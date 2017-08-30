@@ -1,10 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
+Version=1.63
 Name=GuidoSceneComposer
 GenericName=Guido Scene Composer
 Comment=Guido Music Notation scene editor.
 Comment[fr]=Un éditeur de partitions et de scenes au format Guido.
-Exec=/usr/bin/GuidoSceneComposer %f
+TryExec=GuidoSceneComposer
+Exec=GuidoSceneComposer %f
 Terminal=false
 Type=Application
 Categories=Audio;Music;AudioVideo;Qt;
