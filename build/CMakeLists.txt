@@ -296,21 +296,19 @@ endif()
 #######################################
 # install setup
 if(APPLE)
-set(FRMWK  FRAMEWORK DESTINATION "/Library/Frameworks" CONFIGURATIONS Release)
+	set(FRMWK  FRAMEWORK DESTINATION "/Library/Frameworks" CONFIGURATIONS Release)
 endif(APPLE)
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  SET(CMAKE_INSTALL_PREFIX /usr )
+endif()
 if (NOT WIN32 AND NOT APPLE)
- if (DEFINED LIBINSTALL)
-	set(LIBPATH ${LIBINSTALL})
- else (DEFINED LIBINSTALL)
-	set(LIBPATH "/usr/lib")
- endif (DEFINED LIBINSTALL)
- message (STATUS "Library install path set to ${LIBPATH} - Use -DLIBINSTALL=path to change.")
+message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
 
 install ( TARGETS ${target}
-    	LIBRARY DESTINATION ${LIBPATH}
+    	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
     	${FRMWK}
-    	PUBLIC_HEADER DESTINATION /usr/include/guido
+    	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
 )
 endif()
 
