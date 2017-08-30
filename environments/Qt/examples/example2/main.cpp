@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	QGuidoPainter::startGuidoEngine();
 
 	QGuidoWidget w;
-	w.setGMNCode( "[e d c]" );	
+	w.setGMNCode( "[e d c]", "" );	
 	w.show();
 
 	int result = app.exec();
