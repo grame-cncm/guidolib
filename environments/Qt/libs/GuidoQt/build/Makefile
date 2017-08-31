@@ -1,4 +1,5 @@
 
+PROJECT := GuidoQt
 
 all:
 	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT)
