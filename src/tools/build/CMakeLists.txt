@@ -77,3 +77,19 @@ foreach(tool ${TOOLS})
 	add_dependencies(${tool} ${target})
 endforeach(tool)
 
+
+#######################################
+# install setup
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  SET(CMAKE_INSTALL_PREFIX /usr )
+endif()
+if (NOT WIN32 AND NOT APPLE)
+message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
+
+install ( TARGETS ${TOOLS}
+    	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+)
+endif()
+
+
+
