@@ -16,12 +16,12 @@ GUIDOEngine.dll: ../../../build/GUIDOEngine.dll
 	cp ../../../build/GUIDOEngine.dll .
 
 install:
-	[ $(system) = "linux" ] && $(MAKE) linuxinstall
+	[ $(system) = "Linux" ] && $(MAKE) linuxinstall
 
 linuxinstall:
-	install -m "rwxr-xr-x" guido2image/guido2image $(BINDEST)
-	install -m "rwxr-xr-x" GuidoEditor/GuidoEditor $(BINDEST)
-	install -m "rwxr-xr-x" GuidoSceneComposer/GuidoSceneComposer $(BINDEST)
+	install -m 755 guido2image/guido2image $(BINDEST)
+	install -m 755 GuidoEditor/GuidoEditor $(BINDEST)
+	install -m 755 GuidoSceneComposer/GuidoSceneComposer $(BINDEST)
 
 clean:
 	$(MAKE) -C guido2image/build clean

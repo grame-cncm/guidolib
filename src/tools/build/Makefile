@@ -87,6 +87,9 @@ linux : linux/Makefile linuxtools
 linuxtools : linux/Makefile
 	$(MAKE) -C linux
 
+linuxinstall : 
+	$(MAKE) -C linux install
+
 linux/Makefile : CMakeLists.txt
 	[ -d linux ] || mkdir linux
 	cd linux && cmake .. -G "Unix Makefiles" -Wno-dev

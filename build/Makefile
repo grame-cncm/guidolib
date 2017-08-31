@@ -243,4 +243,6 @@ install:
 
 linuxinstall:
 	$(MAKE) -C linux install
+	$(MAKE) -C ../src/tools/build linuxinstall
+	$(MAKE) -C ../environments/Qt install
 
