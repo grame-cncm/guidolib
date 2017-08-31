@@ -17,7 +17,7 @@ size  = $(shell du -s debian/usr | cut -f 1)
 deb: 
 	-[ -d debian ] && rm -rf debian
 	mkdir debian
-	cp -r debiansvn/* debian
+	cp -r debianbase/* debian
 	@echo make gmn samples
 	@[ -d $(doc) ] || mkdir -p $(doc)
 	#### Export the samples
