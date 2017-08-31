@@ -245,4 +245,5 @@ linuxinstall:
 	$(MAKE) -C linux install
 	$(MAKE) -C ../src/tools/build linuxinstall
 	$(MAKE) -C ../environments/Qt install
+	install -d -m 644 ../src/guido2.ttf /usr/share/fonts/guido/guido2.ttf 
 

@@ -6,6 +6,7 @@ ifeq ($(system), MINGW32_NT-6.1)
 endif
 
 BINDEST ?= /usr/bin
+RSRC := ../package/debianbase/usr/share
 
 all: $(LIB)
 	$(MAKE) -C guido2image/build
@@ -22,6 +23,11 @@ linuxinstall:
 	install -m 755 guido2image/guido2image $(BINDEST)
 	install -m 755 GuidoEditor/GuidoEditor $(BINDEST)
 	install -m 755 GuidoSceneComposer/GuidoSceneComposer $(BINDEST)
+	install -m 755 $(RSRC)/applications/*.desktop /usr/share/applications
+	install -d -m 755 $(RSRC)/icons/hicolor/48x48/apps/guidoeditor.png /usr/share/icons/hicolor/48x48/apps/guidoeditor.png
+	install -d -m 755 $(RSRC)/icons/hicolor/48x48/apps/guidoscenecomposer.png /usr/share/icons/hicolor/48x48/apps/guidoscenecomposer.png
+	install -d -m 755 $(RSRC)/icons/hicolor/128x128/apps/guidoeditor.png /usr/share/icons/hicolor/128x128/apps/guidoeditor.png
+	install -d -m 755 $(RSRC)/icons/hicolor/128x128/apps/guidoscenecomposer.png /usr/share/icons/hicolor/128x128/apps/guidoscenecomposer.png
 
 clean:
 	$(MAKE) -C guido2image/build clean
