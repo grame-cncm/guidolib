@@ -238,6 +238,7 @@ android :
 #===============================================================
 # install target - linux only
 #===============================================================
+DESTDIR ?= /usr
 install: 
 	[ $(TARGET) = "linux" ] && $(MAKE) linuxinstall
 
@@ -245,5 +246,6 @@ linuxinstall:
 	$(MAKE) -C linux install
 	$(MAKE) -C ../src/tools/build linuxinstall
 	$(MAKE) -C ../environments/Qt install
-	install -D -m 644 ../src/guido2.ttf /usr/share/fonts/guido/guido2.ttf 
+	mkdir -p $(DESTDIR)$(PREFIX)/share/fonts/guido
+	install -m 644 ../src/guido2.ttf $(DESTDIR)$(PREFIX)/share/fonts/guido/guido2.ttf 
 

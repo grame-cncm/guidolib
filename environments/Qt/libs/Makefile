@@ -1,8 +1,7 @@
 
 system	:= $(shell uname -s)
 
-LIBDEST ?= /usr/lib
-INCDEST ?= /usr/include/guido
+DESTDIR ?= /usr
 
 all:
 	$(MAKE) -C GuidoQt/build
@@ -12,8 +11,9 @@ install:
 	[ $(system) = "Linux" ] && $(MAKE) linuxinstall
 
 linuxinstall:
-	cp  libGuidoQt.a $(LIBDEST)
-	install -m 644 GuidoQt/include/*.h $(INCDEST)
+	cp  libGuidoQt.a $(DESTDIR)$(PREFIX)/lib
+	mkdir -p $(DESTDIR)$(PREFIX)/include/guido
+	install -m 644 GuidoQt/include/*.h $(DESTDIR)$(PREFIX)/include/guido
 
 clean:
 	$(MAKE) -C GuidoQt/build clean

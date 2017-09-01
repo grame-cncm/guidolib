@@ -5,7 +5,9 @@ ifeq ($(system), MINGW32_NT-6.1)
 	LIB = GUIDOEngine.dll
 endif
 
-BINDEST ?= /usr/bin
+DESTDIR ?= /usr
+BINDEST = $(DESTDIR)$(PREFIX)/bin
+SHARED  = $(DESTDIR)$(PREFIX)/share
 RSRC := ../package/debianbase/usr/share
 
 all: $(LIB)
@@ -23,11 +25,11 @@ linuxinstall:
 	install -m 755 guido2image/guido2image $(BINDEST)
 	install -m 755 GuidoEditor/GuidoEditor $(BINDEST)
 	install -m 755 GuidoSceneComposer/GuidoSceneComposer $(BINDEST)
-	install -m 644 $(RSRC)/applications/*.desktop /usr/share/applications
-	install -D -m 644 $(RSRC)/icons/hicolor/48x48/apps/guidoeditor.png /usr/share/icons/hicolor/48x48/apps/guidoeditor.png
-	install -D -m 644 $(RSRC)/icons/hicolor/48x48/apps/guidoscenecomposer.png /usr/share/icons/hicolor/48x48/apps/guidoscenecomposer.png
-	install -D -m 644 $(RSRC)/icons/hicolor/128x128/apps/guidoeditor.png /usr/share/icons/hicolor/128x128/apps/guidoeditor.png
-	install -D -m 644 $(RSRC)/icons/hicolor/128x128/apps/guidoscenecomposer.png /usr/share/icons/hicolor/128x128/apps/guidoscenecomposer.png
+	install -m 644 $(RSRC)/applications/*.desktop $(SHARED)/applications
+	install -D -m 644 $(RSRC)/icons/hicolor/48x48/apps/guidoeditor.png $(SHARED)/icons/hicolor/48x48/apps/guidoeditor.png
+	install -D -m 644 $(RSRC)/icons/hicolor/48x48/apps/guidoscenecomposer.png $(SHARED)/icons/hicolor/48x48/apps/guidoscenecomposer.png
+	install -D -m 644 $(RSRC)/icons/hicolor/128x128/apps/guidoeditor.png $(SHARED)/icons/hicolor/128x128/apps/guidoeditor.png
+	install -D -m 644 $(RSRC)/icons/hicolor/128x128/apps/guidoscenecomposer.png $(SHARED)/icons/hicolor/128x128/apps/guidoscenecomposer.png
 
 clean:
 	$(MAKE) -C guido2image/build clean
