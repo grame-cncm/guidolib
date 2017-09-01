@@ -52,7 +52,7 @@ GROctava::GROctava( GRStaff * staff, const NVstring & text, const AROctava* ar, 
 	mBoundingBox.top = (GCoord)(y - staff->getStaffLSPACE());
 	mBoundingBox.left -= (GCoord)(LSPACE/4);
 	mBoundingBox.bottom = (GCoord)(4*LSPACE);
-	fTextHeight = y - 10;
+	fTextHeight = y; // - 10;
 }
 
 GROctava::~GROctava()
