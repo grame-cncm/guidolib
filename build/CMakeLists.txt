@@ -283,7 +283,6 @@ else()
 		message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
 	endif ()
 
-	set (LIBDEST /usr/lib)
 	target_link_libraries (${target} ${LINK})
 endif()
 
