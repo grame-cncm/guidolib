@@ -61,11 +61,21 @@ void ARBowing::setTagParameters (const TagParameterMap& params)
 	const TagParameterFloat* dx2 = getParameter<TagParameterFloat> (kDx2Str);
 	const TagParameterFloat* dy1 = getParameter<TagParameterFloat> (kDy1Str);
 	const TagParameterFloat* dy2 = getParameter<TagParameterFloat> (kDy2Str);
+	const TagParameterFloat* dx = getParameter<TagParameterFloat> (kDxStr);
+	const TagParameterFloat* dy = getParameter<TagParameterFloat> (kDyStr);
 	fDx1 = dx1 ? dx1->getValue() : 0;
 	fDx2 = dx2 ? dx2->getValue() : 0;
 	fDy1 = dy1 ? dy1->getValue() : 0;
 	fDy2 = dy2 ? dy2->getValue() : 0;
-	fParSet = (dx1 || dx2 || dy1 || dy2);
+	if (dx) {
+		fDx1 += dx->getValue();
+		fDx2 += dx->getValue();
+	}
+	if (dy) {
+		fDy1 += dy->getValue();
+		fDy2 += dy->getValue();
+	}
+	fParSet = (dx1 || dx2 || dy1 || dy2 || dx || dy);
 
 	const TagParameterString* dir = getParameter<TagParameterString> (kCurveStr);
 	if (dir) {
