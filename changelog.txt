@@ -8,6 +8,8 @@ GUIDO Engine history
 - fix inverted dy for dynamics (\cresc, \decresc)
 - ornaments syntax change (affects \trill, \mordent, \turn): they don't use a chord for 
   specification any more, but can be applied to (real) chord. Tag parameters have been redesigned.
+- slurs: dx[12] and dy[12] are now taken into account when curve direction (up | down) is set,
+  dx and dy are now applied as offsets to dx1, dx2 and dy1, dy2
 
 -----------------------------
   version 1.6.4
