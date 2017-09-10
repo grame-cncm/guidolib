@@ -57,6 +57,16 @@ ARBowing::ARBowing(const ARBowing * bowing) : ARMTParameter(-1,bowing)
 
 void ARBowing::setTagParameters (const TagParameterMap& params)
 {
+	const TagParameterFloat* dx1 = getParameter<TagParameterFloat> (kDx1Str);
+	const TagParameterFloat* dx2 = getParameter<TagParameterFloat> (kDx2Str);
+	const TagParameterFloat* dy1 = getParameter<TagParameterFloat> (kDy1Str);
+	const TagParameterFloat* dy2 = getParameter<TagParameterFloat> (kDy2Str);
+	fDx1 = dx1 ? dx1->getValue() : 0;
+	fDx2 = dx2 ? dx2->getValue() : 0;
+	fDy1 = dy1 ? dy1->getValue() : 0;
+	fDy2 = dy2 ? dy2->getValue() : 0;
+	fParSet = (dx1 || dx2 || dy1 || dy2);
+
 	const TagParameterString* dir = getParameter<TagParameterString> (kCurveStr);
 	if (dir) {
 		std::string down ("down");
@@ -72,18 +82,10 @@ void ARBowing::setTagParameters (const TagParameterMap& params)
 		}
 	}
 	else {
-		const TagParameterFloat* dx1 = getParameter<TagParameterFloat> (kDx1Str);
-		const TagParameterFloat* dx2 = getParameter<TagParameterFloat> (kDx2Str);
-		const TagParameterFloat* dy1 = getParameter<TagParameterFloat> (kDy1Str);
-		const TagParameterFloat* dy2 = getParameter<TagParameterFloat> (kDy2Str);
 		const TagParameterFloat* r3 = getParameter<TagParameterFloat> (kR3Str);
 		const TagParameterFloat* h = getParameter<TagParameterFloat> (kHStr);
-		fParSet = (dx1 || dx2 || dy1 || dy2 || r3 || h);
-		fDx1 = dx1 ? dx1->getValue() : 0;
-		fDx2 = dx2 ? dx2->getValue() : 0;
-		fDy1 = dy1 ? dy1->getValue() : 0;
-		fDy2 = dy2 ? dy2->getValue() : 0;
 		fCtrlPoint = r3 ? r3->getValue() : undefined();
 		fCtrlPointOffset = h ? h->getValue() : undefined();
+		fParSet |= (r3 || h);
 	}
 }

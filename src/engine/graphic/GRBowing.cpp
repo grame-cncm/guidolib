@@ -324,8 +324,10 @@ void GRBowing::updateBow( GRStaff * inStaff )
 	// --- Calculate the start and end anchor points positions --
 	// NOTE: in the futur, offsets could also be applied after automatic
 	// positionning. (tag parameter list for 'curve' would be completed)
-	if( (dir != ARBowing::kUndefined) || !arBow->getParSet() )
+	if( (dir != ARBowing::kUndefined) || !arBow->getParSet() ) {
 		automaticAnchorPoints( &context, arBow, sse );
+		applyAnchorPointsOffsets( &context, arBow, sse );
+	}
 	else
 	{
 		manualAnchorPoints( &context, arBow, sse );
