@@ -1,6 +1,10 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+  version 1.6.6
+- new GuidoGetMetersAt API
+
+----------------------------------------------------------------
   version 1.6.5
 - fix noteFormat issue within chords (issue  #17)
 - dm parameter removed from \cresc and \decresc tags (redundant with \i)

@@ -92,8 +92,7 @@ typedef struct
 	Absence of meter is denoted with count[0] == 0.
 	
 	\note for convenience, the \c count field has a fixed and limited size
-	that should however cope with any realistic notation case. In case it
-	doesn't,
+	that should however cope with any realistic notation case.
 */
 #define kMaxGuidoMeterCounts	15
 typedef struct
@@ -103,6 +102,7 @@ typedef struct
 	//! the meter unit
     int unit;
 } GuidoMeter;
+typedef GuidoMeter* GuidoMeters;
 
 /** \brief Contains all graphic-related information required by GuidoOnDraw()
 
@@ -547,8 +547,30 @@ as by date. Page numbers start at 1.
 		\return a Guido error code.
 
 		\see the GuidoMeter structure for the meter coding conventions
+		\warning since version 1.6.4 and the support of complex meters with different units, GuidoGetMeterAt may returns incorrect results. It is maintained for compatibility but will be deprecated in future releases. You should use GuidoGetMetesrAt instead.
 	*/
 	GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeter& meter);
+
+
+	/** \brief Gives the current meters on a given date and voice.
+
+		\param inHandleAR a Guido opaque handle to a AR structure.
+		\param voicenum a voice number (starts at 1).
+		\param date the target date.
+		\param meters on output: a null terminated meters array that must be freed wih GuidoFreeMeters.
+		\return a Guido error code.
+
+		\see the GuidoMeter structure for the meter coding conventions
+	*/
+	GUIDOAPI(GuidoErrCode) GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeters& meters);
+
+
+	/** \brief Releases a meters array..
+
+		\param meters: a meters array.
+		\return a Guido error code.
+	*/
+	GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters);
 
 /*! @} */
 

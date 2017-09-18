@@ -613,6 +613,26 @@ GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, con
 }
 
 // --------------------------------------------------------------------------
+// introduced in guido 1.66 [DF Oct. 18 2017]
+GUIDOAPI(GuidoErrCode) GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeters& meters)
+{
+	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
+		return guidoErrInvalidHandle;
+
+	meters = 0;
+	bool result = inHandleAR->armusic->getMetersAt( voicenum, date, meters );
+	return result ? guidoNoErr : guidoErrBadParameter;
+}
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters)
+{
+	if (!meters) return guidoErrBadParameter;
+	delete [] meters;
+	return guidoNoErr;
+}
+
+
+// --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )

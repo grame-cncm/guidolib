@@ -29,7 +29,7 @@ void MeterVisitor::reset() {
 }
 
 //------------------------------------------------------------------------------
-void MeterVisitor::visitIn (ARMusicalObject* obj)
+void MeterVisitor::visitIn (ARMusicalTag* obj)
 {
 	const ARMeter* meter = dynamic_cast<ARMeter*>(obj);
 	if (meter) {
@@ -70,4 +70,43 @@ void MeterVisitor::visitIn (ARMusicalObject* obj)
 		}
 	}
 }
+
+//------------------------------------------------------------------------------
+void MetersVisitor::reset() {
+	fMeters.clear();
+}
+
+//------------------------------------------------------------------------------
+void MetersVisitor::visitIn (ARMusicalTag* obj)
+{
+	const ARMeter* meter = dynamic_cast<ARMeter*>(obj);
+	if (meter) {
+		TYPE_TIMEPOSITION date = meter->getRelativeTimePosition();
+		if (date <= fLimit) {
+			fMeters.clear();
+
+			const vector<Fraction>& mlist = meter->getMeters();
+			size_t n = mlist.size();
+			for (size_t i=0; i<n; i++) {
+				GuidoMeter meter;
+				meter.count[0] = mlist[i].getNumerator();
+				meter.count[1] = 0;
+				meter.unit = mlist[i].getDenominator();
+				fMeters.push_back (meter);
+			}
+		}
+	}
+}
+//------------------------------------------------------------------------------
+GuidoMeters MetersVisitor::getMeters() const
+{
+	size_t n = fMeters.size();
+	GuidoMeters meters = new GuidoMeter[n+1];
+	for (size_t i=0; i<n; i++)
+		meters[i] = fMeters[i];
+	meters[n].count[0] = 0;
+	meters[n].unit = 0;
+	return meters;
+}
+
 

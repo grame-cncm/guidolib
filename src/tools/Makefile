@@ -15,7 +15,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll guido2rproportional midi2proll midi2rproportional guido2midi guidogetmeter # guido2gmn
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll guido2rproportional midi2proll midi2rproportional guido2midi guidogetmeter guidogetmeters # guido2gmn
 
 .PHONY: checkall
 
@@ -62,6 +62,9 @@ guidogetvoicecount : guidogetvoicecount.cpp
 
 guidogetmeter : guidogetmeter.cpp
 	$(CXX) guidogetmeter.cpp $(INC) $(lib) -o guidogetmeter
+
+guidogetmeters : guidogetmeters.cpp
+	$(CXX) guidogetmeters.cpp $(INC) $(lib) -o guidogetmeters
 
 guidogettimemap : guidogettimemap.cpp
 	$(CXX) guidogettimemap.cpp $(INC) $(lib) -o guidogettimemap
