@@ -210,7 +210,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
 	if (!mDraw || !mShow) return;
 
-    int numVoice = getAbstractRepresentation()->getVoiceNum();
+//    int numVoice = getAbstractRepresentation()->getVoiceNum();
     float incy = 1;
     float posy = 0;
     int sum = mNumHelpLines;

@@ -1875,7 +1875,7 @@ void ARFactory::endTag()
                     AROctava * myoct;
                     ARTStem * mystem;
                     ARTHead * myhead;
-                    ARNoteFormat * mynf;
+//                    ARNoteFormat * mynf;
                     ARDotFormat * mydf;
                     ARRestFormat * myrf;
                     ARAlter * myal;
