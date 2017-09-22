@@ -16,11 +16,10 @@ ifeq ($(system), MINGW)
 else
 ifeq ($(system), Linux)
 	TARGET = linux
-	LINUXMIDI ?= yes
+	MIDIEXPORT ?= no
 endif
 endif
 endif
-
 
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MAC  ?= MacOS
@@ -69,7 +68,7 @@ help :
 	@echo "   macos [C++11=yes/no (default to no)]"	
 	@echo "   mac     (build also ios library)"	
 	@echo "   windows (build 32 and 64 bits library)"	
-	@echo "   linux"	
+	@echo "   linux [MIDIEXPORT=yes/no (default to no)]"	
 	@echo "the platform targets is automatically evaluated by the default target."	
 	@echo "NOTE: windows targets are based on $(WIN32VS)"	
 
@@ -185,10 +184,9 @@ libGUIDOEngine.so :  $(LINUX)/libGUIDOEngine.so
 $(LINUX)/libGUIDOEngine.so : $(LINUX)/Makefile 
 	$(MAKE) -C $(LINUX)
 	
-linuxcmake:
 $(LINUX)/Makefile : CMakeLists.txt
 	[ -d $(LINUX) ] || mkdir $(LINUX)
-	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=$(LINUXMIDI)
+	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=$(MIDIEXPORT)
 
 linuxclean:
 	rm -rf $(LINUX)
