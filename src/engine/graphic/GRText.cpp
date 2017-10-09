@@ -286,10 +286,11 @@ void GRText::setHPosition( GCoord nx )
 	assert(st);
 
 	const ARText * arText = getARText();
-	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
+// this way to read the current lspace is not deterministic !!!
+//	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
 	float dx = 0;
 	if (arText->getDX())
-		dx = arText->getDX()->getValue( curLSPACE );
+		dx = arText->getDX()->getValue( LSPACE );
 	mPosition.x += dx;
 
 	st->position.x = nx;

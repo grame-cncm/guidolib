@@ -3,6 +3,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.6.6
 - new GuidoGetMetersAt API
+- fix incorrect text position for marks
 
 ----------------------------------------------------------------
   version 1.6.5
