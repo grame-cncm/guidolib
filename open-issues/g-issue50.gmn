@@ -1,0 +1,18 @@
+(*
+	pb with slur slope (due to stems direction)
+	pb with dim autopos
+*)
+{ 
+ 	[ \clef<"g2"> \key<-2> \meter<"2/4"> 
+ 	\intens<"mf", dy=-3.6hs, dx=-1>( _/16) 
+	\stemsDown 
+%	\slurBegin<h=10, dy1=1.5, dy=2, r3=0.47> 
+	\slurBegin
+	\beam( d2/16 
+	\stemsUp 
+ 	\grace( f/8) \dimBegin<autopos="on"> 
+	\stemsDown 
+	e&/16 d/16) 
+	\beam( e&/16 c/16 b&1/16 \dimEnd a/16) \slurEnd \bar 
+ 	] 
+ } 
