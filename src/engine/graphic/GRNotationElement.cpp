@@ -343,6 +343,8 @@ void GRNotationElement::OnDraw(VGDevice & hdc) const
 	
 	if (mSymbol != 0)
 		OnDrawSymbol( hdc, mSymbol );
+//	NVRect r = mBoundingBox + mPosition;
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
 }
 
 // -------------------------------------------------------------------------
