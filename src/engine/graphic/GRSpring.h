@@ -17,6 +17,7 @@
 
 #include "kf_ilist.h"
 #include <typeinfo>
+#include <iostream>
 
 // #include "ARMusicalObject.h"
 #include "GRNotationElement.h"
@@ -35,8 +36,6 @@ class GRSpringCollider;
 
 /** \brief Used with rods and space fore functions
 */
-
-
 class GRSpring  
 {
 	friend class GRSpaceForceFunction2;
@@ -108,7 +107,8 @@ public:
 	int		fIsfrozen;
 	float	fPosx;	// (JB) was int
 
-    float setProportionalForce();
+    float 	setProportionalForce();
+    void 	print(std::ostream& out) const;
 
 protected:
 	float calcconst(GRNotationElement * grn);
@@ -136,5 +136,8 @@ private:
 
 int sprcomp(const GRSpring &gr1,const GRSpring &gr2);
 int sprpcomp(const GRSpring *gr1,const GRSpring *gr2);
+
+inline std::ostream & operator << ( std::ostream & os, const GRSpring* spr ) { spr->print(os); return os; }
+
 
 #endif
