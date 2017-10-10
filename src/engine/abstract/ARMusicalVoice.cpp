@@ -670,7 +670,19 @@ void ARMusicalVoice::adjustDuration(const TYPE_DURATION & newDuration)
 	const TYPE_DURATION fill (newDuration - d);
 	if (fill != DURATION_0)
 	{
-		AddTail(new ARNote(fill));
+		TYPE_DURATION remain = fill;
+		while (remain != DURATION_0) {
+			if (remain >= DURATION_16) {
+				AddTail(new ARNote(DURATION_16));
+				remain -= DURATION_16;
+			}
+			else {
+				AddTail(new ARNote(remain));
+				remain = DURATION_0;
+			}
+		}
+
+//		AddTail(new ARNote(fill));
 
 		// We have to look for the PositionTags here!
 		if (mPosTagList)
