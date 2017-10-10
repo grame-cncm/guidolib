@@ -22,15 +22,13 @@
 class ARClef;
 class GRStaff;
 
-
 /** \brief Graphial representation of a staff clef.
 */
 
-class GRClef : public GRTagARNotationElement //,  public GRTag  
+class GRClef : public GRTagARNotationElement //,  public GRTag
 {
 	
 public:
-
 /*	enum CLEFTYPE { NONE = 32, // SCR_NOCLEFT,
 					VIOLIN = 38, // SCR_GCLEF, 
 					BASS = 63, // SCR_FCLEF,
@@ -38,7 +36,7 @@ public:
 				};*/
 
 					 GRClef(const ARClef * arClef, GRStaff * curstaff, bool ownsAR = false );
-	virtual 		~GRClef();
+	virtual 		~GRClef() {}
 	
 	virtual bool operator ==(const GRTag & tag) const;
 	virtual bool operator ==(const GRClef & clef) const;
@@ -53,15 +51,10 @@ public:
 	
 	const ARClef * getARClef() const;
 	
-	
 	TYPE_PITCH getBasePitch() const			{ return mClefBasePitch; }
 	TYPE_REGISTER getBaseOct() const		{ return mClefBaseOctave; }
 	int getBaseLine() const					{ return mClefStaffLine; }
-	
 
-	//virtual long getLeftSpace() const;
-	// virtual long getRightSpace() const;
-	
 protected:
 
 	TYPE_PITCH 		mClefBasePitch;
@@ -71,17 +64,12 @@ protected:
 	NVPoint 		mOctaveOffset;
 	
 	bool			mDoubleTreble;
-	
-//	static char * cp8;
-//	static char * cp15;
 
 	static NVPoint refposPerc;
 	static NVPoint refposTreble;
 	static NVPoint refposAlto;
 	static NVPoint refposBass;
 	static unsigned int sClefTextAlign;
-	
-	
 };
 
 
