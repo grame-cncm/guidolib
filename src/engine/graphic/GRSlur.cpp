@@ -304,12 +304,12 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing *
 	else if( !upward && ( yForStartX < ( startY + 20 ))) endA = ((startY + 20) - b2) / startX;
 
 	// -- Avoid too high curves.
-//	const float maxSlope = float(0.6);
-//	if(( abs(startA) > maxSlope ) && ( abs(endA) > maxSlope ))
-//	{
-//		startA = 0;	// abandon previous slopes, we'll use the 'middle' point.
-//		endA = 0;
-//	}
+	const float maxSlope = float(1.2);
+	if(( abs(startA) > maxSlope ) && ( abs(endA) > maxSlope ))
+	{
+		startA = 0;	// abandon previous slopes, we'll use the 'middle' point.
+		endA = 0;
+	}
 	
 	// -- Calculate the intersection point by resolving the equation:
 	// a1x + b1 = a2x + b2 <=> x = (b2 - b1) / (a1 - a2)
