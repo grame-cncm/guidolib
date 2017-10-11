@@ -670,20 +670,35 @@ void ARMusicalVoice::adjustDuration(const TYPE_DURATION & newDuration)
 	const TYPE_DURATION fill (newDuration - d);
 	if (fill != DURATION_0)
 	{
+#if 0
+		// this could be a workaround for the clef incorrect offset issue (#18)
+		// but actually it significantly modifies the layout since hidden 1/8 notes could
+		// be present everywhere (especially in multi-voices on a single staff context)
+		// A correct solution should analyse the time layout across all voice and
+		// insert small duration only at appropriate places, which doesn't solves the
+		// problem for hand written scores.
+		// But the ideal solution consists probably in score and rods settings of the clef
+		// when linked to an empty element.
+		//
+		// issue can be tracked with GRClef::setHPosition
+		//
 		TYPE_DURATION remain = fill;
 		while (remain != DURATION_0) {
-			if (remain >= DURATION_16) {
-				AddTail(new ARNote(DURATION_16));
-				remain -= DURATION_16;
+			if (remain >= DURATION_8) {
+				AddTail(new ARNote(DURATION_8));
+				remain -= DURATION_8;
 			}
 			else {
 				AddTail(new ARNote(remain));
 				remain = DURATION_0;
 			}
 		}
-
-//		AddTail(new ARNote(fill));
-
+#else
+#ifndef WIN32
+#warning ("TODO: fix empty elements issue wich clefs");
+#endif
+		AddTail(new ARNote(fill));
+#endif
 		// We have to look for the PositionTags here!
 		if (mPosTagList)
 		{
