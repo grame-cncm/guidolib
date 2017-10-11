@@ -231,6 +231,13 @@ void GRClef::accept (GRVisitor& visitor)
 }
 
 // -----------------------------------------------------------------------------
+void GRClef::setHPosition( float inX )
+{
+//	cerr << (void*)this << " GRClef::setHPosition " << inX << endl;
+	GRTagARNotationElement::setHPosition(inX);
+}
+
+// -----------------------------------------------------------------------------
 void GRClef::OnDraw(VGDevice & hdc) const
 {
 	if (error)  return;

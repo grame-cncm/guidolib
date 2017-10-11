@@ -55,6 +55,8 @@ public:
 	TYPE_REGISTER getBaseOct() const		{ return mClefBaseOctave; }
 	int getBaseLine() const					{ return mClefStaffLine; }
 
+	virtual void setHPosition( float inX );
+
 protected:
 
 	TYPE_PITCH 		mClefBasePitch;
