@@ -451,8 +451,6 @@ void GRBowing::manualControlPoints( GRBowingContext * context, const ARBowing * 
 
 	float tagR3 =  arBow->getR3();
 	const TYPE_FLOATPARAMETER valueR3 = (tagR3 == ARBowing::undefined()) ? 0.5f : tagR3;
-//	const TagParameterFloat * tagR3 =  arBow->getR3();
-//	const TYPE_FLOATPARAMETER valueR3 = tagR3 ? tagR3->getValue() : float(0.5);
 
 	bowInfos->offsets[1].x = (GCoord)(distx * valueR3 );
 	bowInfos->offsets[1].y = (GCoord)(disty * valueR3 * dir);
@@ -460,11 +458,7 @@ void GRBowing::manualControlPoints( GRBowingContext * context, const ARBowing * 
 	// -- Apply the middle control point y-offset.
 	const float lspaceRatio = staff->getStaffLSPACE() / LSPACE;
 	float tagH = arBow->getH();
-//	const TYPE_FLOATPARAMETER valueH = (tagH == ARBowing::undefined()) ? 2.f : tagH * lspaceRatio;
 	const TYPE_FLOATPARAMETER valueH = (tagH == ARBowing::undefined() ? LSPACE/2 : tagH) * lspaceRatio;
-//	const float staffLSpace = staff->getStaffLSPACE();
-//	const TagParameterFloat * tagH = arBow->getH();
-//	const TYPE_FLOATPARAMETER valueH = tagH ? tagH->getValue( staffLSpace ) : float(2);
 	bowInfos->offsets[1].y += -dir * ((valueH > 0) ? valueH : -valueH);
 
 	// - Store
