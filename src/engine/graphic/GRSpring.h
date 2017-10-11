@@ -15,11 +15,10 @@
 
 */
 
-#include "kf_ilist.h"
 #include <typeinfo>
 #include <iostream>
 
-// #include "ARMusicalObject.h"
+#include "kf_ilist.h"
 #include "GRNotationElement.h"
 #include "GRVoice.h"
 
