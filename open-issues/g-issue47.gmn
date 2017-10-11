@@ -1,8 +1,9 @@
 (*
-	issue #47 (github)
+	issue #47
+
 	slurs collisions
 	removing \stemDown solves the collision
-	Guidp Engine 1.6.5
+	Guido Engine 1.6.5
 *)
 {
 	[ \clef<"f4"> \key<-1> \meter<"2/4">
