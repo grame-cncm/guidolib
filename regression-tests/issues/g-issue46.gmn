@@ -6,13 +6,9 @@
 
 	This issue is similar to issue #18.
 	The problem here is that the empty elements are inserted by the engine.
-	One solution is to insert empty/16 instead of a single one. This could be optimized by using 
-	the previous voices smallest duration (not known at the time of the insertion).
-	see ARMusicalVoice::adjustDuration
-
-	The drawback of this solution (and of the previous one) is that it modifies the layout: with 
-	the sample code below, the second measure is aligned on a 1/16 notes grid.
-	Anyway and for an optimal rendering, each voice should be fully written (i.e. up to the end
+	Adding an empty element after the 'c' note solves the problem.
+	
+	For an optimal rendering, each voice should be fully written (i.e. up to the end
 	of the score), that gives a full control over the spacing.
 *)
 { [ \staff<1>  
@@ -25,5 +21,7 @@
    (* meas. 1 *)  \clef<"f4"> \key<-2> \meter<"4/4", autoBarlines="off", autoMeasuresNum="system"> 
 	\stemsUp \beamsOff c0/4 _/4 \stemsDown \beamsOff { g/4, c1/4 } _/4 \bar 
    (* meas. 2 *)  \beamsOff b&/4 \clef<"g2"> \beam( d2/8 c/8) \stemsUp \beam( b&1/8 a/8 g/8 f/8)  ]
-, [\staff<2> empty empty empty c ]
+, [\staff<2> empty empty empty c 
+%	empty
+  ]
  }
