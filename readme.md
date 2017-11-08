@@ -10,9 +10,14 @@ The Guido engine runs on the main operating systems: Linux, MacOS, iOS, Windows,
 
 See [Guido page](http://guidolib.sourceforge.net/) for more information.
 
-See [Guido wiki](https://github.com/grame-cncm/guidolib/wiki) for building instructions. 
+See [Guido wiki](https://github.com/grame-cncm/guidolib/wiki) for building instructions.
 
 Binary distributions are available from https://sourceforge.net/projects/guidolib/files/
+
+
+---
+
+Travis build status:  <a href="https://travis-ci.org/grame-cncm/guidolib"><img src="https://travis-ci.org/grame-cncm/guidolib.svg?branch=dev"></a>
 
 ----------------------------------------------------------------------
 
@@ -38,9 +43,8 @@ Benjamen Ruprechter,
 Mike Solomon,
 Ivan Vukosav
 
-And of course, warmest thanks to my colleagues and friends Stéphane Letz 
+And of course, warmest thanks to my colleagues and friends Stéphane Letz
 and Yann Orlarey.
 
 ---
 [Dominique Fober](https://github.com/dfober)
-
