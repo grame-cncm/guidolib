@@ -103,8 +103,8 @@ bool ARMusic::getMetersAt (int voicenum, const GuidoDate &date, GuidoMeters& met
 	GuidoPos pos = GetHeadPosition();
 	ARMusicalVoice * voice = 0;
 	while (pos && !voice) {
-		if (!--voicenum) voice = GetNext(pos);
-		else GetNext(pos);
+		ARMusicalVoice * tmp = GetNext(pos);
+		if (tmp->getVoiceNum() == voicenum) voice = tmp;
 	}
 	if (!voice) return false;		// no such voice
 	TYPE_TIMEPOSITION tp (date.num, date.denom);
