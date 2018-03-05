@@ -60,6 +60,7 @@ help :
 	@echo "   Qt           : build the Guido Qt library, applications and tools"	
 	@echo "   java         : build the jni and java libraries"	
 	@echo "   js           : build the javascript library (requires emscripten)"	
+	@echo "   wasm         : build the web assembly library (requires emscripten)"	
 	@echo "   android      : build the GUIDOEngine static library for Android"	
 	@echo "   install      : install the Guido library and public headers (linux only)"	
 	@echo 
@@ -190,7 +191,9 @@ linuxclean:
 # building the javascript engine
 #===============================================================
 js:
-	$(MAKE) -C ../lang/javascript -j 4
+	$(MAKE) -C ../lang/javascript
+wasm:
+	$(MAKE) -C ../lang/javascript WASM=yes
 
 
 #===============================================================
