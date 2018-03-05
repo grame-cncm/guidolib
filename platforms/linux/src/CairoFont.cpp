@@ -83,7 +83,7 @@ void CairoFont::GetExtent( const char * s, int charCount, float * outWidth, floa
 		memcpy (str, s, charCount);
 		str[charCount] = 0;
 		GetExtent (str, outWidth, outHeight, (cairo_t *)dev->GetNativeContext());
-		delete str;
+		delete[] str;
 	}
 }
 
