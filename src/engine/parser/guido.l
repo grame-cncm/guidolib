@@ -40,6 +40,7 @@ using namespace std;
 static int nested;
 
 #define YY_NO_UNISTD_H
+#define register		// this is to avoid deprecated register declarations
 
 static  char* unescape (char * str) {
 	int n = strlen(str);
