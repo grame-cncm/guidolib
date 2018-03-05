@@ -41,8 +41,7 @@ ifeq ($(TARGET), windows)
 endif
 
 LINUX := linux
-C++11 ?= yes
-CMAKEOPT ?= -DMIDIEXPORT=yes -DC++11=$(C++11)
+CMAKEOPT ?= -DMIDIEXPORT=yes
 
 all :
 	$(MAKE) $(TARGET)
@@ -65,17 +64,17 @@ help :
 	@echo "   install      : install the Guido library and public headers (linux only)"	
 	@echo 
 	@echo "Platform targets to build the GUIDOEngine library are:"	
-	@echo "   macos [C++11=yes/no (default to no)]"	
-	@echo "   mac     (build also ios library)"	
-	@echo "   windows (build 32 and 64 bits library)"	
-	@echo "   linux [MIDIEXPORT=yes/no (default to no)]"	
+	@echo "   macos   : build the GUIDOEgngine framework"	
+	@echo "   mac     : build also ios library"	
+	@echo "   windows : build 32 and 64 bits libraries"	
+	@echo "   linux [MIDIEXPORT=yes/no (default to $(MIDIEXPORT))]"	
 	@echo "the platform targets is automatically evaluated by the default target."	
-	@echo "NOTE: windows targets are based on $(WIN32VS)"	
+	@echo "NOTE: windows targets are based on $(WIN32VS)"
 
 #===============================================================
 # building the library on Mac OS X
 #===============================================================
-.PHONY : macos mac11 $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
+.PHONY : macos $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
 
 mac : 
 	$(MAKE) macos
@@ -97,10 +96,6 @@ $(MAC)/guidolib.xcodeproj : CMakeLists.txt
 GUIDOEngine.tgz : GUIDOEngine.framework
 	tar czf GUIDOEngine.tgz GUIDOEngine.framework
 
-mac11:
-	$(MAKE) macos MAC=mac11 C++11=yes
-	cp -R $(MAC)/Release/GUIDOEngine.framework mac11
-	cd mac11 && tar czf GUIDOEngine.tgz GUIDOEngine.framework
 
 #===============================================================
 # building the library for iOS

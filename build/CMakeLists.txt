@@ -21,7 +21,6 @@ endif(UNIX)
 
 #######################################
 # Options disabled by default
-option ( C++11 	"C++11 support" on )
 option ( IOS 	"Generates project for iOS" off )
 option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
@@ -30,12 +29,13 @@ option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( GL "Links to opengl device" off)
 
 
+set (CMAKE_CXX_STANDARD 11)
 
 #########################################
 # mac os specific part
 #########################################
 if(APPLE)
-	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++11")
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 #######################################
 #   iOS support
 	if ( IOS )
@@ -89,12 +89,6 @@ elseif(WIN32)
   set (target GUIDOEngine64)
   set (statictarget SGUIDOEngine64)
  endif ()
-
-#########################################
-# assume linux host
-#########################################
-else()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
 add_definitions(-DGUIDOExport)
@@ -298,17 +292,12 @@ if(APPLE)
 	set(FRMWK  FRAMEWORK DESTINATION "/Library/Frameworks" CONFIGURATIONS Release)
 endif(APPLE)
 
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  SET(CMAKE_INSTALL_PREFIX /usr )
-endif()
-if (NOT WIN32 AND NOT APPLE)
+if (NOT IOS)
 message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
-
 install ( TARGETS ${target}
     	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
     	${FRMWK}
     	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
 )
 endif()
-
 
