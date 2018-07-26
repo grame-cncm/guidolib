@@ -14,18 +14,19 @@
  
  #include "QFindWidget.h"
  
- #include <QtDebug>
- 
- #define SETTINGS_GROUP "FindWidget"
- #define FIND_EDIT_SETTING		"FindEdit"
- #define REPLACE_EDIT_SETTING	"ReplaceEdit"
- #define CASE_SENSITIVE_SETTING	"CaseSensitive"
- #define WHOLE_WORDS_SETTING	"WholeWords"
- #define FIND_EDIT_DEFAULT		""
- #define REPLACE_EDIT_DEFAULT	""
- #define CASE_SENSITIVE_DEFAULT	false
- #define WHOLE_WORDS_DEFAULT	false
- #define TOOL_BUTTON_ICON_SIZE QSize(12,12)
+#include <QtDebug>
+#include <QStyle>
+
+#define SETTINGS_GROUP "FindWidget"
+#define FIND_EDIT_SETTING		"FindEdit"
+#define REPLACE_EDIT_SETTING	"ReplaceEdit"
+#define CASE_SENSITIVE_SETTING	"CaseSensitive"
+#define WHOLE_WORDS_SETTING	"WholeWords"
+#define FIND_EDIT_DEFAULT		""
+#define REPLACE_EDIT_DEFAULT	""
+#define CASE_SENSITIVE_DEFAULT	false
+#define WHOLE_WORDS_DEFAULT	false
+#define TOOL_BUTTON_ICON_SIZE QSize(12,12)
    
 //-------------------------------------------------------------------------
 QFindWidget::QFindWidget(QPlainTextEdit * edit , QWidget * parent)
