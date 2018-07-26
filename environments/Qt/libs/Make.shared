@@ -8,8 +8,7 @@ system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo 
 ifeq ($(system), Darwin)
 	TARGET = mac
 	SPEC ?= -spec macx-xcode
-	QTPATH ?= $(shell ../../../qt-path)
-	QMAKEIOS ?= $(QTPATH)/ios/bin/qmake
+	QMAKEIOS ?= qmake-ios
 else
 ifeq ($(system), MINGW)
 	TARGET = windows
@@ -22,7 +21,6 @@ endif
 
 ifeq ($(TARGET), windows)
 	PLATFORM ?= $(shell ../../../qt-arch)
-	QMAKEWIN ?= $(shell ../../../qt-win32)
 	MSVC 	 ?= $(shell ../../../vs-win32)
 	DEST := ../..
 	OUT = $(DEST)/$(PROJECT).exe
@@ -95,7 +93,7 @@ lib$(PROJECT)-iOS.a: ios/$(PROJECT)-iOS.xcodeproj
 ###################
 $(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro 
 	[ -d $(DEST) ] || mkdir $(DEST)
-	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+	cd $(DEST) && $(QMAKE) $(SPEC) $(ROOT)/..
 
 $(PROJECT).lib: $(DEST)/$(PROJECT).vcxproj 
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"

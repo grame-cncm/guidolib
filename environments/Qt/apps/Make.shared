@@ -6,8 +6,7 @@ system	:= $(shell uname -s)
 system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
 	TARGET = macos
-	QTPATH ?= $(shell ../../../qt-path)
-	QMAKEIOS ?= $(QTPATH)/ios/bin/qmake
+	QMAKEIOS ?= qmake-ios
 	SPEC ?= -spec macx-xcode
 	DEST := ..
 	OUT = $(DEST)/$(PROJECT)$(APP)
@@ -25,7 +24,6 @@ endif
 
 ifeq ($(TARGET), windows)
 	PLATFORM ?= $(shell ../../../qt-arch)
-	QMAKEWIN ?= $(shell ../../../qt-win32)
 	MSVC 	 ?= $(shell ../../../vs-win32)
 	OUT = ../../$(PROJECT).exe
 	ifeq ($(PLATFORM), x64)
@@ -87,9 +85,12 @@ $(PROJECT): macos/$(PROJECT).xcodeproj
 ###################
 # iOS part
 ###################
-ios/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
+ios/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared $(QMAKEIOS)
 	[ -d ios ] || mkdir ios
 	cd ios && $(QMAKEIOS) $(SPEC) $(ROOT)/..
+
+$(QMAKEIOS):
+	@which $(QMAKEIOS) > /dev/null || (echo ERROR: the command $(QMAKEIOS) must be available from your path; false)
 
 ios/$(PROJECT): ios/$(PROJECT).xcodeproj  
 	xcodebuild -jobs 8 -project  ios/$(PROJECT).xcodeproj -target $(PROJECT) -configuration Release
@@ -99,7 +100,7 @@ ios/$(PROJECT): ios/$(PROJECT).xcodeproj
 ###################
 $(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
 	[ -d $(DEST) ] || mkdir $(DEST)
-	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+	cd $(DEST) && $(QMAKE) $(SPEC) $(ROOT)/..
 
 $(PROJECT).exe: $(DEST)/$(PROJECT).vcxproj  
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"

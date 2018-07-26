@@ -24,7 +24,6 @@ endif
 
 ifeq ($(TARGET), windows)
 	PLATFORM ?= $(shell ../../../qt-arch)
-	QMAKEWIN ?= $(shell ../../../qt-win32)
 	MSVC 	 ?= $(shell ../../../vs-win32)
 	COPY := ../..
 	OUT = ../../$(PROJECT).exe
@@ -77,7 +76,7 @@ $(PROJECT): macos/$(PROJECT).xcodeproj
 ###################
 $(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro
 	[ -d $(DEST) ] || mkdir $(DEST)
-	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+	cd $(DEST) && $(QMAKE) $(SPEC) $(ROOT)/..
 
 $(PROJECT).exe: $(DEST)/$(PROJECT).vcxproj  
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
