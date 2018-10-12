@@ -8,25 +8,25 @@
               pluginSilenceInIsSilenceOut="0" pluginTailLength="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="JuceProjectAU" pluginAUViewClass="JuceProjectAU_V1"
               pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
-              jucerVersion="3.1.0" defines="JUCE_DONT_DEFINE_MACROS" includeBinaryInAppConfig="1">
+              jucerVersion="5.3.2" defines="JUCE_DONT_DEFINE_MACROS" includeBinaryInAppConfig="1"
+              pluginFormats="buildVST,buildAU" headerPath="../../../../../src/engine/include&#10;../../../Device">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-               objCExtraSuffix="WzPHFY" extraLinkerFlags="-F../../../../build/MacOS/Debug  -framework GUIDOEngine"
-               extraCompilerFlags="-I../../../../src/include" bigIcon="IAUjPh">
+               objCExtraSuffix="WzPHFY" extraLinkerFlags="-F../../../../../build  -framework GUIDOEngine&#10;"
+               bigIcon="IAUjPh">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
-                       osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="default"/>
+                       osxCompatibility="10.6 SDK"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
-                       osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
+                       osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
                        binaryPath=""/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_gui_basics" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_gui_audio" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_events" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_core" path="../../../../../juce2/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../../juce/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <XCODE_IPHONE targetFolder="Builds/iOS" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
@@ -34,19 +34,17 @@
                   extraCompilerFlags="-I../../../../src/include" bigIcon="IAUjPh">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
-                       osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="Native"
-                       iosCompatibility="default"/>
+                       osxCompatibility="10.6 SDK" osxArchitecture="Native"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
-                       osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
-                       binaryPath="" iosCompatibility="default"/>
+                       osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
+                       binaryPath=""/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_gui_basics" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_gui_audio" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_events" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../../../juce2/modules"/>
-        <MODULEPATH id="juce_core" path="../../../../../juce2/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../../juce/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../../juce/modules"/>
       </MODULEPATHS>
     </XCODE_IPHONE>
     <VS2005 targetFolder="Builds/VisualStudio2005" vstFolder="c:\SDKs\vstsdk2.4"
@@ -77,36 +75,12 @@
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_basics" path="/home/fober/src/juce/modules"/>
-        <MODULEPATH id="juce_gui_audio" path="/home/fober/src/juce/modules"/>
         <MODULEPATH id="juce_graphics" path="/home/fober/src/juce/modules"/>
         <MODULEPATH id="juce_events" path="/home/fober/src/juce/modules"/>
         <MODULEPATH id="juce_data_structures" path="/home/fober/src/juce/modules"/>
         <MODULEPATH id="juce_core" path="/home/fober/src/juce/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
-    <ANDROID targetFolder="Builds/Android" androidSDKPath="${user.home}/Desktop/SDKs/android-sdk-mac_x86"
-             androidNDKPath="${user.home}/Desktop/SDKs/android-ndk-r5" androidInternetNeeded="1"
-             extraCompilerFlags="-I../../../../src/include -I../../../Device -I../../JuceLibraryCode"
-             extraLinkerFlags="-L../../../../buildMacOS/Release  -lSGUIDOEngine"
-             androidActivityClass="com.grame.guidoviewer.GuidoViewer" androidMinimumSDK="8"
-             androidKeyStore="${user.home}/.android/debug.keystore" androidKeyStorePass="android"
-             androidKeyAlias="androiddebugkey" androidKeyAliasPass="android"
-             bigIcon="IAUjPh">
-      <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
-                       androidArchitectures="armeabi armeabi-v7a"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
-                       binaryPath="" androidArchitectures="armeabi armeabi-v7a"/>
-      </CONFIGURATIONS>
-      <MODULEPATHS>
-        <MODULEPATH id="juce_gui_basics" path="../../../../../juce/modules"/>
-        <MODULEPATH id="juce_gui_audio" path="../../../../../juce/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../../../juce/modules"/>
-        <MODULEPATH id="juce_events" path="../../../../../juce/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../../../juce/modules"/>
-        <MODULEPATH id="juce_core" path="../../../../../juce/modules"/>
-      </MODULEPATHS>
-    </ANDROID>
   </EXPORTFORMATS>
   <MAINGROUP id="cQ5GjM" name="GuidoViewer">
     <GROUP id="r7RLot" name="Source">
@@ -129,11 +103,13 @@
   </MAINGROUP>
   <JUCEOPTIONS JUCE_USE_CDBURNER="disabled"/>
   <MODULES>
-    <MODULE id="juce_core" showAllCode="1"/>
-    <MODULE id="juce_data_structures" showAllCode="1"/>
-    <MODULE id="juce_events" showAllCode="1"/>
-    <MODULE id="juce_graphics" showAllCode="1"/>
-    <MODULE id="juce_gui_audio" showAllCode="1"/>
-    <MODULE id="juce_gui_basics" showAllCode="1"/>
+    <MODULE id="juce_core" showAllCode="1" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useGlobalPath="1"/>
   </MODULES>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>
