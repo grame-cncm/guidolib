@@ -45,9 +45,9 @@ class VGColor
 						{ if( col ) Set( col[0], col[1], col[2], col[3] ); else Set( 0 ); }
 
 		void		Set( int r, int g, int b, int a = ALPHA_OPAQUE )
-						{ mRed = r; mGreen = g; mBlue = b, mAlpha = a; }
+						{ mRed = r; mGreen = g; mBlue = b; mAlpha = a; }
 		void		Set( const VGColor & in )
-						{ mRed = in.mRed; mGreen = in.mGreen; mBlue = in.mBlue, mAlpha = in.mAlpha; }
+						{ mRed = in.mRed; mGreen = in.mGreen; mBlue = in.mBlue; mAlpha = in.mAlpha; }
 
 				
 		bool 		operator == ( const VGColor & col ) const
