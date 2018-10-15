@@ -2,7 +2,7 @@
 # a makefile to build the guido engine android library
 #
 
-ABI ?= armeabi
+ABI ?= armeabi-v7a
 ifneq ($(ABI),)
 	APP_ABI = APP_ABI=$(ABI)
 endif
