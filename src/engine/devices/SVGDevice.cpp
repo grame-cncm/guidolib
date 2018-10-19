@@ -490,10 +490,11 @@ void SVGDevice::DrawString( float x, float y, const char * s, int inCharCount )
 	fStream << "\">";
 	fStream << fEndl++; 
 	for (int i=0; i<inCharCount; i++) {
-		if (s[i] > 0)
-			fStream << s[i];
-		else 
-			fStream << "&#" << int((unsigned char)s[i]) << ";"; 
+		fStream << s[i];				// assumes utf-8 encoding
+//		if (s[i] > 0)
+//			fStream << s[i];
+//		else
+//			fStream << "&#" << int((unsigned char)s[i]) << ";";
 	}
 	fEndl--;
 	fStream << fEndl << "</text>"; 
