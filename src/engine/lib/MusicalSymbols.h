@@ -181,6 +181,9 @@ ConstMusicalSymbolID kSquareRightBracket             = 239;
 ConstMusicalSymbolID kAngledLeftBracket              = 240;
 ConstMusicalSymbolID kAngledRightBracket             = 241;
 
+// version 1.51
+ConstMusicalSymbolID kArpeggioSymbol               	= 242;
+
 
 #endif
 

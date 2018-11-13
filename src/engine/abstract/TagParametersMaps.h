@@ -23,6 +23,7 @@ typedef struct TagParametersMaps {
 	const TagParameterMap sARAccoladeMap;
 	const TagParameterMap sARAlterMap;
 	const TagParameterMap sARArticulationMap;
+	const TagParameterMap sARArpeggioMap;
 	const TagParameterMap sARAutoMap;
 	const TagParameterMap sARBarMap;
 	const TagParameterMap sARBarFormatMap;
@@ -80,6 +81,7 @@ typedef struct TagParametersMaps {
 			sARAccoladeMap (kARAccoladeParams),
 			sARAlterMap (kARAlterParams),
 			sARArticulationMap (kARArticulationParams),
+			sARArpeggioMap (kARArpeggioParams),
 			sARAutoMap (kARAutoParams),
 			sARBarMap (kARBarParams),
 			sARBarFormatMap (kARBarFormatParams),

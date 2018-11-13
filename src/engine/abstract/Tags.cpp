@@ -29,6 +29,7 @@ const char* kTagAccent		= "accent";
 const char* kTagAccolade	= "accolade";
 const char* kTagAccol		= "accol";
 const char* kTagAlter		= "alter";
+const char* kTagArpeggio	= "arpeggio";
 const char* kTagAuto		= "auto";
 const char* kTagBar			= "bar";
 const char* kTagBarFormat	= "barFormat";

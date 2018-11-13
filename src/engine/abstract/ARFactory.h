@@ -112,6 +112,8 @@ class ARFactory
   	
   private:
 
+		enum { kNoBeam = -99999999 };
+
 		ARMusicalVoice * 	mCurrentVoice = NULL;
 		ARMusic * 			mCurrentMusic = NULL;
 		ARMusicalEvent * 	mCurrentEvent = NULL;
@@ -126,7 +128,8 @@ class ARFactory
 		int 				mCurrentNumerator;
 		int 				mCurrentDenominator;
 		int				 	mCurrentIntensity;
-	
+		int					mCurrentBeamID;
+
 		void	checkTagEnd	( ARMusicalTag* tag);
 		void	checkRange	( const ARMusicalTag* tag, const std::string& ) const;
 		void	endTremolo	( ARMusicalTag * tag );

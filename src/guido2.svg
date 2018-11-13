@@ -2,9 +2,9 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 <metadata>
-Created by FontForge 20141027 at Tue Dec 09 11:31:31 2014
-
-Copyright (c) 1996-2001 Keith A. Hamel, 2009-2014 Grame. All rights reserved. To be used with GUIDO Engine. Version 3.5, Dec. 9 2014.
+Created by FontForge 20161003 at Tue Nov 13 11:15:44 2018
+ By Dominique Fober
+Copyright (c) 1996-2001 Keith A. Hamel, 2009-2018 Grame. All rights reserved. To be used with GUIDO Engine. Version 3.6, Nov. 12 2018.
 </metadata>
 <defs>
 <font id="Guido2" horiz-adv-x="512" >
@@ -19,8 +19,8 @@ Copyright (c) 1996-2001 Keith A. Hamel, 2009-2014 Grame. All rights reserved. To
     x-height="74"
     cap-height="187"
     bbox="-261 -1236 1477.57 1315"
-    underline-thickness="19.456"
-    underline-position="-124.928"
+    underline-thickness="19"
+    underline-position="-179"
     unicode-range="U+0003-00FF"
   />
 <missing-glyph 
@@ -633,8 +633,9 @@ d="M41 560v-48h83v-464h-83v-48h128v560h-128z" />
 d="M233 379l-215 -78q-18 -6 -18 -20.5t18 -20.5q108 -39 215 -78v41l-182 58l182 57v41z" />
     <glyph glyph-name="ntilde" unicode="&#xf1;" horiz-adv-x="232" 
 d="M0 379l215 -78q18 -6 18 -20.5t-18 -20.5q-108 -39 -215 -78v41l182 58l-182 57v41z" />
-    <glyph glyph-name="ograve" unicode="&#xf2;" 
-d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
+    <glyph glyph-name="ograve" unicode="&#xf2;" horiz-adv-x="165" 
+d="M97.0957 -2.38184l-25.1377 3.01367q-79.7949 94.9365 -69.7461 119.351q7.36426 16.3018 51.0635 37.5361q43.6992 21.2354 47.1846 34.3818q4.25 19.1826 -4.41211 35.8545q-3.15527 3.87891 -26.1992 29.9932l25.0986 -2.01465q36.8193 -45.5879 45.2471 -56.2656
+q29.6279 -40.8652 23.3027 -58.1279q-7.36523 -16.3027 -52.1025 -36.5762q-44.7373 -20.2754 -48.2236 -33.4229q-5.20898 -20.2197 5.53027 -38.8115q3.2334 -5.87793 28.3945 -34.9111z" />
     <glyph glyph-name="oacute" unicode="&#xf3;" 
 d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
     <glyph glyph-name="ocircumflex" unicode="&#xf4;" 

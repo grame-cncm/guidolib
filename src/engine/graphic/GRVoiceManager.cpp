@@ -23,6 +23,7 @@
 #include "ARAccidental.h"
 #include "ARAccolade.h"
 #include "ARAlter.h"
+#include "ARArpeggio.h"
 #include "ARAuto.h"
 #include "ARBarFormat.h"
 #include "ARBase.h"
@@ -108,6 +109,7 @@
 
 #include "GRAccelerando.h"
 #include "GRArticulation.h"
+#include "GRArpeggio.h"
 #include "GRAutoBeam.h"
 #include "GRBar.h"
 #include "GRBeam.h"
@@ -1313,6 +1315,15 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 		addGRTag(grbeam,0);
 		mCurGrStaff->AddTag(grbeam);
 		fMusic->addVoiceElement(arVoice,grbeam);
+	}
+	else if (tinf == typeid(ARArpeggio))
+	{
+		// Beams that start at the end of the line are parsed for the next line...
+		// if (atEnd) return retval;
+		GRArpeggio * grarp = new GRArpeggio(mCurGrStaff, static_cast<const ARArpeggio *>(apt));
+		addGRTag(grarp,0);
+		mCurGrStaff->AddTag(grarp);
+		fMusic->addVoiceElement(arVoice,grarp);
 	}
 	else if (tinf == typeid(ARFeatheredBeam))
 	{

@@ -3,6 +3,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.6.6
 - new GuidoGetMetersAt API
+- new \arpeggio tag
 - fix incorrect text position for marks
 - fix \intens bounding box
 

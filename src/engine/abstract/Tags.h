@@ -27,6 +27,7 @@ extern const char* kTagAccidental;
 extern const char* kTagAccol;
 extern const char* kTagAccolade;
 extern const char* kTagAlter;
+extern const char* kTagArpeggio;
 extern const char* kTagAuto;
 extern const char* kTagB;
 extern const char* kTagBar;
