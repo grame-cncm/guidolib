@@ -12,7 +12,7 @@
 
 */
 
-#include <cstring>
+#include <string.h>
 
 #include "ARArpeggio.h"
 #include "ARNote.h"
