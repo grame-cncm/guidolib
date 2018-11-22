@@ -123,7 +123,7 @@ vector<string> fillPathsVector (const char *filename)
 		string s(filename);
 		size_t n = s.find_last_of (pathSep);
 		if (n != string::npos) {		// add also the gmn file path
-			cerr << "fillPathsVector add " << s.substr(0,n) << endl;
+//			cerr << "fillPathsVector add " << s.substr(0,n) << endl;
 			pathsVector.push_back(s.substr(0,n));
 		}
 	}
