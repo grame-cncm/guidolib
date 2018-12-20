@@ -44,6 +44,7 @@ static void usage (char* name)
     cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;
     cerr << "           	-systemmap boolean : enables or not system mapping draw (default is false)" << endl;
     cerr << "           	-checkLyrics	   : enables lyrics collisions detection" << endl;
+    cerr << "           	-viewport	       : add viewport information (in addition to viewBox)" << endl;
 	exit(1);
 }
 
@@ -147,8 +148,10 @@ static void check (int argc, char *argv[])
 	for (int i = 1; i < argc; i++) {
 		const char* ptr = argv[i];
 		if (*ptr++ == '-') {
-			if ((*ptr != 'p') && (*ptr != 'f') &&
-				(strcmp(ptr, "staffmap")) && (strcmp(ptr, "voicemap")) && (strcmp(ptr, "systemmap") && (strcmp(ptr, "checkLyrics"))))
+			if ((*ptr != 'p') && (*ptr != 'f')
+				&& strcmp(ptr, "staffmap") && strcmp(ptr, "voicemap")
+				&& strcmp(ptr, "systemmap") && strcmp(ptr, "checkLyrics")
+				&& strcmp(ptr, "viewport"))
                 usage(argv[0]);
 		}
 	}
@@ -167,6 +170,28 @@ static bool readfile (FILE * fd, string& content)
 	} while (true);
 
 	return ferror(fd) == 0;
+}
+
+//_______________________________________________________________________________
+static GuidoErrCode Draw( VGDevice* dev, const GRHandler handle, int page, std::ostream& out)
+{
+	GuidoOnDrawDesc desc;              // declare a data structure for drawing
+	desc.handle = handle;
+
+	GuidoPageFormat	pf;
+	GuidoResizePageToMusic (handle);
+	GuidoGetPageFormat (handle, page, &pf);
+
+	desc.hdc = dev;                    // we'll draw on the svg device
+	desc.page = page;
+	desc.updateRegion.erase = true;     // and draw everything
+	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+	desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
+	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
+	dev->NotifySize(desc.sizex, desc.sizey);
+	dev->SelectPenColor(VGColor(0,0,0));
+
+	return GuidoOnDraw (&desc);
 }
 
 //_______________________________________________________________________________
@@ -241,17 +266,25 @@ int main(int argc, char **argv)
 
     if (getBoolOption(argc, argv, "-systemmap", false))
         mappingMode += kSystemMapping;
-
     /*************/
 
-#if 1
-	err = GuidoGR2SVG (grh, page, cout, false, fontfile, mappingMode);
-#else
-	err = GuidoSVGExport(grh, page, cout, fontfile, mappingMode);
-#endif
+	bool viewPort = getBoolOption(argc, argv, "-viewport");
+
+	VGDevice *svg = 0;
+	if (mappingMode) {
+		svg = sys.CreateDisplayDevice(cout, mappingMode);
+		if (viewPort) cerr << "Warning: viewport not supported with mappings" << endl;
+	}
+	else
+		svg = new SVGDevice(cout, &sys, fontfile, viewPort);
+	
+
+//	err = GuidoGR2SVG (grh, page, cout, false, fontfile, mappingMode);
+	err = Draw( svg, grh, page, cout);
     if (err != guidoNoErr)
         error(err);
-	
+
+	delete svg;
     GuidoCloseParser(parser);
 	return 0;
 }
