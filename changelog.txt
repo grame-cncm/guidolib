@@ -2,8 +2,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.6
-- new GuidoGetMetersAt API
+- add -viewport option to guido2svg
 - new \arpeggio tag
+- new GuidoGetMetersAt API
 - fix incorrect text position for marks
 - fix \intens bounding box
 
