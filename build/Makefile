@@ -112,7 +112,7 @@ $(IOS)/Release-iphoneos/libGUIDOEngine.a :
 ioscmake:
 $(IOS)/guidolib.xcodeproj : CMakeLists.txt
 	[ -d $(IOS) ] || mkdir $(IOS)
-	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DC++11=yes -DIOS=yes
+	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DIOS=yes
 
 macclean :
 	rm -rf $(IOS) $(MAC) $(OUT)
