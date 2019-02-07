@@ -17,6 +17,7 @@
 #include "ARAuto.h"
 #include "TagParameterStrings.h"
 #include "TagParameterString.h"
+#include "TagParameterFloat.h"
 
 using namespace std;
 
@@ -33,6 +34,8 @@ ARAuto::ARAuto()
 	fStretchFirstLineState  = kOff;
 	fLyricsAutoPos		    = kOff;
 	fInstrAutoPos		    = kOff;
+	fFingeringPos			= kDefault;
+	fFingeringSize			= 0;
 }
 
 void ARAuto::setTagParameters (const TagParameterMap& params)
@@ -62,4 +65,17 @@ void ARAuto::setTagParameters (const TagParameterMap& params)
 
 	p = getParameter<TagParameterString>(kAutoLyricsPosStr, kLyricsAutoPosStr);
 	if (p && (on == p->getValue())) fLyricsAutoPos = kOn;
+
+	p = getParameter<TagParameterString>(kFingeringPosStr);
+	if (p) {
+		if (p->getString() == kAboveStr) 	 fFingeringPos = kAbove;
+		else if (p->getString() == kBelowStr) fFingeringPos = kBelow;
+		fHasFingeringPos = true;
+	}
+
+	const TagParameterFloat * f = getParameter<TagParameterFloat>(kFingeringSizeStr);
+	if (f) {
+		fFingeringSize = f->getValue();
+		fHasFingeringSize = true;
+	}
 }

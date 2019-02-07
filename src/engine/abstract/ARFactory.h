@@ -22,6 +22,7 @@
 #include "ARDefine.h"
 #include "ARMusicalTag.h"
 #include "ARMusicalVoice.h"
+#include "ARAuto.h"
 
 class ARMusic;
 class ARMusicalVoice;
@@ -48,7 +49,6 @@ class ARDiminuendo;
 class ARTremolo;
 class ARChordTag;
 class ARTuplet;
-class ARAuto;
 class ARKey;
 
 typedef KF_IPointerList<ARMusicalTag> TagPointerList; // todo: replace by stl container (easy)
@@ -168,6 +168,8 @@ protected:
 	bool				mVoiceAdded;
 	bool				mAutoLyricsPos;
 	bool				mAutoInstrPos;
+	ARAuto::position 	mFingeringPos;
+	float				mFingeringSize;
 
     NVstring mFilePath;
 };

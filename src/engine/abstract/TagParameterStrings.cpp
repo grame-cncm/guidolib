@@ -47,6 +47,7 @@ const char* kARDisplayDurationParams ="I,n,,r;I,d,,r;I,ndots,0,o";
 const char* kARDynamicParams	= "U,dx1,0,o;U,dx1,0,o;U,dx2,0,o;U,deltaY,3,o;U,thickness,0.16,o;S,autopos,off,o";
 const char* kARFeatheredBeamParams= "S,durations,,o;S,drawDuration,false,o";
 const char* kARFermataParams	= "S,type,,o;S,position,above,o";
+const char* kARFingeringParams	= "S,position,,o;U,fsize,10pt,o;";
 const char* kARGlissandoParams	= "U,dx1,0,o;U,dy1,0,o;U,dx2,0,o;U,dy2,0,o;S,fill,false,o;U,thickness,0.3,o";
 const char* kARGraceParams		= "I,i,,o";
 const char* kARHarmonyParams	= "S,text,,r;U,dy,-1,o;U,ypos,0hs,o;S,textformat,cc,o;S,font,Arial,o;U,fsize,18pt,o;S,fattrib,,o";
@@ -84,6 +85,7 @@ const char* kARVoltaParams		= "S,mark,,r;S,format,,o";
 //---------------------------------------------
 // tags parameters supported at language level
 //---------------------------------------------
+const char* kAboveStr 		= "above";
 const char* kAbsTempoStr	= "abstempo";
 const char* kAccidentalStr	= "accidental";
 const char* kAdxStr			= "adx";
@@ -94,6 +96,7 @@ const char* kAutoBarlinesStr= "autoBarlines";
 const char* kAutoMeasNumStr = "autoMeasuresNum";
 const char* kAutoposStr		= "autopos";
 const char* kBeginStr		= "begin";
+const char* kBelowStr 		= "below";
 const char* kBlueStr		= "blue";
 const char* kBmStr			= "bm";
 const char* kBoldStr		= "bold";
@@ -193,6 +196,8 @@ const char* kAutoStretchLastLineStr	= "autoStretchLastLine";
 const char* kAutoStretchFirstLineStr= "autoStretchFirstLine";
 const char* kAutoInstrPosStr		= "autoInstrPos";
 const char* kAutoLyricsPosStr		= "autoLyricsPos";
+const char* kFingeringPosStr		= "fingeringPos";
+const char* kFingeringSizeStr		= "fingeringSize";
 
 
 

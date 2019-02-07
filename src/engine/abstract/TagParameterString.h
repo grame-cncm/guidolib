@@ -41,6 +41,7 @@ class TagParameterString : public TagParameter
         virtual bool isString() const				{ return true; }
 
 		const char* getValue() const				{ return fValue.c_str(); }
+		const std::string& getString() const		{ return fValue; }
 		bool		getRGB( unsigned char colref[4] ) const; 	// returns 1 if successful
         bool        getBool() const;
 		bool operator == (const char * inCString ) const;

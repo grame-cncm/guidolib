@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.6
+- fingering tag: add position attribute, add global settings
 - add -viewport option to guido2svg
 - new \arpeggio tag
 - new GuidoGetMetersAt API

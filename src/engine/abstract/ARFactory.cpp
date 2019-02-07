@@ -146,6 +146,8 @@ ARFactory::ARFactory()
 	mVoiceAdded(false),
 	mAutoLyricsPos(false),
 	mAutoInstrPos(false),
+	mFingeringPos(ARAuto::kDefault),
+	mFingeringSize(0),
     mFilePath()
 {
 		sMaxTagId = -1;
@@ -240,6 +242,8 @@ void ARFactory::createVoice()
 	mVoiceAdded = false;
 	mAutoLyricsPos = false;
 	mAutoInstrPos = false;
+	mFingeringPos = ARAuto::kDefault;
+	mFingeringSize = 0;
 	mCurrentKey = 0;
 }
 
@@ -944,9 +948,10 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'f':
-			if (!strcmp(name, kTagFingering ))
+			if (!strcmp(name, kTagFingering ) || !strcmp(name, kTagShortFingering ))
 			{
-				ARFingering * tmp = new ARFingering;
+				ARFingering * tmp = new ARFingering(mFingeringPos);
+				if (mFingeringSize) tmp->setFingeringSize(mFingeringSize);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
@@ -1957,6 +1962,8 @@ void ARFactory::addTag()
 	if (autoTag) {
 		mAutoLyricsPos = (autoTag->getAutoLyricsPos() == ARAuto::kOn);
 		mAutoInstrPos = (autoTag->getAutoInstrPos() == ARAuto::kOn);
+		if (autoTag->hasFingeringPos())  mFingeringPos  = autoTag->getFingeringPos();
+		if (autoTag->hasFingeringSize()) mFingeringSize = autoTag->getFingeringSize();
 	}
 	mTagParameters.clear();
 }

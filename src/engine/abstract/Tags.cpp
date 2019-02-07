@@ -80,6 +80,7 @@ const char* kTagFBeamEnd		= "fBeamEnd";
 const char* kTagFermata			= "fermata";
 const char* kTagFine			= "fine";
 const char* kTagFingering		= "fingering";
+const char* kTagShortFingering	= "fing";
 const char* kTagGlissando		= "glissando";
 const char* kTagGlissandoBegin	= "glissandoBegin";
 const char* kTagGlissandoEnd	= "glissandoEnd";

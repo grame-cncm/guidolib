@@ -127,6 +127,7 @@
 #include "GRDummy.h"
 #include "GREmpty.h"
 #include "GRFinishBar.h"
+#include "GRFingering.h"
 #include "GRGlissando.h"
 #include "GRGlobalLocation.h"
 #include "GRGlobalStem.h"
@@ -1373,8 +1374,9 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 	else if (tinf == typeid(ARFingering))
 	{
 		const ARFingering * artxt = static_cast<const ARFingering *>(apt);
-		GRText * gtext = new GRText(mCurGrStaff,artxt);
-		gtext->mustFollowPitch( true );
+//		GRText * gtext = new GRText(mCurGrStaff,artxt);
+//		gtext->mustFollowPitch( true );
+		GRText * gtext = new GRFingering(mCurGrStaff,artxt);
 		// adds the tag at the end...
 		addGRTag(gtext,0);
 

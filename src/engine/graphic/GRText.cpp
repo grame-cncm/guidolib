@@ -169,8 +169,7 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 //cerr << arText->getSupportedTagParameters() ;
 	float dx = 0;
 	float dy = 0;
-//	if( arText->getYPos())
-//		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
+
 	if (arText->getDY())
 		dy = -arText->getDY()->getValue( curLSPACE );
 	if (arText->getDX())
