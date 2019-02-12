@@ -118,7 +118,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 
 	VGSystem * gSystem= new SVGSystem(______src_guido2_svg);
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
-	desc.musicFont = "Guido2";
+	desc.musicFont = kMusicFontStr;
 	desc.textFont  = "Times";
 	GuidoErrCode errcode = GuidoInit (&desc);
 	return errcode;

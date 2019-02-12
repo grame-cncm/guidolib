@@ -73,7 +73,7 @@ const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int prop
 {
 #ifdef INDEPENDENTSVG
 	// This system try to use embed font metrics
-	if(strcmp("Guido2", faceName) == 0) {
+	if(strcmp (kMusicFontStr, faceName) == 0) {
 		return new GuidoFont(faceName, size, properties);
 	} else {
 		//if(strcmp("Times", faceName) == 0) {
