@@ -30,7 +30,6 @@
 #include "ARBarFormat.h"
 #include "ARBeam.h"
 #include "ARBeamState.h"
-#include "ARBembel.h"
 #include "ARBreathMark.h"
 #include "ARChordTag.h"
 #include "ARClef.h"
@@ -754,12 +753,6 @@ void ARFactory::createTag( const char * name, int no )
 				ARBarFormat * tmp = new ARBarFormat;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
-			}
-			else if (!strcmp(name, kTagBembel ))
-			{
-				ARBembel * tmp = new ARBembel;
-				mTags.AddHead(tmp);
-				mCurrentVoice->AddTail(tmp);				
 			}
 			else if(!strcmp(name, kTagBreathMark ))	
 			{

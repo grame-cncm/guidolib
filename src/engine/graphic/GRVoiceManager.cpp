@@ -28,7 +28,6 @@
 #include "ARBarFormat.h"
 #include "ARBase.h"
 #include "ARBeam.h"
-#include "ARBembel.h"
 #include "ARBreathMark.h"
 #include "ARChordComma.h"
 #include "ARChordTag.h"
@@ -113,7 +112,6 @@
 #include "GRAutoBeam.h"
 #include "GRBar.h"
 #include "GRBeam.h"
-#include "GRBembel.h"
 #include "GRBreathMark.h"
 #include "GRChordTag.h"
 #include "GRClef.h"
@@ -967,13 +965,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRSpace * tmp = new GRSpace(myspc,0);
 		tmp->setNeedsSpring(0);	
 		
-		mCurGrStaff->AddTag(tmp);
-		fMusic->addVoiceElement(arVoice,tmp);
-		grne = tmp;
-	}
-	else if (tinf == typeid(ARBembel))
-	{
-		GRBembel * tmp = new GRBembel(static_cast<ARBembel *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
 		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
