@@ -55,7 +55,8 @@ void QGuidoPainter::startGuidoEngine()
 		QGuidoPainter::mSys = new GSystemQt(0);
 		QGuidoPainter::mDev = mSys->CreateDisplayDevice();
 		
-		GuidoInitDesc gd = { QGuidoPainter::mDev , 0, "Guido2", "Times New Roman" };
+//		GuidoInitDesc gd = { QGuidoPainter::mDev , 0, "Guido2", "Times New Roman" };
+		GuidoInitDesc gd = { QGuidoPainter::mDev , 0, 0, "Times New Roman" };
 		GuidoInit (&gd);             // Initialise the Guido Engine first
 	}
 }
