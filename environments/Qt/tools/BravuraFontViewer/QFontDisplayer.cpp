@@ -191,8 +191,9 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 			QString symbol = QString( c );
 
 #ifdef WITH_GRAPHICS_SCENE
-			QGraphicsItem * text;			
-			text = mScene->addText(QVariant(n).toString(),miniTextFont);
+			QGraphicsItem * text;
+			text = mScene->addText(QString::number( n, 16 ).toUpper(), miniTextFont);
+//			text = mScene->addText(QVariant(n).toString(), miniTextFont);
 			text->translate(x,y);
 			((QGraphicsTextItem*)text)->setDefaultTextColor(Qt::red);
 			text = mScene->addText(symbol,font);
@@ -202,7 +203,8 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 			QPen redPen(Qt::red );
 			painter.setPen( redPen );
 			painter.setFont( miniTextFont );
-			painter.drawText( x , y + QFontMetrics(miniTextFont).height() , QVariant(n).toString() );
+			painter.drawText( x , y + QFontMetrics(miniTextFont).height() , QString::number( n, 16 ).toUpper() );
+//			painter.drawText( x , y + QFontMetrics(miniTextFont).height() , QVariant(n).toString() );
 			painter.setPen( lightPen );
 			painter.drawLine( x + xOffset , y , x + xOffset , y + CELL_HEIGHT );
 			painter.drawLine( x , y + CELL_HEIGHT - yOffset , x + CELL_WIDTH , y + CELL_HEIGHT - yOffset );
