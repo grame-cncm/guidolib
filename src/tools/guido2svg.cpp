@@ -37,8 +37,9 @@ static void usage (char* name)
 	cerr << "usage: " << tool << " [options] <gmn file>" << endl;
 	cerr << "       convert GMN code to svg" << endl;
 	cerr << "       options:" << endl;
-	cerr << "           	-f fontfile        : include the guido font taken from fontfile" << endl;
-	cerr << "           	-p pagenum         : an optional page number (default is 1)" << endl;
+	cerr << "           	-f --fontfile <file>  : include the font taken from file" << endl;
+	cerr << "           	   --font     <name>  : use the 'name' as musical font" << endl;
+	cerr << "           	-p pagenum            : an optional page number (default is 1)" << endl;
 	cerr << "       reads the standard input when gmn file is omitted." << endl;
 	cerr << "           	-voicemap  boolean : enables or not event mapping draw (default is false)" << endl;
     cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;
@@ -145,10 +146,12 @@ vector<string> fillPathsVector (const char *filename)
 //_______________________________________________________________________________
 static void check (int argc, char *argv[])
 {
+	if (argc < 2) usage(argv[0]);
 	for (int i = 1; i < argc; i++) {
 		const char* ptr = argv[i];
 		if (*ptr++ == '-') {
 			if ((*ptr != 'p') && (*ptr != 'f')
+				&& strcmp(ptr, "-fontfile") && strcmp(ptr, "-font")
 				&& strcmp(ptr, "staffmap") && strcmp(ptr, "voicemap")
 				&& strcmp(ptr, "systemmap") && strcmp(ptr, "checkLyrics")
 				&& strcmp(ptr, "viewport"))
@@ -205,7 +208,9 @@ int main(int argc, char **argv)
 		usage(argv[0]);
 	}
 
+	const char* musicfont 	 = getOption (argc, argv, "--font", 0);
 	const char* fontfile = getOption (argc, argv, "-f", 0);
+	if (!fontfile) fontfile = getOption (argc, argv, "--fontfile", 0);
 	const char* filename = getFile (argc, argv);
 
 	string gmn;							// a string to read the standard input
@@ -214,7 +219,7 @@ int main(int argc, char **argv)
 
 	SVGSystem sys(fontfile);
 	VGDevice *dev = sys.CreateDisplayDevice();
-    GuidoInitDesc gd = { dev, 0, 0, 0 };
+    GuidoInitDesc gd = { dev, 0, musicfont, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
 
 	GuidoErrCode err;
