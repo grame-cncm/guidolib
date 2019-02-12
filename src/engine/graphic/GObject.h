@@ -119,7 +119,7 @@ class GObject
 
 		static void		NotifyNewInstance();
 
-		static float sSymbolExtentMap [ kMaxMusicalSymbolID ];
+//		static float sSymbolExtentMap [ kMaxMusicalSymbolID ];
 		static int	sInstanceCount;		// debug
 		static NVPoint sRefposNone;
 };

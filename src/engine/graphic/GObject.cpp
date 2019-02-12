@@ -25,7 +25,7 @@ using namespace std;
 
 // - Static members
 int	GObject::sInstanceCount = 0;
-float GObject::sSymbolExtentMap [ kMaxMusicalSymbolID ];
+//float GObject::sSymbolExtentMap [ kMaxMusicalSymbolID ];
 NVPoint GObject::sRefposNone;
 
 // ------------------------------------------------------------------------
@@ -97,9 +97,9 @@ void GObject::GGSOutput() const
 */
 float GObject::GetSymbolExtent( unsigned int inSymbol ) 
 {
-	const float retval = sSymbolExtentMap[ inSymbol ];
-	if (retval > -1)
-		return retval;
+//	const float retval = sSymbolExtentMap[ inSymbol ];
+//	if (retval > -1)
+//		return retval;
 
 	float extent = 0;
 	float x = 0;
@@ -108,18 +108,18 @@ float GObject::GetSymbolExtent( unsigned int inSymbol )
 		FontManager::gFontScriab->GetExtent( inSymbol, &x, &y, gGlobalSettings.gDevice );
 	
 	extent = x;
-	sSymbolExtentMap[ inSymbol ] = extent;
+//	sSymbolExtentMap[ inSymbol  ] = extent;
 	return extent;
 }
 
 // --------------------------------------------------------------------------
 void GObject::NotifyNewInstance()
 { 
- 	if( ++ sInstanceCount == 1 )
-	{	
-		for( int index = 0; index < kMaxMusicalSymbolID; ++ index )
-			sSymbolExtentMap[ index ] = -1;
-	}
+// 	if( ++ sInstanceCount == 1 )
+//	{
+//		for( int index = 0; index < kMaxMusicalSymbolID; ++ index )
+//			sSymbolExtentMap[ index ] = -1;
+//	}
 }
 
 // --------------------------------------------------------------------------
