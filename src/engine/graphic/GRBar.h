@@ -45,7 +45,6 @@ class GRBar : public GRTagARNotationElement
 		void setPosTo( float posy );
 		
 		virtual void setGRStaff(GRStaff * pstaff);
-		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void DrawWithGlyphs( VGDevice & hdc ) const;
 		virtual void DrawWithLines( VGDevice & hdc ) const;
