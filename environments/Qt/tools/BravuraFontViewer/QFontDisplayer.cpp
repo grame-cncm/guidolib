@@ -21,7 +21,7 @@
 //#define PRINTEXTEND
 #ifdef PRINTEXTEND
 #include <fstream>
-std::ofstream guidoout("guido2.txt");
+std::ofstream bravuraout("bravura.txt");
 std::ofstream timesout("times.txt");
 # ifdef WIN32
 #  define OS "Win32"
@@ -47,37 +47,42 @@ using namespace std;
 #define STARTGLYPH 57344
 
 
-#ifdef WITH_GRAPHICS_SCENE
-QFontDisplayer::QFontDisplayer(const QString& policeFamily , int nbOfColumns , int nbOfChars , QWidget *parent)
-    : QGraphicsView(parent) ,   mPoliceFamily(policeFamily) ,
-	mNbOfColumns(nbOfColumns) , mNbOfChars(nbOfChars)
-{
-	
-	mScene = new QGraphicsScene();
-	setScene(mScene);
-	showPolice();
-}
-#else
 QFontDisplayer::QFontDisplayer(const QString& policeFamily , int nbOfColumns , int nbOfChars , QWidget* )
-    : mPoliceFamily(policeFamily) ,
-	mNbOfColumns(nbOfColumns) , mNbOfChars(nbOfChars)
+    : mPoliceFamily(policeFamily), mNbOfColumns(nbOfColumns) , mNbOfChars(nbOfChars)
 {
 }
-#endif
 
 //--------------------------------------------------
-QFontDisplayer::~QFontDisplayer()
+void QFontDisplayer::printMetrics(QPainter& painter )
 {
-#ifdef WITH_GRAPHICS_SCENE
-	delete mScene;
+#ifdef PRINTEXTEND
+	static bool done = false;
+	if (!done) {
+		painter.save();
+		painter.scale( 1/painter.worldTransform().m11(), 1/painter.worldTransform().m22());
+		const float LSPACE = 50;
+		QFont musicFont	= QFont("Bravura" , 4*LSPACE);
+		QFontMetrics *metrics = new QFontMetrics(musicFont);
+		bravuraout << OS << " - Qt - Bravura font - size: " << 4*LSPACE << endl;
+		for (unsigned char i=STARTGLYPH; i<STARTGLYPH+mNbOfChars; i++) {
+			bravuraout << "0x" << QString::number( i, 16 ).toUpper() << ": " << metrics->width( QChar(i) ) << endl;
+		}
+		delete metrics;
+
+		QFont timesFont	= QFont("Times" , 1.5*LSPACE);
+		metrics = new QFontMetrics(timesFont);
+		timesout << OS << " - Qt - Time font - size: " << 1.5*LSPACE << endl;
+		for (unsigned char i=32; i<255; i++) {
+			timesout << int(i) << ": " << metrics->width( QChar(i) ) << endl;
+		}
+		delete metrics;
+		painter.restore();
+		done = true;
+	}
 #endif
 }
 
 //--------------------------------------------------	
-#ifdef WITH_GRAPHICS_SCENE
-void QFontDisplayer::showPolice()
-{
-#else
 void QFontDisplayer::paintEvent( QPaintEvent * event )
 {
 	event->accept();
@@ -85,32 +90,8 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	QPainter painter(this);
 	painter.fillRect( 0 , 0 , width() , height() , QBrush(Qt::white) );
 
-#endif
-
 #ifdef PRINTEXTEND
-	static bool done = false;
-	if (!done) {
-		painter.save();
-		painter.scale( 1/painter.worldTransform().m11(), 1/painter.worldTransform().m22());
-		const float LSPACE = 50;
-		QFont guidoFont	= QFont("Guido2" , 4*LSPACE);
-		QFontMetrics *metrics = new QFontMetrics(guidoFont);	
-		guidoout << OS << " - Qt - Guido2 font - size: " << 4*LSPACE << endl; 
-		for (unsigned char i=32; i<255; i++) {
-			guidoout << int(i) << ": " << metrics->width( QChar(i) ) << endl; 
-		}
-		delete metrics;
-
-		QFont timesFont	= QFont("Times" , 1.5*LSPACE);
-		metrics = new QFontMetrics(timesFont);	
-		timesout << OS << " - Qt - Time font - size: " << 1.5*LSPACE << endl; 
-		for (unsigned char i=32; i<255; i++) {
-			timesout << int(i) << ": " << metrics->width( QChar(i) ) << endl; 
-		}
-		delete metrics;
-		painter.restore();
-		done = true;
-	}
+	printMetrics( painter );
 #endif
 
 	int cellSize = width() / (mNbOfColumns + 3);
@@ -118,6 +99,7 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	int policeSize = (cellSize / 6) * 3;
 	QFont font( mPoliceFamily );
 	font.setPixelSize( policeSize );
+	QFontMetrics metric (font);
 	
 	QString textPoliceFamily = "Arial";
 	int textPoliceSize = (cellSize / 6) * 3;
@@ -131,7 +113,6 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	int CELL_HEIGHT = cellSize;
 	
 	int nbOfRows = mNbOfChars / mNbOfColumns + 1;
-#ifndef WITH_GRAPHICS_SCENE
 	resize( width() , (nbOfRows + 1) * CELL_HEIGHT );
 
 	int xOffset = cellSize / 4;
@@ -139,72 +120,43 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	QPen lightPen( Qt::red );
 	lightPen.setWidth( 0.5f );
 	lightPen.setStyle( Qt::DotLine );
-#endif	
 
 	QPen pen;
-	pen.setWidth(2);
+	pen.setWidth(1.5);
 	for (int i = 0 ; i < mNbOfColumns ; i++ )
 	{
 		int x = (i+2) * CELL_WIDTH;
 		int y = 0;
-#ifdef WITH_GRAPHICS_SCENE
-		QGraphicsItem * t = mScene->addText(QVariant(i).toString() , textFont );
-		t->translate( x , y );		
-		mScene->addRect( x , y , CELL_WIDTH , CELL_HEIGHT , pen );
-#else
 		painter.setPen( pen );
 		painter.setFont( textFont );
-		painter.drawText( x , y + CELL_HEIGHT , QVariant(i).toString() );
+		painter.drawText( x+10 , y -10 + CELL_HEIGHT , QVariant(i).toString() );
 		painter.drawRect( x , y , CELL_WIDTH , CELL_HEIGHT );
-#endif
 	}
 	
 	for (int j = 0 ; j < nbOfRows ; j++ )
 	{
 		int x = 0;
 		int y = (j+1) * CELL_HEIGHT;
-#ifdef WITH_GRAPHICS_SCENE
-		QGraphicsItem * t = mScene->addText(QVariant(j * mNbOfColumns).toString() , textFont);
-		t->translate( x , y );
-		mScene->addRect( x , y , 2 * CELL_WIDTH , CELL_HEIGHT , pen );
-#else
-		painter.drawText( x , y + CELL_HEIGHT , QVariant(j * mNbOfColumns).toString() );
+		painter.drawText( x+10 , y -10 + CELL_HEIGHT , QVariant(j * mNbOfColumns).toString() );
 		painter.drawRect( x , y , 2 * CELL_WIDTH , CELL_HEIGHT );
-#endif
 	}
 	
-	bool quit = false;
-	unsigned int n = STARTGLYPH;
+	QPen bbpen (Qt::blue);
+	bbpen.setWidth(1.5);
+	unsigned int glyph = STARTGLYPH;
 	for (int j = 0 ; j < nbOfRows ; j++ )
 	{
-		if ( quit ) 
-		{
-			break;
-		}
 		for (int i = 0 ; i < mNbOfColumns ; i++ )
 		{	
 			int x = (i+2) * CELL_WIDTH;
 			int y = (j+1) * CELL_HEIGHT;
 		
-//			QChar c = QChar::fromAscii( n );
-			QChar c = QChar( n );
-			QString symbol = QString( c );
+			QString symbol = QString( QChar( glyph ) );
 
-#ifdef WITH_GRAPHICS_SCENE
-			QGraphicsItem * text;
-			text = mScene->addText(QString::number( n, 16 ).toUpper(), miniTextFont);
-//			text = mScene->addText(QVariant(n).toString(), miniTextFont);
-			text->translate(x,y);
-			((QGraphicsTextItem*)text)->setDefaultTextColor(Qt::red);
-			text = mScene->addText(symbol,font);
-			text->translate(x,y);
-			mScene->addRect( x , y , CELL_WIDTH , CELL_HEIGHT );
-#else
 			QPen redPen(Qt::red );
 			painter.setPen( redPen );
 			painter.setFont( miniTextFont );
-			painter.drawText( x , y + QFontMetrics(miniTextFont).height() , QString::number( n, 16 ).toUpper() );
-//			painter.drawText( x , y + QFontMetrics(miniTextFont).height() , QVariant(n).toString() );
+			painter.drawText( x , y + QFontMetrics(miniTextFont).height() , QString::number( glyph, 16 ).toUpper() );
 			painter.setPen( lightPen );
 			painter.drawLine( x + xOffset , y , x + xOffset , y + CELL_HEIGHT );
 			painter.drawLine( x , y + CELL_HEIGHT - yOffset , x + CELL_WIDTH , y + CELL_HEIGHT - yOffset );
@@ -212,13 +164,9 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 			painter.setFont( font );
 			painter.drawText( x + xOffset , y + CELL_HEIGHT - yOffset , symbol );
 			painter.drawRect( x , y , CELL_WIDTH , CELL_HEIGHT );
-#endif
-			n++;
-			if ( int(n) == mNbOfChars )
-			{
-				quit = true;
-				break;
-			}
+//			painter.setPen( bbpen );
+//			painter.drawRect( x + xOffset , y +10, metric.width(symbol) , CELL_HEIGHT-20 );
+			glyph++;
 		}
 	}
 

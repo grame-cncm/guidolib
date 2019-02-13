@@ -14,28 +14,16 @@
  #include <QWidget>
  #include <QString>
 
-#ifdef WITH_GRAPHICS_SCENE
- #include <QGraphicsView>
- #include <QGraphicsScene>
-class QFontDisplayer : public QGraphicsView
-#else
 class QFontDisplayer : public QWidget
-#endif
 {
-
 public:
     
-	QFontDisplayer(const QString& policeFamily , int nbOfColumns , int nbOfChars , QWidget *parent = 0);
-	~QFontDisplayer();
+	 QFontDisplayer(const QString& policeFamily , int nbOfColumns , int nbOfChars , QWidget *parent = 0);
+	~QFontDisplayer() {}
 	
 protected:
-
-#ifdef WITH_GRAPHICS_SCENE
-	void showPolice();
-	QGraphicsScene * mScene;
-#else
 	void paintEvent( QPaintEvent * event );
-#endif
+	void printMetrics(QPainter& painter );
 
 	QString mPoliceFamily;
 	int mNbOfColumns;
