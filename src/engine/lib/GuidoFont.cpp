@@ -1,6 +1,6 @@
 /*
   GUIDO Library
-  Copyright (C) 2014	Grame
+  Copyright (C) 2014-2019	Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,47 +10,270 @@
   research@grame.fr
 
 */
+
 #include "GuidoFont.h"
 
-GuidoFont::GuidoFont(const char *name, int size, int properties) : name(name), size(size), properties(properties)
+void GuidoFont::initialize()
 {
+	fRefSize = kGuidoFontSize;		// the font size used to compute the extends map
+	fHeight	 = kGuidoFontHeight;	// the static height value
+
+	fExtends[0] = 100;
+	fExtends[1] = 100;
+	fExtends[2] = 100;
+	fExtends[3] = 100;
+	fExtends[4] = 100;
+	fExtends[5] = 100;
+	fExtends[6] = 100;
+	fExtends[7] = 100;
+	fExtends[8] = 100;
+	fExtends[9] = 80;
+	fExtends[10] = 100;
+	fExtends[11] = 100;
+	fExtends[12] = 100;
+	fExtends[13] = 100;
+	fExtends[14] = 100;
+	fExtends[15] = 100;
+	fExtends[16] = 100;
+	fExtends[17] = 100;
+	fExtends[18] = 100;
+	fExtends[19] = 100;
+	fExtends[20] = 100;
+	fExtends[21] = 100;
+	fExtends[22] = 100;
+	fExtends[23] = 100;
+	fExtends[24] = 100;
+	fExtends[25] = 100;
+	fExtends[26] = 100;
+	fExtends[27] = 100;
+	fExtends[28] = 100;
+	fExtends[29] = 100;
+	fExtends[30] = 100;
+	fExtends[31] = 100;
+	fExtends[32] = 20;
+	fExtends[33] = 42;
+	fExtends[34] = 28;
+	fExtends[35] = 43;
+	fExtends[36] = 29;
+	fExtends[37] = 103;
+	fExtends[38] = 123;
+	fExtends[39] = 189;
+	fExtends[40] = 33;
+	fExtends[41] = 33;
+	fExtends[42] = 60;
+	fExtends[43] = 60;
+	fExtends[44] = 36;
+	fExtends[45] = 60;
+	fExtends[46] = 19;
+	fExtends[47] = 108;
+	fExtends[48] = 72;
+	fExtends[49] = 50;
+	fExtends[50] = 68;
+	fExtends[51] = 65;
+	fExtends[52] = 66;
+	fExtends[53] = 60;
+	fExtends[54] = 67;
+	fExtends[55] = 68;
+	fExtends[56] = 66;
+	fExtends[57] = 67;
+	fExtends[58] = 72;
+	fExtends[59] = 83;
+	fExtends[60] = 41;
+	fExtends[61] = 200;
+	fExtends[62] = 76;
+	fExtends[63] = 136;
+	fExtends[64] = 65;
+	fExtends[65] = 30;
+	fExtends[66] = 134;
+	fExtends[67] = 84;
+	fExtends[68] = 63;
+	fExtends[69] = 60;
+	fExtends[70] = 150;
+	fExtends[71] = 41;
+	fExtends[72] = 80;
+	fExtends[73] = 41;
+	fExtends[74] = 54;
+	fExtends[75] = 56;
+	fExtends[76] = 82;
+	fExtends[77] = 117;
+	fExtends[78] = 20;
+	fExtends[79] = 71;
+	fExtends[80] = 147;
+	fExtends[81] = 60;
+	fExtends[82] = 60;
+	fExtends[83] = 106;
+	fExtends[84] = 105;
+	fExtends[85] = 112;
+	fExtends[86] = 52;
+	fExtends[87] = 128;
+	fExtends[88] = 60;
+	fExtends[89] = 200;
+	fExtends[90] = 117;
+	fExtends[91] = 52;
+	fExtends[92] = 52;
+	fExtends[93] = 89;
+	fExtends[94] = 53;
+	fExtends[95] = 100;
+	fExtends[96] = 122;
+	fExtends[97] = 50;
+	fExtends[98] = 40;
+	fExtends[99] = 84;
+	fExtends[100] = 149;
+	fExtends[101] = 4;
+	fExtends[102] = 89;
+	fExtends[103] = 31;
+	fExtends[104] = 5;
+	fExtends[105] = 30;
+	fExtends[106] = 109;
+	fExtends[107] = 110;
+	fExtends[108] = 91;
+	fExtends[109] = 121;
+	fExtends[110] = 46;
+	fExtends[111] = 28;
+	fExtends[112] = 77;
+	fExtends[113] = 60;
+	fExtends[114] = 112;
+	fExtends[115] = 227;
+	fExtends[116] = 52;
+	fExtends[117] = 112;
+	fExtends[118] = 53;
+	fExtends[119] = 81;
+	fExtends[120] = 60;
+	fExtends[121] = 150;
+	fExtends[122] = 52;
+	fExtends[123] = 21;
+	fExtends[124] = 64;
+	fExtends[125] = 91;
+	fExtends[126] = 69;
+	fExtends[127] = 100;
+	fExtends[128] = 100;
+	fExtends[129] = 100;
+	fExtends[130] = 100;
+	fExtends[131] = 100;
+	fExtends[132] = 100;
+	fExtends[133] = 100;
+	fExtends[134] = 100;
+	fExtends[135] = 100;
+	fExtends[136] = 100;
+	fExtends[137] = 100;
+	fExtends[138] = 100;
+	fExtends[139] = 100;
+	fExtends[140] = 100;
+	fExtends[141] = 100;
+	fExtends[142] = 100;
+	fExtends[143] = 100;
+	fExtends[144] = 100;
+	fExtends[145] = 100;
+	fExtends[146] = 100;
+	fExtends[147] = 100;
+	fExtends[148] = 100;
+	fExtends[149] = 100;
+	fExtends[150] = 100;
+	fExtends[151] = 100;
+	fExtends[152] = 100;
+	fExtends[153] = 100;
+	fExtends[154] = 100;
+	fExtends[155] = 100;
+	fExtends[156] = 0;
+	fExtends[157] = 100;
+	fExtends[158] = 100;
+	fExtends[159] = 100;
+	fExtends[160] = 63;
+	fExtends[161] = 40;
+	fExtends[162] = 50;
+	fExtends[163] = 49;
+	fExtends[164] = 240;
+	fExtends[165] = 51;
+	fExtends[166] = 46;
+	fExtends[167] = 41;
+	fExtends[168] = 56;
+	fExtends[169] = 35;
+	fExtends[170] = 43;
+	fExtends[171] = 25;
+	fExtends[172] = 82;
+	fExtends[173] = 0;
+	fExtends[174] = 78;
+	fExtends[175] = 4;
+	fExtends[176] = 158;
+	fExtends[177] = 122;
+	fExtends[178] = 23;
+	fExtends[179] = 56;
+	fExtends[180] = 53;
+	fExtends[181] = 170;
+	fExtends[182] = 47;
+	fExtends[183] = 91;
+	fExtends[184] = 105;
+	fExtends[185] = 105;
+	fExtends[186] = 47;
+	fExtends[187] = 170;
+	fExtends[188] = 69;
+	fExtends[189] = 121;
+	fExtends[190] = 113;
+	fExtends[191] = 60;
+	fExtends[192] = 119;
+	fExtends[193] = 139;
+	fExtends[194] = 147;
+	fExtends[195] = 289;
+	fExtends[196] = 33;
+	fExtends[197] = 33;
+	fExtends[198] = 81;
+	fExtends[199] = 55;
+	fExtends[200] = 289;
+	fExtends[201] = 60;
+	fExtends[202] = 109;
+	fExtends[203] = 56;
+	fExtends[204] = 63;
+	fExtends[205] = 40;
+	fExtends[206] = 88;
+	fExtends[207] = 6;
+	fExtends[208] = 6;
+	fExtends[209] = 95;
+	fExtends[210] = 135;
+	fExtends[211] = 113;
+	fExtends[212] = 154;
+	fExtends[213] = 123;
+	fExtends[214] = 60;
+	fExtends[215] = 60;
+	fExtends[216] = 118;
+	fExtends[217] = 60;
+	fExtends[218] = 5;
+	fExtends[219] = 60;
+	fExtends[220] = 60;
+	fExtends[221] = 109;
+	fExtends[222] = 57;
+	fExtends[223] = 149;
+	fExtends[224] = 20;
+	fExtends[225] = 34;
+	fExtends[226] = 35;
+	fExtends[227] = 87;
+	fExtends[228] = 20;
+	fExtends[229] = 105;
+	fExtends[230] = 89;
+	fExtends[231] = 63;
+	fExtends[232] = 60;
+	fExtends[233] = 60;
+	fExtends[234] = 60;
+	fExtends[235] = 60;
+	fExtends[236] = 60;
+	fExtends[237] = 60;
+	fExtends[238] = 33;
+	fExtends[239] = 33;
+	fExtends[240] = 46;
+	fExtends[241] = 46;
+	fExtends[242] = 100;
+	fExtends[243] = 100;
+	fExtends[244] = 100;
+	fExtends[245] = 100;
+	fExtends[246] = 100;
+	fExtends[247] = 100;
+	fExtends[248] = 100;
+	fExtends[249] = 100;
+	fExtends[250] = 100;
+	fExtends[251] = 100;
+	fExtends[252] = 100;
+	fExtends[253] = 100;
+	fExtends[254] = 100;
+	fExtends[255] = 100;
+	fExtends[256] = 137;
 }
 
-GuidoFont::~GuidoFont()
-{
-}
-
-inline const char * GuidoFont::GetName() const
-{
-    return name.c_str();
-}
-
-inline int GuidoFont::GetSize() const
-{
-	return size;
-}
-
-inline int GuidoFont::GetProperties() const
-{
-    return properties;
-}
-
-void GuidoFont::GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const
-{
-	*outWidth = 0;
-	*outHeight = 0;
-    for(int i = 0; i < inCharCount; i++)
-    {
-		*outWidth += kGuidoFontWidth[(int)s[i]] * size / (float)kGuidoFontSize;
-		float height = kGuidoFontHeight[(int)s[i]] * size / (float)kGuidoFontSize;
-		if(height > *outHeight) {
-			*outHeight = height;
-		}
-    }
-}
-
-void GuidoFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
-{
-	*outWidth = kGuidoFontWidth[c] * size / (float)kGuidoFontSize;
-	*outHeight = kGuidoFontHeight[c] * size / (float)kGuidoFontSize;
-}

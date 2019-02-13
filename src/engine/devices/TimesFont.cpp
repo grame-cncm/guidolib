@@ -1,6 +1,6 @@
 /*
   GUIDO Library
-  Copyright (C) 2014	Grame
+  Copyright (C) 2014-2019	Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,47 +10,270 @@
   research@grame.fr
 
 */
+
 #include "TimesFont.h"
 
-TimesFont::TimesFont(const char *name, int size, int properties) : name(name), size(size), properties(properties)
+void TimesFont::initialize()
 {
+	fRefSize = kTimesFontSize;		// the font size used to compute the extends map
+	fHeight	 = kTimesFontHeight;	// the static height value
+
+	fExtends[0]  = 50;
+	fExtends[1]  = 50;
+	fExtends[2]  = 50;
+	fExtends[3]  = 100;
+	fExtends[4]  = 100;
+	fExtends[5]  = 100;
+	fExtends[6]  = 100;
+	fExtends[7]  = 100;
+	fExtends[8]  = 100;
+	fExtends[9]  = 80;
+	fExtends[10] = 100;
+	fExtends[11] = 100;
+	fExtends[12] = 100;
+	fExtends[13] = 100;
+	fExtends[14] = 100;
+	fExtends[15] = 100;
+	fExtends[16] = 100;
+	fExtends[17] = 100;
+	fExtends[18] = 100;
+	fExtends[19] = 100;
+	fExtends[20] = 100;
+	fExtends[21] = 100;
+	fExtends[22] = 100;
+	fExtends[23] = 100;
+	fExtends[24] = 100;
+	fExtends[25] = 100;
+	fExtends[26] = 100;
+	fExtends[27] = 100;
+	fExtends[28] = 100;
+	fExtends[29] = 100;
+	fExtends[30] = 100;
+	fExtends[31] = 100;
+	fExtends[32] = 50;
+	fExtends[33] = 67;
+	fExtends[34] = 82;
+	fExtends[35] = 100;
+	fExtends[36] = 100;
+	fExtends[37] = 167;
+	fExtends[38] = 156;
+	fExtends[39] = 36;
+	fExtends[40] = 67;
+	fExtends[41] = 67;
+	fExtends[42] = 100;
+	fExtends[43] = 113;
+	fExtends[44] = 50;
+	fExtends[45] = 67;
+	fExtends[46] = 50;
+	fExtends[47] = 56;
+	fExtends[48] = 100;
+	fExtends[49] = 100;
+	fExtends[50] = 100;
+	fExtends[51] = 100;
+	fExtends[52] = 100;
+	fExtends[53] = 100;
+	fExtends[54] = 100;
+	fExtends[55] = 100;
+	fExtends[56] = 100;
+	fExtends[57] = 100;
+	fExtends[58] = 56;
+	fExtends[59] = 56;
+	fExtends[60] = 113;
+	fExtends[61] = 113;
+	fExtends[62] = 113;
+	fExtends[63] = 89;
+	fExtends[64] = 184;
+	fExtends[65] = 144;
+	fExtends[66] = 133;
+	fExtends[67] = 133;
+	fExtends[68] = 144;
+	fExtends[69] = 122;
+	fExtends[70] = 111;
+	fExtends[71] = 144;
+	fExtends[72] = 144;
+	fExtends[73] = 67;
+	fExtends[74] = 78;
+	fExtends[75] = 144;
+	fExtends[76] = 122;
+	fExtends[77] = 178;
+	fExtends[78] = 144;
+	fExtends[79] = 144;
+	fExtends[80] = 111;
+	fExtends[81] = 144;
+	fExtends[82] = 133;
+	fExtends[83] = 111;
+	fExtends[84] = 122;
+	fExtends[85] = 144;
+	fExtends[86] = 144;
+	fExtends[87] = 189;
+	fExtends[88] = 144;
+	fExtends[89] = 144;
+	fExtends[90] = 122;
+	fExtends[91] = 67;
+	fExtends[92] = 56;
+	fExtends[93] = 67;
+	fExtends[94] = 94;
+	fExtends[95] = 100;
+	fExtends[96] = 67;
+	fExtends[97] = 89;
+	fExtends[98] = 100;
+	fExtends[99] = 89;
+	fExtends[100] = 100;
+	fExtends[101] = 89;
+	fExtends[102] = 67;
+	fExtends[103] = 100;
+	fExtends[104] = 100;
+	fExtends[105] = 56;
+	fExtends[106] = 56;
+	fExtends[107] = 100;
+	fExtends[108] = 56;
+	fExtends[109] = 156;
+	fExtends[110] = 100;
+	fExtends[111] = 100;
+	fExtends[112] = 100;
+	fExtends[113] = 100;
+	fExtends[114] = 67;
+	fExtends[115] = 78;
+	fExtends[116] = 56;
+	fExtends[117] = 100;
+	fExtends[118] = 100;
+	fExtends[119] = 144;
+	fExtends[120] = 100;
+	fExtends[121] = 100;
+	fExtends[122] = 89;
+	fExtends[123] = 96;
+	fExtends[124] = 40;
+	fExtends[125] = 96;
+	fExtends[126] = 108;
+	fExtends[127] = 100;
+	fExtends[128] = 65;
+	fExtends[129] = 80;
+	fExtends[130] = 88;
+	fExtends[131] = 100;
+	fExtends[132] = 190;
+	fExtends[133] = 100;
+	fExtends[134] = 100;
+	fExtends[135] = 100;
+	fExtends[136] = 100;
+	fExtends[137] = 100;
+	fExtends[138] = 100;
+	fExtends[139] = 100;
+	fExtends[140] = 100;
+	fExtends[141] = 100;
+	fExtends[142] = 110;
+	fExtends[143] = 110;
+	fExtends[144] = 100;
+	fExtends[145] = 100;
+	fExtends[146] = 100;
+	fExtends[147] = 100;
+	fExtends[148] = 100;
+	fExtends[149] = 100;
+	fExtends[150] = 100;
+	fExtends[151] = 100;
+	fExtends[152] = 100;
+	fExtends[153] = 100;
+	fExtends[154] = 100;
+	fExtends[155] = 100;
+	fExtends[156] = 0;
+	fExtends[157] = 100;
+	fExtends[158] = 100;
+	fExtends[159] = 100;
+	fExtends[160] = 50;
+	fExtends[161] = 67;
+	fExtends[162] = 100;
+	fExtends[163] = 100;
+	fExtends[164] = 100;
+	fExtends[165] = 100;
+	fExtends[166] = 40;
+	fExtends[167] = 100;
+	fExtends[168] = 67;
+	fExtends[169] = 152;
+	fExtends[170] = 55;
+	fExtends[171] = 100;
+	fExtends[172] = 113;
+	fExtends[173] = 0;
+	fExtends[174] = 152;
+	fExtends[175] = 67;
+	fExtends[176] = 80;
+	fExtends[177] = 113;
+	fExtends[178] = 60;
+	fExtends[179] = 60;
+	fExtends[180] = 67;
+	fExtends[181] = 100;
+	fExtends[182] = 91;
+	fExtends[183] = 50;
+	fExtends[184] = 67;
+	fExtends[185] = 60;
+	fExtends[186] = 62;
+	fExtends[187] = 100;
+	fExtends[188] = 150;
+	fExtends[189] = 150;
+	fExtends[190] = 150;
+	fExtends[191] = 89;
+	fExtends[192] = 144;
+	fExtends[193] = 144;
+	fExtends[194] = 144;
+	fExtends[195] = 144;
+	fExtends[196] = 144;
+	fExtends[197] = 144;
+	fExtends[198] = 178;
+	fExtends[199] = 133;
+	fExtends[200] = 122;
+	fExtends[201] = 122;
+	fExtends[202] = 122;
+	fExtends[203] = 122;
+	fExtends[204] = 67;
+	fExtends[205] = 67;
+	fExtends[206] = 67;
+	fExtends[207] = 67;
+	fExtends[208] = 144;
+	fExtends[209] = 144;
+	fExtends[210] = 144;
+	fExtends[211] = 144;
+	fExtends[212] = 144;
+	fExtends[213] = 144;
+	fExtends[214] = 144;
+	fExtends[215] = 113;
+	fExtends[216] = 144;
+	fExtends[217] = 144;
+	fExtends[218] = 144;
+	fExtends[219] = 144;
+	fExtends[220] = 144;
+	fExtends[221] = 144;
+	fExtends[222] = 111;
+	fExtends[223] = 100;
+	fExtends[224] = 89;
+	fExtends[225] = 89;
+	fExtends[226] = 89;
+	fExtends[227] = 89;
+	fExtends[228] = 89;
+	fExtends[229] = 89;
+	fExtends[230] = 133;
+	fExtends[231] = 89;
+	fExtends[232] = 89;
+	fExtends[233] = 89;
+	fExtends[234] = 89;
+	fExtends[235] = 89;
+	fExtends[236] = 56;
+	fExtends[237] = 56;
+	fExtends[238] = 56;
+	fExtends[239] = 56;
+	fExtends[240] = 100;
+	fExtends[241] = 100;
+	fExtends[242] = 100;
+	fExtends[243] = 100;
+	fExtends[244] = 100;
+	fExtends[245] = 100;
+	fExtends[246] = 100;
+	fExtends[247] = 113;
+	fExtends[248] = 100;
+	fExtends[249] = 100;
+	fExtends[250] = 100;
+	fExtends[251] = 100;
+	fExtends[252] = 100;
+	fExtends[253] = 100;
+	fExtends[254] = 100;
+	fExtends[255] = 100;
+	fExtends[256] = 144;
 }
 
-TimesFont::~TimesFont()
-{
-}
-
-inline const char * TimesFont::GetName() const
-{
-    return name.c_str();
-}
-
-inline int TimesFont::GetSize() const
-{
-	return size;
-}
-
-inline int TimesFont::GetProperties() const
-{
-    return properties;
-}
-
-void TimesFont::GetExtent(const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context) const
-{
-	*outWidth = 0;
-	*outHeight = 0;
-    for(int i = 0; i < inCharCount; i++)
-    {
-		*outWidth += kTimesFontWidth[(int)s[i]] * size / float(kTimesFontSize);
-		float height = kTimesFontHeight[(int)s[i]] * size / float(kTimesFontSize);
-		if(height > *outHeight) {
-			*outHeight = height;
-		}
-	}
-}
-
-void TimesFont::GetExtent(unsigned char c, float * outWidth, float * outHeight, VGDevice * context) const
-{
-	*outWidth = kTimesFontWidth[c] * size / float(kTimesFontSize);
-	*outHeight = kTimesFontHeight[c] * size / float(kTimesFontSize);
-}
