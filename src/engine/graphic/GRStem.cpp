@@ -23,8 +23,6 @@
 #include "GRSingleNote.h"
 #include "GRStdNoteHead.h"
 
-#include "GUIDOEngine.h"		// for AddGGSOutput
-
 using namespace std;
 
 NVPoint GRStem::sRefpos;
@@ -132,8 +130,8 @@ void GRStem::setStemDir(GDirection dir)
 // TODO: draw only one scaled symbol
 void GRStem::OnDraw( VGDevice & hdc ) const
 {
-    DrawWithGlyph(hdc);
-    //DrawWithLine(hdc);
+    //DrawWithGlyph(hdc);
+    DrawWithLine(hdc);
 }
 
 //-------------------------------------------------------------------
@@ -301,37 +299,6 @@ void GRStem::DrawWithLine( VGDevice & hdc ) const
         if (colref)
             hdc.PopPenColor();
     }
-}
-
-void GRStem::GGSOutput() const
-{
-	if (mStemDir == dirOFF) return;
-
-	/* this has to be changed so the correct
-	   GGS-String is produced ... */
-
-	char buffer[200];
-	if (mStemDir == dirUP)
-	{
-		snprintf(buffer, 200, "\\draw_stem<%ld,%d,%d,%d>\n",
-			getID(),
-			(int)(mPosition.x + mOffset.x + (GCoord)(sRefpos.x * mSize) 
-				+ (GCoord) (60 * mSize)+ ggsoffsetx) , // HARDCODED 60 is the size of the notehead ...
-			(int)(mPosition.y + mOffset.y + (GCoord)(sRefpos.y * mSize) + ggsoffsety), 
-			(int)mStemLen);
-
-		AddGGSOutput(buffer);
-	}
-	else if (mStemDir == dirDOWN)
-	{
-		snprintf(buffer, 200, "\\draw_stem<%ld,%d,%d,%d>\n",
-			getID(),
-			(int)(mPosition.x + mOffset.x + (GCoord)(sRefpos.x * mSize) + ggsoffsetx),
-			(int)(mPosition.y + mOffset.y + (GCoord)(sRefpos.y * mSize) + ggsoffsety),
-			(int)(-mStemLen));
-
-		AddGGSOutput(buffer);
-	}
 }
 
 const NVPoint & GRStem::getReferencePosition() const
