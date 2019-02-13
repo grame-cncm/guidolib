@@ -185,7 +185,7 @@ NVRect GRMeter::computeBoundingBox (VGDevice* hdc, const string& str) const
 	const char* ptr = str.c_str();
 	float width = 0;
 	while (*ptr) {
-		int symbol = (*ptr == '+') ? kTimeSigPlus : *ptr + kNumericsOffset - '0';
+		int symbol = (*ptr == '+') ? kMeterPlusSymbol : *ptr + kMeter0Symbol - '0';
 		float w, h;
 		FontManager::gFontScriab->GetExtent(symbol, &w, &h, hdc);
 		width += w + TIMESIGSPACE;
@@ -260,7 +260,7 @@ void GRMeter::DrawSymbolStr(const char* str, float x, float y, VGDevice & hdc ) 
 {
 	while (*str) {
 #ifdef SMUFL
-		int symbol = (*str == '+') ? kTimeSigPlus : *str + kNumericsOffset - '0';
+		int symbol = (*str == '+') ? kMeterPlusSymbol : *str + kMeter0Symbol - '0';
 #else
 		int symbol = *str;
 #endif
@@ -294,14 +294,19 @@ float GRMeter::DrawNumericSingle(VGDevice & hdc, const string& num, const string
 void GRMeter::DrawNumericSeveral(VGDevice & hdc ) const
 {
 	float wsep, h;
-	FontManager::gFontScriab->GetExtent('+', &wsep, &h, &hdc);
+#ifdef SMUFL
+	ConstMusicalSymbolID plus = kMeterPlusSymbol;
+#else
+	ConstMusicalSymbolID plus = '+';
+#endif
+	FontManager::gFontScriab->GetExtent(plus, &wsep, &h, &hdc);
 	wsep *= mTagSize;
 	vector<GRMeter::TSingleMeter> m = meters2metersStr(fMeters);
 	float x = -mBoundingBox.Width()/2;
 	for (size_t i=0; i < m.size(); i++) {
 		if (i) {
 			// '+' y position is on the middle line
-			DrawSymbol(hdc, '+', x, 2*fCurLSPACE, mTagSize);
+			DrawSymbol(hdc, plus, x, 2*fCurLSPACE, mTagSize);
 			x += wsep;
 		}
 		x += DrawNumericSingle (hdc, m[i].first, m[i].second, x);

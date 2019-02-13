@@ -37,11 +37,9 @@
 	SMUFL compliant font description
 */
 
-#define kNumericsOffset		0xE080
 
-
-ConstMusicalSymbolID kNoneSymbol			 =   0;	// must stay = 0
-ConstMusicalSymbolID kEmptySymbol			 = 32;
+ConstMusicalSymbolID kNoneSymbol			 = 0;	// must stay = 0
+ConstMusicalSymbolID kEmptySymbol			 = 0;
 
 ConstMusicalSymbolID kClefViolin			 = 0xE050;
 ConstMusicalSymbolID kClefViolin8b		 	 = 0xE052;
@@ -120,7 +118,8 @@ ConstMusicalSymbolID kCodaSymbol			 = 0xE048;
 
 ConstMusicalSymbolID kC2Symbol				 = 0xE08B;
 ConstMusicalSymbolID kCSymbol				 = 0xE08A;
-ConstMusicalSymbolID kTimeSigPlus			 = 0xE08C;
+ConstMusicalSymbolID kMeterPlusSymbol		 = 0xE08C;
+ConstMusicalSymbolID kMeter0Symbol		 	 = 0xE080;
 
 ConstMusicalSymbolID kLongaHeadSymbol		 = 0xE0A0;
 ConstMusicalSymbolID kWholeNoteHeadSymbol	 = 0xE0A2;
@@ -178,18 +177,23 @@ ConstMusicalSymbolID kFullReversedTriangleHeadSymbol = 0xE0C7;
 ConstMusicalSymbolID kHalfReversedTriangleHeadSymbol = 0xE0C6;
 //ConstMusicalSymbolID kErrorHeadSymbol				 = 0xE0A9;
 
-//ConstMusicalSymbolID kRoundLeftBracket               = 0xE0F5;
-//ConstMusicalSymbolID kRoundRightBracket              = 0xE0F6;
-//ConstMusicalSymbolID kRoundLeftBracket               = 0xE571;
-//ConstMusicalSymbolID kRoundRightBracket              = 0xE572;
-ConstMusicalSymbolID kRoundLeftBracket               = 0xE542;
-ConstMusicalSymbolID kRoundRightBracket              = 0xE543;
-ConstMusicalSymbolID kSquareLeftBracket              = 0xE544;
-ConstMusicalSymbolID kSquareRightBracket             = 0xE545;
-//ConstMusicalSymbolID kAngledLeftBracket              = 240;
-//ConstMusicalSymbolID kAngledRightBracket             = 241;
-ConstMusicalSymbolID kAngledLeftBracket              = 32;
-ConstMusicalSymbolID kAngledRightBracket             = 32;
+ConstMusicalSymbolID kTuplet0Symbol 		= 0xE880;
+ConstMusicalSymbolID kTuplet9Symbol 		= 0xE889;
+ConstMusicalSymbolID kTupletColonSymbol 	= 0xE88A;
+
+
+//ConstMusicalSymbolID kRoundLeftBracket 	= 0xE0F5;
+//ConstMusicalSymbolID kRoundRightBracket	= 0xE0F6;
+//ConstMusicalSymbolID kRoundLeftBracket	= 0xE571;
+//ConstMusicalSymbolID kRoundRightBracket	= 0xE572;
+ConstMusicalSymbolID kRoundLeftBracket 		= 0xE542;
+ConstMusicalSymbolID kRoundRightBracket 	= 0xE543;
+ConstMusicalSymbolID kSquareLeftBracket  	= 0xE544;
+ConstMusicalSymbolID kSquareRightBracket 	= 0xE545;
+//ConstMusicalSymbolID kAngledLeftBracket 	= 240;
+//ConstMusicalSymbolID kAngledRightBracket 	= 241;
+ConstMusicalSymbolID kAngledLeftBracket  	= 0;
+ConstMusicalSymbolID kAngledRightBracket 	= 0;
 
 ConstMusicalSymbolID kHarmonicSymbol		 = 0xE614;
 
