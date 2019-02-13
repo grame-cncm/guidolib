@@ -874,8 +874,6 @@ Includes functions to query the time spent by the main Guido Engine operations.
 
 /*! @} */
 
-    void AddGGSOutput(const char *s);
-void AddGuidoOutput(const char *s);
 #ifdef __cplusplus
 }
 #endif

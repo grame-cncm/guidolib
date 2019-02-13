@@ -108,14 +108,4 @@ GRHandler guido_RegisterGRMusic( GRMusic * inMusic, ARHandler inHandleAR )
 	return newNode;  // returns the brand new guido handle.
 }
 
-// --------------------------------------------------------------------------
-void AddGGSOutput(const char * s)
-{
-	// we do nothing ....
-}
-
-void AddGuidoOutput(const char * s)
-{
-}
-
 //} // extern "C" 
