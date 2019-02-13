@@ -38,7 +38,7 @@ class BinaryFont : public VGFont
 		virtual	int				GetProperties() const	{ return fFont->GetProperties(); }
 
 		virtual	void	GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const;
-		virtual	void	GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const;
+		virtual	void	GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context ) const;
 };
 
 /*! @} */

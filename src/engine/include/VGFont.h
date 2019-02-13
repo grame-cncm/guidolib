@@ -65,7 +65,7 @@ class VGFont
 
 		/// Computes the width and height of the input character using the
 		/// current font capabilities in the input VGDevice
-		virtual	void			GetExtent( unsigned char c,
+		virtual	void			GetExtent( int c,
 										   float * outWidth,
 										   float * outHeight,
 										   VGDevice * context ) const = 0;

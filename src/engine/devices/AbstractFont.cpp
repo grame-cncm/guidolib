@@ -54,7 +54,7 @@ void AbstractFont::GetExtent( const char * s, int inCharCount, float * outWidth,
 }
 
 //______________________________________________________________________________
-void AbstractFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
+void AbstractFont::GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 	fFont->GetExtent( c, outWidth, outHeight, fDevice );
 }
