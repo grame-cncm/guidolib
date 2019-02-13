@@ -99,93 +99,6 @@ void GRSingleNote::doCreateNote( const TYPE_DURATION & p_durtemplate )
 }
 
 //____________________________________________________________________________________
-char * GRSingleNote::getGGSInfo( int infotype ) const
-{
-	// now we find out, where the next spring is ....
-	// our sprid is set ....
-	const GRSpring * prevspring = mGrStaff->getGRSystem()->getGRSpring(mSpringID - 1);
-	const GRSpring * nextspring = mGrStaff->getGRSystem()->getGRSpring(mSpringID + 1);
-
-	const GRSpring * myspring   = mGrStaff->getGRSystem()->getGRSpring(mSpringID);
-
-	int left = (int)myspring->fPosx;
-	int right = (int)myspring->fPosx;
-
-	if (prevspring)	left = (int)prevspring->fPosx;
-	if (nextspring)	right = (int)nextspring->fPosx;
-
-	char * buf = new char[100];
-
-	GRSystem * cursystem = mGrStaff->getGRSystem();
-
-#ifdef MSVC
-	snprintf(buf, 100, 100, "%d,%d,%d,%d,%ld,%d,%ld,%d\n",
-		(int)cursystem->getGRPage()->getMarginLeft(),
-		(int)cursystem->getPosition().x,
-		(int)mPosition.x,
-		(int)myspring->fPosx,
-		(long int)prevspring,
-		(int)left,
-		(long int)nextspring,	// <- !!! pointer to int !!!
-		(int)right);
-#else
-	snprintf(buf, 100, "%d,%d,%d,%d,%ld,%d,%ld,%d\n",
-		(int)cursystem->getGRPage()->getMarginLeft(),
-		(int)cursystem->getPosition().x,
-		(int)mPosition.x,
-		(int)myspring->fPosx,
-		(long int)prevspring,
-		(int)left,
-		(long int)nextspring,	// <- !!! pointer to int !!!
-		(int)right);
-#endif
-	return buf;
-}
-
-//____________________________________________________________________________________
-void GRSingleNote::GGSOutput() const
-{
-	// draw ledgerlines ...
-	float incy= 1;
-	float posy = 0;
-	int sum = mNumHelpLines;
-	if (mNumHelpLines > 0)
-	{ // ledgerlines above system
-		incy = -mCurLSPACE;
-		posy = -mCurLSPACE;
-	}
-	else if (mNumHelpLines < 0)
-	{
-		incy = mCurLSPACE;
-		posy = mGrStaff->getNumlines() * mCurLSPACE;
-		sum *= -1;
-	}
-
-	// draw ledgerlines
-	const int zeichen = kLedgerLineSymbol;
-	for (int i=0;i<sum;i++,posy+=incy)
-	{
-		GGSOutputAt((unsigned int) zeichen, (long)(-60 * 0.85 * mSize), (long)(posy - mPosition.y));
-	}
-
-	GuidoPos pos = First();
-	while (pos)
-	{
-		GRNotationElement * el = GetNext(pos);
-		el->setID((long int) this);
-		el->GGSOutput();
-	}
-
-	const GRNEList& articulations = getArticulations();
-	for( GRNEList::const_iterator ptr = articulations.begin(); ptr != articulations.end(); ++ptr )
-	{
-		GRArticulation * el = *ptr;
-		el->setID((long int) this);
-		el->GGSOutput();
-	}
-}
-
-//____________________________________________________________________________________
 void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
     if (fCluster) {
@@ -232,7 +145,11 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
         hdc.SetFontColor(VGColor(mGrStaff->getStffrmtColRef()));
 
     // draw ledger lines
+#ifdef SMUFL
+    const float ledXPos = -mCurLSPACE * 0.65;;
+#else
     const float ledXPos = - 60 * 0.85f * mSize;
+#endif
     for (int i = 0; i < sum; ++i, posy += incy)
         GRNote::DrawSymbol(hdc, kLedgerLineSymbol, ledXPos, (posy - mPosition.y)); // REM: the ledger line width can't change with staffFormat width
                                                                                    //      because it's drawn with the font, not with a line

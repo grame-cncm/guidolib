@@ -29,12 +29,6 @@ class GRClef : public GRTagARNotationElement //,  public GRTag
 {
 	
 public:
-/*	enum CLEFTYPE { NONE = 32, // SCR_NOCLEFT,
-					VIOLIN = 38, // SCR_GCLEF, 
-					BASS = 63, // SCR_FCLEF,
-					BRATSCHE = 66 // SCR_BCLEF 
-				};*/
-
 					 GRClef(const ARClef * arClef, GRStaff * curstaff, bool ownsAR = false );
 	virtual 		~GRClef() {}
 	
@@ -43,7 +37,6 @@ public:
 
 	virtual void accept (GRVisitor& visitor);
 	virtual void OnDraw( VGDevice & hdc ) const;
-	virtual void GGSOutput() const;
 
 	virtual const NVPoint & getReferencePosition() const;
 	virtual unsigned int	getTextAlign() const		{ return sClefTextAlign; }
@@ -67,10 +60,14 @@ protected:
 	
 	bool			mDoubleTreble;
 
+#ifdef SMUFL
+	static NVPoint fRefpos;
+#else
 	static NVPoint refposPerc;
 	static NVPoint refposTreble;
 	static NVPoint refposAlto;
 	static NVPoint refposBass;
+#endif
 	static unsigned int sClefTextAlign;
 };
 

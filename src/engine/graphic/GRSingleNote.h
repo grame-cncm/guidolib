@@ -55,8 +55,6 @@ class GRSingleNote : public GRNote
 
 				void	doCreateNote( const TYPE_DURATION & p_durtemplate /* = DURATION_0*/);
 
-		virtual char*	getGGSInfo(int infotype) const; 
-		virtual void	GGSOutput() const;
 		virtual void	OnDraw( VGDevice & hdc ) const;
 		virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 

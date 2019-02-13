@@ -25,7 +25,6 @@
 
 #include "VGDevice.h"
 
-#include "GUIDOEngine.h"	// for AddGGSOutput 
 #include "secureio.h"
 
 using namespace std;
@@ -33,10 +32,15 @@ using namespace std;
 const char * const clef_cp8 = "8";
 const char * const clef_cp15 = "15";
 
+#ifdef SMUFL
+NVPoint GRClef::fRefpos;
+#else
 NVPoint GRClef::refposPerc;
 NVPoint GRClef::refposTreble;
 NVPoint GRClef::refposBass;
 NVPoint GRClef::refposAlto;
+#endif
+
 unsigned int GRClef::sClefTextAlign;
 
 GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
@@ -71,7 +75,7 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 			mBoundingBox.bottom = 0;
 			break;
 		}
-		
+
 		case ARClef::DOUBLEG:	// same as the octave treble clef (-8)
 			mDoubleTreble = true;	// no break;		
 		case ARClef::VIOLIN:
@@ -82,7 +86,11 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 			// default for mClefStaffLine is 3
 			mPosition.y = mClefStaffLine * curLSPACE;
 			// dependant on Font .. needed for octava-keys
-			mBoundingBox.top = -  (float(4.1) * curLSPACE);
+#ifdef SMUFL
+			mBoundingBox.top    = -(float(4.3) * curLSPACE);
+#else
+			mBoundingBox.top    = -(float(4.1) * curLSPACE);
+#endif
 			mBoundingBox.bottom =  (float(2.7) * curLSPACE);
 			break;
 		}
@@ -93,7 +101,11 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 			mClefBasePitch = NOTE_F;
 			mPosition.y = (mClefStaffLine * curLSPACE);
 			mBoundingBox.top = (-1 * curLSPACE);
+#ifdef SMUFL
+			mBoundingBox.bottom = (2.7 * curLSPACE);
+#else
 			mBoundingBox.bottom = (3 * curLSPACE);
+#endif
 			break;
 		}
 		
@@ -126,9 +138,12 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 			mClefBaseOctave += 1;
 			// default for mClefStaffLine is 3
 			mPosition.y = (mClefStaffLine * curLSPACE);
-
-			mBoundingBox.top = - ( float(4.1) * curLSPACE ); // was 5.1 (?)
-			mBoundingBox.bottom = ( float(2.7) * curLSPACE);
+#ifdef SMUFL
+			mBoundingBox.top    = -(float(4.3) * curLSPACE);
+#else
+			mBoundingBox.top    = -(float(4.1) * curLSPACE);
+#endif
+			mBoundingBox.bottom =  (float(2.7) * curLSPACE);
 		}
 	}
 
@@ -180,9 +195,13 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 
 	// this is OK, the size determines the extent of the rods ...
 	float extent = GetSymbolExtent(mSymbol);
-	mLeftSpace = ((extent * 0.5f + LSPACE / 5 ) * mTagSize);
-	mRightSpace = ((extent * 0.5f + LSPACE / 5 ) * mTagSize);
-
+#ifdef SMUFL
+	mLeftSpace = ((extent * 0.5f) * mTagSize);
+	mRightSpace = ((extent * 0.5f) * mTagSize);
+#else
+	mLeftSpace  = ((extent * 0.5f + LSPACE / 5) * mTagSize);
+	mRightSpace = ((extent * 0.5f + LSPACE / 5) * mTagSize);
+#endif
 	if( mDoubleTreble )
 		mRightSpace += extent;
 
@@ -195,6 +214,10 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 	// this information must be read from the font (or a table/map) ....
 	// this is static information!
 	// reference-positions are also always according to STANDARD-size characters (staffFormat 3pt per Halfspace)
+#ifdef SMUFL
+	fRefpos.x  = - extent * 0.5f - LSPACE / 5.0f;
+	fRefpos.y  = 0; //LSPACE;
+#else
 	switch (mSymbol)
 	{
 		case kClefViolin:
@@ -217,6 +240,8 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 			refposPerc.y  = LSPACE;
 			break;
 	}
+#endif
+
 	sClefTextAlign = (VGDevice::kAlignLeft | VGDevice::kAlignBase);
 	mGrStaff = curstaff;
 
@@ -240,8 +265,7 @@ void GRClef::setHPosition( float inX )
 // -----------------------------------------------------------------------------
 void GRClef::OnDraw(VGDevice & hdc) const
 {
-	if (error)  return;
-	if (!mDraw || !mShow) return;
+	if (error || !mDraw || !mShow) return;
 
 //	NVRect r = mBoundingBox + mPosition;
 //	hdc.Frame(r.left, r.top, r.right, r.bottom);
@@ -269,30 +293,6 @@ void GRClef::OnDraw(VGDevice & hdc) const
 	}
 }
 
-void GRClef::GGSOutput() const
-{
-	char buffer[200];
-	const char * cleftype;
-	switch ( mSymbol )
-	{
-		case kClefViolin:	cleftype = "treble_clef";	break;
-		case kClefBass:		cleftype = "bass_clef";		break;
-		case kClefBratsche:	cleftype = "alto_clef";		break;
-		default:	cleftype = NULL;
-	}
-	
-	if (cleftype != NULL)
-	{
-		snprintf(buffer, 200, "\\draw_image<\"%s\",%ld,%d,%d>\n",
-			cleftype,
-			getID(),
-			(int)(mPosition.x + mBoundingBox.left + ggsoffsetx),
-			(int)(mPosition.y + 4 * LSPACE + ggsoffsety));
-		
-		AddGGSOutput(buffer);
-	}
-}
-
 const ARClef * GRClef::getARClef() const
 {
 	return /*dynamic*/static_cast<const ARClef*>(getAbstractRepresentation());
@@ -317,6 +317,9 @@ bool GRClef::operator==(const GRTag & tag) const
 	return false;
 }
 
+#ifdef SMUFL
+const NVPoint & GRClef::getReferencePosition() const	{ return fRefpos; }
+#else
 const NVPoint & GRClef::getReferencePosition() const
 {
 	switch (mSymbol)
@@ -326,12 +329,6 @@ const NVPoint & GRClef::getReferencePosition() const
 		case kClefBratsche:	return refposAlto;
 		case kClefBass:		return refposBass;
 		default: 		return refposTreble;
-	}	
+	}
 }
-
-
-
-
-
-
-
+#endif

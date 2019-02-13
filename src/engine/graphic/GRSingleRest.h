@@ -86,7 +86,9 @@ class GRSingleRest : public GRRest
 	NVstring mRestAppearance;
 	
 	private:
-	void setTypeAndPos(TYPE_DURATION dur);
+		TYPES 	duration2Type (const TYPE_DURATION& duration) const;
+		float 	type2YPosition (TYPES type) const;
+		void 	setTypeAndPos (TYPE_DURATION dur);
 };
 
 #endif

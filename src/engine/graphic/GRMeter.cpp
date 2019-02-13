@@ -32,6 +32,11 @@
 using namespace std;
 
 #define GROUPSEVERAL	1		// control several time sign grouping
+#ifdef SMUFL
+#define TIMESIGSPACE	6
+#else
+#define TIMESIGSPACE	0
+#endif
 
 //-------------------------------------------------------------------------------------
 GRMeter::GRMeter( const ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
@@ -175,7 +180,24 @@ NVRect GRMeter::computeBoundingBox (VGDevice* hdc, const string& str) const
 {
 	NVRect bb;
 	if (!hdc)	return bb;
-	
+
+#ifdef SMUFL
+	const char* ptr = str.c_str();
+	float width = 0;
+	while (*ptr) {
+		int symbol = (*ptr == '+') ? kTimeSigPlus : *ptr + kNumericsOffset - '0';
+		float w, h;
+		FontManager::gFontScriab->GetExtent(symbol, &w, &h, hdc);
+		width += w + TIMESIGSPACE;
+		ptr++;
+	}
+	bb.left  = (GCoord)(- width * 0.5f * mTagSize);
+	bb.right = -bb.left;
+	// default top position (staff first line) is adjusted to the glyph size
+	bb.top = -(mTagSize-1) * fNumericHeight * 2;
+	// default bottom position (staff last line) is adjusted to the glyph size
+	bb.bottom = 4 * fCurLSPACE + (mTagSize-1) * fNumericHeight * 2;
+#else
 	float w, h;
 	FontManager::gFontScriab->GetExtent (str.c_str(),  int(str.size()), &w, &h, hdc);
 	bb.left  = (GCoord)(- w * 0.5f * mTagSize);
@@ -184,6 +206,7 @@ NVRect GRMeter::computeBoundingBox (VGDevice* hdc, const string& str) const
 	bb.top = -(mTagSize-1) * fNumericHeight * 2;
 	// default bottom position (staff last line) is adjusted to the glyph size
 	bb.bottom = 4 * fCurLSPACE + (mTagSize-1) * fNumericHeight * 2;
+#endif
 	return bb;
 }
 
@@ -216,39 +239,6 @@ NVRect GRMeter::computeBoundingBox (VGDevice* hdc) const
 	return bb;
 }
 
-
-//-------------------------------------------------------------------------------------
-void GRMeter::GGSOutput() const
-{
-//this code is obsolete, it makes use of numerator and denominator values that are not any more
-//maintained due to complex meter support
-//
-//	char buffer[20]; char buf[100];
-//	if (error) return;
-//	if (fType == ARMeter::NUMERIC) {
-//		
-//	  snprintf(buf,100,"\\draw_image<\"%d\",%ld,%d,%d>\n",
-//			fNumerator, getID(), (int)(mPosition.x + ggsoffsetx), (int)(LSPACE + ggsoffsety));
-//	  AddGGSOutput(buf);
-//		  
-//	  snprintf(buf,100,"\\draw_image<\"%d\",%ld,%d,%d>\n",
-//			fDenominator, getID(), (int)(mPosition.x + ggsoffsetx), (int)(3*LSPACE + ggsoffsety));
-//	  AddGGSOutput(buf);
-//	}
-//	else if (fType == ARMeter::C) {
-//	  snprintf(buffer,20,"c" /*SCR_ALLABREVE*/ );
-//	  snprintf(buf,100,"\\draw_image<\"%s\",%ld,%d,%d>\n",
-//			buffer, getID(), (int)(mPosition.x + ggsoffsetx), (int)(mPosition.y + 2 * LSPACE + ggsoffsety));
-//	  AddGGSOutput(buf);
-//	}
-//	else if (fType == ARMeter::C2) {
-//	  snprintf(buffer,20,"C" /* SCR_ALLABREVE2 */ );
-//	  snprintf(buf,100,"\\draw_image<\"%s\",%ld,%d,%d>\n",
-//			buffer, getID(), (int)(mPosition.x + ggsoffsetx), (int)(mPosition.y + 2 * LSPACE + ggsoffsety));
-//	  AddGGSOutput(buf);
-//	}
-}
-
 //-------------------------------------------------------------------------------------
 // depending on the relative numerator and denominator size, an offset
 // must be applied to the smallest part
@@ -269,10 +259,15 @@ std::pair<float,float> GRMeter::GetXOffsets(VGDevice & hdc, const std::string& n
 void GRMeter::DrawSymbolStr(const char* str, float x, float y, VGDevice & hdc ) const
 {
 	while (*str) {
-		DrawSymbol(hdc, *str, x, y, mTagSize);
+#ifdef SMUFL
+		int symbol = (*str == '+') ? kTimeSigPlus : *str + kNumericsOffset - '0';
+#else
+		int symbol = *str;
+#endif
+		DrawSymbol(hdc, symbol, x, y, mTagSize);
 		float w, h;
-		FontManager::gFontScriab->GetExtent(*str, &w, &h, &hdc);
-		x += w * mTagSize;
+		FontManager::gFontScriab->GetExtent(symbol, &w, &h, &hdc);
+		x += w * mTagSize + TIMESIGSPACE;
 		str++;
 	}
 }
