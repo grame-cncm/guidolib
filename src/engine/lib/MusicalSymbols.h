@@ -48,7 +48,6 @@ const int kMaxMusicalSymbolID				= 256;
 
 typedef const unsigned int ConstMusicalSymbolID;	// will be replaced by const unsigned int
 
-#define SMUFL
 
 #ifdef SMUFL
 #include "MusicalSymbolsSMUFL.h"

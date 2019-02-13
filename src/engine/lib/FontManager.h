@@ -19,7 +19,6 @@
 #include <string>
 #include "VGSystem.h"
 
-#define SMUFL
 #ifdef SMUFL
 #define kMusicFontStr	"Bravura"
 #else
