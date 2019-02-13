@@ -122,7 +122,7 @@ unsigned int GRAccidental::quarters2symbol(int quarters) const
 		case -1:	return kQFlatSymbol;
 		case -2:	return kFlatSymbol;
 		case -3:	return k3QFlatSymbol;
-		case -4:	return kDSharpSymbol;
+		case -4:	return kDFlatSymbol;
 		case 0:		return kNaturalSymbol;
 	}
 	return 0; // unknown type
