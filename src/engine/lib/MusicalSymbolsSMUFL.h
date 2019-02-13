@@ -44,7 +44,16 @@ ConstMusicalSymbolID kNoneSymbol			 =   0;	// must stay = 0
 ConstMusicalSymbolID kEmptySymbol			 = 32;
 
 ConstMusicalSymbolID kClefViolin			 = 0xE050;
+ConstMusicalSymbolID kClefViolin8b		 	 = 0xE052;
+ConstMusicalSymbolID kClefViolin8bold		 = 0xE055;
+ConstMusicalSymbolID kClefViolin15b		 	 = 0xE051;
+ConstMusicalSymbolID kClefViolin8a		 	 = 0xE053;
+ConstMusicalSymbolID kClefViolin15a		 	 = 0xE054;
 ConstMusicalSymbolID kClefBass				 = 0xE062;
+ConstMusicalSymbolID kClefBass8b			 = 0xE064;
+ConstMusicalSymbolID kClefBass15b			 = 0xE063;
+ConstMusicalSymbolID kClefBass8a			 = 0xE065;
+ConstMusicalSymbolID kClefBass15a			 = 0xE066;
 ConstMusicalSymbolID kClefBratsche			 = 0xE05C;
 ConstMusicalSymbolID kClefPerc				 = 0xE069;
 
@@ -111,6 +120,7 @@ ConstMusicalSymbolID kCodaSymbol			 = 0xE048;
 
 ConstMusicalSymbolID kC2Symbol				 = 0xE08B;
 ConstMusicalSymbolID kCSymbol				 = 0xE08A;
+ConstMusicalSymbolID kTimeSigPlus			 = 0xE08C;
 
 ConstMusicalSymbolID kLongaHeadSymbol		 = 0xE0A0;
 ConstMusicalSymbolID kWholeNoteHeadSymbol	 = 0xE0A2;
