@@ -603,7 +603,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 		if (fLowerNote)
 		{
 			GRStdNoteHead* head = fLowerNote->getNoteHead();
-			unsigned char lowerNoteSymbol = kNoneSymbol;
+			int lowerNoteSymbol = kNoneSymbol;
 			if (head && !fLowerNote->isEmpty()) lowerNoteSymbol = head->getSymbol();
 
 			if (lowerNoteSymbol == kFullXHeadSymbol)
