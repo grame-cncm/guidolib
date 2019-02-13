@@ -38,9 +38,6 @@ public:
 	virtual const NVPoint & getReferencePosition() const;
 	virtual void OnDraw( VGDevice & hdc ) const;
 
-	virtual void GGSOutput() const;
-
-	
 	virtual unsigned int getSymbol() const;
 
 	virtual void adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDirection inGlobalStemDirection);

@@ -52,8 +52,6 @@ class GRArticulation : public GRTagARNotationElement
 		// the staccato belongs ....
 		virtual void tellPosition(GObject * caller, const NVPoint & inPos);
 
-		virtual void GGSOutput() const;
-		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void accept (GRVisitor& visitor);
 
 		

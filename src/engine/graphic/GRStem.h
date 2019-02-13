@@ -59,7 +59,6 @@ public:
 	virtual float getSize() const	{ return mSize; }
 
 	virtual void OnDraw( VGDevice & hdc ) const;
-	virtual void GGSOutput() const;
 
 	virtual GDirection getStemDir() const	{ return mStemDir; }
 	virtual float getStemLength() const	{ return mStemLen; }

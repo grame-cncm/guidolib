@@ -270,15 +270,6 @@ void GRKey::updateBoundingBox()
 	
 }
 
-void GRKey::GGSOutput() const
-{
-	if (error) return;
-
-	GuidoPos pos = First();
-	while (pos)
-		GetNext(pos)->GGSOutput();
-}
-
 void GRKey::OnDraw( VGDevice & hdc) const
 {
 	if (error) return;
@@ -286,8 +277,6 @@ void GRKey::OnDraw( VGDevice & hdc) const
 		return;
 	DrawSubElements( hdc );
 }
-
-
 
 void GRKey::setGRStaff( GRStaff * inStaff )
 {

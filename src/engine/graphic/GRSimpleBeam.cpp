@@ -27,10 +27,6 @@ GRSimpleBeam::GRSimpleBeam (GRBeam * p_parent, const NVPoint par[4] )
 	fPoints[3] = par[3];
 }
 
-void GRSimpleBeam::GGSOutput() const
-{
-}
-
 void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow)

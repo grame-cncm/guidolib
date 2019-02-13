@@ -263,7 +263,6 @@ class GRStaff : public GRCompositeNotationElement
 		void        BeginStaff(GRStaffManager * staffmgr);
 		void        addElementsToSprings();
 
-		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 				void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);

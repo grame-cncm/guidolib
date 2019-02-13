@@ -510,33 +510,6 @@ const StaffVector * GRSystem::getStaves() const
 	return 0;
 }
 
-//----------------------------------------------------------------------------------------------------
-void GRSystem::GGSOutput() const
-{
-	ggsoffsetx += (long)mPosition.x;
-	ggsoffsety += (long)mPosition.y;
-
-	GRStaff * s;
-	for (int i=mStaffs->GetMinimum();i<=mStaffs->GetMaximum();i++)
-	{
-		if ((s = mStaffs->Get(i)) == NULL)
-			continue;
-
-		gCurStaff = s;
-		s->GGSOutput();
-	}
-
-	// now draw the (System)-elements
-	GuidoPos elpos = First();
-	while (elpos)
-	{
-		GetNext(elpos)->GGSOutput();
-	}
-
-	ggsoffsetx -= (long)mPosition.x;
-	ggsoffsety -= (long)mPosition.y;
-}
-
 // --------------------------------------------------------------------------
 void GRSystem::AddSystemSlice( GRSystemSlice * inSlice )
 {

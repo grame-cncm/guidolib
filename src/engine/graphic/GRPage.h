@@ -62,7 +62,6 @@ class GRPage : public GREvent
 	virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	
 	virtual void	print(std::ostream& os) const;
-	virtual void	GGSOutput() const;
 	virtual void	accept (GRVisitor& visitor);
 	
 			void	getMarginsCm( float * ml, float * mt, float * mr, float * mb );

@@ -65,7 +65,6 @@ public:
 	bool getStraight() const			{ return mStraight; }
 
 	virtual void OnDraw(VGDevice & hdc ) const;
-	virtual void GGSOutput() const;
 
 	virtual int getNumFaehnchen() const;
 	virtual void setColRef(const unsigned char * tmpcolref);

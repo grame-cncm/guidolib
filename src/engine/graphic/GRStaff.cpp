@@ -2275,38 +2275,6 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 	hdc.OffsetOrigin( -xOffset, -yOffset ); // restore origin
 }
 
-
-// ----------------------------------------------------------------------------
-void GRStaff::GGSOutput() const
-{
-	char buffer[200];
-	assert(endglue);
-	snprintf(buffer, 200, "\\draw_staff<%ld,%d,%f,%d,%d,%d>\n", 
-		getID(), 
-		mStaffState.numlines,
-        mStaffState.lineThickness,
-		(int)(mPosition.x + ggsoffsetx), 
-		(int)(mPosition.y + 4 * LSPACE + ggsoffsety),  
-		(int)(endglue->getPosition().x ));
-		// position.x + mBoundingBox.right);
-
-	AddGGSOutput(buffer);
-
-	ggsoffsetx += (long)mPosition.x;
-	ggsoffsety += (long)mPosition.y;
-
-	GRNotationElement * e;
-	GuidoPos pos = mCompElements.GetHeadPosition();
-	while (pos)
-	{
-		e = mCompElements.GetNext(pos);
-		e->GGSOutput();
-	}
-
-	ggsoffsetx -= (long)mPosition.x;
-	ggsoffsety -= (long)mPosition.y;
-}
-
 //-------------------------------------------------
 /** \brief Find the spatial x end position from the time position and the duration
 */

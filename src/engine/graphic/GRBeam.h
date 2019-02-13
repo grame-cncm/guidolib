@@ -68,7 +68,6 @@ public:
 	virtual void	StaffFinished(GRStaff * grstaff = 0);
 	virtual void	RangeEnd(GRStaff * grstaff = 0);
 	virtual void	addAssociation(GRNotationElement * grnot);
-	virtual void	GGSOutput() const;
 	virtual void	OnDraw( VGDevice & hdc ) const;
 	virtual bool	isAutoBeam() const		{ return false; } // derived by GRAutoBeam
 	virtual GRNotationElement * getEndElement();

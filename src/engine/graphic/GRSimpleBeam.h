@@ -26,10 +26,7 @@ class GRSimpleBeam : public GRNotationElement
 {
 	public:
 				GRSimpleBeam(GRBeam * p_parent, const NVPoint par[4]);
-
-
 		
-		virtual void GGSOutput() const;
 		virtual const unsigned char * getColRef() const;
 
 		virtual void OnDraw( VGDevice & hdc ) const;

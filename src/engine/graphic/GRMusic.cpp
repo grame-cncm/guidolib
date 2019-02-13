@@ -35,8 +35,6 @@
 #include "GRBar.h"
 #include "GRDefine.h"
 
-// - Guido Misc
-#include "GUIDOInternal.h" 	// for AddGGSOutput
 #include "VGDevice.h"
 
 // - Guido debug
@@ -51,10 +49,6 @@
 #include "TCollisions.h"
 
 using namespace std;
-
-// - Globals
-long ggsoffsetx = 0L;
-long ggsoffsety = 0L;
 
 // --------------------------------------------------------------------------
 GRMusic::GRMusic(const ARMusic * ar, const ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR )
@@ -76,32 +70,6 @@ GRMusic::~GRMusic()
 	// deletes all, because voicelist owns it elements which are GRVoice-Objects
 	DeleteContent( &mVoiceList );
 	delete fInFormat;
-}
-
-// --------------------------------------------------------------------------
-/** \brief Guido Graphic Stream.
-*/
-char * GRMusic::getGGSInfo(int infotype) const
-{
-	char * buf = new char[100];
-	strncpy( buf, "this is grmusic ...",100);
-	return buf;
-}
-
-// --------------------------------------------------------------------------
-void GRMusic::GGSOutputPage( int inPageNum ) const
-{
-	const GRPage * curpage = getPage(inPageNum);
-	if (curpage == 0) return;
-
-	ggsoffsetx = 0;
-	ggsoffsety = 0;
-
-	char buffer[100];
-	snprintf(buffer,100,"\\unit<%d>\n", (int)LSPACE/2);
-	AddGGSOutput(buffer);
-
-	curpage->GGSOutput();	
 }
 
 // --------------------------------------------------------------------------
@@ -754,126 +722,6 @@ int GRMusic::getVoiceNum(ARMusicalVoice * arv) const
 }
 
 // --------------------------------------------------------------------------
-/** \brief Returns some code whether the operation was successful or not.
-
-	This is something completely new! Input to the Renderer ...
-*/
-int GRMusic::GGSInputPage(int page, const char * str)
-{
-	// first, we have to figure out, where we are,
-	// then, we have to manipulate the Abstract Representation
-	// and then we have to recreate the Graphical Represenation
-	// this process can be done in an intelligent way "later"
-	// right now, we just want to show that it basically works...
-
-	// -> decipher the input 
-	// how to we call the parser on strings?
-	// what reactions do we get from the parser -> another parser-flag ...?
-
-	// write our own parser for handling stuff ?
-	// this is a very dumm/first approach to handling GGS-input
-
-//	printf("Inside GGSInput: %s\n",str);
-//  
-//	char type[250];
-//	type[0] = 0;
-//	int xpos = 0, ypos = 0, staffid = 0;
-//	long int id=0;
-//	int isadd = 0;
-//	if (!(strncmp(&str[1],"add",3)))
-//	{
-//		// this is an add-command ...
-//		printf("is an add\n");
-//		isadd = 1;
-//		// try to read the parameters ...
-//		// syntax \add<"type",xpos,ypos,staffid>
-//
-//		int ret = sscanf(&str[6],"%249[^\"]\",%d,%d,%d>",type, &xpos,&ypos,&staffid);
-//		printf("ret returnd %d, %s,%d,%d,%d\n",ret,type,xpos,ypos,staffid);
-//	}
-//	else if (!strncmp(&str[1],"move",4))
-//    {
-//		// it is a move ...
-//		printf("is a move\n");
-//		// syntax \move<id,dx,dy>
-//		int ret = sscanf(&str[6],"%ld,%d,%d>",&id,&xpos,&ypos);
-//		printf("ret returned %d, %ld, %d, %d\n",ret,id,xpos,ypos);
-//
-//		// now, we try to really move the object ....
-//		// this should work quite easily ...
-//		// first try: do it with an offset, next really change the height of notes 
-//		GRSingleNote * nt = dynamic_cast<GRSingleNote *>((GObject *) id);
-//		GREvent * ev = GREvent::cast((GObject *) id);
-//		GRNotationElement *el = dynamic_cast<GRNotationElement *>((GObject *) id);
-//		if (nt)
-//		{
-//			// we have a real note ....
-//			// offset is only set in x-direction, y-offset changes note-height
-//			nt->addToOffset(NVPoint(float(xpos), 0));
-//
-//			// y-pos changes note-height ...
-//			ARNote * arnote = nt->getARNote();
-//			arnote->resetGRRepresentation();
-//
-//			// this removes the elements from the note ...
-//			nt->removeElements();
-//
-//			// the y-difference is calcualted to real half-steps ...
-//			int steps =  (int)(- ypos * 2 / LSPACE);
-//			printf("number of steps : %d\n",steps);
-//
-//			// this sets the new pitch ...
-//			arnote->offsetpitch(steps);
-//
-//			// this creates the new elements ...
-//			// a new stem, a new stemdirection and all that ...
-//			nt->doCreateNote(nt->getDuration());
-//		}
-//		else if (ev)
-//		{
-//			// we really have an element ...
-//			NVPoint position = ev->getPosition();
-//			printf("Name of object : %s\n",typeid(ev).name());
-//			ev->addToOffset(NVPoint(float(xpos), float(ypos)));
-//		}
-//		else if (el)
-//		{
-//			el->addToOffset(NVPoint(float(xpos), float(ypos)));
-//		}
-//	}
-//	else if (!strncmp(&str[1], "remove_image", 12))
-//	{
-//		// it is a delete ...
-//		printf("is a remove_image\n");
-//		// syntax \remove_image<id>
-//		int ret = sscanf(&str[14],"%ld>",&id);
-//		printf("ret returned %d, %ld\n",ret,id);
-//	}
-//
-//	if (!isadd) return guidoErrActionFailed;  // (jb) why ? Only Adds can be successful ?
-//  											// (was: return 0; );
-//
-//	// first dummy: we always add a quarter note at the end of the abstract representation:
-//	ARMusic * arm = getARMusic();
-//	arm->resetGRRepresentation();
-//	arm->removeAutoTags();
-//
-//	// - Release all pages and voices
-//	DeleteContent( &mPages );
-//	DeleteContent( &mVoiceList );
-//
-//	// - Adds a note to the end
-//	assert(arm);
-//	ARMusicalVoice * vc = arm->GetHead();
-//	assert(vc);
-//	ARNote * nt = new ARNote(ARNoteName("c"),0,1,1,4,80);
-//	vc->AddTail(nt);
-//	arm->doAutoStuff();
-//	createGR( 0 );
-	return guidoNoErr;	// (JB) was: return 1;
-}
-
-// --------------------------------------------------------------------------
 void GRMusic::getGuido() const
 {
 	const ARMusic * arm = getconstARMusic();
@@ -892,7 +740,6 @@ void GRMusic::getGuido() const
 	s[ charCount ] = '\n';
 	s[ charCount ] = 0;
 
-  AddGuidoOutput( s );
   delete [] s;
 }
 

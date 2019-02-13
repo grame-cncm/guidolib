@@ -181,32 +181,6 @@ bool GRPage::DPtoLPRect( VGDevice & hdc, float left, float top,
 }
 
 // ----------------------------------------------------------------------------
-void GRPage::GGSOutput() const
-{
-	char buffer[100];
-	snprintf(buffer,100,"\\open_page<%d,%d>\n",(int)getPageWidth(),(int)getPageHeight());
-	AddGGSOutput(buffer);
-
-	GuidoPos pagepos = First();
-	while (pagepos)
-	{
-		GetNext(pagepos)->GGSOutput();
-	}
-
-	const float tstx = -mLeftMargin;
-	const float tsty = -mTopMargin;
-
-	ggsoffsetx = (long)(-tstx);
-	ggsoffsety = (long)(-tsty);
-
-	ggsoffsetx = 0;
-	ggsoffsety = 0;
-
-	snprintf(buffer,100,"\\close_page\n");
-	AddGGSOutput(buffer);
-}
-
-// ----------------------------------------------------------------------------
 /** \brief Draws the score page.
 
 	The GuidoEngine does not draw nor erase the background.
