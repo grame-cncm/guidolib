@@ -21,11 +21,12 @@ endif()
 
 #######################################
 # Options disabled by default
-option ( IOS 	"Generates project for iOS" off )
-option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
+option ( IOS 		"Generates project for iOS" off )
+option ( DIST 		"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
 option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
+option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
 option ( GL "Links to opengl device" off)
 
 
@@ -83,6 +84,14 @@ elseif (WIN32)
  endif ()
 endif()
 
+
+#########################################
+# optional SMUFL support
+#########################################
+if (SMUFL)
+ message (STATUS "Generates SMUFL compliant code.")
+ add_definitions(-DSMUFL)
+endif()
 add_definitions(-DGUIDOExport)
 
 #######################################
