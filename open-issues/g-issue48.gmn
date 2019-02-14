@@ -5,7 +5,10 @@
 	[ \staff<1> 
 	(* meas. 1 *) \clef<"g2"> \key<-2> \meter<"3/4"> _*3/4 \bar 
 	(* meas. 2 *) \beamsOff { a&0/4, c1/4, f/4 } 
-					 \cresc( \beamsOff { a&0/2, b&/2, f1/2 }) \bar 
+					 \cresc<dy=-4>( \beamsOff { a&0/2, b&/2, f1/2 }) \bar 
 					 \cresc<dx1=-2, dx2=4, deltaY=2, autopos="on">( \beamsOff { a&0/2, b&/2, f1/2 }) \bar 
+
+					 \cresc<dy=-2>( \beamsOff c1/4 d) 
+%					 \cresc<dx1=-2, dx2=4, deltaY=2, autopos="on">( \beamsOff { a&0/2, b&/2, f1/2 }) \bar 
 	] 
 }
