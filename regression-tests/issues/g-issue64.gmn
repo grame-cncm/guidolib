@@ -1,0 +1,36 @@
+(*
+	staccato position is incorrect when beaming is enforced
+*)
+{
+[ 
+	\clef<"f4"> 
+	(* meas. 1 *) \stemsDown  
+	\stacc<position="below">( c-1/8) 
+	\stacc<position="below">( c0/8) \stacc<position="below">( c-1/8) 
+	\stacc<position="below">( c0/8) \stacc<position="below">( c-1/8) 
+	\stacc<position="below">( c0/8)  
+] 
+, 
+[ 
+	\clef<"f4"> 
+	(* meas. 1 *) \stemsDown  \beamBegin:1 
+	\stacc<position="below">( c-1/8) 
+	\stacc<position="below">( c0/8) \stacc<position="below">( c-1/8) 
+	\stacc<position="below">( c0/8) \stacc<position="below">( c-1/8) 
+	\stacc<position="below">( c0/8)  \beamEnd:1
+] 
+, 
+[ 
+	\staffFormat<dy=-6> (* meas. 1 *) \stemsUp  
+	\stacc<position="above">( e0/8) \stacc<position="above">( f/8) 
+	\stacc<position="above">( g/8) \stacc<position="above">( e/8) 
+	\stacc<position="above">( f/8) \stacc<position="above">( g/8)
+] 
+, 
+[ 
+	\staffFormat<dy=-6> (* meas. 1 *) \stemsUp \beamBegin:1 
+	\stacc<position="above">( e0/8) \stacc<position="above">( f/8) 
+	\stacc<position="above">( g/8) \stacc<position="above">( e/8) 
+	\stacc<position="above">( f/8) \stacc<position="above">( g/8) \beamEnd:1 
+] 
+}

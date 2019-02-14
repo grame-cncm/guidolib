@@ -447,9 +447,8 @@ void GRArticulation::setStaccmoDirection( bool above )
 void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Called by GREvent when event position
 {																			// is set
 	GREvent * ev = GREvent::cast(caller);
-	if( ev == 0 )
-		return;
-
+	if( ev == 0 ) return;
+	
 	NVPoint newPoint (inPos);
 	switch( mArticulationFlag )
 	{

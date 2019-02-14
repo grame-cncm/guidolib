@@ -237,12 +237,6 @@ int GREvent::adjustLength( const TYPE_DURATION & ndur )
 	return -1;
 }
 
-
-
-bool compareArticulations (GRArticulation* i,GRArticulation* j) {
-	return (i->getArticulationOrder() < j->getArticulationOrder());
-}
-
 // ----------------------------------------------------------------------------
 void GREvent::setPosition( const NVPoint & inPos )
 {
@@ -251,7 +245,7 @@ void GREvent::setPosition( const NVPoint & inPos )
 	
 	GRNEList::iterator ptr;
 
-	sort (mArtilist.begin(), mArtilist.end(), compareArticulations);
+	sort (mArtilist.begin(), mArtilist.end(), GRArticulation::compare);
 	for( ptr = mArtilist.begin(); ptr != mArtilist.end(); ++ptr )
 	{
 		GRNotationElement * el = *ptr;

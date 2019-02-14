@@ -80,9 +80,6 @@ class GRSingleNote : public GRNote
 
 		// This tells the Note, to draw the stem only
 		virtual void	drawStemOnly( int flag );	
-	  	virtual int		tstStemEndPos( float ) { return 0; }
-	  	virtual int		setStemEndPos( float ) { return 0; }
-
 		virtual void    setStemOffsetStartPosition(float inOffset);
 		virtual void    setFirstSegmentDrawingState(bool inDrawingState);
 

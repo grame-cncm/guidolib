@@ -6,6 +6,8 @@ GUIDO Engine history
 - add -viewport option to guido2svg
 - new \arpeggio tag
 - new GuidoGetMetersAt API
+- fix incorrect cresc. on single chord
+- fix incorrect articulations position in case of enforced beaming
 - fix incorrect text position for marks
 - fix \intens bounding box
 

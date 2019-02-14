@@ -195,7 +195,6 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 //____________________________________________________________________________________
 void GRSingleNote::updateBoundingBox()
 {
-	traceMethod("updateBoundingBox");
 	// - Call inherited
 	GRNote::updateBoundingBox();
 
@@ -810,7 +809,12 @@ float GRSingleNote::changeStemLength( float inLen )
 	// the stemlength was changed with a parameter.
 	mStemLengthSet = false;
 
-// TODO: update bounding box (in setStemLength?) ?
+	GRNEList::iterator ptr;
+	GRNEList& articulations = getArticulations();
+	sort (articulations.begin(), articulations.end(), GRArticulation::compare);
+	for( GRNEList::iterator i = articulations.begin(); i != articulations.end(); i++ ) {
+		(*i)->tellPosition( this, mPosition );
+	}
 	return mStemLen;
 }
 
