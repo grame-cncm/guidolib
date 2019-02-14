@@ -41,7 +41,7 @@ void GFontOSX::GetExtent( const char * s, int inCharCount, float * outWidth,
 
 // --------------------------------------------------------------
 void	
-GFontOSX::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
+GFontOSX::GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 	float fooBaseLine;	
 	CGContextRef dc = (CGContextRef)( GetContext(context) );

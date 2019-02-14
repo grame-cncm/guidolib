@@ -53,7 +53,7 @@ class_export GFontOSX : public VGFont
 
 		// - Symbol services ---------------------------------------------
 		virtual	void			GetExtent( const char * s, int count, float * width, float * height, VGDevice * context ) const;
-		virtual	void			GetExtent( unsigned char c, float * width, float * height, VGDevice * context ) const;
+		virtual	void			GetExtent( int c, float * width, float * height, VGDevice * context ) const;
 	
 		// - OSX specific services ---------------------------------------
 		/// Returns the symbol corresponding to the input index.
