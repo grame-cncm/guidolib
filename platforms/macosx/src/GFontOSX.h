@@ -15,7 +15,11 @@
 */
 
 #include <string>
+#ifdef SMUFL
+#include <CoreText/CoreText.h>
+#else
 #import <QuartzCore/QuartzCore.h>
+#endif
 #include "VGFont.h"
 #include "GUIDOExport.h"
 
@@ -37,10 +41,15 @@
 */		
 class_export GFontOSX : public VGFont		
 {
+#ifdef SMUFL
+	CFStringRef fCTName;
+	CTFontRef	fCTFont;
+#else
 	/// Computes the input string's graphical size.
 	void	GetQuartzTextDims( const char * str, int count, float * width, float * height, float * baseline, CGContextRef dc ) const;
 	/// Computes the input symbol's graphical size.
 	void	GetQuartzGlyphDims( const CGGlyph * inGlyphs, int count, float * width, float * height, float * baseline, CGContextRef dc ) const;
+#endif
 
 	public:
 				 GFontOSX( const char* faceName, int size, int properties);
