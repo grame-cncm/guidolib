@@ -211,7 +211,11 @@ ConstMusicalSymbolID kTilde					 = 0xEAA4;	// trill
 ConstMusicalSymbolID kUpArrowSymbol			 = 0xEB60;
 ConstMusicalSymbolID kDownArrowSymbol		 = 0xEB64;
 
-ConstMusicalSymbolID kArpeggioSymbol         = 32;
+ConstMusicalSymbolID kArpeggioSymbol         = 0;
+
+ConstMusicalSymbolID kPedalSymbol            = 0xE650;
+ConstMusicalSymbolID kPedalUpSymbol         = 0xE655;
+
 
 
 #endif

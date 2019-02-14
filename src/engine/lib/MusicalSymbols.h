@@ -192,6 +192,10 @@ ConstMusicalSymbolID kAngledRightBracket             = 241;
 // version 1.51
 ConstMusicalSymbolID kArpeggioSymbol               	= 242;
 
+// version 1.66
+ConstMusicalSymbolID kPedalSymbol               	= 176;
+ConstMusicalSymbolID kPedalUpSymbol               	= 42;
+
 #endif
 
 #endif
