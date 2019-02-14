@@ -44,13 +44,11 @@ class GRDynamics : public GRPTagARNotationElement
 		std::map<const GRSystem*, TXSegment>	fXPoints;
 		TXSegment		fCurrentSegment;
 		float			fWidth;
-//		unsigned int	fMarkingSymbol;
 		float			fThickness;
 
 		const TXSegment*	getSegment(const GRSystem*) const;
 		bool				empty(const TXSegment& seg) const	{ return seg.fx1 == seg.fx2; }
 		void				clear(TXSegment& seg) const			{ seg.fx1 = seg.fx2 = 0.f; }
-//		void				initDynamicsMap();
 
 	private:
 		const GRNotationElement * getNextEvent (const GRStaff* staff, const GRNotationElement * elt) const;
