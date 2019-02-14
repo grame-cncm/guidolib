@@ -36,9 +36,7 @@ GFontWin32::~GFontWin32()
 		::DeleteObject( winFont );
 }
 // --------------------------------------------------------------
-void
-GFontWin32::GetExtent( const char * s, int inCharCount, float * outWidth, 
-					   float * outHeight, VGDevice * context ) const 
+void GFontWin32::GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const 
 {
 	if (!inCharCount) {
 		*outWidth = *outHeight = 0;
@@ -67,9 +65,7 @@ GFontWin32::GetExtent( const char * s, int inCharCount, float * outWidth,
 }
 
 // --------------------------------------------------------------
-void	
-GFontWin32::GetExtent( unsigned char c, float * outWidth, 
-					   float * outHeight, VGDevice * context ) const
+void GFontWin32::GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 	HDC hdc;
 
@@ -79,15 +75,12 @@ GFontWin32::GetExtent( unsigned char c, float * outWidth,
 		hdc = (HDC)(GetContext(context)); 
 
 	HFONT old = (HFONT)::SelectObject( hdc, GetNativeFont() );
-		
 	SIZE winSize;
-//	::GetTextExtentPoint32( GetHDC(), s, inCharCount, &winSize ); 
-	::GetTextExtentPoint32( hdc, (LPCTSTR)&c, 1, &winSize ); 
+	::GetTextExtentPoint32( hdc, (LPCTSTR)&c, 1, &winSize );
 	*outWidth	= (float)winSize.cx;
 	*outHeight	= (float)winSize.cy;
 
 	::SelectObject( hdc, old );
-
 	if (!context)
 		::ReleaseDC( (HWND)NULL, hdc );
 }

@@ -57,21 +57,11 @@ void CairoFont::GetExtent( const char * s, float * outWidth, float * outHeight, 
 	}
 	SelectFont (context);
 
-//	cairo_matrix_t matrix;
-//	cairo_get_matrix (context, &matrix);
-
 	cairo_text_extents_t extents;
 	cairo_text_extents (context, s, &extents);
 	*outWidth	= extents.width;
 	*outHeight	= extents.height;
-//	*outWidth	= extents.width - extents.x_advance;
-//	*outHeight	= extents.height - extents.y_advance;
-//	*outWidth	= (extents.width - extents.x_advance) * matrix.xx;
-//	*outHeight	= (extents.height - extents.y_advance) * matrix.yy;
-//std::cout << "CairoFont::GetExtent -" << s << "- w/h " << *outWidth << "/" << *outHeight 
-//	<< " - adv x/y " << extents.x_advance << "/" << extents.y_advance << std::endl;
-        if (newcontext)
-                cairo_destroy(context);
+	if (newcontext) cairo_destroy(context);
 }
 
 void CairoFont::GetExtent( const char * s, int charCount, float * outWidth, float * outHeight, VGDevice * dev ) const
@@ -87,7 +77,7 @@ void CairoFont::GetExtent( const char * s, int charCount, float * outWidth, floa
 	}
 }
 
-void CairoFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * dev ) const
+void CairoFont::GetExtent( int c, float * outWidth, float * outHeight, VGDevice * dev ) const
 {
 	extern const char* to_utf8 (int n, int& outcount);
 	int n;
