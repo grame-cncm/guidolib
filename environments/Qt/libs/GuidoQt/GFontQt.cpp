@@ -40,7 +40,7 @@ void GFontQt::GetExtent( const char * s, int , float * outWidth, float * outHeig
 }
 
 //------------------------------------------------------------------------
-void GFontQt::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * ) const
+void GFontQt::GetExtent( int c, float * outWidth, float * outHeight, VGDevice * ) const
 {
 	QFontMetrics fontMetrics(*mNativeFont);	
 	*outWidth  = fontMetrics.width( QString(Symbol(c)) ); 
