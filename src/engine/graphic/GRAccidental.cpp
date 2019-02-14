@@ -196,33 +196,41 @@ void GRAccidental::setAccidentalLayout(float notebreite, float curLSPACE)
 		case kSharpSymbol:
 		case kQSharpSymbol:
 		case k3QSharpSymbol:
-//		case kCau3QSharpSymbol:
+#ifndef SMUFL
+		case kCau3QSharpSymbol:
+#endif
 			mBoundingBox.top = -1.5f*curLSPACE;
 			mBoundingBox.bottom = 1.52f*curLSPACE;
 			break;
 		case kDSharpSymbol:
-//		case kCauDSharpSymbol:
+#ifndef SMUFL
+		case kCauDSharpSymbol:
+#endif
 			mBoundingBox.top = -curLSPACE;
 			mBoundingBox.bottom = curLSPACE;
 			break;
-//		case kCauSharpSymbol:
-//			mBoundingBox.top = -1.5f*curLSPACE;
-//			mBoundingBox.right = 2.43f*curLSPACE-halfExtent;
-//			mBoundingBox.bottom = 1.52f*curLSPACE;
-//			break;
-//		case kCNaturalSymbol:
-//			mBoundingBox.top = -1.4f*curLSPACE;
-////			mBoundingBox.right = 2.38f*curLSPACE-halfExtent;
-//			mBoundingBox.bottom = 1.4f*curLSPACE;
-//			break;
+#ifndef SMUFL
+		case kCauSharpSymbol:
+			mBoundingBox.top = -1.5f*curLSPACE;
+			mBoundingBox.right = 2.43f*curLSPACE-halfExtent;
+			mBoundingBox.bottom = 1.52f*curLSPACE;
+			break;
+		case kCNaturalSymbol:
+			mBoundingBox.top = -1.4f*curLSPACE;
+//			mBoundingBox.right = 2.38f*curLSPACE-halfExtent;
+			mBoundingBox.bottom = 1.4f*curLSPACE;
+			break;
+#endif
 		case kFlatSymbol:
 		case kQFlatSymbol:
 		case k3QFlatSymbol:
 		case kDFlatSymbol:
-//		case kCauFlatSymbol:
-//		case kCauQFlatSymbol:
-//		case kCau3QFlatSymbol:
-//		case kCauDFlatSymbol:
+#ifndef SMUFL
+		case kCauFlatSymbol:
+		case kCauQFlatSymbol:
+		case kCau3QFlatSymbol:
+		case kCauDFlatSymbol:
+#endif
 			mBoundingBox.top = -1.76f*curLSPACE;
 			mBoundingBox.bottom = 0.71f*curLSPACE;
 			break;
@@ -338,13 +346,14 @@ NVPoint & GRAccidental::getRefPos() const
 		case 0:		return sRefposNone;
 		case kSharpSymbol:		return sRefposSharp;
 		case kDSharpSymbol:		return sRefposDSharp;
-//		case kCauSharpSymbol:	return sRefposCSharp;
 		case kFlatSymbol:		return sRefposFlat;
 		case kDFlatSymbol:		return sRefposDFlat;
-//		case kCauFlatSymbol:	return sRefposCFlat;
 		case kNaturalSymbol:	return sRefposNatural;
-//		case kCNaturalSymbol :	return sRefposCNatural;
-
+#ifndef SMUFL
+		case kCauFlatSymbol:	return sRefposCFlat;
+		case kCauSharpSymbol:	return sRefposCSharp;
+		case kCNaturalSymbol :	return sRefposCNatural;
+#endif
 		case kQSharpSymbol	:	return sRefposQSharp;
 		case k3QSharpSymbol	:	return sRefpos3QSharp;
 		case kQFlatSymbol	:	return sRefposQFlat;
