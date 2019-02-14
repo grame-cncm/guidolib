@@ -130,8 +130,11 @@ void GRStem::setStemDir(GDirection dir)
 // TODO: draw only one scaled symbol
 void GRStem::OnDraw( VGDevice & hdc ) const
 {
-    //DrawWithGlyph(hdc);
+#ifdef SMUFL
     DrawWithLine(hdc);
+#else
+    DrawWithGlyph(hdc);
+#endif
 }
 
 //-------------------------------------------------------------------
