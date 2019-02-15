@@ -98,7 +98,7 @@ class GRBowing : public GRPTagARNotationElement
 		virtual void automaticCurveDirection	( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticAnchorPoints		( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticControlPoints		( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
-		virtual void updateBow					( GRStaff * grstaff );
+		virtual void updateBow					( GRStaff * grstaff, bool grace=false );
 
 	private:
 		virtual void drawSlur( VGDevice & hdc, NVPoint pstart, NVPoint pmid, NVPoint pend ) const;
@@ -111,6 +111,7 @@ class GRBowing : public GRPTagARNotationElement
 		virtual	GRGlobalStem * findGlobalStem( const GRSystemStartEndStruct * sse, const GRNotationElement * stemOwner ) const;
 		
 		// - Positionning of the curve. 
+		virtual void graceAnchorPoints			( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse, GRStaff * staff );
 		virtual void manualAnchorPoints			( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void manualControlPoints		( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void applyAnchorPointsOffsets	( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
