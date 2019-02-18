@@ -42,7 +42,7 @@ class StaticFont : public VGFont
 		float 		fRefSize=1;		// the font size used to compute the extends map
 		int 		fHeight=1;		// the static height value
 
-        virtual void initialize() = 0;		// must initialize the fExtends maps, the height and the ref size
+        virtual void initialize() {}		// must initialize the fExtends maps, the height and the ref size
 
 	private:
 		std::string fName;			// the font name
