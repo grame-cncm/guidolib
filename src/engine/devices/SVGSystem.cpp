@@ -17,6 +17,7 @@
 #include "SVGDevice.h"
 #include "SVGFont.h"
 #include "SVGMapDevice.h"
+#include "FontManager.h"
 #include "GUIDOEngine.h"
 #include "GuidoFont.h"
 #include "TimesFont.h"
