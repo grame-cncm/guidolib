@@ -20,7 +20,6 @@
 
 #define POLICE_NAME		"Bravura"
 #define NB_OF_COLUMNS		20
-#define NB_OF_CHARS_SHOWN	3500
 
 int main(int argc, char *argv[])
 {
@@ -30,7 +29,7 @@ int main(int argc, char *argv[])
 	QFontDisplayer fontDisplayer( POLICE_NAME , NB_OF_COLUMNS , NB_OF_CHARS_SHOWN );
 	fontDisplayer.show();
 #else	
-	QFontDisplayer * fontDisplayer = new QFontDisplayer( POLICE_NAME , NB_OF_COLUMNS , NB_OF_CHARS_SHOWN );
+	QFontDisplayer * fontDisplayer = new QFontDisplayer( POLICE_NAME , NB_OF_COLUMNS );
 	QScrollArea scrollArea;
 	scrollArea.setWidget( fontDisplayer );
 	scrollArea.setAlignment( Qt::AlignHCenter );

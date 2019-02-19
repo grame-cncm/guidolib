@@ -44,18 +44,25 @@ using namespace std;
 
 #include "QFontDisplayer.h"
 
-#define STARTGLYPH 57344
+#define STARTGLYPH 		0xE000
+#define ENDGLYPH		0xEE3F
+
+// this is the end of the reserved range, includes optional characters
+// #define ENDGLYPH		0xF8FF
 
 
-QFontDisplayer::QFontDisplayer(const QString& policeFamily , int nbOfColumns , int nbOfChars , QWidget* )
-    : mPoliceFamily(policeFamily), mNbOfColumns(nbOfColumns) , mNbOfChars(nbOfChars)
+QFontDisplayer::QFontDisplayer(const QString& policeFamily , int nbOfColumns , QWidget* )
+    : mPoliceFamily(policeFamily), mNbOfColumns(nbOfColumns)
 {
 }
 
 //--------------------------------------------------
+int QFontDisplayer::charsCount() const	{ return ENDGLYPH - STARTGLYPH; }
+
+#ifdef PRINTEXTEND
+//--------------------------------------------------
 void QFontDisplayer::printMetrics(QPainter& painter )
 {
-#ifdef PRINTEXTEND
 	static bool done = false;
 	if (!done) {
 		painter.save();
@@ -64,7 +71,7 @@ void QFontDisplayer::printMetrics(QPainter& painter )
 		QFont musicFont	= QFont("Bravura" , 4*LSPACE);
 		QFontMetrics *metrics = new QFontMetrics(musicFont);
 		bravuraout << OS << " - Qt - Bravura font - size: " << 4*LSPACE << endl;
-		for (unsigned char i=STARTGLYPH; i<STARTGLYPH+mNbOfChars; i++) {
+		for (unsigned char i=STARTGLYPH; i<=ENDGLYPH; i++) {
 			bravuraout << "0x" << QString::number( i, 16 ).toUpper() << ": " << metrics->width( QChar(i) ) << endl;
 		}
 		delete metrics;
@@ -79,8 +86,8 @@ void QFontDisplayer::printMetrics(QPainter& painter )
 		painter.restore();
 		done = true;
 	}
-#endif
 }
+#endif
 
 //--------------------------------------------------	
 void QFontDisplayer::paintEvent( QPaintEvent * event )
@@ -112,7 +119,7 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	int CELL_WIDTH = cellSize;
 	int CELL_HEIGHT = cellSize;
 	
-	int nbOfRows = mNbOfChars / mNbOfColumns + 1;
+	int nbOfRows = charsCount() / mNbOfColumns + 1;
 	resize( width() , (nbOfRows + 1) * CELL_HEIGHT );
 
 	int xOffset = cellSize / 4;

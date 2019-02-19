@@ -18,14 +18,14 @@ class QFontDisplayer : public QWidget
 {
 public:
     
-	 QFontDisplayer(const QString& policeFamily , int nbOfColumns , int nbOfChars , QWidget *parent = 0);
+	 QFontDisplayer(const QString& policeFamily , int nbOfColumns , QWidget *parent = 0);
 	~QFontDisplayer() {}
 	
 protected:
 	void paintEvent( QPaintEvent * event );
 	void printMetrics(QPainter& painter );
+	int  charsCount() const;
 
 	QString mPoliceFamily;
 	int mNbOfColumns;
-	int mNbOfChars;	
 };
