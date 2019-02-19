@@ -7,10 +7,12 @@
 		<script type="text/javascript" src="../libGUIDOEngine.js"></script>
 		<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript">
+
 	var guidoEngine;
 	$( document ).ready(function() {
 		// Guido engine initialisation
-		guidoEngine = new Module.GuidoEngineAdapter;
+		var module = GuidoModule();
+		guidoEngine = new module.GuidoEngineAdapter;
 		guidoEngine.init();
 		
 		// Test for gmn code
@@ -139,7 +141,8 @@
 		guidoEngine.freeAR(ar3);
 		
 		// Score Map test
-		var scoreMap = new Module.GUIDOScoreMap;
+		var module = GuidoModule();
+		var scoreMap = new module.GUIDOScoreMap;
 
 		pagemap_n = scoreMap.getPageMap( gr, 1, 1000.0, 1000.0 );
 		$("#guidoGetPageMap_JSON").html("<b>Page map for page 1 (scoreMap.getPageMap( gr, 1, 1000.0, 1000.0 )) :</b> "+ pagemap_n);
