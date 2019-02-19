@@ -18,7 +18,7 @@
 #include <ostream>
 #include <string.h>
 #include "canvasdevice.h"
-#include "GuidoFont.h"
+#include "MusicFont.h"
 #include "TimesFont.h"
 #include "SVGFont.h"
 
