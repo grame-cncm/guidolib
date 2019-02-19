@@ -21,6 +21,7 @@
 
 #include "ARIntens.h"
 #include "TagParameterFloat.h"
+#include "TagParameterString.h"
 #include "MusicalSymbols.h"
 
 #include "GRIntens.h"
@@ -99,11 +100,38 @@ void GRIntens::accept (GRVisitor& visitor)
 //## Other Operations (implementation)
 void GRIntens::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw || !mShow)
-		return;
+	if(!mDraw || !mShow) return;
 	GRTagARNotationElement::OnDraw( hdc );
-}
 
+	const float space = (mGrStaff ? mGrStaff->getStaffLSPACE() : LSPACE) / 2;
+	const ARIntens* ar = getARIntens();
+	const string font = ar->getFont();
+	const string attr = ar->getTextAttributes();
+	const VGFont* hmyfont = FontManager::FindOrCreateFont( ar->getFSize(), &font, &attr );
+
+	hdc.SetTextFont( hmyfont );
+	const VGColor prevTextColor = hdc.GetFontColor();
+
+	if( mColRef )
+		hdc.SetFontColor( VGColor( mColRef ));
+
+	// - Print text
+	const string& textafter = ar->getTextAfter();
+	float y = mPosition.y - ar->getDY()->getValue();
+	float x = mPosition.x + ar->getDX()->getValue();
+    if (!textafter.empty()) {
+		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignLeft );
+	    hdc.DrawString( mPosition.x + mBoundingBox.right + space, y, textafter.c_str(), textafter.size());
+	}
+
+	const string& text = ar->getTextBefore();
+    if (!text.empty()) {
+		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignRight );
+		hdc.DrawString( x - space/2, y, text.c_str(), text.size());
+	}
+	
+	if( mColRef ) hdc.SetFontColor( prevTextColor );
+}
 
 const ARIntens* GRIntens::getARIntens() const
 {

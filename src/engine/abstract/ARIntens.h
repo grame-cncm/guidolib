@@ -17,11 +17,11 @@
 
 #include <string>
 
-#include "ARMTParameter.h"
+#include "ARFontAble.h"
 
 /** \brief The intensity tag.
 */
-class ARIntens :  public ARMTParameter 
+class ARIntens :  public ARFontAble
 {
 	public:
 				 ARIntens(const char * txt);
@@ -30,7 +30,9 @@ class ARIntens :  public ARMTParameter
 
 		virtual void setTagParameters (const TagParameterMap& params);
 
-		virtual const std::string& getText() const { return fIntens; }
+		virtual const std::string& getText() const 			{ return fIntens; }
+		virtual const std::string& getTextBefore() const 	{ return fBefore; }
+		virtual const std::string& getTextAfter() const 	{ return fAfter; }
 
 		virtual const char*	getParamsStr() const	{ return kARIntensParams; };
 		virtual const char*	getTagName() const		{ return "ARIntens"; };
@@ -40,6 +42,8 @@ class ARIntens :  public ARMTParameter
 
 	protected:
 		std::string fIntens;
+		std::string fBefore;
+		std::string fAfter;
 };
 
 #endif
