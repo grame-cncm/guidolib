@@ -30,20 +30,15 @@ using namespace std;
 
 static void fontwidth(QFontMetrics& m, int start, int end)
 {
-//    cout << "static const int kGuidoFontWidth[] = {" << endl;
+	cout << "const int kFontTblOffset = 0x" << std::hex << std::uppercase << STARTGLYPH << ";" << std::dec << endl << endl;
     for (int i=start; i <= end; i++) {
-        cout << "	fExtends[" << i << "] = " << m.width(QString(QChar(i))) << ";" << endl;
-        }
-//	cout << "};" << endl;
+        cout << "	fExtends[" << (i-start) << "] = " << m.width(QString(QChar(i))) << ";" << endl;
+	}
 }
 
 static void fontheight(QFontMetrics& m)
 {
-    cout << "static const int kGuidoFontHeight = " << m.height() << ";" << endl;
-//    for (int i=0; i <= max; i++) {
-//        cout << "	" << m.height() << ",	// " << i << endl;
-//        }
-//	cout << "};" << endl;
+    cout << "static const int kFontHeight = " << m.height() << ";" << endl;
 }
 
 static void infos(int size)
@@ -57,7 +52,7 @@ static void infos(int size)
 
 int main(int argc, char *argv[])
 {
-	QApplication app( argc , argv );	// required by Qt
+	QApplication app( argc , argv );
 	const int SIZE = 200;
     QFont font	= QFont("Bravura" , SIZE);
     font.setPixelSize( SIZE );
