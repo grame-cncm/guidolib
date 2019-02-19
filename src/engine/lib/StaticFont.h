@@ -18,6 +18,12 @@
 
 #include "VGFont.h"
 
+#ifdef SMUFL
+#define kMaxTblIndex	3647
+#else
+#define kMaxTblIndex	256
+#endif
+
 class StaticFont : public VGFont
 {
    public:
@@ -27,30 +33,29 @@ class StaticFont : public VGFont
          */
 				 StaticFont(const char * name, int size, int properties)
 							: fName(name), fSize(size), fProperties(properties) {}
-        virtual ~StaticFont() {}
+        virtual ~StaticFont() { }
 
         const char *	GetName() const			{ return fName.c_str(); }
         int 			GetSize() const			{ return fSize; }
         int				GetProperties() const	{ return fProperties; }
 
-        void	GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const;
-        void	GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context ) const;
+        virtual void	GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const;
+        virtual void	GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context ) const;
 
     protected:
-		typedef std::map<int, float> TExtendMap;
-		TExtendMap	fExtends;		// the static extend values
+		int			fExtends[kMaxTblIndex+1];	// the static extend values
 		float 		fRefSize=1;		// the font size used to compute the extends map
 		int 		fHeight=1;		// the static height value
+		int			fTblOffset=0;
 
         virtual void initialize() = 0;		// must initialize the fExtends maps, the height and the ref size
 
-	private:
+    	inline float	GetExtend (int c) const
+    		{  int i=c-fTblOffset; return ((i >= 0) && (i <= kMaxTblIndex)) ? fExtends[i] : 0.f; }
+
 		std::string fName;			// the font name
 		int 		fSize;			// the font size
         int 		fProperties;	// the font properties
-
-    	inline float	GetExtend (int c) const
-    		{  TExtendMap::const_iterator i = fExtends.find(c); return (i==fExtends.end()) ? 0.f : i->second; }
 };
 
 #endif
