@@ -26,7 +26,7 @@ class StaticFont : public VGFont
 		 *
          */
 				 StaticFont(const char * name, int size, int properties)
-							: fName(name), fSize(size), fProperties(properties) { initialize(); }
+							: fName(name), fSize(size), fProperties(properties) {}
         virtual ~StaticFont() {}
 
         const char *	GetName() const			{ return fName.c_str(); }
@@ -42,7 +42,7 @@ class StaticFont : public VGFont
 		float 		fRefSize=1;		// the font size used to compute the extends map
 		int 		fHeight=1;		// the static height value
 
-        virtual void initialize() {}		// must initialize the fExtends maps, the height and the ref size
+        virtual void initialize() = 0;		// must initialize the fExtends maps, the height and the ref size
 
 	private:
 		std::string fName;			// the font name
@@ -53,4 +53,4 @@ class StaticFont : public VGFont
     		{  TExtendMap::const_iterator i = fExtends.find(c); return (i==fExtends.end()) ? 0.f : i->second; }
 };
 
-#endif // GUIDOFONT_H
+#endif

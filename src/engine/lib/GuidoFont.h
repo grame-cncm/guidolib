@@ -20,7 +20,7 @@ class GuidoFont : public StaticFont
     public:
     	enum { kGuidoFontSize=200, kGuidoFontHeight=499 };
 
-				 GuidoFont(const char * name, int size, int properties) : StaticFont(name, size, properties) {}
+				 GuidoFont(const char * name, int size, int properties) : StaticFont(name, size, properties) { initialize(); }
         virtual ~GuidoFont() {}
 
     protected:
