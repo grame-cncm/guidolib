@@ -15,17 +15,17 @@
 
 #include "StaticFont.h"
 
-class GuidoFont : public StaticFont
+class MusicFont : public StaticFont
 {
     public:
-    	enum { kGuidoFontSize=200, kGuidoFontHeight=499 };
+    	enum { kFontSize=200, kGuidoFontHeight=499, kBravuraFontHeight = 804 };
 
-				 GuidoFont(const char * name, int size, int properties) : StaticFont(name, size, properties) { initialize(); }
-        virtual ~GuidoFont() {}
+				 MusicFont(const char * name, int size, int properties) : StaticFont(name, size, properties) { initialize(); }
+        virtual ~MusicFont() {}
 
     protected:
         virtual void initialize();		// must initialize the fExtends maps, the height and the ref size
 };
 
 
-#endif // GUIDOFONT_H
+#endif
