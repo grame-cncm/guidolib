@@ -25,20 +25,20 @@ using namespace std;
 
 static void fontwidth(QFontMetrics& m, int max)
 {
-    cout << "static const int kGuidoFontWidth[] = {" << endl;
+//    cout << "static const int kGuidoFontWidth[] = {" << endl;
     for (int i=0; i <= max; i++) {
-        cout << "	" << m.width(QString(QChar(i))) << ",	// " << i << endl;
+        cout << "	fExtends[" << i << "] = " << m.width(QString(QChar(i))) << ";" << endl;
         }
-	cout << "};" << endl;
+//	cout << "};" << endl;
 }
 
 static void fontheight(QFontMetrics& m, int max)
 {
-    cout << "static const int kGuidoFontHeight[] = {" << endl;
-    for (int i=0; i <= max; i++) {
-        cout << "	" << m.height() << ",	// " << i << endl;
-        }
-	cout << "};" << endl;
+    cout << "static const int kGuidoFontHeight = " << m.height() << ";" << endl;
+//    for (int i=0; i <= max; i++) {
+//        cout << "	" << m.height() << ",	// " << i << endl;
+//        }
+//	cout << "};" << endl;
 }
 
 static void infos(int size)
@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
     guidoFont.setPixelSize( SIZE );
 	QFontMetrics metrics (guidoFont);
 	infos (SIZE);
-	fontwidth (metrics, MAXGLYPH);
-	cout << endl;
 	fontheight (metrics, MAXGLYPH);
+	cout << endl;
+	fontwidth (metrics, MAXGLYPH);
 	return 0;
 }
