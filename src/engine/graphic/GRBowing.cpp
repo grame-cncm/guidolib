@@ -35,6 +35,8 @@
 
 extern GRSystem * gCurSystem;
 
+#define FIX_SLOPE
+
 using namespace std;
 
 
@@ -343,8 +345,37 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 		// A tag for control points has been specified in the guido script.
 		manualControlPoints( &context, arBow, sse );
 	}
-	else // Automatic placement of control points, it will try to avoid collisions.
+	else { // Automatic placement of control points, it will try to avoid collisions.
+#ifdef FIX_SLOPE
+		NVRect rect = getAssociatedBoundingBox();
+		float limit = context.staff->getStaffLSPACE() * 6;
+		int count = 0;
+		float prevypos = bowInfos->position.y;
+		float prevgap = 10000;
+		do {
+			automaticControlPoints( &context, arBow, sse );
+			updateBoundingBox();
+			const bool upward = (context.curveDir == 1);
+			float gap = upward ? rect.top - mBoundingBox.top : mBoundingBox.bottom - rect.bottom;
+			if (gap > limit) {
+				if (gap > prevgap) {				// situation is getting worse
+					bowInfos->position.y -= prevypos;	// revert to previous pos
+					automaticControlPoints( &context, arBow, sse );
+					updateBoundingBox();
+					break;
+				}
+				prevgap = gap;
+				float yAdjust  = context.staff->getStaffLSPACE() / (upward ? 2.f : -2.f);
+				bowInfos->position.y -= yAdjust;
+				count++;
+			}
+			else break;
+		} while (count < 3);
+		return;
+#else
 		automaticControlPoints( &context, arBow, sse );
+#endif
+	}
 
 	updateBoundingBox();
 }
@@ -629,6 +660,9 @@ void GRBowing::OnDraw( VGDevice & hdc) const
 	if (error) return;
 	assert( gCurSystem );
 
+//	NVRect r = getAssociatedBoundingBox();
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
+//
 //	DrawBoundingBox( hdc, VGColor( 255, 120, 150, 120 )); // DEBUG
 //	hdc.Frame(mBoundingBox.left, mBoundingBox.top, mBoundingBox.right, mBoundingBox.bottom);
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
@@ -744,12 +778,12 @@ void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2, float x3, 
 	hdc.Polygon( xPoints, yPoints, index );
 
 	/* - DEBUG ->
-	hdc.PushPen( GColor( 200, 0, 0 ), 5 );
+	hdc.PushPen( VGColor( 200, 0, 0 ), 5 );
 
 	hdc.Line( x1 - 20, y1 - 20, x1 + 20, y1 + 20);
 	hdc.Line( x1 - 20, y1 + 20, x1 + 20, y1 - 20);
 
-	hdc.PushPen( GColor( 200, 0, 200 ), 5 );
+	hdc.PushPen( VGColor( 200, 0, 200 ), 5 );
 	hdc.Line( x2 - 20, y2 - 20, x2 + 20, y2 + 20);
 	hdc.Line( x2 - 20, y2 + 20, x2 + 20, y2 - 20);
 	hdc.PopPen();
