@@ -21,20 +21,9 @@ endif
 endif
 endif
 
-
-# try to detect Visual Studio version used
 ifeq ($(TARGET), windows)
- MSVC ?= C:\Program Files (x86)\Microsoft Visual Studio 12.0
- ifneq ($(wildcard "$(MSVC)"), "") 
-  WIN32VS ?= Visual Studio 12 2013
+  WIN32VS ?= Visual Studio 14 2015
   WIN64VS ?= $(WIN32VS) Win64
-  endif
- else
- MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
- ifneq ($(wildcard "$(MSVC)"), "") 
-  WIN32VS ?= Visual Studio 10
-  WIN64VS ?= $(WIN32VS) Win64
- endif
 endif
 
 all :
@@ -66,7 +55,7 @@ win32 : win32/guidotool.sln win32tools
 win64 : win64/guidotool.sln win64tools 
 
 win32tools : win32/guidotool.sln
-	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/guidotools.sln /maxcpucount:4 /p:Configuration=Release"
+	cd win32 && cmake --build . --config Release
 
 win32/guidotool.sln : CMakeLists.txt
 	[ -d win32 ] || mkdir win32
@@ -77,7 +66,7 @@ win64/guidotool.sln : CMakeLists.txt
 	cd win64 && cmake .. -G "$(WIN64VS)" -Wno-dev
 
 win64tools : win64/guidotool.sln
-	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidotools.sln /maxcpucount:4 /p:Configuration=Release"
+	cd win64 && cmake --build . --config Release
 
 #===============================================================
 # building the tools on linux
