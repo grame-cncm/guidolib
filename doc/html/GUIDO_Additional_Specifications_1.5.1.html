@@ -20,6 +20,7 @@
 			A:hover   { color:#990000; text-decoration: none; }
 
 			p		 { margin-left: 50px; }
+			p.warning  { font-weight : bold; margin-left: 50px; color:#990000; }
 			p.notes  { font-style: italic; margin-left: 0px; }
 			p.tag    { margin-left: 90px; text-indent: -40px}
 			ul		 { margin-left: 100px; }
@@ -39,66 +40,46 @@
 			<br>
 			<a href="http://www.grame.fr/Recherche/">Grame</a> - April 2013
 		</p>
-		
-		
 		<p>
-			<p>
-				<a href="#1.">1. Trill</a>
-			</p>
-			<p>
-				<a href="#2.">2. Noteheads</a>
+			<p><a href="#1.">1. Trill</a></p>
+			<p><a href="#2.">2. Noteheads</a>
 				<ul>
 					<li><a href="#2.1">2.1 Noteheads</a></li>
 					<li><a href="#2.2">2.2 Noteheads brackets</a></li>
 				</ul>
 			</p>
-			<p>
-				<a href="#3.">3. Glissandos</a>
-			</p>
-			<p>
-				<a href="#4.">4. Clusters</a>
-			</p>
-			<p>
-				<a href="#5.">5. staffOff, staffOn</a>
-			</p>
-			<p>
-				<a href="#6.">6. Symbol</a>
-			</p>
-			<p>
-				<a href="#7.">7. Feathered Beaming</a>
-			</p>
-			
-			
+			<p><a href="#3.">3. Glissandos</a></p>
+			<p><a href="#4.">4. Clusters</a></p>
+			<p><a href="#5.">5. staffOff, staffOn</a></p>
+			<p><a href="#6.">6. Symbol</a></p>
+			<p><a href="#7.">7. Feathered Beaming</a></p>
+
 			<hr>
-			
-			
 			<a name="1."></a>
 			<h4>1. Trill</h4>
 
+			<p class="warning">
+				Warning ! The <span class="tag">\trill</span> specification has changed with Guido Engine version 1.6.5. See the corresponding documentation.
+			</p>
 			<p class="tag">
 				<p>
 					<span class="tag">\trill</span>&lt;<i>dx, dy, adx, ady, size, color, tr, anchor</i>&gt;(<i>chords</i>) 
 				</p>
 				<p>
 					Places a trill on the first note of each chord. Each chord should have two voices which specify the main and auxiliary note. Upward and downward trills can be realised by specifying these notes accordingly.
-				</p>
-				
+				</p>			
 				<br>
-				
 				<ul>
 					<li>
 						<i><b>Parameters</b> (in the order of their default positions):</i>
-						
 						<ul>
 							<br>
 							<li>
-								<b><i>dx, dy, adx, ady</i></b> - graphic offsets of the trill (dx/dy for entire trill, adx/ady only for the accidental)
-							
+								<b><i>dx, dy, adx, ady</i></b> - graphic offsets of the trill (dx/dy for entire trill, adx/ady only for the accidental)					
 								<ul>
 									<br>
 									<li>
-										<i>standard values:</i>
-						
+										<i>standard values:</i>						
 										<ul>
 											<li>
 												unit parameters
@@ -211,20 +192,15 @@
 							</li>
 						</ul>		
 						<br>
-					</li>
-									
+					</li>			
 					<li>
-						<b><i>Range:</i></b> obligatory
-					</li>
-									
+						<b><i>Range:</i></b> mandatory
+					</li>		
 					<br><br>
-									
 					<li>
 						<b><i>Semantics:</i></b>
-								
 						<ul>
 							<li>
-								
 								rapid alternation between two adjacent notes
 							</li>
 						</ul>
@@ -253,11 +229,9 @@
 			
 			<a name="2."></a>
 			<h3>2. Noteheads</h3>
-			
-			
+
 			<a name="2.1"></a>
-			<h4>2.1 Noteheads</h4>
-			
+			<h4>2.1 Noteheads</h4>			
 			<p class="tag">
 				<span class="tag">\noteFormat</span>&lt;<i>type</i>&gt; 
 				<p>
@@ -431,19 +405,13 @@
 						<br>
 					</li>
 									
-					<li>
-						<b><i>Range:</i></b> obligatory
-					</li>
+					<li><b><i>Range:</i></b> mandatory</li>
 									
 					<br><br>
-									
 					<li>
-						<b><i>Semantics:</i></b>
-								
+						<b><i>Semantics:</i></b>	
 						<ul>
-							<li>
-								A glissando is a glide from one pitch to another.
-							</li>
+							<li>A glissando is a glide from one pitch to another.</li>
 						</ul>
 					</li>
 									
@@ -565,7 +533,7 @@
 					</li>
 									
 					<li>
-						<b><i>Range:</i></b> obligatory
+						<b><i>Range:</i></b> mandatory
 					</li>
 									
 					<br><br>
@@ -902,7 +870,7 @@
 					</li>
 									
 					<li>
-						<b><i>Range:</i></b> obligatory
+						<b><i>Range:</i></b> mandatory
 					</li>
 									
 					<br><br>

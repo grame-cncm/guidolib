@@ -20,6 +20,7 @@
 	A:hover   { color:#990000; text-decoration: none; }
 
     p		 { margin-left: 50px; }
+	p.warning  { font-weight : bold; margin-left: 50px; color:#990000; }
     p.notes  { font-style: italic; margin-left: 0px; }
     p.tag    { margin-left: 90px; text-indent: -40px}
     ul		 { margin-left: 100px; }
@@ -138,6 +139,11 @@ where <i>type</i> can be one of the following:
 
 
 <a name="2."></a><h3>2. Ornaments</h3>
+<p class="warning">
+Warning ! Ornaments specification has changed with Guido Engine version 1.6.5: they are not specified with chords anymore. See the corresponding documentation.
+</p>
+
+
 <p>
 The formatting of ornaments is specified with chords ; each chord parameter has at least two notes, 
 the main one (which will be drawn) and the auxiliary ones (which won't be drawn, but used to define the type of ornament desired). 

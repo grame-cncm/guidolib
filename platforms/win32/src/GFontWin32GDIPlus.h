@@ -74,7 +74,7 @@ class_export GFontWin32GDIPlus : public VGFont
 										   VGDevice * context = 0) const;
 		/// Computes the width and height of the input character using the 
 		/// current font capabilities in the input VGDevice
-		virtual	void			GetExtent( unsigned char c, float * outWidth, float * outHeight,
+		virtual	void			GetExtent( int c, float * outWidth, float * outHeight,
 										   VGDevice * context = 0) const;
 				float		mAscent;
 				float		mEmHeight;

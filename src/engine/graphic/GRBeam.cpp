@@ -16,8 +16,6 @@
 #include <sstream>
 #include <algorithm>
 
-#include "GUIDOEngine.h"	// for AddGGSOutput
-
 #include "GRBeam.h"
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
@@ -75,27 +73,6 @@ GRBeam::~GRBeam()
 	// associations are removed within
 	// the GRPositionTag-Removal ...
 	FreeAssociatedList();
-}
-
-void GRBeam::GGSOutput() const
-{
-	if (error) return;
-
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
-	if (!sse) return;
- 
-	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	assert(st);
-
-	char buffer[500];
-	snprintf(buffer, 500, "\\draw_beam<%ld,%d,%d,%d,%d>\n", 
-			getID(),
-			(int)(st->p[0].x + ggsoffsetx),
-			(int)(st->p[0].y + ggsoffsety),
-			(int)(st->p[3].x + ggsoffsetx),
-			(int)(st->p[3].y + ggsoffsety ));
-
-	AddGGSOutput(buffer);
 }
 
 // -----------------------------------------------------------------------------

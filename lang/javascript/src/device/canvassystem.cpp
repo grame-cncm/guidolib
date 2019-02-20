@@ -11,6 +11,7 @@
 
 */
 
+#include "FontManager.h"
 #include "canvassystem.h"
 
 using namespace std;
@@ -63,8 +64,8 @@ const VGFont* CanvasSystem::CreateVGFont(const char * faceName, int size, int pr
 {
 	// This system is used when we can't calculate font metrics
 	// A arbitrary text font metrics (Times) is used for text font
-	if(strcmp("Guido2", faceName) == 0) {
-		return new GuidoFont(faceName, size, properties);
+	if(strcmp(kMusicFontStr, faceName) == 0) {
+		return new MusicFont(faceName, size, properties);
 	} else {
 		return new TimesFont(faceName, size, properties);
 	}

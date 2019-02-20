@@ -22,6 +22,7 @@
 #include "ARDefine.h"
 #include "ARMusicalTag.h"
 #include "ARMusicalVoice.h"
+#include "ARAuto.h"
 
 class ARMusic;
 class ARMusicalVoice;
@@ -48,7 +49,6 @@ class ARDiminuendo;
 class ARTremolo;
 class ARChordTag;
 class ARTuplet;
-class ARAuto;
 class ARKey;
 
 typedef KF_IPointerList<ARMusicalTag> TagPointerList; // todo: replace by stl container (easy)
@@ -112,6 +112,8 @@ class ARFactory
   	
   private:
 
+		enum { kNoBeam = -99999999 };
+
 		ARMusicalVoice * 	mCurrentVoice = NULL;
 		ARMusic * 			mCurrentMusic = NULL;
 		ARMusicalEvent * 	mCurrentEvent = NULL;
@@ -126,7 +128,8 @@ class ARFactory
 		int 				mCurrentNumerator;
 		int 				mCurrentDenominator;
 		int				 	mCurrentIntensity;
-	
+		int					mCurrentBeamID;
+
 		void	checkTagEnd	( ARMusicalTag* tag);
 		void	checkRange	( const ARMusicalTag* tag, const std::string& ) const;
 		void	endTremolo	( ARMusicalTag * tag );
@@ -165,6 +168,8 @@ protected:
 	bool				mVoiceAdded;
 	bool				mAutoLyricsPos;
 	bool				mAutoInstrPos;
+	ARAuto::position 	mFingeringPos;
+	float				mFingeringSize;
 
     NVstring mFilePath;
 };

@@ -702,6 +702,7 @@ static std::string fontName2iOSName(const string name, int properties)
         switch (properties) {
             case 1:		iosname = "TimesNewRomanPS-BoldMT"; break;
             case 2:		iosname = "TimesNewRomanPS-ItalicMT";break;
+            default:	iosname = "TimesNewRomanPS";
         }
     }
 }

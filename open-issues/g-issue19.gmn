@@ -1,6 +1,7 @@
 (*
-  gmn code converted using libmusicxml v.2.1.0
-  and the embedded xml2guido converter v.2.0.0
+	issue #19
+	rehearshal marks are moving when the score is reloaded
+	+ a cresc sign cross almost the score although none is written before measure 136
 *)
 { [ \staff<1> \instr<"[Unnamed (treble staff)]", dx=-48hs, dy=-5hs> \systemFormat<"", dx=48hs> \barFormat<style= "system", range="1"> 
    (* meas. 1 *)  \clef<"g2"> \key<3> \meter<"2/8", autoBarlines="off", autoMeasuresNum="page"> \tempo<"Allegro vivo [1/4] = 152", dy=4> _/4 \bar 

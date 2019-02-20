@@ -24,30 +24,16 @@
 using namespace std;
 
 // - Static members
-int	GObject::sInstanceCount = 0;
-float GObject::sSymbolExtentMap [ kMaxMusicalSymbolID ];
+//int	GObject::sInstanceCount = 0;
+std::map<ConstMusicalSymbolID, float> GObject::sSymbolExtentMap;
 NVPoint GObject::sRefposNone;
 
-// ------------------------------------------------------------------------
-GObject::GObject()
-{
-	mGId = (long) this;
-	NotifyNewInstance();
-}
 
 // --------------------------------------------------------------------------
 GObject::GObject( const GObject & in )
 {
 	mBoundingBox = in.mBoundingBox;
 	mPosition = in.mPosition;
-	mGId = (long) this;			// not in.mGId 
-	NotifyNewInstance();
-}
-
-// --------------------------------------------------------------------------
-GObject::~GObject()
-{
-	--sInstanceCount;
 }
 
 // --------------------------------------------------------------------------
@@ -81,11 +67,6 @@ void GObject::tellPosition(GObject *, const NVPoint &)
 }
 
 // --------------------------------------------------------------------------
-void GObject::GGSOutput() const
-{
-}
-
-// --------------------------------------------------------------------------
 /** \brief Returns the width of a musical symbol.
 
 	When GetSymbolExtent() is called for the first time for a given symbol, 
@@ -95,31 +76,18 @@ void GObject::GGSOutput() const
 	TODO: also return the height of the symbols. (the width is not enough 
 	to calculate a bounding box)
 */
-float GObject::GetSymbolExtent( unsigned int inSymbol ) 
+float GObject::GetSymbolExtent( unsigned int inSymbol )
 {
-	const float retval = sSymbolExtentMap[ inSymbol ];
-	if (retval > -1)
-		return retval;
+	float val = sSymbolExtentMap[ inSymbol ];
+	if (val) return val;
 
-	float extent = 0;
 	float x = 0;
 	float y = 0;
 	if( gGlobalSettings.gDevice )
 		FontManager::gFontScriab->GetExtent( inSymbol, &x, &y, gGlobalSettings.gDevice );
 	
-	extent = x;
-	sSymbolExtentMap[ inSymbol ] = extent;
-	return extent;
-}
-
-// --------------------------------------------------------------------------
-void GObject::NotifyNewInstance()
-{ 
- 	if( ++ sInstanceCount == 1 )
-	{	
-		for( int index = 0; index < kMaxMusicalSymbolID; ++ index )
-			sSymbolExtentMap[ index ] = -1;
-	}
+	sSymbolExtentMap[ inSymbol  ] = x;
+	return x;
 }
 
 // --------------------------------------------------------------------------

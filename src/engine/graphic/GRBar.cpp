@@ -133,16 +133,6 @@ GRBar::~GRBar()
 {
 }
 
-// --------------------------------------------------------------------------
-void GRBar::GGSOutput() const
-{
-	// this is a temporary change for Font stuff ...
-	if( mSymbol == kBarSymbol )
-		GGSOutputAt( kBarGSSymbol );	// kBarGSSymbol ?
-	else
-		GRTagARNotationElement::GGSOutput();
-}
-
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */

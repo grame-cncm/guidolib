@@ -8,10 +8,10 @@
 ]
 ,
 [
-	a \slur<dx1=-6, dx2=4>(g f e) d
+	a \slur<dy=-1, dx1=-6, dx2=4>(g f e) d
 ]
 ,
 [
-	a \slur<curve="", dx1=-6, dx2=4>(g f e) d
+	a \slur<curve="up", dx1=-6, dx2=4>(g f e) d
 ]
 }

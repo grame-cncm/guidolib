@@ -17,7 +17,6 @@
 
 // - Guido Misc
 #include "VGDevice.h"
-#include "GUIDOEngine.h"	// for AddGGSOutput
 #include "FontManager.h"
 
 // - Guido GR
@@ -40,9 +39,6 @@
 #include "FontManager.h"
 
 using namespace std;
-
-extern long ggsoffsetx;
-extern long ggsoffsety;
 
 GRNotationElement::GRNotationElement()
 {
@@ -144,54 +140,6 @@ GRNotationElement::addToBoundingBox( GRNotationElement * in )
 	box -= getPosition();
 
 	mBoundingBox.Merge( box );
-}
-
-// -------------------------------------------------------------------------
-void GRNotationElement::GGSOutput() const
-{
-	if (mSymbol != 0)
-	{
-		const float size = getSize();
-		const NVPoint & refpos = getReferencePosition();
-	//	const short * colref = getColRef();
-		const NVPoint & offset = getOffset();
-		char buffer[200];
-		snprintf(buffer,200,"\\draw_image<\"%d\","
-			"%ld,%d,%d>\n",
-			(int)mSymbol,
-			getID(),
-			(int)(mPosition.x + offset.x + (refpos.x * size) + ggsoffsetx),
-			(int)(mPosition.y + offset.y + (refpos.y * size) + ggsoffsety));
-		AddGGSOutput(buffer);
-	}
-}
-
-void GRNotationElement::GGSOutputAt( unsigned int tmptype,
-									long offsx,
-									long offsy,
-									float mysize ) const
-{
-	if (tmptype != 0)
-	{
-		float size;
-		if (mysize > 0.0)
-			size = mysize;
-		else
-			size = getSize();
-
-		const NVPoint & refpos = getReferencePosition();
-		//const short * colref = getColRef();
-		const NVPoint & offset = getOffset();
-		char buffer[200];
-		snprintf(buffer,200,"\\draw_image<\"%d\","
-			"%ld,%d,%d>\n",
-			tmptype,
-			getID(),
-			(int)(mPosition.x + offset.x + (refpos.x* size) + offsx + ggsoffsetx ),
-			(int)(mPosition.y + offset.y + (refpos.y * size) + offsy + ggsoffsety ));
-		
-		AddGGSOutput(buffer);
-	}
 }
 
 // -------------------------------------------------------------------------
@@ -343,6 +291,8 @@ void GRNotationElement::OnDraw(VGDevice & hdc) const
 	
 	if (mSymbol != 0)
 		OnDrawSymbol( hdc, mSymbol );
+//	NVRect r = mBoundingBox + mPosition;
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
 }
 
 // -------------------------------------------------------------------------
@@ -382,6 +332,24 @@ void GRNotationElement::setPosition( const NVPoint & inPos )
 	// - Notify associations using 'tell' (ties, slurs, tuplets...)
 	if (mAssociated) 
 		mAssociated->tellPosition( this, getPosition());
+}
+
+// -------------------------------------------------------------------------
+NVRect GRNotationElement::getAssociatedBoundingBox() const
+{
+	NVRect rect;
+	GuidoPos pos = mAssociated->GetHeadPosition();
+	bool first = true;
+	while( pos ) {
+		GRNotationElement * el = mAssociated->GetNext(pos);
+		NVRect bb = el->getBoundingBox() + el->getPosition();
+		if (first) {
+			rect = bb;
+			first = false;
+		}
+		else rect.Merge(bb);
+	}
+	return rect;
 }
 
 // -------------------------------------------------------------------------

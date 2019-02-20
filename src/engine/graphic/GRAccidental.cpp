@@ -36,7 +36,6 @@ NVPoint GRAccidental::sRefpos3QFlat;
 
 using namespace std;
 
-
 //____________________________________________________________________________________
 GRAccidental::GRAccidental( GREvent * sngnot, float notebreite, float inAccidentalID, float p_size, float curLSPACE)
 	: offsetset(false)
@@ -100,12 +99,6 @@ GRAccidental::~GRAccidental()
 }
 
 //____________________________________________________________________________________
-//void GRAccidental::setPosition(const NVPoint & inPos)
-//{
-//	GRNotationElement::setPosition(inPos);
-//}
-
-//____________________________________________________________________________________
 void GRAccidental::setStyleNone()	{ mAccidentalSize = 0; }
 
 //____________________________________________________________________________________
@@ -117,28 +110,22 @@ void GRAccidental::OnDraw(VGDevice & hdc) const
 }
 
 //____________________________________________________________________________________
-//void GRAccidental::GGSOutput() const
-//{
-//	GRNotationElement::GGSOutput();
-//}
-
-//____________________________________________________________________________________
 unsigned int GRAccidental::quarters2symbol(int quarters) const
 {
 	if (quarters > 4)  quarters = 4;
 	if (quarters < -4) quarters = -4;
 	switch (quarters) {
-		case 1:		return AC_QSHARP;
-		case 2:		return AC_SHARP;
-		case 3:		return AC_3QSHARP;
-		case 4:		return AC_DSHARP;
-		case -1:	return AC_QFLAT;
-		case -2:	return AC_FLAT;
-		case -3:	return AC_3QFLAT;
-		case -4:	return AC_DFLAT;
-		case 0:		return AC_NATURAL;
+		case 1:		return kQSharpSymbol;
+		case 2:		return kSharpSymbol;
+		case 3:		return k3QSharpSymbol;
+		case 4:		return kDSharpSymbol;
+		case -1:	return kQFlatSymbol;
+		case -2:	return kFlatSymbol;
+		case -3:	return k3QFlatSymbol;
+		case -4:	return kDFlatSymbol;
+		case 0:		return kNaturalSymbol;
 	}
-	return AC_NONE; // unknown type
+	return 0; // unknown type
 }
 
 //____________________________________________________________________________________
@@ -150,7 +137,7 @@ unsigned int GRAccidental::accidentalDetunedID2symbol(float inAccidentalID) cons
 	bool cautionary;
 	int acc = accidentalID2acc (id, cautionary);
 	if (acc == kNotAnID) {
-		if (!quarters) return AC_NONE;
+		if (!quarters) return 0;
 		else acc = 0;
 	}
 	acc  *= 2;	// accidents in quarter tones
@@ -181,16 +168,16 @@ unsigned int GRAccidental::accidentalID2symbol(int inAccidentalID) const
 {
 	switch (inAccidentalID)
 	{
-		case 1:		return AC_SHARP;
-		case 2:		return AC_DSHARP;
-		case 3:		return AC_CSHARP;
-		case -1:	return AC_FLAT;
-		case -2:	return AC_DFLAT;
-		case -3:	return AC_CFLAT;
-		case 10:	return AC_CNATURAL;
-		case -10:	return AC_NATURAL;
+		case 1:		return kSharpSymbol;
+		case 2:		return kDSharpSymbol;
+		case 3:		return kCauSharpSymbol;
+		case -1:	return kFlatSymbol;
+		case -2:	return kDFlatSymbol;
+		case -3:	return kCauFlatSymbol;
+		case 10:	return kCNaturalSymbol;
+		case -10:	return kNaturalSymbol;
 	}
-	return AC_NONE; // unknown type
+	return 0; // unknown type
 }
 
 //____________________________________________________________________________________
@@ -206,36 +193,44 @@ void GRAccidental::setAccidentalLayout(float notebreite, float curLSPACE)
 //  the following looks to be useless since changing the values doesn't change events bounding boxes
 	switch (mSymbol)
 	{
-		case AC_SHARP:
-		case AC_QSHARP:
-		case AC_3QSHARP:
-		case AC_C3QSHARP:
+		case kSharpSymbol:
+		case kQSharpSymbol:
+		case k3QSharpSymbol:
+#ifndef SMUFL
+		case kCau3QSharpSymbol:
+#endif
 			mBoundingBox.top = -1.5f*curLSPACE;
 			mBoundingBox.bottom = 1.52f*curLSPACE;
 			break;
-		case AC_DSHARP:
-		case AC_CDSHARP:
+		case kDSharpSymbol:
+#ifndef SMUFL
+		case kCauDSharpSymbol:
+#endif
 			mBoundingBox.top = -curLSPACE;
 			mBoundingBox.bottom = curLSPACE;
 			break;
-		case AC_CSHARP:
+#ifndef SMUFL
+		case kCauSharpSymbol:
 			mBoundingBox.top = -1.5f*curLSPACE;
 			mBoundingBox.right = 2.43f*curLSPACE-halfExtent;
 			mBoundingBox.bottom = 1.52f*curLSPACE;
 			break;
-//		case AC_CNATURAL:
-//			mBoundingBox.top = -1.4f*curLSPACE;
-////			mBoundingBox.right = 2.38f*curLSPACE-halfExtent;
-//			mBoundingBox.bottom = 1.4f*curLSPACE;
-//			break;
-		case AC_FLAT:
-		case AC_QFLAT:
-		case AC_3QFLAT:
-		case AC_DFLAT:
-		case AC_CFLAT:
-		case AC_CQFLAT:
-		case AC_C3QFLAT:
-		case AC_CDFLAT:
+		case kCNaturalSymbol:
+			mBoundingBox.top = -1.4f*curLSPACE;
+//			mBoundingBox.right = 2.38f*curLSPACE-halfExtent;
+			mBoundingBox.bottom = 1.4f*curLSPACE;
+			break;
+#endif
+		case kFlatSymbol:
+		case kQFlatSymbol:
+		case k3QFlatSymbol:
+		case kDFlatSymbol:
+#ifndef SMUFL
+		case kCauFlatSymbol:
+		case kCauQFlatSymbol:
+		case kCau3QFlatSymbol:
+		case kCauDFlatSymbol:
+#endif
 			mBoundingBox.top = -1.76f*curLSPACE;
 			mBoundingBox.bottom = 0.71f*curLSPACE;
 			break;
@@ -248,8 +243,8 @@ void GRAccidental::setAccidentalLayout(float notebreite, float curLSPACE)
 ////			mBoundingBox.right = 2.26f*curLSPACE-halfExtent;
 //			mBoundingBox.bottom = 1.19f*curLSPACE;
 //			break;
-		case AC_NATURAL:
-		case AC_CNATURAL:
+		case kNaturalSymbol:
+//		case kCNaturalSymbol:
 			mBoundingBox.top = -1.4f*curLSPACE;
 //			mBoundingBox.right = 0.7f*curLSPACE-halfExtent;
 			mBoundingBox.bottom = 1.4f*curLSPACE;
@@ -283,16 +278,15 @@ void GRAccidental::setAccidental(float inAccidentalID, float notebreite, float c
 unsigned int GRAccidental::getCautionary (unsigned int symbol) const
 {
 	switch (symbol) {
-		case AC_NONE	: return AC_CNATURAL;
-		case AC_SHARP 	: return AC_CSHARP;
-		case AC_DSHARP 	: return AC_CDSHARP;
-		case AC_FLAT 	: return AC_CFLAT;
-		case AC_DFLAT 	: return AC_CDFLAT;
-		case AC_NATURAL : return AC_CNATURAL;
-		case AC_QSHARP	: return AC_CQSHARP;
-		case AC_3QSHARP	: return AC_C3QSHARP;
-		case AC_QFLAT	: return AC_CQFLAT;
-		case AC_3QFLAT	: return AC_C3QFLAT;
+		case kNaturalSymbol	: return kCNaturalSymbol;
+		case kSharpSymbol 	: return kCauSharpSymbol;
+		case kDSharpSymbol 	: return kCauDSharpSymbol;
+		case kFlatSymbol 	: return kCauFlatSymbol;
+		case kDFlatSymbol 	: return kCauDFlatSymbol;
+		case kQSharpSymbol	: return kCauQSharpSymbol;
+		case k3QSharpSymbol	: return kCau3QSharpSymbol;
+		case kQFlatSymbol	: return kCauQFlatSymbol;
+		case k3QFlatSymbol	: return kCau3QFlatSymbol;
 	}
 	return 0;
 }
@@ -349,20 +343,21 @@ NVPoint & GRAccidental::getRefPos() const
 	static NVPoint p;
 	switch ( mSymbol )
 	{
-		case AC_NONE:		return sRefposNone;
-		case AC_SHARP:		return sRefposSharp;
-		case AC_DSHARP:		return sRefposDSharp;
-		case AC_CSHARP:		return sRefposCSharp;
-		case AC_FLAT:		return sRefposFlat;
-		case AC_DFLAT:		return sRefposDFlat;
-		case AC_CFLAT:		return sRefposCFlat;
-		case AC_NATURAL:	return sRefposNatural;
-		case AC_CNATURAL :	return sRefposCNatural;
-
-		case AC_QSHARP	:	return sRefposQSharp;
-		case AC_3QSHARP	:	return sRefpos3QSharp;
-		case AC_QFLAT	:	return sRefposQFlat;
-		case AC_3QFLAT	:	return sRefpos3QFlat;
+		case 0:		return sRefposNone;
+		case kSharpSymbol:		return sRefposSharp;
+		case kDSharpSymbol:		return sRefposDSharp;
+		case kFlatSymbol:		return sRefposFlat;
+		case kDFlatSymbol:		return sRefposDFlat;
+		case kNaturalSymbol:	return sRefposNatural;
+#ifndef SMUFL
+		case kCauFlatSymbol:	return sRefposCFlat;
+		case kCauSharpSymbol:	return sRefposCSharp;
+		case kCNaturalSymbol :	return sRefposCNatural;
+#endif
+		case kQSharpSymbol	:	return sRefposQSharp;
+		case k3QSharpSymbol	:	return sRefpos3QSharp;
+		case kQFlatSymbol	:	return sRefposQFlat;
+		case k3QFlatSymbol	:	return sRefpos3QFlat;
 	}
 	return p;
 }

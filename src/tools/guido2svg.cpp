@@ -37,13 +37,15 @@ static void usage (char* name)
 	cerr << "usage: " << tool << " [options] <gmn file>" << endl;
 	cerr << "       convert GMN code to svg" << endl;
 	cerr << "       options:" << endl;
-	cerr << "           	-f fontfile        : include the guido font taken from fontfile" << endl;
-	cerr << "           	-p pagenum         : an optional page number (default is 1)" << endl;
+	cerr << "           	-f --fontfile <file>  : include the font taken from file" << endl;
+	cerr << "           	   --font     <name>  : use the 'name' as musical font" << endl;
+	cerr << "           	-p pagenum            : an optional page number (default is 1)" << endl;
 	cerr << "       reads the standard input when gmn file is omitted." << endl;
 	cerr << "           	-voicemap  boolean : enables or not event mapping draw (default is false)" << endl;
     cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;
     cerr << "           	-systemmap boolean : enables or not system mapping draw (default is false)" << endl;
     cerr << "           	-checkLyrics	   : enables lyrics collisions detection" << endl;
+    cerr << "           	-viewport	       : add viewport information (in addition to viewBox)" << endl;
 	exit(1);
 }
 
@@ -123,7 +125,7 @@ vector<string> fillPathsVector (const char *filename)
 		string s(filename);
 		size_t n = s.find_last_of (pathSep);
 		if (n != string::npos) {		// add also the gmn file path
-			cerr << "fillPathsVector add " << s.substr(0,n) << endl;
+//			cerr << "fillPathsVector add " << s.substr(0,n) << endl;
 			pathsVector.push_back(s.substr(0,n));
 		}
 	}
@@ -144,11 +146,15 @@ vector<string> fillPathsVector (const char *filename)
 //_______________________________________________________________________________
 static void check (int argc, char *argv[])
 {
+	if (argc < 2) usage(argv[0]);
 	for (int i = 1; i < argc; i++) {
 		const char* ptr = argv[i];
 		if (*ptr++ == '-') {
-			if ((*ptr != 'p') && (*ptr != 'f') &&
-				(strcmp(ptr, "staffmap")) && (strcmp(ptr, "voicemap")) && (strcmp(ptr, "systemmap") && (strcmp(ptr, "checkLyrics"))))
+			if ((*ptr != 'p') && (*ptr != 'f')
+				&& strcmp(ptr, "-fontfile") && strcmp(ptr, "-font")
+				&& strcmp(ptr, "staffmap") && strcmp(ptr, "voicemap")
+				&& strcmp(ptr, "systemmap") && strcmp(ptr, "checkLyrics")
+				&& strcmp(ptr, "viewport"))
                 usage(argv[0]);
 		}
 	}
@@ -170,6 +176,28 @@ static bool readfile (FILE * fd, string& content)
 }
 
 //_______________________________________________________________________________
+static GuidoErrCode Draw( VGDevice* dev, const GRHandler handle, int page, std::ostream& out)
+{
+	GuidoOnDrawDesc desc;              // declare a data structure for drawing
+	desc.handle = handle;
+
+	GuidoPageFormat	pf;
+	GuidoResizePageToMusic (handle);
+	GuidoGetPageFormat (handle, page, &pf);
+
+	desc.hdc = dev;                    // we'll draw on the svg device
+	desc.page = page;
+	desc.updateRegion.erase = true;     // and draw everything
+	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+	desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
+	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
+	dev->NotifySize(desc.sizex, desc.sizey);
+	dev->SelectPenColor(VGColor(0,0,0));
+
+	return GuidoOnDraw (&desc);
+}
+
+//_______________________________________________________________________________
 int main(int argc, char **argv)
 {
 	check (argc, argv);
@@ -180,7 +208,9 @@ int main(int argc, char **argv)
 		usage(argv[0]);
 	}
 
+	const char* musicfont 	 = getOption (argc, argv, "--font", 0);
 	const char* fontfile = getOption (argc, argv, "-f", 0);
+	if (!fontfile) fontfile = getOption (argc, argv, "--fontfile", 0);
 	const char* filename = getFile (argc, argv);
 
 	string gmn;							// a string to read the standard input
@@ -189,7 +219,7 @@ int main(int argc, char **argv)
 
 	SVGSystem sys(fontfile);
 	VGDevice *dev = sys.CreateDisplayDevice();
-    GuidoInitDesc gd = { dev, 0, 0, 0 };
+    GuidoInitDesc gd = { dev, 0, musicfont, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
 
 	GuidoErrCode err;
@@ -241,17 +271,25 @@ int main(int argc, char **argv)
 
     if (getBoolOption(argc, argv, "-systemmap", false))
         mappingMode += kSystemMapping;
-
     /*************/
 
-#if 1
-	err = GuidoGR2SVG (grh, page, cout, false, fontfile, mappingMode);
-#else
-	err = GuidoSVGExport(grh, page, cout, fontfile, mappingMode);
-#endif
+	bool viewPort = getBoolOption(argc, argv, "-viewport");
+
+	VGDevice *svg = 0;
+	if (mappingMode) {
+		svg = sys.CreateDisplayDevice(cout, mappingMode);
+		if (viewPort) cerr << "Warning: viewport not supported with mappings" << endl;
+	}
+	else
+		svg = new SVGDevice(cout, &sys, fontfile, viewPort);
+	
+
+//	err = GuidoGR2SVG (grh, page, cout, false, fontfile, mappingMode);
+	err = Draw( svg, grh, page, cout);
     if (err != guidoNoErr)
         error(err);
-	
+
+	delete svg;
     GuidoCloseParser(parser);
 	return 0;
 }

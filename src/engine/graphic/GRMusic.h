@@ -35,9 +35,6 @@ class TCollisions;
 typedef std::vector<GRPage *> PageList;
 typedef std::vector<GRVoice *> VoiceList;
 
-extern long ggsoffsetx;
-extern long ggsoffsety;
-
 /** \brief Graphical representation of the music. It handles a list of voices
 	and a list of pages.
 */
@@ -94,10 +91,6 @@ class GRMusic : public GREvent
 
 		virtual void	DrawMusic( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos );
 		virtual void	GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const;
-
-		virtual void	GGSOutputPage( int inPageNum ) const;
-		virtual int		GGSInputPage( int inPageNum, const char * str);
-		virtual char *	getGGSInfo( int infotype ) const;
 
 		virtual void	print(std::ostream& os) const;
 		virtual void	trace(VGDevice & hdc);

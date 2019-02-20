@@ -88,11 +88,6 @@ GRNoteDot::~GRNoteDot()
 }
 
 // ------------------------------------------------------------------------
-void GRNoteDot::GGSOutput() const
-{
-}
-
-// ------------------------------------------------------------------------
 void GRNoteDot::OnDraw(VGDevice & hdc) const
 {
 	int n = mDots;

@@ -18,8 +18,8 @@
 
 using namespace std;
 
-const int  kDefaultWidth      = -1;
-const int  kDefaultHeight     = -1;
+const int  kDefaultWidth      = 1024;
+const int  kDefaultHeight     = 512;
 const int  kDefaultMinPitch   = -1;
 const int  kDefaultMaxPitch   = -1;
 
@@ -36,8 +36,8 @@ static void usage(char* name)
 #endif
 	cerr << "usage: " << tool << " [options] gmnfile" << endl;
 	cerr << "options:" << endl;
-	cerr << "         -width           value  : set the output width (default is " << kDefaultWidth << " -> width is adjusted to 1024)" << endl;
-	cerr << "         -height          value  : set the output height (default is " << kDefaultHeight << " -> height is adjusted to 512)" << endl;
+	cerr << "         -width           value  : set the output width (default is " << kDefaultWidth << ")" << endl;
+	cerr << "         -height          value  : set the output height (default is " << kDefaultHeight << ")" << endl;
 	cerr << "         -start           date   : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
 	cerr << "         -end             date   : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
     cerr << "         -minpitch        value  : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;

@@ -26,7 +26,8 @@ class ARAuto : public ARMTParameter
 	public:
 		friend class ARMusicalVoiceState;
 
-		enum state { kOff,kOn };
+		enum state    { kOff,kOn };
+		enum position { kDefault, kAbove,kBelow };
 
 				 ARAuto();
 		virtual ~ARAuto() {}
@@ -39,6 +40,10 @@ class ARAuto : public ARMTParameter
 		state getPageBreakState() const				{ return fPageBreakState; }
 		state getAutoLyricsPos() const				{ return fLyricsAutoPos; }
 		state getAutoInstrPos() const				{ return fInstrAutoPos; }
+		position getFingeringPos() const			{ return fFingeringPos; }
+		float    getFingeringSize() const			{ return fFingeringSize; }
+		bool 	 hasFingeringPos() const			{ return fHasFingeringPos; }
+		bool     hasFingeringSize() const			{ return fHasFingeringSize; }
 
 		virtual void setTagParameters (const TagParameterMap& params);
 
@@ -57,6 +62,11 @@ class ARAuto : public ARMTParameter
 		state fStretchFirstLineState;
 		state fLyricsAutoPos;
 		state fInstrAutoPos;
+	
+		bool		fHasFingeringPos 	= false;
+		bool		fHasFingeringSize	= false;
+		position 	fFingeringPos;
+		float		fFingeringSize;
 };
 
 #endif

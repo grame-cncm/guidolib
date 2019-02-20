@@ -19,100 +19,100 @@
 #include "defines.h" 
 #include "ARFactory.h"
 
-#include "ARNote.h"
-#include "ARRest.h"
-#include "ARTDummy.h"
+#include "ARAccelerando.h"
+#include "ARAccent.h"
+#include "ARAccidental.h"
+#include "ARAccolade.h"
+#include "ARAlter.h"
+#include "ARArpeggio.h"
+#include "ARAuto.h"
 #include "ARBar.h"
-#include "ARDoubleBar.h"
-#include "ARFinishBar.h"
-#include "ARText.h"
-#include "ARLyrics.h"
-#include "ARFermata.h"
-#include "ARHarmonic.h"
-#include "ARTStem.h"
-#include "ARKey.h"
-#include "ARStaff.h"
-#include "ARBreathMark.h"
-#include "ARVolta.h"
-
-#include "ARCoda.h"
-#include "ARDaCapo.h"
-#include "ARDalSegno.h"
-#include "ARDaCoda.h"
-#include "ARFine.h"
-#include "ARSegno.h"
-
-#include "ARTextHarmony.h"
-#include "ARIntens.h"
+#include "ARBarFormat.h"
 #include "ARBeam.h"
 #include "ARBeamState.h"
-#include "ARSlur.h"
-#include "ARTie.h"
-#include "ARColor.h" 
+#include "ARBreathMark.h"
+#include "ARChordTag.h"
+#include "ARClef.h"
+#include "ARCluster.h"
+#include "ARCoda.h"
+#include "ARColor.h"
+#include "ARComposer.h"
 #include "ARCrescendo.h"
+#include "ARCue.h"
+#include "ARDaCapo.h"
+#include "ARDaCoda.h"
+#include "ARDalSegno.h"
+#include "ARDefineTag.h"
 #include "ARDiminuendo.h"
-#include "ARSpace.h"
-#include "ARAlter.h"
-#include "ARNewSystem.h"
+#include "ARDisplayDuration.h"
+#include "ARDotFormat.h"
+#include "ARDoubleBar.h"
 #include "ARDrHoos.h"
 #include "ARDrRenz.h"
-#include "ARBembel.h"
 #include "ARDummyRangeEnd.h"
+#include "ARFeatheredBeam.h"
+#include "ARFermata.h"
+#include "ARFine.h"
+#include "ARFingering.h"
+#include "ARFinishBar.h"
+#include "ARGlissando.h"
+#include "ARGrace.h"
+#include "ARHarmonic.h"
+#include "ARInstrument.h"
+#include "ARIntens.h"
+#include "ARKey.h"
+#include "ARLabel.h"
+#include "ARLyrics.h"
+#include "ARMarcato.h"
+#include "ARMark.h"
+#include "ARMerge.h"
+#include "ARMeter.h"
+#include "ARMusic.h"
+#include "ARMusicalVoice.h"
 #include "ARNewPage.h"
+#include "ARNewSystem.h"
+#include "ARNote.h"
+#include "ARNoteFormat.h"
+#include "ARNotations.h"
+#include "AROctava.h"
 #include "ARPageFormat.h"
+#include "ARPizzicato.h"
 #include "ARRepeatBegin.h"
 #include "ARRepeatEnd.h"
-#include "ARTempo.h"
-#include "ARSpecial.h"
 #include "ARRepeatEndRangeEnd.h"
+#include "ARRest.h"
+#include "ARRestFormat.h"
+#include "ARRitardando.h"
+#include "ARSegno.h"
+#include "ARShareLocation.h"
+#include "ARShareStem.h"
+#include "ARSlur.h"
+#include "ARSpace.h"
+#include "ARSpecial.h"
+#include "ARStaccato.h"
+#include "ARStaff.h"
+#include "ARStaffFormat.h"
 #include "ARStaffOff.h"
 #include "ARStaffOn.h"
-#include "ARMerge.h"
-#include "ARTuplet.h"
-#include "ARMusicalVoice.h"
-#include "ARMusic.h"
-#include "ARClef.h"
-#include "ARMeter.h"
+#include "ARSymbol.h"
 #include "ARSystemFormat.h"
-#include "ARStaffFormat.h"
-#include "ARBarFormat.h"
-#include "ARUnits.h"
-#include "ARAccolade.h"
-#include "ARAccidental.h"
-#include "ARDotFormat.h"
-#include "ARNoteFormat.h"
-#include "ARRestFormat.h"
-#include "ARComposer.h"
-#include "ARTitle.h"
-#include "ARStaccato.h"
-#include "ARPizzicato.h"
-#include "ARMarcato.h"
-#include "ARAccent.h"
+#include "ARTDummy.h"
+#include "ARTempo.h"
 #include "ARTenuto.h"
-#include "ARMark.h"
-#include "ARLabel.h"
-#include "ARFingering.h"
-#include "AROctava.h"
-#include "ARGrace.h"
+#include "ARText.h"
+#include "ARTextHarmony.h"
+#include "ARTHead.h"
+#include "ARTie.h"
+#include "ARTitle.h"
 #include "ARTremolo.h"
 #include "ARTrill.h"
-#include "ARInstrument.h"
-#include "ARRitardando.h"
-#include "ARAccelerando.h"
-#include "ARCue.h"
-#include "ARAuto.h"
-#include "ARDefineTag.h"
-#include "ARDisplayDuration.h"
-#include "ARShareStem.h"
-#include "ARShareLocation.h"
-#include "ARTHead.h"
-#include "ARChordTag.h"
-#include "ARUserChordTag.h"
-#include "ARCluster.h"
-#include "ARGlissando.h"
-#include "ARSymbol.h"
+#include "ARTStem.h"
 #include "ARTuplet.h"
-#include "ARFeatheredBeam.h"
+#include "ARTuplet.h"
+#include "ARUnits.h"
+#include "ARUserChordTag.h"
+#include "ARVolta.h"
+
 #include "NoteAndChordFactory.h"
 #include "NoteAndChordParser.h"
 
@@ -135,36 +135,19 @@ using namespace std;
 // ----------------------------------------------------------------------------
 ARFactory::ARFactory()
   :
-//	mCurrentVoice(NULL),
-//	mCurrentMusic(NULL),
-//	mCurrentEvent(NULL),
-//	mCurrentRepeatBegin(NULL),
 	mLastEvent(NULL),
 	mCurrentRegister(DEFAULT_REGISTER),
 	mCurrentNumerator(DEFAULT_NUMERATOR),
 	mCurrentDenominator(DEFAULT_DENOMINATOR),
 	mCurrentIntensity(DEFAULT_INTENSITY),
-//	mCurrentOctava(NULL),
-//	mCurrentGrace(NULL),
-//	mCurrentCue(NULL),
-//	mCurrentTrill(NULL),
-//	mCurrentStem(NULL),
-//	mCurrentHead(NULL),
-//	mCurrentNoteFormat(NULL),
-//	mCurrentRestFormat(NULL),
-//	mCurrentDotFormat(NULL),
-//	mCurrentAlter(NULL),
-//	mSaveCurrentVoice(NULL),
-//	mCurrentStaff(NULL),
-//	mCurrentCluster(NULL),
-//    mCurrentTremolo(NULL),
-//    mCurrentChordTag(NULL),
-//    mCurrentTuplet(NULL),
+	mCurrentBeamID (kNoBeam),
 	mVoiceNum(1),
 	mCurrentTags(0),
 	mVoiceAdded(false),
 	mAutoLyricsPos(false),
 	mAutoInstrPos(false),
+	mFingeringPos(ARAuto::kDefault),
+	mFingeringSize(0),
     mFilePath()
 {
 		sMaxTagId = -1;
@@ -174,11 +157,9 @@ ARFactory::ARFactory()
 ARFactory::~ARFactory()
 {
 	while (mCurrentTags) {
-//		addTag();
 		endTag();
 	}
-//	if (mCurrentVoice && !mVoiceAdded)	addVoice();
-	delete mSaveCurrentVoice;	
+	delete mSaveCurrentVoice;
 	delete mCurrentEvent;
 	delete mCurrentVoice;
 	delete mCurrentMusic;
@@ -261,6 +242,8 @@ void ARFactory::createVoice()
 	mVoiceAdded = false;
 	mAutoLyricsPos = false;
 	mAutoInstrPos = false;
+	mFingeringPos = ARAuto::kDefault;
+	mFingeringSize = 0;
 	mCurrentKey = 0;
 }
 
@@ -676,7 +659,13 @@ void ARFactory::createTag( const char * name, int no )
 				ARAlter * tmp = new ARAlter(mCurrentAlter);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
-			}	
+			}
+			else if(!strcmp(name, kTagArpeggio ))
+			{
+				ARArpeggio * tmp = new ARArpeggio();
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
+			}
 			else if (!strcmp(name, kTagAuto ))
 			{
 				ARAuto * tmp = new ARAuto();
@@ -706,22 +695,25 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'b':
-			if(!strcmp(name, kTagBeam ) || !strcmp(name, kTagBm ) || !strcmp(name, kTagB )) // ATTENTION needs to be removed later
+			if((!strcmp(name, kTagBeam ) || !strcmp(name, kTagBm ) || !strcmp(name, kTagB )))// && (mCurrentBeamID == kNoBeam)) // ATTENTION needs to be removed later
 			{
 				ARBeam * tmp = new ARBeam();
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddPositionTag(tmp);				
+				mCurrentBeamID = -1;
 			}
-			else if (!strcmp(name, kTagBeamBegin ))
+			else if (!strcmp(name, kTagBeamBegin )) //  && (mCurrentBeamID == kNoBeam))
 			{
 				ARBeam * tmp = new ARBeam;
 				tmp->setID(no);
 				tmp->setAllowRange(0);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
+				mCurrentBeamID = no;
 			}
-			else if (!strcmp(name, kTagBeamEnd ))
+			else if (!strcmp(name, kTagBeamEnd )) //  && (no == mCurrentBeamID) )
 			{
+				mCurrentBeamID = kNoBeam;
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\beamEnd");
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
@@ -762,12 +754,6 @@ void ARFactory::createTag( const char * name, int no )
 				ARBarFormat * tmp = new ARBarFormat;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
-			}
-			else if (!strcmp(name, kTagBembel ))
-			{
-				ARBembel * tmp = new ARBembel;
-				mTags.AddHead(tmp);
-				mCurrentVoice->AddTail(tmp);				
 			}
 			else if(!strcmp(name, kTagBreathMark ))	
 			{
@@ -956,9 +942,10 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'f':
-			if (!strcmp(name, kTagFingering ))
+			if (!strcmp(name, kTagFingering ) || !strcmp(name, kTagShortFingering ))
 			{
-				ARFingering * tmp = new ARFingering;
+				ARFingering * tmp = new ARFingering(mFingeringPos);
+				if (mFingeringSize) tmp->setFingeringSize(mFingeringSize);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
@@ -1221,6 +1208,18 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				ARTDummy * tmp = new ARTDummy;
 				mTags.AddHead(tmp); // push()
+			}
+			else if(!strcmp(name, kTagPedalOn ))
+			{
+				ARNotations * tmp = new ARNotations (ARNotations::kPedalBegin);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddTail(tmp);
+			}
+			else if(!strcmp(name, kTagPedalOff ))
+			{
+				ARNotations * tmp = new ARNotations (ARNotations::kPedalEnd);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddTail(tmp);
 			}
 			break;
 
@@ -1792,6 +1791,8 @@ void ARFactory::endTag()
         mCurrentTags--;
         ARMusicalTag * tag = mTags.RemoveHead(); // pop()
 
+		if (dynamic_cast<const ARBeam*>(tag)) mCurrentBeamID = kNoBeam;
+		
         // some of the tags need to be checked. As they end here, the behaviour of ARFactory needs to be "reset"
         // check for range ...
 		checkTagEnd (tag);
@@ -1875,7 +1876,7 @@ void ARFactory::endTag()
                     AROctava * myoct;
                     ARTStem * mystem;
                     ARTHead * myhead;
-                    ARNoteFormat * mynf;
+//                    ARNoteFormat * mynf;
                     ARDotFormat * mydf;
                     ARRestFormat * myrf;
                     ARAlter * myal;
@@ -1967,6 +1968,8 @@ void ARFactory::addTag()
 	if (autoTag) {
 		mAutoLyricsPos = (autoTag->getAutoLyricsPos() == ARAuto::kOn);
 		mAutoInstrPos = (autoTag->getAutoInstrPos() == ARAuto::kOn);
+		if (autoTag->hasFingeringPos())  mFingeringPos  = autoTag->getFingeringPos();
+		if (autoTag->hasFingeringSize()) mFingeringSize = autoTag->getFingeringSize();
 	}
 	mTagParameters.clear();
 }

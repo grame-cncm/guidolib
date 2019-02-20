@@ -15,16 +15,17 @@
 
 */
 
+#include <map>
+
 #include "NVPoint.h"
 #include "NVRect.h"
-#include "MusicalSymbols.h"	// for kMaxMusical...
+#include "MusicalSymbols.h"
 #include "GUIDOScoreMap.h"
 #include "defines.h"
 
 class NVstring;
 class VGDevice;
 class VGColor;
-class VGDevive;
 
 enum GDirection 	// was STEMDIR
 {
@@ -52,7 +53,7 @@ class MapInfos
 class GObject 
 {
 	public:
-		virtual ~GObject();
+		virtual ~GObject() {}
 
 		virtual void addToOffset(const NVPoint &)		{ }
 
@@ -90,37 +91,23 @@ class GObject
 		
 		virtual	bool	isGREventClass() const { return false; }
 
-		static int		InstanceCount() { return sInstanceCount; }
-
-		long getID() const 	{ return mGId; }		// Could it be void* instead of long ?
-		void setID(long id) { mGId = id; }
-
 		virtual void	OnDraw( VGDevice & hdc ) const = 0;
 		virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const {};
 		virtual	void	DrawBoundingBox( VGDevice & hdc, const VGColor & inBrushColor ) const; // debug
-		virtual char *	getGGSInfo(int) const    { return 0; }
-		virtual void	GGSOutput() const;
 		
 		static bool		positionIsOnStaffLine( float inPositionY, float inLSpace );
-
-		static float	GetSymbolExtent( unsigned int inSymbol );	// Rather put it in GRSpecial ?
+		static float    GetSymbolExtent( unsigned int inSymbol );
 
 	protected:
-		
 		NVPoint			mPosition;
 		NVRect			mBoundingBox;
 		NVRect			mMapping;
 
-		long			mGId;
-
 		// this is an abstract base class. No direct initialization.
-		GObject();	
+		GObject() {}
 		GObject( const GObject & in );	
 
-		static void		NotifyNewInstance();
-
-		static float sSymbolExtentMap [ kMaxMusicalSymbolID ];
-		static int	sInstanceCount;		// debug
+		static std::map<ConstMusicalSymbolID, float> sSymbolExtentMap;
 		static NVPoint sRefposNone;
 };
 

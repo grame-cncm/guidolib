@@ -82,7 +82,8 @@ class_export SVGDevice : public VGDevice
 	VGColor			fFontColor, fFontBackgroundColor;
 	int				fFontAlign;
 	float			fDPI;
-	
+	bool			fViewPort;
+
 	VGColor	*	fPendingStrokeColor;
 	bool		fBeginDone;
 	
@@ -113,7 +114,7 @@ private:
 
 	public:
 		enum	{ kSVGSizeDivider = 8 };		// used to compute the svg view size GuidoSVGExport and GuidoGetSVGMap
-				 SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont);
+				 SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont, bool setviewport=false);
 		virtual	~SVGDevice();
 
 		/// Returns the ability of the current VGdevice to be drawn into.

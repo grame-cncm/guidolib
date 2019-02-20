@@ -304,15 +304,6 @@ const NVPoint & GRStdNoteHead::getReferencePosition() const
 	else
 		return sRefposNone;
 }
-
-void GRStdNoteHead::GGSOutput() const
-{
-	// so that the notehead is put at the correct position
-	// this is a workaround ....
-	// tell Christian.
-	GRNoteHead::GGSOutput();
-}
-
 void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 {
 	if (!mShow) return;

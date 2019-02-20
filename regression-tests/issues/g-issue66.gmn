@@ -1,0 +1,14 @@
+(*
+	slur explosion on the first group
+*)
+{
+[ 
+	\clef<"g2"> 
+	\stemsUp \slurBegin:1<curve="down"> \beamBegin:1 e/16 d#/16 c#/16 d#/16 e/16 f#/16 \beamEnd:1 
+	\beamBegin:1 e/16 d#/16 c#/16 d#/16 e/16 f#/16 \beamEnd:1 
+	\slurEnd:1 \bar 
+	\slurBegin:1<curve="up"> \beamBegin:1 e/16 d#/16 e/16 f#/16 g#/16 \dimBegin<dy=-2.8hs> a/16 
+	\beamEnd:1 
+	\stemsDown \beamBegin:1 b/16 c#2/16 d#/16 e/16 f#/16 g#/16 \beamEnd:1 \slurEnd:1 \dimEnd 
+] 
+}

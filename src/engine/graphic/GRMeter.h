@@ -34,7 +34,6 @@ class GRMeter : public GRTagARNotationElement
 				 GRMeter(const ARMeter * ar, GRStaff * curstaff, bool p_ownsAR = false);
 		virtual ~GRMeter() {}
 
-		virtual void	GGSOutput() const;
 		virtual void	OnDraw(VGDevice & hdc ) const;
 		virtual bool	checkCollisionWith() const	{ return true; }
 		virtual void	accept (GRVisitor& visitor);

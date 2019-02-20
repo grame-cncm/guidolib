@@ -19,6 +19,7 @@ using namespace std;
 #include "GRGlobalStem.h"
 #include "GREvent.h"
 #include "ARMusicalObject.h"	// for DURATIONs
+#include "VGDevice.h"
 
 NVPoint GRFlag::sRefpos;
 
@@ -134,7 +135,7 @@ void GRFlag::initialize(const TYPE_DURATION & duration, GDirection stemdir, floa
 	mRightSpace = 0;
 
 	// this must be independant on size !
-	sRefpos.x = - 30; // HARDCODED!
+	sRefpos.x = -30; // HARDCODED!
 	sRefpos.y = 0;
 
 	calcFlagExtent( notebreite ); // calculate the spaces .
@@ -142,13 +143,7 @@ void GRFlag::initialize(const TYPE_DURATION & duration, GDirection stemdir, floa
 
 void GRFlag::OnDraw(VGDevice & hdc) const
 {
-	if (!mDraw)
-        return;
-
-	if ( mSymbol == NONE )
-        return;
-
-	if (!mFlagOn)
+	if (!mDraw || ( mSymbol == NONE ) || !mFlagOn)
         return;
 
 	if (!mStraight) {
@@ -159,10 +154,6 @@ void GRFlag::OnDraw(VGDevice & hdc) const
 		// this is the straight case ..
 		// TODO
 	}
-}
-
-void GRFlag::GGSOutput() const
-{
 }
 
 int GRFlag::getNumFaehnchen() const
@@ -206,8 +197,7 @@ void GRFlag::changeStemLength(GREvent * sngnot, float inLen,
 		mOffset.y += inLen;
 }
 
-void	
-GRFlag::calcFlagExtent( float inNoteBreite )
+void GRFlag::calcFlagExtent( float inNoteBreite )
 {
 	switch ( mSymbol ) 
 	{
@@ -215,8 +205,11 @@ GRFlag::calcFlagExtent( float inNoteBreite )
 		case H16U:
 		case H32U:
 		case H64U:
-			mRightSpace = float(1.5) * inNoteBreite * mSize;
-			mLeftSpace = 0;
+			mRightSpace = 1.5f * inNoteBreite * mSize;
+			mLeftSpace  = 0;
+#ifdef SMUFL
+			mOffset.x = (inNoteBreite - 5) * mSize;
+#endif
 			break;
 	
 		case H8D:
@@ -224,7 +217,7 @@ GRFlag::calcFlagExtent( float inNoteBreite )
 		case H32D:
 		case H64D:
 			mRightSpace = 0;
-			mLeftSpace = float(0.5) * inNoteBreite * mSize;
+			mLeftSpace  = 0.5f * inNoteBreite * mSize;
 			break;
 	}
 }

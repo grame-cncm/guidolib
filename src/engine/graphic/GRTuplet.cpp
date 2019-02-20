@@ -230,7 +230,11 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 
         /* In order that numerator/denominator stays at the same vertical position even if size is changed */
         float xextent, yextent;
+#ifdef SMUFL
+        FontManager::gFontText->GetExtent(fText.c_str(), (int)charCount, &xextent, &yextent, &hdc);
+#else
         FontManager::gFontScriab->GetExtent(fText.c_str(), (int)charCount, &xextent, &yextent, &hdc);
+#endif
         int offset = int(yextent / 11.2 * arTuplet->getTextSize() - 40);
         /***************************************************************************************************/
 		hdc.SetFontAlign(VGDevice::kAlignCenter | VGDevice::kAlignBottom);

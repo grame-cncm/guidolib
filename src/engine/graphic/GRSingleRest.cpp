@@ -100,56 +100,46 @@ void GRSingleRest::accept (GRVisitor& visitor)
 }
 
 // -----------------------------------------------------------------------------
+GRSingleRest::TYPES GRSingleRest::duration2Type (const TYPE_DURATION& duration) const
+{
+	if (duration >= DURATION_1) 	return P1;
+	if (duration >= DURATION_2)		return P2;
+	if (duration >= DURATION_4)		return P4;
+	if (duration >= DURATION_8)		return P8;
+	if (duration >= DURATION_16)	return P16;
+	if (duration >= DURATION_32)	return P32;
+	if (duration >= DURATION_64)	return P64;
+	if (duration >= DURATION_128)	return P128;
+	return P0;
+}
+
+// -----------------------------------------------------------------------------
+float GRSingleRest::type2YPosition (TYPES type) const
+{
+	switch (type) {
+#ifdef SMUFL
+		case P1:	return mCurLSPACE;
+		case P128:	return mCurLSPACE * 3;
+		default:	return mCurLSPACE * 2;
+#else
+		case P1:	return mCurLSPACE;
+		case P2:
+		case P4:	return mCurLSPACE * 2;
+		case P8:	return mCurLSPACE * 1.25f;
+		case P16:
+		case P32:	return mCurLSPACE * 2.25f;
+		case P64:	return mCurLSPACE * 3.25f;
+		case P128:	return mCurLSPACE * 4.25f;
+		default:	return mCurLSPACE;
+#endif
+	}
+}
+
+// -----------------------------------------------------------------------------
 void GRSingleRest::setTypeAndPos(TYPE_DURATION duration)
 {
-	// (JB) changed equal comparaisons (duration == DURATION_xxx) to
-	// greater or equal: (duration >= DURATION_xxx), to catch dotted durations.
-	if (duration >= DURATION_1)
-	{
-		mType = P1;
-		mPosition.y = mCurLSPACE;
-	}
-	else if (duration >= DURATION_2)
-	{
-		mType = P2;
-		mPosition.y = mCurLSPACE * 2;
-	}
-	else if (duration >= DURATION_4)
-	{
-		mType = P4;
-		mPosition.y = (float)(2 * mCurLSPACE);
-	}
-	else if (duration >= DURATION_8)
-	{
-		mType = P8;
-		mPosition.y = (float)(1.25f * mCurLSPACE);
-
-	}
-	else if (duration >= DURATION_16)
-	{
-		mType = P16;
-		mPosition.y = (float)(2.25f * mCurLSPACE);
-	}
-	else if (duration >= DURATION_32)
-	{
-		mType = P32;
-		mPosition.y = (float)(2.25f * mCurLSPACE);
-	}
-	else if (duration >= DURATION_64)
-	{
-		mType = P64;
-		mPosition.y = (float)(3.25f * mCurLSPACE);
-	}
-	else  if (duration >= DURATION_128)
-	{
-		mType = P128;
-		mPosition.y = (float)(4.25f * mCurLSPACE);
-	}
-	else
-	{ // Unknown Duration ... what do we do know
-		mType = P0;
-		return;
-	}
+	mType = duration2Type (duration);
+	mPosition.y = type2YPosition (mType);
 }
 
 
@@ -168,10 +158,6 @@ void GRSingleRest::createRest(const TYPE_DURATION & duration)
 	const float extent = GetSymbolExtent(mType);
 	mLeftSpace = (float)(extent * 0.5f * mSize);
 	mRightSpace = (float)(extent * 0.5f * mSize);
-}
-
-void GRSingleRest::GGSOutput() const
-{
 }
 
 void GRSingleRest::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const

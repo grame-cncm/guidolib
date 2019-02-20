@@ -52,8 +52,6 @@ class GRArticulation : public GRTagARNotationElement
 		// the staccato belongs ....
 		virtual void tellPosition(GObject * caller, const NVPoint & inPos);
 
-		virtual void GGSOutput() const;
-		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void accept (GRVisitor& visitor);
 
 		
@@ -61,9 +59,11 @@ class GRArticulation : public GRTagARNotationElement
 		int	 getArticulationOrder() const	{ return sOrdering[mArticulationFlag]; }
 		int	 getARPlacement() const;		// gives the ARArticulation position
 		void print(std::ostream& os) const;
+	
+		static bool  compare (GRArticulation* i, GRArticulation* j) 	{ return (i->getArticulationOrder() < j->getArticulationOrder()); }
 
 	protected:
-	
+
 		void	setupStaccato();
 		void	setupStaccmo();
 		void	setupLeftHPizz();

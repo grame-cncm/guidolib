@@ -96,6 +96,24 @@ bool ARMusic::getMeterAt (int voicenum, const GuidoDate &date, GuidoMeter& meter
 	return true;
 }
 
+bool ARMusic::getMetersAt (int voicenum, const GuidoDate &date, GuidoMeters& meters)
+{
+	if (voicenum <= 0) return false;
+
+	GuidoPos pos = GetHeadPosition();
+	ARMusicalVoice * voice = 0;
+	while (pos && !voice) {
+		ARMusicalVoice * tmp = GetNext(pos);
+		if (tmp->getVoiceNum() == voicenum) voice = tmp;
+	}
+	if (!voice) return false;		// no such voice
+	TYPE_TIMEPOSITION tp (date.num, date.denom);
+	MetersVisitor mv (tp);
+	voice->accept (mv);
+	meters = mv.getMeters();
+	return true;
+}
+
 void ARMusic::getTimeMap (TimeMapCollector& f) const
 {
 	GuidoPos pos = GetHeadPosition();

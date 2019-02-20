@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+BBEdit Language Module for INScore
+
+Put this file in 
+   ~/Library/Application Support/BBEdit/Language Modules
+or equivalent.
+-->
+<plist version="1.0">
+<dict>
+	<key>BBEditDocumentType</key>
+		<string>CodelessLanguageModule</string>
+	<key>BBLMLanguageDisplayName</key>
+		<string>Guido</string>
+	<key>BBLMLanguageCode</key>
+		<string>GMN</string>
+	<key>BBLMColorsSyntax</key>
+		<true/>
+	<key>BBLMScansFunctions</key>
+		<true/>
+	<key>BBLMIsCaseSensitive</key>
+		<true/>
+	<key>BBLMSupportsTextCompletion</key>
+		<true/>
+	<key>BBLMCommentLineDefault</key>
+		<string>%</string>
+	<key>BBLMKeywordList</key>
+	<array>
+		<string>acc</string>
+		<string>accidental</string>
+		<string>accelBegin</string>
+		<string>accelEnd</string>
+		<string>accelerando</string>
+		<string>accel</string>
+		<string>accent</string>
+		<string>accolade</string>
+		<string>accol</string>
+		<string>alter</string>
+		<string>auto</string>
+		<string>bar</string>
+		<string>barFormat</string>
+		<string>beam</string>
+		<string>bm</string>
+		<string>b</string>
+		<string>beamBegin</string>
+		<string>beamEnd</string>
+		<string>beamsAuto</string>
+		<string>beamsFull</string>
+		<string>beamsOff</string>
+		<string>bembel</string>
+		<string>breathMark</string>
+		<string>chord</string>
+		<string>splitChord</string>
+		<string>clef</string>
+		<string>cluster</string>
+		<string>coda</string>
+		<string>color</string>
+		<string>colour</string>
+		<string>composer</string>
+		<string>cresc</string>
+		<string>crescendo</string>
+		<string>crescBegin</string>
+		<string>crescEnd</string>
+		<string>cue</string>
+		<string>daCapo</string>
+		<string>daCapoAlFine</string>
+		<string>daCoda</string>
+		<string>dalSegno</string>
+		<string>dalSegnoAlFine</string>
+		<string>decresc</string>
+		<string>decrescendo</string>
+		<string>dim</string>
+		<string>diminuendo</string>
+		<string>decrescBegin</string>
+		<string>dimBegin</string>
+		<string>diminuendoBegin</string>
+		<string>decrescEnd</string>
+		<string>dimEnd</string>
+		<string>diminuendoBegin</string>
+		<string>dispDur</string>
+		<string>displayDuration</string>
+		<string>dotFormat</string>
+		<string>doubleBar</string>
+		<string>endBar</string>
+		<string>fBeam</string>
+		<string>fBeamBegin</string>
+		<string>fBeamEnd</string>
+		<string>fermata</string>
+		<string>fine</string>
+		<string>fingering</string>
+		<string>fing</string>
+		<string>glissando</string>
+		<string>glissandoBegin</string>
+		<string>glissandoEnd</string>
+		<string>grace</string>
+		<string>harmonic</string>
+		<string>harmony</string>
+		<string>headsCenter</string>
+		<string>headsLeft</string>
+		<string>headsNormal</string>
+		<string>headsReverse</string>
+		<string>headsRight</string>
+		<string>instrument</string>
+		<string>instr</string>
+		<string>intensity</string>
+		<string>intens</string>
+		<string>i</string>
+		<string>key</string>
+		<string>label</string>
+		<string>lyrics</string>
+		<string>marcato</string>
+		<string>mark</string>
+		<string>merge</string>
+		<string>meter</string>
+		<string>mordent</string>
+		<string>mord</string>
+		<string>newLine</string>
+		<string>newSystem</string>
+		<string>newPage</string>
+		<string>noteFormat</string>
+		<string>oct octava</string>
+		<string>pageFormat</string>
+		<string>pizzicato</string>
+		<string>pizz</string>
+		<string>port</string>
+		<string>repeatBegin</string>
+		<string>repeatEnd</string>
+		<string>restFormat</string>
+		<string>ritBegin</string>
+		<string>ritEnd</string>
+		<string>ritardando</string>
+		<string>rit</string>
+		<string>segno</string>
+		<string>set</string>
+		<string>shareLocation</string>
+		<string>shortFermata</string>
+		<string>slur sl</string>
+		<string>slurBegin</string>
+		<string>slurEnd</string>
+		<string>space</string>
+		<string>special</string>
+		<string>splitChord</string>
+		<string>chord</string>
+		<string>staccBegin</string>
+		<string>staccEnd</string>
+		<string>staccato</string>
+		<string>stacc</string>
+		<string>staff</string>
+		<string>staffFormat</string>
+		<string>staffOff</string>
+		<string>staffOn</string>
+		<string>stemsAuto</string>
+		<string>stemsDown</string>
+		<string>stemsOff</string>
+		<string>stemsUp</string>
+		<string>symbol</string>
+		<string>s</string>
+		<string>systemFormat</string>
+		<string>tempo</string>
+		<string>tenuto</string>
+		<string>ten</string>
+		<string>text</string>
+		<string>t</string>
+		<string>tie</string>
+		<string>tieBegin</string>
+		<string>tieEnd</string>
+		<string>title</string>
+		<string>tremolo</string>
+		<string>trem</string>
+		<string>tremoloBegin</string>
+		<string>tremBegin</string>
+		<string>tremoloEnd</string>
+		<string>tremEnd</string>
+		<string>trill</string>
+		<string>trillBegin</string>
+		<string>trillEnd</string>
+		<string>tuplet</string>
+		<string>turn</string>
+		<string>units</string>
+		<string>volta</string>
+		<string>voltaBegin</string>
+		<string>voltaEnd</string>
+	</array>
+	<key>BBLMSuffixMap</key>
+	<array>
+		<dict>
+			<key>BBLMLanguageSuffix</key>
+			<string>.gmn</string>
+		</dict>
+	</array>
+	<key>Language Features</key>
+	<dict>
+		<key>Identifier and Keyword Character Class</key>
+		<string>0-9A-Z_a-z</string>
+
+		<key>Open Strings 1</key>	<string>"</string>
+		<key>Close Strings 1</key>	<string>"</string>
+		<key>End-of-line Ends Strings 1</key>	<false/>
+		<key>End-of-line Ends Strings 2</key> 	<false/>
+
+		<key>Open Line Comments</key>	<string>%</string>
+		<key>Open Block Comments</key>	<string>(*</string>
+		<key>Close Block Comments</key>	<string>*)</string>
+
+		<key>Open Parameter Lists</key>     <string>(</string>
+		<key>Close Parameter Lists</key>    <string>)</string>
+	</dict>
+</dict>
+</plist>

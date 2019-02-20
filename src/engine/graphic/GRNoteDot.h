@@ -33,14 +33,11 @@ class GRNoteDot : public GRNotationElement
 		friend class GRSingleNote;
 		using GObject::addToOffset;
 	 
-					GRNoteDot( GREvent * inNote, const TYPE_DURATION & duration, 
+					 GRNoteDot( GREvent * inNote, const TYPE_DURATION & duration, 
 																float notebreite );
-
-					GRNoteDot( GREvent * inNote, float notebreite, int inDotCount );
-	
+					 GRNoteDot( GREvent * inNote, float notebreite, int inDotCount );
 	 virtual		~GRNoteDot();
 
-	 virtual void	GGSOutput() const;
 	 virtual void	OnDraw( VGDevice & hdc ) const;
 	 // virtual void setPosition(const NVPoint &position);
 

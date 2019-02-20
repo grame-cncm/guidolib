@@ -66,10 +66,6 @@ bool GROctava::DeleteStaff(GRStaff * grstaff)
 	return GRPositionTag::DeleteStaff(grstaff);
 }
 
-void GROctava::GGSOutput() const
-{
-}
-
 void GROctava::setColRef(const TagParameterString *tps) {
     if (!mColRef)
         mColRef = new unsigned char[4];

@@ -21,9 +21,6 @@
 
 using namespace std;
 
-const char* kAboveStr = "above";
-const char* kBelowStr = "below";
-
 
 ARArticulation::ARArticulation() : fPosition(kDefaultPosition)
 {

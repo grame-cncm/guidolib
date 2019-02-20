@@ -1,0 +1,38 @@
+% \fingering tag 
+% example of fingering on chords: fingering must be attached to each note of the chord
+% note that fingering attached to a chord is ignored (e.g. \fing<"1">({c,e,g})
+%
+[ 
+	\meter<"4/4">
+	{	\fingering<"1", dy=16.5>( c) , 
+		\fingering<"3", dy=17.2>( e),
+		\fingering<"5", dy=17.9>( g) }
+
+	{	\fingering<"1", position="above">( c) , 
+		\fingering<"3", position="above", dy=2.8>( e),
+		\fingering<"5", position="above", dy=5.6>( g) } 
+
+	{	\fingering<"1", position="below", dy=-6>( c) , 
+		\fingering<"3", position="below", dy=-3.8>( e),
+		\fingering<"5", position="below", dy=-1>( g) }
+
+	\fingering<"3">( c )
+
+
+	\fingering<"3", position="below", fsize=10pt>( c )
+	\fingering<"2", position="above", fsize=16pt>( c2 )
+
+	\fingering<"1", position="below">( b0 )
+	\fingering<"2", position="below">( g1 )
+	\fingering<"3", position="below">( a )
+	\fingering<"2", position="above">( d )
+	\sl(
+	\set<fingeringPos="above">
+	\fing<"2">( g )
+	\fing<"2">( c2 )
+	\fing<"2">( e2 )
+	\fing<"2">( g2 ))
+	\fing<"4", fsize=12pt>( h )
+	\accent(\fing<"1", fsize=9pt>( c2 ) )
+]
+

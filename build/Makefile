@@ -16,11 +16,10 @@ ifeq ($(system), MINGW)
 else
 ifeq ($(system), Linux)
 	TARGET = linux
-	LINUXMIDI ?= yes
+	MIDIEXPORT ?= no
 endif
 endif
 endif
-
 
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MAC  ?= MacOS
@@ -42,8 +41,7 @@ ifeq ($(TARGET), windows)
 endif
 
 LINUX := linux
-C++11 ?= yes
-CMAKEOPT ?= -DMIDIEXPORT=yes -DC++11=$(C++11)
+CMAKEOPT ?= -DMIDIEXPORT=yes
 
 all :
 	$(MAKE) $(TARGET)
@@ -62,21 +60,22 @@ help :
 	@echo "   Qt           : build the Guido Qt library, applications and tools"	
 	@echo "   java         : build the jni and java libraries"	
 	@echo "   js           : build the javascript library (requires emscripten)"	
+	@echo "   wasm         : build the web assembly library (requires emscripten)"	
 	@echo "   android      : build the GUIDOEngine static library for Android"	
 	@echo "   install      : install the Guido library and public headers (linux only)"	
 	@echo 
 	@echo "Platform targets to build the GUIDOEngine library are:"	
-	@echo "   macos [C++11=yes/no (default to no)]"	
-	@echo "   mac     (build also ios library)"	
-	@echo "   windows (build 32 and 64 bits library)"	
-	@echo "   linux"	
+	@echo "   macos   : build the GUIDOEgngine framework"	
+	@echo "   mac     : build also ios library"	
+	@echo "   windows : build 32 and 64 bits libraries"	
+	@echo "   linux [MIDIEXPORT=yes/no (default to $(MIDIEXPORT))]"	
 	@echo "the platform targets is automatically evaluated by the default target."	
-	@echo "NOTE: windows targets are based on $(WIN32VS)"	
+	@echo "NOTE: windows targets are based on $(WIN32VS)"
 
 #===============================================================
 # building the library on Mac OS X
 #===============================================================
-.PHONY : macos mac11 $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
+.PHONY : macos $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
 
 mac : 
 	$(MAKE) macos
@@ -98,10 +97,6 @@ $(MAC)/guidolib.xcodeproj : CMakeLists.txt
 GUIDOEngine.tgz : GUIDOEngine.framework
 	tar czf GUIDOEngine.tgz GUIDOEngine.framework
 
-mac11:
-	$(MAKE) macos MAC=mac11 C++11=yes
-	cp -R $(MAC)/Release/GUIDOEngine.framework mac11
-	cd mac11 && tar czf GUIDOEngine.tgz GUIDOEngine.framework
 
 #===============================================================
 # building the library for iOS
@@ -117,7 +112,7 @@ $(IOS)/Release-iphoneos/libGUIDOEngine.a :
 ioscmake:
 $(IOS)/guidolib.xcodeproj : CMakeLists.txt
 	[ -d $(IOS) ] || mkdir $(IOS)
-	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DC++11=yes -DIOS=yes
+	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DIOS=yes
 
 macclean :
 	rm -rf $(IOS) $(MAC) $(OUT)
@@ -185,10 +180,9 @@ libGUIDOEngine.so :  $(LINUX)/libGUIDOEngine.so
 $(LINUX)/libGUIDOEngine.so : $(LINUX)/Makefile 
 	$(MAKE) -C $(LINUX)
 	
-linuxcmake:
 $(LINUX)/Makefile : CMakeLists.txt
 	[ -d $(LINUX) ] || mkdir $(LINUX)
-	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=$(LINUXMIDI)
+	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=$(MIDIEXPORT)
 
 linuxclean:
 	rm -rf $(LINUX)
@@ -197,7 +191,9 @@ linuxclean:
 # building the javascript engine
 #===============================================================
 js:
-	$(MAKE) -C ../lang/javascript -j 4
+	$(MAKE) -C ../lang/javascript
+wasm:
+	$(MAKE) -C ../lang/javascript WASM=yes
 
 
 #===============================================================

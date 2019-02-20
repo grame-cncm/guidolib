@@ -18,7 +18,7 @@
 
 # include <stdio.h>
 
-#ifdef VC2005
+#ifdef MSVC
 # define sscanf							sscanf_s
 # define snprintf						_snprintf_s
 # define snprsize(n)					(n),_TRUNCATE

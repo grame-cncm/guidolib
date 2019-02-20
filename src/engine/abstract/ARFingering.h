@@ -22,11 +22,21 @@
 class ARFingering : public ARText
 {
 	public:
-					 ARFingering() { rangesetting = ONLY; }
+		enum { kDefaultPosition, kAbove, kBelow };
+
+					 ARFingering(int pos=kDefaultPosition);
 		virtual		~ARFingering() {}
+
+		virtual void	setTagParameters (const TagParameterMap& params);
+		virtual int		getFingeringPosition () const	{ return fPosition; }
+		virtual void	setFingeringSize (float size)	{ fSize = size; }
 
 		virtual const char*	getTagName() const		{ return "ARFingering"; };
 		virtual std::string getGMNName() const		{ return "\\fingering"; };
+
+	protected:
+		int  	fPosition;
+		float	fSize = 0;
 };
 
 #endif

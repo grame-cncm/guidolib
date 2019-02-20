@@ -82,7 +82,8 @@ public:
 
 	virtual NVPoint getTieEnd() const					{ return mPosition; } // do not rely on that
 	virtual NVPoint getTieStart() const					{ return mPosition; }
-	
+	virtual NVRect  getAssociatedBoundingBox() const;
+
 			void addToBoundingBox( GRNotationElement * in );
 
 
@@ -122,8 +123,6 @@ public:
 
 	// - Text, streams
     virtual void print(std::ostream& os) const;
-	virtual void GGSOutput() const;
-	virtual void GGSOutputAt(unsigned int tmptype, long offsx = 0, long offsy = 0, float mysize = 0.0f ) const;
 	inline const NEPointerList* associated() const { return mAssociated; }
 
     /**** Functions to avoid dynamic_cast ****/

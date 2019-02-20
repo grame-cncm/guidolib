@@ -1,5 +1,5 @@
-#ifndef ARBembel_H
-#define ARBembel_H
+#ifndef ARNotations_H
+#define ARNotations_H
 
 /*
   GUIDO Library
@@ -16,23 +16,26 @@
 */
 
 #include "ARMTParameter.h"
+#include "ARPositionTag.h"
 
-/** \brief not yet documented
+/** \brief The Pedal tag
 */
-class ARBembel : public ARMTParameter
+class ARNotations : public ARMTParameter
 {
 	public:
-					 ARBembel();
-		virtual 	~ARBembel() {}
+	enum  { kPedalBegin, kPedalEnd };
 
-		virtual const char*	getParamsStr() const	{ return kARBembelParams; };
-		virtual const char*	getTagName() const		{ return "ARBembel"; };
-		virtual std::string getGMNName() const		{ return "\\bembel"; };
+					 ARNotations(int type) : fType(type) {}
+		virtual		~ARNotations() {}
 
-		int getInverse() const;
+		virtual const char*	getTagName() const		{ return "ARNotations"; }
+		virtual std::string getGMNName() const;
+	
+		int getType() const 	{ return fType; }
 
-	protected:
-	//	int inverse;
+	private:
+		int fType;
 };
 
 #endif
+ 

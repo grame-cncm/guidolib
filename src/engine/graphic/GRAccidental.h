@@ -28,40 +28,12 @@ class GRAccidental : public GRNotationElement
 {
 	enum { kNotAnID = -999999 };
 	public:
-
-		enum TYPES 
-		{ 
-	  		AC_NONE 	= kNoneSymbol,
-			AC_SHARP 	= kSharpSymbol,
-			AC_DSHARP 	= kDSharpSymbol,
-			AC_CSHARP	= kCauSharpSymbol,
-			AC_CDSHARP 	= kCauDSharpSymbol,
-			AC_FLAT 	= kFlatSymbol,
-			AC_DFLAT 	= kDFlatSymbol, 
-			AC_CFLAT	= kCauFlatSymbol,
-			AC_CDFLAT 	= kCauDFlatSymbol, 
-		 	AC_NATURAL 	= kNaturalSymbol,
-			AC_CNATURAL = kCNaturalSymbol,
-			
-			AC_QSHARP	= kQSharpSymbol,
-			AC_3QSHARP	= k3QSharpSymbol,
-			AC_QFLAT	= kQFlatSymbol,
-			AC_3QFLAT	= k3QFlatSymbol,
-
-			AC_CQSHARP	= kCauQSharpSymbol,
-			AC_C3QSHARP	= kCau3QSharpSymbol,
-			AC_CQFLAT	= kCauQFlatSymbol,
-			AC_C3QFLAT	= kCau3QFlatSymbol
-	  	};
-		
 				 GRAccidental(GREvent * sngnot, float notebreite, float inAccidentalID, float p_size = 1.0f, float curLSPACE = 50.0f );
 				 GRAccidental();					// a none accidental
 				 GRAccidental(float detune, bool cautionnary, float p_size);	//
 	 virtual	~GRAccidental();
 
-//	 virtual void GGSOutput() const;
 	 virtual void OnDraw(VGDevice & hdc) const;
-//	 virtual void setPosition( const NVPoint & position );
 	 virtual void setAccidental		 ( float inAccidentalID, float notebreite, float curLSPACE );
 	 virtual void setAccidentalByQuarter( int quarterTones, int offset, float notebreite, float curLSPACE = 50.0f );
 	 virtual void setCautionary(int offset, float notebreite, float curLSPACE = 50.0f );

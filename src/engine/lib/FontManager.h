@@ -19,6 +19,12 @@
 #include <string>
 #include "VGSystem.h"
 
+#ifdef SMUFL
+#define kMusicFontStr	"Bravura"
+#else
+#define kMusicFontStr	"Guido2"
+#endif
+
 class VGFont;
 /** \brief Description of a font: name, font size and attributes.
 

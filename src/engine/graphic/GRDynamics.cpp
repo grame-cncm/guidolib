@@ -44,8 +44,6 @@ GRDynamics::GRDynamics(GRStaff * grstaff, const ARDynamic* ar) : GRPTagARNotatio
 	assert(grstaff);
 	setGRStaff(grstaff);
 
-//	if (fDynamic2Symbol.empty()) initDynamicsMap();
-
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	sse->grsystem = grstaff->getGRSystem();
 
@@ -59,22 +57,6 @@ GRDynamics::GRDynamics(GRStaff * grstaff, const ARDynamic* ar) : GRPTagARNotatio
 }
 
 GRDynamics::~GRDynamics()	{}
-
-//----------------------------------------------------------------------
-//void GRDynamics::initDynamicsMap()
-//{
-//	fDynamic2Symbol["p"]	= kIntensPSymbol;
-//	fDynamic2Symbol["f"]	= kIntensFSymbol;
-//	fDynamic2Symbol["ff"]	= kIntensFFSymbol;
-//	fDynamic2Symbol["fff"]	= kIntensFFFSymbol;
-//	fDynamic2Symbol["ffff"]	= kIntensFFFFSymbol;
-//	fDynamic2Symbol["mf"]	= kIntensMFSymbol;
-//	fDynamic2Symbol["mp"]	= kIntensMPSymbol;
-//	fDynamic2Symbol["sf"]	= kIntensSFSymbol;
-//	fDynamic2Symbol["pp"]	= kIntensPPSymbol;
-//	fDynamic2Symbol["ppp"]	= kIntensPPPSymbol;
-//	fDynamic2Symbol["pppp"]	= kIntensPPPPSymbol;
-//}
 
 //---------------------------------------------------------------------------------
 const GRNotationElement * GRDynamics::getNextEvent (const GRStaff* staff, const GRNotationElement * elt) const
@@ -113,9 +95,11 @@ void GRDynamics::tellPosition(GObject *caller, const NVPoint & newPosition)
 	else {
 		fCurrentSegment.fx2 = newPosition.x;
 		if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST) {
-			if (sse->startElement == sse->endElement)	// this is a single note dynamic
-				fNext = getNextEvent (staff, sse->endElement);
 			fCurrentSegment.fx2 += dx2 ;
+			bool singleev = (fCurrentSegment.fx1 == fCurrentSegment.fx2);
+//			if (sse->startElement == sse->endElement)	// this is a single note dynamic
+			if (singleev)	// this is a single note dynamic
+				fNext = getNextEvent (staff, sse->endElement);
 		}
 		fCurrentSegment.fx2 = newPosition.x + (sse->endflag == GRSystemStartEndStruct::RIGHTMOST ? dx2 : 0);
 		const float staffLSpace = staff->getStaffLSPACE();

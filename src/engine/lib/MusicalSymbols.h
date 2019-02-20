@@ -46,7 +46,15 @@
 
 const int kMaxMusicalSymbolID				= 256;
 
-typedef const unsigned char ConstMusicalSymbolID;	// will be replaced by const unsigned int
+typedef const unsigned int ConstMusicalSymbolID;	// will be replaced by const unsigned int
+
+
+#ifdef SMUFL
+#include "MusicalSymbolsSMUFL.h"
+
+#else
+
+#define kNumericsOffset		0
 
 ConstMusicalSymbolID kNoneSymbol			 =   0;	// must stay = 0
 ConstMusicalSymbolID kEmptySymbol			 =  32;
@@ -181,6 +189,14 @@ ConstMusicalSymbolID kSquareRightBracket             = 239;
 ConstMusicalSymbolID kAngledLeftBracket              = 240;
 ConstMusicalSymbolID kAngledRightBracket             = 241;
 
+// version 1.51
+ConstMusicalSymbolID kArpeggioSymbol               	= 242;
+
+// version 1.66
+ConstMusicalSymbolID kPedalSymbol               	= 176;
+ConstMusicalSymbolID kPedalUpSymbol               	= 42;
+
+#endif
 
 #endif
 

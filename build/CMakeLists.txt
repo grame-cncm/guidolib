@@ -16,26 +16,27 @@ set (GUIDOFWKVERS C)
 set (SOVERS 1)
 
 if(UNIX)
-	add_definitions(-Wall -Wno-deprecated-register -DGCC)
-endif(UNIX)
+	add_definitions(-Wall -DGCC)
+endif()
 
 #######################################
 # Options disabled by default
-option ( C++11 	"C++11 support" on )
-option ( IOS 	"Generates project for iOS" off )
-option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
+option ( IOS 		"Generates project for iOS" off )
+option ( DIST 		"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
 option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
+option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
 option ( GL "Links to opengl device" off)
 
 
+set (CMAKE_CXX_STANDARD 11)
 
 #########################################
 # mac os specific part
 #########################################
 if(APPLE)
-	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++11")
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 #######################################
 #   iOS support
 	if ( IOS )
@@ -55,48 +56,42 @@ if(APPLE)
 			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
 		endif ()
 	add_definitions(-D_USE_QD_COORDINATES_ )
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.9)
+	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.10)
 #	set (CMAKE_MACOSX_RPATH 1)
-	set (CMAKE_LDFLAGS -mmacosx-version-min=10.9)
-	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
-	set (MACOSX_DEPLOYMENT_TARGET 10.9)
+	set (CMAKE_LDFLAGS -mmacosx-version-min=10.10)
+	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
+	set (MACOSX_DEPLOYMENT_TARGET 10.10)
 	endif ()
 
 #########################################
 # windows specific part
 #########################################
-elseif(WIN32)
+elseif (WIN32)
  add_definitions(-DWINVER=0x0400 -DWIN32)
  if(${CMAKE_GENERATOR} STREQUAL "Visual Studio 6")
   add_definitions(-DVC6)
- elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 8 2005")
-  add_definitions(-DVC2005)
- elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 9 2008")
-  add_definitions(-DVC2005)
- elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 10" OR ${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010")
-  add_definitions(-DVC2005)
- elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
-  add_definitions(-DVC2005)
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+ elseif(${CMAKE_GENERATOR} MATCHES "Visual Studio.*")
+  add_definitions(-DMSVC)
  elseif(${CMAKE_GENERATOR} STREQUAL "MSYS Makefiles")
   add_definitions(-DGCC)
  endif()
 
  if (${CMAKE_GENERATOR} MATCHES ".*Win64")
-  add_definitions(-DVC2005)
   add_definitions(-DWIN64)
   set (WIN64 1)
   set (target GUIDOEngine64)
   set (statictarget SGUIDOEngine64)
  endif ()
-
-#########################################
-# assume linux host
-#########################################
-else()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+
+#########################################
+# optional SMUFL support
+#########################################
+if (SMUFL)
+ message (STATUS "Generates SMUFL compliant code.")
+ add_definitions(-DSMUFL)
+endif()
 add_definitions(-DGUIDOExport)
 
 #######################################
@@ -105,7 +100,7 @@ set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
 set (PLATFORMS ${GUIDO_PATH}/platforms)
 set (SRC_PATH	${GUIDO_PATH}/src/engine)
 set (HEADERS_PATH ${SRC_PATH}/include)
-if (GL STREQUAL "yes")
+if (GL)
 	set(VGDEV_PATH ${PLATFORMS}/opengl/device)
 elseif(WIN32)
 	set(VGDEV_PATH ${PLATFORMS}/win32/src)
@@ -256,7 +251,7 @@ endif(APPLE)
 
 #######################################
 # library generation
-if (IOS STREQUAL "yes")
+if (IOS)
 	add_library(${target} STATIC ${LIBCONTENT})
 	set_target_properties ( ${target} PROPERTIES 
 				XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${IOS_DEPLOYMENT_TARGET} )
@@ -298,17 +293,12 @@ if(APPLE)
 	set(FRMWK  FRAMEWORK DESTINATION "/Library/Frameworks" CONFIGURATIONS Release)
 endif(APPLE)
 
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  SET(CMAKE_INSTALL_PREFIX /usr )
-endif()
-if (NOT WIN32 AND NOT APPLE)
+if (NOT IOS)
 message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
-
 install ( TARGETS ${target}
     	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
     	${FRMWK}
     	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
 )
 endif()
-
 

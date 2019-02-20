@@ -1,0 +1,19 @@
+% Release 1.6.6
+{
+[  
+	\clef<"g"> 
+
+	\arpeggio (
+		{ c1, e, g, b }
+		{ d, f#, a, c2 }
+	)
+
+	\arpeggio<direction="up"> (
+		{ c1, e, g, b }
+	) 
+
+	\arpeggio<direction="down"> (
+		{ d, f#, a, c2, e, g, b }
+	)
+]
+}

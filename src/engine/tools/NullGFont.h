@@ -43,7 +43,7 @@ class NullGFont : public VGFont
 		// - Symbol services ---------------------------------------------
 		virtual void			GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context = 0) const
 									{ *outWidth = float(fSize*inCharCount); *outHeight = float(fSize); }
-		virtual void			GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context = 0) const	
+		virtual void			GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context = 0) const	
 									{ *outWidth = *outHeight = float(fSize); }
 };
 

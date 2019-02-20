@@ -34,15 +34,13 @@ class GROctava : public GRARNotationElement, public GRPositionTag
 		virtual 	~GROctava();
 
 		virtual void tellPosition(GObject *caller, const NVPoint & );
-//		virtual void addAssociation(GRNotationElement *el);
-		virtual void GGSOutput() const;
+
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void setColRef(const TagParameterString *tps);
 		virtual bool DeleteStaff(GRStaff * grstaff);
 	
 	private:
 		int		countSegments();
-//		NVRect	getExtensionLine (const NEPointerList * assoc, const GRSystemStartEndStruct * sse) const;
 		NVRect	getExtensionLine (const NEPointerList * assoc, int num) const;
 		NVRect	getEltBox (const GRNotationElement* el) const;
 

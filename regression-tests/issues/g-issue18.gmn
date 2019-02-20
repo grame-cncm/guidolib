@@ -1,0 +1,25 @@
+(*
+	issue #18
+	unwanted space before the clef on second staff
+
+	Actually not an issue: the engine forbids a clef insertion on the duration of a note
+	empty have the same status than notes, one could replace the last empty with a note (e.g. c0/2)
+	to make that visible. Using empty/8 empty/4 instead empty/2 solves the problem.
+*)
+{ 
+[
+%	\accol<id=0, range="1-2"> \barFormat<style= "system", range="2-3"> 
+%   (* meas. 1 *)  \beamsOff 
+	\text<"Unwanted space before the clef on second staff", dy=15>(f/8 a&1/4 g/8) \bar 
+   (* meas. 2 *)  \beam( c1/8 e/8 a&/8  f/8)
+ ], 
+[ 
+   (* meas. 1 *)   \beamsOff  { f-2/8, f-1/8 } _/8 _/4  
+   (* meas. 2 *)   _/8 \clef<"g2"> _/8 _/4 
+ ], 
+[ \staff<2> (* 2nd voice *)
+   (* meas. 1 *)  empty/2 \bar 
+   (* meas. 2 *)  \text<"Using empty/8 empty/4 instead empty/2 solves the problem.", dy=-10, dx=-40> 
+	(empty/2) 
+  ]
+ }

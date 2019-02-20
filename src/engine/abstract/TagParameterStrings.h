@@ -27,6 +27,7 @@ extern const char* kARAccelerandoParams;
 extern const char* kARAccidentalParams;
 extern const char* kARAccoladeParams;
 extern const char* kARAlterParams;
+extern const char* kARArpeggioParams;
 extern const char* kARArticulationParams;
 extern const char* kARAutoParams;
 extern const char* kARBarFormatParams;
@@ -45,6 +46,7 @@ extern const char* kARDrRenzParams;
 extern const char* kARDynamicParams;
 extern const char* kARFeatheredBeamParams;
 extern const char* kARFermataParams;
+extern const char* kARFingeringParams;
 extern const char* kARGlissandoParams;
 extern const char* kARGraceParams;
 extern const char* kARHarmonyParams;
@@ -83,16 +85,20 @@ extern const char* kARVoltaParams;
 //---------------------------------------------
 // tags parameters supported at language level
 //---------------------------------------------
+extern const char* kAboveStr;
 extern const char* kAbsTempoStr;
 extern const char* kAccidentalStr;
 extern const char* kAdxStr;
 extern const char* kAdyStr;
+extern const char* kAfterStr;
 extern const char* kAlphaStr;
 //extern const char* kAnchorStr;
 extern const char* kAutoBarlinesStr;
 extern const char* kAutoMeasNumStr;
 extern const char* kAutoposStr;
 extern const char* kBeginStr;
+extern const char* kBeforeStr;
+extern const char* kBelowStr;
 extern const char* kBlueStr;
 extern const char* kBmStr;
 extern const char* kBoldStr;
@@ -105,6 +111,7 @@ extern const char* kDeltaYStr;
 extern const char* kDetuneStr;
 extern const char* kDisplayMeasNumStr;
 extern const char* kDispNoteStr;
+extern const char* kDirectionStr;
 extern const char* kDistanceStr;
 extern const char* kDMStr;
 extern const char* kDrawDurationStr;
@@ -191,7 +198,9 @@ extern const char* kAutoClefKeyMeterOrderStr;
 extern const char* kAutoStretchLastLineStr; 
 extern const char* kAutoStretchFirstLineStr; 
 extern const char* kAutoInstrPosStr; 
-extern const char* kAutoLyricsPosStr; 
+extern const char* kAutoLyricsPosStr;
+extern const char* kFingeringPosStr;
+extern const char* kFingeringSizeStr;
 
 #endif
 

@@ -15,6 +15,8 @@
 
 */
 
+#include <vector>
+
 #include "ARVisitor.h"
 #include "GUIDOEngine.h"
 #include "defines.h"
@@ -35,7 +37,25 @@ class MeterVisitor : public ARVisitor
 		void		reset();			// reset the last meter value to a default value (no meter)
 		GuidoMeter	getMeter() const { return fLastMeter; }
 	
-    virtual void visitIn  (ARMusicalObject* object);
+    virtual void visitIn  (ARMusicalTag* object);
+};
+
+//------------------------------------------------------------------------------
+class MetersVisitor : public ARVisitor
+{
+	enum { kNoLimit = 0xffffffff };
+	TYPE_TIMEPOSITION	fLimit;
+	std::vector<GuidoMeter>	fMeters;
+
+	public:
+				 MetersVisitor() : fLimit(kNoLimit, 1)		{ reset(); }
+				 MetersVisitor(const TYPE_TIMEPOSITION& limit) : fLimit(limit) { reset(); }
+		virtual ~MetersVisitor() {}
+	
+		void		reset();			// reset the last meter value to a default value (no meter)
+		GuidoMeters	getMeters() const;
+	
+    virtual void visitIn  (ARMusicalTag* object);
 };
 
 

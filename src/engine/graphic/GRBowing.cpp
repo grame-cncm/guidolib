@@ -35,6 +35,8 @@
 
 extern GRSystem * gCurSystem;
 
+#define FIX_SLOPE
+
 using namespace std;
 
 
@@ -264,13 +266,12 @@ void GRBowing::updateBoundingBox()
 	-> startElement->getTieEnd().y ) * dx3 +  ...
 
 */
-void GRBowing::updateBow( GRStaff * inStaff )
+void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 {
 	GRSystemStartEndStruct * sse = prepareSSEStructForBow( inStaff );
 	if ( sse == 0 ) return;
 
 	// --- Collects informations about the context ---
-
 	GRBowingContext context;
 	context.staff = inStaff;
 	getBowBeginingContext( &context, sse );
@@ -324,15 +325,13 @@ void GRBowing::updateBow( GRStaff * inStaff )
 	// --- Calculate the start and end anchor points positions --
 	// NOTE: in the futur, offsets could also be applied after automatic
 	// positionning. (tag parameter list for 'curve' would be completed)
-	if( (dir != ARBowing::kUndefined) || !arBow->getParSet() ) {
+	if (grace)
+		graceAnchorPoints( &context, arBow, sse, inStaff );
+	else if( (dir != ARBowing::kUndefined) || !arBow->getParSet() )
 		automaticAnchorPoints( &context, arBow, sse );
-		applyAnchorPointsOffsets( &context, arBow, sse );
-	}
 	else
-	{
 		manualAnchorPoints( &context, arBow, sse );
-		applyAnchorPointsOffsets( &context, arBow, sse );
-	}
+	applyAnchorPointsOffsets( &context, arBow, sse );
 
 	// WARNING: THE PRECEDING CODE MODIFIED THE VALUE OF paramH WHILE
 	// PROCESSING ANCHOR CALCULATION: THEN PTR BECAME UNVALID (DELETED
@@ -346,8 +345,37 @@ void GRBowing::updateBow( GRStaff * inStaff )
 		// A tag for control points has been specified in the guido script.
 		manualControlPoints( &context, arBow, sse );
 	}
-	else // Automatic placement of control points, it will try to avoid collisions.
+	else { // Automatic placement of control points, it will try to avoid collisions.
+#ifdef FIX_SLOPE
+		NVRect rect = getAssociatedBoundingBox();
+		float limit = context.staff->getStaffLSPACE() * 6;
+		int count = 0;
+		float prevypos = bowInfos->position.y;
+		float prevgap = 10000;
+		do {
+			automaticControlPoints( &context, arBow, sse );
+			updateBoundingBox();
+			const bool upward = (context.curveDir == 1);
+			float gap = upward ? rect.top - mBoundingBox.top : mBoundingBox.bottom - rect.bottom;
+			if (gap > limit) {
+				if (gap > prevgap) {				// situation is getting worse
+					bowInfos->position.y -= prevypos;	// revert to previous pos
+					automaticControlPoints( &context, arBow, sse );
+					updateBoundingBox();
+					break;
+				}
+				prevgap = gap;
+				float yAdjust  = context.staff->getStaffLSPACE() / (upward ? 2.f : -2.f);
+				bowInfos->position.y -= yAdjust;
+				count++;
+			}
+			else break;
+		} while (count < 3);
+		return;
+#else
 		automaticControlPoints( &context, arBow, sse );
+#endif
+	}
 
 	updateBoundingBox();
 }
@@ -356,6 +384,38 @@ void GRBowing::updateBow( GRStaff * inStaff )
 void GRBowing::automaticAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	manualAnchorPoints( context, arBow, sse );
+}
+
+// -----------------------------------------------------------------------------
+/** \brief Anchor points positionning whith grace notes
+*/
+void GRBowing::graceAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse, GRStaff * staff )
+{
+	NVPoint posLeft;
+	NVPoint posRight;
+
+	GRNotationElement * startElement = sse->startElement;
+	GRNotationElement * endElement = sse->endElement;
+	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
+	float lspace = staff->getStaffLSPACE();
+
+	const bool upward = context->curveDir == 1;
+	GRStdNoteHead * lefthead = upward ? context->topLeftHead : context->bottomLeftHead;
+	posLeft = lefthead ? lefthead->getNoteHeadPosition() : startElement->getPosition();
+
+	GRStdNoteHead * righthead = upward ? context->topRightHead : context->bottomRightHead;
+	posRight = righthead ? righthead->getNoteHeadPosition() : endElement->getPosition();
+	float graceoffset = lspace/2 * (upward ? -1 : 1);
+	float noteoffset  = lspace * 0.8 * (upward ? -1 : 1);
+	posLeft.y  += graceoffset;
+	posRight.y += noteoffset;
+	posRight.x -= lspace/4;
+
+	if (context->openLeft)	posLeft.y = posRight.y;
+	if (context->openRight)	posRight.y = posLeft.y;
+
+	bowInfos->position = posLeft;
+	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
 }
 
 // -----------------------------------------------------------------------------
@@ -418,19 +478,6 @@ void GRBowing::applyAnchorPointsOffsets( GRBowingContext * context, const ARBowi
 	bowInfos->offsets[0].y -= arBow->getDY1() * spaceRatio;
 	bowInfos->offsets[2].x += arBow->getDX2() * spaceRatio;
 	bowInfos->offsets[2].y -= arBow->getDY2() * spaceRatio;
-
-//	if( arBow->getDX1())
-//		bowInfos->offsets[0].x += arBow->getDX1()->getValue( staffLSpace ));
-//
-//	if( arBow->getDY1())
-//		bowInfos->offsets[0].y -= (arBow->getDY1()->getValue( staffLSpace ));
-//
-//	// -- Applies the offset settings to the end anchor point --
-//	if( arBow->getDX2())
-//		bowInfos->offsets[2].x += (arBow->getDX2()->getValue( staffLSpace ));
-//
-//	if( arBow->getDY2())
-//		bowInfos->offsets[2].y -= (arBow->getDY2()->getValue( staffLSpace ));
 }
 
 // -----------------------------------------------------------------------------
@@ -451,8 +498,6 @@ void GRBowing::manualControlPoints( GRBowingContext * context, const ARBowing * 
 
 	float tagR3 =  arBow->getR3();
 	const TYPE_FLOATPARAMETER valueR3 = (tagR3 == ARBowing::undefined()) ? 0.5f : tagR3;
-//	const TagParameterFloat * tagR3 =  arBow->getR3();
-//	const TYPE_FLOATPARAMETER valueR3 = tagR3 ? tagR3->getValue() : float(0.5);
 
 	bowInfos->offsets[1].x = (GCoord)(distx * valueR3 );
 	bowInfos->offsets[1].y = (GCoord)(disty * valueR3 * dir);
@@ -460,11 +505,7 @@ void GRBowing::manualControlPoints( GRBowingContext * context, const ARBowing * 
 	// -- Apply the middle control point y-offset.
 	const float lspaceRatio = staff->getStaffLSPACE() / LSPACE;
 	float tagH = arBow->getH();
-//	const TYPE_FLOATPARAMETER valueH = (tagH == ARBowing::undefined()) ? 2.f : tagH * lspaceRatio;
 	const TYPE_FLOATPARAMETER valueH = (tagH == ARBowing::undefined() ? LSPACE/2 : tagH) * lspaceRatio;
-//	const float staffLSpace = staff->getStaffLSPACE();
-//	const TagParameterFloat * tagH = arBow->getH();
-//	const TYPE_FLOATPARAMETER valueH = tagH ? tagH->getValue( staffLSpace ) : float(2);
 	bowInfos->offsets[1].y += -dir * ((valueH > 0) ? valueH : -valueH);
 
 	// - Store
@@ -551,8 +592,14 @@ void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 	const GRNotationElement * const startElement = sse->startElement;
 	const GRNotationElement * const endElement = sse->endElement;
 
-	if( el == endElement || ( endElement == 0 && el == startElement))
-		updateBow( staff );
+	if( el == endElement || ( endElement == 0 && el == startElement)) {
+		const GRNote * start = startElement->isGRNote();
+		const GRNote * end = endElement ? endElement->isGRNote() : 0;
+		NEPointerList* al = getAssociations();
+		int n = al ? al->size() : 0;
+		bool grace = ((n == 2) && start && end && start->isGraceNote() && !end->isGraceNote());
+		updateBow( staff, grace );
+	}
 }
 
 // -----------------------------------------------------------------------------
@@ -613,6 +660,9 @@ void GRBowing::OnDraw( VGDevice & hdc) const
 	if (error) return;
 	assert( gCurSystem );
 
+//	NVRect r = getAssociatedBoundingBox();
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
+//
 //	DrawBoundingBox( hdc, VGColor( 255, 120, 150, 120 )); // DEBUG
 //	hdc.Frame(mBoundingBox.left, mBoundingBox.top, mBoundingBox.right, mBoundingBox.bottom);
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
@@ -728,12 +778,12 @@ void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2, float x3, 
 	hdc.Polygon( xPoints, yPoints, index );
 
 	/* - DEBUG ->
-	hdc.PushPen( GColor( 200, 0, 0 ), 5 );
+	hdc.PushPen( VGColor( 200, 0, 0 ), 5 );
 
 	hdc.Line( x1 - 20, y1 - 20, x1 + 20, y1 + 20);
 	hdc.Line( x1 - 20, y1 + 20, x1 + 20, y1 - 20);
 
-	hdc.PushPen( GColor( 200, 0, 200 ), 5 );
+	hdc.PushPen( VGColor( 200, 0, 200 ), 5 );
 	hdc.Line( x2 - 20, y2 - 20, x2 + 20, y2 + 20);
 	hdc.Line( x2 - 20, y2 + 20, x2 + 20, y2 - 20);
 	hdc.PopPen();
@@ -752,68 +802,7 @@ void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2, float x3, 
 	// <- */
 }
 
-/* Original curve code ->
-void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2, float x3, float y3)
-{
-	float delx1, delx2, ratio;
-	float addY2, addX, addY, x2a, y2a, x2b, y2b;
-	float maxD, h1, h2;
 
-	// if start and endpoint is the same, just don't do anything.
-	// this is a hack, whatsoever, because this should not really happen!
-	if (x1==x3) return;
-
-	const float oneOverDeltaX = (1.0f / (x3 - x1));
-
-	maxD = (SLUR_THICKNESS * 1.25f);
-	ratio = (y3 - y1) * oneOverDeltaX;
-	addY2 = (y2 - y1) / 3;
-	addX = (x3 - x1) / 5;	// defines the attack of the curve.
-	addY = addX * ratio;
-	x2a = x2 - addX;
-	y2a = y2 - addY + addY2;
-	x2b = x2 + addX;
-	y2b = y2 - addY + addY2;
-	h1 = abs(y2a - y1);
-	h2 = abs(y2b - y3);
-	if (x2a - x1 > h1) x2a = x1 + h1;
-	if (x3 - x2b > h2) x2b = x3 - h2;
-	delx1 = ((y3 - y1) * SLUR_THICKNESS) * oneOverDeltaX;
-	delx2 = ((y3 - y1) * SLUR_THICKNESS) * oneOverDeltaX;
-	if (delx1 > maxD) delx1 = maxD;
-	if (delx2 > maxD) delx2 = maxD;
-	if (delx1 < -maxD) delx1 = -maxD;
-	if (delx2 < -maxD) delx2 = -maxD;
-
-	const int ptCount = (2 * ( NSEGS + 3 ));
-
-	NVPoint thePoints[ ptCount ]; //ptCount ];
-
-	// DRAW THE FIRST CURVE
-	// PROBABLY YOU WANT TO START A POLYGON NOW
-	int index = 0;
-	makeCurve( hdc, x1, y1, x2a, y2a, x2b, y2b, x3, y3, NSEGS, thePoints, &index );
-
-	y2a = (y2a < y1 ? y2a + SLUR_THICKNESS : y2a - SLUR_THICKNESS);
-	y2b = (y2b < y3 ? y2b + SLUR_THICKNESS : y2b - SLUR_THICKNESS);
-	x2a += delx1;
-	x2b += delx2;
-
-	//CALCULATE THE SECOND CURVE
-	makeCurve( hdc, x3, y3, x2b, y2b, x2a, y2a, x1, y1, NSEGS, thePoints, &index );
-
-	//PROBABLY YOU WANT TO CLOSE THE POLYGON NOW AND FILL IT
-	float xPoints [ ptCount ];
-	float yPoints [ ptCount ];
-	for( int currPt = 0; currPt < index; currPt ++ )
-	{
-		xPoints [ currPt ] = thePoints[ currPt ].x;
-		yPoints [ currPt ] = thePoints[ currPt ].y;
-	}
-
-	hdc.Polygon( xPoints, yPoints, index );
-}
-*/
 // -----------------------------------------------------------------------------
 /** \brief Rudis Slur-routine (currently unused)
 */

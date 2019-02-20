@@ -43,12 +43,13 @@ void svgendl::print(std::ostream& os) const {
 //______________________________________________________________________________
 // SVGDevice
 //______________________________________________________________________________
-SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont) :
+SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont, bool setviewport) :
 	fSystem (system), fGuidoFont(guidofont),
 	fWidth(1000), fHeight(1000),
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
+    fViewPort (setviewport),
 	fPendingStrokeColor(0),
 	fBeginDone(false),
 	fStream(outstream),
@@ -136,8 +137,12 @@ void SVGDevice::printFont(std::ostream& out, const char* font) const
 //______________________________________________________________________________
 bool SVGDevice::BeginDraw()
 {
+
 	fStream << "<?xml version=\"1.0\"?>" << fEndl;
-	fStream << "<svg viewBox=\"0 0 " << fWidth << " " << fHeight << "\" xmlns=\"http://www.w3.org/2000/svg\"  version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
+	fStream << "<svg ";
+	if (fViewPort)
+		fStream << "width=\"" <<  fWidth << "\" height=\"" << fHeight << "\" ";
+	fStream << "viewBox=\"0 0 " << fWidth << " " << fHeight << "\" xmlns=\"http://www.w3.org/2000/svg\"  version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
 	fEndl++;
 	fStream << fEndl << "<desc> SVG file generated using the GuidoEngine version " << GuidoGetVersionStr() << "</desc>";
 	if (fGuidoFont) printFont (fStream, fGuidoFont);
@@ -490,10 +495,11 @@ void SVGDevice::DrawString( float x, float y, const char * s, int inCharCount )
 	fStream << "\">";
 	fStream << fEndl++; 
 	for (int i=0; i<inCharCount; i++) {
-		if (s[i] > 0)
-			fStream << s[i];
-		else 
-			fStream << "&#" << int((unsigned char)s[i]) << ";"; 
+		fStream << s[i];				// assumes utf-8 encoding
+//		if (s[i] > 0)
+//			fStream << s[i];
+//		else
+//			fStream << "&#" << int((unsigned char)s[i]) << ";";
 	}
 	fEndl--;
 	fStream << fEndl << "</text>"; 

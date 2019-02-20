@@ -23,7 +23,7 @@ using namespace std;
 FontInfoList FontManager::sFontList;
 const VGFont *	FontManager::gFontScriab = 0;
 const VGFont *	FontManager::gFontText   = 0;
-string	FontManager::kDefaultMusicFont = "Guido2";
+string	FontManager::kDefaultMusicFont = kMusicFontStr;
 string	FontManager::kDefaultTextFont  = "Times";
 
 // ===========================================================================
@@ -123,7 +123,7 @@ const VGFont* FontManager::FindOrCreateFont( int size, const string * name, cons
 //cerr << "FontManager::FindOrCreateFont " << *name << " " << size << endl;
 	const VGFont* font = FindOrCreateFont (sys, size, name, attributesStr);
 	if (!font) {											// font not found
-		if ((*name != "Guido2") && (*name != "guido2")) {	// if not the guido font
+		if (*name != kMusicFontStr) { //  && (*name != "guido2")) {	// if not the guido font
 			string deffont(kDefaultTextFont);				// try to use the default text font
 			font = FindOrCreateFont (sys, size, &deffont, attributesStr);
 		}

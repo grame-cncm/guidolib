@@ -68,7 +68,6 @@ class GRVoice : public GRARCompositeNotationElement
 		virtual void setPossibleNLinePosition(const TYPE_TIMEPOSITION & tp);
 		virtual void accept   (GRVisitor& visitor);
 
-		virtual void GGSOutput() const {}
 		virtual void OnDraw( VGDevice & ) const {}
 
 	const ARMusicalVoice * getARMusicalVoice() const;

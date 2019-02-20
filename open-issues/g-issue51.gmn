@@ -1,0 +1,12 @@
+(*
+	issue #51
+	DispNote is rendered correctly on single notes but not taken into account for chords.
+*)
+{ 
+[ 
+	\beam( \tuplet<"", dispNote="/32">( c#3/4 b2/4)) 
+	\beam( \tuplet<"", dispNote="/16">( a/4 g#/4)) \bar 
+	\beam( \tuplet<"", dispNote="/16">( { a/4, g3/4 } { c/4, a/4 })) 
+	\beam( \tuplet<"", dispNote="/32">( { a2/4, b3/4 } { a2/4, c4/4 })) 
+] 
+}

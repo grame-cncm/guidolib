@@ -169,8 +169,7 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 //cerr << arText->getSupportedTagParameters() ;
 	float dx = 0;
 	float dy = 0;
-//	if( arText->getYPos())
-//		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
+
 	if (arText->getDY())
 		dy = -arText->getDY()->getValue( curLSPACE );
 	if (arText->getDX())
@@ -286,10 +285,11 @@ void GRText::setHPosition( GCoord nx )
 	assert(st);
 
 	const ARText * arText = getARText();
-	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
+// this way to read the current lspace is not deterministic !!!
+//	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
 	float dx = 0;
 	if (arText->getDX())
-		dx = arText->getDX()->getValue( curLSPACE );
+		dx = arText->getDX()->getValue( LSPACE );
 	mPosition.x += dx;
 
 	st->position.x = nx;

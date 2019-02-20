@@ -16,8 +16,6 @@
 */
 
 #include "GRTagARNotationElement.h"
-#include "MusicalSymbols.h"
-//#include "GRVisitor.h"
 
 class ARIntens;
 class GRStaff;
@@ -28,38 +26,30 @@ class VGDevice;
 */
 class GRIntens : public GRTagARNotationElement
 {
-	
-public:
-	GRIntens( GRStaff * inStaff, const ARIntens * abstractRepresentationOfIntens );
+	public:
+		enum
+		{
+			INTENS_F = kIntensFSymbol, // SCR_INTENSF,
+			INTENS_FF = kIntensFFSymbol, // SCR_INTENSFF,
+			INTENS_FFF = kIntensFFFSymbol, // SCR_INTENSFFF,
+			INTENS_FFFF = kIntensFFFFSymbol, // SCR_INTENSFFFF,
+			INTENS_P = kIntensPSymbol, // SCR_INTENSP,
+			INTENS_PP = kIntensPPSymbol, // SCR_INTENSPP,
+			INTENS_PPP = kIntensPPPSymbol,
+			INTENS_PPPP = kIntensPPPPSymbol,
 
-	enum 
-	{ 
-		INTENS_F = kIntensFSymbol, // SCR_INTENSF,
-		INTENS_FF = kIntensFFSymbol, // SCR_INTENSFF,
-		INTENS_FFF = kIntensFFFSymbol, // SCR_INTENSFFF,
-		INTENS_FFFF = kIntensFFFFSymbol, // SCR_INTENSFFFF,
-		INTENS_P = kIntensPSymbol, // SCR_INTENSP,
-		INTENS_PP = kIntensPPSymbol, // SCR_INTENSPP,
-		INTENS_PPP = kIntensPPPSymbol,
-		INTENS_PPPP = kIntensPPPPSymbol,
+			INTENS_MF = kIntensMFSymbol, // SCR_INTENS_MF,
+			INTENS_MP = kIntensMPSymbol, // SCR_INTENS_MP,
+			INTENS_SF = kIntensSFSymbol  // SCR_INTENS_SF
+		};
 
-		INTENS_MF = kIntensMFSymbol, // SCR_INTENS_MF,
-		INTENS_MP = kIntensMPSymbol, // SCR_INTENS_MP,
-		INTENS_SF = kIntensSFSymbol  // SCR_INTENS_SF
-	};
-
-	virtual ~GRIntens();
+				 GRIntens( GRStaff * inStaff, const ARIntens * abstractRepresentationOfIntens );
+		virtual ~GRIntens() {}
 	
+		virtual void OnDraw(VGDevice & hdc ) const;
+		virtual void accept (GRVisitor& visitor);
 	
-	virtual void OnDraw(VGDevice & hdc ) const;
-	virtual void accept (GRVisitor& visitor);
-	
-		
-	const ARIntens* getARIntens() const;
-	
-protected:
-
-	int rcount;
+		const ARIntens* getARIntens() const;
 };
 
 #endif

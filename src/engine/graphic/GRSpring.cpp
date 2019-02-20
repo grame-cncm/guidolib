@@ -135,15 +135,16 @@ float GRSpring::change_x(float dx)
 	{
 		// GuidoTrace("Warning, chaning length of a frozen spring");
 	}
-	long l = long(floor(dx * 1000.0+0.5));
+//	long l = long(floor(dx * 1000.0+0.5));
+	long l = long(dx * 1000.0+0.5);
 	dx = l / 1000.0f;
 	fX = dx;
 
 	fForce = fX * fSconst;
 
-	l = long(floor(fForce*1000.0+0.5));
+//	l = long(floor(fForce*1000.0+0.5));
+	l = long(fForce * 1000.0+0.5);
 	fForce = l / 1000.0f;
-
 	return fForce;
 }
 
@@ -186,7 +187,8 @@ float GRSpring::change_force(float df)
 	fForce = df;
 
 	fX = fForce / fSconst;
-	l = long(floor(fX * 1000.0 +0.5));
+//	l = long(floor(fX * 1000.0 +0.5));
+	l = long(fX * 1000.0 +0.5);
 	fX = l / 1000.0f;
 	return fX;
 }
@@ -203,7 +205,6 @@ float GRSpring::set_const(float dc)
     assert(dc>0);
     fSconst = dc;
     fForce = fX*dc;
-
     return fForce;
 }
 
@@ -316,7 +317,6 @@ int GRSpring::setGRPositionX(GCoord p_posx)
 		GRNotationElement * el = fGrolst.GetNext(pos);
 		el->setHPosition(fPosx);
 	}
-
 	return 0;
 }
 
@@ -777,6 +777,7 @@ int GRSpring::isCommonSpring(int numvoices) const
 //	if (fGrolst.GetCount() >= 2)  return 1;
 }
 
+//------------------------------------------------------------------------
 /** \brief This tries to draw the spring.
 */
 void GRSpring::OnDraw( VGDevice & hdc ) const
@@ -818,3 +819,15 @@ void GRSpring::OnDraw( VGDevice & hdc ) const
 	}
 	hdc.PopPen();
 }
+
+//------------------------------------------------------------------------
+void GRSpring::print(ostream& out) const
+{
+	out << "GRSpring id: " << fId << " date: " << fTp << " dur: " << fDur << " force/x/const: " << fForce << " " << fX << " " << fSconst << endl;
+	GuidoPos pos = fGrolst.GetHeadPosition();
+	while (pos) {
+		GRNotationElement* elt = fGrolst.GetNext(pos);
+		out << "   " << elt << endl;
+	}
+}
+

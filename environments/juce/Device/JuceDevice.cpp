@@ -24,7 +24,7 @@ using namespace juce;
 // --------------------------------------------------------------
 // static tools
 static float CoordToRadian( float x, float y )		{ return (float)atan2( x, y ); }
-static Colour Color2JColor (const VGColor & c)		{ return Colour (c.mRed, c.mGreen, c.mBlue, c.mAlpha ); }
+static Colour Color2JColor (const VGColor & c)		{ return Colour (uint8(c.mRed), c.mGreen, c.mBlue, uint8(c.mAlpha) ); }
 
 // --------------------------------------------------------------
 void JuceDevice::initialize()
@@ -45,7 +45,12 @@ void JuceDevice::initialize()
 JuceDevice::JuceDevice(Graphics * g, VGSystem* sys) 
 		  : fGraphics (g), fTextFont(0), fMusicFont(0), fSystem(sys) 
 { 
-	fFreeGraphics = false;
+	if (!g) {
+		Image img (Image::ARGB, 10, 10, true);
+		fGraphics = new Graphics(img);
+		fFreeGraphics = true;
+	}
+	else fFreeGraphics = false;
 	initialize(); 
 }
 
@@ -234,6 +239,7 @@ int JuceDevice::GetHeight() const				{ return fHeight; }
 
 // - Font services ---------------------------------------------------
 void JuceDevice::SetMusicFont( const VGFont * font )	{ 
+	if (!font) return;
 	fMusicFont = font;
 	if (fCurrentFont != font) {
 		fGraphics->setFont(static_cast<const JuceFont*>(font)->NativeFont()); 
@@ -242,7 +248,8 @@ void JuceDevice::SetMusicFont( const VGFont * font )	{
 }
 const VGFont *	JuceDevice::GetMusicFont() const		{ return fMusicFont; }
 void JuceDevice::SetTextFont( const VGFont * font )		{ 
-	fTextFont = font; 
+	if (!font) return;
+	fTextFont = font;
 	if (fCurrentFont != font) {
 		fGraphics->setFont(static_cast<const JuceFont*>(font)->NativeFont());
 		fCurrentFont = font;

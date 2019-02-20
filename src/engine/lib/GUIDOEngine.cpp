@@ -118,7 +118,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 
 	VGSystem * gSystem= new SVGSystem(______src_guido2_svg);
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
-	desc.musicFont = "Guido2";
+	desc.musicFont = kMusicFontStr;
 	desc.textFont  = "Times";
 	GuidoErrCode errcode = GuidoInit (&desc);
 	return errcode;
@@ -611,6 +611,26 @@ GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, con
 	bool result = inHandleAR->armusic->getMeterAt( voicenum, date, meter );
 	return result ? guidoNoErr : guidoErrBadParameter;
 }
+
+// --------------------------------------------------------------------------
+// introduced in guido 1.66 [DF Oct. 18 2017]
+GUIDOAPI(GuidoErrCode) GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeters& meters)
+{
+	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
+		return guidoErrInvalidHandle;
+
+	meters = 0;
+	bool result = inHandleAR->armusic->getMetersAt( voicenum, date, meters );
+	return result ? guidoNoErr : guidoErrBadParameter;
+}
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters)
+{
+	if (!meters) return guidoErrBadParameter;
+	delete [] meters;
+	return guidoNoErr;
+}
+
 
 // --------------------------------------------------------------------------
 //		- Score drawing and pages formating -

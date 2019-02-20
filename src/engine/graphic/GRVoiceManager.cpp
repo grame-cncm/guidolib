@@ -23,11 +23,11 @@
 #include "ARAccidental.h"
 #include "ARAccolade.h"
 #include "ARAlter.h"
+#include "ARArpeggio.h"
 #include "ARAuto.h"
 #include "ARBarFormat.h"
 #include "ARBase.h"
 #include "ARBeam.h"
-#include "ARBembel.h"
 #include "ARBreathMark.h"
 #include "ARChordComma.h"
 #include "ARChordTag.h"
@@ -66,6 +66,7 @@
 #include "ARNaturalKey.h"
 #include "ARNewPage.h"
 #include "ARNewSystem.h"
+#include "ARNotations.h"
 #include "ARNote.h"
 #include "ARNoteFormat.h"
 #include "AROctava.h"
@@ -108,10 +109,10 @@
 
 #include "GRAccelerando.h"
 #include "GRArticulation.h"
+#include "GRArpeggio.h"
 #include "GRAutoBeam.h"
 #include "GRBar.h"
 #include "GRBeam.h"
-#include "GRBembel.h"
 #include "GRBreathMark.h"
 #include "GRChordTag.h"
 #include "GRClef.h"
@@ -125,6 +126,7 @@
 #include "GRDummy.h"
 #include "GREmpty.h"
 #include "GRFinishBar.h"
+#include "GRFingering.h"
 #include "GRGlissando.h"
 #include "GRGlobalLocation.h"
 #include "GRGlobalStem.h"
@@ -137,6 +139,7 @@
 #include "GRMark.h"
 #include "GRMeter.h"
 #include "GRMusic.h"
+#include "GRNotations.h"
 #include "GROctava.h"
 #include "GRPageText.h"
 #include "GRRange.h"
@@ -968,13 +971,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
-	else if (tinf == typeid(ARBembel))
-	{
-		GRBembel * tmp = new GRBembel(static_cast<ARBembel *>(arOfCompleteObject));
-		mCurGrStaff->AddTag(tmp);
-		fMusic->addVoiceElement(arVoice,tmp);
-		grne = tmp;
-	}
 	else if (tinf == typeid(ARBreathMark)) {
 		GRBreathMark * tmp = new GRBreathMark(static_cast<ARBreathMark *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
@@ -1045,6 +1041,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		fMusic->addVoiceElement(arVoice,grmark);
 
 		grne = grmark;
+	}
+	else if (tinf == typeid(ARNotations))
+	{
+		GRNotations * notation = new GRNotations(mCurGrStaff, static_cast<ARNotations *>(arOfCompleteObject));
+		notation->setNeedsSpring(1);
+		mCurGrStaff->AddTag(notation);
+		fMusic->addVoiceElement(arVoice,notation);
+		grne = notation;
 	}
 	else if (tinf == typeid(ARSpecial))
 	{
@@ -1314,6 +1318,15 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 		mCurGrStaff->AddTag(grbeam);
 		fMusic->addVoiceElement(arVoice,grbeam);
 	}
+	else if (tinf == typeid(ARArpeggio))
+	{
+		// Beams that start at the end of the line are parsed for the next line...
+		// if (atEnd) return retval;
+		GRArpeggio * grarp = new GRArpeggio(mCurGrStaff, static_cast<const ARArpeggio *>(apt));
+		addGRTag(grarp,0);
+		mCurGrStaff->AddTag(grarp);
+		fMusic->addVoiceElement(arVoice,grarp);
+	}
 	else if (tinf == typeid(ARFeatheredBeam))
 	{
 		GRBeam * grbeam = new GRBeam(mCurGrStaff, static_cast<const ARFeatheredBeam *>(apt));
@@ -1362,8 +1375,9 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 	else if (tinf == typeid(ARFingering))
 	{
 		const ARFingering * artxt = static_cast<const ARFingering *>(apt);
-		GRText * gtext = new GRText(mCurGrStaff,artxt);
-		gtext->mustFollowPitch( true );
+//		GRText * gtext = new GRText(mCurGrStaff,artxt);
+//		gtext->mustFollowPitch( true );
+		GRText * gtext = new GRFingering(mCurGrStaff,artxt);
 		// adds the tag at the end...
 		addGRTag(gtext,0);
 

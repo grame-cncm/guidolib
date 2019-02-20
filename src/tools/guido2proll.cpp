@@ -17,8 +17,8 @@
 
 using namespace std;
 
-const int  kDefaultWidth           = -1;
-const int  kDefaultHeight          = -1;
+const int  kDefaultWidth           = 1024;
+const int  kDefaultHeight          = 512;
 const int  kDefaultMinPitch        = -1;
 const int  kDefaultMaxPitch        = -1;
 //const bool kDefaultKeyboard        = false;

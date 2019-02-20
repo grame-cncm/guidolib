@@ -24,8 +24,7 @@
 #pragma warning (disable : 4996)	// for _CRT_SECURE_NO_DEPRECATE
 
 // --------------------------------------------------------------
-GFontWin32GDIPlus::GFontWin32GDIPlus( Font* nativeFont, const char * faceName, 
-									  int size, int properties) 
+GFontWin32GDIPlus::GFontWin32GDIPlus( Font* nativeFont, const char * faceName, int size, int properties)
 						: mNativeFont(nativeFont), mName(faceName),
 						  mSize(size), mFontProp(properties)
 {
@@ -66,9 +65,7 @@ GFontWin32GDIPlus::~GFontWin32GDIPlus()
 		delete ( winFont );
 }
 // --------------------------------------------------------------
-void
-GFontWin32GDIPlus::GetExtent( const char * str, int inCharCount, float * outWidth, 
-					   float * outHeight, VGDevice * context ) const 
+void GFontWin32GDIPlus::GetExtent( const char * str, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 	if (!inCharCount) {
 		*outWidth = *outHeight = 0;
@@ -115,9 +112,7 @@ GFontWin32GDIPlus::GetExtent( const char * str, int inCharCount, float * outWidt
 }
 
 // --------------------------------------------------------------
-void	
-GFontWin32GDIPlus::GetExtent( unsigned char c, float * outWidth, 
-					          float * outHeight, VGDevice * context ) const
+void GFontWin32GDIPlus::GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 	WCHAR wstr [] = L"0";
 	mbstowcs(wstr, (const char*)&c, 1);

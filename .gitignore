@@ -4,7 +4,6 @@ CMakeCache.txt
 CMakeLists.txt.user
 cmake_*
 *.xcodeproj
-*/build/linux
 build/GUIDOEngine.*
 build/libGUIDOEngine.a
 build/MacOS
@@ -55,3 +54,5 @@ lang/javascript/doc/api
 lang/java/svgSalamander.jar
 environments/Qt/package
 environments/package
+src/Guido2.sfd
+

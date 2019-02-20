@@ -17,8 +17,9 @@
 #include "SVGDevice.h"
 #include "SVGFont.h"
 #include "SVGMapDevice.h"
+#include "FontManager.h"
 #include "GUIDOEngine.h"
-#include "GuidoFont.h"
+#include "MusicFont.h"
 #include "TimesFont.h"
 
 using namespace std;
@@ -73,15 +74,16 @@ const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int prop
 {
 #ifdef INDEPENDENTSVG
 	// This system try to use embed font metrics
-	if(strcmp("Guido2", faceName) == 0) {
-		return new GuidoFont(faceName, size, properties);
+	if (strcmp (kMusicFontStr, faceName) == 0) {
+		return new MusicFont(faceName, size, properties);
 	} else {
 		//if(strcmp("Times", faceName) == 0) {
 		// TODO GGX Add Arial font and bold / italic style ?
 			return new TimesFont(faceName, size, properties);
 		//} else return NULL;
 	}
-#endif
+#else
 	return new SVGFont (faceName, size, properties);
+#endif
 }
 

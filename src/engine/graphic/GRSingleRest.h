@@ -51,7 +51,6 @@ class GRSingleRest : public GRRest
 		virtual void accept (GRVisitor& visitor);
 		virtual void setFillsBar(bool value,GRNotationElement * bar1, GRNotationElement * bar2, bool filled);
 		
-		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		
@@ -87,7 +86,9 @@ class GRSingleRest : public GRRest
 	NVstring mRestAppearance;
 	
 	private:
-	void setTypeAndPos(TYPE_DURATION dur);
+		TYPES 	duration2Type (const TYPE_DURATION& duration) const;
+		float 	type2YPosition (TYPES type) const;
+		void 	setTypeAndPos (TYPE_DURATION dur);
 };
 
 #endif

@@ -67,7 +67,7 @@
           e/4 \slurEnd 
          \tie<dy1=2.4hs,dx2=-1hs,dy2=2.4hs,h=1.75hs>( 
 		 \fingering<text="4 5",dy=8hs,fsize=7pt>( \stemsUp<5hs> d) d ) 
-		  \tieBegin<dy=1hs>
+		  \tieBegin
 		      \fingering<text="4 5",dy=8hs,fsize=7pt>(c#) 
  %measure 5 (voice 1)
           \bm( \stemsUp<8hs> c#/16 \stemsUp 

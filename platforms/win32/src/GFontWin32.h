@@ -60,7 +60,7 @@ class_export GFontWin32 : public VGFont
 
 		// - Symbol services -------------------------------------------
 		virtual	void			GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context = 0) const;
-		virtual	void			GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context = 0) const;
+		virtual	void			GetExtent( int c, float * outWidth, float * outHeight, VGDevice * context = 0) const;
 
 		// - Win32 specific services -----------------------------------
 				HFONT			GetNativeFont() const
