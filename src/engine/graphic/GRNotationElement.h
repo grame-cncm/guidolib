@@ -82,7 +82,8 @@ public:
 
 	virtual NVPoint getTieEnd() const					{ return mPosition; } // do not rely on that
 	virtual NVPoint getTieStart() const					{ return mPosition; }
-	
+	virtual NVRect  getAssociatedBoundingBox() const;
+
 			void addToBoundingBox( GRNotationElement * in );
 
 

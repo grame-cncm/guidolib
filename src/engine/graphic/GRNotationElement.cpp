@@ -335,6 +335,24 @@ void GRNotationElement::setPosition( const NVPoint & inPos )
 }
 
 // -------------------------------------------------------------------------
+NVRect GRNotationElement::getAssociatedBoundingBox() const
+{
+	NVRect rect;
+	GuidoPos pos = mAssociated->GetHeadPosition();
+	bool first = true;
+	while( pos ) {
+		GRNotationElement * el = mAssociated->GetNext(pos);
+		NVRect bb = el->getBoundingBox() + el->getPosition();
+		if (first) {
+			rect = bb;
+			first = false;
+		}
+		else rect.Merge(bb);
+	}
+	return rect;
+}
+
+// -------------------------------------------------------------------------
 void GRNotationElement::addAssociation( GRNotationElement * p )
 {
 	if (mAssociated == 0)
