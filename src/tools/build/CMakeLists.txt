@@ -81,7 +81,7 @@ endforeach(tool)
 #######################################
 # install setup
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  SET(CMAKE_INSTALL_PREFIX /usr )
+  SET(CMAKE_INSTALL_PREFIX /usr/local )
 endif()
 if (NOT WIN32 AND NOT APPLE)
 message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
