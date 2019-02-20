@@ -28,9 +28,9 @@ IOS  := ios
 
 # try to detect Visual Studio version used
 ifeq ($(TARGET), windows)
- MSVC ?= C:\Program Files (x86)\Microsoft Visual Studio 12.0
+ MSVC ?= C:\Program Files (x86)\Microsoft Visual Studio 14.0
  ifneq ($(wildcard "$(MSVC)"), "") 
-  WIN32VS ?= Visual Studio 12 2013
+  WIN32VS ?= Visual Studio 14 2015
   WIN64VS ?= $(WIN32VS) Win64
   endif
  else
