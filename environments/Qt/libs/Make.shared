@@ -111,4 +111,4 @@ lib$(PROJECT)-linux.a: linux/$(PROJECT).makefile
 	$(MAKE) -C linux -f $(PROJECT).makefile
 	
 clean:
-	rm -rf ../../lib$(PROJECT)*.a ../../$(PROJECT).lib ios macos $(DEST) linux
+	rm -rf ../../lib$(PROJECT)*.a ../../$(PROJECT).lib ios macos $(DEST) linux win64
