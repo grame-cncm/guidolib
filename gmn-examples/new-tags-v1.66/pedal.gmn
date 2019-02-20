@@ -1,0 +1,11 @@
+(*
+	Piano notation
+	New \pedalOn and \pedolOff tags
+	Supports the standard attributes (dx, dy, size, etc.)
+*)
+{
+[
+	\clef<"g"> \meter<"2/4">
+	a b \pedalOn g d e \pedalOff f \i<"p"> c
+]
+}

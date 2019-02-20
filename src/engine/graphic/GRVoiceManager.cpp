@@ -66,6 +66,7 @@
 #include "ARNaturalKey.h"
 #include "ARNewPage.h"
 #include "ARNewSystem.h"
+#include "ARNotations.h"
 #include "ARNote.h"
 #include "ARNoteFormat.h"
 #include "AROctava.h"
@@ -138,6 +139,7 @@
 #include "GRMark.h"
 #include "GRMeter.h"
 #include "GRMusic.h"
+#include "GRNotations.h"
 #include "GROctava.h"
 #include "GRPageText.h"
 #include "GRRange.h"
@@ -1039,6 +1041,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		fMusic->addVoiceElement(arVoice,grmark);
 
 		grne = grmark;
+	}
+	else if (tinf == typeid(ARNotations))
+	{
+		GRNotations * notation = new GRNotations(mCurGrStaff, static_cast<ARNotations *>(arOfCompleteObject));
+		notation->setNeedsSpring(1);
+		mCurGrStaff->AddTag(notation);
+		fMusic->addVoiceElement(arVoice,notation);
+		grne = notation;
 	}
 	else if (tinf == typeid(ARSpecial))
 	{

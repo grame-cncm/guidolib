@@ -73,6 +73,7 @@
 #include "ARNewSystem.h"
 #include "ARNote.h"
 #include "ARNoteFormat.h"
+#include "ARNotations.h"
 #include "AROctava.h"
 #include "ARPageFormat.h"
 #include "ARPizzicato.h"
@@ -1207,6 +1208,18 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				ARTDummy * tmp = new ARTDummy;
 				mTags.AddHead(tmp); // push()
+			}
+			else if(!strcmp(name, kTagPedalOn ))
+			{
+				ARNotations * tmp = new ARNotations (ARNotations::kPedalBegin);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddTail(tmp);
+			}
+			else if(!strcmp(name, kTagPedalOff ))
+			{
+				ARNotations * tmp = new ARNotations (ARNotations::kPedalEnd);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddTail(tmp);
 			}
 			break;
 

@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.6
+- new pedalOn and pedalOff tags
 - intens tag: add text before and after attributes
 - fingering tag: add position attribute, add global settings
 - add -viewport option to guido2svg

@@ -112,6 +112,8 @@ extern const char* kTagNoteFormat;
 extern const char* kTagOct;
 extern const char* kTagOctava;
 extern const char* kTagPageFormat;
+extern const char* kTagPedalOn;
+extern const char* kTagPedalOff;
 extern const char* kTagPizz;
 extern const char* kTagPizzicato;
 extern const char* kTagPort;
