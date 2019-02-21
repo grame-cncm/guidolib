@@ -22,9 +22,8 @@ if(NOT APPLE)
 	endif()
 endif()
 
-
-FIND_PACKAGE(JNI )
-if (NOT ${JNI_FOUND})
+FIND_PACKAGE(JNI QUIET)
+if (NOT JNI_FOUND)
 	message (WARNING "JNI package not found - skip jniGUIDOEngine target")
 	return () 
 endif()
