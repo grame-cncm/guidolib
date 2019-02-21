@@ -65,7 +65,6 @@ if(APPLE)
 		else ()
 			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
 		endif ()
-	set( DEFS ${DEFS} -D_USE_QD_COORDINATES_ )
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.10)
 #	set (CMAKE_MACOSX_RPATH 1)
 	set (CMAKE_LDFLAGS -mmacosx-version-min=10.10)
@@ -78,15 +77,15 @@ endif()
 # windows specific part
 #########################################
 if (WIN32)
-	set( DEFS ${DEFS} -DWINVER=0x0400 -DWIN32 -DGUIDOExport)
+	set( DEFS "${DEFS} -DWINVER=0x0400 -DWIN32 -DGUIDOExport")
 	if(MSVC)
-		set( DEFS ${DEFS} -DMSVC )
+		set( DEFS "${DEFS} -DMSVC" )
 	else()
-		set( DEFS ${DEFS} -DGCC )
+		set( DEFS "${DEFS} -DGCC" )
 	endif()
 
 	if (${CMAKE_GENERATOR} MATCHES ".*Win64")
-		set( DEFS ${DEFS} -DWIN64 )
+		set( DEFS "${DEFS} -DWIN64" )
 		set (WIN64 1)
 		set (target GUIDOEngine64)
 		set (statictarget SGUIDOEngine64)
@@ -99,7 +98,7 @@ endif()
 #########################################
 if (SMUFL)
 	message (STATUS "Generates SMUFL compliant code.")
-	set( DEFS ${DEFS} -DSMUFL )
+	set( DEFS "${DEFS} -DSMUFL" )
 endif()
 
 
@@ -123,7 +122,7 @@ endif()
 if (MIDIEXPORT)
 	message (STATUS "MIDI export will be generated (requires MidiShareLight) - Use -DMIDIEXPORT=no to change.")
 	set (MSLIGHT_PATH	${ROOT}/src/midisharelight)
-	set (DEFS ${DEFS} -DMIDIEXPORT )
+	set (DEFS "${DEFS} -DMIDIEXPORT" )
 	
 	set(INCL ${INCL} ${MSLIGHT_PATH})			# add include folders
 	if (WIN32)
@@ -145,7 +144,7 @@ endif()
 # independent svg support
 if (INDEPENDENTSVG STREQUAL "yes")
 	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
-	set (DEFS ${DEFS} -DINDEPENDENTSVG )
+	set (DEFS "${DEFS} -DINDEPENDENTSVG" )
 else()
 	message (STATUS "Independent SVG will not be enforced and SVG fonts will be approximated using system fonts - Use -DINDEPENDENTSVG=yes to change.")
 endif()
@@ -248,7 +247,7 @@ install ( TARGETS ${target}
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
     ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
     FRAMEWORK DESTINATION ${CMAKE_INSTALL_PREFIX}/Frameworks CONFIGURATIONS Release
-    PUBLIC_HEADERS DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
 )
 
 

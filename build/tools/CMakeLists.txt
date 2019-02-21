@@ -25,8 +25,9 @@ set (GUIDO		${CMAKE_CURRENT_SOURCE_DIR}/../../..)
 
 #######################################
 if(UNIX)
-	add_definitions(-Wall -DGCC)
-endif(UNIX)
+	set (INCDEFS -DGCC)
+	add_definitions(-Wall)
+endif()
 
 if(APPLE)
 	set (DEVICE ${GUIDO}/platforms/macosx/src)
@@ -42,6 +43,12 @@ endif()
 
 set (INCTOOLS ${GUIDOSRC}/engine/include ${GUIDOSRC}/engine/devices ${GUIDOSRC}/engine/tools ${DEVICE})
 
+if (UNIX AND NOT APPLE)
+	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "cairo"  OUTPUT_VARIABLE TMP ERROR_VARIABLE TMP )
+	string (STRIP ${TMP} UINCL)
+	set (INCDEFS "${INCDEFS} ${UINCL}")
+endif()
+
 #######################################
 # tools generation
 set(TOOLS guidoparse guidoar2gr guidodraw)
@@ -56,6 +63,7 @@ set(TOOLS guido2midi guido2svg guido2abstract guido2proll midi2proll guido2svgma
 foreach(tool ${TOOLS})
 	add_executable( ${tool} ${TOOLS_PATH}/${tool}.cpp )
 	target_include_directories (${tool} PRIVATE ${INCTOOLS})
+	target_compile_definitions (${tool} PRIVATE ${INCDEFS})
 	target_link_libraries( ${tool} ${target})
 	add_dependencies(${tool} ${target})
 endforeach(tool)

@@ -23,7 +23,12 @@ if(NOT APPLE)
 endif()
 
 
-FIND_PACKAGE(JNI REQUIRED)
+FIND_PACKAGE(JNI )
+if (NOT ${JNI_FOUND})
+	message (WARNING "JNI package not found - skip jniGUIDOEngine target")
+	return () 
+endif()
+
 #FIND_PACKAGE(Java REQUIRED)
 #message ( "JNI_INCLUDE_DIRS	  ${JNI_INCLUDE_DIRS}")
 #message ( "JAVA_AWT_LIBRARY	  ${JAVA_AWT_LIBRARY}")
