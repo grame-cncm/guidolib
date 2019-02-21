@@ -15,7 +15,8 @@ macx:TARGET = GuidoEditor
 MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc
 UI_DIR = ./tmpSrc
-DESTDIR = $$PWD/..
+unix:DESTDIR = $$PWD
+win32:DESTDIR = $$PWD/..
 
 macx {
 	# In new version of ios, we can't use Contents folder for anything other than code
