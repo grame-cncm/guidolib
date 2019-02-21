@@ -89,7 +89,7 @@ class GRTrill : public GRPTagARNotationElement
 	
 	private:
 		typedef std::vector<std::pair<const GRSystem*, NVRect> > TDrawRects;
-		TDrawRects	getAssociatedBoundingBox (const NEPointerList * assoc, const GRStaff* staff) const;
+		TDrawRects	getAllAssociatedBoundingBox (const NEPointerList * assoc, const GRStaff* staff) const;
 		NVRect		getCurrentRect (const GRSystem* sys) const;
 
 		TDrawRects	fDrawRects;

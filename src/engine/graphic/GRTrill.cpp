@@ -235,7 +235,10 @@ const NVPoint & GRTrill::getReferencePosition() const
 extern GRSystem * gCurSystem;
 
 //-------------------------------------------------------------------
-GRTrill::TDrawRects GRTrill::getAssociatedBoundingBox (const NEPointerList * assoc, const GRStaff* staff) const
+#ifndef WIN32
+#warning ("todo: report getAllAssociatedBoundingBox to GRNotationElement")
+#endif
+GRTrill::TDrawRects GRTrill::getAllAssociatedBoundingBox (const NEPointerList * assoc, const GRStaff* staff) const
 {
 	TDrawRects out;
 
@@ -287,7 +290,7 @@ void GRTrill::tellPosition( GObject * caller, const NVPoint & np )
 		const GRStaff* staff = elt->getGRStaff();
 		float staffLSpace = staff->getStaffLSPACE();
 		if (mAssociated) {
-			fDrawRects = getAssociatedBoundingBox (mAssociated, elt->getGRStaff());
+			fDrawRects = getAllAssociatedBoundingBox (mAssociated, elt->getGRStaff());
 		}
 		else mDraw = false;
 
