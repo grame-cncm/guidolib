@@ -40,8 +40,6 @@ class GRTie : public GRBowing
 
 	protected:
 
-		virtual void updateBow( GRStaff * grstaff );
-
 		virtual void automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticControlPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 

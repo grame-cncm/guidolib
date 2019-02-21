@@ -57,22 +57,6 @@ void GRTie::addAssociation(GRNotationElement * el)
 }
 
 // -----------------------------------------------------------------------------
-/** \brief Calculate the placement of the bow.
-
-	Changes the parameter-names and just handle positions correctly.
-
-	calculation the position of y for dy3:
-	(eposy-sposy)*dx3 + sposy + dy3 * hspace;
-	-> (endElement->getTieEnd().y - 
-	-> startElement->getTieEnd().y ) * dx3 +  ...
-
-*/
-void GRTie::updateBow( GRStaff * inStaff )
-{
-	GRBowing::updateBow( inStaff );
-}
-
-// -----------------------------------------------------------------------------
 /**
 */
 void GRTie::automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse )
