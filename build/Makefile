@@ -7,7 +7,7 @@
 TARGET := undefined
 system	:= $(shell uname -s)
 # normalizes MINGW versions
-system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo $(system))
+system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
 	TARGET = mac
 else

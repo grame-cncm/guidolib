@@ -1,36 +1,46 @@
 #######################################
 # CMAKE guidolib
 #######################################
-
 project(guidolib)
 cmake_minimum_required(VERSION 2.6)
 
-set (CMAKE_CONFIGURATION_TYPES Debug Release)
+set (CMAKE_BUILD_TYPE Release)
 set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
+
+get_filename_component(ROOT ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
+
 #######################################
 # versions management
-set (VERSION 1.66)
-set (STRVERS "v.1.66")
+set (VERSION 1.6.6)
+macro (get_major_minor_patch version)
+	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\1"  VERSION_MAJOR ${version} )
+	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\2"  VERSION_MINOR ${version} )
+	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\3"  VERSION_PATCH ${version} )
+endmacro()
+get_major_minor_patch( ${VERSION} )
+set (SOVERS ${VERSION_MAJOR})
+set (STRVERS "v.1.6.6")
 set (GUIDOFWKVERS C)
-set (SOVERS 1)
+message (STATUS "Configuring version ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-if(UNIX)
-	add_definitions(-Wall -DGCC)
-endif()
 
 #######################################
-# Options disabled by default
+# Options 
 option ( IOS 		"Generates project for iOS" off )
 option ( DIST 		"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
 option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
-option ( GL "Links to opengl device" off)
+option ( GL         "Links to opengl device" off)
 
 
 set (CMAKE_CXX_STANDARD 11)
+
+if(UNIX)
+	set (DEFS -DGCC)
+endif()
 
 #########################################
 # mac os specific part
@@ -55,33 +65,32 @@ if(APPLE)
 		else ()
 			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
 		endif ()
-	add_definitions(-D_USE_QD_COORDINATES_ )
+	set( DEFS ${DEFS} -D_USE_QD_COORDINATES_ )
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.10)
 #	set (CMAKE_MACOSX_RPATH 1)
 	set (CMAKE_LDFLAGS -mmacosx-version-min=10.10)
 	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
 	set (MACOSX_DEPLOYMENT_TARGET 10.10)
 	endif ()
+endif()
 
 #########################################
 # windows specific part
 #########################################
-elseif (WIN32)
- add_definitions(-DWINVER=0x0400 -DWIN32)
- if(${CMAKE_GENERATOR} STREQUAL "Visual Studio 6")
-  add_definitions(-DVC6)
- elseif(${CMAKE_GENERATOR} MATCHES "Visual Studio.*")
-  add_definitions(-DMSVC)
- elseif(${CMAKE_GENERATOR} STREQUAL "MSYS Makefiles")
-  add_definitions(-DGCC)
- endif()
+if (WIN32)
+	set( DEFS ${DEFS} -DWINVER=0x0400 -DWIN32 -DGUIDOExport)
+	if(MSVC)
+		set( DEFS ${DEFS} -DMSVC )
+	else()
+		set( DEFS ${DEFS} -DGCC )
+	endif()
 
- if (${CMAKE_GENERATOR} MATCHES ".*Win64")
-  add_definitions(-DWIN64)
-  set (WIN64 1)
-  set (target GUIDOEngine64)
-  set (statictarget SGUIDOEngine64)
- endif ()
+	if (${CMAKE_GENERATOR} MATCHES ".*Win64")
+		set( DEFS ${DEFS} -DWIN64 )
+		set (WIN64 1)
+		set (target GUIDOEngine64)
+		set (statictarget SGUIDOEngine64)
+	endif ()
 endif()
 
 
@@ -89,16 +98,15 @@ endif()
 # optional SMUFL support
 #########################################
 if (SMUFL)
- message (STATUS "Generates SMUFL compliant code.")
- add_definitions(-DSMUFL)
+	message (STATUS "Generates SMUFL compliant code.")
+	set( DEFS ${DEFS} -DSMUFL )
 endif()
-add_definitions(-DGUIDOExport)
+
 
 #######################################
 # set directories, src and headers.
-set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
-set (PLATFORMS ${GUIDO_PATH}/platforms)
-set (SRC_PATH	${GUIDO_PATH}/src/engine)
+set (PLATFORMS ${ROOT}/platforms)
+set (SRC_PATH  ${ROOT}/src/engine)
 set (HEADERS_PATH ${SRC_PATH}/include)
 if (GL)
 	set(VGDEV_PATH ${PLATFORMS}/opengl/device)
@@ -112,12 +120,12 @@ endif()
 
 #######################################
 # midi export support
-if (MIDIEXPORT STREQUAL "yes")
+if (MIDIEXPORT)
 	message (STATUS "MIDI export will be generated (requires MidiShareLight) - Use -DMIDIEXPORT=no to change.")
-	set (MSLIGHT_PATH	${GUIDO_PATH}/src/midisharelight)
-	add_definitions(-DMIDIEXPORT)
+	set (MSLIGHT_PATH	${ROOT}/src/midisharelight)
+	set (DEFS ${DEFS} -DMIDIEXPORT )
 	
-	set(INCL ${INCL} "${MSLIGHT_PATH}")			# add include folders
+	set(INCL ${INCL} ${MSLIGHT_PATH})			# add include folders
 	if (WIN32)
 		if (${CMAKE_CL_64})
 			set(LINK ${LINK} "${MSLIGHT_PATH}/win64/midisharelight64.lib")
@@ -133,98 +141,33 @@ else()
 	message (STATUS "MIDI export will not be generated - Use -DMIDIEXPORT=yes to change (requires MidiShareLight).")
 endif()
 
-# OPENGL
-if (GL STREQUAL "yes")
-	message (STATUS "Open GL device will be built. Use -DGL=no to change.")
-else()
-	message (STATUS "Open GL device won't be built. Use -DGL=yes to change.")
-endif()
-
-set (SRC ${SRC} "${SRC_PATH}/*/*.cpp")					# add source files
+#######################################
 # independent svg support
 if (INDEPENDENTSVG STREQUAL "yes")
 	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
-	add_definitions(-DINDEPENDENTSVG)
+	set (DEFS ${DEFS} -DINDEPENDENTSVG )
 else()
 	message (STATUS "Independent SVG will not be enforced and SVG fonts will be approximated using system fonts - Use -DINDEPENDENTSVG=yes to change.")
 endif()
 
+
+#######################################
 # vgdev
-if (GL STREQUAL "yes")
-	# independent svg needs to be enabled with this device
-	add_definitions(-DINDEPENDENTSVG)
-	set (VGDEV_SRC "${VGDEV_PATH}/*.cpp")
-	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
-	set(LINK ${LINK} "-l glut -l GLU")
-	# gl
-	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "gl"
-                OUTPUT_VARIABLE TMP
-                ERROR_VARIABLE TMP
-        )
-	string (STRIP ${TMP} GLINCL)
-	add_definitions(${GLINCL})
-        EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "gl"
-                  OUTPUT_VARIABLE TMP
-                  ERROR_VARIABLE TMP
-        )
-	string (STRIP ${TMP} GLLIB)
-	set(LINK ${LINK} ${GLLIB})
-	# freetype
-	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "freetype2"
-                OUTPUT_VARIABLE TMP
-                ERROR_VARIABLE TMP
-        )
-	string (STRIP ${TMP} FREETYPEINCL)
-	add_definitions(${FREETYPEINCL})
-        EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "freetype2"
-                  OUTPUT_VARIABLE TMP
-                  ERROR_VARIABLE TMP
-        )
-	string (STRIP ${TMP} FREETYPELIB)
-	set(LINK ${LINK} ${FREETYPELIB})
-	# ftgl
-	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "ftgl"
-                OUTPUT_VARIABLE TMP
-                ERROR_VARIABLE TMP
-        )
-	string (STRIP ${TMP} FTGLINCL)
-	add_definitions(${FTGLINCL})
-        EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "ftgl"
-                  OUTPUT_VARIABLE TMP
-                  ERROR_VARIABLE TMP
-        )
-	string (STRIP ${TMP} FTGLLIB)
-	set(LINK ${LINK} ${FTGLLIB})
-elseif(WIN32)
-	set (VGDEV_SRC "${VGDEV_PATH}/GDeviceWin32.cpp" "${VGDEV_PATH}/GFontWin32.cpp" "${VGDEV_PATH}/GSystemWin32.cpp"
-		"${VGDEV_PATH}/GDeviceWin32GDIPlus.cpp" "${VGDEV_PATH}/GFontWin32GDIPlus.cpp" "${VGDEV_PATH}/GSystemWin32GDIPlus.cpp")
-	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
-elseif(APPLE)
-	set (VGDEV_SRC "${VGDEV_PATH}/*.cpp")
-	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
-elseif(UNIX)
-	set (VGDEV_SRC "${VGDEV_PATH}/*Cairo*.cpp")
-	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
-	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "cairo"
-                OUTPUT_VARIABLE TMP
-                ERROR_VARIABLE TMP
-        )
-	string (STRIP ${TMP} UINCL)
-	add_definitions(${UINCL})
-endif()
+include (cmake/vgdev.cmake)
 
-file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC} ${VGDEV_SRC})
 
-set(HEADERS ${HEADERS} "${SRC_PATH}/*/*.h")		# add header files
-file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS} ${VGDEV_H})
+#######################################
+# set sources and headers files
+file (GLOB SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRC_PATH}/*/*.cpp" ${VGDEV_SRC})
+file (GLOB HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRC_PATH}/*/*.h" ${VGDEV_H})
 file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*.h" "${VGDEV_H}" "${SRC_PATH}/devices/*H")
 
-set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
-set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
-file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${INCL})
 
 #######################################
 # set includes
+set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
+set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
+file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${INCL})
 include_directories( ${INCDIRS})
 set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
 
@@ -232,54 +175,50 @@ set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
 # set library target
 if(WIN32)
 	enable_language(RC)
-	set(LIBCONTENT ${LIBSRC} ${LIBH} ${PLATFORMS}/win32/GUIDOEngine.rc)
+	set(SRC ${SRC} ${PLATFORMS}/win32/GUIDOEngine.rc)
 	set(LINK ${LINK} "msimg32.lib" "gdiplus.lib")
-else(WIN32)
-	set(LIBCONTENT ${LIBSRC} ${LIBH})
 endif(WIN32)
 
 if(APPLE)
-	set(LINK ${LINK} "-framework Carbon -framework CoreText -compatibility_version 1.0.0 -lc++")
+	set(LINK ${LINK} "-framework Carbon -framework CoreText")
 elseif (UNIX)
-      EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"
-                OUTPUT_VARIABLE TMP
-                ERROR_VARIABLE TMP
-        )
+	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"   OUTPUT_VARIABLE TMP ERROR_VARIABLE TMP )
 	string (STRIP ${TMP} CAIRO)
 	set(LINK ${LINK} ${CAIRO})
-endif(APPLE)
+endif()
 
 #######################################
-# library generation
+# describe targets
+set (targets ${target})
 if (IOS)
-	add_library(${target} STATIC ${LIBCONTENT})
+	add_library(${target} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
 	set_target_properties ( ${target} PROPERTIES 
 				XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${IOS_DEPLOYMENT_TARGET} )
 
 else()
 
-	add_library(${target} SHARED ${LIBCONTENT})
+	add_library(${target} SHARED ${SRC} ${HEADERS} ${PUBLICHEADERS})
 	set_target_properties (${target} PROPERTIES
 				FRAMEWORK TRUE
 				FRAMEWORK_VERSION ${GUIDOFWKVERS}
 				PUBLIC_HEADER "${PUBLICHEADERS}"
-				DEFINE_SYMBOL LIBMUSICXML_EXPORTS
+				DEFINE_SYMBOL GUIDOLIB_EXPORTS
 				VERSION ${VERSION}
-#				MACOSX_RPATH TRUE
 				SOVERSION ${SOVERS}
 				MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
-				MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
-				MACOSX_FRAMEWORK_BUNDLE_VERSION "A")
-
-	if (STATICLIB)
-		message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
-		add_library(${statictarget} STATIC ${LIBCONTENT})
-	else ()
-		message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
-	endif ()
-
-	target_link_libraries (${target} ${LINK})
+				MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION} )
 endif()
+
+if (STATICLIB AND NOT IOS)
+	message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
+	add_library( ${statictarget} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
+	target_compile_definitions (${statictarget} PRIVATE ${DEFS})
+	target_include_directories (${statictarget} PRIVATE ${INCDIRS})
+	set (targets ${targets} ${statictarget})
+else ()
+	message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
+endif ()
+
 
 if(WIN32)
 	set_target_properties (${target} PROPERTIES
@@ -287,18 +226,93 @@ if(WIN32)
 		RELEASE_OUTPUT_NAME ${target})
 endif()
 
+target_compile_definitions (${target} PRIVATE ${DEFS})
+target_include_directories (${target} PRIVATE ${INCDIRS})
+target_link_libraries (${target} ${LINK})
+
+####################################
+# add sub projects (tools)
+####################################
+if (NOT IOS)
+add_subdirectory (tools)
+add_subdirectory (java)
+add_subdirectory (postprocess)
+endif()
+
+if (NOT IOS)
 #######################################
 # install setup
-if(APPLE)
-	set(FRMWK  FRAMEWORK DESTINATION "/Library/Frameworks" CONFIGURATIONS Release)
-endif(APPLE)
-
-if (NOT IOS AND NOT WIN32)
 message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
 install ( TARGETS ${target}
-    	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    	${FRMWK}
-    	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
+	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin CONFIGURATIONS Release
+    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_PREFIX}/Frameworks CONFIGURATIONS Release
+    PUBLIC_HEADERS DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
+)
+
+
+####################################
+# install gmn files
+set (GMN ${ROOT}/gmn-examples)
+install (
+    DIRECTORY ${GMN} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib
+    FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+    DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    FILES_MATCHING PATTERN "*.gmn"
+)
+
+####################################
+# install documentation
+set (DOC ${ROOT}/doc)
+install (
+    DIRECTORY ${DOC}/html DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
+    FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+    DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    PATTERN ".DS_Store" EXCLUDE
+    PATTERN "Makefile" EXCLUDE
+)
+file (GLOB PDF RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${DOC}/*.pdf  ${DOC}/refard/*.pdf ${DOC}/refard/latex/*.pdf )
+install (
+    FILES     ${PDF} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
+    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+)
+
+####################################
+# install guido font
+file (GLOB PDF RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${DOC}/*.pdf  ${DOC}/refard/*.pdf ${DOC}/refard/latex/*.pdf )
+install (
+    FILES     ${ROOT}/src/guido2.ttf  ${ROOT}/src/guido2.svg  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib
+    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+)
+
+####################################
+# install Qt applications
+set ( QT ${ROOT}/environments/Qt/apps)
+if (APPLE)
+	set ( GUIDO2IMAGE guido2image)
+	set ( GUIDOEDITOR GuidoEditor.app)
+	set ( GUIDOSCENECOMPOSER GuidoSceneComposer.app)
+	set ( QTAPPS ${QT}/guido2image/guido2image)
+	set ( QTAPPS ${QT}/guido2image/${GUIDO2IMAGE})
+elseif(WIN32)
+	set ( GUIDO2IMAGE guido2image.exe)
+	set ( GUIDOEDITOR GuidoEditor.exe)
+	set ( GUIDOSCENECOMPOSER GuidoSceneComposer.exe)
+	set ( QTAPPS ${QT}/${GUIDO2IMAGE} ${QT}/${GUIDOEDITOR} ${QT}/${GUIDOSCENECOMPOSER} )
+elseif(UNIX)
+	set ( QTAPPS ${QT}/guido2image/guido2image ${QT}/GuidoEditor/GuidoEditor ${QT}/GuidoSceneComposer/GuidoSceneComposer )
+endif()
+install (
+    PROGRAMS ${QTAPPS}  DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)
+if (APPLE)
+set ( QTBUNDLES ${QT}/GuidoEditor/${GUIDOEDITOR} ${QT}/GuidoSceneComposer/${GUIDOSCENECOMPOSER})
+install (
+    DIRECTORY ${QTBUNDLES} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+    USE_SOURCE_PERMISSIONS
 )
 endif()
 
+endif()
