@@ -297,6 +297,7 @@ if (NOT IOS AND NOT WIN32)
 message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
 install ( TARGETS ${target}
     	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    	${FRMWK}
     	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
 )
 endif()
