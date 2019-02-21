@@ -28,7 +28,7 @@
 // --------------------------------------------------------------
 CairoFont::CairoFont(const char* faceName, int size, int properties, const unsigned int * charSet) 
 				: fName(faceName),
-				  fSize(size), fProperties(properties), fSymbolTable(charSet)
+				  fSize(size), fProperties(properties) //, fSymbolTable(charSet)
 {}
 
 CairoFont::~CairoFont() {}

@@ -49,7 +49,7 @@ class CairoFont : public VGFont
 		std::string				fName;
 		int						fSize;
 		int						fProperties;
-		const unsigned int *	fSymbolTable ;
+//		const unsigned int *	fSymbolTable ;
 
 		void	GetExtent( const char * s, float * outWidth, float * outHeight, cairo_t * context ) const;
 		void	SelectFont( cairo_t * cr ) const;
