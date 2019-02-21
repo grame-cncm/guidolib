@@ -1,8 +1,6 @@
 *.class
 *.dylib
 *.dll
-guidoengine.jar
 drawcommand.jar
-doc
 tests
 cmake/Makefile

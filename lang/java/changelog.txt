@@ -1,6 +1,10 @@
 GUIDO Engine - JNI package history 
 
 ----------------------------------------------------------------
+version 1.6.6 - 
+- update to guido engine lib version
+
+----------------------------------------------------------------
 version 1.2.6 - 
 - fix native graphic device issues
 
