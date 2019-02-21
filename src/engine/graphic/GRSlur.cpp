@@ -172,10 +172,7 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing *
 {
 	if (mAssociated == 0 ) return;
 
-	GRNotationElement * startElement = sse->startElement;
-	GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
-
 	const bool upward = (context->curveDir == 1);
 
 	// We don't need to adjust the curve if there is only two elements
