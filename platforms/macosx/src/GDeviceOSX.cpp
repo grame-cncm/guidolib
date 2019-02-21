@@ -705,6 +705,7 @@ static std::string fontName2iOSName(const string name, int properties)
             default:	iosname = "TimesNewRomanPS";
         }
     }
+    return iosname;
 }
 
 void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
