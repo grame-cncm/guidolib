@@ -11,16 +11,11 @@
 
 */
 
-#ifdef VC6
-#pragma warning (disable : 4786)
-#endif
-
 #include <iostream>
 #ifdef VOLTADEBUG
 #include <fstream>
 ofstream vdebug("voltadebug.txt");
 #endif
-using namespace std;
 
 #include "ARMusicalObject.h"
 #include "ARMusicalTag.h"
@@ -41,6 +36,8 @@ using namespace std;
 #include "kf_ivect.h"
 #include "VGDevice.h"
 #include "FontManager.h"
+
+using namespace std;
 
 std::map<int, GRVolta *> GRVolta::mPrevious;
 

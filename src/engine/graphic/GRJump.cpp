@@ -11,13 +11,8 @@
 
 */
 
-#ifdef VC6
-#pragma warning (disable : 4786)
-#endif
-
 #include <iostream>
 #include <ctype.h>
-using namespace std;
 
 #include "ARJump.h"
 #include "GRJump.h"
@@ -26,6 +21,8 @@ using namespace std;
 #include "GUIDOInternal.h"
 #include "VGDevice.h"
 #include "VGFont.h"
+
+using namespace std;
 
 NVPoint		GRJump::refpos;
 SymbolMap   GRJump::mSymbols;

@@ -15,10 +15,6 @@
 
 */
 
-#ifdef VC6
-#pragma warning (disable : 4786)
-#endif
-
 #include <string>
 #include <vector>
 
