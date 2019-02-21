@@ -22,6 +22,7 @@ QT += xml widgets printsupport
 MOC_DIR = tmpSrc
 RCC_DIR = tmpSrc
 UI_DIR  = tmpSrc
+DESTDIR = $$PWD/..
 
 macx {
 	CONFIG += c++11
