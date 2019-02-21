@@ -22,7 +22,7 @@ QT += xml widgets printsupport
 MOC_DIR = tmpSrc
 RCC_DIR = tmpSrc
 UI_DIR  = tmpSrc
-unix:DESTDIR = $$PWD
+macx:DESTDIR = $$PWD
 win32:DESTDIR = $$PWD/..
 
 macx {
