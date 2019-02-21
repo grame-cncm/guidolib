@@ -185,9 +185,6 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing *
 	// futur bow and the line joining the first and the last element.
 	// Important: note that the screen y-axis is inverted.
 
-	const TYPE_TIMEPOSITION & startDate = startElement->getRelativeTimePosition();
-	const TYPE_TIMEPOSITION & endDate = endElement->getRelativeTimePosition();
-
 	const float startX = bowInfos->position.x + bowInfos->offsets[0].x;
 	const float startY = bowInfos->position.y + bowInfos->offsets[0].y;
 	const float endX = bowInfos->position.x + bowInfos->offsets[2].x;
