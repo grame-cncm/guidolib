@@ -69,15 +69,15 @@ void GRArpeggio::OnDraw( VGDevice & hdc ) const
 
 	hdc.PushPenWidth(7);
 	for (auto r: fPos) {		// for each chord, retrive the chord bounding box
-		float x = r.left - (fLSpace * 1.1) + fDx;
+		float x = r.left - (fLSpace * 1.1f) + fDx;
 		float y = r.top + fLSpace - fDy;
 		float bottom = r.bottom + fLSpace - fDy - 5;
-		if (dir == ARArpeggio::kUp) DrawUpArrow (hdc, x+17, r.top - fLSpace*0.4 - fDy);
+		if (dir == ARArpeggio::kUp) DrawUpArrow (hdc, x+17, r.top - fLSpace*0.4f - fDy);
 		while (y < bottom) {
 			hdc.DrawMusicSymbol (x, y, kArpeggioSymbol);
 			y += fLSpace;
 		}
-		if (dir == ARArpeggio::kDown) DrawDownArrow (hdc, x+13, y - fLSpace*0.7);
+		if (dir == ARArpeggio::kDown) DrawDownArrow (hdc, x+13, y - fLSpace*0.7f);
 	}
 	hdc.PopPenWidth();
 

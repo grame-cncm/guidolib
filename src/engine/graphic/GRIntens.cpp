@@ -103,7 +103,7 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 	const ARIntens* ar = getARIntens();
 	const string font = ar->getFont();
 	const string attr = ar->getTextAttributes();
-	const VGFont* hmyfont = FontManager::FindOrCreateFont( ar->getFSize(), &font, &attr );
+	const VGFont* hmyfont = FontManager::FindOrCreateFont( int(ar->getFSize()), &font, &attr );
 
 	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();
@@ -117,13 +117,13 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 	float x = mPosition.x + ar->getDX()->getValue();
     if (!textafter.empty()) {
 		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignLeft );
-	    hdc.DrawString( mPosition.x + mBoundingBox.right + space, y, textafter.c_str(), textafter.size());
+	    hdc.DrawString( mPosition.x + mBoundingBox.right + space, y, textafter.c_str(), int(textafter.size()));
 	}
 
 	const string& text = ar->getTextBefore();
     if (!text.empty()) {
 		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignRight );
-		hdc.DrawString( x - space/2, y, text.c_str(), text.size());
+		hdc.DrawString( x - space/2, y, text.c_str(), int(text.size()));
 	}
 	
 	if( mColRef ) hdc.SetFontColor( prevTextColor );

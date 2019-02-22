@@ -406,7 +406,7 @@ void GRBowing::graceAnchorPoints( GRBowingContext * context, const ARBowing * ar
 	GRStdNoteHead * righthead = upward ? context->topRightHead : context->bottomRightHead;
 	posRight = righthead ? righthead->getNoteHeadPosition() : endElement->getPosition();
 	float graceoffset = lspace/2 * (upward ? -1 : 1);
-	float noteoffset  = lspace * 0.8 * (upward ? -1 : 1);
+	float noteoffset  = lspace * 0.8f * (upward ? -1 : 1);
 	posLeft.y  += graceoffset;
 	posRight.y += noteoffset;
 	posRight.x -= lspace/4;

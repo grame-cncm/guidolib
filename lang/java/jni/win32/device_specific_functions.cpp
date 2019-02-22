@@ -80,7 +80,7 @@ namespace device_specific {
 		infos.bmiHeader.biBitCount = 32;
 		infos.bmiHeader.biCompression = BI_RGB;
 		infos.bmiHeader.biSizeImage = 0;
-		infos.bmiHeader.biXPelsPerMeter = infos.bmiHeader.biYPelsPerMeter = (100 / 2.54f) * 72;
+		infos.bmiHeader.biXPelsPerMeter = infos.bmiHeader.biYPelsPerMeter = LONG((100 / 2.54f) * 72);
 		infos.bmiHeader.biClrUsed = 0;
 		infos.bmiHeader.biClrImportant = 0;
 		int n = GetDIBits(windev->getHDC(), windev->getBitmap(), 0, h, dstBitmap, &infos, DIB_RGB_COLORS);

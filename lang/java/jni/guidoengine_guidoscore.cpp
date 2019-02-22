@@ -20,7 +20,7 @@
 */
 
 #ifdef WIN32
-#pragma warning (disable: 4800)
+#pragma warning (disable: 4800 4311 4302 4996)
 #endif
 
 #include "guidoengine_guidoscore.h"
