@@ -77,15 +77,15 @@ endif()
 # windows specific part
 #########################################
 if (WIN32)
-	set( DEFS "${DEFS} -DWINVER=0x0400 -DWIN32 -DGUIDOExport")
+	set( DEFS ${DEFS} GUIDOExport)
 	if(MSVC)
-		set( DEFS "${DEFS} -DMSVC" )
+		set( DEFS ${DEFS} MSVC )
 	else()
-		set( DEFS "${DEFS} -DGCC" )
+		set( DEFS ${DEFS} GCC )
 	endif()
 
 	if (${CMAKE_GENERATOR} MATCHES ".*Win64")
-		set( DEFS "${DEFS} -DWIN64" )
+		set( DEFS ${DEFS} WIN64 )
 		set (WIN64 1)
 		set (target GUIDOEngine64)
 		set (statictarget SGUIDOEngine64)
@@ -122,7 +122,7 @@ endif()
 if (MIDIEXPORT)
 	message (STATUS "MIDI export will be generated (requires MidiShareLight) - Use -DMIDIEXPORT=no to change.")
 	set (MSLIGHT_PATH	${ROOT}/src/midisharelight)
-	set (DEFS "${DEFS} -DMIDIEXPORT" )
+	set (DEFS ${DEFS} MIDIEXPORT )
 	
 	set(INCL ${INCL} ${MSLIGHT_PATH})			# add include folders
 	if (WIN32)
@@ -201,7 +201,6 @@ else()
 				FRAMEWORK TRUE
 				FRAMEWORK_VERSION ${GUIDOFWKVERS}
 				PUBLIC_HEADER "${PUBLICHEADERS}"
-				DEFINE_SYMBOL GUIDOLIB_EXPORTS
 				VERSION ${VERSION}
 				SOVERSION ${SOVERS}
 				MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
