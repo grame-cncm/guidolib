@@ -98,6 +98,10 @@ target_link_libraries (${java} ${LINK})
 #######################################
 # install settings
 #######################################
+if (PACK)
+	set (CMAKE_INSTALL_PREFIX .)
+endif()
+
 install ( TARGETS ${java}	
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
     ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release

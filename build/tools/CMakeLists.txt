@@ -68,6 +68,9 @@ foreach(tool ${TOOLS})
 	add_dependencies(${tool} ${target})
 endforeach(tool)
 
+if (PACK)
+	set (CMAKE_INSTALL_PREFIX .)
+endif()
 
 #######################################
 # install setup
