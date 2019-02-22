@@ -290,6 +290,15 @@ install (
 )
 
 ####################################
+# install readme
+if (WIN32 OR APPLE)
+install (
+    FILES     ${ROOT}/misc/README.html DESTINATION ${CMAKE_INSTALL_PREFIX}
+    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+)
+endif()
+
+####################################
 # install Qt applications
 set ( QT ${ROOT}/environments/Qt/apps)
 if (APPLE)
