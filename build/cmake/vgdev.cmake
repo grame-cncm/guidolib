@@ -64,5 +64,5 @@ elseif (UNIX)
 	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "cairo"  OUTPUT_VARIABLE TMP ERROR_VARIABLE TMP )
 	string (STRIP ${TMP} UINCL)
 	set (DEFS "${DEFS} ${UINCL}" )
-
 endif()
+

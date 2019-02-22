@@ -22,7 +22,7 @@ if(NOT APPLE)
 	endif()
 endif()
 
-FIND_PACKAGE(JNI QUIET)
+FIND_PACKAGE(JNI)
 if (NOT JNI_FOUND)
 	message (WARNING "JNI package not found - skip jniGUIDOEngine target")
 	return () 
@@ -63,8 +63,8 @@ elseif(UNIX)
 	set (INCJAVA ${INCJAVA} ${ROOT}/platforms/linux/src)
 	set (SRC ${SRC} "${JNI_PATH}/linux/*.cpp")
 	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "cairo" OUTPUT_VARIABLE TMP ERROR_VARIABLE TMP )
-	string (STRIP ${TMP} UINCL)
-	set ( JAVADEFS ${JAVADEFS} ${UINCL})
+	string (STRIP ${TMP} JAVACAIRO)
+	set ( JAVADEFS "-DFOO ${JAVACAIRO}")		# -DFOO added to prevent what looks like a bug with cmake 3.11.0-rc1
 endif()
 
 
@@ -91,12 +91,13 @@ set_target_properties (${java} PROPERTIES
 	VERSION ${VERSION}
 	SOVERSION ${SOVERS}
 )
-target_compile_definitions (${target} PRIVATE ${JAVADEFS})
+target_compile_definitions (${java} PRIVATE ${JAVADEFS})
 target_include_directories (${java} PRIVATE ${INCJAVA})
 target_link_libraries (${java} ${LINK})
 
 #######################################
 # install settings
+#######################################
 install ( TARGETS ${java}	
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
     ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release

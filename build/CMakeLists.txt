@@ -241,6 +241,7 @@ endif()
 if (NOT IOS)
 #######################################
 # install setup
+#######################################
 message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
 install ( TARGETS ${target}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin CONFIGURATIONS Release
