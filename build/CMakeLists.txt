@@ -313,5 +313,29 @@ install (
     USE_SOURCE_PERMISSIONS
 )
 endif()
-
 endif()
+
+
+
+####################################
+# cpack section
+####################################
+set (CPACK_PACKAGE_NAME   "GuidoLib")
+set (CPACK_PACKAGE_VENDOR "GRAME")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "GuidoLib - a set of tools and libraries for music score rendering, based on the Guido Music Notation language.")
+set (CPACK_PACKAGE_VERSION   ${VERSION})
+set (CPACK_PACKAGE_VERSION_MAJOR   ${VERSION_MAJOR})
+set (CPACK_PACKAGE_VERSION_MINOR   ${VERSION_MINOR})
+set (CPACK_PACKAGE_VERSION_PATCH   ${VERSION_PATCH})
+
+set (CPACK_MONOLITHIC_INSTALL true)
+set (CPACK_RESOURCE_FILE_LICENSE  ${ROOT}/src/license.txt)
+set (CPACK_PACKAGE_INSTALL_DIRECTORY  GuidoLib)
+
+####################################
+# NSIS specific section
+set (CPACK_NSIS_INSTALL_ROOT "C:\\\\Program Files")
+set (CPACK_NSIS_MODIFY_PATH on)
+set (CPACK_NSIS_MUI_ICON "${ROOT}/misc/logo.ico")
+
+include (CPack)
