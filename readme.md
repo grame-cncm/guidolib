@@ -23,7 +23,7 @@ Travis build status:  <a href="https://travis-ci.org/grame-cncm/guidolib"><img s
 
 ## Acknowledgments
 
-The Guido project has been initiated in the 90s by Holger Hoos, Jürgen Kilian and Kai Renz, who designed the Guido Music Notation format and developped the core of the Guido engine. It became an open source project on 2002 at Grame initiative.
+The Guido project has been initiated in the 90s by Holger Hoos, Jürgen Kilian and Kai Renz, who designed the Guido Music Notation format and developed the core of the Guido engine. It became an open source project on 2002 at Grame initiative.
 
 I would like to thank all the people who have been contributing to the project, and especially:
 
