@@ -56,6 +56,9 @@ foreach(tool ${TOOLS})
 	add_executable( ${tool} ${TESTS_PATH}/${tool}.cpp )
 	target_include_directories (${tool} PRIVATE ${INCTOOLS})
 	target_link_libraries( ${tool} ${target})
+	set_target_properties(${tool}  PROPERTIES
+		RUNTIME_OUTPUT_DIRECTORY ${BINDIR}
+		RUNTIME_OUTPUT_DIRECTORY_RELEASE ${BINDIR})
 	add_dependencies(${tool} ${target})
 endforeach(tool)
 
@@ -65,6 +68,9 @@ foreach(tool ${TOOLS})
 	target_include_directories (${tool} PRIVATE ${INCTOOLS})
 	target_compile_definitions (${tool} PRIVATE ${INCDEFS})
 	target_link_libraries( ${tool} ${target})
+	set_target_properties(${tool}  PROPERTIES
+		RUNTIME_OUTPUT_DIRECTORY ${BINDIR}
+		RUNTIME_OUTPUT_DIRECTORY_RELEASE ${BINDIR})
 	add_dependencies(${tool} ${target})
 endforeach(tool)
 

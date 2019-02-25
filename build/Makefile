@@ -2,190 +2,93 @@
 # 
 #
 
-.PHONY : macos ios Qt
-
 TARGET := undefined
 system	:= $(shell uname -s)
 # normalizes MINGW versions
 system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
-	TARGET = mac
+	GENERATOR ?= Xcode
+	PREFIX ?= /usr/local
 else
 ifeq ($(system), MINGW)
-	TARGET = windows
+	GENERATOR ?= "Visual Studio 14 2015 Win64"
 else
-ifeq ($(system), Linux)
-	TARGET = linux
-	MIDIEXPORT ?= no
+	GENERATOR ?= "Unix Makefiles"
+	PREFIX ?= /usr/local
 endif
 endif
+
+BUILDDIR ?= guidodir
+
+#===============================================================
+# platform dependant settings
+#===============================================================
+ifeq ($(GENERATOR), Xcode)
+	PROJ = $(BUILDDIR)/guidolib.xcodeproj
+	JOBS ?= -jobs 4
+endif
+ifneq (,$(findstring Makefile, $(GENERATOR)))
+	PROJ = $(BUILDDIR)/Makefile
+	JOBS ?= -j 4
+endif
+ifneq (,$(findstring "Visual Studio",$(GENERATOR)))
+	PROJ = $(BUILDDIR)/guidolib.sln
+	JOBS ?= /maxcpucount:4
 endif
 
-OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
-MAC  ?= MacOS
-IOS  := ios
+CMAKEOPT ?= -DMIDIEXPORT=yes -Wno-dev
+BUILDOPT ?= --config Release
 
-# try to detect Visual Studio version used
-ifeq ($(TARGET), windows)
- MSVC ?= C:\Program Files (x86)\Microsoft Visual Studio 14.0
- ifneq ($(wildcard "$(MSVC)"), "") 
-  WIN32VS ?= Visual Studio 14 2015
-  WIN64VS ?= $(WIN32VS) Win64
-  endif
- else
- MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
- ifneq ($(wildcard "$(MSVC)"), "") 
-  WIN32VS ?= Visual Studio 10
-  WIN64VS ?= $(WIN32VS) Win64
- endif
-endif
+#===============================================================
+all : $(PROJ)
+	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
+	$(MAKE) java
+	$(MAKE) js
+	$(MAKE) wasm
+	
+$(PROJ) : $(BUILDDIR)
+	cd $(BUILDDIR) && cmake $(CMAKEOPT) .. -G $(GENERATOR)
 
-LINUX := linux
-CMAKEOPT ?= -DMIDIEXPORT=yes
+cmake : $(BUILDDIR)
+	cd $(BUILDDIR) && cmake $(CMAKEOPT) .. 
 
-all :
-	$(MAKE) $(TARGET)
-	$(MAKE) tools
-	$(MAKE) Qt
+$(BUILDDIR) :
+	mkdir $(BUILDDIR)
 
-undefined:
-	$(error System is undefined, not target available)
 
+libs : $(PROJ)
+	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT)
+
+#===============================================================
 help :
-	@echo GUIDOEngine makefile - Targets are :
-	@echo "   all (default): build the GUIDOEngine library,"	
-	@echo "                        the guido tools,"	
-	@echo "                        the Guido Qt library, applications and tools"	
+	@echo "GUIDOEngine makefile - Available targets are:"
+	@echo "   base (default): build the GUIDOEngine libraries and tools,"	
+	@echo "   all          : build the GUIDOEngine library,"	
+	@echo "                        the guido tools,"
+	@echo "                        the Guido Qt library and applications,"	
+	@echo "                        the guido Java library,"
+	@echo "                        the guido Javascript library."
+	@echo "   lib          : build the GUIDOEngine library"	
 	@echo "   tools        : build guido tools"	
 	@echo "   Qt           : build the Guido Qt library, applications and tools"	
 	@echo "   java         : build the jni and java libraries"	
 	@echo "   js           : build the javascript library (requires emscripten)"	
 	@echo "   wasm         : build the web assembly library (requires emscripten)"	
+	@echo "   ios          : build the GUIDOEngine static library for iOS"	
 	@echo "   android      : build the GUIDOEngine static library for Android"	
-	@echo "   install      : install the Guido library and public headers (linux only)"	
+	@echo "   install      : install the Guido library and public headers"
+	@echo "   uninstall    : undo what install did"
 	@echo 
-	@echo "Platform targets to build the GUIDOEngine library are:"	
-	@echo "   macos   : build the GUIDOEgngine framework"	
-	@echo "   mac     : build also ios library"	
-	@echo "   windows : build 32 and 64 bits libraries"	
-	@echo "   linux [MIDIEXPORT=yes/no (default to $(MIDIEXPORT))]"	
-	@echo "the platform targets is automatically evaluated by the default target."	
-	@echo "NOTE: windows targets are based on $(WIN32VS)"
-
-#===============================================================
-# building the library on Mac OS X
-#===============================================================
-.PHONY : macos $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
-
-mac : 
-	$(MAKE) macos
-	$(MAKE) $(IOS)	
-
-macos : $(MAC)/guidolib.xcodeproj GUIDOEngine.framework GUIDOEngine.tgz
-
-GUIDOEngine.framework :  MacOS/Release/GUIDOEngine.framework
-	rm -rf GUIDOEngine.framework
-	cp -R macos/Release/GUIDOEngine.framework .
-
-$(MAC)/Release/GUIDOEngine.framework :
-	xcodebuild -jobs 8 -project $(MAC)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
-
-$(MAC)/guidolib.xcodeproj : CMakeLists.txt
-	[ -d $(MAC) ] || mkdir $(MAC)
-	cd $(MAC) && cmake .. -G Xcode $(CMAKEOPT)
-
-GUIDOEngine.tgz : GUIDOEngine.framework
-	tar czf GUIDOEngine.tgz GUIDOEngine.framework
-
-
-#===============================================================
-# building the library for iOS
-#===============================================================
-$(IOS) : $(IOS)/guidolib.xcodeproj libGUIDOEngine.a
-
-libGUIDOEngine.a : $(IOS)/guidolib.xcodeproj $(IOS)/Release-iphoneos/libGUIDOEngine.a
-	cp $(IOS)/Release-iphoneos/libGUIDOEngine.a .
-
-$(IOS)/Release-iphoneos/libGUIDOEngine.a :
-	xcodebuild -jobs 8 -project $(IOS)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
- 
-ioscmake:
-$(IOS)/guidolib.xcodeproj : CMakeLists.txt
-	[ -d $(IOS) ] || mkdir $(IOS)
-	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DIOS=yes
-
-macclean :
-	rm -rf $(IOS) $(MAC) $(OUT)
-
-iosclean :
-	rm -rf $(IOS) libGUIDOEngine.a
-
-#===============================================================
-# building the library on windows
-#===============================================================
-.PHONY : win32 win64 win32/Release/GUIDOEngine.dll win64/Release/GUIDOEngine64.dll
-
-windows :
-	$(MAKE) win32
-	$(MAKE) win64
-
-win32 : win32/guidolib.sln GUIDOEngine.dll GUIDOEngine.lib 
-
-GUIDOEngine.lib : GUIDOEngine.dll
-
-GUIDOEngine.dll : win32/Release/GUIDOEngine.dll
-	cp win32/Release/GUIDOEngine.dll .
-	cp win32/Release/GUIDOEngine.lib .
-
-win32/Release/GUIDOEngine.dll : win32/guidolib.sln
-	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/guidolib.sln /maxcpucount:4 /p:Configuration=Release"
-
-win32cmake:
-win32/guidolib.sln : CMakeLists.txt
-	[ -d win32 ] || mkdir win32
-	cd win32 && cmake .. -G "$(WIN32VS)" $(CMAKEOPT)
-
-
-win64 : win64/guidolib.sln GUIDOEngine64.dll GUIDOEngine64.lib 
-
-GUIDOEngine64.lib : GUIDOEngine64.dll
-
-GUIDOEngine64.dll : win64/Release/GUIDOEngine64.dll
-	cp win64/Release/GUIDOEngine64.dll .
-	cp win64/Release/GUIDOEngine64.lib .
-
-win64/Release/GUIDOEngine64.dll : win64/guidolib.sln
-	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidolib.sln /maxcpucount:4 /p:Configuration=Release"
-
-win64cmake:
-win64/guidolib.sln : CMakeLists.txt
-	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G "$(WIN64VS)" $(CMAKEOPT) -DMIDIEXPORT=yes
-
-winclean:
-	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
-
-#===============================================================
-# building the library on linux
-#===============================================================
-.PHONY : $(LINUX) libGUIDOEngine.so
-
-linux : libGUIDOEngine.so
-
-libGUIDOEngine.so :  $(LINUX)/libGUIDOEngine.so
-	rm -rf GUIDOEngine*.so*
-	$(MAKE) -C $(LINUX)
-	cp -R $(LINUX)/libGUIDOEngine*.so* .
-
-$(LINUX)/libGUIDOEngine.so : $(LINUX)/Makefile 
-	$(MAKE) -C $(LINUX)
-	
-$(LINUX)/Makefile : CMakeLists.txt
-	[ -d $(LINUX) ] || mkdir $(LINUX)
-	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=$(MIDIEXPORT)
-
-linuxclean:
-	rm -rf $(LINUX)
+	@echo "Options:"
+	@echo "   BUILDDIR     : the output folder (currently $(BUILDDIR))"
+	@echo "   GENERATOR    : a cmake generator (currently $(GENERATOR))"
+	@echo "   CMAKEOPT     : options passed to cmake for project generation (currently $(CMAKEOPT))"
+	@echo "   BUILDOPT     : options passed to cmake for building (currently $(BUILDOPT))"
+	@echo 
+	@echo "Installation options:"
+	@echo " 'DESTDIR'    : the destination directory,"
+	@echo " 'PREFIX'     : the destination prefix,"
+	@echo "  Note that when using a relative path, it is relative to BUILDDIR ($(BUILDDIR))"
 
 #===============================================================
 # building the javascript engine
@@ -195,35 +98,30 @@ js:
 wasm:
 	$(MAKE) -C ../lang/javascript WASM=yes
 
-
 #===============================================================
 # clean the project
 #===============================================================
 clean :
-	$(MAKE) macclean
-	$(MAKE) winclean
-	$(MAKE) linuxclean
-	$(MAKE) -C ../src/tools/build clean
+	rm -rf $(BUILDDIR)
 	$(MAKE) -C ../environments/Qt clean
-	$(MAKE) -C ../lang/java/build clean
 
 #===============================================================
-# building the Guido tools
+# building the Guido library
 #===============================================================
-tools :
-	$(MAKE) -C ../src/tools/build
+lib :
+	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
+
+#===============================================================
+# building the jni and java library
+#===============================================================
+java :
+	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) --target jniGUIDOEngine -- $(JOBS)
 
 #===============================================================
 # building the Qt resources
 #===============================================================
 Qt :
 	$(MAKE) -C ../environments/Qt
-
-#===============================================================
-# building the jni and java library
-#===============================================================
-java :
-	$(MAKE) -C ../lang/java/build
 
 #===============================================================
 # building the library for Android
@@ -234,14 +132,13 @@ android :
 #===============================================================
 # install target - linux only
 #===============================================================
-DESTDIR ?= /usr
+DESTDIR ?=
 install: 
-	[ $(TARGET) = "linux" ] && $(MAKE) linuxinstall
+	cd $(BUILDDIR) && cmake .. -DCMAKE_INSTALL_PREFIX=$(PREFIX) 
+	cmake --build $(BUILDDIR)  $(BUILDOPT) --target install -- $(JOBS)
 
-linuxinstall:
-	$(MAKE) -C linux install
-	$(MAKE) -C ../src/tools/build linuxinstall
-	$(MAKE) -C ../environments/Qt install
-	mkdir -p $(DESTDIR)$(PREFIX)/share/fonts/guido
-	install -m 644 ../src/guido2.ttf $(DESTDIR)$(PREFIX)/share/fonts/guido/guido2.ttf 
+installLog := $(BUILDDIR)/install_manifest.txt
+uninstall: installedfiles = $(shell cat $(installLog))
+uninstall: $(installLog)
+	rm -f $(installedfiles) $(installLog)
 

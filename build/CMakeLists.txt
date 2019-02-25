@@ -35,6 +35,11 @@ option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
 option ( GL         "Links to opengl device" off)
 
+#######################################
+# Output folders 
+set (BINDIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set (LIBDIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
 
 set (CMAKE_CXX_STANDARD 11)
 
@@ -188,23 +193,26 @@ endif()
 
 #######################################
 # describe targets
-set (targets ${target})
 if (IOS)
 	add_library(${target} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
 	set_target_properties ( ${target} PROPERTIES 
-				XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${IOS_DEPLOYMENT_TARGET} )
+			ARCHIVE_OUTPUT_DIRECTORY  ${LIBDIR}
+			XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${IOS_DEPLOYMENT_TARGET} )
 
 else()
 
 	add_library(${target} SHARED ${SRC} ${HEADERS} ${PUBLICHEADERS})
 	set_target_properties (${target} PROPERTIES
-				FRAMEWORK TRUE
-				FRAMEWORK_VERSION ${GUIDOFWKVERS}
-				PUBLIC_HEADER "${PUBLICHEADERS}"
-				VERSION ${VERSION}
-				SOVERSION ${SOVERS}
-				MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
-				MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION} )
+			ARCHIVE_OUTPUT_DIRECTORY  ${LIBDIR}
+			LIBRARY_OUTPUT_DIRECTORY ${LIBDIR}
+			LIBRARY_OUTPUT_DIRECTORY_RELEASE ${LIBDIR}
+			FRAMEWORK TRUE
+			FRAMEWORK_VERSION ${GUIDOFWKVERS}
+			PUBLIC_HEADER "${PUBLICHEADERS}"
+			VERSION ${VERSION}
+			SOVERSION ${SOVERS}
+			MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
+			MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION} )
 endif()
 
 if (STATICLIB AND NOT IOS)
@@ -212,7 +220,9 @@ if (STATICLIB AND NOT IOS)
 	add_library( ${statictarget} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
 	target_compile_definitions (${statictarget} PRIVATE ${DEFS})
 	target_include_directories (${statictarget} PRIVATE ${INCDIRS})
-	set (targets ${targets} ${statictarget})
+	set_target_properties(statictarget PROPERTIES 
+		ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR}
+		LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
 else ()
 	message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
 endif ()
@@ -285,7 +295,7 @@ install (
 # install guido font
 file (GLOB PDF RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${DOC}/*.pdf  ${DOC}/refard/*.pdf ${DOC}/refard/latex/*.pdf )
 install (
-    FILES     ${ROOT}/src/guido2.ttf  ${ROOT}/src/guido2.svg  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib
+    FILES     ${ROOT}/src/guido2.ttf  ${ROOT}/src/guido2.svg  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/fonts/guido/guido2.ttf
     PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
 )
 
@@ -293,7 +303,7 @@ install (
 # install readme
 if (WIN32 OR APPLE)
 install (
-    FILES     ${ROOT}/misc/README.html DESTINATION ${CMAKE_INSTALL_PREFIX}
+    FILES     ${ROOT}/misc/README.html ${ROOT}/changelog.txt DESTINATION ${CMAKE_INSTALL_PREFIX}
     PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
 )
 endif()
