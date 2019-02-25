@@ -11,41 +11,30 @@ system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MIN
 ifeq ($(system), Darwin)
 	GENERATOR ?= Xcode
 	PREFIX ?= /usr/local
+	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
+	JOBS ?= -jobs 4
 else
 ifeq ($(system), MINGW)
 	GENERATOR ?= "Visual Studio 14 2015 Win64"
+	PROJ ?= $(BUILDDIR)/guidolib.sln
+	JOBS ?= /maxcpucount:4
 else
 	GENERATOR ?= "Unix Makefiles"
 	PREFIX ?= /usr/local
+	PROJ ?= $(BUILDDIR)/Makefile
+	JOBS ?= -j 4
 endif
 endif
 
 BUILDDIR ?= guidodir
-.PHONY: ios $(BUILDDIR)
-
-#===============================================================
-# platform dependant settings
-#===============================================================
-ifeq ($(GENERATOR), Xcode)
-	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
-	JOBS ?= -jobs 4
-endif
-ifneq (,$(findstring Makefile, $(GENERATOR)))
-	PROJ ?= $(BUILDDIR)/Makefile
-	JOBS ?= -j 4
-endif
-ifneq (,$(findstring "Visual Studio",$(GENERATOR)))
-	PROJ ?= $(BUILDDIR)/guidolib.sln
-	JOBS ?= /maxcpucount:4
-endif
 
 CMAKEOPT ?= -DMIDIEXPORT=yes -Wno-dev
 BUILDOPT ?= --config Release
 
 #===============================================================
 all : $(PROJ)
-	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
-	$(MAKE) java
+	$(MAKE) basic
+	$(MAKE) Qt
 	$(MAKE) js
 	$(MAKE) wasm
 	
@@ -58,9 +47,9 @@ cmake : $(BUILDDIR)
 $(BUILDDIR) :
 	mkdir $(BUILDDIR)
 
+basic : $(PROJ)
+	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
 
-libs : $(PROJ)
-	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT)
 
 #===============================================================
 help :
@@ -96,10 +85,13 @@ help :
 #===============================================================
 # building the javascript engine
 #===============================================================
-js:
+js: emcc
 	$(MAKE) -C ../lang/javascript
-wasm:
+wasm: emcc
 	$(MAKE) -C ../lang/javascript WASM=yes
+
+emcc:
+	which emcc || echo emcc compiler must be available crom the command line
 
 #===============================================================
 # clean the project
