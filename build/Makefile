@@ -27,9 +27,10 @@ endif
 endif
 
 BUILDDIR ?= guidodir
-
 CMAKEOPT ?= -DMIDIEXPORT=yes -Wno-dev
 BUILDOPT ?= --config Release
+
+.PHONY: lib
 
 #===============================================================
 all : $(PROJ)
