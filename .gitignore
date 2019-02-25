@@ -55,4 +55,8 @@ lang/java/svgSalamander.jar
 environments/Qt/package
 environments/package
 src/Guido2.sfd
-
+build/guidodir
+build/bin
+build/lib
+build/iosdir
+build/GuidoLib*

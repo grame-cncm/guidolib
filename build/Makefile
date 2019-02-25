@@ -1,8 +1,10 @@
 #
-# 
+# Guido Engine Makefile
+#
 #
 
-TARGET := undefined
+VERSION = 1.6.6
+
 system	:= $(shell uname -s)
 # normalizes MINGW versions
 system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MINGW || echo $(system))
@@ -19,20 +21,21 @@ endif
 endif
 
 BUILDDIR ?= guidodir
+.PHONY: ios $(BUILDDIR)
 
 #===============================================================
 # platform dependant settings
 #===============================================================
 ifeq ($(GENERATOR), Xcode)
-	PROJ = $(BUILDDIR)/guidolib.xcodeproj
+	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
 	JOBS ?= -jobs 4
 endif
 ifneq (,$(findstring Makefile, $(GENERATOR)))
-	PROJ = $(BUILDDIR)/Makefile
+	PROJ ?= $(BUILDDIR)/Makefile
 	JOBS ?= -j 4
 endif
 ifneq (,$(findstring "Visual Studio",$(GENERATOR)))
-	PROJ = $(BUILDDIR)/guidolib.sln
+	PROJ ?= $(BUILDDIR)/guidolib.sln
 	JOBS ?= /maxcpucount:4
 endif
 
@@ -130,7 +133,17 @@ android :
 	$(MAKE) -C ../platforms/android/
 
 #===============================================================
-# install target - linux only
+# building the library for iOS
+#===============================================================
+ios : iosdir/guidolib.xcodeproj
+	cd iosdir && cmake --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
+
+iosdir/guidolib.xcodeproj:
+	@[ -d iosdir ] || mkdir iosdir
+	cd iosdir && cmake -DIOS=yes $(CMAKEOPT) .. -G Xcode
+
+#===============================================================
+# install targets
 #===============================================================
 DESTDIR ?=
 install: 
@@ -141,4 +154,12 @@ installLog := $(BUILDDIR)/install_manifest.txt
 uninstall: installedfiles = $(shell cat $(installLog))
 uninstall: $(installLog)
 	rm -f $(installedfiles) $(installLog)
+
+#===============================================================
+# packaging
+#===============================================================
+package: PACK:=GuidoLib-$(VERSION)
+package: 
+	make install PREFIX=../$(PACK)
+	hdiutil create $(PACK).dmg -fs HFS+ -srcfolder $(PACK) -format UDBZ -ov
 
