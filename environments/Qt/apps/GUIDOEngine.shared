@@ -17,26 +17,24 @@ ios {
 win32 {
 	contains(QMAKE_HOST.arch, x86) {
 	QMAKE_LFLAGS *= /MACHINE:X86
-	!DebugBuild { GUIDO = $$ROOT/build/win32/release/GUIDOEngine.lib }
-	else		{ GUIDO = $$ROOT/build/win32/debug/GUIDOEngineD.lib } 
+	GUIDO = $$ROOT/build/lib/GUIDOEngine.lib
 	}
 	contains(QMAKE_HOST.arch, x86_64) {
 	QMAKE_LFLAGS *= /MACHINE:X64
-	!DebugBuild { GUIDO = $$ROOT/build/win64/release/GUIDOEngine64.lib }
-	else		{ GUIDO = $$ROOT/build/win64/debug/GUIDOEngine64D.lib }
+	GUIDO = $$ROOT/build/win64/release/GUIDOEngine64.lib 
 	}
 }
 
 # GUIDOEngine library link for each platform
 !DebugBuild {
-	macx:LIBS += -F$$ROOT/build -framework GUIDOEngine
-	ios:LIBS += -L$$ROOT/build/iOS/Release-iphoneos -lGUIDOEngine
+	macx:LIBS += -F$$ROOT/build/lib -framework GUIDOEngine
+	ios:LIBS += -L$$ROOT/build/lib -lGUIDOEngine
 } else {
-	macx:LIBS += -F$$ROOT/build/MacOS/Debug -framework GUIDOEngine
-	ios:LIBS += -L$$ROOT/build/iOS/Debug-iphoneos -lGUIDOEngine
+	macx:LIBS += -F$$ROOT/build/lib/Debug -framework GUIDOEngine
+	ios:LIBS += -L$$ROOT/build/lib/Debug-iphoneos -lGUIDOEngine
 }
 
-unix:!macx:!ios:LIBS += -L$$ROOT/build/linux -lGUIDOEngine
+unix:!macx:!ios:LIBS += -L$$ROOT/build/lib -lGUIDOEngine
 win32:LIBS += $$GUIDO
 
 INCLUDEPATH += $$ROOT/src/engine/include 
