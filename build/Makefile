@@ -51,6 +51,11 @@ $(BUILDDIR) :
 basic : $(PROJ)
 	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
 
+travis : CMAKEOPT := -DMIDIEXPORT=no -Wno-dev
+travis : $(PROJ)
+	$(MAKE) basic
+	$(MAKE) Qt
+
 
 #===============================================================
 help :

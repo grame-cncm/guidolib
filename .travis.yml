@@ -11,4 +11,4 @@ branches:
   - dev
   - master
 
-script: make -C build CMAKEOPT="-DMIDIEXPORT=no"
+script: make -C build travis 
