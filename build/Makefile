@@ -53,7 +53,7 @@ basic : $(PROJ)
 
 travis : CMAKEOPT := -DMIDIEXPORT=no -Wno-dev
 travis : $(PROJ)
-	$(MAKE) basic
+	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
 	$(MAKE) Qt
 
 
