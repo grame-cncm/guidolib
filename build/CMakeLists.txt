@@ -313,6 +313,17 @@ install (
 endif()
 
 ####################################
+# install VS redistributables
+if (WIN32)
+set (VS "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT")
+#set (VS "${ROOT}/misc")
+install (
+    FILES  "${VS}/msvcp140.dll" "${VS}/vcruntime140.dll" DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+)
+endif()
+
+####################################
 # install Qt applications
 set ( QT ${ROOT}/environments/Qt/apps)
 if (APPLE)
@@ -364,5 +375,6 @@ set (CPACK_PACKAGE_INSTALL_DIRECTORY  GuidoLib)
 set (CPACK_NSIS_INSTALL_ROOT "C:\\\\Program Files")
 set (CPACK_NSIS_MODIFY_PATH on)
 set (CPACK_NSIS_MUI_ICON "${ROOT}/misc/logo.ico")
+set (CPACK_NSIS_EXTRA_INSTALL_COMMANDS  " ExecWait ./bin/vcredist_x64.exe")
 
 include (CPack)
