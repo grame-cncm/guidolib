@@ -48,6 +48,17 @@ clean:
 	rm -f $(objects) $(target)
 
 ##############################################################
+# publishing to npm
+##############################################################
+npmdir := npm
+npm: $(npmdir)/$(library).js
+	npm publish $(npmdir) --access public
+	
+$(npmdir)/$(library).js : $(library).js
+	cp $(library).js $(npmdir)/$(library).js
+
+
+##############################################################
 # building the library as web assembly
 ##############################################################
 $(library).wasm.js : $(objects)
