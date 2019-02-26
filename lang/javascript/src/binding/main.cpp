@@ -157,6 +157,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("inches2Unit", &GuidoEngineAdapter::inches2Unit)
 			.function("resizePageToMusic", &GuidoEngineAdapter::resizePageToMusic, allow_raw_pointers())
 			.function("getVersion", &GuidoEngineAdapter::getVersion)
+			.function("getVersionStr", &GuidoEngineAdapter::getVersionStr)
 			.function("checkVersionNums", &GuidoEngineAdapter::checkVersionNums)
 			.function("getLineSpace", &GuidoEngineAdapter::getLineSpace)
 			.function("markVoice", &GuidoEngineAdapter::markVoice, allow_raw_pointers())

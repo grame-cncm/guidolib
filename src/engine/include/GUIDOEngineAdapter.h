@@ -438,7 +438,8 @@ class_export GuidoEngineAdapter
 
 				\return a GuidoVersion structure.
 			*/
-			GuidoVersion getVersion();
+			GuidoVersion 	getVersion();
+			std::string 	getVersionStr();
 
 			/**	\brief Checks a required library version number.
 

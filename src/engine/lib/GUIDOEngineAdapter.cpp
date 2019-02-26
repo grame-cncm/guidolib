@@ -227,6 +227,10 @@ GuidoVersion GuidoEngineAdapter::getVersion()
 	version.str = ::GuidoGetVersionStr();
 	return version;
 }
+string 	GuidoEngineAdapter::getVersionStr()
+{
+	return ::GuidoGetVersionStr();
+}
 
 GuidoErrCode GuidoEngineAdapter::checkVersionNums(int major, int minor, int sub)
 {
