@@ -18,13 +18,13 @@
 class TimesFont : public StaticFont
 {
     public:
-    	enum { kTimesFontSize=200, kTimesFontHeight=242 };
+    	enum { kTimesFontSize=200, kTimesFontHeight=200 };
 	
         /*!
 		 *  \brief Construct times font with precalculated metrics.
 		 *
          */
-			     TimesFont(const char * name, int size, int properties) : StaticFont(name, size, properties) {}
+			     TimesFont(const char * name, int size, int properties) : StaticFont(name, size, properties) { initialize(); }
 		virtual ~TimesFont() {}
 
     protected:
