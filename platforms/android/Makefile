@@ -7,6 +7,8 @@ ifneq ($(ABI),)
 	APP_ABI = APP_ABI=$(ABI)
 endif
 
+ROOT := ../..
+
 all: android
 
 help:
@@ -20,7 +22,7 @@ help:
 #===============================================================
 android :
 	ndk-build -C guido-engine-android -j 4 $(APP_ABI)
-	-[ $(ABI) ] && cp guido-engine-android/libs/$(ABI)/libGUIDOEngine.so libGUIDOEngine.$(ABI).so
+	-[ $(ABI) ] && cp guido-engine-android/libs/$(ABI)/libGUIDOEngine.so libGUIDOEngine.$(ABI).so && cp libGUIDOEngine.$(ABI).so $(ROOT)/build/lib
 
 test :
 	-[ $(ABI) != all ] && echo libGUIDOEngine.$(ABI).so || true
