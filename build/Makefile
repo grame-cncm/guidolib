@@ -139,7 +139,7 @@ ios : iosdir/guidolib.xcodeproj
 
 iosdir/guidolib.xcodeproj:
 	@[ -d iosdir ] || mkdir iosdir
-	cd iosdir && cmake -DIOS=yes $(CMAKEOPT) .. -G Xcode
+	cd iosdir && cmake -DIOS=yes -DMIDIEXPORT=no .. -G Xcode
 
 #===============================================================
 # install targets
