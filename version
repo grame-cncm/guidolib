@@ -23,7 +23,7 @@ else
 fi
 
 
-echo -n $VERSION > version.txt
+/bin/echo -n $VERSION > version.txt
 
 CMAKE=$ROOT/build/CMakeLists.txt
 echo " updating $CMAKE"
