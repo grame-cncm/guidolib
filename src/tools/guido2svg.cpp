@@ -37,6 +37,7 @@ static void usage (char* name)
 	cerr << "usage: " << tool << " [options] <gmn file>" << endl;
 	cerr << "       convert GMN code to svg" << endl;
 	cerr << "       options:" << endl;
+	cerr << "           	-o <file>             : output file name" << endl;
 	cerr << "           	-f --fontfile <file>  : include the font taken from file" << endl;
 	cerr << "           	   --font     <name>  : use the 'name' as musical font" << endl;
 	cerr << "           	-p pagenum            : an optional page number (default is 1)" << endl;
@@ -150,7 +151,7 @@ static void check (int argc, char *argv[])
 	for (int i = 1; i < argc; i++) {
 		const char* ptr = argv[i];
 		if (*ptr++ == '-') {
-			if ((*ptr != 'p') && (*ptr != 'f')
+			if ((*ptr != 'p') && (*ptr != 'f') && (*ptr != 'o')
 				&& strcmp(ptr, "-fontfile") && strcmp(ptr, "-font")
 				&& strcmp(ptr, "staffmap") && strcmp(ptr, "voicemap")
 				&& strcmp(ptr, "systemmap") && strcmp(ptr, "checkLyrics")
@@ -209,6 +210,7 @@ int main(int argc, char **argv)
 	}
 
 	const char* musicfont 	 = getOption (argc, argv, "--font", 0);
+	const char* outfile = getOption (argc, argv, "-o", 0);
 	const char* fontfile = getOption (argc, argv, "-f", 0);
 	if (!fontfile) fontfile = getOption (argc, argv, "--fontfile", 0);
 	const char* filename = getFile (argc, argv);
@@ -274,18 +276,20 @@ int main(int argc, char **argv)
     /*************/
 
 	bool viewPort = getBoolOption(argc, argv, "-viewport");
+	if (viewPort && mappingMode) cerr << "Warning: viewport not supported with mappings" << endl;
+
+	ostream* out;
+	if (outfile)
+		out = new ofstream (outfile);
+	else out = &cout;
 
 	VGDevice *svg = 0;
-	if (mappingMode) {
-		svg = sys.CreateDisplayDevice(cout, mappingMode);
-		if (viewPort) cerr << "Warning: viewport not supported with mappings" << endl;
-	}
+	if (mappingMode)
+		svg = sys.CreateDisplayDevice(*out, mappingMode);
 	else
-		svg = new SVGDevice(cout, &sys, fontfile, viewPort);
+		svg = new SVGDevice(*out, &sys, fontfile, viewPort);
 	
-
-//	err = GuidoGR2SVG (grh, page, cout, false, fontfile, mappingMode);
-	err = Draw( svg, grh, page, cout);
+	err = Draw( svg, grh, page, *out);
     if (err != guidoNoErr)
         error(err);
 
