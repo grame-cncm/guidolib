@@ -33,6 +33,9 @@ BUILDOPT ?= --config Release
 .PHONY: lib
 
 #===============================================================
+basic : $(PROJ)
+	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
+
 all : $(PROJ)
 	$(MAKE) basic
 	$(MAKE) Qt
@@ -48,9 +51,6 @@ cmake : $(BUILDDIR)
 $(BUILDDIR) :
 	mkdir $(BUILDDIR)
 
-basic : $(PROJ)
-	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
-
 travis : CMAKEOPT := -DMIDIEXPORT=no -Wno-dev
 travis : $(PROJ)
 	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
@@ -60,13 +60,12 @@ travis : $(PROJ)
 #===============================================================
 help :
 	@echo "GUIDOEngine makefile - Available targets are:"
-	@echo "   base (default): build the GUIDOEngine libraries and tools,"	
+	@echo "   basic (default): build the GUIDOEngine library"	
+	@echo "                        the guido tools,"
+	@echo "                        the guido Java library (when JDK is present),"
 	@echo "   all          : build the basic target,"	
 	@echo "                        the Guido Qt library and applications,"	
 	@echo "                        the guido Javascript library."
-	@echo "   basic        : build the GUIDOEngine library"	
-	@echo "                        the guido tools,"
-	@echo "                        the guido Java library (when JDK is present),"
 	@echo "   lib          : build the GUIDOEngine library"	
 	@echo "   tools        : build guido tools"	
 	@echo "   Qt           : build the Guido Qt library, applications and tools"	
