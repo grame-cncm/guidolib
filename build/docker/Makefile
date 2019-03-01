@@ -14,5 +14,9 @@ list:
 run:
 	docker run -t -i guidolib:$(VERSION) bash
 
+rmstopped:
+	@echo remove all stopped containers
+	docker rm $(shell docker ps -a -q)
+
 clean:
 	docker image rm -f guidolib:$(VERSION)

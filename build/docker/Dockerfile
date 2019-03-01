@@ -1,24 +1,19 @@
 FROM ubuntu:bionic
 
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
 RUN \
   apt-get update && \
-  apt-get install -y git cmake g++-8 qtbase5-dev qt5-default qt5-qmake libcairo2-dev
+  apt-get install -y git cmake g++-8 qtbase5-dev qt5-default qt5-qmake libcairo2-dev openjdk-8-jdk
 
-RUN \
-  mkdir src && cd src && \
-  git clone https://github.com/grame-cncm/midishare.git && \
-  git clone https://github.com/grame-cncm/guidolib.git
+RUN mkdir grame
+WORKDIR /grame
 
-RUN \
-  cd src/midishare/midisharelight/cmake && \
-  cmake . && make -j 4 && make install && \
-  echo "==========================================" && \
-  echo "=======         midishare done        ====" && \
-  echo "=========================================="
+RUN git clone --single-branch -b dev --depth 1 https://github.com/grame-cncm/midishare.git
+RUN git clone --single-branch -b dev --depth 1 https://github.com/grame-cncm/guidolib.git
 
-RUN \
-  cd src/guidolib/build && \
-  make -j 4 && make install && \
-  echo "==========================================" && \
-  echo "=======         guidolib done         ====" && \
-  echo "=========================================="
+WORKDIR /grame/midishare/midisharelight/cmake
+RUN  cmake . && make -j 4 && make install
+
+WORKDIR /grame/guidolib/build
+RUN make basic -j 4 && make install
