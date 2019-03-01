@@ -1,7 +1,7 @@
 
 .PHONY : doc
 
-VERSION := 1.6.7
+VERSION := $(shell cat ../version.txt)
 DOCVERS := 1.54
 DEST    := .
 

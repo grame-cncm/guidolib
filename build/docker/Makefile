@@ -2,7 +2,7 @@
 #
 #
 
-VERSION := 1.6.7
+VERSION := $(shell cat ../../version.txt)
 NAME    := guidolib:$(VERSION)
 
 all:

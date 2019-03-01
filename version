@@ -7,39 +7,48 @@
 if [ $# -ne 1 ]
 then
 	echo "usage: version version_num"
-	echo "       version_num format: n.n"
+	echo "       version_num format: n.n.n"
 	exit 1
 fi
 
 ROOT=.
 VERSION=$1
 
+if [ -d validate ] 
+then
+	echo "moving version number to $VERSION"
+else
+	echo "### This script must be called from the repository root"; 
+	exit 1
+fi
 
-echo "moving version number to $VERSION"
+
+echo -n $VERSION > version.txt
 
 CMAKE=$ROOT/build/CMakeLists.txt
 echo " updating $CMAKE"
-open -t $CMAKE
+sed "s/\(VERSION \)[0-9]*\.[0-9]*\.[0-9]*/\1$VERSION/" $CMAKE > TMP$$
+mv -f TMP$$ $CMAKE
 
-DOC=$ROOT/doc/doxygen/Makefile
-echo " updating $DOC"
-sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $DOC > TMP$$
-mv -f TMP$$ $DOC
+#DOC=$ROOT/doc/doxygen/Makefile
+#echo " updating $DOC"
+#sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $DOC > TMP$$
+#mv -f TMP$$ $DOC
 
-PKG=$ROOT/package/Makefile
-echo " updating $PKG"
-sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
-mv -f TMP$$ $PKG
+#PKG=$ROOT/package/Makefile
+#echo " updating $PKG"
+#sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
+#mv -f TMP$$ $PKG
 
-PKG=$ROOT/lang/javascript/Makefile
-echo " updating $PKG"
-sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
-mv -f TMP$$ $PKG
+#PKG=$ROOT/lang/javascript/Makefile
+#echo " updating $PKG"
+#sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
+#mv -f TMP$$ $PKG
 
-PKG=$ROOT/lang/javascript/package/Makefile
-echo " updating $PKG"
-sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
-mv -f TMP$$ $PKG
+#PKG=$ROOT/lang/javascript/package/Makefile
+#echo " updating $PKG"
+#sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
+#mv -f TMP$$ $PKG
 
 echo "==> change manually GUIDOEngine.cpp and rc files in win32 folder"
 open -t platforms/win32/GUIDOEngine.rc src/engine/lib/GUIDOEngine.cpp
