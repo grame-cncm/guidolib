@@ -14,6 +14,12 @@ WORKDIR /grame/midishare/midisharelight/cmake
 RUN  cmake . && make -j 4 && make install
 
 WORKDIR /grame
+RUN git clone --single-branch -b dev --depth 1 https://github.com/grame-cncm/guidoar.git
+WORKDIR /grame/guidoar/build
+RUN make -j 4
+RUN make install
+
+WORKDIR /grame
 RUN git clone --single-branch -b dev --depth 1 https://github.com/grame-cncm/guidolib.git
 WORKDIR /grame/guidolib/build
 RUN make basic -j 4
