@@ -66,7 +66,7 @@ class_export GFontOSX : public VGFont
 	
 		// - OSX specific services ---------------------------------------
 		/// Returns the symbol corresponding to the input index.
-		CGGlyph			GetGlyph( unsigned int inSymbolID )		{ return inSymbolID; }
+    CGGlyph            GetGlyph( unsigned int inSymbolID );
 	protected:
 		std::string		mName;
 		int				mSize;
