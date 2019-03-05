@@ -588,7 +588,7 @@ void GDeviceOSX::DrawMusicSymbol( float x, float y, unsigned int inSymbolID )
 		float w = 0;
 		float h = 0;
 		float baseline = 0;
-		mCurrMusicFont->GetExtent( (char)inSymbolID, &w, &h, this );
+        mCurrMusicFont->GetExtent( inSymbolID, &w, &h, this );
 		if( mTextAlign & kAlignBottom )	// Vertical align
 			y -= baseline; 
 		else if( mTextAlign & kAlignTop )
