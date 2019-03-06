@@ -279,9 +279,11 @@ void GDeviceOSX::SetMusicFont( const VGFont * inObj )
 	// a well-known font. If we did not, musical symbols may be displayed instead of 
 	// plain-text.
 
+#ifndef JG_CTFONT_DEF
 //	::CGContextSelectFont(mContext, "Helvetica", inObj->GetSize(), kCGEncodingMacRoman  );	// ok
 	::CGContextSelectFont(mContext, inObj->GetName(), inObj->GetSize(), kCGEncodingFontSpecific );// ok
-	
+#endif
+
 	mCurrMusicFont = inObj;
 	
 }
@@ -295,7 +297,9 @@ void GDeviceOSX::SetTextFont( const VGFont* inObj )
 
 //	::CGContextSelectFont(mContext, "Helvetica", inObj->GetSize(), kCGEncodingMacRoman);	// ok
 	if (inObj) {
+#ifndef JG_CTFONT_DEF
 		::CGContextSelectFont(mContext, inObj->GetName(), inObj->GetSize(), kCGEncodingMacRoman);// ok
+#endif
 		mCurrTextFont = inObj;
 	}
 }
@@ -600,7 +604,15 @@ void GDeviceOSX::DrawMusicSymbol( float x, float y, unsigned int inSymbolID )
 			x -= (w * float(0.5));
 	}
 
+#ifdef JG_CTFONT_DEF
+    // Uncommented code does not work. Core text uses different coordinates.
+    // CGPoint point = CGPointMake(x, y);
+    // CTFontDrawGlyphs(macFont->fCTFont, &glyph, &point, 1, mContext);
+    ::CGContextSetFont(mContext, macFont->fCGFont);
+    ::CGContextSetFontSize(mContext, macFont->GetSize());
+#else
 	::CGContextSelectFont(mContext, mCurrMusicFont->GetName(), mCurrMusicFont->GetSize(), kCGEncodingMacRoman  );// ok
+#endif
 
 	// - Draw text
 	PushFillColor( VGColor(mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue, mTextColor.mAlpha) );
@@ -667,6 +679,7 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
 //	PopPen(); 
 }
 #else		// defined IOS
+#ifndef JG_CTFONT_DEF
 static std::string fontName2iOSName(const string name, int properties)
 {
 	string iosname = "TimesNewRomanPSMT";
@@ -707,6 +720,7 @@ static std::string fontName2iOSName(const string name, int properties)
     }
     return iosname;
 }
+#endif
 
 void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
 {
