@@ -17,7 +17,6 @@
 GFontOSX::GFontOSX(const char * faceName, int size, int properties) 
 			:  mName(faceName), mSize(size), mFontProp(properties)
 {
-#ifdef JG_CTFONT_DEF
 	fCTName = CFStringCreateWithCString(0, faceName, kCFStringEncodingUTF8);
 	fCTFont = CTFontCreateWithName( fCTName, mSize, 0);
     fCGFont = CTFontCopyGraphicsFont(fCTFont, NULL);
@@ -25,18 +24,15 @@ GFontOSX::GFontOSX(const char * faceName, int size, int properties)
     CFStringRef keys[1] = { kCTFontAttributeName };
     CTFontRef values[1] = { fCTFont };
     fCTFontDictionary = CFDictionaryCreate(NULL, (const void **) keys, (const void **) values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-#endif
 }
 
 // --------------------------------------------------------------
 GFontOSX::~GFontOSX()
 {
-#ifdef JG_CTFONT_DEF
     CFRelease (fCTFontDictionary);
     CFRelease (fCGFont);
 	CFRelease (fCTFont);
 	CFRelease (fCTName);
-#endif
 }
 
 CGGlyph  GFontOSX::GetGlyph( unsigned int inSymbolID ) {
@@ -62,7 +58,6 @@ void GFontOSX::GetExtent( const char * s, int inCharCount, float * outWidth,
 	if( inCharCount < 0 )
 		inCharCount = (int)strlen( s );
 
-#ifdef JG_CTFONT_TEXT
     CFStringRef string = CFStringCreateWithBytes(NULL, (const UInt8 *)s, inCharCount, kCFStringEncodingUTF8, false);
     CFIndex length = CFStringGetLength(string);
     CFRange range = CFRangeMake(0, length);
@@ -79,15 +74,6 @@ void GFontOSX::GetExtent( const char * s, int inCharCount, float * outWidth,
     CFRelease(fsetter);
     CFRelease(attrString);
     CFRelease(string);
-
-#else
-	float fooBaseLine;
-	CGContextRef dc = (CGContextRef)( GetContext(context) );
-	::CGContextSaveGState( dc );
-	::CGContextSelectFont( dc, GetName(), GetSize(), kCGEncodingMacRoman  );
-	GetQuartzTextDims( s, inCharCount, outWidth, outHeight, &fooBaseLine, dc );
-	::CGContextRestoreGState( dc );
-#endif
 }
 
 // --------------------------------------------------------------
@@ -99,7 +85,6 @@ void GFontOSX::GetExtent( int c, float * outWidth, float * outHeight, VGDevice *
 		return;
 	}
 
-#ifdef SMUFL
 	CGGlyph glyphs[1];
 	CGRect  boundingRects[1];
 	UniChar ustr[1];
@@ -112,69 +97,7 @@ void GFontOSX::GetExtent( int c, float * outWidth, float * outHeight, VGDevice *
 	*outWidth  = float(rect.size.width);
     *outHeight = float(mSize); // float(rect.size.height);
 
-#else
-	float fooBaseLine;	
-	CGContextRef dc = (CGContextRef)( GetContext(context) );
-	::CGContextSaveGState(dc);
-	::CGContextSelectFont( dc, GetName(), GetSize(), kCGEncodingMacRoman  );
-	const CGGlyph glyph = c;
-
-	GetQuartzGlyphDims( &glyph, 1, outWidth, outHeight, &fooBaseLine, dc );
-	if (c == 139) *outWidth = 4.0;		// ????????????????
-	::CGContextRestoreGState( dc );
-#endif
+    if (c == 139) {
+        *outWidth = 4.0;        // ????????????????
+    }
 }
-
-#if !defined (SMUFL) || !defined (JG_CTFONT_TEXT)
-// --------------------------------------------------------------
-// Q: How do I measure the width of my text before drawing it with Core Graphics?
-// A: First call CGContextGetTextPosition to find the current text position. Then, set the 
-// text drawing mode to kCGTextInvisible using CGContextSetTextDrawingMode and draw the text. 
-// Finally, call CGContextGetTextPosition again to determine the final text position. Take 
-// the difference between the starting and ending positions to find the width of your text.
-// TODO: calculate exact baseline. Currently is only an approximation.
-void GFontOSX::GetQuartzTextDims( const char * inString, int inCharCount, float * outWidth, 
-							 float * outHeight, float * outBaseline, CGContextRef dc ) const
-{
-	CGPoint oldTextPos = ::CGContextGetTextPosition( dc );
-	::CGContextSetTextDrawingMode( dc, kCGTextInvisible );
-
-
-	::CGContextShowText( dc, inString, size_t(inCharCount));
-	CGPoint newTextPos = ::CGContextGetTextPosition( dc );
-
-	*outWidth = newTextPos.x - oldTextPos.x;
-	
-	// - Approximation
-	*outHeight = (GetSize() /** GetYScale()*/);
-	*outBaseline = (*outHeight /** GetYScale()*/ * 0.2f); // Approx
-
-	//	cout << "guido quartz, GetQuartzTextDims width = " << (*outWidth) << " x " << (*outHeight) << endl;	// DEBUG
-	
-	// - Restore previous state
-	::CGContextSetTextPosition( dc, oldTextPos.x, oldTextPos.y );
-	::CGContextSetTextDrawingMode( dc, kCGTextFill );	// kCGTextFillStroke
-}
-
-// --------------------------------------------------------------
-void GFontOSX::GetQuartzGlyphDims( const CGGlyph * inGlyphs, int inGlyphCount, float * outWidth,
-							   float * outHeight, float * outBaseline, CGContextRef dc ) const
-{
-//	CGContextRef dc = GetDC();
-	CGPoint oldTextPos = ::CGContextGetTextPosition( dc );
-	::CGContextSetTextDrawingMode( dc, kCGTextInvisible );
-
-	::CGContextShowGlyphs( dc, inGlyphs, (size_t)inGlyphCount );
-	CGPoint newTextPos = ::CGContextGetTextPosition( dc );
-
-	*outWidth = newTextPos.x - oldTextPos.x;
-	
-	// - Approximation
-	*outHeight = GetSize();
-	*outBaseline = (*outHeight * 0.2f); // Approx
-
-	// - Restore previous state
-	::CGContextSetTextPosition( dc, oldTextPos.x, oldTextPos.y );
-	::CGContextSetTextDrawingMode( dc, kCGTextFill );	// kCGTextFillStroke
-}
-#endif
