@@ -32,6 +32,21 @@ GFontOSX::~GFontOSX()
 #endif
 }
 
+CGGlyph  GFontOSX::GetGlyph( unsigned int inSymbolID ) {
+#ifdef SMUFL
+    CGGlyph glyphs[1] = { 0 };
+    UniChar ustr[1] = { (UniChar)inSymbolID };
+    bool done = CTFontGetGlyphsForCharacters(fCTFont, ustr, glyphs, 1);
+    if (done) {
+        return glyphs[0];
+    } else {
+        return 0;
+    }
+#else
+    return inSymbolID;
+#endif
+}
+
 // --------------------------------------------------------------
 void GFontOSX::GetExtent( const char * s, int inCharCount, float * outWidth, 
 					 float * outHeight, VGDevice * context ) const 
