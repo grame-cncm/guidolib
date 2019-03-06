@@ -93,6 +93,7 @@ using namespace std;
 #include "kf_ivect.h"
 #include "TCollisions.h"
 
+int gd_noteName2pc(const char *name);
 
 #if 0
 #define staff_debug(m)  cout << this << " GRStaff::" << m << endl
