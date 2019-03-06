@@ -35,9 +35,8 @@ using namespace std;
 #include "GuidoTiming.h"
 #include "ARMusic.h"
 
-//#define DEBUG
-#undef DEBUG
-#ifdef DEBUG
+//#define DEBUG_AR
+#ifdef DEBUG_AR
 #include "PrintVisitor.h"
 #include "GMNCodePrintVisitor.h"
 #endif
@@ -93,12 +92,12 @@ GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
 
     ifs.close();
 
-#ifdef DEBUG
+#ifdef DEBUG_AR
     if (ar) {
         cout << std::endl;
         //GMNCodePrintVisitor *visitor = new GMNCodePrintVisitor(cout);
         PrintVisitor *visitor = new PrintVisitor(cout);
-        ar->armusic->goThrough(visitor);
+        visitor->visitIn(ar->armusic);
         cout << std::endl;
     }
 #endif
@@ -129,12 +128,12 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
 #endif
     }
     
-#ifdef DEBUG
+#ifdef DEBUG_AR
     if (ar) {
         cout << std::endl;
         //GMNCodePrintVisitor *visitor = new GMNCodePrintVisitor(cout);
         PrintVisitor *visitor = new PrintVisitor(cout);
-        ar->armusic->goThrough(visitor);
+        visitor->visitIn(ar->armusic);
         cout << std::endl;
     }
 #endif
@@ -171,12 +170,12 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 #endif
     }
 
-#ifdef DEBUG
+#ifdef DEBUG_AR
     if (ar) {
         cout << std::endl;
         //GMNCodePrintVisitor *visitor = new GMNCodePrintVisitor(cout);
         PrintVisitor *visitor = new PrintVisitor(cout);
-        ar->armusic->goThrough(visitor);
+        visitor->visitIn(ar->armusic);
         cout << std::endl;
     }
 #endif
