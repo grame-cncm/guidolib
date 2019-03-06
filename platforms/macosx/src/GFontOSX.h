@@ -15,12 +15,7 @@
 */
 
 #include <string>
-#ifdef JG_CTFONT_DEF
 #include <CoreText/CoreText.h>
-#endif
-#if !defined (SMUFL) || !defined (JG_CTFONT_TEXT)
-#import <QuartzCore/QuartzCore.h>
-#endif
 #include "VGFont.h"
 #include "GUIDOExport.h"
 
@@ -43,18 +38,10 @@
 class_export GFontOSX : public VGFont		
 {
     friend class GDeviceOSX;
-#ifdef JG_CTFONT_DEF
 	CFStringRef fCTName;
 	CTFontRef	fCTFont;
     CGFontRef fCGFont;
     CFDictionaryRef fCTFontDictionary;
-#endif
-#if !defined (SMUFL) || !defined (JG_CTFONT_TEXT)
-	/// Computes the input string's graphical size.
-	void	GetQuartzTextDims( const char * str, int count, float * width, float * height, float * baseline, CGContextRef dc ) const;
-	/// Computes the input symbol's graphical size.
-	void	GetQuartzGlyphDims( const CGGlyph * inGlyphs, int count, float * width, float * height, float * baseline, CGContextRef dc ) const;
-#endif
 
 	public:
 				 GFontOSX( const char* faceName, int size, int properties);

@@ -275,31 +275,13 @@ void GDeviceOSX::Rectangle( float left, float top, float right, float bottom )
 // --------------------------------------------------------------
 void GDeviceOSX::SetMusicFont( const VGFont * inObj )
 {
-	// CGContextSelectFont does not return an error code, so we first select
-	// a well-known font. If we did not, musical symbols may be displayed instead of 
-	// plain-text.
-
-#ifndef JG_CTFONT_DEF
-//	::CGContextSelectFont(mContext, "Helvetica", inObj->GetSize(), kCGEncodingMacRoman  );	// ok
-	::CGContextSelectFont(mContext, inObj->GetName(), inObj->GetSize(), kCGEncodingFontSpecific );// ok
-#endif
-
 	mCurrMusicFont = inObj;
-	
 }
 
 // --------------------------------------------------------------
 void GDeviceOSX::SetTextFont( const VGFont* inObj )
 {
-	// CGContextSelectFont does not return an error code, so we first select
-	// a well-known font. If we did not, musical symbols may be displayed instead of 
-	// plain-text.
-
-//	::CGContextSelectFont(mContext, "Helvetica", inObj->GetSize(), kCGEncodingMacRoman);	// ok
 	if (inObj) {
-#ifndef JG_CTFONT_DEF
-		::CGContextSelectFont(mContext, inObj->GetName(), inObj->GetSize(), kCGEncodingMacRoman);// ok
-#endif
 		mCurrTextFont = inObj;
 	}
 }
@@ -604,123 +586,17 @@ void GDeviceOSX::DrawMusicSymbol( float x, float y, unsigned int inSymbolID )
 			x -= (w * float(0.5));
 	}
 
-#ifdef JG_CTFONT_DEF
     // Uncommented code does not work. Core text uses different coordinates.
     // CGPoint point = CGPointMake(x, y);
     // CTFontDrawGlyphs(macFont->fCTFont, &glyph, &point, 1, mContext);
     ::CGContextSetFont(mContext, macFont->fCGFont);
     ::CGContextSetFontSize(mContext, macFont->GetSize());
-#else
-	::CGContextSelectFont(mContext, mCurrMusicFont->GetName(), mCurrMusicFont->GetSize(), kCGEncodingMacRoman  );// ok
-#endif
 
 	// - Draw text
 	PushFillColor( VGColor(mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue, mTextColor.mAlpha) );
 	::CGContextShowGlyphsAtPoint(mContext, x, y, &glyph, 1 );
 	PopFillColor();
 }
-// --------------------------------------------------------------
-//#ifndef IOS
-#if 0
-void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
-{
-	// this is for macos 10.4 : select a dummy font first 
-	::CGContextSelectFont(mContext, "Monaco", mCurrTextFont->GetSize(), kCGEncodingMacRoman  );// ok
-	
-	if (s == 0 || s[ 0 ] == '\0' || inCharCount == 0)
-		return;
-
-	if (inCharCount == -1) 
-		inCharCount = (int)strlen( s );
-
-	// - Manage character encoding
-	const char * convStr = s; 
-	if( convStr == 0 ) return;
-
-	// - Calculate string dimensions
-	float w = 0;
-	float h = 0;
-	float baseline = 0;
-	mCurrTextFont->GetExtent( convStr, inCharCount, &w, &h, this );
-		
-	// - Perform text alignement
-	if( mTextAlign != ( kAlignLeft | kAlignBase )) {
-		if( mTextAlign & kAlignBottom )	// Vertical align
-			y -= baseline; 
-		else if( mTextAlign & kAlignTop )
-			y += h - baseline;
-
-		if( mTextAlign & kAlignRight )	// Horizontal align
-			x -= w;
-		else if( mTextAlign & kAlignCenter )
-			x -= (w * 0.5);
-	}
-
-	// - Draw text background
-//	if( mTextBackColor.mAlpha < 255 ){
-		PushPen( mTextBackColor, 1 );
-		PushFillColor( mTextBackColor );
-		Rectangle( x, y, x + w, y + h );
-		PopFillColor();
-		PopPen();
-//	}
-
-	::CGContextSelectFont(mContext, mCurrTextFont->GetName(), mCurrTextFont->GetSize(), kCFStringEncodingMacRoman);
-    
-	// - Draw text
-	PushFillColor( VGColor(mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue,  mTextColor.mAlpha) );
-	::CGContextShowTextAtPoint(mContext, x, y, convStr, (size_t)inCharCount );
-	PopFillColor();
-	
-	// - Debug: draw refpoint
-//	PushPen( GColor( 250, 0, 0 ), 5 );	
-//	Line( debugX - 20, debugY + 20, debugX + 20, debugY - 20 );
-//	Line( debugX - 20, debugY - 20, debugX + 20, debugY + 20 );	
-//	PopPen(); 
-}
-#else		// defined IOS
-#ifndef JG_CTFONT_DEF
-static std::string fontName2iOSName(const string name, int properties)
-{
-	string iosname = "TimesNewRomanPSMT";
-    if (name == "Times New Roman") {
-        switch (properties) {
-            case 1:		iosname = "TimesNewRomanPS-BoldMT"; break;
-            case 2:		iosname = "TimesNewRomanPS-ItalicMT"; break;
-        }
-    }
-	else if (name == "Arial") {
-        switch (properties) {
-            case 1:		iosname = "Arial-BoldMT"; break;
-            case 2:		iosname = "Arial-ItalicMT"; break;
-            default:	iosname = "ArialMT";
-        }
-    }
-	else if (name == "Palatino") {
-        switch (properties) {
-            case 1:		iosname = "Palatino-Bold"; break;
-            case 2:		iosname = "Palatino-Italic"; break;
-            default:	iosname = "Palatino";
-        }
-    }
-	else if (name == "Baskerville") {
-        switch (properties) {
-            case 1:		iosname = "Baskerville-Bold"; break;
-            case 2:		iosname = "Baskerville-Italic"; break;
-            default:	iosname = "Baskerville";
-        }
-    }
-	else {
-        // default to Times New Roman
-        switch (properties) {
-            case 1:		iosname = "TimesNewRomanPS-BoldMT"; break;
-            case 2:		iosname = "TimesNewRomanPS-ItalicMT";break;
-            default:	iosname = "TimesNewRomanPS";
-        }
-    }
-    return iosname;
-}
-#endif
 
 void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
 {
@@ -738,23 +614,12 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
         CFAttributedStringReplaceString(attributedOverlayText, CFRangeMake(0, 0), CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8));
     }
     
-    //#warning ("GDeviceOSX::DrawString is not implemented (deprecated functions and types change)")
-#ifdef JG_CTFONT_DEF
     CTFontRef ctFont = ((GFontOSX *)mCurrTextFont)->fCTFont;
-    CFRetain(ctFont);
-#else
-    std::string iosConvertedFontName = fontName2iOSName(mCurrTextFont->GetName(), mCurrTextFont->GetProperties());
-//==================================================================================
-// The code below doesn't compile any more one with on MacOS 10.12 using Xcode 8.3
-//==================================================================================
-    CTFontRef ctFont = CTFontCreateWithName( CFStringCreateWithCString(kCFAllocatorDefault, iosConvertedFontName.c_str(), kCFStringEncodingUTF8) , mCurrTextFont->GetSize(), NULL);
-#endif
     CFAttributedStringSetAttribute(attributedOverlayText,
                                    CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
                                    kCTFontAttributeName,
                                    ctFont);
-    CFRelease(ctFont);
-    
+
     ///Create framesetter with the attributed text
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedOverlayText);
     CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, /* Framesetter */
@@ -810,7 +675,6 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
     // Restore the state of the contexte
     CGContextRestoreGState(mContext);
 }
-#endif
 
 // --------------------------------------------------------------
 void *			
