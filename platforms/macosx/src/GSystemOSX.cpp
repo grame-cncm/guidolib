@@ -108,7 +108,46 @@ VGDevice* GSystemOSX::CreatePrinterDevice( )
 // --------------------------------------------------------------
 const VGFont* GSystemOSX::CreateVGFont( const char * faceName, int size, int properties ) const
 {
-	return faceName ? new GFontOSX (faceName, size, properties) : 0;
+    if (faceName == NULL) {
+        return NULL;
+    }
+    CFStringRef fontName = CFStringCreateWithCString(NULL, faceName, kCFStringEncodingUTF8);
+    CTFontDescriptorRef fontDescriptor = CTFontDescriptorCreateWithNameAndSize(fontName, size);
+    if (properties) {
+        CTFontSymbolicTraits traits = 0;
+        if (properties & 1) {
+            traits |= kCTFontTraitBold;
+        }
+        if (properties & 2) {
+            traits |= kCTFontTraitItalic;
+        }
+        CTFontDescriptorRef other = CTFontDescriptorCreateCopyWithSymbolicTraits(fontDescriptor, traits, traits);
+        if (other) {
+            CFRelease(fontDescriptor);
+            fontDescriptor = other;
+        }
+    }
+    // Does not work: CFTypeRef attribute = CTFontDescriptorCopyAttribute(fontDescriptor, kCTFontNameAttribute); // CFStringRef replacement = (CFStringRef)attribute; // Times -> Times, not TimesNewRomanPSMT.
+    // kCTFontNameAttribute is wrong. We need postscriptName.
+    // In UIFontDescriptor/NSFontDescriptor there is a method for it.
+    // But in CoreText there seems to be no way to get it from CTFontDescriptor.
+    // So we get it from CTFont.
+    CTFontRef font = CTFontCreateWithFontDescriptor(fontDescriptor, size, NULL);
+    GFontOSX *ret;
+    if (font) {
+        CFStringRef replacement = CTFontCopyPostScriptName(font);
+        CFIndex len = CFStringGetLength(replacement);
+        CFIndex max = CFStringGetMaximumSizeForEncoding(len, kCFStringEncodingUTF8);
+        char buffer[max+1];
+        CFStringGetCString(replacement, buffer, max+1, kCFStringEncodingUTF8);
+        // FIXME: we should pass font in the constructor.
+        ret = new GFontOSX (buffer, size, properties);
+        CFRelease(replacement);
+        CFRelease(font);
+    } else {
+        ret = new GFontOSX (faceName, size, properties);
+    }
+    CFRelease(fontDescriptor);
+    CFRelease(fontName);
+    return ret;
 }
-
-
