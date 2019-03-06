@@ -17,16 +17,20 @@
 GFontOSX::GFontOSX(const char * faceName, int size, int properties) 
 			:  mName(faceName), mSize(size), mFontProp(properties)
 {
-#ifdef SMUFL
+#ifdef JG_CTFONT_DEF
 	fCTName = CFStringCreateWithCString(0, faceName, kCFStringEncodingUTF8);
 	fCTFont = CTFontCreateWithName( fCTName, mSize, 0);
+    CFStringRef keys[1] = { kCTFontAttributeName };
+    CTFontRef values[1] = { fCTFont };
+    fCTFontDictionary = CFDictionaryCreate(NULL, (const void **) keys, (const void **) values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 #endif
 }
 
 // --------------------------------------------------------------
 GFontOSX::~GFontOSX()
 {
-#ifdef SMUFL
+#ifdef JG_CTFONT_DEF
+    CFRelease (fCTFontDictionary);
 	CFRelease (fCTFont);
 	CFRelease (fCTName);
 #endif
@@ -40,18 +44,23 @@ void GFontOSX::GetExtent( const char * s, int inCharCount, float * outWidth,
 	if( inCharCount < 0 )
 		inCharCount = (int)strlen( s );
 
-#ifdef SMUFL
-	CGGlyph glyphs[inCharCount];
-	CGRect  boundingRects[inCharCount];
-	UniChar ustr[inCharCount];
-	for (int i=0; i<inCharCount; i++) ustr[i] = s[i];
-	bool done = CTFontGetGlyphsForCharacters(fCTFont, ustr, glyphs, inCharCount);
-	if (!done)
-		std::cerr << "GFontOSX::GetExtent error in CTFontGetGlyphsForCharacters with '" << s << "'" << std::endl;
-	CGRect rect = CTFontGetBoundingRectsForGlyphs (fCTFont, kCTFontOrientationHorizontal, glyphs, boundingRects, inCharCount);
-
-	*outWidth  = float(rect.size.width);
-	*outHeight = float(rect.size.height);
+#ifdef JG_CTFONT_TEXT
+    CFStringRef string = CFStringCreateWithBytes(NULL, (const UInt8 *)s, inCharCount, kCFStringEncodingUTF8, false);
+    CFIndex length = CFStringGetLength(string);
+    CFRange range = CFRangeMake(0, length);
+    CFAttributedStringRef attrString = CFAttributedStringCreate(NULL, string, fCTFontDictionary);
+    CTFramesetterRef fsetter = CTFramesetterCreateWithAttributedString (attrString);
+    CFRange fitRange;
+    CGSize frameSize = CTFramesetterSuggestFrameSizeWithConstraints (fsetter,
+                                                                     range,
+                                                                     NULL,  // frame attributes
+                                                                     CGSizeMake (CGFLOAT_MAX, CGFLOAT_MAX), // mSize+1
+                                                                     &fitRange);
+    *outWidth = ceil(frameSize.width);
+    *outHeight = mSize; // frameSize.height;
+    CFRelease(fsetter);
+    CFRelease(attrString);
+    CFRelease(string);
 
 #else
 	float fooBaseLine;
@@ -83,7 +92,7 @@ void GFontOSX::GetExtent( int c, float * outWidth, float * outHeight, VGDevice *
 	CGRect rect = CTFontGetBoundingRectsForGlyphs (fCTFont, kCTFontOrientationHorizontal, glyphs, boundingRects, 1);
 
 	*outWidth  = float(rect.size.width);
-	*outHeight = float(rect.size.height);
+    *outHeight = float(mSize); // float(rect.size.height);
 
 #else
 	float fooBaseLine;	
@@ -98,7 +107,7 @@ void GFontOSX::GetExtent( int c, float * outWidth, float * outHeight, VGDevice *
 #endif
 }
 
-#ifndef SMUFL
+#if !defined (SMUFL) || !defined (JG_CTFONT_TEXT)
 // --------------------------------------------------------------
 // Q: How do I measure the width of my text before drawing it with Core Graphics?
 // A: First call CGContextGetTextPosition to find the current text position. Then, set the 

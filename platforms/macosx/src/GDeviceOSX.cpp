@@ -724,85 +724,17 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
         CFAttributedStringReplaceString(attributedOverlayText, CFRangeMake(0, 0), CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8));
     }
     
+    //#warning ("GDeviceOSX::DrawString is not implemented (deprecated functions and types change)")
+#ifdef JG_CTFONT_DEF
+    CTFontRef ctFont = ((GFontOSX *)mCurrTextFont)->fCTFont;
+    CFRetain(ctFont);
+#else
     std::string iosConvertedFontName = fontName2iOSName(mCurrTextFont->GetName(), mCurrTextFont->GetProperties());
-/*
-    std::string fontName = mCurrTextFont->GetName();
-    if (fontName == "Times New Roman")
-    {
-        switch (mCurrTextFont->GetProperties()) {
-            case 1:  // bold
-                iosConvertedFontName = "TimesNewRomanPS-BoldMT";
-                break;
-                
-            case 2:  // italic
-                iosConvertedFontName = "TimesNewRomanPS-ItalicMT";
-                break;
-            default:
-                break;
-        }
-    }else if (fontName == "Arial")
-    {
-        switch (mCurrTextFont->GetProperties()) {
-            case 1:  // bold
-                iosConvertedFontName = "Arial-BoldMT";
-                break;
-                
-            case 2:  // italic
-                iosConvertedFontName = "Arial-ItalicMT";
-                break;
-            default:
-                iosConvertedFontName = "ArialMT";
-                break;
-        }
-    }else if (fontName == "Palatino")
-    {
-        switch (mCurrTextFont->GetProperties()) {
-            case 1:  // bold
-                iosConvertedFontName = "Palatino-Bold";
-                break;
-                
-            case 2:  // italic
-                iosConvertedFontName = "Palatino-Italic";
-                break;
-            default:
-                iosConvertedFontName = "Palatino";
-                break;
-        }
-    }else if (fontName == "Baskerville")
-    {
-        switch (mCurrTextFont->GetProperties()) {
-            case 1:  // bold
-                iosConvertedFontName = "Baskerville-Bold";
-                break;
-                
-            case 2:  // italic
-                iosConvertedFontName = "Baskerville-Italic";
-                break;
-            default:
-                iosConvertedFontName = "Baskerville";
-                break;
-        }
-    }else {
-        // default to Times New Roman
-        switch (mCurrTextFont->GetProperties()) {
-            case 1:  // bold
-                iosConvertedFontName = "TimesNewRomanPS-BoldMT";
-                break;
-                
-            case 2:  // italic
-                iosConvertedFontName = "TimesNewRomanPS-ItalicMT";
-                break;
-            default:
-                break;
-        }
-    }
- */
-
-#warning ("GDeviceOSX::DrawString is not implemented (deprecated functions and types change)")
 //==================================================================================
 // The code below doesn't compile any more one with on MacOS 10.12 using Xcode 8.3
 //==================================================================================
     CTFontRef ctFont = CTFontCreateWithName( CFStringCreateWithCString(kCFAllocatorDefault, iosConvertedFontName.c_str(), kCFStringEncodingUTF8) , mCurrTextFont->GetSize(), NULL);
+#endif
     CFAttributedStringSetAttribute(attributedOverlayText,
                                    CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
                                    kCTFontAttributeName,

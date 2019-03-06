@@ -15,9 +15,10 @@
 */
 
 #include <string>
-#ifdef SMUFL
+#ifdef JG_CTFONT_DEF
 #include <CoreText/CoreText.h>
-#else
+#endif
+#if !defined (SMUFL) || !defined (JG_CTFONT_TEXT)
 #import <QuartzCore/QuartzCore.h>
 #endif
 #include "VGFont.h"
@@ -41,10 +42,13 @@
 */		
 class_export GFontOSX : public VGFont		
 {
-#ifdef SMUFL
+    friend class GDeviceOSX;
+#ifdef JG_CTFONT_DEF
 	CFStringRef fCTName;
 	CTFontRef	fCTFont;
-#else
+    CFDictionaryRef fCTFontDictionary;
+#endif
+#if !defined (SMUFL) || !defined (JG_CTFONT_TEXT)
 	/// Computes the input string's graphical size.
 	void	GetQuartzTextDims( const char * str, int count, float * width, float * height, float * baseline, CGContextRef dc ) const;
 	/// Computes the input symbol's graphical size.
