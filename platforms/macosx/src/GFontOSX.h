@@ -46,6 +46,7 @@ class_export GFontOSX : public VGFont
 #ifdef JG_CTFONT_DEF
 	CFStringRef fCTName;
 	CTFontRef	fCTFont;
+    CGFontRef fCGFont;
     CFDictionaryRef fCTFontDictionary;
 #endif
 #if !defined (SMUFL) || !defined (JG_CTFONT_TEXT)

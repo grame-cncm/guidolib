@@ -20,6 +20,8 @@ GFontOSX::GFontOSX(const char * faceName, int size, int properties)
 #ifdef JG_CTFONT_DEF
 	fCTName = CFStringCreateWithCString(0, faceName, kCFStringEncodingUTF8);
 	fCTFont = CTFontCreateWithName( fCTName, mSize, 0);
+    fCGFont = CTFontCopyGraphicsFont(fCTFont, NULL);
+
     CFStringRef keys[1] = { kCTFontAttributeName };
     CTFontRef values[1] = { fCTFont };
     fCTFontDictionary = CFDictionaryCreate(NULL, (const void **) keys, (const void **) values, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -31,6 +33,7 @@ GFontOSX::~GFontOSX()
 {
 #ifdef JG_CTFONT_DEF
     CFRelease (fCTFontDictionary);
+    CFRelease (fCGFont);
 	CFRelease (fCTFont);
 	CFRelease (fCTName);
 #endif
