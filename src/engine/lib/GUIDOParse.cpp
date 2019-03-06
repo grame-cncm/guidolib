@@ -36,6 +36,7 @@ using namespace std;
 #include "ARMusic.h"
 
 //#define DEBUG
+#undef DEBUG
 #ifdef DEBUG
 #include "PrintVisitor.h"
 #include "GMNCodePrintVisitor.h"
