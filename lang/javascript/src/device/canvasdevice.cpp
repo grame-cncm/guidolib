@@ -25,14 +25,16 @@ CanvasDevice::~CanvasDevice()
 // 0
 bool CanvasDevice::BeginDraw()
 {
-	EM_ASM(
+	EM_ASM (
 		gU1D0cANVA$.updateMatrices(gU1D0cANVA$.CONTEXT, 1, 0, 0, 1, 0, 0);
 		gU1D0cANVA$.CONTEXT.clearRect(0, 0, gU1D0cANVA$.CANVAS.width, gU1D0cANVA$.CANVAS.height);
 
 		gU1D0cANVA$.PEN_COLORS = [gU1D0cANVA$.FONT_COLOR];
 		gU1D0cANVA$.FILL_COLORS = [gU1D0cANVA$.FILL_COLOR];
 		gU1D0cANVA$.PEN_WIDTHS = [gU1D0cANVA$.PEN_WIDTH];
-		gU1D0cANVA$.PEN = [{ "color" : gU1D0cANVA$.FONT_COLOR, "width" : gU1D0cANVA$.PEN_WIDTH}];
+//        gU1D0cANVA$.PEN = [{ "color" : gU1D0cANVA$.FONT_COLOR, "width" : gU1D0cANVA$.PEN_WIDTH}];
+        gU1D0cANVA$.PEN["color"] = gU1D0cANVA$.FONT_COLOR;
+        gU1D0cANVA$.PEN["width"] = gU1D0cANVA$.PEN_WIDTH;
 	);
 		return true;
 }
