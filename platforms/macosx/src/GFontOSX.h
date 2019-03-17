@@ -37,11 +37,6 @@
 */		
 class_export GFontOSX : public VGFont		
 {
-    friend class GDeviceOSX;
-	CTFontRef	fCTFont;
-    CGFontRef fCGFont;
-    CFDictionaryRef fCTFontDictionary;
-
 	public:
 				 GFontOSX( const char* faceName, int size, int properties);
 		virtual	~GFontOSX();
@@ -57,11 +52,23 @@ class_export GFontOSX : public VGFont
 	
 		// - OSX specific services ---------------------------------------
 		/// Returns the symbol corresponding to the input index.
-    CGGlyph            GetGlyph( unsigned int inSymbolID );
+        CGGlyph            GetGlyph( unsigned int inSymbolID );
+        /// Returns the core text font.
+        CTFontRef          GetCTFont() { return fCTFont; }
+        /// Returns the core graphics font.
+        CGFontRef          GetCGFont() { return fCGFont; }
+        /// Returns a dictionary for creating attributed strings.
+        /// Has the core graphics font as the value of kCTFontAttributeName.
+        CFDictionaryRef    GetCTFontDictionary() { return fCTFontDictionary; }
+
 	protected:
 		std::string		mName;
 		int				mSize;
 		int				mFontProp;
+
+        CTFontRef     fCTFont;
+        CGFontRef     fCGFont;
+        CFDictionaryRef fCTFontDictionary;
 };
 
 #endif

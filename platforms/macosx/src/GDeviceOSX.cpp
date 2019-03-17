@@ -589,7 +589,7 @@ void GDeviceOSX::DrawMusicSymbol( float x, float y, unsigned int inSymbolID )
     // Uncommented code does not work. Core text uses different coordinates.
     // CGPoint point = CGPointMake(x, y);
     // CTFontDrawGlyphs(macFont->fCTFont, &glyph, &point, 1, mContext);
-    ::CGContextSetFont(mContext, macFont->fCGFont);
+    ::CGContextSetFont(mContext, macFont->GetCGFont());
     ::CGContextSetFontSize(mContext, macFont->GetSize());
 
 	// - Draw text
@@ -614,7 +614,7 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
         CFAttributedStringReplaceString(attributedOverlayText, CFRangeMake(0, 0), CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8));
     }
     
-    CTFontRef ctFont = ((GFontOSX *)mCurrTextFont)->fCTFont;
+    CTFontRef ctFont = ((GFontOSX *)mCurrTextFont)->GetCTFont();
     CFAttributedStringSetAttribute(attributedOverlayText,
                                    CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
                                    kCTFontAttributeName,
