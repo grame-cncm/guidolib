@@ -13,12 +13,16 @@
 
 #include "GFontOSX.h"
 
+static CTFontDescriptorRef createCTFontDescriptor(const char * faceName, int size, int properties);
+
 // --------------------------------------------------------------
 GFontOSX::GFontOSX(const char * faceName, int size, int properties) 
 			:  mName(faceName), mSize(size), mFontProp(properties)
 {
-	fCTName = CFStringCreateWithCString(0, faceName, kCFStringEncodingUTF8);
-	fCTFont = CTFontCreateWithName( fCTName, mSize, 0);
+    // Create a font descriptor, assuming faceName is a font family name or concrete font name.
+    CTFontDescriptorRef fontDescriptor = createCTFontDescriptor(faceName, size, properties);
+    // Create a font reference that best matches the given font descriptor.
+    fCTFont = CTFontCreateWithFontDescriptor(fontDescriptor, size, NULL);
     fCGFont = CTFontCopyGraphicsFont(fCTFont, NULL);
 
     CFStringRef keys[1] = { kCTFontAttributeName };
@@ -32,7 +36,6 @@ GFontOSX::~GFontOSX()
     CFRelease (fCTFontDictionary);
     CFRelease (fCGFont);
 	CFRelease (fCTFont);
-	CFRelease (fCTName);
 }
 
 CGGlyph  GFontOSX::GetGlyph( unsigned int inSymbolID ) {
@@ -100,4 +103,27 @@ void GFontOSX::GetExtent( int c, float * outWidth, float * outHeight, VGDevice *
     if (c == 139) {
         *outWidth = 4.0;        // ????????????????
     }
+}
+
+// Creates a font descriptor.
+// The client becomes the owner of the font descriptor and should release it.
+static CTFontDescriptorRef createCTFontDescriptor(const char * faceName, int size, int properties) {
+    CFStringRef fontName = CFStringCreateWithCString(NULL, faceName, kCFStringEncodingUTF8);
+    CTFontDescriptorRef fontDescriptor = CTFontDescriptorCreateWithNameAndSize(fontName, size);
+    if (properties) {
+        CTFontSymbolicTraits traits = 0;
+        if (properties & 1) {
+            traits |= kCTFontTraitBold;
+        }
+        if (properties & 2) {
+            traits |= kCTFontTraitItalic;
+        }
+        CTFontDescriptorRef other = CTFontDescriptorCreateCopyWithSymbolicTraits(fontDescriptor, traits, traits);
+        if (other) {
+            CFRelease(fontDescriptor);
+            fontDescriptor = other;
+        }
+    }
+    CFRelease(fontName);
+    return fontDescriptor;
 }

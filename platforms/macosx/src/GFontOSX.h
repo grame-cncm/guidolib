@@ -38,7 +38,6 @@
 class_export GFontOSX : public VGFont		
 {
     friend class GDeviceOSX;
-	CFStringRef fCTName;
 	CTFontRef	fCTFont;
     CGFontRef fCGFont;
     CFDictionaryRef fCTFontDictionary;
