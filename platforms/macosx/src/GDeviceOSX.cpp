@@ -586,15 +586,14 @@ void GDeviceOSX::DrawMusicSymbol( float x, float y, unsigned int inSymbolID )
 			x -= (w * float(0.5));
 	}
 
-    // Uncommented code does not work. Core text uses different coordinates.
-    // CGPoint point = CGPointMake(x, y);
-    // CTFontDrawGlyphs(macFont->fCTFont, &glyph, &point, 1, mContext);
-    ::CGContextSetFont(mContext, macFont->GetCGFont());
-    ::CGContextSetFontSize(mContext, macFont->GetSize());
+    CGPoint pointInUserCoordinates = CGPointMake(x, y);
+    CGAffineTransform textMatrix = CGContextGetTextMatrix(mContext);
+    CGAffineTransform inverse = CGAffineTransformInvert(textMatrix);
+    CGPoint pointInTextCoordinates = CGPointApplyAffineTransform(pointInUserCoordinates, inverse);
 
 	// - Draw text
 	PushFillColor( VGColor(mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue, mTextColor.mAlpha) );
-	::CGContextShowGlyphsAtPoint(mContext, x, y, &glyph, 1 );
+    CTFontDrawGlyphs(macFont->GetCTFont(), &glyph, &pointInTextCoordinates, 1, mContext);
 	PopFillColor();
 }
 
