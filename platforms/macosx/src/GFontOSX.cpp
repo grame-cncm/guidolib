@@ -89,15 +89,13 @@ void GFontOSX::GetExtent( int c, float * outWidth, float * outHeight, VGDevice *
 	}
 
 	CGGlyph glyphs[1];
-	CGRect  boundingRects[1];
 	UniChar ustr[1];
 	ustr[0] = c;
 	bool done = CTFontGetGlyphsForCharacters(fCTFont, ustr, glyphs, 1);
 	if (!done)
 		std::cerr << "GFontOSX::GetExtent error in CTFontGetGlyphsForCharacters with char '" << c << "'" << std::endl;
-	CGRect rect = CTFontGetBoundingRectsForGlyphs (fCTFont, kCTFontOrientationHorizontal, glyphs, boundingRects, 1);
-
-	*outWidth  = float(rect.size.width);
+    double advance = CTFontGetAdvancesForGlyphs(fCTFont, kCTFontOrientationHorizontal, glyphs, NULL, 1);
+    *outWidth = advance;
     *outHeight = float(mSize); // float(rect.size.height);
 
     if (c == 139) {
