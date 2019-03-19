@@ -1,0 +1,12 @@
+(*
+	This script was crashing due the ugly implementation of the way notes are parsed in a tremolo.
+	The crash occured in setAccidental method and was triggered by the flat.
+	Actually and to parse the pitch attribute of tremolo, a derived parser is created, that makes use 
+	of a derived factory. But this factory declares its own state and may use the inherited state 
+	in an uninitialized context.
+	The problem has been fixed with a setAccidental method running in the correct derived factory
+	context. The whole implementation should be revised.
+*)
+[
+	\trem<pitch="{e&,a}">(g)
+]

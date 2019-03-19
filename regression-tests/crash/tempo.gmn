@@ -1,0 +1,6 @@
+(*
+	this script was crashing due to uninitialized music font in the graphic device 
+*)
+[ 
+\tempo<"Allegro [1/8] = 60",bpm="1/4=60",dx=-5, dy=4>
+]
