@@ -393,7 +393,7 @@ void ARFactory::createEvent( const char * name )
 		mCurrentEvent = new ARRest(mCurrentNumerator,mCurrentDenominator );
 	else {
 		ARNote* note = new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
-		mCurrentEvent = note; //new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
+		mCurrentEvent = note;
 		note->setOctava (mCurrentOctava ? mCurrentOctava->getOctava() : 0);
 		if (mCurrentTrill && !note->isEmptyNote()) note->setOrnament(mCurrentTrill, false);
 	}
@@ -574,11 +574,6 @@ void ARFactory::setAccidentals(TYPE_ACCIDENTALS accidentals)
 */
 void ARFactory::setRegister(TYPE_REGISTER newRegister)
 {
-	/* was:	if (!mCurrentEvent || !dynamic cast<ARNote *>(mCurrentEvent))
-				return;
-
-		assert(dynamic cast<ARNote*>(mCurrentEvent)); */
-	
 	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
 	if( note == 0 ) return;
 	
