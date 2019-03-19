@@ -170,9 +170,8 @@ float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xO
 	hdc.SetScale(cueScale, cueScale);
 
 	// - Calculate the position of the head
-	float w, h;
-
-	hdc.GetMusicFont()->GetExtent(theSymbol, &w, &h, &hdc);
+	if (!hdc.GetMusicFont()) hdc.SetMusicFont(FontManager::gFontScriab);
+	float w = GetSymbolExtent(theSymbol);
 	float xPos = (xOffset + mPosition.x) / cueScale;
 	float yPos = (yOffset + mPosition.y - w / 2.5f) / cueScale;
 
@@ -214,7 +213,7 @@ float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xO
 	// - Draw Dot
 	if (theDotSymbol != kNoneSymbol)
     {
-		hdc.GetMusicFont()->GetExtent(theDotSymbol, &w, &h, &hdc);
+		float w = GetSymbolExtent (theDotSymbol);
 		hdc.DrawMusicSymbol( xPos + 2 * LSPACE, yPos, theDotSymbol);
 		offsetX += LSPACE;
 	}
