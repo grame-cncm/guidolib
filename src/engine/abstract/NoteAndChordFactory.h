@@ -54,6 +54,7 @@ class NoteAndChordFactory : public ARFactory
 		virtual void 		addTag(){}
 
         virtual void        setVoice(ARMusicalVoice * voice) {mCurrentVoice = voice;}
+		virtual void 		setAccidentals( TYPE_ACCIDENTALS accidentals );
 
 		virtual void 		addTagParameter( const char * parameter ){}
 		virtual void 		addTagParameter( TYPE_TAGPARAMETER_INT parameter ){}

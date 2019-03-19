@@ -118,6 +118,21 @@ void NoteAndChordFactory::setRegister(TYPE_REGISTER newRegister)
 }
 
 // ----------------------------------------------------------------------------
+/** \brief Sets the accidentals of the current event.
+*/
+void NoteAndChordFactory::setAccidentals(TYPE_ACCIDENTALS accidentals)
+{
+	// this is really ugly and prone to crash bugs
+	// depending on the context, mCurrentEvent could belong to ARFactory or to NoteAndChordFactory
+	// while it may be initalised in NoteAndChordFactory context,
+	// it could be used in ARFactory context (and thus with a null value) by methods that have not been overriden
+	ARMusicalEvent * ev = mCurrentEvent;
+	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
+	assert(note);
+	note->setAccidentals(accidentals);
+}
+
+// ----------------------------------------------------------------------------
 void NoteAndChordFactory::createEvent( const char * name )
 {	
     if(mDone)
