@@ -604,22 +604,10 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
     if( convStr == 0 ) return;
     
     // Create an attributed string
-    CFMutableAttributedStringRef attributedOverlayText = CFAttributedStringCreateMutable(kCFAllocatorDefault, 0);
-    
-    if (inCharCount>0)
-    {
-        //CFStringCreateWithBytes(kCFAllocatorDefault, reinterpret_cast<const UInt8*>(overlayText.data()), overlayText.size(), kCFStringEncodingUTF8, false);
-        //CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8)
-        CFStringRef string = CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8);
-        CFAttributedStringReplaceString(attributedOverlayText, CFRangeMake(0, 0), string);
-        CFRelease(string);
-    }
-    
-    CTFontRef ctFont = ((GFontOSX *)mCurrTextFont)->GetCTFont();
-    CFAttributedStringSetAttribute(attributedOverlayText,
-                                   CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
-                                   kCTFontAttributeName,
-                                   ctFont);
+    GFontOSX *font = (GFontOSX *)mCurrTextFont;
+    CFDictionaryRef attributes = font->GetCTFontDictionary();
+    CFStringRef string = CFStringCreateWithBytes(NULL, (const UInt8 *)s, inCharCount, kCFStringEncodingUTF8, false);
+    CFAttributedStringRef attributedOverlayText = CFAttributedStringCreate(kCFAllocatorDefault, string, attributes);
 
     ///Create framesetter with the attributed text
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedOverlayText);
@@ -629,6 +617,8 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
                                                                         CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), /* Constraints (CGFLOAT_MAX indicates unconstrained) */
                                                                         NULL /* Gives the range of string that fits into the constraints, doesn't matter in your situation */
                                                                         );
+    CFRelease(attributedOverlayText);
+    CFRelease(framesetter);
     
     /// Set text alignment (paragraph style)
     CTTextAlignment alignment = kCTTextAlignmentLeft;
@@ -656,16 +646,16 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
             alignment = kCTTextAlignmentLeft;
         }
     }
-    
+
+    // Second pass of frame setting with paragraph style.
+
     CTParagraphStyleSetting settings[] = {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment};
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, sizeof(settings) / sizeof(settings[0]));
-    // Check: is it allowed to change attributes after the attributed string is passed to framesetter?
-    CFAttributedStringSetAttribute(attributedOverlayText,
-                                   CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
-                                   kCTParagraphStyleAttributeName,
-                                   paragraphStyle);
-    CFRelease(paragraphStyle);
-    
+    CFMutableDictionaryRef mutableAttributes = CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 2, attributes);
+    CFDictionarySetValue(mutableAttributes, kCTParagraphStyleAttributeName, paragraphStyle);
+    attributedOverlayText = CFAttributedStringCreate(kCFAllocatorDefault, string, mutableAttributes);
+    framesetter = CTFramesetterCreateWithAttributedString(attributedOverlayText);
+
     // Core Text changes the state of the context, so save it
     CGContextSaveGState(mContext);
     
@@ -677,7 +667,9 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
     CFRelease(path);
     CFRelease(framesetter);
     CFRelease(attributedOverlayText);
-    
+    CFRelease(mutableAttributes);
+    CFRelease(paragraphStyle);
+
     // Restore the state of the contexte
     CGContextRestoreGState(mContext);
 }
