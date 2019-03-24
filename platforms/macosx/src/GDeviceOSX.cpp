@@ -610,7 +610,9 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
     {
         //CFStringCreateWithBytes(kCFAllocatorDefault, reinterpret_cast<const UInt8*>(overlayText.data()), overlayText.size(), kCFStringEncodingUTF8, false);
         //CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8)
-        CFAttributedStringReplaceString(attributedOverlayText, CFRangeMake(0, 0), CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8));
+        CFStringRef string = CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8);
+        CFAttributedStringReplaceString(attributedOverlayText, CFRangeMake(0, 0), string);
+        CFRelease(string);
     }
     
     CTFontRef ctFont = ((GFontOSX *)mCurrTextFont)->GetCTFont();
@@ -657,6 +659,7 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
     
     CTParagraphStyleSetting settings[] = {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment};
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, sizeof(settings) / sizeof(settings[0]));
+    // Check: is it allowed to change attributes after the attributed string is passed to framesetter?
     CFAttributedStringSetAttribute(attributedOverlayText,
                                    CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
                                    kCTParagraphStyleAttributeName,
@@ -667,9 +670,13 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
     CGContextSaveGState(mContext);
     
     /// Draw attributed text using CTFrameDraw
-    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), CGPathCreateWithRect(CGRectMake(x, y, suggestedSize.width, suggestedSize.height), NULL), NULL);
+    CGPathRef path = CGPathCreateWithRect(CGRectMake(x, y, suggestedSize.width, suggestedSize.height), NULL);
+    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
     CTFrameDraw(frame, mContext);
+    CFRelease(frame);
+    CFRelease(path);
     CFRelease(framesetter);
+    CFRelease(attributedOverlayText);
     
     // Restore the state of the contexte
     CGContextRestoreGState(mContext);
