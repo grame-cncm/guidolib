@@ -5,6 +5,7 @@ GUIDO Engine history
 - fix missing initialisation in static Times font
 - fix crash bug with special tempo form
 - fix crash bug with tremolo and accidentals
+- fix incorrect arpeggio position when embedded in text tag
 
 ----------------------------------------------------------------
   version 1.6.6

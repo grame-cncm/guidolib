@@ -67,6 +67,7 @@ void GRArpeggio::OnDraw( VGDevice & hdc ) const
 		hdc.SetFontColor(color);
 	}
 
+	hdc.SetFontAlign( VGDevice::kAlignBaseLeft );
 	hdc.PushPenWidth(7);
 	for (auto r: fPos) {		// for each chord, retrive the chord bounding box
 		float x = r.left - (fLSpace * 1.1f) + fDx;
