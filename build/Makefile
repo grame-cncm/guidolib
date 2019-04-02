@@ -76,6 +76,7 @@ help :
 	@echo "   android      : build the GUIDOEngine static library for Android"	
 	@echo "   install      : install the Guido library and public headers"
 	@echo "   uninstall    : undo what install did"
+	@echo "   localinstall : install the Guido tools to $$HOME/bin"
 	@echo 
 	@echo "Options:"
 	@echo "   BUILDDIR     : the output folder (currently $(BUILDDIR))"
@@ -152,6 +153,9 @@ installLog := $(BUILDDIR)/install_manifest.txt
 uninstall: installedfiles = $(shell cat $(installLog))
 uninstall: $(installLog)
 	rm -f $(installedfiles) $(installLog)
+
+localinstall:
+	cp bin/guido* bin/midi* $(HOME)/bin
 
 #===============================================================
 # packaging
