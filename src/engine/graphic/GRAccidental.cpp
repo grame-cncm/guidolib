@@ -19,6 +19,7 @@
 #include "GREvent.h"
 #include "TagParameterString.h"
 
+
 NVPoint GRAccidental::sRefposNone;
 NVPoint GRAccidental::sRefposSharp;
 NVPoint GRAccidental::sRefposDSharp;
@@ -104,9 +105,9 @@ void GRAccidental::setStyleNone()	{ mAccidentalSize = 0; }
 //____________________________________________________________________________________
 void GRAccidental::OnDraw(VGDevice & hdc) const
 {
-//cout << "GRAccidental::OnDraw refpos: " << getReferencePosition().x << " offset: " << offset.x << endl;
-	if (mAccidentalSize)
-		GRNotationElement::OnDraw(hdc);
+	if (mAccidentalSize && fAlterSize && mSymbol) {
+		GRNotationElement::OnDrawSymbol (hdc, mSymbol, fDxy.x, -fDxy.y, (fAlterSize == 1) ? 0 : fAlterSize);
+	}
 }
 
 //____________________________________________________________________________________

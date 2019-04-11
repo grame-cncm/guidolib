@@ -53,7 +53,10 @@ class GRAccidental : public GRNotationElement
 	 virtual void setOffsetX(float x)			{ offsetset = true; offset.x = x; }	
 	 virtual void setOffsetY(float y)			{ offsetset = true; offset.y = y; }	
 	 virtual void setOffset(const NVPoint & pt)	{ offsetset = true; offset = pt; }
-	 
+
+	 virtual void setDxy(const NVPoint & pt)	{ fDxy = pt; }
+	 virtual void setAlterSize(float size)		{ fAlterSize = size; }
+
 	 virtual void setSize( float newsize )		{ mAccidentalSize = newsize; }
 	 bool getOffsetSet() const					{ return offsetset; }
 
@@ -75,7 +78,9 @@ class GRAccidental : public GRNotationElement
 	  static NVPoint sRefposQFlat;
 	  static NVPoint sRefpos3QFlat;
 
-	  NVPoint offset;
+	  NVPoint 	offset;
+	  NVPoint 	fDxy;				// can only be set with alter tag
+	  float 	fAlterSize = 1;		// can only be set with alter tag
 	  unsigned char * mColRef;
 	  float mAccidentalSize;
 	

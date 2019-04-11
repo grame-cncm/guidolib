@@ -32,7 +32,6 @@ class GRBeam;
 
 class ARTHead;
 class ARAccidental;
-class ARAlter;
 
 /** \brief Graphical representation of a note event.
 */

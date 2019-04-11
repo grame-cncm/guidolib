@@ -15,9 +15,9 @@ Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
 
 #include <string>
 
+#include "ARAlter.h"
 #include "ARNoteName.h"
 #include "ARMusicalEvent.h"
-
 #include "GuidoDefs.h"
 
 
@@ -67,9 +67,9 @@ class ARNote : public ARMusicalEvent
 		void		 offsetpitch( int steps );
 
 		int		     getAccidentals() const					{ return fAccidentals; }
-		float		 getDetune() const						{ return fDetune; }
-		float		 getPitchShift() const					{ return fDetune + fAccidentals; }
-//		ARTrill *	     getOrnament()						{ return fOrnament;}
+		float		 getDetune() const						{ return fAlter ? fAlter->getDetune() : 0; }
+		const ARAlter * getAlter() const					{ return fAlter; }
+		float		 getPitchShift() const					{ return getDetune() + fAccidentals; }
 		const ARTrill*   getOrnament() const		    	{ return fOrnament;}
 		ARCluster *	     getARCluster()						{ return fCluster;}
 		const ARCluster* getARCluster() const				{ return fCluster;}
@@ -84,7 +84,7 @@ class ARNote : public ARMusicalEvent
 
 		void 		 setTremolo(const ARTremolo* trem)      { fTremolo = trem; }
 		void         setIsLonelyInCluster()					{ fIsLonelyInCluster = true; }
-		void		 setDetune( float detune )				{ fDetune = detune; }
+		void		 setAlter( const ARAlter * alter )		{ fAlter = alter; }
 		void		 setOrnament(const ARTrill *newOrnament, bool trillOwner=true);
 		void		 setAccidentals( int theAccidentals );
 		ARCluster*	 setCluster(ARCluster *inCluster, bool inClusterHaveToBeDrawn = false,
@@ -108,7 +108,6 @@ class ARNote : public ARMusicalEvent
 		int		   fPitch;
 		int		   fOctave;
 		int		   fAccidentals;
-		float	   fDetune;
 		int 	   fIntensity;
 		const ARTrill   *fOrnament;
 		ARCluster *fCluster;
@@ -117,7 +116,8 @@ class ARNote : public ARMusicalEvent
 		bool       fClusterHaveToBeDrawn;
 		bool       fSubElementsHaveToBeDrawn;
 		bool	   fAuto;			// a flag to discriminate notes created by the auto stuff (e.g. due to barlines)
-		const ARTremolo *fTremolo;
+		const ARTremolo * fTremolo 	= 0;
+		const ARAlter *   fAlter	= 0;
 
 		bool		fTrillOwner = false;
 	

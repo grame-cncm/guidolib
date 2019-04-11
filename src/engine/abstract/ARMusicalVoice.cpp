@@ -1007,10 +1007,13 @@ void ARMusicalVoice::doMicroTonal()
 				GuidoPos tagpos = tags->GetHeadPosition();
 				while (tagpos) {
 					ARAlter * alter = dynamic_cast<ARAlter *>(tags->GetNext(tagpos));
-					if (alter) detune += alter->getDetune();
+					if (alter) {
+						detune += alter->getDetune();
+						note->setAlter (alter);
+					}
 				}
 			}
-			note->setDetune(detune);
+//			note->setDetune(detune);
 		}
 	}
 	setReadMode (CHORDMODE);

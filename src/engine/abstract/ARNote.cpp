@@ -31,14 +31,14 @@ const char * gd_pc2noteName(int fPitch);
 
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),
-    fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
+    fAccidentals(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
     fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fStartPosition(-1,1), fNoteAppearance(""), fOctava(0)
 {
 }
 
 ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
-		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
+		fOctave(MIN_REGISTER), fAccidentals(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
         fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0),
         fStartPosition(-1,1), fNoteAppearance(""), fOctava(0)
 {
@@ -46,7 +46,7 @@ ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_
 
 ARNote::ARNote( const std::string & name, int accidentals, int octave, int numerator, int denominator, int intensity )
 	:	ARMusicalEvent(numerator, denominator), fName( name ), fPitch ( UNKNOWN ),
-		fOctave( octave ),	fAccidentals( accidentals ), fDetune(0), fIntensity( intensity ),
+		fOctave( octave ),	fAccidentals( accidentals ), fIntensity( intensity ),
 		fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), 
 		fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fStartPosition(-1,1), fNoteAppearance(""), fOctava(0)
 {
@@ -64,11 +64,10 @@ ARNote::ARNote(const ARNote & arnote, bool istied)
 	fPitch = arnote.fPitch;
 	fOctave = arnote.fOctave;
 	fAccidentals = arnote.fAccidentals;
-	fDetune = arnote.fDetune;
+	fAlter = arnote.getAlter();
 	fIntensity = arnote.fIntensity;
     fVoiceNum = arnote.getVoiceNum(); // Added to fix a bug during chord copy (in doAutoBarlines)
 	fOctava = arnote.getOctava();
-//	fAuto = istied;
 	const ARTrill* trill = arnote.getOrnament();
 	if (trill) {
 		ARTrill* copy = new ARTrill(-1, trill);

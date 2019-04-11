@@ -24,7 +24,6 @@
 #include "VGDevice.h"
 
 // - Guido AR
-#include "ARAlter.h"
 #include "ARNoteFormat.h"
 #include "ARDotFormat.h"
 #include "ARAccidental.h"
@@ -328,8 +327,18 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	AccList * mylist = mGrStaff->askAccidentals(pitch, octave, accidentals, arNote->getDetune());
 	if (!mylist->empty()) {
 		GuidoPos pos = mylist->GetHeadPosition();
-		while (pos)
-			AddTail(new GRAccidental(this, mNoteBreite, mylist->GetNext(pos)));
+		while (pos) {
+			GRAccidental* acc = new GRAccidental(this, mNoteBreite, mylist->GetNext(pos));
+			const ARAlter* alter = arNote->getAlter();
+			if (alter) {
+				NVPoint p(alter->getDX()->getValue(), alter->getDY()->getValue());
+				acc->setDxy(p);
+
+				const TagParameterFloat* size = alter->getSize();
+				if (size) acc->setAlterSize(size->getValue());
+			}
+			AddTail(acc);
+		}
 	}
 	delete mylist;
 
