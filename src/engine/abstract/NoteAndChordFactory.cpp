@@ -126,7 +126,7 @@ void NoteAndChordFactory::setAccidentals(TYPE_ACCIDENTALS accidentals)
 	// depending on the context, mCurrentEvent could belong to ARFactory or to NoteAndChordFactory
 	// while it may be initalised in NoteAndChordFactory context,
 	// it could be used in ARFactory context (and thus with a null value) by methods that have not been overriden
-	ARMusicalEvent * ev = mCurrentEvent;
+//	ARMusicalEvent * ev = mCurrentEvent;
 	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
 	assert(note);
 	note->setAccidentals(accidentals);

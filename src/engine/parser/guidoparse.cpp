@@ -161,7 +161,7 @@
 #include <vector>
 
 #include "GuidoParser.h"
-#include "guido.h"
+#include "gddefs.h"
 
 #include "guidoparse.hpp"
 

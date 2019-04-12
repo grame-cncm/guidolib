@@ -6,13 +6,13 @@ PREFIX := guido
 
 code : $(OUT)
 
-guidoparse.cpp : guido.y guido.h 
+guidoparse.cpp : guido.y gddefs.h 
 	$(YACC) -d -o guidoparse.cpp  -p $(PREFIX) guido.y
 
-guidoparse.hpp : guido.y guido.h 
+guidoparse.hpp : guido.y gddefs.h 
 	$(YACC) -d -o guidoparse.cpp  -p $(PREFIX) guido.y
 
-guidolex.cpp : guido.l guido.h guidoparse.hpp
+guidolex.cpp : guido.l gddefs.h guidoparse.hpp
 	$(LEX)  -oguidolex.cpp -I -P$(PREFIX) guido.l
 
 clean:

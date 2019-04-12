@@ -20,7 +20,7 @@
 #include "TagParameterStrings.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
-#include "guido.h"
+#include "gddefs.h"
 #include "GuidoDefs.h"
 
 using namespace std;

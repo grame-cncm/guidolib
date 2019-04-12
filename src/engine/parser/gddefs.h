@@ -12,10 +12,7 @@
 
 */
 
-/* guido.h */
-
-#ifndef GUIDO_H
-#define GUIDO_H
+#pragma once
 
 #include "GuidoDefs.h"
 
@@ -33,6 +30,4 @@ int gd_fracCmp(long int a, long int b, long int c, long int d);
 
 const char *	gd_pc2noteName(int pitch);
 int				gd_noteName2pc (const char *name);
-
-#endif
 

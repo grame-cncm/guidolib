@@ -36,7 +36,7 @@ static void yyunput(int, char*) __attribute__((unused));
 #include <stdlib.h>
 #include <string.h>
 
-#include "guido.h"
+#include "gddefs.h"
 
 /* --- utility functions: --- */
 

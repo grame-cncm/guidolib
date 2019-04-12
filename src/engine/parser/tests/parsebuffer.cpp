@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "../guido.h"
+#include "../gddefs.h"
 
 using namespace std;
 

@@ -23,7 +23,7 @@
 #include <sstream>
 
 #include "defines.h"		// for GuidoWarn and GuidoTrace
-#include "guido.h"			
+#include "gddefs.h"			
 #include "ARPageFormat.h"
 #include "GUIDOInternal.h"
 

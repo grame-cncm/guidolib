@@ -32,7 +32,7 @@ using namespace std;
 
 // - Guido Misc
 #include "secureio.h"
-#include "guido.h"
+#include "gddefs.h"
 #include "GuidoDefs.h" 		// for LSPACE
 #include "GUIDOInternal.h"
 

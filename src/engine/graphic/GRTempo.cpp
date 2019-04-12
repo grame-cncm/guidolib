@@ -213,7 +213,7 @@ float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xO
 	// - Draw Dot
 	if (theDotSymbol != kNoneSymbol)
     {
-		float w = GetSymbolExtent (theDotSymbol);
+//		float w = GetSymbolExtent (theDotSymbol);
 		hdc.DrawMusicSymbol( xPos + 2 * LSPACE, yPos, theDotSymbol);
 		offsetX += LSPACE;
 	}

@@ -44,7 +44,7 @@ using namespace std;
 // - Guido Misc
 #include "GUIDOInternal.h"
 #include "GUIDOParse.h"
-#include "guido.h"
+#include "gddefs.h"
 #include "VGDevice.h"
 #include "GuidoParser.h"
 
