@@ -38,13 +38,15 @@ class ARStaffFormat : public ARMTParameter
 		virtual std::string getGMNName() const		{ return "\\staffFormat"; };
 		virtual const TagParameterFloat *	getSize() const;
 
-				const TagParameterString *	getStyle() const;
+//				const TagParameterString *	getStyle() const;
 				const TagParameterFloat *	getStaffDistance() const;
 				float getLineThickness() const		{ return fLineThickness; }
+				int   getLinesCount() const		{ return fLinesCount; }
 
 	protected:
 		TagParameterFloat	fSize;
 		float				fLineThickness;
+		int					fLinesCount = 5;
 };
 
 #endif 

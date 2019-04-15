@@ -13,6 +13,8 @@
 */
 
 #include <iostream>
+#include <regex>
+#include <string>
 
 #include "ARStaffFormat.h"
 #include "TagParameterStrings.h"
@@ -21,7 +23,7 @@
 #include "GRDefine.h"
 #include "gmntools.h" // for gd_convertUnits
 
-
+using namespace std;
 
 ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick)
 {
@@ -37,7 +39,6 @@ ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 	fLineThickness = stffrmt.getLineThickness();
 }
 
-const TagParameterString * ARStaffFormat::getStyle() const			{ return getParameter<TagParameterString>(kStyleStr); }
 const TagParameterFloat * ARStaffFormat::getStaffDistance() const	{ return getParameter<TagParameterFloat>(kDistanceStr); }
 const TagParameterFloat * ARStaffFormat::getSize() const
 {
@@ -61,6 +62,15 @@ void ARStaffFormat::setTagParameters (const TagParameterMap& params)
 			fSize.setUnit(size->getUnit());
 			fSize.setBySet();
 		}
+	}
+
+	const TagParameterString * style = getParameter<TagParameterString>(kStyleStr);
+	if (style && style->TagIsSet()) {
+		string str = style->getValue();
+		std::regex e ("([0-9]+)-lines?");
+		smatch m;
+		if (regex_match (str, m, e))
+			fLinesCount = std::stoi(m[1].str());
 	}
 }
 
