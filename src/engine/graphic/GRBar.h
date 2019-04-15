@@ -69,8 +69,8 @@ class GRBar : public GRTagARNotationElement
 		float	getY2	(float y1, float bottom) const;
 
 		static NVPoint sRefPos;
-        int    fLineNumber;
 
+        int    fLinesCount;
         float mDx;
         float mDy;
         float mStaffRatio;

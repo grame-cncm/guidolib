@@ -34,8 +34,6 @@ GRDoubleBar::GRDoubleBar(const ARDoubleBar * ardbar, GRStaff * inStaff, const TY
 	mBoundingBox.left  -= spacing;
 	mBoundingBox.right += spacing;
     mRightSpace = mBoundingBox.right * mTagSize * inStaff->getSizeRatio();
-
-    fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
 }
 
@@ -48,8 +46,6 @@ GRDoubleBar::GRDoubleBar(const ARDoubleBar * ardbar, GRSystem * p_grsystem, GRSt
 	mBoundingBox.left  -= spacing;
 	mBoundingBox.right += spacing;
 	mRightSpace = mBoundingBox.right * mTagSize * inStaff->getSizeRatio();
-
-    fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
 }
 

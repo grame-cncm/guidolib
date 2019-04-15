@@ -39,7 +39,7 @@ GRFinishBar::GRFinishBar( const ARFinishBar * p_ardbar, GRStaff * inStaff, const
 	refpos.y = 4 * LSPACE;
 
     fBaseThickness = LSPACE * 0.5f;
-    fLineNumber = inStaff->getNumlines();
+//    fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
     fSize = inStaff->getSizeRatio();
 
@@ -56,14 +56,11 @@ GRFinishBar::GRFinishBar( const ARFinishBar * p_arbar, GRSystem * p_grsystem, GR
 	mRightSpace = 0;
 
 	refpos.x = -40;		// hardcoded
-//	refpos.y = inStaff ? inStaff->getDredgeSize() : (4 * LSPACE);
 	refpos.y = 4 * LSPACE;
 
     fBaseThickness = LSPACE * 0.5f;
-    fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
     fSize = inStaff->getSizeRatio();
-
 	updateBoundingBox();
 }
 
@@ -89,13 +86,6 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
     if (mColRef)
         hdc.PushFillColor(VGColor(mColRef));
 
-    // - Vertical adjustement according to staff's line number
-    float offsety1 = (float)(fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
-    float offsety2 = 0;
-
-    if (fLineNumber != 0 && fLineNumber != 1)
-        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
-
     const float offsetX = (fSize - 1) * 1.8f + (fStaffThickness - 4) * 0.5f + 2.8f + (fSize - 1) * (fStaffThickness - 4) * 0.5f;
 
     float leftLineThickness = 1.8f * kLineThick * fSize;
@@ -104,15 +94,15 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
 	const float x2 = x1 + spacing;
 
 	if (fRanges.empty()) {
-		const float y1 = mPosition.y + (offsety1 - 2) * fSize;
-		const float y2 = y1 + mBoundingBox.bottom + (offsety2 + 4) * fSize;
+		const float y1 = getY1 (mBoundingBox.top);
+		const float y2 = getY2 (y1, mBoundingBox.bottom);
 		hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
 		hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
 	}
 	else
 	for (size_t i=0; i< fRanges.size(); i++) {
-		const float y1 = fRanges[i].first + (offsety1 - 2) * fSize;
-		const float y2 = fRanges[i].second + (offsety2 + 4) * fSize;
+		float y1 = getY1 (fRanges[i].first);
+		float y2 = getY2 (-mDy, fRanges[i].second);
 		hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
 		hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
 	}

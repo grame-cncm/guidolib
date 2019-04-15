@@ -29,8 +29,6 @@ NVPoint GRRepeatBegin::refpos;
 // --------------------------------------------------------------------------
 GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *arrb, bool p_ownsar)
 					: GRTagARNotationElement(arrb, LSPACE, p_ownsar) 
-//GRRepeatBegin::GRRepeatBegin( ARRepeatBegin * arrb, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos )
-//					: GRBar(arrb, inStaff, inTimePos) 
 {
 	mNeedsSpring = 1;
 	sconst = SCONST_BAR - 2;
@@ -38,7 +36,7 @@ GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *arrb, bool p_ownsar)
 	mLeftSpace = mRightSpace = 0;
 	refpos = NVPoint (0, 4 * LSPACE);
 
-    fLineNumber = 5;
+	fLinesCount = 5;
     fStaffThickness = 4;
     fSize = 1;
     fBaseThickness = LSPACE * 0.6f;
@@ -60,29 +58,32 @@ const ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() const {
 void GRRepeatBegin::updateBoundingBox()
 {
 	const float halfExtent = GetSymbolExtent(mSymbol) * 0.5f;
-
-	mBoundingBox.top    = 0;
-	mBoundingBox.left   = -halfExtent;
-	mBoundingBox.right  = halfExtent;
-	mBoundingBox.bottom = 4 * LSPACE;
+	float curLSPACE = LSPACE;
+	float staffh = 4 * curLSPACE;
 
     GRStaff *staff = getGRStaff();
-
-    if (staff)
-    {
-        fLineNumber = staff->getNumlines();
-
-        int linesOffset = fLineNumber - 5;
-
-        if (linesOffset)
-            mPosition.y += staff->getStaffLSPACE() * linesOffset / 2;
-
+    if (staff) {
+  		curLSPACE 	= staff->getStaffLSPACE();
+  		staffh 		= staff->getDredgeSize();
+		
+      	fLinesCount = staff->getNumlines();
         fStaffThickness = staff->getLineThickness();
         fSize = staff->getSizeRatio();
         fBaseThickness = LSPACE * 0.6f * fSize;
 
         mTagSize *= fSize;
     }
+
+	mPosition.y = 0;
+	float topoffset = 0;
+	float botoffset = 4 * curLSPACE;
+	if (fLinesCount > 1) botoffset = staffh;
+	else topoffset = botoffset = 2 * curLSPACE;
+
+	mBoundingBox.top = -topoffset;
+	mBoundingBox.left = -halfExtent;
+	mBoundingBox.right = halfExtent;
+	mBoundingBox.bottom = botoffset; //curLSPACE * ((fLinesCount > 5) ? (fLinesCount-1) : 4);
 }
 
 // ----------------------------------------------------------------------------
@@ -119,29 +120,32 @@ bool GRRepeatBegin::isSystemSlice() const
 }
 
 // --------------------------------------------------------------------------
+float GRRepeatBegin::getXOffset() const
+{
+	// obscure computation, should be revised !!!
+	float v = (fStaffThickness - 4) * 0.5;
+	return 40 - 30 * (fSize - 1) + v * fSize  - mBoundingBox.Width();  // ????????
+}
+
+// --------------------------------------------------------------------------
 void GRRepeatBegin::DrawDots( VGDevice & hdc ) const
 {
-    float offsety1AccordingToLineNumber = 0;
-    float offsety2AccordingToLineNumber = 0;
-
-    if (fLineNumber == 0)
-        offsety1AccordingToLineNumber = - LSPACE / 2 * fSize;
-    else if (fLineNumber == 1)
-        offsety1AccordingToLineNumber = - LSPACE * fSize;
-    else if (fLineNumber == 2)
-    {
-        offsety1AccordingToLineNumber = 14 * fSize;
-        offsety2AccordingToLineNumber = - 2 * offsety1AccordingToLineNumber;
-    }
-
-    int   pointSymbol = 220;
-    float pointOffsety1 = - 5 * fSize + offsety1AccordingToLineNumber;
-    float pointOffsety2 = pointOffsety1 + LSPACE * fSize + offsety2AccordingToLineNumber;
-    float pointOffsetx = 28 * (fSize - 1) + 0.5f * (fStaffThickness - 4) + (fSize - 1) * (fStaffThickness - 4) * 0.5f + 8;
+	float hlspace = LSPACE * fSize * 0.5;
+	float symh = 2;
+	float y1 = hlspace * (fLinesCount - 5) - symh;
+	if (! (fLinesCount % 2)) y1 += hlspace;
+	float y2 = y1 - symh + LSPACE * fSize;
     float pointSize = 0.4f * fSize;
+	
+	if (fLinesCount == 2) {
+		pointSize = 0.3f * fSize;
+		y1 += 9 * fSize;
+		y2 = y1 + 20 * fSize;
+	}
 
-    DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
-    DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
+    float x  = getXOffset() + hlspace * 2.4;
+    DrawSymbol(hdc, kDotSymbol, x, y1, pointSize);
+    DrawSymbol(hdc, kDotSymbol, x, y2, pointSize);
 }
 
 // --------------------------------------------------------------------------
@@ -159,29 +163,28 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 	bool systembar = getTagType() == GRTag::SYSTEMTAG;
 	if (systembar || !isSystemSlice()) {
 		// - Vertical adjustement according to staff's line number
-		float offsety1 = (float)(fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+		float offsety1 = (float)(fmod(- 0.5f * fLinesCount - 2, 3) + 1.5f) * LSPACE;
 		float offsety2 = 0;
 
-		if (fLineNumber != 0 && fLineNumber != 1)
-			offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+		if (fLinesCount != 0 && fLinesCount != 1)
+			offsety2 = ((fLinesCount - 5) % 6) * LSPACE;
 
 		float rightLineThickness = 1.8f * kLineThick * fSize;
 
 		// - Horizontal adjustement according to staff's lines size and staff's size
-		const float offsetX = 0.5f * (fStaffThickness - 4) - 30 * (fSize - 1) + (fSize - 1) * (fStaffThickness - 4) * 0.5f + 40;
+//		const float offsetX = 0.5f * (fStaffThickness - 4) - 30 * (fSize - 1) + (fSize - 1) * (fStaffThickness - 4) * 0.5f + 40;
 
 		const float spacing = fBaseThickness + LSPACE * 0.4f * fSize - rightLineThickness;
-		const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
+		const float x1 = mPosition.x  + getXOffset();
 		const float x2 = x1 + spacing;
 
 		if (fRanges.empty()) {
-			const float y1 = mPosition.y + offsety1 * fSize;
-			const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
+			const float y1 = mPosition.y + mBoundingBox.top; // * fSize;
+			const float y2 = mPosition.y + mBoundingBox.bottom; // * fSize;
 			hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
 			hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
 		}
-		else
-		for (size_t i=0; i< fRanges.size(); i++) {
+		else for (size_t i=0; i< fRanges.size(); i++) {
 			float y1 = fRanges[i].first + offsety1 * fSize;
 			float y2 = fRanges[i].second + offsety2 * fSize;
 			hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);

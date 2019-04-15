@@ -50,11 +50,12 @@ class GRRepeatEnd : public GRBar
 	protected:
         static NVPoint refpos;
         float  fBaseThickness;
-        int    fLineNumber;
         float  fSize;
         float  fStaffThickness;
+        float  fLSpace;
 
 	private:
+				float	getXOffset() const;
 				void	DrawDots( VGDevice & hdc ) const;
 				void	InitRepeatEnd();
 };

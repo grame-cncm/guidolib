@@ -30,26 +30,11 @@ using namespace std;
 NVPoint GRRepeatEnd::refpos;
 
 // --------------------------------------------------------------------------
-/*
-GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * ar, bool ownsar )
-				: GRTagARNotationElement( ar, LSPACE, ownsar )
-//				: GRPTagARNotationElement( ar, ownsar )
-*/
-GRRepeatEnd::GRRepeatEnd( const ARRepeatEnd * arre, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float proportionnalRender )
-					: GRBar(arre, inStaff, inTimePos, proportionnalRender)
+GRRepeatEnd::GRRepeatEnd( const ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float proportionnalRender )
+					: GRBar(ar, inStaff, inTimePos, proportionnalRender)
 {
 	InitRepeatEnd();
 }
-
-// --------------------------------------------------------------------------
-/*
-GRRepeatEnd::GRRepeatEnd( ARRepeatEndRangeEnd * ar, bool ownsar )
-						: GRTagARNotationElement( ar, LSPACE, ownsar )
-//				: GRPTagARNotationElement( ar, ownsar )
-{
-	InitRepeatEnd();
-} 
-*/
 
 const ARRepeatEnd* GRRepeatEnd::getARRepeatEnd() {
 	return dynamic_cast<const ARRepeatEnd*>(getAbstractRepresentation());
@@ -60,21 +45,21 @@ void GRRepeatEnd::InitRepeatEnd()
 {
 	mNeedsSpring = 1;
 	sconst = SCONST_BAR - 2;
-//	sconst = 5; //SCONST_BAR;
 
 	mSymbol = kRepeatEndSymbol; 
 	mLeftSpace =  mRightSpace = 0;
 	refpos.Set( -LSPACE * 0.8f, 4 * LSPACE );
+	fLSpace = LSPACE;
+	fSize = 1;
+	fStaffThickness = 4;
 
     GRStaff *staff = getGRStaff();
-
     if (staff)
     {
-        fLineNumber = staff->getNumlines();
-
         fStaffThickness = staff->getLineThickness();
         fSize = staff->getSizeRatio();
         fBaseThickness = LSPACE * 0.6f * fSize;
+        fLSpace = staff->getStaffLSPACE();
     }
 	updateBoundingBox();
 }
@@ -103,37 +88,37 @@ void GRRepeatEnd::GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& in
 // --------------------------------------------------------------------------
 void GRRepeatEnd::updateBoundingBox()
 {
-	const float extent = GetSymbolExtent( mSymbol );
-	const float halfExtent = extent * 0.5f;
-
-	mBoundingBox.top = 0;
-	mBoundingBox.left = -halfExtent + refpos.x;
-	mBoundingBox.right = halfExtent + refpos.x;
-	mBoundingBox.bottom = 4 * LSPACE;
+//	const float extent = GetSymbolExtent( mSymbol );
+//	const float halfExtent = extent * 0.5f;
+//
+//	mBoundingBox.top = 0;
+//	mBoundingBox.left = -halfExtent + refpos.x;
+//	mBoundingBox.right = halfExtent + refpos.x;
+//	mBoundingBox.bottom = 4 * LSPACE;
 }
+
+// --------------------------------------------------------------------------
+float GRRepeatEnd::getXOffset() const { return mBoundingBox.Width() / fSize + (LSPACE * 0.75 * fSize); }
 
 // --------------------------------------------------------------------------
 void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 {
-   float offsety1AccordingToLineNumber = 0;
-    float offsety2AccordingToLineNumber = 0;
-
-    if (fLineNumber == 0)
-        offsety1AccordingToLineNumber = - LSPACE / 2 * fSize;
-    else if (fLineNumber == 1)
-        offsety1AccordingToLineNumber = - LSPACE * fSize;
-    else if (fLineNumber == 2)
-    {
-        offsety1AccordingToLineNumber = 14 * fSize;
-        offsety2AccordingToLineNumber = - 2 * offsety1AccordingToLineNumber;
-    }
-
-    float pointOffsety1 = - 5 * fSize + offsety1AccordingToLineNumber;
-    float pointOffsety2 = pointOffsety1 + LSPACE * fSize + offsety2AccordingToLineNumber;
-    float pointOffsetx  = (fStaffThickness - 4) * 0.5f - 62 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f - 57;
+	float hlspace = LSPACE * fSize * 0.5;
+	float symh = 2; //4;
+	float y1 = hlspace * (fLinesCount - 5) - symh;
+	if (! (fLinesCount % 2)) y1 += hlspace;
+	float y2 = y1 - symh + LSPACE * fSize;
     float pointSize = 0.4f * fSize;
-    DrawSymbol(hdc, kDotSymbol, pointOffsetx, pointOffsety1, pointSize);
-    DrawSymbol(hdc, kDotSymbol, pointOffsetx, pointOffsety2, pointSize);
+
+	if (fLinesCount == 2) {
+		pointSize = 0.3f * fSize;
+		y1 += 9 * fSize;
+		y2 = y1 + 20 * fSize;
+	}
+
+    float x  = -hlspace * 0.75 - getXOffset();
+    DrawSymbol(hdc, kDotSymbol, x, y1, pointSize);
+    DrawSymbol(hdc, kDotSymbol, x, y2, pointSize);
 }
 
 // --------------------------------------------------------------------------
@@ -151,31 +136,26 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 	bool systembar = getTagType() == GRTag::SYSTEMTAG;
 	// for system tags, draw the bars only once
 	if (systembar || !isSystemSlice()) {
-		// - Vertical adjustement according to staff's line number
-		float offsety1 = (float)(fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
-		float offsety2 = 0;
-
-		if (fLineNumber != 0 && fLineNumber != 1)
-			offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
 
 		// - Horizontal adjustement according to staff's lines size and staff's size
-		const float offsetX = (fStaffThickness - 4) * 0.5f - 48 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f + 49;
+//		const float offsetX = (fStaffThickness - 4) * 0.5f - 48 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f + 49;
 
 		float leftLineThickness = 1.8f * kLineThick * fSize;
 		const float spacing = LSPACE * 0.4f * fSize;
-		const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
+		const float x1 = mPosition.x - getXOffset(); //mPosition.x - mBoundingBox.Width() / fSize - (LSPACE/2 * fSize); // + offsetX;
 		const float x2 = x1 + spacing;
 
 		if (fRanges.empty()) {
-			const float y1 = mPosition.y + offsety1 * fSize;
-			const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
+			const float lthick = fStaffThickness/8;
+			const float y1 = getY1 (mBoundingBox.top) - lthick;
+			const float y2 = getY2 (y1, mBoundingBox.bottom) + lthick;
 			hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
 			hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
 		}
 		else
 		for (size_t i=0; i< fRanges.size(); i++) {
-			const float y1 = fRanges[i].first + offsety1 * fSize;
-			const float y2 = fRanges[i].second + offsety2 * fSize;
+			const float y1 = fRanges[i].first;
+			const float y2 = fRanges[i].second;
 			hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
 			hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
 		}

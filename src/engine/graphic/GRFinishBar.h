@@ -40,7 +40,6 @@ public:
 protected:
     float	fBaseThickness;
     static	NVPoint refpos;
-    int     fLineNumber;
     float   fStaffThickness;
     float   fSize;
 };

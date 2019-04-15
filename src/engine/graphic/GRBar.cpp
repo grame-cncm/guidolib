@@ -60,9 +60,8 @@ GRBar::GRBar(const ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION &
 	setTagType(GRTag::STAFFTAG);
 	sconst = SCONST_BAR;
     mStaffRatio = 1.0f;
+    fLinesCount = inStaff->getNumlines();
 	InitGRBar( inTimePos, inStaff );
-
-    fLineNumber = inStaff->getNumlines();
 }
 
 // --------------------------------------------------------------------------
@@ -77,8 +76,8 @@ GRBar::GRBar(const ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_T
 	mSymbol = kBarSymbol;
 	mNeedsSpring = 0;
 	setTagType(GRTag::SYSTEMTAG);
+    fLinesCount = inStaff->getNumlines();
 	InitGRBar( inTimePos, inStaff );
-    fLineNumber = inStaff->getNumlines();
 }
 
 // -----------------------------------------------------------------------------
@@ -100,20 +99,21 @@ void GRBar::InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inSt
 	// - Setup the bouding box
 	// this is the space left and right of a barline ...
 	// not sure, wether this should be done here?
-	mBoundingBox.top = 0;
+	float topoffset = 0;
+	float botoffset = 4 * curLSPACE;
+	if (fLinesCount > 1) botoffset = inStaff->getDredgeSize();
+	else {
+		topoffset = botoffset = 2 * curLSPACE;
+	}
+
+	mBoundingBox.top = -topoffset;
 	mBoundingBox.left = -halfExtent;
 	mBoundingBox.right = halfExtent;
-	mBoundingBox.bottom = curLSPACE * 4;
+	mBoundingBox.bottom = botoffset;
 
-	if (inStaff) {
-		mStaffRatio = inStaff->getSizeRatio();
-		int linesOffset = inStaff->getNumlines() - 5;
+	if (inStaff) mStaffRatio = inStaff->getSizeRatio();
 
-		if (linesOffset)
-			mPosition.y += curLSPACE * linesOffset / 2;
-	}
-	
-	// - Setup left and right spaces	
+	// - Setup left and right spaces
 	mLeftSpace =  (GCoord)((curLSPACE * 0.5f > halfExtent ? curLSPACE * 0.5f : halfExtent) * mTagSize * mStaffRatio);
 	mRightSpace = (GCoord)(halfExtent * mTagSize * mStaffRatio);
 
@@ -265,19 +265,15 @@ float GRBar::getXPos(float staffSize) const
 // --------------------------------------------------------------------------
 float GRBar::getY1	(float top) const
 {
-    // - Vertical adjustement according to staff's line number
-	float offsety1 = (float)(fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
-	return mPosition.y + top + offsety1 * mGrStaff->getSizeRatio() - mDy;
+    // - Vertical adjustement according to staff's lines count
+	return mPosition.y + top - mDy;
 }
 
 // --------------------------------------------------------------------------
 float GRBar::getY2	(float y1, float bottom) const
 {
-    // - Vertical adjustement according to staff's line number
-   float offsety2 = 0;
-    if (fLineNumber != 0 && fLineNumber != 1)
-        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
-	return y1 + bottom + offsety2 * mGrStaff->getSizeRatio();
+    // - Vertical adjustement according to staff's lines count
+	return mPosition.y + bottom - mDy;
 }
 
 // --------------------------------------------------------------------------
@@ -295,16 +291,16 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
         hdc.SetFontColor(VGColor(mColRef));
         hdc.PushPenColor(VGColor(mColRef));
     }
-
 	DisplayMeasureNum (hdc);
-	
+
 	const float lineThickness = (mGrStaff ? mGrStaff->currentLineThikness() : kLineThick) * staffSize * mTagSize;
 	hdc.PushPenWidth(lineThickness);
 
     const float x  = getXPos(staffSize);
 	if (fRanges.empty()) {
-		float y1 = getY1 (mBoundingBox.top) + lineThickness / 2;
-		float y2 = getY2 (y1, mBoundingBox.bottom) - lineThickness / 2;
+		NVRect r = mBoundingBox	+ mPosition;
+		float y1 = getY1(mBoundingBox.top) + lineThickness / 2;
+		float y2 = getY2(y1, mBoundingBox.bottom) - lineThickness / 2;
 		hdc.Line(x, y1, x, y2);
 	}
 	else
@@ -313,6 +309,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 		float y2 = getY2 (-mDy, fRanges[i].second) - lineThickness / 2;
 		hdc.Line(x, y1, x, y2);
 	}
+
     hdc.PopPenWidth();
     if (mColRef) {
         hdc.SetFontColor(prevFontColor);
@@ -373,8 +370,8 @@ void GRBar::setPosFrom(GCoord posy)
 */
 void GRBar::setPosTo(GCoord posy) 
 {
-	traceMethod("setPosTo");
-	mBoundingBox.bottom = posy; 
+//	traceMethod("setPosTo");
+//	mBoundingBox.bottom = posy;
 }
 
 // --------------------------------------------------------------------------

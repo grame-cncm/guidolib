@@ -34,7 +34,6 @@ public:
     virtual void DrawWithLines( VGDevice & hdc ) const;
 
 protected:
-    int   fLineNumber;
     float fStaffThickness;
 };
 

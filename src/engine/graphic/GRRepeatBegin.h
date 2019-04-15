@@ -52,11 +52,13 @@ protected:
 	void	DrawDots( VGDevice & hdc ) const;
 
     static NVPoint refpos;
-           float   fBaseThickness;
-           int     fLineNumber;
-           float   fSize;
-           float   fStaffThickness;
+	float   fBaseThickness;
+//           int     fLineNumber;
+	int 	fLinesCount;
+	float   fSize;
+	float   fStaffThickness;
 private:
+	float	getXOffset() const;
 	GRBar::TRanges	fRanges;
 };
 
