@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.7
+- fix staff lines count limitation + various layout issues with bars
 - fix missing initialisation in static Times font
 - fix crash bug with special tempo form
 - fix crash bug with tremolo and accidentals
