@@ -1,0 +1,6 @@
+{
+	[ 
+		\accol<id=1, range="1-7", dx=-4, type="straightBrace">	 
+		\barFormat<"system">  
+		\staffFormat<"25-lines"> c | d \doubleBar e ]
+}

@@ -1,0 +1,12 @@
+{
+	[ \accol<type="none">	  
+	  \staffFormat<"0-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"1-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"2-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"3-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"4-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"5-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"6-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"7-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ],
+	[ \staffFormat<"8-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f ]
+}
