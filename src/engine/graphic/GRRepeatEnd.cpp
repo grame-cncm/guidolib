@@ -142,7 +142,7 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 
 		float leftLineThickness = 1.8f * kLineThick * fSize;
 		const float spacing = LSPACE * 0.4f * fSize;
-		const float x1 = mPosition.x - getXOffset(); //mPosition.x - mBoundingBox.Width() / fSize - (LSPACE/2 * fSize); // + offsetX;
+		const float x1 = mPosition.x - getXOffset() + mDx;
 		const float x2 = x1 + spacing;
 
 		if (fRanges.empty()) {

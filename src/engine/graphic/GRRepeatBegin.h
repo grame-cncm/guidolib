@@ -53,10 +53,11 @@ protected:
 
     static NVPoint refpos;
 	float   fBaseThickness;
-//           int     fLineNumber;
 	int 	fLinesCount;
 	float   fSize;
 	float   fStaffThickness;
+	float 	fDx = 0;
+	float 	fDy = 0;
 private:
 	float	getXOffset() const;
 	GRBar::TRanges	fRanges;

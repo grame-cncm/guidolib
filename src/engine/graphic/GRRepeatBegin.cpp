@@ -20,6 +20,7 @@
 #include "GRRepeatBegin.h"
 #include "GRSystemSlice.h"
 #include "GRStaff.h"
+#include "TagParameterFloat.h"
 #include "VGDevice.h"
 
 using namespace std;
@@ -27,8 +28,8 @@ using namespace std;
 NVPoint GRRepeatBegin::refpos;
 
 // --------------------------------------------------------------------------
-GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *arrb, bool p_ownsar)
-					: GRTagARNotationElement(arrb, LSPACE, p_ownsar) 
+GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *ar, bool p_ownsar)
+					: GRTagARNotationElement(ar, LSPACE, p_ownsar)
 {
 	mNeedsSpring = 1;
 	sconst = SCONST_BAR - 2;
@@ -40,6 +41,8 @@ GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *arrb, bool p_ownsar)
     fStaffThickness = 4;
     fSize = 1;
     fBaseThickness = LSPACE * 0.6f;
+    fDx = ar->getDX()->getValue();
+    fDy = ar->getDY()->getValue();
 	updateBoundingBox();
 }
 
@@ -175,12 +178,12 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 //		const float offsetX = 0.5f * (fStaffThickness - 4) - 30 * (fSize - 1) + (fSize - 1) * (fStaffThickness - 4) * 0.5f + 40;
 
 		const float spacing = fBaseThickness + LSPACE * 0.4f * fSize - rightLineThickness;
-		const float x1 = mPosition.x  + getXOffset();
+		const float x1 = mPosition.x  + getXOffset() + fDx;
 		const float x2 = x1 + spacing;
 
 		if (fRanges.empty()) {
-			const float y1 = mPosition.y + mBoundingBox.top; // * fSize;
-			const float y2 = mPosition.y + mBoundingBox.bottom; // * fSize;
+			const float y1 = mPosition.y + mBoundingBox.top - fDy; // * fSize;
+			const float y2 = mPosition.y + mBoundingBox.bottom  - fDy; // * fSize;
 			hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
 			hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
 		}
