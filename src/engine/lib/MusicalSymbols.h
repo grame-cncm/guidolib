@@ -196,6 +196,11 @@ ConstMusicalSymbolID kArpeggioSymbol               	= 242;
 ConstMusicalSymbolID kPedalSymbol               	= 176;
 ConstMusicalSymbolID kPedalUpSymbol               	= 42;
 
+// version 1.67
+ConstMusicalSymbolID kIntensSFZSymbol               = 243;
+ConstMusicalSymbolID kIntensRFZSymbol               = 244;
+ConstMusicalSymbolID kIntensFZSymbol                = 90;
+
 #endif
 
 #endif

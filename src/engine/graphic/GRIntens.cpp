@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string>
 #include <string.h>
 
 #include "ARIntens.h"
@@ -43,18 +44,36 @@ GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
 	mGrStaff = inStaff;
 
 	// Now try to figure out, which intensity was selected:
-	const char * cp = getARIntens()->getText().c_str();
-	if (!strcmp(cp,"p"))		mSymbol = INTENS_P;
-	else if (!strcmp(cp,"f") )	mSymbol = INTENS_F;
-	else if (!strcmp(cp,"ff"))	mSymbol = INTENS_FF;
-	else if (!strcmp(cp,"fff"))	mSymbol = INTENS_FFF;
-	else if (!strcmp(cp,"ffff"))mSymbol = INTENS_FFFF;
-	else if (!strcmp(cp,"mf"))	mSymbol = INTENS_MF;
-	else if (!strcmp(cp,"mp"))	mSymbol = INTENS_MP;
-	else if (!strcmp(cp,"sf"))	mSymbol = INTENS_SF;
-	else if (!strcmp(cp,"pp"))	mSymbol = INTENS_PP;
-	else if (!strcmp(cp,"ppp"))	mSymbol = INTENS_PPP;
-	else if (!strcmp(cp,"pppp"))mSymbol = INTENS_PPPP;
+//	const char * cp = getARIntens()->getText().c_str();
+//	if (!strcmp(cp,"p"))		mSymbol = kIntensPSymbol;
+//	else if (!strcmp(cp,"f") )	mSymbol = kIntensFSymbol;
+//	else if (!strcmp(cp,"ff"))	mSymbol = kIntensFFSymbol;
+//	else if (!strcmp(cp,"fff"))	mSymbol = kIntensFFFSymbol;
+//	else if (!strcmp(cp,"ffff"))mSymbol = kIntensFFFFSymbol;
+//	else if (!strcmp(cp,"mf"))	mSymbol = kIntensMFSymbol;
+//	else if (!strcmp(cp,"mp"))	mSymbol = kIntensMPSymbol;
+//	else if (!strcmp(cp,"sf"))	mSymbol = kIntensSFSymbol;
+//	else if (!strcmp(cp,"pp"))	mSymbol = kIntensPPSymbol;
+//	else if (!strcmp(cp,"ppp"))	mSymbol = kIntensPPPSymbol;
+//	else if (!strcmp(cp,"pppp"))mSymbol = kIntensPPPPSymbol;
+
+	string intens = getARIntens()->getText().c_str();
+	if (intens == "p")			mSymbol = kIntensPSymbol;
+	else if (intens == "f")		mSymbol = kIntensFSymbol;
+	else if (intens == "ff")	mSymbol = kIntensFFSymbol;
+	else if (intens == "fff")	mSymbol = kIntensFFFSymbol;
+	else if (intens == "ffff")	mSymbol = kIntensFFFFSymbol;
+	else if (intens == "mf")	mSymbol = kIntensMFSymbol;
+	else if (intens == "mp")	mSymbol = kIntensMPSymbol;
+	else if (intens == "sf")	mSymbol = kIntensSFSymbol;
+	else if (intens == "pp")	mSymbol = kIntensPPSymbol;
+	else if (intens == "ppp")	mSymbol = kIntensPPPSymbol;
+	else if (intens == "pppp")	mSymbol = kIntensPPPPSymbol;
+	else if (intens == "sfz")	mSymbol = kIntensSFZSymbol;
+	else if (intens == "rfz")	mSymbol = kIntensRFZSymbol;
+	else if (intens == "fz")	mSymbol = kIntensFZSymbol;
+	else mSymbol = 0;
+
 
 	if (mSymbol != 0) {
 		float x = 0;

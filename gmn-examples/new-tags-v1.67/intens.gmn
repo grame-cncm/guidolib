@@ -1,0 +1,10 @@
+(*
+	Make sure you have the guido font version 3.7 or greater installed
+
+	fz, sfz and rfz are now supported
+*)
+{
+[
+	\i<"pp">g \i<"sfz"> g \i<"rfz">  g \i<"ff"> g \i<"fz"> g
+]
+}
