@@ -1,0 +1,18 @@
+{
+[ 
+	\barFormat<style= "system"> 
+	\clef<"g2"> \key<-2> \meter<"3/8"> \intens<"p", dy=-2.6hs> _/4. 
+]
+, 
+[ 
+   \clef<"f4"> \key<-2> \meter<"3/8">  
+	\stemsDown 
+	\beamBegin:1 
+	d-1/16 a f#0
+	\beamEnd:1 
+
+	\beamBegin:1 
+	a d1 \staff<1> f# 
+	\beamEnd:1
+ ]
+}
