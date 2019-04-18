@@ -21,17 +21,19 @@
 #include "TimeUnwrap.h"
 
 
-ARIntens::ARIntens() : ARFontAble()
+ARIntens::ARIntens()
 {
 	setupTagParameters (gMaps->sARIntensMap);
 	relativeTimePosition.set( -1, 1 );
 	setDuration ( DURATION_0 );
  }
 
-ARIntens::ARIntens(const char * txt) : ARFontAble()
+ARIntens::ARIntens(const char * txt)
 {
 	setupTagParameters (gMaps->sARIntensMap);
 	fIntens = txt;
+	relativeTimePosition.set( -1, 1 );
+	setDuration ( DURATION_0 );
 }
 
 void ARIntens::setTagParameters (const TagParameterMap& params)
@@ -44,6 +46,7 @@ void ARIntens::setTagParameters (const TagParameterMap& params)
 	fBefore = p ? p->getValue() : "";
 	p = getParameter<TagParameterString>(kAfterStr);
 	fAfter = p ? p->getValue() : "";
+	fAutoPos = getParameter<TagParameterString>(kAutoposStr, true)->getBool();
 }
 
 // --------------------------------------------------------------------------
