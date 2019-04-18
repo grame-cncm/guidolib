@@ -188,10 +188,6 @@ void GRStem::DrawStem( VGDevice & hdc, unsigned int symbol1, unsigned int symbol
 		starty += offset;
 		length -= offset;
 	}
-//	if (length) {
-//		starty -= length;
-//		GRNotationElement::DrawSymbol( hdc, symbol2, 0, starty );
-//	}
 }
 
 //-------------------------------------------------------------------
@@ -249,6 +245,9 @@ void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 			offsy += halfSpaceBySize;
 		}
 	}
+
+//cerr << "GRStem::DrawWithLine pos / len: " << mPosition << " : " << mStemLen << " dir: " <<  ((mStemDir == dirUP) ? "up" : "down") << endl;
+
 	// - Restore context
 	if (colref) hdc.SetFontColor( prevTextColor );  //(TODO: in a parent method)
 }
@@ -256,12 +255,9 @@ void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 // Not used for now, but use it would avoid some stem length problems (cf. regression-tests/pending/badStemLength.gmn)
 void GRStem::DrawWithLine( VGDevice & hdc ) const
 {
-	if(!mDraw || !mShow)
-		return;
-	if (mStemDir == dirOFF)
-        return;
-	if (mSize < kMinNoteSize)
-        return;			// size is too small, don't draw
+	if(!mDraw || !mShow) 		return;
+	if (mStemDir == dirOFF) 	return;
+	if (mSize < kMinNoteSize) 	return;			// size is too small, don't draw
 
 	// - Setup colors
 	const unsigned char *colref = getColRef();
@@ -282,31 +278,22 @@ void GRStem::DrawWithLine( VGDevice & hdc ) const
 
         if (mStemDir == dirUP)
         {
-            x1 = mPosition.x + mOffset.x + noteXextent * 0.5f - width * 0.5f;
+            x1 = x2 = mPosition.x + mOffset.x + noteXextent * 0.5f - width * 0.5f;
             y1 = mPosition.y + mOffset.y - width * 0.5f - (noteYextent * 0.5f / 6);
-            x2 = mPosition.x + mOffset.x + noteXextent * 0.5f - width * 0.5f;
             y2 = mPosition.y + mOffset.y - mStemLen + width * 0.5f;
         }
         else // if (mStemDir == dirDOWN)	assume dir is down
         {
-            x1 = mPosition.x + mOffset.x - noteXextent * 0.5f + width * 0.5f,
+            x1 = x2 = mPosition.x + mOffset.x - noteXextent * 0.5f + width * 0.5f,
             y1 = mPosition.y + mOffset.y + width * 0.5f + (noteYextent * 0.5f / 6),
-            x2 = mPosition.x + mOffset.x - noteXextent * 0.5f + width * 0.5f,
             y2 = mPosition.y + mOffset.y + mStemLen - width * 0.5f;
         }
 
         hdc.Line(x1, y1, x2, y2);
-
         hdc.PopPenWidth();
-
         if (colref)
             hdc.PopPenColor();
     }
-}
-
-const NVPoint & GRStem::getReferencePosition() const
-{
-	return sRefpos;
 }
 
 void GRStem::setColRef( const unsigned char * inColor )

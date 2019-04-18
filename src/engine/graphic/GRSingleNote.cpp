@@ -272,7 +272,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	if (mGlobalStem == 0) {
 		if (mStemDir == dirAUTO) {
 			tmp =  new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite); // was 60?);
-			mStemDir = tmp->mStemDir;
+			mStemDir = tmp->getStemDir();
 		}
 		else {
 			stemTmpDirection = mStemDir;
@@ -280,7 +280,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 			mStemDirSet = true;
 		}
 
-		mStemLen = tmp->mStemLen;
+		mStemLen = tmp->getStemLength();
 		AddTail(tmp);
 
 		// here we have to add the flags ...
@@ -354,9 +354,9 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	if (!mStemLengthSet && !mGlobalStem) {
 		GRStem * stem = getStem();
 		if (stem) {
-			if (stem->mStemDir == dirUP) {
+			if (stem->getStemDir() == dirUP) {
 				NVPoint stemendpos (stem->getPosition());
-				stemendpos.y -= stem->mStemLen;
+				stemendpos.y -= stem->getStemLength();
                 float coef = 0;
 
                 if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 64.0f && mPosition.y > 250)
@@ -369,12 +369,12 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
                 if (stemendpos.y > coef * mCurLSPACE) {
                     const float newlength = (stem->getPosition().y - coef * mCurLSPACE);
                     changeStemLength(newlength);
-                    mStemLen = stem->mStemLen;
+                    mStemLen = stem->getStemLength();
                 }
 			}
-			else if (stem->mStemDir == dirDOWN) {
+			else if (stem->getStemDir() == dirDOWN) {
 				NVPoint stemendpos (stem->getPosition());
-				stemendpos.y += stem->mStemLen;
+				stemendpos.y += stem->getStemLength();
                 float coef = 0;
 
                 if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 64.0f && mPosition.y < - 50)
@@ -387,7 +387,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 				if (stemendpos.y < coef * mCurLSPACE) {
 					const float newlength = (coef * mCurLSPACE - stem->getPosition().y);
 					changeStemLength(newlength) ;
-					mStemLen = stem->mStemLen;
+					mStemLen = stem->getStemLength();
 				}
 			}
 		}
@@ -795,7 +795,7 @@ float GRSingleNote::setStemLength( float inLen )
 	if (stem)
 	{
 		stem->setStemLength( inLen );
-		mStemLen = stem->mStemLen;
+		mStemLen = stem->getStemLength();
 	}
 	else mStemLen = inLen;
 
@@ -838,7 +838,7 @@ float GRSingleNote::getStemLength() const
 {
 	const GRStem * stem = getStem();
 	if (stem)
-		return stem->mStemLen;		// I am a friend!
+		return stem->getStemLength();
 	return mStemLen;
 }
 

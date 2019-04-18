@@ -28,21 +28,9 @@ class GRGlobalStem;
 class GRStem : public GRNotationElement
 {
 public:
-
-	friend class GRSingleNote;
-
-	// the LS-Parameters mean:
-	// LENGTH - SET (the stemlength
-	// was set explicitly)
-
-	// the constructur for global stems ...
-	GRStem(GRGlobalStem * gstem);
-
-	GRStem(GREvent * sngnot,
-		const TYPE_DURATION & durtempl,
-		GDirection dir,
-		float length,
-		float notebreite);
+			// the constructur for global stems ...
+			 GRStem(GRGlobalStem * gstem);
+			 GRStem(GREvent * sngnot, const TYPE_DURATION & dur, GDirection dir, float length, float notebreite);
 
 	virtual ~GRStem();
 
@@ -50,29 +38,26 @@ public:
 
 	virtual void setStemLength( float inLen );
 	virtual void setStemDir(GDirection dir);
-	virtual const NVPoint & getOffset() const		{ return mOffset; }
-	virtual void addToOffset(const NVPoint &pt)		{ mOffset += pt; }
-	virtual const NVPoint & getReferencePosition() const;
-
-	virtual const unsigned char * getColRef() const	{ return mColRef; }
-
-	virtual float getSize() const	{ return mSize; }
+	virtual void addToOffset(const NVPoint &pt)		{		 mOffset += pt; }
 
 	virtual void OnDraw( VGDevice & hdc ) const;
 
-	virtual GDirection getStemDir() const	{ return mStemDir; }
-	virtual float getStemLength() const	{ return mStemLen; }
+	virtual const NVPoint& getReferencePosition() const	{ return sRefpos; }
+	virtual const NVPoint& getOffset() const			{ return mOffset; }
+	virtual float 		getSize() const					{ return mSize; }
+	virtual GDirection 	getStemDir() const				{ return mStemDir; }
+	virtual float 		getStemLength() const			{ return mStemLen; }
+	virtual const unsigned char * getColRef() const		{ return mColRef; }
+	
+    bool getFirstSegmentDrawingState() const 			{ return fDrawActivated; }
+    ARTHead::HEADSTATE getHeadOrientation() const 		{ return fHeadOrientation; }
 
 	virtual void setColRef( const unsigned char * inColor );
 
-	void setOffsetStartPosition(float inOffset) { fOffsetStartPosition = inOffset; }
-    void setFirstSegmentDrawingState(bool inDrawActivated) { fDrawActivated = inDrawActivated; }
-    bool getFirstSegmentDrawingState() { return fDrawActivated; }
-
-    ARTHead::HEADSTATE getHeadOrientation() { return fHeadOrientation; }
-    
+	void setOffsetStartPosition(float inOffset) 			{ fOffsetStartPosition = inOffset; }
+    void setFirstSegmentDrawingState(bool inDrawActivated)  { fDrawActivated = inDrawActivated; }
     /* Only for GlobalStem */
-    void setLastHeadOrientation(ARTHead::HEADSTATE inLastHeadOrientation) { fLastHeadOrientation = inLastHeadOrientation; }
+    void setLastHeadOrientation(ARTHead::HEADSTATE value) 	{ fLastHeadOrientation = value; }
 
 private:
 	void DrawWithGlyph		( VGDevice & hdc ) const;
