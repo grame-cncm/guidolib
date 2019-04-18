@@ -25,7 +25,7 @@ class ARIntens :  public ARFontAble
 {
 	public:
 				 ARIntens(const char * txt);
-				 ARIntens();
+				 ARIntens(bool autopos);
 		virtual ~ARIntens() {}
 
 		virtual void setTagParameters (const TagParameterMap& params);

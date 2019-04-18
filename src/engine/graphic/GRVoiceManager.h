@@ -50,6 +50,7 @@ class GRSingleNote;
 class GRRange;
 class GRGlissando;
 class GRTagARNotationElement;
+class GRIntens;
 
 typedef KF_IPointerList<GRTag> GRTagPointerList;
 
@@ -129,6 +130,7 @@ protected:
 	const ARRestFormat *	currestformat;
 	const ARTStem *			curstemstate;
 	const ARTHead *			curheadstate;
+	GRIntens*				curIntens = 0;
 
 	static bool &	getCurStaffDraw(int index);
 

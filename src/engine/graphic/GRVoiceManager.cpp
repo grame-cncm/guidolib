@@ -946,6 +946,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		grne = /* dynamic cast<GRNotationElement *>*/(
 		mCurGrStaff->AddIntens(static_cast<const ARIntens *>( arOfCompleteObject)));
 		fMusic->addVoiceElement(arVoice,	grne);
+		curIntens = dynamic_cast<GRIntens *>(grne);
 	}
 	else if (tinf == typeid(ARFermata))
 	{
@@ -1725,6 +1726,7 @@ void GRVoiceManager::checkCenterRest(GRStaff * grstaff, float lastpos, float new
 	}
 }
 
+//-------------------------------------------------------------------------------------------------
 /** \brief Creates a GRNote from a ARNote
 */
 GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject)
@@ -1739,6 +1741,7 @@ GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 	return CreateSingleNote (tp, arObject);
 }
 
+//-------------------------------------------------------------------------------------------------
 /** \brief Creates a GRNote from a ARNote
 */
 GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size, bool isGrace)
@@ -1817,11 +1820,32 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	mCurGrStaff->addNotationElement(grnote);
 	fMusic->addVoiceElement(arVoice,grnote);
 	lastev = grnote;
+
+	// the section below associate the current intens with the corresponding note
+	if (curIntens) {
+		const GRSingleNote* note = curIntens->getNote();
+		bool inchord = !grnote->getDuration();
+		if (note) {
+			if (inchord) {		// in case of chord, scan for the lowest note
+				int cp, co, ca;
+				note->getPitchAndOctave( &cp, &co, &ca );
+				int p, o, a;
+				grnote->getPitchAndOctave( &p, &o, &a );
+				if ((o < co) || ((o==co) && (p < cp)) )
+					curIntens->setNote (grnote);
+			}
+		}
+		else {
+			curIntens->setNote (grnote);
+		}
+		if (!inchord) curIntens = 0;	// when done, clear the current intens
+	}
 	return grnote;
 }
 
 
-/** \brief Creates a Grace-Note which is just a regular note; it 
+//-------------------------------------------------------------------------------------------------
+/** \brief Creates a Grace-Note which is just a regular note; it
 	is not added to the staff or the voice because it belongs to GRGrace.
 
 	Independant of this, the GraceNote gets all the associations that a "real" event would get.

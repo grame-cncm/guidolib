@@ -24,6 +24,7 @@
 #include "GRIntens.h"
 #include "GRStaff.h"
 #include "GRDefine.h"
+#include "GRSingleNote.h"
 
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
 #include "FontManager.h"
@@ -43,20 +44,6 @@ GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
 	sconst = SCONST_INTENS;
 	mGrStaff = inStaff;
 
-	// Now try to figure out, which intensity was selected:
-//	const char * cp = getARIntens()->getText().c_str();
-//	if (!strcmp(cp,"p"))		mSymbol = kIntensPSymbol;
-//	else if (!strcmp(cp,"f") )	mSymbol = kIntensFSymbol;
-//	else if (!strcmp(cp,"ff"))	mSymbol = kIntensFFSymbol;
-//	else if (!strcmp(cp,"fff"))	mSymbol = kIntensFFFSymbol;
-//	else if (!strcmp(cp,"ffff"))mSymbol = kIntensFFFFSymbol;
-//	else if (!strcmp(cp,"mf"))	mSymbol = kIntensMFSymbol;
-//	else if (!strcmp(cp,"mp"))	mSymbol = kIntensMPSymbol;
-//	else if (!strcmp(cp,"sf"))	mSymbol = kIntensSFSymbol;
-//	else if (!strcmp(cp,"pp"))	mSymbol = kIntensPPSymbol;
-//	else if (!strcmp(cp,"ppp"))	mSymbol = kIntensPPPSymbol;
-//	else if (!strcmp(cp,"pppp"))mSymbol = kIntensPPPPSymbol;
-
 	string intens = getARIntens()->getText().c_str();
 	if (intens == "p")			mSymbol = kIntensPSymbol;
 	else if (intens == "f")		mSymbol = kIntensFSymbol;
@@ -75,34 +62,25 @@ GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
 	else mSymbol = 0;
 
 
+	const float curLSPACE = mGrStaff ? mGrStaff->getStaffLSPACE() : LSPACE;
 	if (mSymbol != 0) {
-		float x = 0;
-		float y = 0;
-		float dx = 0;
-		float dy = 0;
+		float x = GetSymbolExtent(mSymbol);
+		fDx = ar->getDX()->getValue();
+		fDy = ar->getDY()->getValue();
 
-		if( gGlobalSettings.gDevice )
-			FontManager::gFontScriab->GetExtent( mSymbol, &x, &y, gGlobalSettings.gDevice );
+		const TagParameterFloat* p = ar->getSize();
+		if (p) fSize = p->getValue();
 
-		const TagParameterFloat* p = ar->getDX();
-		dx = p->getValue();
-		p = ar->getDY();
-		if (p) dy = -p->getValue();
-
-		mBoundingBox.left  = dx;
-		mBoundingBox.right = x + dx;
+		mBoundingBox.left  = fDx - x/3;
+		mBoundingBox.right = mBoundingBox.left + x;
 		mBoundingBox.top = LSPACE * -1.5;
 		mBoundingBox.bottom = LSPACE/2;
 	}
 	else mBoundingBox.Set( 0, 0, 0, 0 );
-
 	mLeftSpace = 0;
 	mRightSpace = 0;
 
-	// no referencePosition?
-	// probably dependant on Type!
-	const float curLSPACE = mGrStaff ? mGrStaff->getStaffLSPACE() : LSPACE;
-	mPosition.y = (GCoord)(6 * curLSPACE);
+	mPosition.y =  6 * curLSPACE;
 }
 
 // -----------------------------------------------------------------------------
@@ -112,11 +90,10 @@ void GRIntens::accept (GRVisitor& visitor)
 	visitor.visitEnd (this);
 }
 
-//## Other Operations (implementation)
+// -----------------------------------------------------------------------------
 void GRIntens::OnDraw(VGDevice & hdc) const
 {
 	if(!mDraw || !mShow) return;
-	GRTagARNotationElement::OnDraw( hdc );
 
 	const float space = (mGrStaff ? mGrStaff->getStaffLSPACE() : LSPACE) / 2;
 	const ARIntens* ar = getARIntens();
@@ -126,34 +103,41 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 
 	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();
-
 	if( mColRef )
 		hdc.SetFontColor( VGColor( mColRef ));
 
+	float sy = 0;
+	float w = 0;
+	if (ar->autoPos() && fNote) {
+		NVRect r = fNote->getEnclosingBox(false, false, false);
+		sy = (r.bottom - mPosition.y) + space * 3.5 * fSize;
+		if (sy < 0) sy = 0;
+		w = GetSymbolExtent(mSymbol) / 3 * fSize;
+	}
+	float y = mPosition.y - fDy + sy;
+	float x = mPosition.x + fDx - w;
+
+//	GRTagARNotationElement::OnDraw( hdc );
+	if (mSymbol) OnDrawSymbol (hdc, mSymbol, -w, sy, 0);
+
 	// - Print text
-	const string& textafter = ar->getTextAfter();
-	float y = mPosition.y - ar->getDY()->getValue();
-	float x = mPosition.x + ar->getDX()->getValue();
+	const string& textafter  = ar->getTextAfter();
+	const string& textbefore = ar->getTextBefore();
     if (!textafter.empty()) {
 		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignLeft );
-	    hdc.DrawString( mPosition.x + mBoundingBox.right + space, y, textafter.c_str(), int(textafter.size()));
+	    hdc.DrawString( x + mBoundingBox.Width() * fSize + space, y, textafter.c_str(), int(textafter.size()));
 	}
 
-	const string& text = ar->getTextBefore();
-    if (!text.empty()) {
+    if (!textbefore.empty()) {
 		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignRight );
-		hdc.DrawString( x - space/2, y, text.c_str(), int(text.size()));
+		hdc.DrawString( x - space/2, y, textbefore.c_str(), int(textbefore.size()));
 	}
-	
+
 	if( mColRef ) hdc.SetFontColor( prevTextColor );
 }
 
+// -----------------------------------------------------------------------------
 const ARIntens* GRIntens::getARIntens() const
 {
 	return static_cast<const ARIntens*>(getAbstractRepresentation());
 }
-
-
-
-
-

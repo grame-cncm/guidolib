@@ -21,7 +21,7 @@
 #include "TimeUnwrap.h"
 
 
-ARIntens::ARIntens()
+ARIntens::ARIntens(bool autopos) : fAutoPos(autopos)
 {
 	setupTagParameters (gMaps->sARIntensMap);
 	relativeTimePosition.set( -1, 1 );
@@ -46,7 +46,8 @@ void ARIntens::setTagParameters (const TagParameterMap& params)
 	fBefore = p ? p->getValue() : "";
 	p = getParameter<TagParameterString>(kAfterStr);
 	fAfter = p ? p->getValue() : "";
-	fAutoPos = getParameter<TagParameterString>(kAutoposStr, true)->getBool();
+	p = getParameter<TagParameterString>(kAutoposStr);
+	if (p) fAutoPos = p->getBool();
 }
 
 // --------------------------------------------------------------------------

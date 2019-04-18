@@ -40,6 +40,7 @@ class ARAuto : public ARMTParameter
 		state getPageBreakState() const				{ return fPageBreakState; }
 		state getAutoLyricsPos() const				{ return fLyricsAutoPos; }
 		state getAutoInstrPos() const				{ return fInstrAutoPos; }
+		state getAutoIntensPos() const				{ return fIntensAutoPos; }
 		position getFingeringPos() const			{ return fFingeringPos; }
 		float    getFingeringSize() const			{ return fFingeringSize; }
 		bool 	 hasFingeringPos() const			{ return fHasFingeringPos; }
@@ -62,7 +63,8 @@ class ARAuto : public ARMTParameter
 		state fStretchFirstLineState;
 		state fLyricsAutoPos;
 		state fInstrAutoPos;
-	
+		state fIntensAutoPos;
+
 		bool		fHasFingeringPos 	= false;
 		bool		fHasFingeringSize	= false;
 		position 	fFingeringPos;

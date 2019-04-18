@@ -26,30 +26,21 @@ class VGDevice;
 */
 class GRIntens : public GRTagARNotationElement
 {
-	public:
-//		enum
-//		{
-//			INTENS_F = kIntensFSymbol, // SCR_INTENSF,
-//			INTENS_FF = kIntensFFSymbol, // SCR_INTENSFF,
-//			INTENS_FFF = kIntensFFFSymbol, // SCR_INTENSFFF,
-//			INTENS_FFFF = kIntensFFFFSymbol, // SCR_INTENSFFFF,
-//			INTENS_P = kIntensPSymbol, // SCR_INTENSP,
-//			INTENS_PP = kIntensPPSymbol, // SCR_INTENSPP,
-//			INTENS_PPP = kIntensPPPSymbol,
-//			INTENS_PPPP = kIntensPPPPSymbol,
-//
-//			INTENS_MF = kIntensMFSymbol, // SCR_INTENS_MF,
-//			INTENS_MP = kIntensMPSymbol, // SCR_INTENS_MP,
-//			INTENS_SF = kIntensSFSymbol  // SCR_INTENS_SF
-//		};
+	float fSize = 1;
+	float fDx 	= 0;
+	float fDy 	= 0;
+	const GRSingleNote* fNote = 0;
 
+	public:
 				 GRIntens( GRStaff * inStaff, const ARIntens * abstractRepresentationOfIntens );
 		virtual ~GRIntens() {}
 	
 		virtual void OnDraw(VGDevice & hdc ) const;
 		virtual void accept (GRVisitor& visitor);
-	
+
 		const ARIntens* getARIntens() const;
+		void setNote (const GRSingleNote* note) 	{ fNote = note; }
+		const GRSingleNote* getNote() const 		{ return fNote; }
 };
 
 #endif

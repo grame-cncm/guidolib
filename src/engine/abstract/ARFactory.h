@@ -168,6 +168,7 @@ protected:
 	bool				mVoiceAdded;
 	bool				mAutoLyricsPos;
 	bool				mAutoInstrPos;
+	bool				mAutoIntensPos;
 	ARAuto::position 	mFingeringPos;
 	float				mFingeringSize;
 

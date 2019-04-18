@@ -34,6 +34,7 @@ ARAuto::ARAuto()
 	fStretchFirstLineState  = kOff;
 	fLyricsAutoPos		    = kOff;
 	fInstrAutoPos		    = kOff;
+	fIntensAutoPos		    = kOff;
 	fFingeringPos			= kDefault;
 	fFingeringSize			= 0;
 }
@@ -65,6 +66,9 @@ void ARAuto::setTagParameters (const TagParameterMap& params)
 
 	p = getParameter<TagParameterString>(kAutoLyricsPosStr, kLyricsAutoPosStr);
 	if (p && (on == p->getValue())) fLyricsAutoPos = kOn;
+
+	p = getParameter<TagParameterString>(kAutoIntensPosStr, kIntensAutoPosStr);
+	if (p && (on == p->getValue())) fIntensAutoPos = kOn;
 
 	p = getParameter<TagParameterString>(kFingeringPosStr);
 	if (p) {
