@@ -85,7 +85,6 @@
 #include "ARRitardando.h"
 #include "ARSegno.h"
 #include "ARShareLocation.h"
-#include "ARShareStem.h"
 #include "ARSlur.h"
 #include "ARSpace.h"
 #include "ARSpecial.h"
