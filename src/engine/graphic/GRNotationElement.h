@@ -137,6 +137,7 @@ public:
 
     virtual const GRText*		isText() const			{ return 0; }
     virtual const GRSingleNote* isSingleNote() const	{ return 0; }
+    virtual 	  GRSingleNote* isSingleNote() 			{ return 0; }
     virtual const GRNote *		isGRNote() const		{ return 0; }
     virtual const GRRest *		isRest() const			{ return 0; }
     virtual const GREvent *		isGREvent() const		{ return 0; }

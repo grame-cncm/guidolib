@@ -107,6 +107,7 @@ class GRSingleNote : public GRNote
 
 		virtual void	tellPosition( GObject * caller, const NVPoint & newPosition ); 
 		virtual const	GRSingleNote* isSingleNote() const		{ return this; }
+		virtual 		GRSingleNote* isSingleNote() 			{ return this; }
 
 	  	GRStdNoteHead *	getNoteHead() const;
 	  	void			extractAccidentals( GRAccidentalList * outList ) const;
