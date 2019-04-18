@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     GuidoInit (&gd);
 
 	for (int i=1; i < argc; i++) {
-		cerr << "# get time map for " << argv[i] << endl;
+//		cerr << "# get time map for " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
         GuidoParser *parser = GuidoOpenParser();
