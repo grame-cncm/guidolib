@@ -190,7 +190,8 @@ extern const char* kClefKeyMeterOrderStr;
 extern const char* kStretchLastLineStr; 
 extern const char* kStretchFirstLineStr; 
 extern const char* kLyricsAutoPosStr; 
-extern const char* kInstrAutoPosStr; 
+extern const char* kInstrAutoPosStr;
+extern const char* kIntensAutoPosStr;
 extern const char* kAutoEndBarStr; 
 extern const char* kAutoPageBreakStr; 
 extern const char* kAutoSystemBreakStr; 
@@ -199,6 +200,7 @@ extern const char* kAutoStretchLastLineStr;
 extern const char* kAutoStretchFirstLineStr; 
 extern const char* kAutoInstrPosStr; 
 extern const char* kAutoLyricsPosStr;
+extern const char* kAutoIntensPosStr;
 extern const char* kFingeringPosStr;
 extern const char* kFingeringSizeStr;
 

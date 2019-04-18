@@ -22,7 +22,7 @@ const char* kARFontAbleParams	= "S,textformat,rc,o;S,font,Times,o;U,fsize,9pt,o;
 
 //---------------------------------------------
 // specific tags parameters strings
-const char* kARAutoParams		= "S,endBar,on,o;S,pageBreak,on,o;S,systemBreak,on,o;S,clefKeyMeterOrder,on,o;S,stretchLastLine,off,o;S,stretchFirstLine,off,o;S,lyricsAutoPos,off,o;S,instrAutoPos,off,o;S,autoEndBar,on,o;S,autoPageBreak,on,o;S,autoSystemBreak,on,o;S,autoClefKeyMeterOrder,on,o;S,autoStretchLastLine,off,o;S,autoStretchFirstLine,off,o;S,autoInstrPos,off,o;S,autoLyricsPos,off,o";
+const char* kARAutoParams		= "S,endBar,on,o;S,pageBreak,on,o;S,systemBreak,on,o;S,clefKeyMeterOrder,on,o;S,stretchLastLine,off,o;S,stretchFirstLine,off,o;S,lyricsAutoPos,off,o;S,instrAutoPos,off,o;S,intensAutoPos,off,o;S,autoEndBar,on,o;S,autoPageBreak,on,o;S,autoSystemBreak,on,o;S,autoClefKeyMeterOrder,on,o;S,autoStretchLastLine,off,o;S,autoStretchFirstLine,off,o;S,autoInstrPos,off,o;S,autoLyricsPos,off,o;S,autoIntensPos,off,o";
 
 const char* kARDrHoosParams		= "I,inverse,0,o";
 const char* kARDrRenzParams		= "I,inverse,0,o";
@@ -52,7 +52,7 @@ const char* kARGlissandoParams	= "U,dx1,0,o;U,dy1,0,o;U,dx2,0,o;U,dy2,0,o;S,fill
 const char* kARGraceParams		= "I,i,,o";
 const char* kARHarmonyParams	= "S,text,,r;U,dy,-1,o;U,ypos,0hs,o;S,textformat,cc,o;S,font,Arial,o;U,fsize,18pt,o;S,fattrib,,o";
 const char* kARInstrumentParams	= "S,name,,r;S,transp,,o;S,autopos,off,o";
-const char* kARIntensParams		= "S,type,,r;S,before,,o;S,after,,o;S,font,Times,o;U,fsize,10pt,o;S,fattrib,i,o";
+const char* kARIntensParams		= "S,type,,r;S,before,,o;S,after,,o;S,font,Times,o;U,fsize,10pt,o;S,fattrib,i,o;S,autopos,off,o";
 const char* kARJumpParams		= "S,m,,o;I,id,0,o";
 const char* kARKeyParams		= "S,key,,r;S,hideNaturals,false,o";
 const char* kARLyricsParams		= "S,text,,r;U,dy,-3,o;S,textformat,ct,o;U,fsize,12pt,o;S,autopos,off,o";
@@ -190,6 +190,7 @@ const char* kStretchLastLineStr		= "stretchLastLine";
 const char* kStretchFirstLineStr	= "stretchFirstLine";
 const char* kLyricsAutoPosStr		= "lyricsAutoPos";
 const char* kInstrAutoPosStr		= "instrAutoPos";
+const char* kIntensAutoPosStr		= "intensAutoPos";
 const char* kAutoEndBarStr			= "autoEndBar";
 const char* kAutoPageBreakStr		= "autoPageBreak";
 const char* kAutoSystemBreakStr		= "autoSystemBreak";
@@ -198,6 +199,7 @@ const char* kAutoStretchLastLineStr	= "autoStretchLastLine";
 const char* kAutoStretchFirstLineStr= "autoStretchFirstLine";
 const char* kAutoInstrPosStr		= "autoInstrPos";
 const char* kAutoLyricsPosStr		= "autoLyricsPos";
+const char* kAutoIntensPosStr		= "autoIntensPos";
 const char* kFingeringPosStr		= "fingeringPos";
 const char* kFingeringSizeStr		= "fingeringSize";
 
