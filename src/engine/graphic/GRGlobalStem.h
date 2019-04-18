@@ -23,25 +23,21 @@ class ARShareStem;
 class ARTStem;
 class ARDisplayDuration;
 class ARNoteFormat;
-
 class GRStaff;
 class GRFlag;
-class GRPositionTag;
 class GREvent;
 class GRSingleNote;
 class GRSystem;
 class GRStdNoteHead;
 class GRStem;
 
-
 /** \brief Shared stem
 */
-class GRGlobalStem :
-	public GRPTagARNotationElement,
-	public GRSystemTagInterface
+class GRGlobalStem : public GRPTagARNotationElement, public GRSystemTagInterface
 {
 	void 	ComputeStemDirection ( GRStaff * staff, const NEPointerList * associated);
 	void 	GetUserStemDirection (const NEPointerList * associated);
+	void 	updateGlobalStem	 (const GRStaff * inStaff);
 
 	public:
 				 GRGlobalStem (GRStaff * inStaff,	const ARShareStem * pshare,  const ARTStem * stem,  const ARDisplayDuration * dur, const ARNoteFormat * format );
@@ -53,41 +49,35 @@ class GRGlobalStem :
         virtual void	setMultiplicatedSize(float newMultiplicatedSize)	{ mTagSize *= newMultiplicatedSize; }
         virtual void	setOffsetXY(float inOffsetX, float inOffsetY);
 		virtual void	setNoteStemLength( GREvent * ev, float inLen );
-		virtual GRFlag * getGRFlag() const	{ return fFlag; }
-		virtual GRStem * getGRStem() const	{ return fStem; }
-
 	    virtual void	addAssociation(GRNotationElement * grnot);
 		virtual void	removeAssociation(GRNotationElement * grnot);
 
 		virtual void		checkPosition(const GRSystem * grsys);
-		virtual GDirection	getStemDir() const;
-		virtual int			getNumFaehnchen() const;
-
 		virtual float		changeStemLength( float inLen );
         virtual void		setHPosition( GCoord nx);
-
-        virtual void		RangeEnd(GRStaff * inStaff);
-        virtual GRNotationElement *  getFirstEl() 		{ return fFirstEl; }
-
-        virtual void	OnDraw(VGDevice & hdc ) const;
-        virtual void	tellPosition(GObject *, const NVPoint &);
-
         virtual void		setFlagOnOff(bool i);
         virtual void		setStemDirection(GDirection dir);
+
+        virtual void		RangeEnd(GRStaff * inStaff);
+
+        virtual void		OnDraw(VGDevice & hdc ) const;
+        virtual void		tellPosition(GObject *, const NVPoint &);
+
         virtual GDirection	getStemDirection() const 	{ return fStemdir; }
-
-        virtual NVPoint		getStemStartPos() const;
-        virtual NVPoint		getStemEndPos() const;
-
+		virtual GRFlag* 	getGRFlag() const			{ return fFlag; }
+		virtual GRStem* 	getGRStem() const			{ return fStem; }
         virtual bool		getStemDirSet() const 		{ return fStemdirSet; }
         virtual bool		getStemLengthSet() const 	{ return fStemlengthSet; }
-        virtual float		getStemLength() const;
+       	virtual const unsigned char * getColRef() const { return mColRef; }
+        virtual GRNotationElement *  getFirstEl() const	{ return fFirstEl; }
 
-        virtual const unsigned char * getColRef() const { return mColRef; }
+ 		virtual GDirection	getStemDir() const;
+        virtual NVPoint		getStemStartPos() const;
+        virtual NVPoint		getStemEndPos() const;
+        virtual float		getStemLength() const;
+		virtual int			getNumFaehnchen() const;
 
 	protected:
-		void updateGlobalStem(const GRStaff * inStaff); 
-
 		bool		fFlagOnOff;
 		bool		fStemdirSet;
 		bool		fStemlengthSet;
@@ -98,8 +88,8 @@ class GRGlobalStem :
 		const ARTStem *	fStemState;
 		TYPE_DURATION fDispdur;
 
-		// fFirstEl is the first element in  the \shareStem-Range. Only the
-		// first event in the range gets a spring on its own ....
+		// fFirstEl is the first element in  the \shareStem-Range.
+		// Only the first event in the range gets a spring on its own ....
 		GRNotationElement * fFirstEl;
 
 		float fLowestY;

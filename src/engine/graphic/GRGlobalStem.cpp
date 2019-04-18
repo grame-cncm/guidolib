@@ -157,11 +157,7 @@ void GRGlobalStem::removeAssociation(GRNotationElement * grnot)
 }
 
 //----------------------------------------------------------------
-GDirection GRGlobalStem::getStemDir() const
-{
-	if (fStem == 0) return dirOFF;
-	return fStem->getStemDir();
-}
+GDirection GRGlobalStem::getStemDir() const			{ return fStem ? fStem->getStemDir() : dirOFF; }
 
 //----------------------------------------------------------------
 // determine the direction
@@ -444,6 +440,9 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
             fFlag->setPosition( NVPoint(fFlag->getPosition().x, fFlag->getPosition().y + lengthDiff));
         }
 	}
+
+//if (fStem)
+//cerr << "GRGlobalStem::RangeEnd stem   : " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
 }
 
 
@@ -804,6 +803,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			}
 		}
 	}
+//if (fStem)
+//cerr << "GRGlobalStem::updateGlobalStem: " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
+//else
+//cerr << "GRGlobalStem::updateGlobalStem NO STEM" << endl;
 }
 
 //----------------------------------------------------------------
@@ -852,6 +855,8 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 
 	if (dynamic_cast<GRNotationElement *>(obj) == fFirstEl) // useless cast ?
 	{
+//if (fStem)
+//cerr << "GRGlobalStem::tellPosition start: " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
 		if (mIsSystemCall) {
 			// this is the staff, to which the stem belongs ....
 			const GRStaff * stemstaff = fFirstEl->getGRStaff();
@@ -913,6 +918,8 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 				updateGlobalStem(tmpel->getGRStaff());
 		}
 		setHPosition(pt.x);
+//if (fStem)
+//cerr << "GRGlobalStem::tellPosition end  : " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
 	}
 }
 
@@ -952,8 +959,13 @@ void GRGlobalStem::setFlagOnOff(bool i)
 //----------------------------------------------------------------
 void GRGlobalStem::setStemDirection(GDirection dir)
 {
+	// the line below catch an incorrect call from GRBeam where the state seems not to be correclty set
+	// thus it tries to infer the stem direction event when set by the user
+	if (fStemState && (fStemState->getStemState() != ARTStem::AUTO) ) return;
+
 	const GDirection olddir = fStemdir;
 	fStemdir = dir;
+
 	if (fStem)
 	{
 		fStem->setStemDir(dir);
