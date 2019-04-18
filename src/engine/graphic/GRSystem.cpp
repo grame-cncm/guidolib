@@ -890,36 +890,6 @@ void GRSystem::updateBoundingBox()
 	actually, updateBoundingBox is never called,
 	the bounding box is updated by GRSystem constructor
 	Note also that the mapping is finalized by the setPosition and the FinishSystem methods
-	
-	
-	// place for accolade
-	GREvent::updateBoundingBox();
-
-	GRNotationElement * e;
-	int i;
-	if (mStaffs)
-	{
-		for (i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i)
-		{
-			e = mStaffs->Get(i);
-			if (!e) continue;
-
-			NVRect eltBox ( e->getBoundingBox());
-			eltBox += e->getPosition();
-			mBoundingBox.Merge( eltBox );
-		}
-
-		// here the staff udpate is done
-		for (i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i)
-		{
-			e = mStaffs->Get(i);
-			if (!e) continue;
-			e->getReferenceBoundingBox().right = - e->getPosition().x +	mBoundingBox.right;
-		}
-	}
-	else
-	{
-	}
 */
 }
 
