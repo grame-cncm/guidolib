@@ -34,20 +34,23 @@ class GRStdNoteHead;
 class GRStem;
 
 
-/** \brief Stem
+/** \brief Shared stem
 */
-class GRGlobalStem : // public GRStem, 
+class GRGlobalStem :
 	public GRPTagARNotationElement,
 	public GRSystemTagInterface
 {
+	void 	ComputeStemDirection ( GRStaff * staff, const NEPointerList * associated);
+	void 	GetUserStemDirection (const NEPointerList * associated);
+
 	public:
 				 GRGlobalStem (GRStaff * inStaff,	const ARShareStem * pshare,  const ARTStem * stem,  const ARDisplayDuration * dur, const ARNoteFormat * format );
         virtual ~GRGlobalStem();
 
 		int		getHighestAndLowestNoteHead( GRStdNoteHead ** highest, GRStdNoteHead ** lowest) const;
 
-		virtual void	setSize(float newsize);
-        virtual void	setMultiplicatedSize(float newMultiplicatedSize);
+		virtual void	setSize(float newsize)								{ mTagSize = newsize; }
+        virtual void	setMultiplicatedSize(float newMultiplicatedSize)	{ mTagSize *= newMultiplicatedSize; }
         virtual void	setOffsetXY(float inOffsetX, float inOffsetY);
 		virtual void	setNoteStemLength( GREvent * ev, float inLen );
 		virtual GRFlag * getGRFlag() const	{ return fFlag; }
@@ -71,7 +74,7 @@ class GRGlobalStem : // public GRStem,
 
         virtual void		setFlagOnOff(bool i);
         virtual void		setStemDirection(GDirection dir);
-        virtual GDirection	getStemDirection() const { return fStemdir; }
+        virtual GDirection	getStemDirection() const 	{ return fStemdir; }
 
         virtual NVPoint		getStemStartPos() const;
         virtual NVPoint		getStemEndPos() const;
@@ -90,8 +93,8 @@ class GRGlobalStem : // public GRStem,
 		bool		fStemlengthSet;
 		GDirection	fStemdir;
 
-		GRStem *	fStem;
-		GRFlag *	fFlag;
+		GRStem *	fStem = 0;
+		GRFlag *	fFlag = 0;
 		const ARTStem *	fStemState;
 		TYPE_DURATION fDispdur;
 

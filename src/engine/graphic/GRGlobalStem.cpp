@@ -38,58 +38,44 @@
 
 using namespace std;
 
-GRGlobalStem::GRGlobalStem( GRStaff * inStaff, const ARShareStem * pshare, const ARTStem * stemstate, const ARDisplayDuration * dispdur, const ARNoteFormat * noteformat )
-	: GRPTagARNotationElement(pshare), fFlagOnOff(true), fStemdirSet(false), fStemlengthSet(false),
+//----------------------------------------------------------------
+GRGlobalStem::GRGlobalStem( GRStaff * staff, const ARShareStem * ar, const ARTStem * stemstate, const ARDisplayDuration * dispdur, const ARNoteFormat * noteformat )
+	: GRPTagARNotationElement(ar), fFlagOnOff(true), fStemdirSet(false), fStemlengthSet(false),
 	fStemdir(dirOFF), fFirstEl(NULL), fLowerNote(NULL), fHigherNote(NULL)
 {
 	if (dispdur && dispdur->getDisplayDuration() > DURATION_0)
 		fDispdur = dispdur->getDisplayDuration();
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
-
-	sse->grsystem = inStaff->getGRSystem();
+	sse->grsystem = staff->getGRSystem();
 	sse->startElement = NULL;
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->endElement = NULL;
 	sse->p = NULL;
-
 	mStartEndList.AddTail(sse);
 
 	fStemState = stemstate;
-	fStem = NULL;
-	fFlag = NULL;
-	fStemlengthSet = false;
-
-    fStaffSize = mTagSize = inStaff->getSizeRatio();
+    fStaffSize = mTagSize = staff->getSizeRatio();
 	if (noteformat) {
 		const TagParameterFloat * tmp = noteformat->getSize();
 		if (tmp) mTagSize = tmp->getValue();
 
-		// color ...
 		const TagParameterString * tmps = noteformat->getColor();
 		if (tmps) {
 			if (!mColRef) mColRef = new unsigned char[ 4 ];
 			tmps->getRGB(mColRef);
 		}
 
-		// offset ....
-		const TagParameterFloat * tmpdx = noteformat->getDX();
-		const TagParameterFloat * tmpdy = noteformat->getDY();
-		if (tmpdx)
-			mTagOffset.x = (GCoord)(tmpdx->getValue(inStaff->getStaffLSPACE()));
-
-		if (tmpdy) {
-			mTagOffset.y = (GCoord)(tmpdy->getValue(inStaff->getStaffLSPACE()));
-            mTagOffset.y = -mTagOffset.y;
-		}
+		mTagOffset.x = noteformat->getDX()->getValue(staff->getStaffLSPACE());
+		mTagOffset.y = -noteformat->getDY()->getValue(staff->getStaffLSPACE());
 	}
 }
 
+//----------------------------------------------------------------
 GRGlobalStem::~GRGlobalStem()
 {
 	// we just remove any association manually
-	if (mAssociated)
-	{
+	if (mAssociated) {
 		GuidoPos pos = mAssociated->GetHeadPosition();
 		while(pos)
 		{
@@ -97,14 +83,14 @@ GRGlobalStem::~GRGlobalStem()
 			if( el ) el->removeAssociation(this);
 		}
 	}
-	if (fFirstEl)
-		fFirstEl->removeAssociation(this);
+	if (fFirstEl) fFirstEl->removeAssociation(this);
 
-	delete fStem; fStem = 0;
-	delete fFlag; fFlag = 0;
-//	if (colref)	delete [] colref;
+	delete fStem;
+	delete fFlag;
+	if (mColRef) delete [] mColRef;
 }
 
+//----------------------------------------------------------------
 void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 {
 	if (error) return;
@@ -159,6 +145,7 @@ void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 	grnot->addAssociation(this);
 }
 
+//----------------------------------------------------------------
 void GRGlobalStem::removeAssociation(GRNotationElement * grnot)
 {
     if (grnot == fFirstEl) {
@@ -169,12 +156,113 @@ void GRGlobalStem::removeAssociation(GRNotationElement * grnot)
 		GRPTagARNotationElement::removeAssociation(grnot);
 }
 
+//----------------------------------------------------------------
 GDirection GRGlobalStem::getStemDir() const
 {
 	if (fStem == 0) return dirOFF;
 	return fStem->getStemDir();
 }
 
+//----------------------------------------------------------------
+// determine the direction
+// has to be done with the notes direction ...
+void GRGlobalStem::ComputeStemDirection( GRStaff * staff, const NEPointerList * associated)
+{
+	GCoord middle = 0;
+	int count = 0;
+
+	// determine the lowest and highest position ...
+	GRNotationElement* el = associated->GetTail();
+	if (el) {
+		middle = el->getPosition().y;
+		if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+			middle += (GCoord)el->getGRStaff()->getPosition().y;
+		fHighestY = middle;
+		fLowestY = middle;
+		++ count;
+
+		GRSingleNote * sn = el->isSingleNote();
+		if (sn) fHigherNote = fLowerNote = sn;
+	}
+	
+	GuidoPos pos = associated->GetHeadPosition();
+	while (pos && pos != associated->GetTailPosition()) {
+		GRNotationElement * el = associated->GetNext(pos);
+		if (el && !el->isEmpty()) {
+			GCoord ypos = el->getPosition().y;
+			if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
+				ypos += el->getGRStaff()->getPosition().y;
+			middle += ypos;
+			++count ;
+			
+			if (fLowestY > ypos) {
+				fLowestY = ypos;
+				fLowerNote = el->isSingleNote();
+			}
+			if (fHighestY < ypos) {
+				fHighestY = ypos;
+				fHigherNote = el->isSingleNote();
+			}
+		}
+	}
+	
+	if (count > 0) middle /= count;
+	
+	const float curLSPACE = (float)(staff->getStaffLSPACE());
+	const float mylowesty = 2 * curLSPACE - fLowestY;
+	const float myhighesty = fHighestY - 2 * curLSPACE;
+	
+	if (mylowesty > myhighesty)			fStemdir = dirDOWN;
+	else if (myhighesty > mylowesty)	fStemdir = dirUP;
+	else {
+		if (middle >= curLSPACE * 2)	 fStemdir = dirUP;
+		else if (middle < curLSPACE * 2) fStemdir = dirDOWN;
+	}
+}
+
+
+//----------------------------------------------------------------
+// user direction
+void GRGlobalStem::GetUserStemDirection (const NEPointerList * associated)
+{
+	GCoord middle = 0;
+	int count = 0;
+	GRNotationElement *el = associated->GetTail();
+
+	if (el) {
+		middle = el->getPosition().y;
+		if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+			middle += el->getGRStaff()->getPosition().y;
+
+		fHighestY = middle;
+		fLowestY = middle;
+		++ count;
+
+		fLowerNote  = (GRSingleNote *)el;
+		fHigherNote = (GRSingleNote *)el;
+	}
+
+	GuidoPos pos = associated->GetHeadPosition();
+	while (pos && pos != associated->GetTailPosition()) {
+		GRNotationElement * el = associated->GetNext(pos);
+		if (el && !el->isEmpty()) {
+			GCoord ypos = el->getPosition().y;
+			if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
+				ypos += el->getGRStaff()->getPosition().y;
+
+			if (fLowestY > ypos) {
+				fLowestY = ypos;
+				fLowerNote = (GRSingleNote *)el;
+			}
+			if (fHighestY < ypos) {
+				fHighestY = ypos;
+				fHigherNote = (GRSingleNote *)el;
+			}
+		}
+	}
+}
+
+//----------------------------------------------------------------
 void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 {
 	if (error || fFirstEl == 0) return;
@@ -218,10 +306,8 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 			}
 		}
 	}
-
 	
-	GRNotationElement * el = /*dynamic cast<GRNotationElement *>*/(this);
-	const NEPointerList * associated = el ? el->getAssociations() : 0;
+	const NEPointerList * associated = getAssociations();
 	if (associated == 0)  return;
 
 	// now I have the associations ... I have to build the stem ....
@@ -237,108 +323,19 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	if (fStemdir == dirOFF) {
 		fStemdir = dirUP;
 		if (fStemState) {
-			if (fStemState->getStemState() == ARTStem::UP)
-				fStemdir = dirUP;		// we have to determine the direction ourselves.
-			else if (fStemState->getStemState() == ARTStem::DOWN)
-				fStemdir = dirDOWN;		// we have to determine the direction ourselves.
-			else if (fStemState->getStemState() == ARTStem::OFF)
-				fStemdir = dirOFF;		// we have to determine the direction ourselves.
+			if (fStemState->getStemState() == ARTStem::UP) 			fStemdir = dirUP;
+			else if (fStemState->getStemState() == ARTStem::DOWN)	fStemdir = dirDOWN;
+			else if (fStemState->getStemState() == ARTStem::OFF)	fStemdir = dirOFF;
 		}
 
-		if ( ( fStemState && fStemState->getStemState() == ARTStem::AUTO  ) || !fStemState)
-		{			
-			// we have to determine the direction ourselves.
-			// this needs to be done with the direction of notes ...
-			GCoord middle = 0;
-			int count = 0;
-			// determine the lowest and highest position ...
-			el = associated->GetTail();
-			if (el) {
-				middle = el->getPosition().y;
-				if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
-					middle += (GCoord)el->getGRStaff()->getPosition().y;
-				fHighestY = middle;
-				fLowestY = middle;
-				++ count;
-
-                if (dynamic_cast<GRSingleNote *>(el))
-				    fHigherNote = fLowerNote = dynamic_cast<GRSingleNote *>(el);
-			}
-			
-			GuidoPos pos = associated->GetHeadPosition();
-			while (pos && pos != associated->GetTailPosition()) {
-				GRNotationElement * el = associated->GetNext(pos);
-				if (el && !el->isEmpty()) {
-					GCoord ypos = el->getPosition().y;
-					if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
-						ypos += el->getGRStaff()->getPosition().y;
-					middle += ypos;
-					++count ;
-					
-					if (fLowestY > ypos) {
-						fLowestY = ypos;
-						fLowerNote = (GRSingleNote *)el;
-					}
-					if (fHighestY < ypos) {
-						fHighestY = ypos;
-						fHigherNote = (GRSingleNote *)el;
-					}
-				}
-			}
-			
+		if ( !fStemState || (fStemState->getStemState() == ARTStem::AUTO) )
+		{
+			ComputeStemDirection(inStaff, associated);
 			highestlowestset = 1;
-			if (count > 0) middle /= count;
-			
-			const float curLSPACE = (float)(inStaff->getStaffLSPACE());
-			const float mylowesty = 2 * curLSPACE - fLowestY;
-			const float myhighesty = fHighestY - 2 * curLSPACE;
-			
-			if (mylowesty > myhighesty)			fStemdir = dirDOWN;
-			else if (myhighesty > mylowesty)	fStemdir = dirUP;
-			else {
-				if (middle >= curLSPACE * 2)	 fStemdir = dirUP;
-				else if (middle < curLSPACE * 2) fStemdir = dirDOWN;
-			}
 		}
 		else // - If stem's direction is fixed by the user, we have to determine lower and higher chord note all the same
 		{
-			GCoord middle = 0;
-			int count = 0;
-			el = associated->GetTail();
-
-			if (el)
-			{
-				middle = el->getPosition().y;
-				if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
-				{
-					middle += (GCoord)el->getGRStaff()->getPosition().y;
-				}
-				fHighestY = middle;
-				fLowestY = middle;
-				++ count;
-
-				fLowerNote  = (GRSingleNote *)el;
-				fHigherNote = (GRSingleNote *)el;
-			}
-
-			GuidoPos pos = associated->GetHeadPosition();
-			while (pos && pos != associated->GetTailPosition()) {
-				GRNotationElement * el = associated->GetNext(pos);
-				if (el && !el->isEmpty()) {
-					GCoord ypos = el->getPosition().y;
-					if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
-						ypos += el->getGRStaff()->getPosition().y;
-
-					if (fLowestY > ypos) {
-						fLowestY = ypos;
-						fLowerNote = (GRSingleNote *)el;
-					}
-					if (fHighestY < ypos) {
-						fHighestY = ypos;
-						fHigherNote = (GRSingleNote *)el;
-					}
-				}
-			}
+			GetUserStemDirection (associated);
 		}
 	}
 	
@@ -351,7 +348,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	if (!highestlowestset)
 	{
 		// determine the lowest and highest position ...
-		el = associated->GetTail();
+		GRNotationElement * el = associated->GetTail();
 		if (el) {
 			fLowestY = el->getPosition().y;
 			if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
@@ -371,14 +368,13 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				if (fHighestY < elpos.y)	fHighestY = elpos.y;
 			}
 		}
-		
 	}
 
 	// now we have the position of the lowest or highest note ...
 	if (fStemdir == dirUP)
-		fStem->setPosition(NVPoint(0, (GCoord)fHighestY));
+		fStem->setPosition(NVPoint(0, fHighestY));
 	else if (fStemdir == dirDOWN)
-		fStem->setPosition(NVPoint(0, (GCoord)fLowestY));
+		fStem->setPosition(NVPoint(0, fLowestY));
 
 	// now we have to deal with the length...
 	const TagParameterFloat * taglength = 0;
@@ -451,6 +447,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 }
 
 
+//----------------------------------------------------------------
 void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 {
 	// now we can adjust the headoffsets for the notes ...
@@ -809,6 +806,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 	}
 }
 
+//----------------------------------------------------------------
 void GRGlobalStem::setHPosition( float nx )
 {
 	if (error)	return; 
@@ -824,6 +822,7 @@ void GRGlobalStem::setHPosition( float nx )
 	if (fFlag)	fFlag->setHPosition(nx);
 }
 
+//----------------------------------------------------------------
 void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
 	if (!mDraw || !mShow || error) return;
@@ -832,6 +831,7 @@ void GRGlobalStem::OnDraw( VGDevice & hdc) const
 	if (fFlag) fFlag->OnDraw(hdc);
 }
 
+//----------------------------------------------------------------
 float GRGlobalStem::changeStemLength( float inLen )
 {
 	if (fStemlengthSet) {
@@ -845,6 +845,7 @@ float GRGlobalStem::changeStemLength( float inLen )
 	return 0;
 }
 
+//----------------------------------------------------------------
 void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 {
 	if (error)	 return;
@@ -915,6 +916,7 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 	}
 }
 
+//----------------------------------------------------------------
 /** \brief Called when the linked GRSystemTag gets a position-update
 */
 void GRGlobalStem::checkPosition(const GRSystem * grsys)
@@ -926,6 +928,7 @@ void GRGlobalStem::checkPosition(const GRSystem * grsys)
 	mIsSystemCall = false;
 }
 
+//----------------------------------------------------------------
 int GRGlobalStem::getNumFaehnchen() const
 {
 	if (fFlag)
@@ -938,6 +941,7 @@ int GRGlobalStem::getNumFaehnchen() const
 	return tmpflag.getNumFaehnchen();
 }
 
+//----------------------------------------------------------------
 void GRGlobalStem::setFlagOnOff(bool i)
 {
 	fFlagOnOff = i;
@@ -945,6 +949,7 @@ void GRGlobalStem::setFlagOnOff(bool i)
 		fFlag->setFlagOnOff(i);
 }
 
+//----------------------------------------------------------------
 void GRGlobalStem::setStemDirection(GDirection dir)
 {
 	const GDirection olddir = fStemdir;
@@ -968,6 +973,7 @@ void GRGlobalStem::setStemDirection(GDirection dir)
 	}
 }
 
+//----------------------------------------------------------------
 NVPoint GRGlobalStem::getStemStartPos() const
 { 
 	const GRStem * stem = fStem;
@@ -995,6 +1001,7 @@ NVPoint GRGlobalStem::getStemStartPos() const
 
 }
 
+//----------------------------------------------------------------
 NVPoint GRGlobalStem::getStemEndPos() const
 {
 	const GRStem * stem = fStem;
@@ -1021,12 +1028,14 @@ NVPoint GRGlobalStem::getStemEndPos() const
 	return pnt;
 }
 
+//----------------------------------------------------------------
 float GRGlobalStem::getStemLength() const
 {
 	return fStem ? fStem->getStemLength() : 0;
 }
 
 
+//----------------------------------------------------------------
 /** \brief (not implemented) This sets the stemlength from the perspective
 	 of a note ....
 
@@ -1038,62 +1047,41 @@ void GRGlobalStem::setNoteStemLength( GREvent * ev, float inLen )
 {
 }
 
-void GRGlobalStem::setSize( float newsize )
-{
-	mTagSize = newsize;
-}
-
-void GRGlobalStem::setMultiplicatedSize(float newMultiplicatedSize)
-{
-    mTagSize *= newMultiplicatedSize;
-}
-
+//----------------------------------------------------------------
 void GRGlobalStem::setOffsetXY(float inOffsetX, float inOffsetY)
 {
     mTagOffset.x += inOffsetX;
     mTagOffset.y += inOffsetY;
 }
 
+//----------------------------------------------------------------
 /** \brief Returns the highest and lowest notehead
 	(with respect to y-position.
 	this is needed for slurs from and to chords.
 */
-int GRGlobalStem::getHighestAndLowestNoteHead(GRStdNoteHead ** highest,
-											  GRStdNoteHead ** lowest) const
+int GRGlobalStem::getHighestAndLowestNoteHead(GRStdNoteHead ** highest, GRStdNoteHead ** lowest) const
 {
 	*highest = *lowest = NULL;
 	if (mAssociated == 0 )	return 0;
 
 	GuidoPos pos = mAssociated->GetHeadPosition();
-	while (pos)
-	{
-		GRSingleNote * sn = dynamic_cast<GRSingleNote *>(mAssociated->GetNext(pos));
-		if (sn)
-		{
+	while (pos) {
+		const GRSingleNote * sn = mAssociated->GetNext(pos)->isSingleNote();
+		if (sn) {
 			GRStdNoteHead * tmp = sn->getNoteHead();
-			if (tmp)
-			{
-				if (*highest && *lowest)
-				{
+			if (tmp) {
+				if (*highest && *lowest) {
 					if ((*highest)->getPosition().y > tmp->getPosition().y)
-					{
 						*highest = tmp;
-					}
 					if ((*lowest)->getPosition().y < tmp->getPosition().y)
-					{
 						*lowest = tmp;
-					}
 				}
-				else 
-				{
+				else {
 					*highest = tmp;
 					*lowest = tmp;
 				}
 			}
 		}
 	}
-	if (*highest != NULL)
-		return 1;
-	
-	return 0;	// is it a stem dir ?
+	return (*highest != NULL) ? 1 : 0;	// is it a stem dir ?
 }
