@@ -74,15 +74,14 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
     float coorY[4];
     NVPoint pos1 = fStartPos;
     NVPoint pos2 = fEndPos;
-    for(int i = 0; i < (fNumberOfStrokes - fBeamCount) ; i++)
-    {
-        if(fIsTwoNotesTremolo)
-        {
-            computeTwoNotesStrokesCoordinates(pos1, pos2, coorX, coorY);
+//    for(int i = 0; i < (fNumberOfStrokes - fBeamCount) ; i++)
+    for(int i = 0; i < fNumberOfStrokes; i++) {
+        if(fIsTwoNotesTremolo) {
+            computeTwoNotesStrokesCoordinates (pos1, pos2, coorX, coorY);
             pos2.y += fStep;
         }
         else
-            computeSimpleStrokesCoordinates(pos1, coorX, coorY);
+            computeSimpleStrokesCoordinates (pos1, coorX, coorY);
         hdc.Polygon(coorX, coorY, 4);
         pos1.y += fStep;
     }
@@ -102,129 +101,85 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
 void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
 {
     GREvent * grel = dynamic_cast<GREvent *>(caller);
-	if (grel == 0)
-        return;
-
+	if (grel == 0) return;
 	GRStaff * staff = grel->getGRStaff();
-	if (staff == 0)
-        return;
-
+	if (staff == 0) return;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem());
-	if (sse == 0)
-        return;
+	if (sse == 0) return;
     
-    GRSingleNote * sng = dynamic_cast<GRSingleNote *>(grel);
+//    GRSingleNote * sng = dynamic_cast<GRSingleNote *>(grel);
+    const GRSingleNote * sng = grel->isSingleNote();
     NVPoint pos;
     NVPoint textPos;
     
     GRNotationElement * startElement = sse->startElement;
-	
     if(grel == startElement)
         fBeamCount = grel->getNumFaehnchen();
     
-    if (sng != 0)
-    {
+    if (sng) {
         GDirection direction = sng->getStemDirection();
         pos = textPos = sng->getStemStartPos();
 
-        if (direction == dirOFF)
-        {
+        if (direction == dirOFF) {
             textPos.y -= 2.5f * LSPACE;
-
-            if (textPos.y > -2.5f * LSPACE)
-                textPos.y = -2.5f * LSPACE;
-            
-            if (pos.y > 2 * LSPACE)
-                pos.y -= 3 * LSPACE;
-            else
-                pos.y += 2 * LSPACE;
+            if (textPos.y > -2.5f * LSPACE) textPos.y = -2.5f * LSPACE;
+            if (pos.y > 2 * LSPACE) 	pos.y -= 3 * LSPACE;
+            else 						pos.y += 2 * LSPACE;
         }
-        else if (direction == dirUP)
-        {
-            if (!fIsTwoNotesTremolo)
-                pos.y += LSPACE / 2 + fBeamCount * fStep;
-            else
-                pos.y += fBeamCount * fStep * 1.5f;
-
+        else if (direction == dirUP) {
+            if (!fIsTwoNotesTremolo) 	pos.y += fBeamCount * fStep + LSPACE / 3;
+            else						pos.y += fBeamCount * fStep * 1.5f;
             textPos.y -= 2*LSPACE;
-
-            if (textPos.y > - 2 * LSPACE )
-                textPos.y = - 2 * LSPACE;
+            if (textPos.y > - 2*LSPACE) textPos.y = - 2 * LSPACE;
         }
-        else
-        {
+        else {
             pos.y -= fThickness + (fNumberOfStrokes-1) * fStep;
-
-            if (!fIsTwoNotesTremolo)
-                pos.y -= LSPACE / 2;
-            else
-                pos.y -= fBeamCount * fStep * 0.5f;
-
-            if (textPos.y < 4*LSPACE)
-                textPos.y = 4*LSPACE;
+            if (!fIsTwoNotesTremolo)	pos.y -= fBeamCount * fStep + LSPACE / 3;
+            else 						pos.y -= fBeamCount * fStep * 1.5f; // * 0.5f;
+            if (textPos.y < 4*LSPACE)	textPos.y = 4*LSPACE;
         }
     }
-    else
-    {
+    else {
         GRGlobalStem * stem = findGlobalStem( sse, grel );
         NEPointerList * list = staff->getElements();
         GuidoPos gpos = list->GetElementPos(grel);
         bool foundStem = false;
-        while(gpos && gpos != sse->startpos && !foundStem )
-        {
+        while(gpos && gpos != sse->startpos && !foundStem ) {
             GRNotationElement * prevEl = list->GetPrev(gpos);
             stem = prevEl ? findGlobalStem( sse, prevEl ) : 0 ;
             if(stem) foundStem = true;
         }
-        if(foundStem)
-        {
+        if (foundStem) {
             pos = textPos = stem->getStemStartPos();
             GDirection direction = stem->getStemDir();
-            if(direction == dirOFF)
-            {
+            if(direction == dirOFF) {
                 float upperNoteY = stem->getAssociations()->GetHead()->getPosition().y;
                 float lowerNoteY = stem->getAssociations()->GetTail()->getPosition().y;
                 textPos.y = upperNoteY -2.5f * LSPACE;
-                if (textPos.y > -2.5 * LSPACE)
-                    textPos.y = -2.5f * LSPACE;
-                
-                if (upperNoteY > 2*LSPACE)
-                    pos.y = upperNoteY - 3 * LSPACE;
-                else
-                    pos.y = lowerNoteY + 2 * LSPACE;
+                if (textPos.y > -2.5 * LSPACE) 	textPos.y = -2.5f * LSPACE;
+                if (upperNoteY > 2*LSPACE) 		pos.y = upperNoteY - 3 * LSPACE;
+                else 							pos.y = lowerNoteY + 2 * LSPACE;
             }
-            else if (direction == dirUP)
-            {
-                if (!fIsTwoNotesTremolo)
-                    pos.y += LSPACE / 2 + fBeamCount * fStep;
-                else
-                    pos.y += fBeamCount * fStep * 1.5f;
-
+            else if (direction == dirUP) {
+                if (!fIsTwoNotesTremolo)		pos.y += LSPACE / 2 + fBeamCount * fStep;
+                else							pos.y += fBeamCount * fStep * 1.5f;
                 textPos.y -= 2 * LSPACE;
-                if(textPos.y > - 2 * LSPACE ) textPos.y = - 2 * LSPACE;
+                if(textPos.y > - 2 * LSPACE ) 	textPos.y = - 2 * LSPACE;
             }
-            else
-            {
+            else {
                 pos.y -= fThickness + (fNumberOfStrokes - 1) * fStep;
-                
-                if (!fIsTwoNotesTremolo)
-                    pos.y -= LSPACE / 2;
-                else
-                    pos.y -= fBeamCount * fStep * 0.5f;
-
-                if (textPos.y < 4 * LSPACE)
-                    textPos.y = 4 * LSPACE;
+                if (!fIsTwoNotesTremolo) 		pos.y -= LSPACE / 2;
+                else							pos.y -= fBeamCount * fStep * 0.5f;
+                if (textPos.y < 4 * LSPACE) 	textPos.y = 4 * LSPACE;
             }
         }
     }
     
-    if(grel == startElement)
-    {
+    if(grel == startElement) {
         fStartPos = pos;
         setPosition(textPos);
     }
-    else
-        fEndPos = pos;
+    else fEndPos = pos;
 }
 
 
@@ -246,7 +201,6 @@ void GRTremolo::computeSimpleStrokesCoordinates( NVPoint pos, float coorX[4], fl
 // -----------------------------------------------------------------------------
 void GRTremolo::computeTwoNotesStrokesCoordinates( NVPoint firstPos, NVPoint endPos, float coorX[4], float coorY[4] ) const
 {
-    
     float xFirst = firstPos.x + dx;
     float xEnd = endPos.x + dx;
     float yFirst = firstPos.y + dy;

@@ -1,11 +1,11 @@
 {
 [
 	\clef<"g2"> \key<1> \meter<"3/4"> 
-	\stemsUp \trem<style="/">( g/8)
-	\stemsUp \trem<style="//">( b/8) 
-	\stemsUp \trem<style="///">( d1/8)
-	\stemsUp \trem<style="////">( g/8) 
-	\stemsDown \trem<style="//">( b/8)
- 	\stemsDown \trem<style="/">( d2/8)
+	\stemsUp \trem<style="/">( g1/8)
+	\stemsUp \trem<style="//">( b) 
+	\stemsUp \trem<style="///">( d1)
+	\stemsUp \trem<style="////">( g) 
+	\stemsDown \trem<style="//">( b)
+ 	\stemsDown \trem<style="/">( d2)
 ]
 }
