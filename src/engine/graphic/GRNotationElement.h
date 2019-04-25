@@ -141,6 +141,7 @@ public:
     virtual const GRNote *		isGRNote() const		{ return 0; }
     virtual const GRRest *		isRest() const			{ return 0; }
     virtual const GREvent *		isGREvent() const		{ return 0; }
+    virtual 	  GREvent *		isGREvent() 			{ return 0; }
     virtual const GRGlue *		isGRGlue() const		{ return 0; }
     virtual const GRTempo *		isGRTempo() const		{ return 0; }
     virtual const GRTrill *		isGRTrill() const		{ return 0; }

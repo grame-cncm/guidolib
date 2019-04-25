@@ -138,6 +138,7 @@ class GREvent : public GRARCompositeNotationElement
 		virtual bool	stemHasBeenChanged() const		{return stemChanged;}
 		virtual void	setStemChanged()				{stemChanged = true;}
 		virtual const GREvent *	isGREvent() const		{ return this; }
+		virtual 	  GREvent *	isGREvent() 			{ return this; }
 
 		GRNoteDot *		getDot();
 
