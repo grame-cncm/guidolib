@@ -52,49 +52,34 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 class GRBeam : public GRPTagARNotationElement, public GRSystemTagInterface
 {
 public:
-
 				 GRBeam(GRStaff * grstf, const ARBeam * arbeam);
 	virtual		~GRBeam();
 
-	virtual void	accept (GRVisitor& visitor);
+	virtual void	accept 		(GRVisitor& visitor);
+
 	virtual void	checkPosition(const GRSystem * grsys);
-	virtual void	ResumeTag(GRStaff * grstaff,GuidoPos assocpos);
-	virtual void	BreakTag(GRStaff * grstaff,GuidoPos &assocpos);
-	virtual void	setError(const GRStaff * grstaff,int p_error);
-//	virtual double	getSlope(GRStaff * grstaff);
+	virtual void	ResumeTag	(GRStaff * grstaff,GuidoPos assocpos);
+	virtual void	BreakTag	(GRStaff * grstaff,GuidoPos &assocpos);
+	virtual void	setError	(const GRStaff * grstaff,int p_error);
 	virtual void	tellPosition(GObject * gobj,const NVPoint &pos);
-	virtual int		getNumLines(GRStaff * grstaff);
-	virtual void	StaffBegin(GRStaff * grstaff = 0);
+	virtual void	StaffBegin	(GRStaff * grstaff = 0);
 	virtual void	StaffFinished(GRStaff * grstaff = 0);
-	virtual void	RangeEnd(GRStaff * grstaff = 0);
+	virtual void	RangeEnd	(GRStaff * grstaff = 0);
 	virtual void	addAssociation(GRNotationElement * grnot);
-	virtual void	OnDraw( VGDevice & hdc ) const;
-	virtual bool	isAutoBeam() const		{ return false; } // derived by GRAutoBeam
-	virtual GRNotationElement * getEndElement();
+	virtual void	OnDraw		( VGDevice & hdc ) const;
 	virtual void	addSmallerBeam(GRBeam * beam);
+
+	virtual GRNotationElement * getEndElement();
+	virtual bool	isAutoBeam() const		{ return false; } // derived by GRAutoBeam
 	virtual void	setLevel(int l)			{ fLevel = l;}
 	virtual void	decLevel()				{ fLevel--;}
 	virtual bool	isGraceBeaming() const	{ return fIsGraceBeaming;}
 
 protected:
-	const ARBeam * getARBeam()										{ return static_cast<const ARBeam *>(mAbstractRepresentation); }
+	const ARBeam * getARBeam()									{ return static_cast<const ARBeam *>(mAbstractRepresentation); }
 	virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()	{ return new GRBeamSaveStruct;  }
-
 	virtual bool checkNotes(GRStaff * grstaff);
-//	virtual int slope(GRBeamSaveStruct * st, int posx);
 
-	bool mHasRestInMiddle;
-
-	int lastdirection;
-	int lastnumf;
-
-	// this is set when a System-Beam needs to check
-	// its slope and all (that is being called by checkPos)
-	// otherwise it is 0. The parameter is used by tellposition
-	// to stop execution of procedure if it is a systemtag
-	// now inside GRSystemTagInterface: 
-
-	// int isSystemCall;
 
 private:
 	typedef struct {
@@ -102,26 +87,29 @@ private:
 		float		currentSize;
 		float		currentLSPACE;
 		bool		oneNote;
-		bool		stemsReverse;
-		bool		stavesStartEnd;
+		bool		stemsReverse; 	// set to true when the beaming connect reversed stems (up and down)
+		bool		stavesStartEnd; // set to true when start and end are on different staves
+		NVPoint		startStaff;		// the start staff position
+		NVPoint		endStaff;		// the end staff position
 	} PosInfos;
-	NVPoint initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosInfos& infos);
+
+	void 	initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosInfos& infos);
 	void	initp1 (GRSystemStartEndStruct * sse, PosInfos& infos);
-	NVPoint initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
+	void 	initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
 	void	initp3 (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
 	void	adjustFeathered (float yFact1, float yFact2, PosInfos& info, GRSystemStartEndStruct * sse);
 	float	setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust, float offsetbeam);
 	void	setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
-	bool	reverseStems 	(const NEPointerList* assoc) const;
+	bool	reverseStems  (const NEPointerList* assoc) const;
 
 	bool	fIsFeathered;
 	bool	fIsGraceBeaming;
 	bool	fDrawDur;
 	int		fLevel;
+	bool 	fHasRestInMiddle;
 
 	static std::pair<float, float> fLastPositionOfBarDuration;
-//	static std::pair<float, float> & getLastPositionOfBarDuration();
 	std::vector<GRBeam *> fSmallerBeams;
 };
 

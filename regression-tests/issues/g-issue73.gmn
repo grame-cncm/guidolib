@@ -1,6 +1,6 @@
 (*
 	issue #73 
-	with beaming and reverse stems on different staves
+	with beaming and reverse stems
 *)
 {
 [ 
@@ -10,7 +10,7 @@
 ,
 [ 
 	\staff<2> 
-	\staffFormat<dy=-5>
+	\staffFormat<dy=-13>
 	\clef<"f4"> \key<2> \meter<"6/8"> 
 
 	\beamBegin:1 
