@@ -5,6 +5,6 @@
     \key<-2> d \doubleBar (* bad key change *)
     \key<1> e \bar
     \key<2> a \bar
-    \key<1,hideNaturals="true"> g \bar  (* bad key change *)
+    \key<-2,hideNaturals="true"> g \bar  (* bad key change *)
 ]
 }
