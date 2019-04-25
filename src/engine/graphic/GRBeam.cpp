@@ -413,8 +413,9 @@ NVPoint GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, P
 		refStaff = sse->startElement->getGRStaff();
 	}
 	offset = refStaff->getPosition();
-	if (tagtype == SYSTEMTAG)
+	if (tagtype == SYSTEMTAG) {
 		st->p[0] += offset;
+	}
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
 	st->p[1] = st->p[0];
 	
@@ -1066,6 +1067,24 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 	}
 }
 
+//--------------------------------------------------------------------
+// scan associated elements to detect reverse beaming
+bool GRBeam::reverseStems 	(const NEPointerList* assoc) const
+{
+	GDirection dir = dirOFF;
+	GuidoPos pos = assoc->GetHeadPosition();
+	while (pos) {
+		const GRNotationElement* elt = assoc->GetNext(pos);
+		const GREvent* ev = elt->isGREvent();
+		if (ev) {
+			GDirection nd = ev->getStemDirection();
+			if (dir == dirOFF) dir = nd;
+			else if ((dir == dirUP) && (nd == dirDOWN)) return true;
+			else if ((dir == dirDOWN) && (nd == dirUP)) return true;
+		}
+	}
+	return false;
+}
 
 //--------------------------------------------------------------------
 /** \brief Called from the LAST-Note of the Beam ...
@@ -1103,11 +1122,11 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const GREvent * startEl = sse->startElement->isGREvent();
-	const GREvent * endEl   = sse->endElement->isGREvent();
+	GREvent * endEl   = sse->endElement->isGREvent();
 	
 	// this is the staff to which the beam belongs and who draws it.
 	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
-	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl)};
+	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), (endEl->getGRStaff()!=startEl->getGRStaff()) };
 	
 	const ARBeam * arBeam = getARBeam();
 	const bool isSpecBeam = arBeam->isGuidoSpecBeam();
@@ -1115,9 +1134,9 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	if (startEl)	infos.stemdir = startEl->getStemDirection();
 	else if(endEl)	infos.stemdir = endEl->getStemDirection();
 
-	NVPoint offset = initp0 (sse, startEl, infos);
+	initp0 (sse, startEl, infos);
 	initp1 (sse, infos);
-	offset = initp2 (sse, endEl, infos);
+	initp2 (sse, endEl, infos);
 	initp3 (sse, infos);
 
 	// -----------------------------------------------------------
@@ -1245,6 +1264,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 
 	// now we have to make sure, that the original positions for the beam are set for the right staff
 	if (tagtype == SYSTEMTAG) {
+		if (infos.stavesStartEnd && infos.stemsReverse) {
+			float ratio = endEl->getGRStaff()->getSizeRatio() * startEl->getGRStaff()->getSizeRatio();
+			endEl->setStemLength(endEl->getStemLength() + LSPACE * ratio);
+		}
 		const NVPoint &offset = beamstaff->getPosition();
 		st->p[0] -= offset;
 		st->p[1] -= offset;

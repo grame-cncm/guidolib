@@ -102,6 +102,8 @@ private:
 		float		currentSize;
 		float		currentLSPACE;
 		bool		oneNote;
+		bool		stemsReverse;
+		bool		stavesStartEnd;
 	} PosInfos;
 	NVPoint initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosInfos& infos);
 	void	initp1 (GRSystemStartEndStruct * sse, PosInfos& infos);
@@ -111,6 +113,7 @@ private:
 	void	adjustFeathered (float yFact1, float yFact2, PosInfos& info, GRSystemStartEndStruct * sse);
 	float	setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust, float offsetbeam);
 	void	setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
+	bool	reverseStems 	(const NEPointerList* assoc) const;
 
 	bool	fIsFeathered;
 	bool	fIsGraceBeaming;
