@@ -246,8 +246,6 @@ void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 		}
 	}
 
-//cerr << "GRStem::DrawWithLine pos / len: " << mPosition << " : " << mStemLen << " dir: " <<  ((mStemDir == dirUP) ? "up" : "down") << endl;
-
 	// - Restore context
 	if (colref) hdc.SetFontColor( prevTextColor );  //(TODO: in a parent method)
 }
