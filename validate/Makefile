@@ -36,8 +36,7 @@ ifeq ($(system), MINGW)
   libbin   := ../build/win$(PLATFORM)/Release
   toolbin  ?= ../src/tools/build/win$(PLATFORM)/Release
   lib       = $(libbin)/GUIDOEngine$(EXTENSION).lib
-  WINTOOLS  = GUIDOEngine$(EXTENSION).dll guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe # guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe guido2proll.exe
-#  guido2image := ./guido2image.exe
+  WINTOOLS  = GUIDOEngine$(EXTENSION).dll guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe 
   guido2svg   := ./guido2svg.exe
   guido2midi  := ./guido2midi.exe
   guido2proll := ./guido2proll.exe
@@ -56,9 +55,8 @@ noilost	= "indirectly lost: 0"
 noplost	= "possibly lost: 0"
 noerr	= "ERROR SUMMARY: 0"
 
-gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
 gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")
-gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
+gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn") $(shell find ../open-issues -name "*.gmn")
 lyricsfiles   = $(shell grep -r -l "\\lyrics" ../gmn-examples ../regression-tests)
 
 
