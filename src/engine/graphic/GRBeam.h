@@ -97,11 +97,12 @@ private:
 	void	initp1 (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void 	initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
 	void	initp3 (GRSystemStartEndStruct * sse, PosInfos& infos);
-	void	slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
+	void	slopeAdjust 	(GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
 	void	adjustFeathered (float yFact1, float yFact2, PosInfos& info, GRSystemStartEndStruct * sse);
-	float	setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust, float offsetbeam);
-	void	setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
-	bool	reverseStems  (const NEPointerList* assoc) const;
+	float	setStemEndPos 	(GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust, float offsetbeam);
+	void	setBeams 		(GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
+	bool	reverseStems  			(const NEPointerList* assoc) const;
+	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const;
 
 	bool	fIsFeathered;
 	bool	fIsGraceBeaming;

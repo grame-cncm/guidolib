@@ -389,11 +389,16 @@ void GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosI
 	infos.currentSize = startEl->getSize();
 
 	if (tagtype == SYSTEMTAG) {
-		st->p[0] += refStaff->getPosition();
+		st->p[0].x += infos.startStaff.x;
+		float yoffset = 0;
 		if (infos.stavesStartEnd && !infos.stemsReverse) {
-			if (infos.stemdir == dirUP) st->p[0].y -= infos.startStaff.y;
-			else st->p[0].y += infos.endStaff.y;
+			if (infos.stemdir == dirUP) {
+				yoffset = std::min(infos.endStaff.y, infos.startStaff.y);
+			}
+			else yoffset = std::max(infos.startStaff.y, infos.endStaff.y);
 		}
+		else yoffset = infos.startStaff.y;
+		st->p[0].y += yoffset;
 	}
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
 	st->p[1] = st->p[0];
@@ -469,13 +474,17 @@ void GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInf
 	if (arBeam && arBeam->isGuidoSpecBeam())
 		st->p[2].y = endEl->getPosition().y;
 	GRStaff * refStaff = endEl->getGRStaff();
+	infos.currentLSPACE = refStaff->getStaffLSPACE();
 
 	if (tagtype == SYSTEMTAG) {
 		st->p[2] += refStaff->getPosition();
-		if (infos.stavesStartEnd && !infos.stemsReverse)
+		if (infos.stavesStartEnd && !infos.stemsReverse) {
 			st->p[2].y = st->p[0].y;
+//			float slopeOffset = infos.currentLSPACE/2;
+//			if (infos.endStaff.y < infos.startStaff.y) st->p[2].y -= slopeOffset;
+//			else st->p[2].y += slopeOffset;
+		}
 	}
-	infos.currentLSPACE = refStaff->getStaffLSPACE();
 
 	st->p[3] = st->p[2];
 
@@ -1058,6 +1067,29 @@ bool GRBeam::reverseStems 	(const NEPointerList* assoc) const
 }
 
 //--------------------------------------------------------------------
+void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const
+{
+	float maxy = 0;
+	float miny = 100000000.f;
+	GuidoPos pos = beams->GetHeadPosition();
+	while (pos) {
+		const GRSimpleBeam* b = beams->GetNext(pos);
+		if (b->fPoints[3].y > maxy) maxy = b->fPoints[3].y;
+		if (b->fPoints[2].y > miny) miny = b->fPoints[2].y;
+	}
+	float slength = ev->getStemLength();
+	float thick = ev->getGRStaff()->getStaffLSPACE()/4; // this is to take account of the beam thickness
+	if (ev->getStemDirection() == dirUP) {
+		float y = ev->getPosition().y - slength;
+		if (y > miny) ev->setStemLength(slength + y - miny - thick);
+	}
+	else {
+		float y = ev->getPosition().y + slength;
+		if (y < maxy) ev->setStemLength(slength + maxy - y - thick);
+	}
+}
+
+//--------------------------------------------------------------------
 /** \brief Called from the LAST-Note of the Beam ...
 */
 // (JB) \bug There is probably a bug somewhere: with map mode
@@ -1111,7 +1143,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	initp1 (sse, infos);
 	initp2 (sse, endEl, infos);
 	initp3 (sse, infos);
-//cerr << "GRBeam::tellPosition initp3: \t\t" << st->p[0] << " " << st->p[1] << " " << st->p[2] << " "  << st->p[3] << endl;
+//cerr << "GRBeam::tellPosition initp3: \t" << st->p[0] << " " << st->p[1] << " " << st->p[2] << " "  << st->p[3] << endl;
 
 	// -----------------------------------------------------------
 	// Now, we adjust the stemlengths, according to beamslope ...
@@ -1182,12 +1214,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		offsetbeam = setStemEndPos(sse, infos, needsadjust, offsetbeam);
 	}
 	
-	if(!fSmallerBeams.empty())
-	{
-		for(std::vector<GRBeam *>::iterator it = fSmallerBeams.begin(); it < fSmallerBeams.end(); it++)
-		{
-			(*it)->decLevel();
-			(*it)->tellPosition((*it)->getEndElement(), (*it)->getEndElement()->getPosition());
+	if(!fSmallerBeams.empty()) {
+		for(auto sb: fSmallerBeams) {
+			sb->decLevel();
+			sb->tellPosition(sb->getEndElement(), sb->getEndElement()->getPosition());
 		}
 		return;
 	}
@@ -1236,18 +1266,23 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
         }
     }
 
-	// now we have to make sure, that the original positions for the beam are set for the right staff
-	if (tagtype == SYSTEMTAG) {
-		if (infos.stavesStartEnd && infos.stemsReverse) {
-			float ratio = endEl->getGRStaff()->getSizeRatio() * startEl->getGRStaff()->getSizeRatio();
+	if (infos.stemsReverse) {
+		if (infos.stavesStartEnd) {
+			float ratio = startEl->getGRStaff()->getSizeRatio() * endEl->getGRStaff()->getSizeRatio();
 			endEl->setStemLength(endEl->getStemLength() + LSPACE * ratio);
 		}
+		else checkEndStemsReverse(endEl, st->simpleBeams);
+	}
+
+	// now we have to make sure, that the original positions for the beam are set for the right staff
+	if (tagtype == SYSTEMTAG) {
 		const NVPoint &offset = beamstaff->getPosition();
 		st->p[0] -= offset;
 		st->p[1] -= offset;
 		st->p[2] -= offset;
 		st->p[3] -= offset;
 	}
+//cerr << "GRBeam::tellPosition out: \t\t" << st->p[0] << " " << st->p[1] << " " << st->p[2] << " "  << st->p[3] << endl;
 }
 
 
