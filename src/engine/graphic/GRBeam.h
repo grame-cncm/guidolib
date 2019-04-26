@@ -89,6 +89,8 @@ private:
 		bool		oneNote;
 		bool		stemsReverse; 	// set to true when the beaming connect reversed stems (up and down)
 		bool		stavesStartEnd; // set to true when start and end are on different staves
+		const GREvent* highNote;	// the highest note (y position)
+		const GREvent* lowNote;		// the lowest note
 		NVPoint		startStaff;		// the start staff position
 		NVPoint		endStaff;		// the end staff position
 	} PosInfos;
@@ -102,6 +104,7 @@ private:
 	float	setStemEndPos 	(GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust, float offsetbeam);
 	void	setBeams 		(GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
 	bool	reverseStems  			(const NEPointerList* assoc) const;
+	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
 	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const;
 
 	bool	fIsFeathered;

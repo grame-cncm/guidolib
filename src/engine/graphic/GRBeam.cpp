@@ -380,18 +380,23 @@ void GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosI
 	// -- Init point 0 (top left)
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const ARBeam * arBeam = getARBeam();
+	const GREvent * refEvt = startEl;
 
-	st->p[0] = startEl->getStemStartPos();
+	if ((tagtype == SYSTEMTAG) && !infos.stemsReverse && infos.stavesStartEnd && !startEl->getStemLengthSet())
+		refEvt = (infos.stemdir == dirUP) ? infos.highNote : infos.lowNote;
+
+	st->p[0] = refEvt->getStemStartPos();
 	if (arBeam && arBeam->isGuidoSpecBeam())
-		st->p[0].y = startEl->getPosition().y;
-	GRStaff * refStaff = startEl->getGRStaff();
-	infos.stemdir = startEl->getStemDirection();
-	infos.currentSize = startEl->getSize();
+		st->p[0].y = refEvt->getPosition().y;
+	GRStaff * refStaff = refEvt->getGRStaff();
+	infos.stemdir = refEvt->getStemDirection();
+	infos.currentSize = refEvt->getSize();
+	infos.currentLSPACE = refStaff->getStaffLSPACE();
 
 	if (tagtype == SYSTEMTAG) {
 		st->p[0].x += infos.startStaff.x;
 		float yoffset = 0;
-		if (infos.stavesStartEnd && !infos.stemsReverse) {
+		if (infos.stavesStartEnd && !infos.stemsReverse && !startEl->getStemLengthSet()) {
 			if (infos.stemdir == dirUP) {
 				yoffset = std::min(infos.endStaff.y, infos.startStaff.y);
 			}
@@ -400,7 +405,6 @@ void GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosI
 		else yoffset = infos.startStaff.y;
 		st->p[0].y += yoffset;
 	}
-	infos.currentLSPACE = refStaff->getStaffLSPACE();
 	st->p[1] = st->p[0];
 	
 	// -- Adjust point 0
@@ -478,11 +482,11 @@ void GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInf
 
 	if (tagtype == SYSTEMTAG) {
 		st->p[2] += refStaff->getPosition();
-		if (infos.stavesStartEnd && !infos.stemsReverse) {
+		if (infos.stavesStartEnd && !infos.stemsReverse &&  !endEl->getStemLengthSet()) {
 			st->p[2].y = st->p[0].y;
-//			float slopeOffset = infos.currentLSPACE/2;
-//			if (infos.endStaff.y < infos.startStaff.y) st->p[2].y -= slopeOffset;
-//			else st->p[2].y += slopeOffset;
+			float slopeOffset = infos.currentLSPACE/2;
+			if (infos.endStaff.y < infos.startStaff.y) st->p[2].y -= slopeOffset;
+			else st->p[2].y += slopeOffset;
 		}
 	}
 
@@ -1067,6 +1071,32 @@ bool GRBeam::reverseStems 	(const NEPointerList* assoc) const
 }
 
 //--------------------------------------------------------------------
+void GRBeam::yRange (const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const
+{
+	const GREvent* ymin  = 0;
+	const GREvent* ymax = 0;
+	float min = 10000000.f;
+	float max = 0;
+	GuidoPos pos = assoc->GetHeadPosition();
+	while (pos) {
+		const GREvent* ev = assoc->GetNext(pos)->isGREvent();
+		if (ev) {
+			NVPoint p = ev->getPosition() + ev->getGRStaff()->getPosition();
+			if (p.y > max) {
+				max = p.y;
+				ymax = ev;
+			}
+			if (p.y < min) {
+				min = p.y;
+				ymin = ev;
+			}
+		}
+	}
+	high = ymin;
+	low = ymax;
+}
+
+//--------------------------------------------------------------------
 void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const
 {
 	float maxy = 0;
@@ -1129,9 +1159,12 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	
 	// this is the staff to which the beam belongs and who draws it.
 	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
-	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), (endEl->getGRStaff()!=startEl->getGRStaff()) };
-	infos.startStaff = startEl->getGRStaff()->getPosition();
-	infos.endStaff	 = endEl->getGRStaff()->getPosition();
+	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), (endEl->getGRStaff()!=startEl->getGRStaff()), 0, 0 };
+	if (tagtype == SYSTEMTAG) {
+		infos.startStaff = startEl->getGRStaff()->getPosition();
+		infos.endStaff	 = endEl->getGRStaff()->getPosition();
+		yRange(mAssociated, infos.highNote, infos.lowNote);
+	}
 
 	const ARBeam * arBeam = getARBeam();
 	const bool isSpecBeam = arBeam->isGuidoSpecBeam();
