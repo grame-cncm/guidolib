@@ -1,0 +1,23 @@
+{
+[ 
+	\staff<1>  \auto<autoInstrPos="on"> \barFormat<style= "system", range="1"> 
+   (* meas. 1 *)  \clef<"g2"> \key<0> \meter<"3/8">  _*3/8 \bar 
+   (* meas. 2 *)  _*3/8 \bar 
+   (* meas. 3 *)  _*3/8 
+]
+ , 
+[ 
+	\staff<2>  \auto<autoInstrPos="on"> \accol<id=0, range="2-3"> \barFormat<style= "system", range="2-3"> 
+   (* meas. 1 *)  \clef<"g2"> \key<-2> \meter<"3/8"> _*3/8 \bar 
+   (* meas. 2 *)  \intens<"p", dy=-0.6hs> _/4. \bar 
+   (* meas. 3 *)  \stemsDown \beamsOff a1/4 \slurEnd:1 _/8
+]
+ , 
+[ 
+	\staff<3> 
+   (* meas. 1 *)  \clef<"f4"> \key<-2> \meter<"3/8">  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 g-1/16 \stemsDown b&/16 \stemsDown d0/16 \stemsDown g/16 \beamEnd:1 \stemsUp \beamBegin:1 b&/16 \stemsUp d1/16 \beamEnd:1 \bar 
+  \bar 
+   (* meas. 2 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 d-1/16 \stemsDown a/16 \stemsDown f#0/16 \beamEnd:1 \stemsDown \beamBegin:1 a/16 \stemsDown d1/16 \staff<2> \stemsDown f#/16 \beamEnd:1 \staff<3> \bar 
+   (* meas. 3 *)  \noteFormat<dx=-2>( _*3/8)
+]
+}
