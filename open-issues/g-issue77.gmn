@@ -1,0 +1,6 @@
+{[   
+   (* meas. 1 *)  \tempo<"Moderato  [1/4] = 108"> d/1 \bar 
+   (* meas. 2 *)  _/1 \bar 
+   (* meas. 3 *)  \tempo<"Adagio  [1/4] = 40"> c/1 \bar 
+   (* meas. 4 *)  _/1 ]
+  }
