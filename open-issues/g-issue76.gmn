@@ -1,0 +1,10 @@
+{[ \staff<1>  \accol<id=0, range="1-2"> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \meter<"3/4", autoBarlines="off", autoMeasuresNum="system"> _/4 \staff<2> \stemsUp  \beamsOff {a0/4, b/4, \staff<1> f1/4  } \stemsUp \beamsOff {a0/4, c1/4, f#/4  } \bar 
+   (* meas. 2 *)  _/4 \staff<2> \stemsUp \beamsOff {g#0/8, b/8, \staff<1> e1/8  } _/8 \staff<2> \stemsUp \beamsOff {g#0/8, b/8, \staff<1> e1/8  } _/8 \bar 
+   (* meas. 3 *)  _/4 \staff<2> \stemsUp \beamsOff {a0/16, c1/16, \staff<1> e&/16  } _/8. \staff<2> \stemsUp \beamsOff {a0/16, c1/16, \staff<1> e&/16  } _/8. ]
+ , 
+[ \staff<2> \staffFormat<dy=-6> 
+   (* meas. 1 *)  \clef<"f4">  \meter<"3/4">  \stemsDown \beamsOff d0/2
+ \stemsDown \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 2 *)  \stemsDown \beamsOff e/2 \stemsDown \beamsOff d/4 \bar 
+   (* meas. 2 *)  \stemsDown \beamsOff f#/2. ]}
