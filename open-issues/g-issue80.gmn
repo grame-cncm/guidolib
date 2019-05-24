@@ -1,0 +1,27 @@
+{
+[ 
+	\staff<1> \accol<id=0, range="1-2"> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<1> \meter<"C/"> \intens<"f", dy=-3.2hs> _/8 
+	\staff<2> \stemsUp \beamBegin:1 {d0/8, f#/8, \staff<1> a/8  } 
+	\staff<2> \stemsUp {f#/8, a/8, \staff<1> d1/8  } 
+	\staff<2> \stemsUp {a0/8, \staff<1> d1/8, f#/8  } \beamEnd:1 
+	\stemsUp \arpeggio( {a0/4, d1/4, f#/4, a/4  }) _/4 \bar 
+   (* meas. 2 *)  \text<"senza cross staff",fattrib="i", dx=1hs, dy=15.4hs>( _/8)
+ 	\stemsUp \beamBegin:1 {d0/8, g/8  } \stemsUp {g/8, b/8, d1/8  } 
+	\stemsUp {b0/8, d1/8, g/8  } \beamEnd:1 
+	\stemsUp \arpeggio( {b0/4, d1/4, g/4, b/4  }) _/4 \bar 
+   (* meas. 3 *)  \text<"with cross staff",fattrib="i", dx=1.2hs, dy=15hs>( _/8)
+ 	\staff<2> \stemsUp \beamBegin:1 {d0/8, g/8  } 
+	\stemsUp {g/8, b/8, \staff<1> d1/8  } \staff<2> \stemsUp {b0/8, \staff<1> d1/8, g/8  } 
+	\beamEnd:1 
+	\stemsUp \arpeggio( {b0/4, d1/4, g/4, b/4  }) _/4 
+]
+, 
+[ 
+	\staff<2> 
+   (* meas. 1 *)  \clef<"f4"> \key<1> \meter<"C/"> \stemsUp {d-1/4, d0/4  } 
+	\restFormat<dy=5>( _/4) _/2 \bar 
+   (* meas. 2 *)  \stemsUp {b-2/4, b-1/4  } _/4 \stemsUp {g-2/4, g-1/4  } _/4 \bar 
+   (* meas. 3 *)  \stemsUp {b-2/4, b-1/4  } \restFormat<dy=8>( _/4)
+ 	\stemsUp \beamsOff {g-2/4, g-1/4  } _/4 ]
+}
