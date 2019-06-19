@@ -1,0 +1,14 @@
+{
+[ 	
+   (* meas. 1 *)  \clef<"g2"> \key<0> \meter<"3/8">  
+	\beamBegin:1 \beam(c2/16 a1/16  c2/16  e&/16) 
+	\beamBegin:2 \tuplet<"3", dispNote="/16", position="below">( f#/24 a/24 c3/24) \beamEnd:2
+ 	\beamEnd:1 \bar 
+
+   (* meas. 2 *)  \stemsDown 
+	\beamBegin:1  \beamBegin:2 c2/16 \stemsDown a1/16 \beamEnd:2 
+	\beamBegin:2 \tuplet<"3", dispNote="/16", position="below">( c2/24 e&/24 f#/24) \beamEnd:2 
+	\beamBegin:2 a/16 c3/16 \beamEnd:2 
+	\beamEnd:1 
+]
+}

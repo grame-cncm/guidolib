@@ -1,0 +1,16 @@
+(*
+	Slurs on Cross-Staff don't cross Staves
+*)
+{
+[ 
+	\staff<1>  \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<0> \meter<"4/4"> empty/1 \bar 
+   (* meas. 2 *)  \beamsOff f/1  
+]
+ , 
+[ 
+	\staff<2> \staffFormat<dy=-6> \barFormat<style= "system", range="2"> 
+   (* meas. 1 *)  \clef<"f4"> \key<0> \meter<"4/4"> \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 c-1/8 \stemsUp g/8 c0/8 e/8 \beamEnd:1 \beamBegin:1 g/8 c1/8 \staff<1> \stemsDown e/8  g/8 \slurEnd:1 \beamEnd:1 \staff<2> \bar 
+   (* meas. 2 *)  _/8 \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 g-2/8 g-1/8 d0/8 \beamEnd:1 \stemsUp \beamBegin:1 f/8 \stemsUp g/8 \staff<1> \stemsDown b/8  d1/8 \slurEnd:1 \beamEnd:1  
+]
+}
