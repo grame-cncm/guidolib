@@ -244,11 +244,12 @@ svgclean:
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) $< | grep -v "SVG file generated using" > __tmp.svg  &&  mv __tmp.svg $@
+	-$(guido2svg) -o $@ $<
+#	-$(guido2svg) $< | grep -v "SVG file generated using" > $(TMP)  &&  mv $(TMP) $@
 
 $(version)/lyrics/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -checkLyrics $<  > $@
+	-$(guido2svg) -checkLyrics -o $@ $< 
 
 
 #########################################################################
@@ -257,15 +258,15 @@ map: $(mapsout)
 
 $(version)/maps/system/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -systemmap true $<  > $@
+	-$(guido2svg) -systemmap true  -o $@ $<
 
 $(version)/maps/staff/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -staffmap true $<  > $@
+	-$(guido2svg) -staffmap true  -o $@ $<
 
 $(version)/maps/voice/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -voicemap true $<  > $@
+	-$(guido2svg) -voicemap true  -o $@ $<
 
 	
 #########################################################################
