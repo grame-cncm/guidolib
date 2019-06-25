@@ -12,29 +12,28 @@
 
 */
 
-#include "ARShareStem.h"
-#include "ARTStem.h"
 #include "ARDisplayDuration.h"
 #include "ARNoteFormat.h"
-
-#include "TagParameterString.h"
-#include "TagParameterFloat.h"
-
-#include "GRGlobalStem.h"
-
-#include "GRStem.h"
-#include "GRStaff.h"
-#include "GREmpty.h"
-#include "GRSpring.h"
-#include "GRFlag.h"
-#include "GRSingleNote.h"
-#include "GRSystem.h"
-#include "GRSystemTag.h"
-#include "GRStdNoteHead.h"
-#include "GRVoice.h"
-#include "GRSystemSlice.h"
-#include "GRNoteDot.h"
+#include "ARShareStem.h"
+#include "ARTStem.h"
 #include "GRAccidental.h"
+#include "GRBeam.h"
+#include "GREmpty.h"
+#include "GRFlag.h"
+#include "GRGlobalStem.h"
+#include "GRNoteDot.h"
+#include "GRSingleNote.h"
+#include "GRSpring.h"
+#include "GRStaff.h"
+#include "GRStdNoteHead.h"
+#include "GRStem.h"
+#include "GRSystem.h"
+#include "GRSystemSlice.h"
+#include "GRSystemTag.h"
+#include "GRVoice.h"
+#include "TagParameterFloat.h"
+#include "TagParameterString.h"
+#include "VGDevice.h"
 
 using namespace std;
 
@@ -440,9 +439,6 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
             fFlag->setPosition( NVPoint(fFlag->getPosition().x, fFlag->getPosition().y + lengthDiff));
         }
 	}
-
-//if (fStem)
-//cerr << "GRGlobalStem::RangeEnd stem   : " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
 }
 
 
@@ -803,19 +799,16 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			}
 		}
 	}
-//if (fStem)
-//cerr << "GRGlobalStem::updateGlobalStem: " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
-//else
-//cerr << "GRGlobalStem::updateGlobalStem NO STEM" << endl;
 }
 
 //----------------------------------------------------------------
 void GRGlobalStem::setHPosition( float nx )
 {
 	if (error)	return; 
-
-	if (tagtype == GRTag::SYSTEMTAG && !mIsSystemCall)
-		return;
+	
+// the lines below prevents correct positioning (x pos null)
+//	if (tagtype == GRTag::SYSTEMTAG && !mIsSystemCall)
+//		return;
 
 	// the first tells the element itself of its new position
 	// and also the associated elements ... 
@@ -853,10 +846,10 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 {
 	if (error)	 return;
 
-	if (dynamic_cast<GRNotationElement *>(obj) == fFirstEl) // useless cast ?
-	{
-//if (fStem)
-//cerr << "GRGlobalStem::tellPosition start: " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
+	GRNotationElement* elt = dynamic_cast<GRNotationElement *>(obj);
+//	cerr << (void*)this << " GRGlobalStem::tellPosition elt " << elt << endl;
+
+	if (elt == fFirstEl) {
 		if (mIsSystemCall) {
 			// this is the staff, to which the stem belongs ....
 			const GRStaff * stemstaff = fFirstEl->getGRStaff();
@@ -918,8 +911,8 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 				updateGlobalStem(tmpel->getGRStaff());
 		}
 		setHPosition(pt.x);
-//if (fStem)
-//cerr << "GRGlobalStem::tellPosition end  : " << fStem->getPosition() << " " << fStem->getStemLength() << " " << (fStem->getStemDir() == dirUP ? "up " : "down ") << (fStemdir == dirUP ? "up " : "down ") << endl;
+		if (fBeam) fBeam->refreshPosition();
+//cerr << (void*)this << " GRGlobalStem::tellPosition " << getStemStartPos() << " " << fStem->getStemLength() << endl;
 	}
 }
 
@@ -1000,13 +993,13 @@ NVPoint GRGlobalStem::getStemStartPos() const
 		stemlength = fStem->getStemLength();
 		if (stemdir == dirUP)
 		{
-			pnt.x += (GCoord)(notebreite * 0.5f * mTagSize + mTagOffset.x - (4 * mTagSize));
-			pnt.y -= (GCoord)(stemlength - mTagOffset.y);
+			pnt.x += (notebreite * 0.5f * mTagSize) + mTagOffset.x - (4 * mTagSize);
+			pnt.y -= stemlength - mTagOffset.y;
 		}
 		else if (stemdir == dirDOWN)
 		{		
-			pnt.x -= (GCoord)(notebreite * 0.5f * mTagSize) - mTagOffset.x;
-			pnt.y += (GCoord)(stemlength +  mTagOffset.y);
+			pnt.x -= (notebreite * 0.5f * mTagSize) - mTagOffset.x;
+			pnt.y += stemlength +  mTagOffset.y;
 		}
 	}
 	return pnt;
@@ -1028,13 +1021,13 @@ NVPoint GRGlobalStem::getStemEndPos() const
 		stemlength = fStem->getStemLength();
 		if (stemdir == dirUP)
 		{
-			pnt.x += (GCoord)((notebreite * 0.5f * mTagSize) + mTagOffset.x - (1 * mTagSize));
-			pnt.y -= (GCoord)(stemlength - mTagOffset.y);
+			pnt.x += (notebreite * 0.5f * mTagSize) + mTagOffset.x - (1 * mTagSize);
+			pnt.y -= stemlength - mTagOffset.y;
 		}
 		else if (stemdir == dirDOWN)
 		{		
-			pnt.x -= (GCoord)((notebreite * 0.5f * mTagSize) - mTagOffset.x - (4 * mTagSize));
-			pnt.y += (GCoord)(stemlength + mTagOffset.y);
+			pnt.x -= (notebreite * 0.5f * mTagSize) - mTagOffset.x - (4 * mTagSize);
+			pnt.y += stemlength + mTagOffset.y;
 		}
 	}
 	return pnt;

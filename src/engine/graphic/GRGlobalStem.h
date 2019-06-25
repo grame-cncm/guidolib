@@ -76,6 +76,8 @@ class GRGlobalStem : public GRPTagARNotationElement, public GRSystemTagInterface
         virtual NVPoint		getStemEndPos() const;
         virtual float		getStemLength() const;
 		virtual int			getNumFaehnchen() const;
+	
+		void			setBeam( GRBeam* beam)			{ fBeam = beam; }
 
 	protected:
 		bool		fFlagOnOff;
@@ -100,6 +102,9 @@ class GRGlobalStem : public GRPTagARNotationElement, public GRSystemTagInterface
 		GRSingleNote *	fHigherNote;
 
         float fStaffSize;
+
+	private:
+		GRBeam *	fBeam = 0;
 };
 
 #endif
