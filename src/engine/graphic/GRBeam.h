@@ -75,6 +75,9 @@ public:
 	virtual void	decLevel()				{ fLevel--;}
 	virtual bool	isGraceBeaming() const	{ return fIsGraceBeaming;}
 
+			void	refreshPosition();
+			void	refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPACE, int dir);
+
 protected:
 	const ARBeam * getARBeam()									{ return static_cast<const ARBeam *>(mAbstractRepresentation); }
 	virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()	{ return new GRBeamSaveStruct;  }

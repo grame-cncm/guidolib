@@ -381,19 +381,21 @@ void GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosI
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const ARBeam * arBeam = getARBeam();
 	const GREvent * refEvt = startEl;
+	bool setref = (tagtype == SYSTEMTAG);
 
-	if ((tagtype == SYSTEMTAG) && !infos.stemsReverse && infos.stavesStartEnd && !startEl->getStemLengthSet())
+	if (setref && !infos.stemsReverse && infos.stavesStartEnd && !startEl->getStemLengthSet())
 		refEvt = (infos.stemdir == dirUP) ? infos.highNote : infos.lowNote;
 
-	st->p[0] = refEvt->getStemStartPos();
-	if (arBeam && arBeam->isGuidoSpecBeam())
-		st->p[0].y = refEvt->getPosition().y;
 	GRStaff * refStaff = refEvt->getGRStaff();
 	infos.stemdir = refEvt->getStemDirection();
 	infos.currentSize = refEvt->getSize();
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
+	st->p[0] = refEvt->getStemStartPos();
+//cerr << "GRBeam::initp0 " << refEvt << " " << st->p[0] << " " << refEvt->getStemLength() << endl;
+	if (arBeam && arBeam->isGuidoSpecBeam())
+		st->p[0].y = refEvt->getPosition().y;
 
-	if (tagtype == SYSTEMTAG) {
+	if (setref) {
 		st->p[0].x += infos.startStaff.x;
 		float yoffset = 0;
 		if (infos.stavesStartEnd && !infos.stemsReverse && !startEl->getStemLengthSet()) {
@@ -479,6 +481,9 @@ void GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInf
 		st->p[2].y = endEl->getPosition().y;
 	GRStaff * refStaff = endEl->getGRStaff();
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
+
+//cerr << "GRBeam::initp2 " << endEl << " " << st->p[2] << endl;
+//cerr << "GRBeam::initp2 " << endEl->getGlobalStem()->getPosition() << " " << endEl->getGlobalStem()->getStemLength() << endl;
 
 	if (tagtype == SYSTEMTAG) {
 		st->p[2] += refStaff->getPosition();
@@ -594,6 +599,32 @@ void GRBeam::slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl,
 	{
 		st->p[0].y = st->p[2].y;
 		st->p[1].y = st->p[3].y;
+	}
+}
+
+//--------------------------------------------------------------------
+void GRBeam::refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPACE, int dir)
+{
+	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
+	NVPoint p[4];
+	p[0] = st->p[0];
+	p[1] = st->p[1];
+	p[2] = st->p[2];
+	p[3] = st->p[3];
+	const float yFact1 = 0.75f * currentLSPACE * dir;
+	const float yFact2 = 0.4f * currentLSPACE;
+	if (st->simpleBeams)
+	{
+		GuidoPos smplpos = st->simpleBeams->GetHeadPosition();
+		while (smplpos)
+		{
+			GRSimpleBeam * smplbeam = st->simpleBeams->GetNext(smplpos);
+			smplbeam->setPoints(p);
+			p[0].y += yFact1;
+			p[1].y += yFact1;
+			p[2].y += yFact1;
+			p[3].y += yFact1;
+		}
 	}
 }
 
@@ -1120,6 +1151,20 @@ void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) 
 }
 
 //--------------------------------------------------------------------
+// this method has been introduced to trig the position computation in case of
+// shared stem with chords spanning different staves
+// (the global stem layout is changed after tellPosition has been called for the beam)
+void GRBeam::refreshPosition()
+{
+	GRNotationElement * el = mAssociated->GetTail();
+	tellPosition (el, el->getPosition());
+	const GRStaff* staff = el->getGRStaff();
+	const GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
+	const GREvent * ev = sse->startElement->isGREvent();
+	refreshBeams(sse, staff->getStaffLSPACE(), (ev->getStemDirection() == dirUP) ? 1 : -1);
+}
+
+//--------------------------------------------------------------------
 /** \brief Called from the LAST-Note of the Beam ...
 */
 // (JB) \bug There is probably a bug somewhere: with map mode
@@ -1146,17 +1191,19 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	
 	GRNotationElement * el = dynamic_cast<GRNotationElement *>(gobj);
 	if (!el || !el->getGRStaff()) return;
-	
+
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(el->getGRStaff()->getGRSystem());
 	assert(sse);
 	if (el != sse->endElement) return;
-
 	if(fLevel != 0) return;
-	
+
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const GREvent * startEl = sse->startElement->isGREvent();
 	GREvent * endEl   = sse->endElement->isGREvent();
-	
+
+	if (startEl->getGlobalStem()) startEl->getGlobalStem()->setBeam (this);
+	if (endEl->getGlobalStem()) endEl->getGlobalStem()->setBeam (this);
+
 	// this is the staff to which the beam belongs and who draws it.
 	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
 	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), (endEl->getGRStaff()!=startEl->getGRStaff()), 0, 0 };
@@ -1176,7 +1223,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	initp1 (sse, infos);
 	initp2 (sse, endEl, infos);
 	initp3 (sse, infos);
-//cerr << "GRBeam::tellPosition initp3: \t" << st->p[0] << " " << st->p[1] << " " << st->p[2] << " "  << st->p[3] << endl;
 
 	// -----------------------------------------------------------
 	// Now, we adjust the stemlengths, according to beamslope ...
@@ -1184,16 +1230,20 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// We have to determine the slope and adjust the slope to minimum and maximum ...
     // -----------------------------------------------------------
 	float stemWidth = st->p[2].x - st->p[0].x;
-	float slope = (st->p[2].y - st->p[0].y) / stemWidth;
-	// another hack to control the slope when events are on different staves - DF sept 15 2009
-	if (startEl && endEl && (startEl->getGRStaff() != endEl->getGRStaff())) {
-		while ((slope < -0.20) || (slope > 0.20)) {
-			float shift = (slope < 0) ? -LSPACE/4 : LSPACE/4;
-			st->p[0].y += shift;
-			st->p[1].y += shift;
-			st->p[2].y -= shift;
-			st->p[3].y -= shift;
-			slope = (st->p[2].y - st->p[0].y) / stemWidth;
+	if (stemWidth < 0) stemWidth = -stemWidth;
+	float slope = 0;
+	if (stemWidth > 0) {
+		slope = (st->p[2].y - st->p[0].y) / stemWidth;
+		// another hack to control the slope when events are on different staves - DF sept 15 2009
+		if (startEl && endEl && (startEl->getGRStaff() != endEl->getGRStaff())) {
+			while ((slope < -0.20) || (slope > 0.20)) {
+				float shift = (slope < 0) ? -LSPACE/4 : LSPACE/4;
+				st->p[0].y += shift;
+				st->p[1].y += shift;
+				st->p[2].y -= shift;
+				st->p[3].y -= shift;
+				slope = (st->p[2].y - st->p[0].y) / stemWidth;
+			}
 		}
 	}
 
