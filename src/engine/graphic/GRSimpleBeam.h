@@ -30,6 +30,7 @@ class GRSimpleBeam : public GRNotationElement
 		virtual const unsigned char * getColRef() const;
 
 		virtual void OnDraw( VGDevice & hdc ) const;
+				void setPoints( const NVPoint p[] );
 
 		NVPoint		fPoints[4];
 		GRBeam *	fParent;
