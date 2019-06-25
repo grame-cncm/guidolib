@@ -436,6 +436,10 @@ void GRBowing::manualAnchorPoints( GRBowingContext * context, const ARBowing * a
 	GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 
+	const GRStaff * startStaff = startElement->getGRStaff();
+	const GRStaff * endStaff   = endElement->getGRStaff();
+	bool spanStaves = (startStaff != endStaff);
+
 	GRStdNoteHead * head;
 
 	const bool upward = context->curveDir == 1;
@@ -458,6 +462,8 @@ void GRBowing::manualAnchorPoints( GRBowingContext * context, const ARBowing * a
 
 	if (context->openLeft)	posLeft.y = posRight.y;
 	if (context->openRight)	posRight.y = posLeft.y;
+
+	if (spanStaves) posRight.y += endStaff->getPosition().y - startStaff->getPosition().y;
 
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.

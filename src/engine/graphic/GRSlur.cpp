@@ -18,10 +18,10 @@
 #include <cmath> // for abs
 #include <algorithm>
 
-#include "GRSlur.h"
-#include "GRStdNoteHead.h"
 #include "GRSingleNote.h"
-
+#include "GRSlur.h"
+#include "GRStaff.h"
+#include "GRStdNoteHead.h"
 
 using namespace std;
 
@@ -98,7 +98,11 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, const ARBowing * 
 	const GRNotationElement * startElement = sse->startElement;
 	const GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
-	
+
+	const GRStaff * startStaff = startElement->getGRStaff();
+	const GRStaff * endStaff   = endElement->getGRStaff();
+	bool spanStaves = (startStaff != endStaff);
+
 	// We try to fix the following problem here: with chord, the start and end
 	// elements are GREmpty objects, with a zero bounding box. So we substitute
 	// them by adequate noteheads.
@@ -132,6 +136,8 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, const ARBowing * 
 		posLeft.y = leftBox.bottom + yMargin;
 		posRight.y = rightBox.bottom + yMargin;
 	}
+
+	if (spanStaves) posRight.y += endStaff->getPosition().y - startStaff->getPosition().y;
 
 	// - Handle broken slurs and minimal width
 	const float minWidth = float(1.5) * LSPACE; // arbitrary miminal width of a tie
