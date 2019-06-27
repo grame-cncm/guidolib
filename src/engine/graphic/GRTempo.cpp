@@ -15,22 +15,21 @@
 #include <iostream>
 #include <string.h>
 #include "secureio.h"
-using namespace std;
 
 #include "ARTempo.h"
-#include "TagParameterFloat.h"
-
-#include "GRTempo.h"
+#include "FontManager.h"
+#include "FontManager.h"
 #include "GRFlag.h"
-
-#include "MusicalSymbols.h"
+#include "GRStaff.h"
+#include "GRTempo.h"
 #include "GuidoDefs.h"
 #include "GUIDOInternal.h"
-#include "FontManager.h"
+#include "MusicalSymbols.h"
+#include "TagParameterFloat.h"
 #include "VGDevice.h"
 #include "VGFont.h"
-#include "FontManager.h"
 
+using namespace std;
 
 const VGFont* GRTempo::mFont = 0;
 
@@ -39,6 +38,7 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
 					: GRTagARNotationElement( inAR, LSPACE )
 {
 	assert(inAR);
+
 	// Sets the Type -> This tag is a SystemTag.
 	setTagType(GRTag::SYSTEMTAG);
 	mPosition.y -= 2 * LSPACE; // Tempo is usually placed two linespaces above the staff.
@@ -70,6 +70,8 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
 			}
 		}
 	}
+	setGRStaff(staff);
+	fDate = inAR->getRelativeTimePosition();
 }
 
 // ----------------------------------------------------------------------------
@@ -102,6 +104,19 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 
 	const float noteOffsetY = 0; // LSPACE * 1.85f;
 	float currX = getOffset().x;
+
+	if (fDate) {
+		NEPointerList * elts = getGRStaff()->getElements();
+		GuidoPos pos = elts->GetHeadPosition();
+		while (pos) {
+			GRNotationElement * e = elts->GetNext(pos);
+			if (e->getRelativeTimePosition() >= fDate) {
+				currX += e->getPosition().x - mPosition.x;
+				if (e->isGREvent()) currX -= e->getBoundingBox().Width()/2;
+				break;
+			}
+		}
+	}
 
 	float dy = 0;
 	if (ar->getDY())

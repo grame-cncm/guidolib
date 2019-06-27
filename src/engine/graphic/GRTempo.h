@@ -37,13 +37,14 @@ class GRTempo : public GRTagARNotationElement
 		virtual unsigned int	getTextAlign() const;
 		virtual const GRTempo *	isGRTempo() const		{ return this; }
 
-	protected:
+	private:
+		TYPE_TIMEPOSITION fDate;
+
 		TYPE_DURATION getDuration (const char * str) const;
 		float	DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xOffset, float yOffset ) const;
 		void	DrawText( VGDevice & hdc,  const char * cp, float xOffset, float yOffset, float * outWidth = 0 ) const;
 
-	private:
-		static const VGFont* mFont;		
+		static const VGFont* mFont;
 };
 
 #endif
