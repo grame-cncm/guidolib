@@ -8,9 +8,9 @@
 %
 { [   % this turns automatic breaking of systems and pages off:
       \set<autoSystemBreak="off",autoPageBreak="off">
-    \meter<"4/4"> \tempo<"This is a crowded line!">
-    c d e f g/2 g a/4 a a a g/1 a/4 a a a g/1 f/4 f f f e/2 e g/4 g g g c/1 \newSystem 
-    \set<autoSystemBreak="on"> \tempo<"This line has autoBreaks on",dy=-2hs>
-    c/4 d e f g/2 g a/4 a a a g/1 a/4 a a a g/1 f/4 f f f e/2 e g/4 g g g c/1 
+    \meter<"4/4"> \text<"This is a crowded line!",dy=14hs>
+    (c) d e f g/2 g a/4 a a a g/1 a/4 a a a g/1 f/4 f f f e/2 e g/4 g g g c/1 \newSystem 
+    \set<autoSystemBreak="on"> \text<"This line has autoBreaks on",dy=14hs>
+    (c/4) d e f g/2 g a/4 a a a g/1 a/4 a a a g/1 f/4 f f f e/2 e g/4 g g g c/1 
     ] }
 
