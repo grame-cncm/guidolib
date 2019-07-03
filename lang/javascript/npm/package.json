@@ -1,0 +1,47 @@
+{
+  "name": "@grame/guidolib",
+  "version": "1.6.6a",
+  "description": "A library for music score rendering based on the Guido Music Notation format.",
+  "main": "libGUIDOEngine.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "cd test; node testApi.js"
+  },
+  "homepage": "https://github.com/grame-cncm/guidolib#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grame-cncm/guidolib.git"
+  },
+  "bugs": { 
+    "url" : "https://github.com/grame-cncm/guidolib/issues"
+  },  
+  "keywords": [
+    "Guido Music Notation",
+    "Music score"
+  ],
+  "author": "D. Fober <fober@grame.fr>",
+  "contributors": [
+	"J. Scott Amort", 
+	"Jérôme Berthet", 
+	"Samuel Brochot", 
+	"Yannick Chapuis", 
+	"Thomas Coffy", 
+	"Christophe Daudin", 
+	"Colas Decron", 
+	"Guillaume Gouilloux", 
+	"Holger Hoos", 
+	"Torben Hohn", 
+	"Jürgen Kilian", 
+	"Camille Le Roy", 
+	"François Levy", 
+	"Arnaud Margaillan", 
+	"Kai Renz", 
+	"Benjamen Ruprechter", 
+	"Mike Solomon", 
+	"Ivan Vukosav"
+  ],
+  "license": "MPL-2.0"
+}
+
