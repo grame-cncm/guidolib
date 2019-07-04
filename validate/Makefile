@@ -56,7 +56,7 @@ noplost	= "possibly lost: 0"
 noerr	= "ERROR SUMMARY: 0"
 
 gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")
-gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn") $(shell find ../open-issues -name "*.gmn")
+gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn" | grep -v "regression-tests/crash") $(shell find ../open-issues -name "*.gmn")
 lyricsfiles   = $(shell grep -r -l "\\lyrics" ../gmn-examples ../regression-tests)
 
 
@@ -244,12 +244,11 @@ svgclean:
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -o $@ $<
-#	-$(guido2svg) $< | grep -v "SVG file generated using" > $(TMP)  &&  mv $(TMP) $@
+	$(guido2svg) -o $@ $<
 
 $(version)/lyrics/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -checkLyrics -o $@ $< 
+	$(guido2svg) -checkLyrics -o $@ $< 
 
 
 #########################################################################
@@ -258,15 +257,15 @@ map: $(mapsout)
 
 $(version)/maps/system/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -systemmap true  -o $@ $<
+	$(guido2svg) -systemmap true  -o $@ $<
 
 $(version)/maps/staff/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -staffmap true  -o $@ $<
+	$(guido2svg) -staffmap true  -o $@ $<
 
 $(version)/maps/voice/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) -voicemap true  -o $@ $<
+	$(guido2svg) -voicemap true  -o $@ $<
 
 	
 #########################################################################
@@ -274,7 +273,7 @@ $(version)/maps/voice/%.svg: ../%.gmn
 timemap: $(timemapout)
 $(version)/maps/time/%.map: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogettimemap $< > $@
+	guidogettimemap $< > $@
 
 	
 #########################################################################
