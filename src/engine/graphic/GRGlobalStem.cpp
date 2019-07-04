@@ -86,7 +86,6 @@ GRGlobalStem::~GRGlobalStem()
 
 	delete fStem;
 	delete fFlag;
-	if (mColRef) delete [] mColRef;
 }
 
 //----------------------------------------------------------------
