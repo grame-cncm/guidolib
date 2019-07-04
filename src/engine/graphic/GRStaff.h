@@ -120,7 +120,7 @@ class GRStaffState
     
         void setStaffLSPACE(float value)                        { staffLSPACE = value * 2; } // Factor 2 to be consistent with GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 
-	protected:
+	private:
 		// Meter-Parameters
 		bool	meterset;		// flag if meter-sig is given . TRUE, FALSE
 
