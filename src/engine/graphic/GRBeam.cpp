@@ -56,6 +56,7 @@ GRBeam::GRBeam(GRStaff * grstaf,const ARBeam * arbeam) : GRPTagARNotationElement
 
 	fLastPositionOfBarDuration.first = 0;
 	fLastPositionOfBarDuration.second = 0;
+	setGRStaff(grstaf);
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct();
 	
@@ -386,13 +387,13 @@ void GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosI
 	if (setref && !infos.stemsReverse && infos.stavesStartEnd && !startEl->getStemLengthSet())
 		refEvt = (infos.stemdir == dirUP) ? infos.highNote : infos.lowNote;
 
-	GRStaff * refStaff = refEvt->getGRStaff();
-	infos.stemdir = refEvt->getStemDirection();
-	infos.currentSize = refEvt->getSize();
+	GRStaff * refStaff = refEvt ? refEvt->getGRStaff() : getGRStaff();
+	infos.stemdir = refEvt ? refEvt->getStemDirection() : GDirection(st->direction);
+	infos.currentSize = refEvt ? refEvt->getSize() : 1;
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
-	st->p[0] = refEvt->getStemStartPos();
+	st->p[0] = refEvt ? refEvt->getStemStartPos() : refStaff->getPosition();
 //cerr << "GRBeam::initp0 " << refEvt << " " << st->p[0] << " " << refEvt->getStemLength() << endl;
-	if (arBeam && arBeam->isGuidoSpecBeam())
+	if (arBeam && arBeam->isGuidoSpecBeam() && refEvt)
 		st->p[0].y = refEvt->getPosition().y;
 
 	if (setref) {
@@ -474,12 +475,12 @@ void GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInf
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const ARBeam * arBeam = getARBeam();
 
-	st->p[2] = endEl->getStemEndPos();
+	st->p[2] = endEl ? endEl->getStemEndPos() : st->p[0];
 	// beam length adjustment - DF sept 15 2009
 	st->p[2].x += infos.currentLSPACE/10;
-	if (arBeam && arBeam->isGuidoSpecBeam())
+	if (arBeam && arBeam->isGuidoSpecBeam() && endEl)
 		st->p[2].y = endEl->getPosition().y;
-	GRStaff * refStaff = endEl->getGRStaff();
+	GRStaff * refStaff = endEl ? endEl->getGRStaff() : getGRStaff();
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
 
 //cerr << "GRBeam::initp2 " << endEl << " " << st->p[2] << endl;
@@ -1201,12 +1202,13 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	const GREvent * startEl = sse->startElement->isGREvent();
 	GREvent * endEl   = sse->endElement->isGREvent();
 
-	if (startEl->getGlobalStem()) startEl->getGlobalStem()->setBeam (this);
-	if (endEl->getGlobalStem()) endEl->getGlobalStem()->setBeam (this);
+	if (startEl && startEl->getGlobalStem()) startEl->getGlobalStem()->setBeam (this);
+	if (endEl   && endEl->getGlobalStem()) endEl->getGlobalStem()->setBeam (this);
+	bool differentStaves = (startEl && endEl) ? (endEl->getGRStaff()!=startEl->getGRStaff()) : false;
 
 	// this is the staff to which the beam belongs and who draws it.
 	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
-	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), (endEl->getGRStaff()!=startEl->getGRStaff()), 0, 0 };
+	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), differentStaves, 0, 0 };
 	if (tagtype == SYSTEMTAG) {
 		infos.startStaff = startEl->getGRStaff()->getPosition();
 		infos.endStaff	 = endEl->getGRStaff()->getPosition();
