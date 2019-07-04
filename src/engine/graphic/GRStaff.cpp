@@ -687,7 +687,6 @@ void GRStaff::setNoteParameters(const GRNote * inNote)
 	const ARNote * arnote = inNote->getARNote();
 	const int tmppitch = arnote->getPitch() - NOTE_C;
 	const int acc = arnote->getAccidentals() - (int)mStaffState.instrKeyArray[tmppitch];
-//	mStaffState.MeasureAccidentals[tmppitch] = acc + arnote->getDetune();
 	mStaffState.fMeasureAccidentals.setAccidental(tmppitch, arnote->getOctave(), acc + arnote->getDetune());
 }
 
@@ -871,7 +870,7 @@ void GRStaff::checkSystemBar(const TYPE_TIMEPOSITION & pos)
 	GRSystemSlice * systemslice = getGRSystemSlice();
 	if (systemslice && systemslice->hasSystemBars()) {
 		GRBar* bar = systemslice->getBarAt(pos);
-		if (bar) {
+		if (bar && !bar->isFinishBar()) {
 			mStaffState.reset2key ();
 		}
 	}

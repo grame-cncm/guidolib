@@ -36,6 +36,7 @@ public:
     virtual const NVPoint & getReferencePosition() const	{ return refpos; }
     virtual void  DrawWithLines( VGDevice & hdc ) const;
     virtual void  updateBoundingBox();
+    virtual const GRFinishBar*  isFinishBar() const { return this; };
 
 protected:
     float	fBaseThickness;

@@ -22,6 +22,7 @@
 
 class GRStaff;
 class GRPage;
+class GRFinishBar;
 
 /** \brief Measure bar.
 */
@@ -52,7 +53,8 @@ class GRBar : public GRTagARNotationElement
 		virtual bool checkCollisionWith() const				{ return true; }
 		virtual void accept (GRVisitor& visitor);
 		virtual const GRBar * isGRBar() const				{ return this; }
-	
+    	virtual const GRFinishBar*  isFinishBar() const 	{ return 0; };
+
 		virtual const NVPoint & getReferencePosition() const { return sRefPos; }
 		
 		const ARBar *		 getARBar() const;
