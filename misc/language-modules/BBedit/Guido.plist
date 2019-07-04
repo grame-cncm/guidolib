@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
-BBEdit Language Module for INScore
+BBEdit Language Module for Guido Music Notation Language
 
 Put this file in 
    ~/Library/Application Support/BBEdit/Language Modules
@@ -37,6 +37,7 @@ or equivalent.
 		<string>accolade</string>
 		<string>accol</string>
 		<string>alter</string>
+		<string>arpeggio</string>
 		<string>auto</string>
 		<string>bar</string>
 		<string>barFormat</string>
@@ -50,8 +51,6 @@ or equivalent.
 		<string>beamsOff</string>
 		<string>bembel</string>
 		<string>breathMark</string>
-		<string>chord</string>
-		<string>splitChord</string>
 		<string>clef</string>
 		<string>cluster</string>
 		<string>coda</string>
@@ -77,7 +76,7 @@ or equivalent.
 		<string>diminuendoBegin</string>
 		<string>decrescEnd</string>
 		<string>dimEnd</string>
-		<string>diminuendoBegin</string>
+		<string>diminuendoEnd</string>
 		<string>dispDur</string>
 		<string>displayDuration</string>
 		<string>dotFormat</string>
@@ -119,8 +118,11 @@ or equivalent.
 		<string>newSystem</string>
 		<string>newPage</string>
 		<string>noteFormat</string>
-		<string>oct octava</string>
+		<string>oct</string>
+		<string>octava</string>
 		<string>pageFormat</string>
+		<string>pedalOn</string>
+		<string>pedalOff</string>
 		<string>pizzicato</string>
 		<string>pizz</string>
 		<string>port</string>
@@ -135,7 +137,8 @@ or equivalent.
 		<string>set</string>
 		<string>shareLocation</string>
 		<string>shortFermata</string>
-		<string>slur sl</string>
+		<string>slur</string>
+		<string>sl</string>
 		<string>slurBegin</string>
 		<string>slurEnd</string>
 		<string>space</string>
