@@ -11,6 +11,8 @@
 
 */
 
+#include <cmath>
+
 #include "GFontOSX.h"
 
 static CTFontDescriptorRef createCTFontDescriptor(const char * faceName, int size, int properties);
