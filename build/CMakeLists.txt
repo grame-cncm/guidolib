@@ -224,7 +224,7 @@ if (STATICLIB AND NOT IOS)
 	add_library( ${statictarget} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
 	target_compile_definitions (${statictarget} PRIVATE ${DEFS})
 	target_include_directories (${statictarget} PRIVATE ${INCDIRS})
-	set_target_properties(statictarget PROPERTIES 
+	set_target_properties(${statictarget} PROPERTIES 
 		ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR}
 		LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
 else ()
