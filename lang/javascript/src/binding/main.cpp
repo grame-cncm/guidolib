@@ -33,7 +33,7 @@ using namespace emscripten;
  */
 EMSCRIPTEN_BINDINGS(CStruct) {
 
-	emscripten::value_object<GuidoLayoutSettings>("GuidoLayoutSettings")
+	value_object<GuidoLayoutSettings>("GuidoLayoutSettings")
 			.field("systemsDistance", &GuidoLayoutSettings::systemsDistance)
 			.field("systemsDistribution", &GuidoLayoutSettings::systemsDistribution)
 			.field("systemsDistribLimit", &GuidoLayoutSettings::systemsDistribLimit)
@@ -44,11 +44,11 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.field("resizePage2Music", &GuidoLayoutSettings::resizePage2Music)
 			.field("proportionalRenderingForceMultiplicator", &GuidoLayoutSettings::proportionalRenderingForceMultiplicator);
 
-	emscripten::value_object<GuidoDate>("GuidoDate")
+	value_object<GuidoDate>("GuidoDate")
 			.field("num", &GuidoDate::num)
 			.field("denom", &GuidoDate::denom);
 
-	emscripten::value_object<GuidoPageFormat>("GuidoPageFormat")
+	value_object<GuidoPageFormat>("GuidoPageFormat")
 			.field("width", &GuidoPageFormat::width)
 			.field("height", &GuidoPageFormat::height)
 			.field("marginleft", &GuidoPageFormat::marginleft)
@@ -56,24 +56,24 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.field("marginright", &GuidoPageFormat::marginright)
 			.field("marginbottom", &GuidoPageFormat::marginbottom);
 
-	emscripten::value_object<ParserError>("ParserError")
+	value_object<ParserError>("ParserError")
 			.field("line", &ParserError::line)
 			.field("col", &ParserError::col)
 			.field("msg", &ParserError::msg);
 
-	emscripten::value_object<GuidoVersion>("GuidoVersion")
+	value_object<GuidoVersion>("GuidoVersion")
 			.field("major", &GuidoVersion::major)
 			.field("minor", &GuidoVersion::minor)
 			.field("sub", &GuidoVersion::sub)
 			.field("str", &GuidoVersion::str);
 
-	emscripten::value_object<LimitParams>("LimitParams")
+	value_object<LimitParams>("LimitParams")
 			.field("startDate", &LimitParams::startDate)
 			.field("endDate", &LimitParams::endDate)
 			.field("lowPitch", &LimitParams::lowPitch)
 			.field("highPitch", &LimitParams::highPitch);
 
-	emscripten::enum_<GuidoErrCode>("GuidoErrCode")
+	enum_<GuidoErrCode>("GuidoErrCode")
 			.value("guidoNoErr", GuidoErrCode::guidoNoErr)
 			.value("guidoErrParse", guidoErrParse)
 			.value("guidoErrMemory", GuidoErrCode::guidoErrMemory)
@@ -86,7 +86,7 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.value("guidoErrNotInitialized", GuidoErrCode::guidoErrNotInitialized)
 			.value("guidoErrActionFailed", GuidoErrCode::guidoErrActionFailed);
 
-	emscripten::enum_<GuidoElementSelector>("GuidoElementSelector")
+	enum_<GuidoElementSelector>("GuidoElementSelector")
 			.value("kGuidoPage", GuidoElementSelector::kGuidoPage)
 			.value("kGuidoSystem", GuidoElementSelector::kGuidoSystem)
 			.value("kGuidoSystemSlice", GuidoElementSelector::kGuidoSystemSlice)
@@ -95,92 +95,92 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.value("kGuidoEvent", GuidoElementSelector::kGuidoEvent)
 			.value("kGuidoScoreElementEnd", GuidoElementSelector::kGuidoScoreElementEnd);
 
-	emscripten::enum_<PianoRollType>("PianoRollType")
+	enum_<PianoRollType>("PianoRollType")
 			.value("kSimplePianoRoll", PianoRollType::kSimplePianoRoll)
 			.value("kTrajectoryPianoRoll", PianoRollType::kTrajectoryPianoRoll);
 
 	// Pitch constants
-	emscripten::constant("kCLine", kCLine);
-	emscripten::constant("kCSharpLine", kCSharpLine);
-	emscripten::constant("kDLine", kDLine);
-	emscripten::constant("kDSharpLine", kDSharpLine);
-	emscripten::constant("kELine", kELine);
-	emscripten::constant("kFLine", kFLine);
-	emscripten::constant("kFSharpLine", kFSharpLine);
-	emscripten::constant("kGLine", kGLine);
-	emscripten::constant("kGSharpLine", kGSharpLine);
-	emscripten::constant("kALine", kALine);
-	emscripten::constant("kASharpLine", kASharpLine);
-	emscripten::constant("kBLine", kBLine);
-	emscripten::constant("kAutoLines", kAutoLines);
-	emscripten::constant("kNoLine", kNoLine);
+	constant("kCLine", kCLine);
+	constant("kCSharpLine", kCSharpLine);
+	constant("kDLine", kDLine);
+	constant("kDSharpLine", kDSharpLine);
+	constant("kELine", kELine);
+	constant("kFLine", kFLine);
+	constant("kFSharpLine", kFSharpLine);
+	constant("kGLine", kGLine);
+	constant("kGSharpLine", kGSharpLine);
+	constant("kALine", kALine);
+	constant("kASharpLine", kASharpLine);
+	constant("kBLine", kBLine);
+	constant("kAutoLines", kAutoLines);
+	constant("kNoLine", kNoLine);
 }
 
 /*
  * C++ class binding.
  * This classes can be used in javascript side.
  */
-EMSCRIPTEN_BINDINGS(EngineAdapter) { 
+EMSCRIPTEN_BINDINGS(EngineAdapter) {
 	// Binding C++ class adapter for guidoEngine
-	emscripten::class_<GuidoEngineAdapter>("GuidoEngineAdapter")
+	class_<GuidoEngineAdapter>("GuidoEngineAdapter")
 			//.smart_ptr_constructor("GuidoEngineAdapter",&std::make_shared<GuidoEngineAdapter>)
 			.constructor<>()
-			.function("init", select_overload<GuidoErrCode(void)>(&GuidoEngineAdapter::init))
-			.function("shutdown", &GuidoEngineAdapter::shutdown)
-			.function("ar2gr", select_overload<NodeGR*(NodeAR*)>(&GuidoEngineAdapter::ar2gr), allow_raw_pointers())
-			.function("ar2grSettings", select_overload<NodeGR*(NodeAR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::ar2gr), allow_raw_pointers())
-			.function("updateGR", select_overload<GuidoErrCode(NodeGR*)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
-			.function("updateGRSettings", select_overload<GuidoErrCode(NodeGR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
-			.function("freeAR", &GuidoEngineAdapter::freeAR, allow_raw_pointers())
-			.function("freeGR", &GuidoEngineAdapter::freeGR, allow_raw_pointers())
-			.function("getErrorString", &GuidoEngineAdapter::getErrorString)
+			.function("init", 				select_overload<GuidoErrCode(void)>(&GuidoEngineAdapter::init))
+			.function("shutdown", 			&GuidoEngineAdapter::shutdown)
+			.function("ar2gr", 				select_overload<NodeGR*(NodeAR*)>(&GuidoEngineAdapter::ar2gr), allow_raw_pointers())
+			.function("ar2grSettings", 		select_overload<NodeGR*(NodeAR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::ar2gr), allow_raw_pointers())
+			.function("updateGR", 			select_overload<GuidoErrCode(NodeGR*)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
+			.function("updateGRSettings", 	select_overload<GuidoErrCode(NodeGR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
+			.function("freeAR", 			&GuidoEngineAdapter::freeAR, allow_raw_pointers())
+			.function("freeGR", 			&GuidoEngineAdapter::freeGR, allow_raw_pointers())
+			.function("getErrorString", 	&GuidoEngineAdapter::getErrorString)
 			.function("getDefaultLayoutSettings", &GuidoEngineAdapter::getDefaultLayoutSettings)
-			.function("countVoices", &GuidoEngineAdapter::countVoices, allow_raw_pointers())
-			.function("getPageCount", &GuidoEngineAdapter::getPageCount, allow_raw_pointers())
-			.function("getSystemCount", &GuidoEngineAdapter::getSystemCount, allow_raw_pointers())
-			.function("duration", &GuidoEngineAdapter::duration, allow_raw_pointers())
-			.function("findEventPage", &GuidoEngineAdapter::findEventPage, allow_raw_pointers())
-			.function("findPageAt", &GuidoEngineAdapter::findPageAt, allow_raw_pointers())
-			.function("getPageDate", &GuidoEngineAdapter::getPageDate, allow_raw_pointers())
-			.function("gr2SVG", select_overload<std::string (NodeGR*, int, bool, int)>(&GuidoEngineAdapter::gr2SVG), allow_raw_pointers())
-			.function("abstractExport", select_overload<std::string (NodeGR*, int)>(&GuidoEngineAdapter::abstractExport), allow_raw_pointers())
-			.function("binaryExport", select_overload<std::string (NodeGR*, int)>(&GuidoEngineAdapter::binaryExport), allow_raw_pointers())
-			.function("javascriptExport", &GuidoEngineAdapter::javascriptExport, allow_raw_pointers())
-			.function("setDrawBoundingBoxes", &GuidoEngineAdapter::setDrawBoundingBoxes)
-			.function("getDrawBoundingBoxes", &GuidoEngineAdapter::getDrawBoundingBoxes)
-			.function("getPageFormat", &GuidoEngineAdapter::getPageFormat, allow_raw_pointers())
-			.function("setDefaultPageFormat", &GuidoEngineAdapter::setDefaultPageFormat)
-			.function("getDefaultPageFormat", &GuidoEngineAdapter::getDefaultPageFormat)
-			.function("unit2CM", &GuidoEngineAdapter::unit2CM)
-			.function("cm2Unit", &GuidoEngineAdapter::cm2Unit)
-			.function("unit2Inches", &GuidoEngineAdapter::unit2Inches)
-			.function("inches2Unit", &GuidoEngineAdapter::inches2Unit)
-			.function("resizePageToMusic", &GuidoEngineAdapter::resizePageToMusic, allow_raw_pointers())
-			.function("getVersion", &GuidoEngineAdapter::getVersion)
-			.function("getVersionStr", &GuidoEngineAdapter::getVersionStr)
-			.function("checkVersionNums", &GuidoEngineAdapter::checkVersionNums)
-			.function("getLineSpace", &GuidoEngineAdapter::getLineSpace)
-			.function("markVoice", &GuidoEngineAdapter::markVoice, allow_raw_pointers())
-			.function("openParser", &GuidoEngineAdapter::openParser, allow_raw_pointers())
-			.function("closeParser", &GuidoEngineAdapter::closeParser, allow_raw_pointers())
-			.function("file2AR", &GuidoEngineAdapter::file2AR, allow_raw_pointers())
-			.function("string2AR", &GuidoEngineAdapter::string2AR, allow_raw_pointers())
-			.function("getStream", &GuidoEngineAdapter::getStream, allow_raw_pointers())
-			.function("stream2AR", &GuidoEngineAdapter::stream2AR, allow_raw_pointers())
+			.function("countVoices", 		&GuidoEngineAdapter::countVoices, allow_raw_pointers())
+			.function("getPageCount", 		&GuidoEngineAdapter::getPageCount, allow_raw_pointers())
+			.function("getSystemCount", 	&GuidoEngineAdapter::getSystemCount, allow_raw_pointers())
+			.function("duration", 			&GuidoEngineAdapter::duration, allow_raw_pointers())
+			.function("findEventPage", 		&GuidoEngineAdapter::findEventPage, allow_raw_pointers())
+			.function("findPageAt", 		&GuidoEngineAdapter::findPageAt, allow_raw_pointers())
+			.function("getPageDate", 		&GuidoEngineAdapter::getPageDate, allow_raw_pointers())
+			.function("gr2SVG", 			select_overload<std::string (NodeGR*, int, bool, int)>(&GuidoEngineAdapter::gr2SVG), allow_raw_pointers())
+			.function("abstractExport", 	select_overload<std::string (NodeGR*, int)>(&GuidoEngineAdapter::abstractExport), allow_raw_pointers())
+			.function("binaryExport", 		select_overload<std::string (NodeGR*, int)>(&GuidoEngineAdapter::binaryExport), allow_raw_pointers())
+			.function("javascriptExport", 		&GuidoEngineAdapter::javascriptExport, allow_raw_pointers())
+			.function("setDrawBoundingBoxes", 	&GuidoEngineAdapter::setDrawBoundingBoxes)
+			.function("getDrawBoundingBoxes", 	&GuidoEngineAdapter::getDrawBoundingBoxes)
+			.function("getPageFormat", 			&GuidoEngineAdapter::getPageFormat, allow_raw_pointers())
+			.function("setDefaultPageFormat", 	&GuidoEngineAdapter::setDefaultPageFormat)
+			.function("getDefaultPageFormat", 	&GuidoEngineAdapter::getDefaultPageFormat)
+			.function("unit2CM", 			&GuidoEngineAdapter::unit2CM)
+			.function("cm2Unit", 			&GuidoEngineAdapter::cm2Unit)
+			.function("unit2Inches", 		&GuidoEngineAdapter::unit2Inches)
+			.function("inches2Unit", 		&GuidoEngineAdapter::inches2Unit)
+			.function("resizePageToMusic",	&GuidoEngineAdapter::resizePageToMusic, allow_raw_pointers())
+			.function("getVersion", 		&GuidoEngineAdapter::getVersion)
+			.function("getVersionStr",		&GuidoEngineAdapter::getVersionStr)
+			.function("checkVersionNums", 	&GuidoEngineAdapter::checkVersionNums)
+			.function("getLineSpace", 		&GuidoEngineAdapter::getLineSpace)
+			.function("markVoice", 			&GuidoEngineAdapter::markVoice, allow_raw_pointers())
+			.function("openParser", 		&GuidoEngineAdapter::openParser, allow_raw_pointers())
+			.function("closeParser", 		&GuidoEngineAdapter::closeParser, allow_raw_pointers())
+			.function("file2AR", 			&GuidoEngineAdapter::file2AR, allow_raw_pointers())
+			.function("string2AR", 			&GuidoEngineAdapter::string2AR, allow_raw_pointers())
+			.function("getStream", 			&GuidoEngineAdapter::getStream, allow_raw_pointers())
+			.function("stream2AR", 			&GuidoEngineAdapter::stream2AR, allow_raw_pointers())
 			.function("parserGetErrorCode", &GuidoEngineAdapter::parserGetErrorCode, allow_raw_pointers())
-			.function("openStream", &GuidoEngineAdapter::openStream, allow_raw_pointers())
-			.function("closeStream", &GuidoEngineAdapter::closeStream, allow_raw_pointers())
-			.function("writeStream", &GuidoEngineAdapter::writeStream, allow_raw_pointers())
-			.function("resetStream", &GuidoEngineAdapter::resetStream, allow_raw_pointers())
+			.function("openStream", 		&GuidoEngineAdapter::openStream, allow_raw_pointers())
+			.function("closeStream", 		&GuidoEngineAdapter::closeStream, allow_raw_pointers())
+			.function("writeStream", 		&GuidoEngineAdapter::writeStream, allow_raw_pointers())
+			.function("resetStream", 		&GuidoEngineAdapter::resetStream, allow_raw_pointers())
 
-			.function("getParsingTime", &GuidoEngineAdapter::getParsingTime, allow_raw_pointers())
-			.function("getAR2GRTime", &GuidoEngineAdapter::getAR2GRTime, allow_raw_pointers())
-			.function("getOnDrawTime", &GuidoEngineAdapter::getOnDrawTime, allow_raw_pointers());
+			.function("getParsingTime", 	&GuidoEngineAdapter::getParsingTime, allow_raw_pointers())
+			.function("getAR2GRTime", 		&GuidoEngineAdapter::getAR2GRTime, allow_raw_pointers())
+			.function("getOnDrawTime", 		&GuidoEngineAdapter::getOnDrawTime, allow_raw_pointers());
 
 
 
 	// Binding C++ class Map2json to have a javascript implementation of GuidoScoreMap
-	emscripten::class_<Map2json>("GUIDOScoreMap")
+	class_<Map2json>("GUIDOScoreMap")
 			.constructor<>()
 			.function("getPageMap", &Map2json::getPageMap, allow_raw_pointers())
 			.function("getStaffMap", &Map2json::getStaffMap, allow_raw_pointers())
@@ -192,7 +192,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("getPianoRollMap", &Map2json::getPianoRollMap, allow_raw_pointers());
 
 	// Binding C++ class adapter for GuidoPianoRoll
-	emscripten::class_<GUIDOPianoRollAdapter>("GUIDOPianoRollAdapter")
+	class_<GUIDOPianoRollAdapter>("GUIDOPianoRollAdapter")
 			.constructor<>()
 			.function("ar2PianoRoll", &GUIDOPianoRollAdapter::ar2PianoRoll, allow_raw_pointers())
 			.function("destroyPianoRoll", &GUIDOPianoRollAdapter::destroyPianoRoll, allow_raw_pointers())
@@ -209,7 +209,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("javascriptExport", &GUIDOPianoRollAdapter::javascriptExport, allow_raw_pointers());
 
 	// Binding C++ class adapter for GuidoFactory
-	emscripten::class_<GUIDOFactoryAdapter>("GUIDOFactoryAdapter")
+	class_<GUIDOFactoryAdapter>("GUIDOFactoryAdapter")
 			.constructor<>()
 			.function("openMusic", &GUIDOFactoryAdapter::openMusic)
 			.function("closeMusic", &GUIDOFactoryAdapter::closeMusic, allow_raw_pointers())
@@ -237,10 +237,10 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("setParameterUnit", &GUIDOFactoryAdapter::setParameterUnit);
 
 	// Black box object, just for passing argument pointer in method to and from javascript.
-	emscripten::class_<GuidoParser>("GuidoParser");
-	emscripten::class_<NodeAR>("NodeAR");
-	emscripten::class_<NodeGR>("NodeGR");
-	emscripten::class_<GuidoStream>("GuidoStream");
-	emscripten::class_<PianoRoll>("PianoRoll");
+	class_<GuidoParser>("GuidoParser");
+	class_<NodeAR>("NodeAR");
+	class_<NodeGR>("NodeGR");
+	class_<GuidoStream>("GuidoStream");
+	class_<PianoRoll>("PianoRoll");
 }
 
