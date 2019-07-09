@@ -1,4 +1,6 @@
 var guidoEngine;
+
+
 function processGMNDiv( div, parser) {
 	var content = div.innerHTML;
 	content = content.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
@@ -16,11 +18,11 @@ function processGMNCode() {
 	guidoEngine.closeParser(p);
 }
 
-document.onreadystatechange = function start() {  
-	if (document.readyState == "complete") {
-		var module = GuidoModule();
-		guidoEngine = new module.GuidoEngineAdapter;
-		guidoEngine.init();
-		processGMNCode();
-	}
-} 
+var module = GuidoModule();
+module['onRuntimeInitialized'] = function() {
+	guidoEngine = new module.GuidoEngineAdapter();
+	var version = guidoEngine.getVersion();
+	console.log( "Guido Engine version " + version.str);
+	guidoEngine.init();
+	processGMNCode();
+}
