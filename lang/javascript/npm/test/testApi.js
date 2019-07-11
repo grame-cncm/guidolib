@@ -1,14 +1,18 @@
 
-var fs = require("fs");
+const Module = require("../libGUIDOEngine");
 
-eval(fs.readFileSync("../libGUIDOEngine.js").toString());
-var module = new GuidoModule();
+var guidoEngine;
+var module;
+Module().then(function(instance) {
+	module = instance;
+	guidoEngine = new module.GuidoEngineAdapter();
+	guidoEngine.init();
+	test();
+});
+
 
 var svgstart = 22;
 var svgend   = 400;
-
-var guidoEngine = new module.GuidoEngineAdapter();
-guidoEngine.init();
 
 
 var settings1= {
@@ -282,22 +286,24 @@ function parseError ()
 	guidoEngine.closeParser(parser);
 }
 
-basic();
-parseError();
-var gmn = "{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } ";
-var gr = buildGr (gmn);
-grMisc (gr);
-testStream();
+function test() {
+	basic();
+	parseError();
+	var gmn = "{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } ";
+	var gr = buildGr (gmn);
+	grMisc (gr);
+	testStream();
 
 //doit("{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } ");
 
-guidoEngine.freeGR(gr);
+	guidoEngine.freeGR(gr);
 
-var pianoRoll = pianoRollTest(module, gmn);
-factoryTest (module, pianoRoll);
+	var pianoRoll = pianoRollTest(module, gmn);
+	factoryTest (module, pianoRoll);
 
 // Stop and delete engine.
-guidoEngine.shutdown();
-delete guidoEngine;
+	guidoEngine.shutdown();
+	delete guidoEngine;
 
-process.exit(0);
+	process.exit(0);
+}
