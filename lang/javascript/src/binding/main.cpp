@@ -177,19 +177,17 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("getAR2GRTime", 		&GuidoEngineAdapter::getAR2GRTime, allow_raw_pointers())
 			.function("getOnDrawTime", 		&GuidoEngineAdapter::getOnDrawTime, allow_raw_pointers());
 
-
-
 	// Binding C++ class Map2json to have a javascript implementation of GuidoScoreMap
 	class_<Map2json>("GUIDOScoreMap")
 			.constructor<>()
-			.function("getPageMap", &Map2json::getPageMap, allow_raw_pointers())
-			.function("getStaffMap", &Map2json::getStaffMap, allow_raw_pointers())
-			.function("getVoiceMap", &Map2json::getVoiceMap, allow_raw_pointers())
-			.function("getSystemMap", &Map2json::getSystemMap, allow_raw_pointers())
-			.function("getTime", &Map2json::getTime)
-			.function("getPoint", &Map2json::getPoint)
-			.function("getTimeMap", &Map2json::getTimeMap, allow_raw_pointers())
-			.function("getPianoRollMap", &Map2json::getPianoRollMap, allow_raw_pointers());
+			.function("getPageMap", 		&Map2json::getPageMap, allow_raw_pointers())
+			.function("getStaffMap", 		&Map2json::getStaffMap, allow_raw_pointers())
+			.function("getVoiceMap", 		&Map2json::getVoiceMap, allow_raw_pointers())
+			.function("getSystemMap", 		&Map2json::getSystemMap, allow_raw_pointers())
+			.function("getTime", 			&Map2json::getTime)
+			.function("getPoint", 			&Map2json::getPoint)
+			.function("getTimeMap", 		&Map2json::getTimeMap, allow_raw_pointers())
+			.function("getPianoRollMap", 	&Map2json::getPianoRollMap, allow_raw_pointers());
 
 	// Binding C++ class adapter for GuidoPianoRoll
 	class_<GUIDOPianoRollAdapter>("GUIDOPianoRollAdapter")
