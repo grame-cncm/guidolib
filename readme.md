@@ -12,8 +12,6 @@ See [Guido page](http://guidolib.sourceforge.net/) for more information.
 
 See [Guido wiki](https://github.com/grame-cncm/guidolib/wiki) for building instructions.
 
-Binary distributions are available from https://sourceforge.net/projects/guidolib/files/
-
 
 ---
 
