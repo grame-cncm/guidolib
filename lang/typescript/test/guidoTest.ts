@@ -34,16 +34,16 @@ var voice   : number = 1;
 var x       : number = 1;
 var y       : number = 1;
 
-var map     : Time2GraphicMap;
+var map     : string;
 var t       : TimeSegment;
 var rect    : Rect;
 var f       : TimeMapCollector;
 
-var guidoScoreMap       : GuidoScoreMapAdapter;
+var guidoScoreMap       : GUIDOScoreMap;
 
 // guidoFactory var
 //------------------------------------ 
-var inEventName : string = 'rest';
+var inEventName : string = 'a';
 var dots        : number = 1;
 var accident    : number = 1;
 var octave      : number = 2;
@@ -53,7 +53,7 @@ var aname       : string = 'Name';
 var tagID       : number = 1;
 var valStr      : string = 'toto';
 var valNum      : number = 1;
-var unit        : string = 'unit';
+var unit        : string = 'hs';
 
 var guidoFactory : GUIDOFactoryAdapter;
 
@@ -74,21 +74,24 @@ var limitParams     : LimitParams = {startDate: date, endDate: endDate, lowPitch
 var pr              : PianoRoll;
 var type            : PianoRollType = PianoRollType.kSimplePianoRoll;
 var guidoPianoRoll  : GUIDOPianoRollAdapter;
-
-  
-// init
-//------------------------------------
-function init() {
-	var guido = require('../../javascript/libGUIDOEngine.js');
-    guidoEngine     = new guido.GuidoEngineAdapter;
-    guidoEngine.init();
-    guidoScoreMap   = new guido.GUIDOScoreMap;
-    guidoFactory    = new guido.GUIDOFactoryAdapter(); 
-    guidoPianoRoll  = new guido.GUIDOPianoRollAdapter;    
-}
-
+ 
 
 class guidoTest {
+
+    async ready():Promise<any> { 
+        return new Promise(function(resolve, reject) {
+        const Module = require("../../javascript/libGUIDOEngine");
+                Module().then(function(guido: any) {
+                console.log ("Module ready");
+                guidoEngine     = new guido.GuidoEngineAdapter;
+                guidoEngine.init();
+                guidoScoreMap   = new guido.GUIDOScoreMap;
+                guidoFactory    = new guido.GUIDOFactoryAdapter(); 
+                guidoPianoRoll  = new guido.GUIDOPianoRollAdapter; 
+                resolve();
+            });
+        });
+    }
     
 // CLOSURES
 //------------------------------------
@@ -129,20 +132,21 @@ class guidoTest {
 // test process
 //------------------------------------
     processTest(): void {
-		init();
+		// init();
         console.log('************************* New test *************************');
         console.log('**               GuidoEngine Version ' + guidoEngine.getVersion().str + '                **');  
         console.log('************************************************************' + '\n');  
         
         this.processMoteur();
         this.processMap();
-        this.processFactory();
         this.processPianoRoll();
+        this.processFactory();
+        this.testEnd();       
         this.todo();
         
         console.log('************************* Test End *************************');             
     }
-    
+  
     processMoteur():void {
         console.log('   ** Test GuidoEgineAdapter **' + '\n');
         
@@ -151,7 +155,6 @@ class guidoTest {
         this.testBrows(); 
         this.testPages();
         this.testParse();
-        this.testEnd();       
     } 
     
     processMap():void {
@@ -162,11 +165,11 @@ class guidoTest {
 
         this.testExpect("guidoScoreMap.getPageMap(gr, pageNum, w, h)",          this._checkRun());        
         this.testExpect("guidoScoreMap.getStaffMap(gr, pageNum, w, h, staff)",  this._checkRun());        
-        this.testExpect("guidoScoreMap.getVoiceMap(gr, pageNum, w, h, voice)",  this._checkRun());        
+        map = this.testExpect("guidoScoreMap.getVoiceMap(gr, pageNum, w, h, voice)",  this._checkRun());        
         this.testExpect("guidoScoreMap.getSystemMap(gr, pageNum, w, h)",        this._checkRun());        
-        //this.testExpect("guidoScoreMap.getTime(date, map, t, rect)",            this._checkIsBool());        
-        //this.testExpect("guidoScoreMap.getPoint(x, y, map, t, rect)",           this._checkIsBool());        
-        //this.testExpect("guidoScoreMap.getTimeMap(gr, f)",                      this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoScoreMap.getTime(date, map)",                     this._checkIsStr());        
+        this.testExpect("guidoScoreMap.getPoint(x, y, map)",                    this._checkIsStr());        
+        this.testExpect("guidoScoreMap.getTimeMap(ar)",                         this._checkIsStr());        
    
         this.testExpect("guidoEngine.freeGR(gr)",                               this._checkVoid());
         this.testExpect("guidoEngine.freeAR(ar)",                               this._checkVoid());        
@@ -181,21 +184,25 @@ class guidoTest {
         this.testExpect("guidoFactory.openChord()",                         this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.insertCommata()",                     this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.openEvent(inEventName)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.openRangeTag(aname, tagID)",        this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.openTag(aname, tagID)",             this._checkErrCode(GuidoErrCode.guidoNoErr));               
-        //this.testExpect("guidoFactory.addSharp()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.addFlat()",                         this._checkErrCode(GuidoErrCode.guidoNoErr));      
-        //this.testExpect("guidoFactory.setEventAccidentals(accident)",     this._checkErrCode(GuidoErrCode.guidoNoErr));          
+        this.testExpect("guidoFactory.addSharp()",                          this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.addFlat()",                           this._checkErrCode(GuidoErrCode.guidoNoErr));      
+        this.testExpect("guidoFactory.setEventAccidentals(accident)",       this._checkErrCode(GuidoErrCode.guidoNoErr));          
         this.testExpect("guidoFactory.setEventDots(dots)",                  this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoFactory.setOctave(octave)",                   this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.setDuration(numerator, denominator)", this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoFactory.endTag()",                            this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.closeEvent()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
+
+        this.testExpect("guidoFactory.openRangeTag(aname, tagID)",          this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.addTagParameterString(valStr)",       this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.addTagParameterInt(valNum)",          this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoFactory.setParameterName(aname)",             this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoFactory.setParameterUnit(unit)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.endTag()",                            this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.closeTag()",                          this._checkErrCode(GuidoErrCode.guidoNoErr));
-        this.testExpect("guidoFactory.closeEvent()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.openTag(aname, tagID)",               this._checkErrCode(GuidoErrCode.guidoNoErr));               
+        this.testExpect("guidoFactory.setParameterName(aname)",             this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.addTagParameterInt(1)",               this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.addTagParameterFloat(0.4)",           this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoFactory.setParameterUnit(unit)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.endTag()",                            this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.closeChord()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.closeVoice()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoFactory.closeMusic()",                        this._checkRun());        
@@ -208,9 +215,7 @@ class guidoTest {
         ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	            this._checkRun());               
         pr = this.testExpect("guidoPianoRoll.ar2PianoRoll(type, ar)",                   this._checkRun());        
         this.testExpect("guidoPianoRoll.svgExport(pr, width, height)",                  this._checkIsStr()); 
-//        console.log(guidoPianoRoll.svgExport(pr, -1, -1));       
-        // use canvas
-        //this.testExpect("guidoPianoRoll.javascriptExport(pr, width, height)",         this._checkErrCode(GuidoErrCode.guidoNoErr));                
+        //this.testExpect("guidoPianoRoll.javascriptExport(pr, width, height)",           this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoPianoRoll.setLimits(pr, limitParams)",                    this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoPianoRoll.enableKeyboard(pr, enabled)",                   this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoPianoRoll.getKeyboardWidth(pr, height)",                  this._checkIsNum());        
@@ -263,6 +268,11 @@ class guidoTest {
         parseur = this.testExpect("guidoEngine.openParser()", 				            this._checkRun());
         ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	            this._checkRun());
         gr = this.testExpect("guidoEngine.ar2gr(ar)",                                   this._checkRun());        
+    
+        this.testExpect("guidoEngine.getParsingTime(ar)",                               this._checkIsNum());
+        this.testExpect("guidoEngine.getAR2GRTime(gr)",                                 this._checkIsNum());
+        this.testExpect("guidoEngine.getOnDrawTime(gr)",                                this._checkIsNum());
+
         guidoLayoutSettings = this.testExpect("guidoEngine.getDefaultLayoutSettings()", this._checkRun());
         
         this.testExpect("guidoEngine.ar2grSettings(ar, guidoLayoutSettings)",           this._checkRun());        
@@ -351,9 +361,6 @@ class guidoTest {
     todo(): void {
         console.log("------------- TODO -------------"      + "\n" +
             "Missing declarations in main.cpp interface : guidoEngine"  + "\n" +
-                    "=> guidoEngine.getParsingTime"             + "\n" +
-                    "=> guidoEngine.getAR2GRTime"               + "\n" + 
-                    "=> guidoEngine.getOnDrawTime"              + "\n" +
                     "=> guidoEngine.setSymbolPath"              + "\n" +
                     "=> guidoEngine.getSymbolPath"              + "\n" +
                     "=> guidoEngine.GuidoStream2GuidoString"    + "\n" +

@@ -2,5 +2,7 @@
 
 
 var guidoFullTest = new guidoTest();
-guidoFullTest.processTest();	
+guidoFullTest.ready().then (function() {
+    guidoFullTest.processTest();
+});
 
