@@ -70,7 +70,6 @@ help :
 	@echo "   tools        : build guido tools"	
 	@echo "   Qt           : build the Guido Qt library, applications and tools"	
 	@echo "   java         : build the jni and java libraries"	
-	@echo "   js           : build the javascript library (requires emscripten)"	
 	@echo "   wasm         : build the web assembly library (requires emscripten)"	
 	@echo "   ios          : build the GUIDOEngine static library for iOS"	
 	@echo "   android      : build the GUIDOEngine static library for Android"	
@@ -93,10 +92,8 @@ help :
 #===============================================================
 # building the javascript engine
 #===============================================================
-js: emcc
-	$(MAKE) -C ../lang/javascript
 wasm: emcc
-	$(MAKE) -C ../lang/javascript WASM=yes
+	$(MAKE) -C ../lang/javascript
 
 emcc:
 	which emcc || echo emcc compiler must be available crom the command line
