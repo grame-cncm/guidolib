@@ -361,7 +361,7 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_SVGExport (JNIEnv * en
 	GuidoErrCode err = guidoErrInvalidHandle;
 	if (gr) {
 		const char *guidofont = env->GetStringUTFChars(font, JNI_FALSE);
-		err = GuidoSVGExport(gr, page, sstr, *guidofont ? guidofont : 0);
+		err = GuidoSVGExportWithFontSpec(gr, page, sstr, *guidofont ? guidofont : 0, 0);
 		env->ReleaseStringUTFChars(font, guidofont);
 		if (err == guidoNoErr) {
 			return env->NewStringUTF(sstr.str().c_str());
