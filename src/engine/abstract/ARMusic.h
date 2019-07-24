@@ -47,6 +47,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 	virtual void	getTimeMap (TimeMapCollector& f) const;
 			bool	getMeterAt (int voicenum, const GuidoDate &date, GuidoMeter& meter);
 			bool	getMetersAt (int voicenum, const GuidoDate &date, GuidoMeters& meters);
+			size_t	getTempoList (GuidoTempoList& tempi);
 			void 	removeAutoTags();
 
     const NVstring  & getName() const { return mName; }

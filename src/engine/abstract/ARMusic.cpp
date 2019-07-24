@@ -19,6 +19,7 @@
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
 #include "MeterVisitor.h"
+#include "TempoVisitor.h"
 #include "TimeMapper.h"
 #include "GMNCodePrintVisitor.h"
 
@@ -112,6 +113,20 @@ bool ARMusic::getMetersAt (int voicenum, const GuidoDate &date, GuidoMeters& met
 	voice->accept (mv);
 	meters = mv.getMeters();
 	return true;
+}
+
+size_t ARMusic::getTempoList (GuidoTempoList& tempi)
+{
+	TempoVisitor tv;
+	int n=0;
+	GuidoPos pos = GetHeadPosition();
+	while (pos) {
+		ARMusicalVoice * voice = GetNext(pos);
+		tv.voice(n++);
+		voice->accept (tv);
+	}
+	tempi = tv.getTempi();
+	return tv.size();
 }
 
 void ARMusic::getTimeMap (TimeMapCollector& f) const
