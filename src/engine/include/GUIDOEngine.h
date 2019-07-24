@@ -18,6 +18,7 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include "VGColor.h"
 #include "GUIDOExport.h"
 
 
@@ -608,20 +609,19 @@ units.
 		\param handle a graphic representation.
 		\param page the page number.
 		\param out the output stream.
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
+		\param color the score color.
 		\return a Guido error code
 	 */
-	GUIDOAPI(GuidoErrCode) GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont );
+	GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color );
 
 	/** \brief Exports one page of score to SVG.
 
 		\param handle a graphic representation.
 		\param page the page number.
 		\param out the output stream.
-		\param fontfile path of the guido svg font file.
-		\param mappingMode the mapping mode (see mapping mode enum).
+		\param width the drawing area width.
+		\param height the drawing area height.
+		\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
 		\return a Guido error code
 	*/
 	#ifdef WIN32
