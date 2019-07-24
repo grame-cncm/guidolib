@@ -62,7 +62,7 @@ foreach(tool ${TOOLS})
 	add_dependencies(${tool} ${target})
 endforeach(tool)
 
-set(TOOLS guido2midi guido2svg guido2abstract guido2proll midi2proll guido2svgmap guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap)
+set(TOOLS guido2midi guido2svg guido2abstract guido2proll midi2proll guido2svgmap guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap guidogettempi guidogetmeters)
 foreach(tool ${TOOLS})
 	add_executable( ${tool} ${TOOLS_PATH}/${tool}.cpp )
 	target_include_directories (${tool} PRIVATE ${INCTOOLS})
