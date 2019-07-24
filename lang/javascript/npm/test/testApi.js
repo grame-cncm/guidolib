@@ -305,5 +305,6 @@ function test() {
 	guidoEngine.shutdown();
 	delete guidoEngine;
 
+	console.log( "=================== End of GUIDO API test ===================");
 	process.exit(0);
 }
