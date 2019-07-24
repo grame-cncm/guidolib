@@ -1,20 +1,41 @@
 #!/bin/sh
 #
 
-echo "#ifndef _guido2_H_"
-echo "#define _guido2_H_"
-echo
-echo "const char ______src_guido2_svg[] = {"
-cat guido2.svg | \
-	sed -e "s/\(.\)/'\1', /g" | \
-	sed -e 's/\\/\\\\/g' | \
-	sed -e "s/$/'\\\n', /" | \
-	sed -e "s/'''/'\\\\''/g"
-echo "' ' };"
-echo
-echo "#endif"
-echo
+cat << !
+/*
+	This file has been generated using makecppfont
+*/
+
+#ifndef _guido2_H_
+#define _guido2_H_
+
+!
+
+/bin/echo -n "const char* ______src_guido2_svg = \""
+cat guido2.svg | sed -e 's/\\/\\\\/g' | sed -e 's/"/\\"/g' | sed -e 's/$/ /' | sed -e 's/[ 	][ 	]*/ /g' | tr -d '\n'
+
+cat << !
+";
+
+#endif
+
+!
 exit
+
+# echo "#ifndef _guido2_H_"
+# echo "#define _guido2_H_"
+# echo
+# echo "const char ______src_guido2_svg[] = {"
+# cat guido2.svg | \
+# 	sed -e "s/\(.\)/'\1', /g" | \
+# 	sed -e 's/\\/\\\\/g' | \
+# 	sed -e "s/$/'\\\n', /" | \
+# 	sed -e "s/'''/'\\\\''/g"
+# echo "' ' };"
+# echo
+# echo "#endif"
+# echo
+# exit
 
 
 #echo "const char* guido2svg = \"\\"
