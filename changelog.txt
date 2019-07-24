@@ -1,7 +1,11 @@
 GUIDO Engine history
 
+
 ----------------------------------------------------------------
   version 1.6.7
+- add new GuidoGetTempoList API
+- add new GuidoGR2SVGColored API
+- update wasm bindings
 - add 'autopos' attribute to \intens  
 - add 'autoIntensPos' and 'intensAutoPos' attributes to \set and \auto global voice settings 
 - fix stem length issue on last note when beaming reverse directions

@@ -105,6 +105,32 @@ typedef struct
 } GuidoMeter;
 typedef GuidoMeter* GuidoMeters;
 
+/**
+    Tempo type is between:
+ 		- kTextualTempo: the tempo tag contains only a textual information
+ 		- kUnitValueTempo: the tempo tag contains unit=value form
+ 		- kUnitUnitTempo: the tempo tag contains unit=unit form
+*/
+typedef enum { kTextualTempo, kUnitValueTempo, kUnitUnitTempo } TempoType;
+typedef struct
+{
+	//! the voice number
+    int voice;
+    //! the tempo date
+    GuidoDate date;
+	//! the tempo text (limited to 127 chars)
+    char text[128];
+	//! the tempo type (see above)
+    TempoType type;
+	//! the beat unit expressed as a Guido date - undefined for kTextualTempo
+    GuidoDate unit;
+    //! the tempo value: defined for kUnitValueTempo only, null otherwise
+    int value;
+    //! the tempo value: defined for kUnitUnitTempo only, null otherwise
+    GuidoDate unitvalue;
+} GuidoTempo;
+typedef GuidoTempo* GuidoTempoList;
+
 /** \brief Contains all graphic-related information required by GuidoOnDraw()
 
 	Used to render a page of score into a device context.
@@ -573,6 +599,28 @@ as by date. Page numbers start at 1.
 	*/
 	GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters);
 
+
+	/** \brief Gives the tempo list.
+
+		\param inHandleAR a Guido opaque handle to a AR structure.
+		\param tempi on output: a tempo array that must be freed wih GuidoFreeTempoList.
+		\return the tempo array size of a GuidoErrCode when negative.
+
+		\see the GuidoTempo structure for the tempo coding conventions
+		\note tempo unit and value are taken is priority from the 'bpm' tempo tag attribute
+			  or inferred from the tempo string when not present
+	*/
+	GUIDOAPI(int) GuidoGetTempoList (CARHandler inHandleAR, GuidoTempoList& tempi);
+
+
+	/** \brief Releases a tempo array..
+
+		\param tempi: a tempo array.
+		\return a Guido error code.
+	*/
+	GUIDOAPI(GuidoErrCode) GuidoFreeTempoList (GuidoTempoList tempi);
+
+
 /*! @} */
 
 
@@ -603,6 +651,18 @@ units.
 		\return a Guido error code
 	 */
 	GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 );
+
+	/** \brief Exports one page of score to SVG.
+
+		\param handle a graphic representation.
+		\param page the page number.
+		\param out the output stream.
+		\param width the drawing area width.
+		\param height the drawing area height.
+		\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
+		\return a Guido error code
+	 */
+	GUIDOAPI(GuidoErrCode) GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont );
 
 	/** \brief Exports one page of score to SVG.
 

@@ -623,11 +623,32 @@ GUIDOAPI(GuidoErrCode) GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, co
 	bool result = inHandleAR->armusic->getMetersAt( voicenum, date, meters );
 	return result ? guidoNoErr : guidoErrBadParameter;
 }
+
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters)
 {
 	if (!meters) return guidoErrBadParameter;
 	delete [] meters;
+	return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+// introduced in guido 1.67 [DF Jul. 24 2019]
+GUIDOAPI(int) GuidoGetTempoList (CARHandler inHandleAR, GuidoTempoList& tempi)
+{
+	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
+		return guidoErrInvalidHandle;
+
+	tempi = 0;
+	size_t result = inHandleAR->armusic->getTempoList( tempi );
+	return int(result);
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoFreeTempoList (GuidoTempoList tempi)
+{
+	if (!tempi) return guidoErrBadParameter;
+	delete [] tempi;
 	return guidoNoErr;
 }
 
