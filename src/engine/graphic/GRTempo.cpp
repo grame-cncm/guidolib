@@ -56,7 +56,7 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
 		FormatStringParserResult::const_iterator assoc;
 		for (assoc = inAR->getTempoMark().begin(); assoc != inAR->getTempoMark().end(); assoc++) {
 			if (assoc->second == FormatStringParser::kSpecial) {
-				TYPE_DURATION duration = getDuration(assoc->first.c_str());
+				TYPE_DURATION duration = inAR->getDuration(assoc->first.c_str());
 				mBoundingBox.right += GetSymbolExtent( kFullHeadSymbol );
 				if (duration.getNumerator() == 3) {
 					mBoundingBox.right += LSPACE;
@@ -80,16 +80,16 @@ GRTempo::~GRTempo()
 }
 
 // ----------------------------------------------------------------------------
-TYPE_DURATION GRTempo::getDuration (const char * str) const
-{
-	int num, denom;
-	TYPE_DURATION duration;
-	if( sscanf( str,"%d/%d", &num, &denom ) == 2 ) {
-		duration.set ( num, denom );
-		duration.normalize();
-	}
-	return duration;
-}
+//TYPE_DURATION GRTempo::getDuration (const char * str) const
+//{
+//	int num, denom;
+//	TYPE_DURATION duration;
+//	if( sscanf( str,"%d/%d", &num, &denom ) == 2 ) {
+//		duration.set ( num, denom );
+//		duration.normalize();
+//	}
+//	return duration;
+//}
 
 // ----------------------------------------------------------------------------
 void GRTempo::OnDraw( VGDevice & hdc ) const
@@ -125,7 +125,7 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 	FormatStringParserResult::const_iterator assoc;
 	for (assoc = ar->getTempoMark().begin(); assoc != ar->getTempoMark().end(); assoc++) {
 		if (assoc->second == FormatStringParser::kSpecial) {
-			TYPE_DURATION duration = getDuration(assoc->first.c_str());
+			TYPE_DURATION duration = ar->getDuration(assoc->first.c_str());
 			currX += DrawNote( hdc, duration, currX + LSPACE, noteOffsetY + dy ) + LSPACE;
 		}
 		else {

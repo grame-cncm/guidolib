@@ -57,6 +57,18 @@ float ARTempo::getQpmValue() const
 	return 0.;
 }
 
+// ----------------------------------------------------------------------------
+TYPE_DURATION ARTempo::getDuration (const char * str) const
+{
+	int num, denom;
+	TYPE_DURATION duration;
+	if( sscanf( str,"%d/%d", &num, &denom ) == 2 ) {
+		duration.set ( num, denom );
+		duration.normalize();
+	}
+	return duration;
+}
+
 // --------------------------------------------------------------------------
 void ARTempo::setTagParameters(const TagParameterMap& map)
 {
