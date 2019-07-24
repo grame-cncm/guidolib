@@ -85,6 +85,7 @@ class_export SVGDevice : public VGDevice
 	bool			fViewPort;
 
 	VGColor	*	fPendingStrokeColor;
+	VGColor	*	fPendingFillColor;
 	bool		fBeginDone;
 	
 	enum		{ kNoFont, kMusicFont, kTextFont };

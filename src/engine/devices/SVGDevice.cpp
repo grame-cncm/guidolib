@@ -51,6 +51,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fFontAlign(kAlignBase), fDPI(0),
     fViewPort (setviewport),
 	fPendingStrokeColor(0),
+	fPendingFillColor(0),
 	fBeginDone(false),
 	fStream(outstream),
 	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
@@ -137,7 +138,6 @@ void SVGDevice::printFont(std::ostream& out, const char* font) const
 //______________________________________________________________________________
 bool SVGDevice::BeginDraw()
 {
-
 	fStream << "<?xml version=\"1.0\"?>" << fEndl;
 	fStream << "<svg ";
 	if (fViewPort)
@@ -151,6 +151,11 @@ bool SVGDevice::BeginDraw()
 		SelectPenColor (*fPendingStrokeColor);
 		delete fPendingStrokeColor;
 		fPendingStrokeColor = 0;
+	}
+	if (fPendingFillColor) {
+		SelectFillColor (*fPendingFillColor);
+		delete fPendingFillColor;
+		fPendingFillColor = 0;
 	}
 	return true;
 }
@@ -169,6 +174,7 @@ void SVGDevice::EndDraw()
     fScaled = false;
 	fOffset = false;
 	fEndl--; fStream << fEndl << "</svg>" << fEndl;
+	fBeginDone = false;
 }
 
 void SVGDevice::InvalidateRect( float left, float top, float right, float bottom ) {}
@@ -261,9 +267,12 @@ void SVGDevice::SelectPen( const VGColor & c, float w )
 }
 void SVGDevice::SelectFillColor( const VGColor & c )
 {
-	if (fPushedFill) closegroup();
-	PushFillColor (c);
-	fPushedFill = true;
+	if (fBeginDone) {
+		if (fPushedFill) closegroup();
+		PushFillColor (c);
+		fPushedFill = true;
+	}
+	else fPendingFillColor = new VGColor(c);
 }
 
 void SVGDevice::PushPen( const VGColor & color, float width )
