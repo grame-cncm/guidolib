@@ -110,6 +110,8 @@ long GuidoEngineAdapter::getParsingTime (const ARHandler ar)		{ return ::GuidoGe
 long GuidoEngineAdapter::getAR2GRTime(const GRHandler gr)			{ return ::GuidoGetAR2GRTime(gr); }
 long GuidoEngineAdapter::getOnDrawTime(const GRHandler gr)			{ return ::GuidoGetOnDrawTime(gr); }
 
+GuidoErrCode GuidoEngineAdapter::showElement( GRHandler gr, int elt, bool status)
+																	{ return ::GuidoShowElement(gr, GRElement(elt), status); }
 
 GuidoErrCode GuidoEngineAdapter::onDraw(GuidoOnDrawDesc * desc)		{ return ::GuidoOnDraw(desc); }
 
@@ -129,6 +131,14 @@ std::string GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, bool e
 {
 	stringstream sstr;
 	::GuidoGR2SVG(handle, page, sstr, embedFont, 0, mappingMode);
+	return sstr.str();
+}
+
+std::string GuidoEngineAdapter::gr2SVGColored( const GRHandler handle, int page, int r, int g, int b)
+{
+	stringstream sstr;
+	VGColor color (r, g, b);
+	::GuidoGR2SVGColored(handle, page, sstr, color);
 	return sstr.str();
 }
 

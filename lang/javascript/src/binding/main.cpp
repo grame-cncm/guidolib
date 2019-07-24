@@ -42,7 +42,8 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.field("neighborhoodSpacing", &GuidoLayoutSettings::neighborhoodSpacing)
 			.field("optimalPageFill", &GuidoLayoutSettings::optimalPageFill)
 			.field("resizePage2Music", &GuidoLayoutSettings::resizePage2Music)
-			.field("proportionalRenderingForceMultiplicator", &GuidoLayoutSettings::proportionalRenderingForceMultiplicator);
+			.field("proportionalRenderingForceMultiplicator", &GuidoLayoutSettings::proportionalRenderingForceMultiplicator)
+			.field("checkLyricsCollisions", &GuidoLayoutSettings::checkLyricsCollisions);
 
 	value_object<GuidoDate>("GuidoDate")
 			.field("num", &GuidoDate::num)
@@ -131,6 +132,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("ar2grSettings", 		select_overload<NodeGR*(NodeAR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::ar2gr), allow_raw_pointers())
 			.function("updateGR", 			select_overload<GuidoErrCode(NodeGR*)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
 			.function("updateGRSettings", 	select_overload<GuidoErrCode(NodeGR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
+			.function("showElement", 		&GuidoEngineAdapter::showElement, allow_raw_pointers())
 			.function("freeAR", 			&GuidoEngineAdapter::freeAR, allow_raw_pointers())
 			.function("freeGR", 			&GuidoEngineAdapter::freeGR, allow_raw_pointers())
 			.function("getErrorString", 	&GuidoEngineAdapter::getErrorString)
@@ -143,6 +145,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("findPageAt", 		&GuidoEngineAdapter::findPageAt, allow_raw_pointers())
 			.function("getPageDate", 		&GuidoEngineAdapter::getPageDate, allow_raw_pointers())
 			.function("gr2SVG", 			select_overload<std::string (NodeGR*, int, bool, int)>(&GuidoEngineAdapter::gr2SVG), allow_raw_pointers())
+			.function("gr2SVGColored", 		&GuidoEngineAdapter::gr2SVGColored, allow_raw_pointers())
 			.function("abstractExport", 	select_overload<std::string (NodeGR*, int)>(&GuidoEngineAdapter::abstractExport), allow_raw_pointers())
 			.function("binaryExport", 		select_overload<std::string (NodeGR*, int)>(&GuidoEngineAdapter::binaryExport), allow_raw_pointers())
 			.function("javascriptExport", 		&GuidoEngineAdapter::javascriptExport, allow_raw_pointers())

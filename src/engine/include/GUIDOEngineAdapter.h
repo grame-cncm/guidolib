@@ -178,6 +178,15 @@ class_export GuidoEngineAdapter
 				\return the settings fill with default values.
 			*/
 			GuidoLayoutSettings getDefaultLayoutSettings();
+
+			/*!
+				Show or hide notation elements.
+				\param gr the handler to the graphic representation.
+				\param elt the target element
+				\param status a boolean value to show (true) or hide (false) the target element
+				\return a Guido error code.
+			*/
+			GuidoErrCode showElement( GRHandler gr, int elt, bool status);
 		/*! @} */
 
 
@@ -303,6 +312,17 @@ class_export GuidoEngineAdapter
 				\return SVG code
 			 */
 			std::string gr2SVG(const GRHandler handle, int page, bool embedFont = true, const int mappingMode = 0);
+
+			/** \brief Exports one page of score to SVG.
+
+				\param handle a graphic representation.
+				\param page the page number.
+				\param r the color red component
+				\param g the color green component
+				\param b the color blue component
+				\return SVG code
+			 */
+			std::string gr2SVGColored(const GRHandler handle, int page, int r, int g, int b);
 
 			/** \brief Exports an abstract representation of GUIDO draw commands.
 
