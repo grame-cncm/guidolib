@@ -43,6 +43,7 @@ interface GuidoLayoutSettings {
 	optimalPageFill:        number;
 	resizePage2Music:       number;
 	proportionalRenderingForceMultiplicator: number;
+	checkLyricsCollisions: number;
 }
 
 interface GuidoOnDrawDesc {
@@ -89,6 +90,7 @@ interface GuidoEngineAdapter {
 	ar2grSettings       (ar: ARHandler, settings: GuidoLayoutSettings): GRHandler;	    	
     updateGR            (gr: GRHandler): GuidoErrCode;
     updateGRSettings    (gr: GRHandler, settings: GuidoLayoutSettings): GuidoErrCode;
+    showElement    		(gr: GRHandler, elt: int, status: boolean): GuidoErrCode;
 
 	freeAR      (ar: ARHandler): void;
 	freeGR      (gr: GRHandler): void;
