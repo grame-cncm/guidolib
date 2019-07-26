@@ -11,7 +11,9 @@
 
 */
 
+#include <iostream>
 #include <sstream>
+
 #include "GUIDOReducedProportionalAdapter.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
@@ -24,12 +26,12 @@
 GUIDOReducedProportionalAdapter::GUIDOReducedProportionalAdapter() {}
 GUIDOReducedProportionalAdapter::~GUIDOReducedProportionalAdapter() {}
 
-RProportional * ar2RProportional(ARHandler arh)
+RProportional * GUIDOReducedProportionalAdapter::ar2RProportional(ARHandler arh)
 {
 	return GuidoAR2RProportional (arh);
 }
 
-RProportional * midi2RProportional(const std::string &midiFileName)
+RProportional * GUIDOReducedProportionalAdapter::midi2RProportional(const std::string &midiFileName)
 {
 	return GuidoMidi2RProportional (midiFileName.c_str());
 }
