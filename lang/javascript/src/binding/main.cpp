@@ -21,7 +21,9 @@
 #include "GUIDOInternal.h"
 #include "GuidoParser.h"
 #include "GUIDOPianoRollAdapter.h"
+#include "GUIDOReducedProportionalAdapter.h"
 #include "PianoRoll.h"
+#include "RProportional.h"
 #include "GUIDOFactoryAdapter.h"
 #include "map2json.h"
 
@@ -209,6 +211,21 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("svgExport", &GUIDOPianoRollAdapter::svgExport, allow_raw_pointers())
 			.function("javascriptExport", &GUIDOPianoRollAdapter::javascriptExport, allow_raw_pointers());
 
+	// Binding C++ class adapter for GUIDOReducedProportional
+	class_<GUIDOReducedProportionalAdapter>("GUIDOReducedProportionalAdapter")
+			.constructor<>()
+			.function("ar2RProportional", &GUIDOReducedProportionalAdapter::ar2RProportional, allow_raw_pointers())
+			.function("destroyRProportional", &GUIDOReducedProportionalAdapter::destroyRProportional, allow_raw_pointers())
+			.function("drawDurationLines", &GUIDOReducedProportionalAdapter::drawDurationLines, allow_raw_pointers())
+			.function("enableAutoVoicesColoration", &GUIDOReducedProportionalAdapter::enableAutoVoicesColoration, allow_raw_pointers())
+			.function("setRGBColorToVoice", &GUIDOReducedProportionalAdapter::setRGBColorToVoice, allow_raw_pointers())
+			.function("setHtmlColorToVoice", &GUIDOReducedProportionalAdapter::setHtmlColorToVoice, allow_raw_pointers())
+			.function("removeColorToVoice", &GUIDOReducedProportionalAdapter::removeColorToVoice, allow_raw_pointers())
+			.function("enableMeasureBars", &GUIDOReducedProportionalAdapter::enableMeasureBars, allow_raw_pointers())
+			.function("setLimits", &GUIDOReducedProportionalAdapter::setLimits, allow_raw_pointers())
+			.function("svgExport", &GUIDOReducedProportionalAdapter::svgExport, allow_raw_pointers())
+			.function("javascriptExport", &GUIDOReducedProportionalAdapter::javascriptExport, allow_raw_pointers());
+
 	// Binding C++ class adapter for GuidoFactory
 	class_<GUIDOFactoryAdapter>("GUIDOFactoryAdapter")
 			.constructor<>()
@@ -243,5 +260,6 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 	class_<NodeGR>("NodeGR");
 	class_<GuidoStream>("GuidoStream");
 	class_<PianoRoll>("PianoRoll");
+	class_<RProportional>("RProportional");
 }
 
