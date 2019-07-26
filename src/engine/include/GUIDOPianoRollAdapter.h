@@ -13,8 +13,9 @@
 
 */
 
-#include "GUIDOPianoRoll.h"
 #include <string>
+
+#include "GUIDOPianoRoll.h"
 
 /*!
  * \addtogroup APICplusplus C++ interface
@@ -27,7 +28,7 @@
 class_export GUIDOPianoRollAdapter
 {
 	public:
-		GUIDOPianoRollAdapter();
+				 GUIDOPianoRollAdapter();
 		virtual ~GUIDOPianoRollAdapter();
 		/*!
 			\brief Creates a new piano roll from AR, corresponding to type :

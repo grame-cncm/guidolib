@@ -12,9 +12,9 @@
   research@grame.fr
 
 */
+#include <string>
 
 #include "GUIDOReducedProportional.h"
-#include <string>
 
 /*!
  * \addtogroup APICplusplus C++ interface
