@@ -134,11 +134,11 @@ std::string GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, bool e
 	return sstr.str();
 }
 
-std::string GuidoEngineAdapter::gr2SVGColored( const GRHandler handle, int page, int r, int g, int b)
+std::string GuidoEngineAdapter::gr2SVGColored( const GRHandler handle, int page, int r, int g, int b, bool embedfont)
 {
 	stringstream sstr;
 	VGColor color (r, g, b);
-	::GuidoGR2SVGColored(handle, page, sstr, color);
+	::GuidoGR2SVGColored(handle, page, sstr, color, embedfont);
 	return sstr.str();
 }
 

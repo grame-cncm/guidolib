@@ -322,7 +322,7 @@ class_export GuidoEngineAdapter
 				\param b the color blue component
 				\return SVG code
 			 */
-			std::string gr2SVGColored(const GRHandler handle, int page, int r, int g, int b);
+			std::string gr2SVGColored(const GRHandler handle, int page, int r, int g, int b, bool embedfont=true);
 
 			/** \brief Exports an abstract representation of GUIDO draw commands.
 

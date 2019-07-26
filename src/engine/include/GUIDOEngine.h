@@ -670,9 +670,10 @@ units.
 		\param page the page number.
 		\param out the output stream.
 		\param color the score color.
+		\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
 		\return a Guido error code
 	 */
-	GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color );
+	GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color, bool embedFont );
 
 	/** \brief Exports one page of score to SVG.
 

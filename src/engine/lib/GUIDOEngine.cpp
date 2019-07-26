@@ -830,9 +830,9 @@ GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostre
 	return error;
 }
 
-GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color )
+GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color, bool embedFont )
 {
-	const char * fontUsed = ______src_guido2_svg;
+	const char * fontUsed = embedFont ? ______src_guido2_svg : 0;
 
 	SVGSystem sys(fontUsed);
 	VGDevice    *dev    = sys.CreateDisplayDevice(out, 0);
