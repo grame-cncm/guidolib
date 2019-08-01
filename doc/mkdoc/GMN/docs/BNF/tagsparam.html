@@ -1,0 +1,10 @@
+
+<div>
+     <script>
+     ComplexDiagram(
+        	Sequence ('<', OneOrMore(
+        		Choice(0, 'value', Sequence ('param', '=' , 'value'))
+        		, ','), '>')
+    ).addTo()
+   </script>
+</div>

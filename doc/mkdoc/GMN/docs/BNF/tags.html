@@ -1,0 +1,13 @@
+
+<div>
+     <script>
+     ComplexDiagram(
+        	Sequence ('\\', 'id',
+        	Optional( Sequence ('<', OneOrMore(
+        		Choice(0, 'value', Sequence ('param', '=' , 'value'))
+        		, ','), '>')),
+        	Optional( Sequence ('(', 'note-series', ')'))
+        	 ) 
+     ).addTo()
+   </script>
+</div>

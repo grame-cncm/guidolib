@@ -1,0 +1,317 @@
+//
+//Common = 
+//| color     | string   |   | black   | true |
+//| dx     | unit   |   | 0   | true |
+//| dy     | unit   |   | 0   | true |
+//| size     | float   |   | 1.0   | true |
+//
+//FontAble = 
+//| textformat     | string   |   | rc   | true |
+//| font     | string   |   | Times   | true |
+//| fsize     | unit   |   | 9pt   | true |
+//| fattrib     | string   |   |    | true |
+
+accelerando = 
+| tempo     | string   |   |    | true |
+| abstempo     | string   |   |    | true |
+| font     | string   |   | Times New Roman   | true |
+| fattrib     | string   |   |    | true |
+| fsize     | unit   |   | 9pt   | true |
+
+
+auto = 
+| endBar     | string   |   | on   | true |
+| pageBreak     | string   |   | on   | true |
+| systemBreak     | string   |   | on   | true |
+| clefKeyMeterOrder     | string   |   | on   | true |
+| stretchLastLine     | string   |   | off   | true |
+| stretchFirstLine     | string   |   | off   | true |
+| lyricsAutoPos     | string   |   | off   | true |
+| instrAutoPos     | string   |   | off   | true |
+| intensAutoPos     | string   |   | off   | true |
+| autoEndBar     | string   |   | on   | true |
+| autoPageBreak     | string   |   | on   | true |
+| autoSystemBreak     | string   |   | on   | true |
+| autoClefKeyMeterOrder     | string   |   | on   | true |
+| autoStretchLastLine     | string   |   | off   | true |
+| autoStretchFirstLine     | string   |   | off   | true |
+| autoInstrPos     | string   |   | off   | true |
+| autoLyricsPos     | string   |   | off   | true |
+| autoIntensPos     | string   |   | off   | true |
+
+
+
+accidental = 
+| style     | string   |   |    | true |
+
+accolade = 
+| id     | integer   |   |    | false |
+| range     | string   |   |    | false |
+| type     | string   |   | stringtandard   | true |
+
+alter = 
+| detune     | float   |   | 0.0   | false |
+| text     | string   |   |    | true |
+
+arpeggio = 
+| direction     | string   |   |    | true |
+
+articulation =
+| position     | string   |   |    | true |
+
+barFormat = 
+| style     | string   |   | stringtaff   | true |
+| range     | string   |   |    | true |
+
+bar = 
+| displayMeasNum     | string   |   | floatalse   | true |
+| numDx     | unit   |   | 0   | true |
+| numDy     | unit   |   | 0   | true |
+
+beam = 
+| dy     | unit   |   | 0   | true |
+| dx1     | unit   |   | 0hs   | true |
+| dy1     | unit   |   | 0hs   | true |
+| dx2     | unit   |   | 0hs   | true |
+| dy2     | unit   |   | 1hs   | true |
+| dx3     | unit   |   | 0hs   | true |
+| dy3     | unit   |   | 0hs   | true |
+| dx4     | unit   |   | 0hs   | true |
+| dy4     | unit   |   | 1hs   | true |
+
+bowing = 
+| curve     | string   |   | down   | true |
+| dx1     | unit   |   | 2hs   | true |
+| dy1     | unit   |   | 1hs   | true |
+| dx2     | unit   |   | -2hs   | true |
+| dy2     | unit   |   | 1hs   | true |
+| r3     | float   |   | 0.5   | true |
+| h     | unit   |   | 2hs   | true |
+
+clef = 
+| type     | string   |   | treble   | false |"
+
+cluster = 
+| hdx     | unit   |   | 0hs   | true |
+| hdy     | unit   |   | 0hs   | true |
+
+color = 
+| red     | float   |   | 0.0   | false |
+| green     | float   |   | 0.0   | false |
+| blue     | float   |   | 0.0   | false |
+| alpha     | float   |   | 0.0   | true |
+
+composer = 
+| name     | string   |   |    | false |
+| pageformat     | string   |   | 53   | true |
+| textformat     | string   |   | rb   | true |
+| fsize     | unit   |   | 14pt   | true |
+
+cue = 
+| name     | string   |   |    | true |
+| fsize     | unit   |   | 9pt   | true |
+
+displayDuration =
+| n     | integer   |   |    | false |
+| d     | integer   |   |    | false |
+| ndots     | integer   |   | 0   | true |
+
+dynamic = 
+| dx1     | unit   |   | 0   | true |
+| dx1     | unit   |   | 0   | true |
+| dx2     | unit   |   | 0   | true |
+| deltaY     | unit   |   | 3   | true |
+| thickness     | unit   |   | 0.16   | true |
+| autopos     | string   |   | off   | true |
+
+featheredBeam = 
+| durations     | string   |   |    | true |
+| drawDuration     | string   |   | floatalse   | true |
+
+fermata = 
+| type     | string   |   |    | true |
+| position     | string   |   | above   | true |
+
+fingering = 
+| position     | string   |   |    | true |
+| fsize     | unit   |   | 10pt   | true |
+| dx1     | "
+
+glissando = 
+			U   |   | 0   | true |
+| dy1     | unit   |   | 0   | true |
+| dx2     | unit   |   | 0   | true |
+| dy2     | unit   |   | 0   | true |
+| fill     | string   |   | floatalse   | true |
+| thickness     | unit   |   | 0.3   | true |
+
+grace = 
+| i     | integer   |   |    | true |
+
+harmony = 
+| text     | string   |   |    | false |
+| dy     | unit   |   | -1   | true |
+| ypos     | unit   |   | 0hs   | true |
+| textformat     | string   |   | cc   | true |
+| font     | string   |   | Arial   | true |
+| fsize     | unit   |   | 18pt   | true |
+| fattrib     | string   |   |    | true |
+
+instrument = 
+| name     | string   |   |    | false |
+| transp     | string   |   |    | true |
+| autopos     | string   |   | off   | true |
+
+intens = 
+| type     | string   |   |    | false |
+| before     | string   |   |    | true |
+| after     | string   |   |    | true |
+| font     | string   |   | Times   | true |
+| fsize     | unit   |   | 10pt   | true |
+| fattrib     | string   |   | integer   | true |
+| autopos     | string   |   | off   | true |
+
+coda = 
+| m     | string   |   |    | true |
+| id     | integer   |   | 0   | true |
+
+key = 
+| key     | string   |   |    | false |
+| hideNaturals     | string   |   | floatalse   | true |
+
+lyrics = 
+| text     | string   |   |    | false |
+| dy     | unit   |   | -3   | true |
+| textformat     | string   |   | ct   | true |
+| fsize     | unit   |   | 12pt   | true |
+| autopos     | string   |   | off   | true |
+
+marcato = 
+| position     | string   |   |    | true |
+
+mark = 
+| text     | string   |   |    | false |
+| enclosure     | string   |   | none   | true |
+| dy     | unit   |   | 0   | true |
+
+meter = 
+| type     | string   |   | 4/4   | false |
+| autoBarlines     | string   |   | on   | true |
+| autoMeasuresNum     | string   |   | off   | true |
+| group     | string   |   | off   | true |
+
+noteFormat = 
+| style     | string   |   | stringtandard   | true |
+
+octava = 
+| i     | integer   |   |    | false |"
+
+pageFormat = 
+| type     | string   |   |    | false |
+| w     | unit   |   |    | false |
+| h     | unit   |   |    | false |
+| lm     | unit   |   | 2cm   | true |
+| tm     | unit   |   | 5cm   | true |
+| rm     | unit   |   | 2cm   | true |
+| bm     | unit   |   | 3cm   | true |
+
+pizzicato = 
+| type     | string   |   | lefthand   | true |
+| position     | string   |   |    | true |
+
+ritardando = 
+| tempo     | string   |   |    | true |
+| abstempo     | string   |   |    | true |
+| font     | string   |   | Times New Roman   | true |
+| fattrib     | string   |   |    | true |
+| fsize     | unit   |   | 9pt   | true |
+
+space = 
+| dd     | unit   |   |    | false |"
+
+special = 
+| char     | string   |   |    | false |"
+
+staccato = 
+| type     | string   |   |    | true |
+| position     | string   |   |    | true |
+
+staffFormat = 
+| style     | string   |   | stringtandard   | true |
+| size     | unit   |   | 3pt   | true |
+| lineThickness     | float   |   | 0.08   | true |
+| distance     | unit   |   | 0hs   | true |
+
+staff = 
+| id     | integer   |   |    | false |"
+
+symbol = 
+| file     | string   |   |    | false |
+| position     | string   |   | mid   | true |
+| w     | integer   |   |    | true |
+| h     | integer   |   |    | true |
+
+tempo = 
+| tempo     | string   |   |    | false |
+| bpm     | string   |   |    | true |
+
+textHarmony = 
+| text     | string   |   |    | false |
+| dy     | unit   |   | -1   | true |
+| textformat     | string   |   | lt   | true |
+| font     | string   |   | Arial   | true |
+| fsize     | unit   |   | 18pt   | true |
+
+text = 
+| text     | string   |   |    | false |
+| dy     | unit   |   | -1   | true |
+| textformat     | string   |   | lt   | true |
+| fsize     | unit   |   | 12pt   | true |
+
+title = 
+| name     | string   |   |    | false |
+| pageformat     | string   |   | c2   | true |
+| dy     | unit   |   | 0   | true |
+| fsize     | unit   |   | 24pt   | true |
+| textformat     | string   |   | cc   | true |
+
+tremolo = 
+| style     | string   |   | ///   | true |
+| speed     | integer   |   | 32   | true |
+| pitch     | string   |   |    | true |
+| thickness     | unit   |   | 0.75   | true |
+| text     | string   |   |    | true |
+
+trill = 
+| note     | string   |   |    | true |
+| type     | string   |   | prall   | true |
+| detune     | float   |   | 0.0   | true |
+| accidental     | string   |   |    | true |
+| dur     | integer   |   | 32   | true |
+| begin     | string   |   | on   | true |
+| adx     | unit   |   | 0hs   | true |
+| ady     | unit   |   | 0hs   | true |
+| tr     | string   |   | true   | true |
+| position     | string   |   | above   | true |
+| repeat     | string   |   | true   | true |
+
+stemsUp = 
+| length     | unit   |   | 7.0   | true |
+
+tuplet = 
+| format     | string   |   |    | false |
+| position     | string   |   | above   | true |
+| dy1     | unit   |   | 0   | true |
+| dy2     | unit   |   | 0   | true |
+| lineThickness     | float   |   | 4   | true |
+| bold     | string   |   |    | true |
+| textSize     | float   |   | 1   | true |
+| dispNote     | string   |   |    | true |
+
+units = 
+| type     | string   |   | cm   | false |"
+
+volta = 
+| mark     | string   |   |    | false |
+| format     | string   |   |    | true |
+

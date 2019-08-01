@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+
+DIR=examples
+
+for a in docs/$DIR/*.md
+do
+	title=$(egrep "^# " $a | sed 's/[^a-zA-Z0-9]*//g')
+	file=$DIR/$(basename $a .md)
+	echo "        - '$title': $file.md"
+done

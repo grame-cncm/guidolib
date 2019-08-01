@@ -1,0 +1,74 @@
+site_name: Guido Music Notation
+site_description: A guide to Guido Music Notation format.
+copyright: Copyright &copy; 2019 <a href="http://www.grame.fr">Grame-CNCM</a>
+nav:
+    - Home: index.md
+    - User Guide: 
+        - 'Basic concepts': guide/basic.md
+        - 'Notes and Rests': guide/notes.md
+        - 'Chords': guide/chords.md
+        - 'Tags and Tagged Ranges': guide/tags.md
+        - 'Voices': guide/voices.md
+        - 'Scores': guide/scores.md
+        - 'Comments and Spacing': guide/comments.md
+    - Reference: 
+        - 'Tags parameters': refs/tagsparams.md
+        - 'Tags': refs/tags.md
+        - 'Tags reference':
+            - 'Accidentals': refs/tags/Accidentals.md
+            - 'Articulations': refs/tags/Articulations.md
+            - 'Barlines': refs/tags/Barlines.md
+            - 'Beaming': refs/tags/Beaming.md
+            - 'Clef Key Meter': refs/tags/ClefKeyMeter.md
+            - 'Dynamics': refs/tags/Dynamics.md
+            - 'Header': refs/tags/Header.md
+            - 'Layout': refs/tags/Layout.md
+            - 'Miscellaneous': refs/tags/Miscellaneous.md
+            - 'Notes': refs/tags/Notes.md
+            - 'Ornaments': refs/tags/Ornaments.md
+            - 'Repeat Signs': refs/tags/RepeatSigns.md
+            - 'Settings': refs/tags/Settings.md
+            - 'Tempo': refs/tags/Time.md
+            - 'Text': refs/tags/Text.md
+        - 'Tags index': refs/index.md
+        - 'Language specification': refs/gmnf.md
+    - Examples: 
+        - '4Voices': examples/4voices.md
+        - 'Accidentals': examples/accidentals.md
+        - 'Articulations': examples/articulations.md
+        - 'Slurs': examples/slurs.md
+    - About: about.md
+
+#theme: readthedocs
+
+extra:
+    social:
+        - type: github
+          link: https://github.com/grame-cncm/guidolib
+        - type: home
+          link: https://guido.sf.net
+        - type: envelope
+          link: mailto:fober@grame.fr
+
+plugins:
+    - search
+    - pdf-export:
+          verbose: false
+          media_type: print
+          combined: true
+          combined_output_path: GUido-Music-Notation.pdf
+          enabled_if_env: ENABLE_PDF_EXPORT
+
+
+extra_javascript:
+  - '/GMN/guidolib/libGUIDOEngine.js'
+  - '/GMN/guidolib/guidocode.js'
+#  - '/BNF/railroad-diagrams/railroad-diagrams.js'
+
+extra_css:
+   - '/GMN/guidolib/guido.css'
+   - '/BNF/railroad-diagrams/railroad-diagrams.css'
+
+markdown_extensions:
+    - markdown_include.include:
+        base_path: './docs'

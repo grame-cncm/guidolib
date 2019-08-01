@@ -1,0 +1,17 @@
+<div class="guido-code guido-full">
+    <pre>    
+[
+	\pageFormat< lm=0,tm=0, bm=0,rm=0 >
+	\key<1> \meter<"2/4">
+	\acc< dy=-0.5hs,dx=-2hs>( c# ) % set accidental position
+	\acc< size=1.4>(d&)            % set accidental size
+	\acc( f# )                    % force a sharp
+	\acc( c2 )                    % force a natural sign
+
+	\alter<0.5> c                 % \alter is used without range
+	\acc<"cautionary", color="blue">(c)
+	\alter<-0.5>(c) b1            % \alter used with a range, applied to c only
+	\alter<0> d a
+]
+	</pre> 
+</div>
