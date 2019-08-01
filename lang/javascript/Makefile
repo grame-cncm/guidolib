@@ -22,7 +22,10 @@ SMUFL ?= no
 ifeq ($(SMUFL), yes)
 	SMUFLDEF = -DSMUFL
 endif
-CXXFLAGS += $(addprefix -I, $(subprojects)) $(SMUFLDEF) -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM -O3 -std=c++11
+
+OPT ?= -O3
+CXXFLAGS += $(addprefix -I, $(subprojects)) $(SMUFLDEF) -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM $(OPT) -std=c++11
+
 
 library = libGUIDOEngine
 target = $(library).js
@@ -59,7 +62,7 @@ $(npmdir)/$(library).js : $(library).js
 # building the library as web assembly
 ##############################################################
 $(library).wasm.js : $(objects)
-	emcc -O3 --bind --memory-init-file 0 $(objects) -o $(target) $(OPTIONS) -s WASM=1
+	emcc $(OPT) --bind --memory-init-file 0 $(objects) -o $(target) $(OPTIONS) -s WASM=1
 	
 depend :
 	makedepend -fMakefile -Y -- $(CXXFLAGS) -- $(sources)
