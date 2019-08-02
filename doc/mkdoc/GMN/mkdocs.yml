@@ -28,7 +28,7 @@ nav:
             - 'Ornaments': refs/tags/Ornaments.md
             - 'Repeat Signs': refs/tags/RepeatSigns.md
             - 'Settings': refs/tags/Settings.md
-            - 'Tempo': refs/tags/Time.md
+            - 'Tempo': refs/tags/Tempo.md
             - 'Text': refs/tags/Text.md
         - 'Tags index': refs/index.md
         - 'Language specification': refs/gmnf.md
