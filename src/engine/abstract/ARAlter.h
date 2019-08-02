@@ -20,6 +20,29 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Accidentals
+
+@tagname:\alter
+@tagalias:
+@tagtype:RP
+@tagnotation:micro-tonal accidentals
+@tagdesc
+The **\alter** tag may be used for micro-tonal accidentals. It supports common tag parameters.
+It can be used with or without a range: in the latter, it takes effect until the next **\alter** tag; if a ranged alter is encountered in between, it is applied locally and the non-ranged alter continues to apply after that.
+ 
+**Note**: the **\alter** tag has a cumulative effect: it is added to existing accidentals.
+@tagend
+
+@params:
+@param:detune:float:a signed floating point value representing semi-tones:0:false
+@paramdesc
+See the [Accidentals](/examples/accidentals/) example.
+@paramend
+
+*/
+
 /** \brief The Alter tag
 */
 class ARAlter : public ARMTParameter, public ARPositionTag

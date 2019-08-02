@@ -17,6 +17,23 @@
 
 #include "ARBar.h"
 
+/*@mkdoc
+
+@group:Barlines
+
+@tagname:\doubleBar
+@tagalias:
+@tagtype:P
+@tagnotation:a double bar line
+@tagdesc
+@tagend
+
+@paramdesc
+The **\doubleBar** tag supports the same parameters than the **\bar** tag.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARDoubleBar : public ARBar  

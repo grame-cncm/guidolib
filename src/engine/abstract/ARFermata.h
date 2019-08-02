@@ -17,6 +17,28 @@
 
 #include "ARArticulation.h"
 
+/*@mkdoc
+
+@group:Articulations
+
+@tagname:\fermata
+@tagalias:
+@tagtype:RP
+@tagnotation:fermata signs
+@tagdesc
+The **\arpeggio** tag displays arpeggio signs and should be applied to chords only.
+It has no effect on single notes.
+@tagend
+
+@params:
+@param:type:string:short, regular or long:regular:true
+@param:position:string:above or below:above:true
+@paramdesc
+See the [Articulations](/examples/articulations/) example.
+@paramend
+
+*/
+
 /* \brief Class ARFermata : abstract representation of a fermata. 
 
 	A fermata is linked to an object (then event is set) or it is 

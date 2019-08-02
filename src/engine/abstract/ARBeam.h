@@ -18,6 +18,30 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Beaming
+
+@tagname:\beam
+@tagalias:\bm<br/>\b<br/>\beamBegin beamEnd
+@tagtype:R
+@tagnotation:notes beaming
+@tagdesc
+Beaming is automatically computed according to the current meter. Manual beaming is always possible.
+@tagend
+
+@params:
+@param:dy1:unit:adjust the left beaming position:*none*:true
+@param:dy2:unit:adjust the right beaming position:*none*:true
+@param:dy:unit:similar to dy1=dy and dy2=dy:*none*:true
+@paramdesc
+*dy* parameters adjust the position of the beams relative to the note head.
+
+Known issue: *dy* fails when the stems are down.
+@paramend
+
+*/
+
 /** \brief Abstract representation of a beam.
 */
 class ARBeam :  public ARMTParameter, public ARPositionTag

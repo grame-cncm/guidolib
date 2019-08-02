@@ -17,7 +17,32 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
 
+@group:Articulations
+
+@tagname:\glissando
+@tagalias:glissandoBegin glissandoEnd
+@tagtype:R
+@tagnotation:a glissando line between notes
+@tagdesc
+The **\glissando** tag displays lines between notes but can be applied to chords as well.
+In the latter case, a line is drawn between the corresponding notes of each chord.
+It is the position of the notes in the GMN code that determines the correspondence
+@tagend
+
+@params:
+@param:dx1:unit:displacement of the line left anchor point:0:true
+@param:dy1:unit:displacement of the line left anchor point:0:true
+@param:dx2:unit:displacement of the line right anchor point:0:true
+@param:dy2:unit:displacement of the line right anchor point:0:true
+@param:fill:boolean@param:fill space between lines when applied to a chord:false:true
+@param:thickness:unit:line thickness:0.3:true
+@paramdesc
+See a [glissando](/examples/articulations/) example.
+@paramend
+
+*/
 
 class ARGlissando : public ARMTParameter, public ARPositionTag
 {

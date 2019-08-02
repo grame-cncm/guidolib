@@ -18,6 +18,27 @@
 #include "ARArticulation.h"
 #include "TimeUnwrap.h"
 
+/*@mkdoc
+
+@group:Articulations
+
+@tagname:\tenuto
+@tagalias:\ten
+@tagtype:R
+@tagnotation:tenuto sign
+@tagdesc
+@tagend
+
+@params:
+@param:type:string:heavy or regular:regular:true
+@param:position:string:above or below:*none*:true
+@paramdesc
+The default tenuto position is close to the note head, on the opposite side of the stem.
+
+See the [Articulations](/examples/articulations/) example.
+@paramend
+
+*/
 
 /** \brief the Tenuto articulation tag
 */

@@ -19,6 +19,29 @@
 
 #include "ARMTParameter.h"
 
+/*@mkdoc
+
+@group:Barlines
+
+@tagname:\bar
+@tagalias:\|
+@tagtype:P
+@tagnotation:a simple bar line
+@tagdesc
+@tagend
+
+@params:
+@param:displayMeasNum:boolean:displays measure number:false:true
+@param:numDx:unit:measure number displacement:0:true
+@param:numDy:unit:measure number displacement:0:true
+@paramdesc
+Measure numbering is attached to barlines. The **displayMeasNum** parameter activates or inhibits measures numbering.
+
+Measure numbering may also be activated at [\meter](ClefKeyMeter) level.
+@paramend
+
+*/
+
 /** \brief Bar tag
 */
 class ARBar : public ARMTParameter

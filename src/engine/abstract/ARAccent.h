@@ -18,6 +18,27 @@
 #include "ARArticulation.h"
 #include "TimeUnwrap.h"
 
+/*@mkdoc
+
+@group:Articulations
+
+@tagname:\accent
+@tagalias:\acc
+@tagtype:R
+@tagnotation:accent sign
+@tagdesc
+@tagend
+
+@params:
+@param:position:string:above or below:*none*:true
+@paramdesc
+Accent position is determined by the stem direction: the accent should be placed on the opposite side of the stem. When no stem is present, the accent is placed above.
+
+See the [Articulations](/examples/articulations/) example.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARAccent : public ARArticulation

@@ -19,6 +19,35 @@
 #include "ARPositionTag.h"
 #include "ARBeam.h"
 
+
+/*@mkdoc
+
+@group:Beaming
+
+@tagname:\fBeam
+@tagalias:\fbeamBegin fbeamEnd
+@tagtype:R
+@tagnotation:feathered beaming
+@tagdesc
+Feathered beaming is provided to support contemporary notation.
+
+Notes grouped under a feathered beam should express their duration normally.
+The spacing algorithm will take these durations into account to position them like any other note.
+The number of beams is computed according to the first and last notes durations.
+@tagend
+
+@params:
+@param:durations:string:used to control the number of beams:*none*:true
+@param:drawDuration:boolean:displays the effective duration of the beamed group:false:true
+@paramdesc
+- duration may be used to override the default strategy to compute the number of beams.
+It must be a string in the form "n/d,m/e" that express the number of beams for the begin and end of the group,
+under the form of two rationals denoting a duration.
+- drawDuration is used to display the actual total duration of the beamed group under the form of a rational value.
+@paramend
+
+*/
+
 /** \brief Abstract representation of a feathered beam.
 */
 class ARFeatheredBeam :  public ARBeam

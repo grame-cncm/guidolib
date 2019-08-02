@@ -17,6 +17,23 @@
 
 #include "ARBar.h"
 
+
+/*@mkdoc
+
+@group:Barlines
+
+@tagname:\endBar
+@tagalias:
+@tagtype:P
+@tagnotation:an end bar line
+@tagdesc
+@tagend
+
+@paramdesc
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARFinishBar: public ARBar  
@@ -27,7 +44,7 @@ class ARFinishBar: public ARBar
 		virtual ~ARFinishBar() {}
 
 		virtual const char*	getTagName() const		{ return "ARFinishBar"; };
-		virtual std::string getGMNName() const		{ return "\\finishBar"; };
+		virtual std::string getGMNName() const		{ return "\\endBar"; };
 
    		 ARMusicalObject *isARFinishBar()			{ return this; }
 };

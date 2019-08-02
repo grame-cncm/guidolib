@@ -17,6 +17,33 @@
 
 #include "ARMusicalTag.h"
 
+/*@mkdoc
+@group:Beaming
+
+@tagname:\beamsAuto
+@tagalias:
+@tagtype:P
+@tagnotation:set automatic beaming on
+@tagdesc
+@tagend
+
+@tagname:\beamsOff
+@tagalias:
+@tagtype:P
+@tagnotation:set automatic beaming off
+@tagdesc
+@tagend
+
+@tagname:\beamsFull
+@tagalias:
+@tagtype:P
+@tagnotation:set full automatic beaming on
+@tagdesc
+A rest inside a group of notes prevents automatic beaming unless full beaming is on.
+
+@tagend
+
+*/
 
 /** \brief not yet documented
 */

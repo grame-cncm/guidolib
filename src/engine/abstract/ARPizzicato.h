@@ -16,6 +16,29 @@
 
 #include "ARArticulation.h"
 
+/*@mkdoc
+
+@group:Articulations
+
+@tagname:\pizzicato
+@tagalias:\pizz
+@tagtype:R
+@tagnotation:pizzicato signs
+@tagdesc
+The **\pizzicato** tag supports various shapes, intended to different instruments.
+@tagend
+
+@params:
+@param:type:string:buzz, snap, bartok, fingernail, lefthand:lefthand:true
+@param:position:string:above or below:above:true
+@paramdesc
+Note that snap and bartok types are equivalent.
+
+See the [Articulations](/examples/articulations/) example.
+@paramend
+
+*/
+
 /*brief	The pizzicato articulation tag */
 class ARPizzicato : public ARArticulation
 {

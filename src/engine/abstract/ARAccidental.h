@@ -21,6 +21,27 @@
 /** \brief Abstract representation of an accidental element.
 */
 
+/*@mkdoc
+
+@group:Accidentals
+
+@tagname:\accidental
+@tagalias:\acc
+@tagtype:R
+@tagnotation:sharp, flat, natural, cautionary accidental
+@tagdesc
+The **\accidental** tag may be used for more precise control over accidentals. It supports common tag parameters.
+Used without parameter, it forces the display of an accidental (flat, sharp or natural).
+@tagend
+
+@params:
+@param:style:string:"cautionary" to enforce a cautionary accidental<br/>"none" to prevent an accidental display:*none*:true
+@paramdesc
+See the [Accidentals](/examples/accidentals/) example.
+@paramend
+
+*/
+
 class ARAccidental : public ARMTParameter, public ARPositionTag
 {
 	public:
