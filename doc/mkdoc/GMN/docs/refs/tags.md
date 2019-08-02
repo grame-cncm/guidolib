@@ -1,3 +1,4 @@
+{!tags.css!}
 
 
 # Tags 
@@ -30,28 +31,21 @@ where 'n' is an integer.
 See the [Slurs](/examples/slurs/) example.
 
 
-## Tags list
+## Tags list by section
 
-
-### \accelerando
-
-| Name | Variants | Type | Notation element |
-| :----| :--------| :----| :----------------|
-| \accel | \accelerando <br /> \accelerando  <br/> \accelerando | R-BE | Accelerando |
-
-#### Parameters
-Supports [text](/refs/tagsparams/#text-parameters) parameters
-
-
-
-### \accent
-
-| Name | Variants | Type | Notation element |
-| :----| :--------| :----| :----------------|
-| \accent |  | R | accent mark |
-
-#### Examples
-~~~~~~
-[ \clef<"g">  g \accent(a) g ]
-~~~~~~
+- [Accidentals](tags/Accidentals.md)
+- [Articulations](tags/Articulations.md)
+- [Barlines](tags/Barlines.md)
+- [Beaming](tags/Beaming.md)
+- [Clef Key Meter](tags/ClefKeyMeter.md)
+- [Dynamics](tags/Dynamics.md)
+- [Header](tags/Header.md)
+- [Layout](tags/Layout.md)
+- [Miscellaneous](tags/Miscellaneous.md)
+- [Notes](tags/Notes.md)
+- [Ornaments](tags/Ornaments.md)
+- [Repeat Signs](tags/RepeatSigns.md)
+- [Settings](tags/Settings.md)
+- [Tempo](tags/Tempo.md)
+- [Text](tags/Text.md)
 

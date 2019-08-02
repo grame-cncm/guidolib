@@ -1,4 +1,5 @@
 {!references.ref!}
+{!tags.css!}
 
 # Tag Parameters 
 
@@ -12,6 +13,21 @@ The general syntax for tag parameters is the following:
 
 where `value` is among:
 {!BNF/value.html!}
+
+
+
+## Values
+
+Values may be of different types among the following:
+
+- **string**: a double quoted string
+- **float**: a floating point or integer number
+- **unit**: a number followed by a unit string
+- **boolean**: a special string among:
+    - "true", "on", "yes" 
+    - "false", "off", "no" 
+
+Note that boolean values are not case sensitive. Also note that a string that is not in the *true* set is considered as false.
 
 
 
@@ -32,7 +48,7 @@ The supported units are:
 
 When not specified, the default unit is `hs`.
 
-### Examples
+### Example
 ~~~~~~
 {
 	[ \meter<"4/4"> \i<"p", dx=0.01m> d/2 e/4 f ],
