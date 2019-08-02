@@ -10,6 +10,11 @@ pdfbuild:
 serve:
 	mkdocs serve
 
+tagfiles:
+	rm -rf tmptags
+	[ -d tmptags ] || mkdir tmptags
+	awk -v OUT=tmptags -f maketag.awk ../../../src/engine/abstract/AR*.h
+
 tagslist.txt:
 	make -C ../../../build/ tags | egrep -v 'make|grep' | egrep -v $(IGNORED) | sort -u > tagslist.txt
 	
