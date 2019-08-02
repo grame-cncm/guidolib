@@ -3,17 +3,44 @@
 
 # Articulations
 
-This example shows nested and interleaved slurs. It makes also use of micro-tonality.
+This example shows various articulations marks.
+Il illustrates also the \glissando and \arpeggio tags.
 
 ~~~~~~
+{
 [
-	a/2 \slur( e2/4 
-	\slurBegin:1 \alter<detune=0.5>(g1) \slurBegin:3<curve="up"> e 
-	\slurBegin:2 c  \alter<detune=-0.5>(e) 
-	\slurEnd:1 f \slurEnd:3  \alter<detune=-1.5>(g) 
-	\slurEnd:2 a/1 )
+	\accol<id=1, range="1-2", type="none">	
+	\instr<"Accents",  autopos="on", fsize=10pt> 
+	\barFormat<"system">
+	\clef<"g"> \meter<"4/4">
+    \accent(b) \marcato(a1 b)
+    \stacc(a1 b) \ten(a1 b) \accent(c)
+],
+[
+	\instr<"Pizz.",  autopos="on", fsize=10pt> 
+	\clef<"g"> \meter<"4/4">
+	\pizz(g) _ \pizz<type="snap">(g) _ 
+	\pizz<"buzz">(g) _ \pizz<"fingernail">(g/2) 
+],
+[
+	\instr<"Fermata",  autopos="on", fsize=10pt> 
+	\clef<"g"> \meter<"4/4">
+	_ \fermata(c2) _ \fermata<type="short">(e) _ 
+	\fermata<"long">(c1) _ \fermata<position="below">(f)
+],
+[
+	\instr<"Mixed",  autopos="on", fsize=10pt> 
+	\clef<"g"> \meter<"4/4">
+    \accent(\stacc(b)) \marcato(\ten(a1 b))
+    \pizz<"buzz"> (\stacc(a1 b) \ten(a1 b)) \accent<position="above">(\ten(c))
+],
+[
+	\instr<"Arp & Gliss",  autopos="on", fsize=10pt> 
+	\clef<"g"> \meter<"4/4">
+    \glissando(b a g/2) _/8 \glissando(\arpeggio({e/4., g, b, d2}) {c1/2, e, g, b})
 ]
+}
 ~~~~~~
-<!-- {!GMN/examples/articulations.html!} -->
 
+{!GMN/examples/articulations.html!}
 

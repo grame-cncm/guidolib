@@ -11,40 +11,29 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \bar | \|       | P    | a simple bar line |
+| \bar | \| | P | a simple bar line |
+
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| displayMeasNum     | boolean   | displays measure number  | false   | true |
-| numDx     | unit   | measure number displacement  | 0   | true |
-| numDy     | unit   | measure number displacement  | 0   | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| displayMeasNum | boolean | displays measure number | false | true |
+| numDx | unit | measure number displacement | 0 | true |
+| numDy | unit | measure number displacement | 0 | true |
+
+Measure numbering is attached to barlines. The **displayMeasNum** parameter activates or inhibits measures numbering.
+
+Measure numbering may also be activated at [\meter](ClefKeyMeter) level.
+
+
+
 
 
 <br />
 
-
-## \barFormat
-
--------
-
-### Description
-
-| Name | Variants | Type | Notation element |
-| :----| :--------| :----| :----------------|
-| \barFormat |
-
-
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| style     | string   |   | stringtaff   | true |
-| range     | string   |   |    | true |
-
-<br />
 
 ## \doubleBar
 
@@ -54,14 +43,16 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \doubleBar |
+| \doubleBar |  | P | a double bar line |
 
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| style     | string   |   | stringtaff   | true |
-| range     | string   |   |    | true |
+
+
+
+The **\doubleBar** tag supports the same parameters than the **\bar** tag.
+
+
+
+
 
 <br />
 
@@ -74,14 +65,11 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \endBar |
+| \endBar |  | P | an end bar line |
 
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| style     | string   |   | stringtaff   | true |
-| range     | string   |   |    | true |
 
-<br />
+
+
+
+
 
