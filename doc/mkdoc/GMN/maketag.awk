@@ -84,6 +84,7 @@ END {
 	if (INDOC) {
 		GROUP = $2;
 		FILE = OUT "/" GROUP ".md"
+		gsub(/ /, "", FILE)
 		if ( file_exists(FILE)) {
 			print "\n\n<br />\n\n" >> FILE;
 		}
