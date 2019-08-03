@@ -1,317 +1,317 @@
 //
 //Common = 
-//| color     | string   |   | black   | true |
-//| dx     | unit   |   | 0   | true |
-//| dy     | unit   |   | 0   | true |
-//| size     | float   |   | 1.0   | true |
+//:color:string::black:true
+//:dx:unit::0:true
+//:dy:unit::0:true
+//:size:float::1.0:true
 //
 //FontAble = 
-//| textformat     | string   |   | rc   | true |
-//| font     | string   |   | Times   | true |
-//| fsize     | unit   |   | 9pt   | true |
-//| fattrib     | string   |   |    | true |
+//:textformat:string::rc:true
+//:font:string::Times:true
+//:fsize:unit::9pt:true
+//:fattrib:string:::true
 
 accelerando = 
-| tempo     | string   |   |    | true |
-| abstempo     | string   |   |    | true |
-| font     | string   |   | Times New Roman   | true |
-| fattrib     | string   |   |    | true |
-| fsize     | unit   |   | 9pt   | true |
+@param:tempo:string:::true
+@param:abstempo:string:::true
+@param:font:string::Times New Roman:true
+@param:fattrib:string:::true
+@param:fsize:unit::9pt:true
 
 
 auto = 
-| endBar     | string   |   | on   | true |
-| pageBreak     | string   |   | on   | true |
-| systemBreak     | string   |   | on   | true |
-| clefKeyMeterOrder     | string   |   | on   | true |
-| stretchLastLine     | string   |   | off   | true |
-| stretchFirstLine     | string   |   | off   | true |
-| lyricsAutoPos     | string   |   | off   | true |
-| instrAutoPos     | string   |   | off   | true |
-| intensAutoPos     | string   |   | off   | true |
-| autoEndBar     | string   |   | on   | true |
-| autoPageBreak     | string   |   | on   | true |
-| autoSystemBreak     | string   |   | on   | true |
-| autoClefKeyMeterOrder     | string   |   | on   | true |
-| autoStretchLastLine     | string   |   | off   | true |
-| autoStretchFirstLine     | string   |   | off   | true |
-| autoInstrPos     | string   |   | off   | true |
-| autoLyricsPos     | string   |   | off   | true |
-| autoIntensPos     | string   |   | off   | true |
+@param:endBar:string::on:true
+@param:pageBreak:string::on:true
+@param:systemBreak:string::on:true
+@param:clefKeyMeterOrder:string::on:true
+@param:stretchLastLine:string::off:true
+@param:stretchFirstLine:string::off:true
+@param:lyricsAutoPos:string::off:true
+@param:instrAutoPos:string::off:true
+@param:intensAutoPos:string::off:true
+@param:autoEndBar:string::on:true
+@param:autoPageBreak:string::on:true
+@param:autoSystemBreak:string::on:true
+@param:autoClefKeyMeterOrder:string::on:true
+@param:autoStretchLastLine:string::off:true
+@param:autoStretchFirstLine:string::off:true
+@param:autoInstrPos:string::off:true
+@param:autoLyricsPos:string::off:true
+@param:autoIntensPos:string::off:true
 
 
 
 accidental = 
-| style     | string   |   |    | true |
+@param:style:string:::true
 
 accolade = 
-| id     | integer   |   |    | false |
-| range     | string   |   |    | false |
-| type     | string   |   | stringtandard   | true |
+@param:id:integer:::false
+@param:range:string:::false
+@param:type:string::stringtandard:true
 
 alter = 
-| detune     | float   |   | 0.0   | false |
-| text     | string   |   |    | true |
+@param:detune:float::0.0:false
+@param:text:string:::true
 
 arpeggio = 
-| direction     | string   |   |    | true |
+@param:direction:string:::true
 
 articulation =
-| position     | string   |   |    | true |
+@param:position:string:::true
 
 barFormat = 
-| style     | string   |   | stringtaff   | true |
-| range     | string   |   |    | true |
+@param:style:string::stringtaff:true
+@param:range:string:::true
 
 bar = 
-| displayMeasNum     | string   |   | floatalse   | true |
-| numDx     | unit   |   | 0   | true |
-| numDy     | unit   |   | 0   | true |
+@param:displayMeasNum:string::floatalse:true
+@param:numDx:unit::0:true
+@param:numDy:unit::0:true
 
 beam = 
-| dy     | unit   |   | 0   | true |
-| dx1     | unit   |   | 0hs   | true |
-| dy1     | unit   |   | 0hs   | true |
-| dx2     | unit   |   | 0hs   | true |
-| dy2     | unit   |   | 1hs   | true |
-| dx3     | unit   |   | 0hs   | true |
-| dy3     | unit   |   | 0hs   | true |
-| dx4     | unit   |   | 0hs   | true |
-| dy4     | unit   |   | 1hs   | true |
+@param:dy:unit::0:true
+@param:dx1:unit::0hs:true
+@param:dy1:unit::0hs:true
+@param:dx2:unit::0hs:true
+@param:dy2:unit::1hs:true
+@param:dx3:unit::0hs:true
+@param:dy3:unit::0hs:true
+@param:dx4:unit::0hs:true
+@param:dy4:unit::1hs:true
 
 bowing = 
-| curve     | string   |   | down   | true |
-| dx1     | unit   |   | 2hs   | true |
-| dy1     | unit   |   | 1hs   | true |
-| dx2     | unit   |   | -2hs   | true |
-| dy2     | unit   |   | 1hs   | true |
-| r3     | float   |   | 0.5   | true |
-| h     | unit   |   | 2hs   | true |
+@param:curve:string::down:true
+@param:dx1:unit::2hs:true
+@param:dy1:unit::1hs:true
+@param:dx2:unit::-2hs:true
+@param:dy2:unit::1hs:true
+@param:r3:float::0.5:true
+@param:h:unit::2hs:true
 
 clef = 
-| type     | string   |   | treble   | false |"
+@param:type:string::treble:false |"
 
 cluster = 
-| hdx     | unit   |   | 0hs   | true |
-| hdy     | unit   |   | 0hs   | true |
+@param:hdx:unit::0hs:true
+@param:hdy:unit::0hs:true
 
 color = 
-| red     | float   |   | 0.0   | false |
-| green     | float   |   | 0.0   | false |
-| blue     | float   |   | 0.0   | false |
-| alpha     | float   |   | 0.0   | true |
+@param:red:float::0.0:false
+@param:green:float::0.0:false
+@param:blue:float::0.0:false
+@param:alpha:float::0.0:true
 
 composer = 
-| name     | string   |   |    | false |
-| pageformat     | string   |   | 53   | true |
-| textformat     | string   |   | rb   | true |
-| fsize     | unit   |   | 14pt   | true |
+@param:name:string:::false
+@param:pageformat:string::53:true
+@param:textformat:string::rb:true
+@param:fsize:unit::14pt:true
 
 cue = 
-| name     | string   |   |    | true |
-| fsize     | unit   |   | 9pt   | true |
+@param:name:string:::true
+@param:fsize:unit::9pt:true
 
 displayDuration =
-| n     | integer   |   |    | false |
-| d     | integer   |   |    | false |
-| ndots     | integer   |   | 0   | true |
+@param:n:integer:::false
+@param:d:integer:::false
+@param:ndots:integer::0:true
 
 dynamic = 
-| dx1     | unit   |   | 0   | true |
-| dx1     | unit   |   | 0   | true |
-| dx2     | unit   |   | 0   | true |
-| deltaY     | unit   |   | 3   | true |
-| thickness     | unit   |   | 0.16   | true |
-| autopos     | string   |   | off   | true |
+@param:dx1:unit::0:true
+@param:dx1:unit::0:true
+@param:dx2:unit::0:true
+@param:deltaY:unit::3:true
+@param:thickness:unit::0.16:true
+@param:autopos:string::off:true
 
 featheredBeam = 
-| durations     | string   |   |    | true |
-| drawDuration     | string   |   | floatalse   | true |
+@param:durations:string:::true
+@param:drawDuration:string::floatalse:true
 
 fermata = 
-| type     | string   |   |    | true |
-| position     | string   |   | above   | true |
+@param:type:string:::true
+@param:position:string::above:true
 
 fingering = 
-| position     | string   |   |    | true |
-| fsize     | unit   |   | 10pt   | true |
-| dx1     | "
+@param:position:string:::true
+@param:fsize:unit::10pt:true
+@param:dx1:"
 
 glissando = 
-			U   |   | 0   | true |
-| dy1     | unit   |   | 0   | true |
-| dx2     | unit   |   | 0   | true |
-| dy2     | unit   |   | 0   | true |
-| fill     | string   |   | floatalse   | true |
-| thickness     | unit   |   | 0.3   | true |
+			U::0:true
+@param:dy1:unit::0:true
+@param:dx2:unit::0:true
+@param:dy2:unit::0:true
+@param:fill:string::floatalse:true
+@param:thickness:unit::0.3:true
 
 grace = 
-| i     | integer   |   |    | true |
+@param:i:integer:::true
 
 harmony = 
-| text     | string   |   |    | false |
-| dy     | unit   |   | -1   | true |
-| ypos     | unit   |   | 0hs   | true |
-| textformat     | string   |   | cc   | true |
-| font     | string   |   | Arial   | true |
-| fsize     | unit   |   | 18pt   | true |
-| fattrib     | string   |   |    | true |
+@param:text:string:::false
+@param:dy:unit::-1:true
+@param:ypos:unit::0hs:true
+@param:textformat:string::cc:true
+@param:font:string::Arial:true
+@param:fsize:unit::18pt:true
+@param:fattrib:string:::true
 
 instrument = 
-| name     | string   |   |    | false |
-| transp     | string   |   |    | true |
-| autopos     | string   |   | off   | true |
+@param:name:string:::false
+@param:transp:string:::true
+@param:autopos:string::off:true
 
 intens = 
-| type     | string   |   |    | false |
-| before     | string   |   |    | true |
-| after     | string   |   |    | true |
-| font     | string   |   | Times   | true |
-| fsize     | unit   |   | 10pt   | true |
-| fattrib     | string   |   | integer   | true |
-| autopos     | string   |   | off   | true |
+@param:type:string:::false
+@param:before:string:::true
+@param:after:string:::true
+@param:font:string::Times:true
+@param:fsize:unit::10pt:true
+@param:fattrib:string::integer:true
+@param:autopos:string::off:true
 
 coda = 
-| m     | string   |   |    | true |
-| id     | integer   |   | 0   | true |
+@param:m:string:::true
+@param:id:integer::0:true
 
 key = 
-| key     | string   |   |    | false |
-| hideNaturals     | string   |   | floatalse   | true |
+@param:key:string:::false
+@param:hideNaturals:string::floatalse:true
 
 lyrics = 
-| text     | string   |   |    | false |
-| dy     | unit   |   | -3   | true |
-| textformat     | string   |   | ct   | true |
-| fsize     | unit   |   | 12pt   | true |
-| autopos     | string   |   | off   | true |
+@param:text:string:::false
+@param:dy:unit::-3:true
+@param:textformat:string::ct:true
+@param:fsize:unit::12pt:true
+@param:autopos:string::off:true
 
 marcato = 
-| position     | string   |   |    | true |
+@param:position:string:::true
 
 mark = 
-| text     | string   |   |    | false |
-| enclosure     | string   |   | none   | true |
-| dy     | unit   |   | 0   | true |
+@param:text:string:::false
+@param:enclosure:string::none:true
+@param:dy:unit::0:true
 
 meter = 
-| type     | string   |   | 4/4   | false |
-| autoBarlines     | string   |   | on   | true |
-| autoMeasuresNum     | string   |   | off   | true |
-| group     | string   |   | off   | true |
+@param:type:string::4/4:false
+@param:autoBarlines:string::on:true
+@param:autoMeasuresNum:string::off:true
+@param:group:string::off:true
 
 noteFormat = 
-| style     | string   |   | stringtandard   | true |
+@param:style:string::stringtandard:true
 
 octava = 
-| i     | integer   |   |    | false |"
+@param:i:integer:::false |"
 
 pageFormat = 
-| type     | string   |   |    | false |
-| w     | unit   |   |    | false |
-| h     | unit   |   |    | false |
-| lm     | unit   |   | 2cm   | true |
-| tm     | unit   |   | 5cm   | true |
-| rm     | unit   |   | 2cm   | true |
-| bm     | unit   |   | 3cm   | true |
+@param:type:string:::false
+@param:w:unit:::false
+@param:h:unit:::false
+@param:lm:unit::2cm:true
+@param:tm:unit::5cm:true
+@param:rm:unit::2cm:true
+@param:bm:unit::3cm:true
 
 pizzicato = 
-| type     | string   |   | lefthand   | true |
-| position     | string   |   |    | true |
+@param:type:string::lefthand:true
+@param:position:string:::true
 
 ritardando = 
-| tempo     | string   |   |    | true |
-| abstempo     | string   |   |    | true |
-| font     | string   |   | Times New Roman   | true |
-| fattrib     | string   |   |    | true |
-| fsize     | unit   |   | 9pt   | true |
+@param:tempo:string:::true
+@param:abstempo:string:::true
+@param:font:string::Times New Roman:true
+@param:fattrib:string:::true
+@param:fsize:unit::9pt:true
 
 space = 
-| dd     | unit   |   |    | false |"
+@param:dd:unit:::false |"
 
 special = 
-| char     | string   |   |    | false |"
+@param:char:string:::false |"
 
 staccato = 
-| type     | string   |   |    | true |
-| position     | string   |   |    | true |
+@param:type:string:::true
+@param:position:string:::true
 
 staffFormat = 
-| style     | string   |   | stringtandard   | true |
-| size     | unit   |   | 3pt   | true |
-| lineThickness     | float   |   | 0.08   | true |
-| distance     | unit   |   | 0hs   | true |
+@param:style:string::stringtandard:true
+@param:size:unit::3pt:true
+@param:lineThickness:float::0.08:true
+@param:distance:unit::0hs:true
 
 staff = 
-| id     | integer   |   |    | false |"
+@param:id:integer:::false |"
 
 symbol = 
-| file     | string   |   |    | false |
-| position     | string   |   | mid   | true |
-| w     | integer   |   |    | true |
-| h     | integer   |   |    | true |
+@param:file:string:::false
+@param:position:string::mid:true
+@param:w:integer:::true
+@param:h:integer:::true
 
 tempo = 
-| tempo     | string   |   |    | false |
-| bpm     | string   |   |    | true |
+@param:tempo:string:::false
+@param:bpm:string:::true
 
 textHarmony = 
-| text     | string   |   |    | false |
-| dy     | unit   |   | -1   | true |
-| textformat     | string   |   | lt   | true |
-| font     | string   |   | Arial   | true |
-| fsize     | unit   |   | 18pt   | true |
+@param:text:string:::false
+@param:dy:unit::-1:true
+@param:textformat:string::lt:true
+@param:font:string::Arial:true
+@param:fsize:unit::18pt:true
 
 text = 
-| text     | string   |   |    | false |
-| dy     | unit   |   | -1   | true |
-| textformat     | string   |   | lt   | true |
-| fsize     | unit   |   | 12pt   | true |
+@param:text:string:::false
+@param:dy:unit::-1:true
+@param:textformat:string::lt:true
+@param:fsize:unit::12pt:true
 
 title = 
-| name     | string   |   |    | false |
-| pageformat     | string   |   | c2   | true |
-| dy     | unit   |   | 0   | true |
-| fsize     | unit   |   | 24pt   | true |
-| textformat     | string   |   | cc   | true |
+@param:name:string:::false
+@param:pageformat:string::c2:true
+@param:dy:unit::0:true
+@param:fsize:unit::24pt:true
+@param:textformat:string::cc:true
 
 tremolo = 
-| style     | string   |   | ///   | true |
-| speed     | integer   |   | 32   | true |
-| pitch     | string   |   |    | true |
-| thickness     | unit   |   | 0.75   | true |
-| text     | string   |   |    | true |
+@param:style:string::///:true
+@param:speed:integer::32:true
+@param:pitch:string:::true
+@param:thickness:unit::0.75:true
+@param:text:string:::true
 
 trill = 
-| note     | string   |   |    | true |
-| type     | string   |   | prall   | true |
-| detune     | float   |   | 0.0   | true |
-| accidental     | string   |   |    | true |
-| dur     | integer   |   | 32   | true |
-| begin     | string   |   | on   | true |
-| adx     | unit   |   | 0hs   | true |
-| ady     | unit   |   | 0hs   | true |
-| tr     | string   |   | true   | true |
-| position     | string   |   | above   | true |
-| repeat     | string   |   | true   | true |
+@param:note:string:::true
+@param:type:string::prall:true
+@param:detune:float::0.0:true
+@param:accidental:string:::true
+@param:dur:integer::32:true
+@param:begin:string::on:true
+@param:adx:unit::0hs:true
+@param:ady:unit::0hs:true
+@param:tr:string::true:true
+@param:position:string::above:true
+@param:repeat:string::true:true
 
 stemsUp = 
-| length     | unit   |   | 7.0   | true |
+@param:length:unit::7.0:true
 
 tuplet = 
-| format     | string   |   |    | false |
-| position     | string   |   | above   | true |
-| dy1     | unit   |   | 0   | true |
-| dy2     | unit   |   | 0   | true |
-| lineThickness     | float   |   | 4   | true |
-| bold     | string   |   |    | true |
-| textSize     | float   |   | 1   | true |
-| dispNote     | string   |   |    | true |
+@param:format:string:::false
+@param:position:string::above:true
+@param:dy1:unit::0:true
+@param:dy2:unit::0:true
+@param:lineThickness:float::4:true
+@param:bold:string:::true
+@param:textSize:float::1:true
+@param:dispNote:string:::true
 
 units = 
-| type     | string   |   | cm   | false |"
+@param:type:string::cm:false |"
 
 volta = 
-| mark     | string   |   |    | false |
-| format     | string   |   |    | true |
+@param:mark:string:::false
+@param:format:string:::true
 
