@@ -1,6 +1,17 @@
 
 IGNORED := 'shareLocation|splitChord|chord|bembel|merge|port'
 
+####################################################################
+help:
+	@echo "Guido Music Notation format"
+	@echo "This Makefile is intended to generate the documentation"
+	@echo "Available targets are:"
+	@echo "  install : install the required components"
+	@echo "  build   : build the web site"
+	@echo "  server  : launch the mkdoc server"
+	@echo "  tagfiles: create the tags documention md files from the src files"
+
+####################################################################
 build:
 	mkdocs build
 
@@ -31,7 +42,7 @@ install:
 	pip install mkdocs
 	pip install mkdocs-pdf-export-plugin
 	pip install markdown-include
-	git clone https://github.com/tabatkins/railroad-diagrams.git
+#	git clone https://github.com/tabatkins/railroad-diagrams.git
 #	npm i railroad-diagrams
 
 uninstall:
