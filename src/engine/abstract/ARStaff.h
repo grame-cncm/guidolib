@@ -17,6 +17,31 @@
 
 #include "ARMTParameter.h"
 
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\staff
+@tagalias:
+@tagtype:P
+@tagnotation:set staff assignment
+@tagdesc
+@tagend
+
+The **\staff** tag is used to write multi-voice music on the same staff.
+
+@params:
+@param:id:integer:a staff number:*none*:false"
+@paramdesc
+'id' indicates a staff numer. All the elements between a \staff tag and the newt one
+(or the end of the voice) are assigned to the staff designated by id.
+
+See the [4 voices](/examples/4voices/) example.
+
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARStaff : public ARMTParameter

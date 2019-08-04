@@ -20,6 +20,27 @@
 
 class TagParameterString;
 
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\staffFormat
+@tagalias:
+@tagtype:P
+@tagnotation:sets the staff format
+@tagdesc
+@tagend
+
+@params:
+@param:style:string:a style string in the form n-lines:5-lines:true
+@param:lineThickness:float:the staff lines thickness:0.08:true
+@param:distance:unit:sets a fixed distance to the preceding staff:0hs:true
+@paramdesc
+Note: the **\staffFormat** tag supports common parameters but dx has no effect.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARStaffFormat : public ARMTParameter

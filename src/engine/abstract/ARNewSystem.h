@@ -17,6 +17,19 @@
 
 #include "ARMTParameter.h"
 
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\newLine
+@tagalias:\newSystem
+@tagtype:P
+@tagnotation:force a line break
+@tagdesc
+@tagend
+
+*/
+
 /** \brief not yet documented
 */
 

@@ -17,6 +17,20 @@
 
 #include "ARMTParameter.h"
 
+
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\staffOn
+@tagalias:
+@tagtype:P
+@tagnotation:cancel the effect of \staffOff
+@tagdesc
+@tagend
+
+*/
+
 /** \brief not yet documented
 */
 class ARStaffOn : public ARMTParameter

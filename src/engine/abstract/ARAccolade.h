@@ -20,6 +20,29 @@
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
 
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\accolade
+@tagalias:\accol
+@tagtype:P
+@tagnotation:accolades grouping staves
+@tagdesc
+@tagend
+
+@params:
+@param:id:integer:an identification number:*none*:false
+@param:range:string:the accolade range:*none*:false
+@param:type:string:straightBrace, standard, curlyBrace, thinBrace or none:standard:true
+@paramdesc
+- the accolade range describes the staves covered by the accolade. It's a string in the form "n-m" or "n",
+where 'n' and 'm' are staves indexes (starting from 1)
+- straightBrace and standard are equivalent
+@paramend
+
+*/
+
 /** \brief Accolade tag to group staves into accolades.
 */
 class ARAccolade : public ARMTParameter

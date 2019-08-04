@@ -17,6 +17,27 @@
 
 #include "ARMTParameter.h"
 
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\systemFormat
+@tagalias:
+@tagtype:P
+@tagnotation:sets the system format
+@tagdesc
+@tagend
+
+The **\systemFormat** tag is mainly used for indentation of the first system.
+
+@params:
+@param:dx:unit:sets a fixed distance to the preceding staff:0hs:true
+@paramdesc
+Note: the **\staffFormat** tag supports common parameters but only dx has an effect.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARSystemFormat : public ARMTParameter

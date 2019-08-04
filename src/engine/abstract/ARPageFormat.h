@@ -20,6 +20,33 @@
 
 #include "ARMTParameter.h"
 
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\pageFormat
+@tagalias:
+@tagtype:P
+@tagnotation:sets the page format
+@tagdesc
+@tagend
+
+The **\pageFormat** tag indicates the score page format. It should be set at the beginning of the first staff.
+When no page format is encountered, the default page format is 21cm x 29.6 (A4) and the margins are set to 2 cm.
+
+@params:
+@param:type:string:A4, A3 or letter:*none*:false when w and h are not present
+@param:w:unit:the page width:*none*:false when type is not present
+@param:h:unit:the page height:*none*:false when type is not present
+@param:lm:unit:the left margin size:2cm:true
+@param:tm:unit:the top margin size:5cm:true
+@param:rm:unit:the right margin size:2cm:true
+@param:bm:unit:the bottom margin size:3cm:true
+@paramdesc
+@paramend
+
+*/
+
 //class GRPage;
 
 /** \brief not yet documented
