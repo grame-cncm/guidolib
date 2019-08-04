@@ -38,6 +38,10 @@ return "\n### Parameters\n\n\
 | :------------ |:-------| :--------------| :------------- | :--------| "
 }
 
+function fontparams () {
+return "Supports [font parameters](/refs/tagsparams/#font)"
+}
+
 
 function param (name, type, desc, def, opt ) {
 	return "| " name " | " type " | " desc " | " def " | " opt " |" ;
@@ -108,6 +112,7 @@ END {
 
 /^@params:/			{ print startparam()  >> FILE; }
 /^@param:/			{ print param($2, $3, $4, $5, $6)  >> FILE; }
+/^@fontparams:/		{ print param($2, $3, $4, $5, $6)  >> FILE; }
 /^@paramdesc/		{ INPDESC = 1; }
 /^@paramend/		{ 
 	INPDESC = 0; 
