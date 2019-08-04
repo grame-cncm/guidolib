@@ -4,64 +4,31 @@ accelBegin:Tempo
 accelEnd:Tempo
 accelerando:Tempo
 accel:Tempo
-accent:Articulations
 accolade:Layout
 accol:Layout
 alter:Accidentals
-arpeggio:Articulations
 auto:Settings
 bar:Barlines
 barFormat:Barlines
-beam:Beaming
-bm:Beaming
-b:Beaming
-beamBegin:Beaming
-beamEnd:Beaming
-beamsAuto:Beaming
-beamsFull:Beaming
-beamsOff:Beaming
 breathMark:Articulations
-clef:Clef Key Meter
 cluster:Notes
 coda:Repeat Signs
 color:Layout
 colour:Layout
-composer:Header
-cresc:Dynamics
-crescendo:Dynamics
-crescBegin:Dynamics
-crescEnd:Dynamics
 cue:Notes
 daCapo:Repeat Signs
 daCapoAlFine:Repeat Signs
 daCoda:Repeat Signs
 dalSegno:Repeat Signs
 dalSegnoAlFine:Repeat Signs
-decresc:Dynamics
-decrescendo:Dynamics
-dim:Dynamics
-diminuendo:Dynamics
-decrescBegin:Dynamics
-dimBegin:Dynamics
-diminuendoBegin:Dynamics
-decrescEnd:Dynamics
-dimEnd:Dynamics
-diminuendoEnd:Dynamics
 dispDur:Notes
 displayDuration:Notes
 dotFormat:Notes
 doubleBar:Barlines
 endBar:Barlines
-fBeam:Beaming
-fBeamBegin:Beaming
-fBeamEnd:Beaming
-fermata:Articulations
 fine:Repeat Signs
 fingering:Text
 fing:Text
-glissando:Articulations
-glissandoBegin:Articulations
-glissandoEnd:Articulations
 grace:Notes
 harmonic:Articulations
 harmony:Text
@@ -72,15 +39,9 @@ headsReverse:Notes
 headsRight:Notes
 instrument:Text
 instr:Text
-intensity:Dynamics
-intens:Dynamics
-i:Dynamics
-key:Clef Key Meter
 label:Text
 lyrics:Text
-marcato:Articulations
 mark:Text
-meter:Clef Key Meter
 mordent:Ornaments
 mord:Ornaments
 newLine:Layout
@@ -92,8 +53,6 @@ octava:Notes
 pageFormat:Layout
 pedalOn:Articulations
 pedalOff:Articulations
-pizzicato:Articulations
-pizz:Articulations
 repeatBegin:Repeat Signs
 repeatEnd:Repeat Signs
 restFormat:Notes
@@ -103,17 +62,12 @@ ritardando:Tempo
 rit:Tempo
 segno:Repeat Signs
 set:Settings
-shortFermata:Articulations
 slur:Articulations
 sl:Articulations
 slurBegin:Articulations
 slurEnd:Articulations
 space:Miscellaneous
 special:Miscellaneous
-staccBegin:Articulations
-staccEnd:Articulations
-staccato:Articulations
-stacc:Articulations
 staff:Layout
 staffFormat:Layout
 staffOff:Layout
@@ -126,14 +80,11 @@ symbol:Miscellaneous
 s:Miscellaneous
 systemFormat:Layout
 tempo:Tempo
-tenuto:Articulations
-ten:Articulations
 text:Text
 t:Text
 tie:Notes
 tieBegin:Notes
 tieEnd:Notes
-title:Header
 tremolo:Repeat Signs
 trem:Repeat Signs
 tremoloBegin:Repeat Signs
