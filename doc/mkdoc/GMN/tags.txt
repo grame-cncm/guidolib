@@ -4,9 +4,6 @@ accelBegin:Tempo
 accelEnd:Tempo
 accelerando:Tempo
 accel:Tempo
-accolade:Layout
-accol:Layout
-alter:Accidentals
 auto:Settings
 bar:Barlines
 barFormat:Barlines
@@ -44,13 +41,9 @@ lyrics:Text
 mark:Text
 mordent:Ornaments
 mord:Ornaments
-newLine:Layout
-newSystem:Layout
-newPage:Layout
 noteFormat:Notes
 oct:Notes
 octava:Notes
-pageFormat:Layout
 pedalOn:Articulations
 pedalOff:Articulations
 repeatBegin:Repeat Signs
@@ -68,17 +61,12 @@ slurBegin:Articulations
 slurEnd:Articulations
 space:Miscellaneous
 special:Miscellaneous
-staff:Layout
-staffFormat:Layout
-staffOff:Layout
-staffOn:Layout
 stemsAuto:Notes
 stemsDown:Notes
 stemsOff:Notes
 stemsUp:Notes
 symbol:Miscellaneous
 s:Miscellaneous
-systemFormat:Layout
 tempo:Tempo
 text:Text
 t:Text
