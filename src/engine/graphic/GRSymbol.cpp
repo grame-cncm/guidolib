@@ -182,9 +182,9 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
 //        float currentSize = arSymbol->getSize();
         float positionStringDy;
 
-        if (!st->positionString.compare("top"))
+        if (st->positionString == "top")
             positionStringDy = - sizey * currentSize * kVirtualToPx - curLSPACE;
-        else if (!st->positionString.compare("bot"))
+        else if ((st->positionString == "bot") || (st->positionString == "bottom"))
             positionStringDy = 5 * curLSPACE;
         else //mid
             positionStringDy = 2 * curLSPACE - (sizey * currentSize * kVirtualToPx / 2);
