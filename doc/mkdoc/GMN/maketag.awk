@@ -4,9 +4,7 @@ function file_exists(file) {
   return 0;
 }
 
-function init() {
-	FILE = "";
-	GROUP = "";
+function taginit() {
 	NAME  = "";
 	ALIAS = "";
 	NOTATION = "";
@@ -18,6 +16,11 @@ function init() {
 	PDEFT = "";
 	POPT = "";
 	PNOTE = "";
+}
+function init() {
+	FILE = "";
+	GROUP = "";
+	taginit();
 }
 
 function start(group) {
@@ -39,7 +42,7 @@ return "\n### Parameters\n\n\
 }
 
 function fontparams () {
-return "Supports [font parameters](/refs/tagsparams/#font)"
+return "Supports [font parameters](/refs/tagsparams/#text-parameters)"
 }
 
 
@@ -99,22 +102,24 @@ END {
 	}
 }
 
-/^@tagname/ 		{ NAME = $2; }
+/^@tagname/ 		{ taginit(); NAME = $2; }
 /^@tagalias/		{ ALIAS= $2; }
 /^@tagtype/			{ TYPE = $2; }
 /^@tagnotation/		{ NOTATION = $2; }
 /^@tagdesc/			{ INDESC = 1; }
 /^@tagend/			{ 
 	INDESC = 0; 
-	print "Create " NAME " in group " GROUP; 
- 	print tagname(NAME, ALIAS, TYPE, NOTATION, DESC) >> FILE;
+	if (INDOC) {
+		print "Create " NAME " in group " GROUP; 
+	 	print tagname(NAME, ALIAS, TYPE, NOTATION, DESC) >> FILE;
+	 }
 }
 
-/^@params:/			{ print startparam()  >> FILE; }
-/^@param:/			{ print param($2, $3, $4, $5, $6)  >> FILE; }
-/^@fontparams:/		{ print param($2, $3, $4, $5, $6)  >> FILE; }
+/^@params:/			{ if (INDOC) print startparam()  >> FILE; }
+/^@param:/			{ if (INDOC) print param($2, $3, $4, $5, $6)  >> FILE; }
+/^@fontparams:/		{ if (INDOC) print fontparams()  >> FILE; }
 /^@paramdesc/		{ INPDESC = 1; }
 /^@paramend/		{ 
 	INPDESC = 0; 
-	print "\n" PNOTE "\n\n"  >> FILE;
+	if (INDOC) print "\n" PNOTE "\n\n"  >> FILE;
 }
