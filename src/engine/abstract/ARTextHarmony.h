@@ -34,10 +34,11 @@ class TagParameterString;
 @tagend
 
 @params:
-@param:text:string:::false
-@param:ypos:unit::0hs:true
+@param:text:string:the harmony string (e.g. C7):*none*:false
 @fontparams:
-@paramdesc
+@paramdes:
+**Note**: default settings (size, position) are still to be defined for the **\harmony** tag.
+The current settings are therefore subject to change.
 @paramend
 
 */

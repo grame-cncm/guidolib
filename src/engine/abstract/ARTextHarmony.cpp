@@ -19,6 +19,9 @@
 
 using namespace std;
 
+#ifndef WIN32
+#warning ("TODO: fix ARTextHarmony default settings");
+#endif
 
 ARTextHarmony::ARTextHarmony()
 {

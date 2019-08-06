@@ -22,6 +22,27 @@
 
 class ARLyrics;
 
+/*@mkdoc
+
+@group:Text
+
+@tagname:\text
+@tagalias:\label <br/> \t
+@tagtype:RP
+@tagnotation:textual elements
+@tagdesc
+The **\text** tag is both a range and a position tag. When a range is specified, the text doesn't take place: it is placed over the range.
+With no range, the text is inserted at its position.
+@tagend
+
+@params:
+@param:text:string:the text:*none*:false
+@fontparams:
+@paramdes:
+@paramend
+
+*/
+
 /** \brief The text tag
 */
 class ARText : public ARFontAble, public ARPositionTag

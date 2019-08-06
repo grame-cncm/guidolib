@@ -23,10 +23,10 @@
 class ARLabel : public ARText
 {
 	public:
-				 ARLabel() { rangesetting = RANGEDC; }
+				 ARLabel() {}
 		virtual ~ARLabel() {}
 
-		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getParamsStr() const	{ return kARTextParams; };
 		virtual const char*	getTagName() const		{ return "ARLabel"; };
 		virtual std::string getGMNName() const		{ return "\\label"; };
 };
