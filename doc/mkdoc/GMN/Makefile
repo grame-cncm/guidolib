@@ -1,5 +1,8 @@
 
-IGNORED := 'shareLocation|splitChord|chord|bembel|merge|port'
+
+IGNORED := "shareLocation|splitChord|chord|bembel|merge|port|shortFermata|color|colour|symbol"
+.PHONY: tagslist.txt
+
 
 ####################################################################
 help:
@@ -26,8 +29,11 @@ tagfiles:
 	[ -d tmptags ] || mkdir tmptags
 	awk -v OUT=tmptags -f maketag.awk ../../../src/engine/abstract/AR*.h
 
-tagslist.txt:
+tagslist: tagslist.txt
+
+tagslist.txt: 
 	make -C ../../../build/ tags | egrep -v 'make|grep' | egrep -v $(IGNORED) | sort -u > tagslist.txt
+	@echo Remove manually the 's' tag
 	
 chapters:
 	cat tags.txt | cut -d':' -f 2 | sort -u
