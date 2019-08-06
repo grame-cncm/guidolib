@@ -75,7 +75,7 @@ Supports the same parameters and the same note than [\accelerando](#accelerando)
 | bpm | string |  | *none* | true |
 
 - **tempo** is an arbitrary string that may contain a marker for note duration in the form "[n/d]" where 'n' and 'd' are integers.
-The corresponding mark is decoded as a note duration and replaced with the corresponding note symbol. Example: "Andante [1/4] = 80"
+The corresponding mark is decoded as a note duration and replaced with the corresponding note symbol. <br/>Example: "Andante [1/4] = 80"
 
 
 

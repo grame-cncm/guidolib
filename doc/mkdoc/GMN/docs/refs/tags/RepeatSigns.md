@@ -214,7 +214,7 @@
 | mark | string | the section mark, typically the ending number | *none* | false |
 | format | string | the volta format | *none* | true |
 
-- the **format** is a string in the form "|-|", "|-", "-|" or "_", that describes the shape of the line over the repeated section.
+- the **format** is a string in the form "|-|", "|-", "-|" or "-", that describes the shape of the line over the repeated section.
 
 
 
