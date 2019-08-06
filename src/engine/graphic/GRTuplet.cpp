@@ -250,6 +250,7 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 	hdc.PushPenWidth(thickness);
     if (mColRef) hdc.PushPenColor(VGColor(mColRef));
 	float thickoffset = thickness * mDirection / LSPACE;
+	float ypos = st->p2.y;
 	if (mShowLeftBrace) { //arTuplet->getLeftBrace()) // (mBraceState & BRACELEFT)
 		float p1X = st->p1.x + dxOffset;
 
@@ -258,17 +259,19 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 		}
 		if (charCount)
 			hdc.Line(p1X, st->p1.y, middleX - textSpace + dxOffset, middleY - slope * textSpace );
-		else
-			hdc.Line(p1X, st->p1.y, st->p2.x + dxOffset, middleY - slope * textSpace );
+		else {
+			ypos = middleY - slope * textSpace;
+			hdc.Line(p1X, st->p1.y, st->p2.x + dxOffset, ypos);
+		}
 	}
 
 	if (mShowRightBrace) { //arTuplet->getRightBrace()) // (mBraceState & BRACERIGHT)
 		float p2X = st->p2.x + dxOffset;
 		if (charCount)
-			hdc.Line(middleX + textSpace + dxOffset, middleY + slope * textSpace, p2X, st->p2.y);
+			hdc.Line(middleX + textSpace + dxOffset, middleY + slope * textSpace, p2X, ypos);
 
 		if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST) {
-			hdc.Line(p2X, st->p2.y - thickoffset, p2X, st->p2.y + 0.5f * LSPACE * mDirection);
+			hdc.Line(p2X, ypos - thickoffset, p2X, ypos + 0.5f * LSPACE * mDirection);
 		}
 	}
 	hdc.PopPenWidth();
