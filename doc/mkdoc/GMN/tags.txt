@@ -1,31 +1,65 @@
-acc:Accidentals
-accidental:Accidentals
+acc:Articulations
+accel:Tempo
 accelBegin:Tempo
 accelEnd:Tempo
 accelerando:Tempo
-accel:Tempo
+accent:Articulations
+accidental:Accidentals
+accol:Layout
+accolade:Layout
+alter:Accidentals
+arpeggio:Articulations
 auto:Settings
+b:Beaming
 bar:Barlines
 barFormat:Barlines
+beam:Beaming
+beamBegin:Beaming
+beamEnd:Beaming
+beamsAuto:Beaming
+beamsFull:Beaming
+beamsOff:Beaming
+bm:Beaming
 breathMark:Articulations
+clef:Clef Key Meter
 cluster:Notes
 coda:Repeat Signs
-color:Layout
-colour:Layout
+composer:Header
+cresc:Dynamics
+crescBegin:Dynamics
+crescEnd:Dynamics
+crescendo:Dynamics
 cue:Notes
 daCapo:Repeat Signs
 daCapoAlFine:Repeat Signs
 daCoda:Repeat Signs
 dalSegno:Repeat Signs
 dalSegnoAlFine:Repeat Signs
+decresc:Dynamics
+decrescBegin:Dynamics
+decrescEnd:Dynamics
+decrescendo:Dynamics
+dim:Dynamics
+dimBegin:Dynamics
+dimEnd:Dynamics
+diminuendo:Dynamics
+diminuendoBegin:Dynamics
+diminuendoEnd:Dynamics
 dispDur:Notes
 displayDuration:Notes
 dotFormat:Notes
 doubleBar:Barlines
 endBar:Barlines
+fBeam:Beaming
+fBeamBegin:Beaming
+fBeamEnd:Beaming
+fermata:Articulations
 fine:Repeat Signs
-fingering:Text
 fing:Text
+fingering:Text
+glissando:Articulations
+glissandoBegin:Articulations
+glissandoEnd:Articulations
 grace:Notes
 harmonic:Articulations
 harmony:Text
@@ -34,51 +68,73 @@ headsLeft:Notes
 headsNormal:Notes
 headsReverse:Notes
 headsRight:Notes
-instrument:Text
+i:Dynamics
 instr:Text
+instrument:Text
+intens:Dynamics
+intensity:Dynamics
+key:Clef Key Meter
 label:Text
 lyrics:Text
+marcato:Articulations
 mark:Text
-mordent:Ornaments
+meter:Clef Key Meter
 mord:Ornaments
+mordent:Ornaments
+newLine:Layout
+newPage:Layout
+newSystem:Layout
 noteFormat:Notes
 oct:Notes
 octava:Notes
-pedalOn:Articulations
+pageFormat:Layout
 pedalOff:Articulations
+pedalOn:Articulations
+pizz:Articulations
+pizzicato:Articulations
 repeatBegin:Repeat Signs
 repeatEnd:Repeat Signs
 restFormat:Notes
+rit:Tempo
+ritardando:Tempo
 ritBegin:Tempo
 ritEnd:Tempo
-ritardando:Tempo
-rit:Tempo
 segno:Repeat Signs
 set:Settings
-slur:Articulations
 sl:Articulations
+slur:Articulations
 slurBegin:Articulations
 slurEnd:Articulations
 space:Miscellaneous
 special:Miscellaneous
+stacc:Articulations
+staccato:Articulations
+staccBegin:Articulations
+staccEnd:Articulations
+staff:Layout
+staffFormat:Layout
+staffOff:Layout
+staffOn:Layout
 stemsAuto:Notes
 stemsDown:Notes
 stemsOff:Notes
 stemsUp:Notes
-symbol:Miscellaneous
-s:Miscellaneous
-tempo:Tempo
-text:Text
+systemFormat:Layout
 t:Text
+tempo:Tempo
+ten:Articulations
+tenuto:Articulations
+text:Text
 tie:Notes
 tieBegin:Notes
 tieEnd:Notes
-tremolo:Repeat Signs
+title:Header
 trem:Repeat Signs
-tremoloBegin:Repeat Signs
 tremBegin:Repeat Signs
-tremoloEnd:Repeat Signs
 tremEnd:Repeat Signs
+tremolo:Repeat Signs
+tremoloBegin:Repeat Signs
+tremoloEnd:Repeat Signs
 trill:Ornaments
 trillBegin:Ornaments
 trillEnd:Ornaments
