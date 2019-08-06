@@ -22,6 +22,28 @@ class TagParameterInt;
 class TagParameterFloat;
 class TagParameterString;
 
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\tremolo
+@tagalias:\trem <br />tremBegin tremEnd <br />tremoloBegin tremoloEnd
+@tagtype:R
+@tagnotation:displays a tremolo
+@tagdesc
+@tagend
+
+@params:
+@param:style:string:a strokes string:///:true
+@param:speed:integer:the tremolo speed:32:true
+@param:pitch:string:the pitch of the other note:*none*:true
+@param:thickness:unit:the stroke thickness:0.75:true
+@param:text:string:a string displayed over the strokes:*none*:true
+@paramdesc
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 

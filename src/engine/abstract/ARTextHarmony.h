@@ -22,6 +22,26 @@
 
 class TagParameterString;
 
+/*@mkdoc
+
+@group:Text
+
+@tagname:\harmony
+@tagalias:
+@tagtype:P
+@tagnotation:harmony marking
+@tagdesc
+@tagend
+
+@params:
+@param:text:string:::false
+@param:ypos:unit::0hs:true
+@fontparams:
+@paramdesc
+@paramend
+
+*/
+
 /** \brief The text tag
  */
 class ARTextHarmony : public ARFontAble, public ARPositionTag

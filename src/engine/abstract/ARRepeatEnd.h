@@ -20,6 +20,19 @@
 
 class ARRepeatBegin;
 
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\repeatEnd
+@tagalias:
+@tagtype:P
+@tagnotation:An end repeat bar
+@tagdesc
+@tagend
+
+*/
+
 /** \brief not yet documented
 */
 class ARRepeatEnd : public ARBar

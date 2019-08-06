@@ -24,6 +24,30 @@
 
 class TagParameterString;
 
+/*@mkdoc
+
+@group:Tempo
+
+@tagname:\accelerando
+@tagalias:\accel <br /> \accelBegin \accelEnd
+@tagtype:R
+@tagnotation:accelerando marks
+@tagdesc
+@tagend
+
+@params:
+@param:tempo:string:the tempo at the beginning:*none*:true
+@param:abstempo:string:the tempo at the end:*none*:true
+@fontparams:
+@paramdesc
+- **tempo** and **abstempo** are intended to be tempo values. A quarter note is inserted before these strings.
+
+**Note**: the implementation of the parameters is not satisfactory, in particular because the value of the time unit is hard coded.
+It will be revised in the future to integrate the encoding of the time unit into the tempo string.
+@paramend
+
+*/
+
 /** \brief The Accelerando position tag
 */
 class ARAccelerando :  public ARFontAble,  public ARPositionTag

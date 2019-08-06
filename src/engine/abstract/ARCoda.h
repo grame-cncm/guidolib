@@ -17,6 +17,19 @@
 #include "ARJump.h"
 #include "TimeMapper.h"
 
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\coda
+@tagalias:
+@tagtype:P
+@tagnotation:the code sign
+@tagdesc
+@tagend
+
+*/
+
 /** \brief Coda
 */
 class ARCoda : public ARJump

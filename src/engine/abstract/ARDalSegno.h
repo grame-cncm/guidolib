@@ -17,6 +17,27 @@
 #include "ARJump.h"
 #include "TimeUnwrap.h"
 
+
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\dalSegno
+@tagalias:
+@tagtype:P
+@tagnotation:Dal Segno
+@tagdesc
+@tagend
+
+@tagname:\dalSegnoAlFine
+@tagalias:
+@tagtype:P
+@tagnotation:Dal Segno al Fine
+@tagdesc
+@tagend
+
+*/
+
 /** \brief dal segno
 */
 class ARDalSegno : public ARJump

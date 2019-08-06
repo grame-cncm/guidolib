@@ -19,6 +19,27 @@
 //#include "ARFontAble.h"
 #include "FormatStringParser.h"
 
+/*@mkdoc
+
+@group:Tempo
+
+@tagname:\tempo
+@tagalias:
+@tagtype:P
+@tagnotation:a tempo mark
+@tagdesc
+@tagend
+
+@params:
+@param:tempo:string:a tempo string:*none*:false
+@param:bpm:string::*none*:true
+@paramdesc
+- **tempo** is an arbitrary string that may contain a marker for note duration in the form "[n/d]" where 'n' and 'd' are integers.
+The corresponding mark is decoded as a note duration and replaced with the corresponding note symbol. <br/>Example: "Andante [1/4] = 80"
+@paramend
+
+*/
+
 /** \brief The tempo tag parameter.
 
 	 new specs (2004)

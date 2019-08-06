@@ -17,6 +17,26 @@
 #include "ARJump.h"
 #include "TimeUnwrap.h"
 
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\daCapo
+@tagalias:
+@tagtype:P
+@tagnotation:Da Capo
+@tagdesc
+@tagend
+
+@tagname:\daCapoAlFine
+@tagalias:
+@tagtype:P
+@tagnotation:Da Capo al Fine
+@tagdesc
+@tagend
+
+*/
+
 /** \brief da capo
 */
 class ARDaCapo : public ARJump

@@ -19,6 +19,19 @@
 
 class ARRepeatEnd;
 
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\repeatBegin
+@tagalias:
+@tagtype:P
+@tagnotation:A begin repeat bar
+@tagdesc
+@tagend
+
+*/
+
 /** \brief The right facing repeat sign.
 */
 class ARRepeatBegin : public ARMTParameter

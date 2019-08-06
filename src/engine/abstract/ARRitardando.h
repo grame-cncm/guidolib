@@ -20,6 +20,20 @@
 
 class TagParameterString;
 
+/*@mkdoc
+
+@group:Tempo
+
+@tagname:\ritardando
+@tagalias:\rit <br /> \ritBegin \ritEnd
+@tagtype:R
+@tagnotation:ritardando marks
+@tagdesc
+Supports the same parameters and the same note than [\accelerando](#accelerando)
+@tagend
+
+*/
+
 /** \brief Ritardando tag
 */
 

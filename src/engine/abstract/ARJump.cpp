@@ -37,5 +37,5 @@ void ARJump::setTagParameters (const TagParameterMap& params)
 		mMark.clear();
 		p.parse (mark.c_str(), mMark);
 	}
-	mID = getParameter<TagParameterInt>(kIDStr, true)->getValue();
+//	mID = getParameter<TagParameterInt>(kIDStr, true)->getValue();
 }

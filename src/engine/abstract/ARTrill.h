@@ -23,6 +23,84 @@ class ARKey;
 
 #define kNoAccidental -9999.f
 
+
+/*@mkdoc
+
+@group:Ornaments
+
+@tagname:\mordent
+@tagalias:\mord
+@tagtype:R
+@tagnotation:a mordent
+@tagdesc
+@tagend
+
+@params:
+@param:note:string:a note, part of the ornament:*none*:true
+@param:type:string:prall, prallprall, inverted or prallinverted:prall:true
+@param:detune:float:note tuning (for microtonality):0.0:true
+@param:accidental:string:cautionary or force:*none*:true
+@param:adx:unit:accidental displacement (if any):0hs:true
+@param:ady:unit:accidental displacement (if any):0hs:true
+@param:position:string:above, below:above:true
+@paramdesc
+- **note** is intended to indicate accidentals, the note itself is not displayed but the possible accidental does.
+- **detune** is applied to the **note** parameter and works similarly as [\alter](/refs/tags/Accidentals#alter)
+- **accidental** is intended is intended to control how the accidental is displayed
+
+See the [Articulations](/examples/articulations/) example.
+@paramend
+
+
+@tagname:\trill
+@tagalias:\trillBegin \trillEnd
+@tagtype:R
+@tagnotation:a turn ornament
+@tagdesc
+@tagend
+
+@params:
+@param:note:string:a note, part of the ornament:*none*:true
+@param:detune:float:note tuning (for microtonality):0.0:true
+@param:accidental:string:cautionary or force:*none*:true
+@param:adx:unit:accidental displacement (if any):0hs:true
+@param:ady:unit:accidental displacement (if any):0hs:true
+@param:begin:boolean:for trill continuations:on:true
+@param:tr:boolean:show/hide the leading "tr" string:true:true
+@param:position:string:above, below:above:true
+@paramdesc
+- **begin** is intended for trill continutation. When false, the trill continues the preceding one (if any). It allows to write new trills with changing accidentals without breaking it.
+- **tr** show or hide the leading "tr" string
+
+other parameters have the same effect as for [\mordent](#mordent)
+
+See the [Articulations](/examples/articulations/) example.
+@paramend
+
+
+
+@tagname:\turn
+@tagalias:
+@tagtype:R
+@tagnotation:a turn ornament
+@tagdesc
+@tagend
+
+@params:
+@param:note:string:a note, part of the ornament:*none*:true
+@param:type:string:inverted or regular:regular:true
+@param:detune:float:note tuning (for microtonality):0.0:true
+@param:accidental:string:cautionary or force:*none*:true
+@param:adx:unit:accidental displacement (if any):0hs:true
+@param:ady:unit:accidental displacement (if any):0hs:true
+@param:position:string:above, below:above:true
+@paramdesc
+The parameters have the same effect as for [\mordent](#mordent)
+@paramend
+
+
+*/
+
 /** \brief not yet documented
 */
 class ARTrill : public ARMTParameter, public ARPositionTag
@@ -63,7 +141,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 				bool	getShowTR() const			{ return fShowTR;}
 //				bool	getAnchor()	const			{ return fDrawOnNoteHead;}
 				POS		getTrillPos()const			{ return fTrillPosition; }
-				int		getRepeat()	const			{ return fRepeat;}
+//				int		getRepeat()	const			{ return fRepeat;}
 				const std::string&	getTrilledNote()	const	{ return fTrilledNote;}
 
 				void	setContinue()				{ fBegin = false; }
@@ -83,7 +161,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		bool	fShowTR;
 		POS		fTrillPosition;
 //		bool	fDrawOnNoteHead;
-		int		fRepeat;
+//		int		fRepeat;
 		float	fAdx;
 		float	fAdy;
 		bool	fBegin;	

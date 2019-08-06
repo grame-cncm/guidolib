@@ -17,6 +17,26 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\volta
+@tagalias:\voltaBegin \voltaEnd
+@tagtype:R
+@tagnotation:support for multiple endings in repreated sections
+@tagdesc
+@tagend
+
+@params:
+@param:mark:string:the section mark, typically the ending number:*none*:false
+@param:format:string:the volta format:*none*:true
+@paramdesc
+- the **format** is a string in the form "|-|", "|-", "-|" or "-", that describes the shape of the line over the repeated section.
+@paramend
+
+*/
+
 /** \brief for different repeat endings
 */
 class ARVolta : public ARMTParameter, public ARPositionTag

@@ -17,6 +17,19 @@
 #include "ARJump.h"
 #include "TimeUnwrap.h"
 
+/*@mkdoc
+
+@group:Repeat Signs
+
+@tagname:\daCoda
+@tagalias:
+@tagtype:P
+@tagnotation:Da Coda
+@tagdesc
+@tagend
+
+*/
+
 /** \brief to coda (\\daCoda tag)
 */
 class ARDaCoda : public ARJump

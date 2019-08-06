@@ -17,6 +17,26 @@
 
 #include "ARText.h"
 
+/*@mkdoc
+
+@group:Text
+
+@tagname:\fingering
+@tagalias:\fing
+@tagtype:P
+@tagnotation:fingering
+@tagdesc
+@tagend
+
+@params:
+@param:position:string:above or below:*none*:true
+@fontparams:
+@paramdesc
+The default position for fingering is close to the note head. When **position** is specified, the fingering is placed above or below the note, avoiding collisions with the stems and always outside the staff.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARFingering : public ARText

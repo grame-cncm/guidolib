@@ -34,12 +34,12 @@ class ARJump : public ARMTParameter
 		virtual void setTagParameters (const TagParameterMap& params);
 
 		const FormatStringParserResult&   getMark() const   { return mMark; }
-		int								  getID() const     { return mID; }
+//		int								  getID() const     { return mID; }
 		const ARMusicalObject *			  isARJump() const	{ return this; }
 
 	private:
 		FormatStringParserResult	mMark;
-		int							mID;             // the tag ID
+//		int							mID;             // the tag ID
 };
 
 #endif
