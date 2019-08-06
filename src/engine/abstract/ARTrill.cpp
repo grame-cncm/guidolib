@@ -33,14 +33,12 @@ ARTrill::ARTrill(ORNAMENT typ, const ARKey* currentKey) : ARMTParameter(), fCurr
 
 	rangesetting            = ONLY;
 	fChordType				= ARMusicalVoice::UP_SIMPLE;
-//	fChordAccidental			= ARMusicalVoice::NONE;
 	fCautionaryAccidental	= false;
 	fForceAccidental		= false;
 	fShowTR                 = true;
-//	fDrawOnNoteHead            = false;
 	fTrillPosition			= AUTO;
 	fAdx = fAdy				= 0;
-	fRepeat					= kUndefined;
+//	fRepeat					= kUndefined;
 	fBegin					= true;
 }
 
@@ -50,21 +48,16 @@ ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy)
 	copyParameters (copy->getTagParameters());
 	fCurrentKey					= copy->fCurrentKey;
 
-//	setTagParameters (copy->getTagParameters());
-
 	rangesetting        = ONLY;
 
 	fTrillType			= copy->getOrnament();
 	fType				= copy->getType();
-//	fChordType			= copy->getChordType();
 	fAccidental			= copy->getIsAuto() ?  kNoAccidental : copy->getAccidental();
-//	fChordAccidental	= copy->getChordAccidental();
 	fCautionaryAccidental= copy->getCautionary();
 	fForceAccidental	= copy->fForceAccidental;
 	fShowTR				= copy->fShowTR;
-//	fDrawOnNoteHead		= copy->fDrawOnNoteHead;
 	fTrillPosition		= copy->fTrillPosition;
-	fRepeat				= copy->fRepeat;
+//	fRepeat				= copy->fRepeat;
 	fAdx				= copy->getadx();
 	fAdy				= copy->getady();
 	fBegin				= copy->getStatus();
@@ -179,7 +172,7 @@ void ARTrill::setTagParameters (const TagParameterMap& params)
 //	p = getParameter<TagParameterString>(kAnchorStr);
 //	if (p) fDrawOnNoteHead = string(p->getValue()) == "note";
 	p = getParameter<TagParameterString>(kRepeatStr);
-	if (p) fRepeat = p->getBool() ? kOn : kOff;
+//	if (p) fRepeat = p->getBool() ? kOn : kOff;
 	
 	fBegin = getParameter<TagParameterString>(kBeginStr, true)->getBool();
 	fAccidental = fTrilledNote.size() ? getAccidental (fTrilledNote, fCurrentKey) : kNoAccidental;
