@@ -7,7 +7,7 @@
 % whereas, in the case of two notes explicitely tied by the user, each one will have its own trill.
 
 {
-[\meter<"2/4">\tieBegin \trill(a) \trill(g) \trill(g) \tieEnd],
+[\meter<"2/4">\tieBegin \trill(g) \trill(g) \trill(g) \tieEnd],
 [\meter<"2/4">\tie( \trill(a) \trill(\tie(g g)))],
 [\meter<"2/4">\trill(a) \trill(g/2)]
 }
