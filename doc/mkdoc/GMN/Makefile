@@ -23,7 +23,7 @@ pdfbuild:
 	ENABLE_PDF_EXPORT=1 && mkdocs build
 
 serve:
-	export LC_ALL=fr_FR.UTF-8 && export LANG=fr_FR.UTF-8 && mkdocs serve
+	mkdocs serve
 
 tagfiles:
 	rm -rf tmptags
