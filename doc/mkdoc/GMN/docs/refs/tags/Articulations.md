@@ -33,7 +33,7 @@ See the [Articulations](/examples/articulations/) example.
 <br />
 
 
-## \arpeggio
+## \breathMark
 
 -------
 
@@ -41,23 +41,7 @@ See the [Articulations](/examples/articulations/) example.
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \arpeggio |  | R | an arpeggio sign |
-
-The **\arpeggio** tag displays arpeggio signs and should be applied to chords only.
-It has no effect on single notes.
-
-
-
-### Parameters
-
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------| 
-| direction | string | up or down | *none* | true |
-
-- up: to display an up arrow
-- down: to display a down arrow
-
-See the [Articulations](/examples/articulations/) example.
+| \breathMark |  | P | a breath mark |
 
 
 
@@ -76,8 +60,6 @@ See the [Articulations](/examples/articulations/) example.
 | :----| :--------| :----| :----------------|
 | \fermata |  | RP | fermata signs |
 
-The **\arpeggio** tag displays arpeggio signs and should be applied to chords only.
-It has no effect on single notes.
 
 
 
@@ -143,8 +125,6 @@ See a [glissando](/examples/articulations/) example.
 | :----| :--------| :----| :----------------|
 | \marcato |  | RP | marcato sign |
 
-The **\arpeggio** tag displays arpeggio signs and should be applied to chords only.
-It has no effect on single notes.
 
 
 
@@ -157,6 +137,43 @@ It has no effect on single notes.
 Note that depending on the position, the glyph for the marcato sign is not the same.
 
 See the [Articulations](/examples/articulations/) example.
+
+
+
+
+
+<br />
+
+
+## \pedalOn
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \pedalOn |  | P | a pedal indication |
+
+
+
+
+
+
+
+## \pedalOff
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \pedalOff |  | P | a pedal indication |
+
+
+
+
 
 
 
@@ -189,6 +206,42 @@ The **\pizzicato** tag supports various shapes, intended to different instrument
 Note that snap and bartok types are equivalent.
 
 See the [Articulations](/examples/articulations/) example.
+
+
+
+
+
+<br />
+
+
+## \slur
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \slur | \sl <br />slurBegin \slurEnd | R | slur |
+
+
+
+
+### Parameters
+
+| Name        	| Type   | Description    | Default value  | Optional |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| curve | string | up or down | *none* | true |
+| dx1 | unit | displacement of the left anchor point | 2hs | true |
+| dy1 | unit | displacement of the left anchor point | 1hs | true |
+| dx2 | unit | displacement of the right anchor point | -2hs | true |
+| dy2 | unit | displacement of the right anchor point | 1hs | true |
+| r3 | float | displacement of the inflection point | 0.5 | true |
+| h | unit | height of the curve | 2hs | true |
+
+The **r3** parameter should be between 0 (leftmost) and 1 (rightmost).
+
+See the [Slurs](/examples/slurs/) example.
 
 
 

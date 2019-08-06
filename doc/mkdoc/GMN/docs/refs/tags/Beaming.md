@@ -27,7 +27,10 @@ Beaming is automatically computed according to the current meter. Manual beaming
 
 *dy* parameters adjust the position of the beams relative to the note head.
 
-Know issue: *dy* fails when the stems are down.
+Known issue: *dy* fails when the stems are down.
+
+See the [Beaming](/examples/beaming/) example.
+
 
 
 
@@ -104,10 +107,12 @@ The number of beams is computed according to the first and last notes durations.
 | durations | string | used to control the number of beams | *none* | true |
 | drawDuration | boolean | displays the effective duration of the beamed group | false | true |
 
-- duration may be used to override the default strategy to compute the number of beams.
+- **duration** may be used to override the default strategy to compute the number of beams.
 It must be a string in the form "n/d,m/e" that express the number of beams for the begin and end of the group,
-under the form of two rationals denoting a duration.
-- drawDuration is used to display the actual total duration of the beamed group under the form of a rational value.
+under the form of two rationals denoting durations. For example, "1/8,1/32" indicates that the group starts with
+- **drawDuration** is used to display the actual total duration of the beamed group under the form of a rational value.
+
+See the [Beaming](/examples/beaming/) example.
 
 
 

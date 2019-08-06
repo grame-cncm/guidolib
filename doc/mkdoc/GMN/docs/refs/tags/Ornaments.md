@@ -1,9 +1,9 @@
-{!references.ref!}
+{!tags.css!}
 
 # Ornaments
 
 
-## \trill
+## \arpeggio
 
 -------
 
@@ -11,25 +11,23 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \trill |
+| \arpeggio |  | R | an arpeggio sign |
+
+The **\arpeggio** tag displays arpeggio signs and should be applied to chords only.
+It has no effect on single notes.
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| note     | string   |   |    | true |
-| type     | string   |   | prall   | true |
-| detune     | float   |   | 0.0   | true |
-| accidental     | string   |   |    | true |
-| dur     | integer   |   | 32   | true |
-| begin     | string   |   | on   | true |
-| adx     | unit   |   | 0hs   | true |
-| ady     | unit   |   | 0hs   | true |
-| tr     | string   |   | true   | true |
-| position     | string   |   | above   | true |
-| repeat     | string   |   | true   | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| direction | string | up or down | *none* | true |
+
+- up: to display an up arrow
+- down: to display a down arrow
+
+See the [Articulations](/examples/articulations/) example.
 
 
-<br />
 

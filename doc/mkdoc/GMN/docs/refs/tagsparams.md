@@ -123,7 +123,7 @@ A combination of the following characters:
   
 ### Examples
 ~~~~~~
-[ \clef<"f"> \text<"hello world", fsize=6pt, fattrib="bi"> ]
+[ \clef<"f"> \text<"hello world", fsize=6pt, fattrib="bi", dy=3.9> ]
 ~~~~~~
 {!GMN/font.html!}
 

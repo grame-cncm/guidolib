@@ -36,7 +36,14 @@ nav:
         - '4Voices': examples/4voices.md
         - 'Accidentals': examples/accidentals.md
         - 'Articulations': examples/articulations.md
+        - 'Barlines': examples/barlines.md
+        - 'Beaming': examples/beaming.md
+        - 'ClefKeyMeter': examples/clefkeymeter.md
+        - 'Dynamics': examples/dynamics.md
+        - 'Layout': examples/layout.md
+        - 'Mozart Quintet': examples/mozart581.md
         - 'Slurs': examples/slurs.md
+        - 'Ties & Space': examples/space.md
     - About: about.md
 
 #theme: readthedocs

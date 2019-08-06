@@ -26,7 +26,40 @@
 
 Measure numbering is attached to barlines. The **displayMeasNum** parameter activates or inhibits measures numbering.
 
-Measure numbering may also be activated at [\meter](ClefKeyMeter) level.
+Measure numbering may also be activated at [\meter](/refs/tags/ClefKeyMeter) level.
+
+See the [Barlines](/examples/barlines/) example.
+
+
+
+
+
+<br />
+
+
+## \barFormat
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \barFormat |  | P | describes the span of a barline. |
+
+
+
+
+### Parameters
+
+| Name        	| Type   | Description    | Default value  | Optional |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| style | string | system or staff | staff | true |
+| range | string | only for system style - indicates the range of staves covered by the bar | *none* | true |
+
+- the **range** string must be in the form *"n-m"* where 'n' and 'm' are integer numbers denoting staff indexes (starting from 1)
+
+See the [Barlines](/examples/barlines/) example.
 
 
 
@@ -50,6 +83,8 @@ Measure numbering may also be activated at [\meter](ClefKeyMeter) level.
 
 The **\doubleBar** tag supports the same parameters than the **\bar** tag.
 
+See the [Barlines](/examples/barlines/) example.
+
 
 
 
@@ -67,6 +102,8 @@ The **\doubleBar** tag supports the same parameters than the **\bar** tag.
 | :----| :--------| :----| :----------------|
 | \endBar |  | P | an end bar line |
 
+A finish bar is automatically inserted at the end of a piece, unless otherwise specified.
+See also the [auto](/refs/tags/Settings) tag.
 
 
 

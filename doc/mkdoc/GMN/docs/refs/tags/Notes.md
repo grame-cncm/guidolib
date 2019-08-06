@@ -1,4 +1,4 @@
-{!references.ref!}
+{!tags.css!}
 
 # Notes
 
@@ -11,15 +11,22 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \cluster |
+| \cluster |  | R | transform chords into clusters |
+
+The **\cluster** takes the highest and lowest notes of a chord and transforms the range into a cluster
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| hdx     | unit   |   | 0hs   | true |
-| hdy     | unit   |   | 0hs   | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| hdx | unit | displacement relative to the chord | 0hs | true |
+| hdy | unit | displacement relative to the chord | 0hs | true |
+
+
+
+
 
 
 <br />
@@ -33,15 +40,23 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \cue |
+| \cue |  | R | cue notes |
+
+Regarding the notes, the **\cue** tag is equivalent to **\noteFormat<color="blue", size=0.6>** tag.
+Cue notes are colored in blue by default. You can override that with  [**\noteFormat**](#noteFormat)
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| name     | string   |   |    | true |
-| fsize     | unit   |   | 9pt   | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| name | string | the cue description | *none* | true |
+Supports [font parameters](/refs/tagsparams/#text-parameters)
+
+
+
+
 
 
 <br />
@@ -55,16 +70,44 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \displayDuration |
+| \displayDuration | \dispDur | RP | display an arbitrary duration for a note |
+
+The duration to display is indicated by a rational value. Provision is also made to display dots.
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| n     | integer   |   |    | false |
-| d     | integer   |   |    | false |
-| ndots     | integer   |   | 0   | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| n | integer | the duration numerator | *none* | false |
+| d | integer | the duration denominator | *none* | false |
+| ndots | integer | the number of dots | 0 | true |
+
+
+
+
+
+
+<br />
+
+
+## \dotFormat
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \dotFormat |  | RP | control the dots format |
+
+The **\dotFormat** tag supports both a range and a position form.
+For the latter, the format is applied up to the next format specification or to the end of the voice.
+
+**\dotFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to dots.
+
+
 
 
 <br />
@@ -78,14 +121,31 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \grace |
+| \grace |  | R | display grace notes |
 
 
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| i     | integer   |   |    | true |
+
+
+
+<br />
+
+
+## \harmonic
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \harmonic |  | R | an harmonic sign |
+
+
+
+
+
+
+
 
 
 <br />
@@ -99,14 +159,28 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \noteFormat |
+| \noteFormat |  | RP | control the notes format |
+
+The **\noteFormat** tag supports both a range and a position form.
+For the latter, the format is applied up to the next format specification or to the end of the voice.
+
+**\noteFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to notes.
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| style     | string   |   | stringtandard   | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| style | string | the notehead style (see below) | standard | true |
+
+The notehead style should be among "diamond", "x", "square", "round", "triangle" and "reversedTriangle".
+
+In addition, each style supports 3 types of variations that consist in enclosing the string into (), <> or [].<br />
+For standard notehead, these variations are simply the  "()", "<>" or "[]" strings.
+
+
+
 
 
 <br />
@@ -120,17 +194,176 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \octava |
+| \octava | \oct | RP | displays an octava sign and transposes the notes accordingly |
+
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| i     | integer   |   |    | false |"
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| i | integer | a signed number of octaves (up or down) | *none* | false |
+
+
+
+
 
 
 <br />
+
+
+## \restFormat
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \restFormat |  | RP | control the rest format |
+
+The **\restFormat** tag supports both a range and a position form.
+For the latter, the format is applied up to the next format specification or to the end of the voice.
+
+**\restFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to rest.
+
+
+
+
+<br />
+
+
+## \headsCenter
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \headsCenter |  | RP | moves the notehead centered on the stem |
+
+The **\headsCenter** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+
+## \headsLeft
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \headsLeft |  | RP | force the notehead to the left of the stem |
+
+The **\headsLeft** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+
+## \headsRight
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \headsRight |  | RP | force the notehead to the right of the stem |
+
+The **\headsRight** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+
+## \headsNormal
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \headsNormal |  | RP | cancel a previous *head* specification and reverts to normal head position. |
+
+The **\headsNormal** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+
+## \headsReverse
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \headsReverse |  | RP | moves the notehead on the opposite side of the normal position |
+
+The **\headsReverse** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+
+
+
+<br />
+
+
+## \stemsOff
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \stemsOff |  | P | disable stems drawing |
+
+
+
+## \stemsAuto
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \stemsAuto |  | P | cancel \stemsOff and enable automatic stems direction |
+
+
+
+
+### Parameters
+
+| Name        	| Type   | Description    | Default value  | Optional |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| length | unit | the stem length | 7.0 | true |
+
+
+
+
+## \stemsDown
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \stemsDown |  | P | force stem direction to down |
+
+
+
+
+### Parameters
+
+| Name        	| Type   | Description    | Default value  | Optional |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| length | unit | the stem length | 7.0 | true |
+
+See the [4 voices](/examples/4voices/) example.
+
 
 
 ## \stemsUp
@@ -141,14 +374,45 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \stemsUp |
+| \stemsUp |  | P | force stem direction to up |
+
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| length     | unit   |   | 7.0   | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| length | unit | the stem length | 7.0 | true |
+
+See the [4 voices](/examples/4voices/) example.
+
+
+
+
+
+<br />
+
+
+## \tie
+
+-------
+
+### Description
+
+| Name | Variants | Type | Notation element |
+| :----| :--------| :----| :----------------|
+| \tie | \tieBegin \tieEnd | R | tie between successive notes |
+
+The ties parameters are similar to those of [slurs](/refs/tags/Articulations/#slur).
+Apart from moving the curve 'up' or 'down', there is no reason to change the other parameters
+
+
+
+See the [Tie](/examples/space/) example.
+
+
+
 
 
 <br />
@@ -162,22 +426,28 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \tuplet |
+| \tuplet |  | R | displays an octava sign and transposes the notes accordingly |
+
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| format     | string   |   |    | false |
-| position     | string   |   | above   | true |
-| dy1     | unit   |   | 0   | true |
-| dy2     | unit   |   | 0   | true |
-| lineThickness     | float   |   | 4   | true |
-| bold     | string   |   |    | true |
-| textSize     | float   |   | 1   | true |
-| dispNote     | string   |   |    | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| format | string | a format string for shape control | *none* | false |
+| position | string | below or above | above | true |
+| dy1 | unit | displacement of the left anchor point | 0 | true |
+| dy2 | unit | displacement of the right anchor point | 0 | true |
+| lineThickness | float | the tuplet line thickness (if any) | 4 | true |
+| bold | boolean | to use bold font | false | true |
+| textSize | float | the text size | 1 | true |
+| dispNote | string | a note duration | *none* | true |
+
+- the **format** string must be in "x", "-x-", "x:y", "-x:y-", or "--"
+where 'x' and 'y' are the numbers and '-' denotes the presence of left and right tuplet braces.
+- **textSize** is a ratio: 1 is for nominal size
+- **dispNote** is similar to [\displayDuration](#displayduration): it forces the notes appearance whatever their duration. The **dispNote** string must be in the form "/n", where n is a number (e.g. "/16" to display sixteenth notes)
 
 
-<br />
 

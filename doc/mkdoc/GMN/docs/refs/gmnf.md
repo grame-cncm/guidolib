@@ -58,7 +58,7 @@ tagarg		: number
 			;
 
 number		: integer | float ;
-UNIT		: 'm' | 'cm' | 'mm' | 'in' | 'pt' | 'pc' | 'hs' | 'rl' ;
+UNIT		: 'm' | 'cm' | 'mm' | 'in' | 'pt' | 'pc' | 'hs' ;
 string      : [a-z_A-Z][a-z_A-Z0-9]*
 ~~~~~~
 
