@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'Guido2';
+    src: url('guido2-webfont.woff2') format('woff2'),
+         url('guido2-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+.guido-code {
+	width: 50%;
+	border: 1px solid #c3c3c3;
+	border-radius: 10px;
+	padding: 50px;
+    background-color: #F8F8F8;
+}
+.guido-medium {
+	width: 75%;
+}
+.guido-full {
+	width: 100%;
+}
