@@ -135,6 +135,7 @@ extern const char* kFileStr;
 extern const char* kFillStr;
 extern const char* kFontStr;
 extern const char* kFormatStr;
+extern const char* kFreeStr;
 extern const char* kFSizeStr;
 extern const char* kGreenStr;
 extern const char* kGroupStr;

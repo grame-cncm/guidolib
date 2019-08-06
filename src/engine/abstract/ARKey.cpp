@@ -99,6 +99,11 @@ void ARKey::setTagParameters (const TagParameterMap& params)
 		fHideAutoNaturalsSet = true;
 		fHideAutoNaturals = p->getBool();
 	}
+    p = getParameter<TagParameterString>(kFreeStr);
+	if (p){
+		fIsFree = true;
+		getFreeKeyArray (p->getValue());
+	}
 }
 
 void ARKey::name2KeyNum (string name)
