@@ -1,6 +1,6 @@
 
 
-IGNORED := "shareLocation|splitChord|chord|bembel|merge|port|shortFermata|color|colour|symbol"
+IGNORED := "shareLocation|splitChord|chord|bembel|merge|port|shortFermata|color|colour|symbol|unit"
 .PHONY: tagslist.txt
 
 
@@ -9,10 +9,11 @@ help:
 	@echo "Guido Music Notation format"
 	@echo "This Makefile is intended to generate the documentation"
 	@echo "Available targets are:"
-	@echo "  install : install the required components"
-	@echo "  build   : build the web site"
-	@echo "  server  : launch the mkdoc server"
-	@echo "  tagfiles: create the tags documention md files from the src files"
+	@echo "  install  : install the required components"
+	@echo "  build    : build the web site"
+	@echo "  server   : launch the mkdoc server"
+	@echo "  tagfiles : create the tags documention md files from the src files"
+	@echo "  tagsindex: generates the tags index page"
 
 ####################################################################
 build:
@@ -22,7 +23,7 @@ pdfbuild:
 	ENABLE_PDF_EXPORT=1 && mkdocs build
 
 serve:
-	mkdocs serve
+	export LC_ALL=fr_FR.UTF-8 && export LANG=fr_FR.UTF-8 && mkdocs serve
 
 tagfiles:
 	rm -rf tmptags
@@ -41,7 +42,9 @@ chapters:
 tagschapters:
 	cat tags.txt | sed -e 's/\([^:]*\):\([^:]*\)/\2:\1/' | sed 's/ *//g' | sort -u
 	
-tagsindex:
+tagsindex:  docs/refs/index.md
+
+docs/refs/index.md: tags.txt
 	cat tags.txt | awk -f tagslist.awk  > docs/refs/index.md
 
 install:
