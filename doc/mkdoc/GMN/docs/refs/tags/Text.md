@@ -1,4 +1,4 @@
-{!references.ref!}
+{!tags.css!}
 
 # Text
 
@@ -11,16 +11,22 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \fingering |
+| \fingering | \fing | P | fingering |
+
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| position     | string   |   |    | true |
-| fsize     | unit   |   | 10pt   | true |
-| dx1     | "
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| position | string | above or below | *none* | true |
+Supports [font parameters](/refs/tagsparams/#text-parameters)
+
+The default position for fingering is close to the note head. When **position** is specified, the fingering is placed above or below the note, avoiding collisions with the stems and always outside the staff.
+
+
+
 
 
 <br />
@@ -34,116 +40,19 @@
 
 | Name | Variants | Type | Notation element |
 | :----| :--------| :----| :----------------|
-| \harmony |
+| \harmony |  | P | harmony marking |
+
+
 
 
 ### Parameters
- 
+
 | Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| text     | string   |   |    | false |
-| dy     | unit   |   | -1   | true |
-| ypos     | unit   |   | 0hs   | true |
-| textformat     | string   |   | cc   | true |
-| font     | string   |   | Arial   | true |
-| fsize     | unit   |   | 18pt   | true |
-| fattrib     | string   |   |    | true |
+| :------------ |:-------| :--------------| :------------- | :--------| 
+| text | string |  |  | false |
+| ypos | unit |  | 0hs | true |
+Supports [font parameters](/refs/tagsparams/#text-parameters)
 
 
-<br />
 
-
-## \instrument
-
--------
-
-### Description
-
-| Name | Variants | Type | Notation element |
-| :----| :--------| :----| :----------------|
-| \instrument |
-
-
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| name     | string   |   |    | false |
-| transp     | string   |   |    | true |
-| autopos     | string   |   | off   | true |
-
-
-<br />
-
-
-## \lyrics
-
--------
-
-### Description
-
-| Name | Variants | Type | Notation element |
-| :----| :--------| :----| :----------------|
-| \lyrics |
-
-
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| text     | string   |   |    | false |
-| dy     | unit   |   | -3   | true |
-| textformat     | string   |   | ct   | true |
-| fsize     | unit   |   | 12pt   | true |
-| autopos     | string   |   | off   | true |
-
-
-<br />
-
-
-## \mark
-
--------
-
-### Description
-
-| Name | Variants | Type | Notation element |
-| :----| :--------| :----| :----------------|
-| \mark |
-
-
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| text     | string   |   |    | false |
-| enclosure     | string   |   | none   | true |
-| dy     | unit   |   | 0   | true |
-
-
-<br />
-
-
-## \text
-
--------
-
-### Description
-
-| Name | Variants | Type | Notation element |
-| :----| :--------| :----| :----------------|
-| \text |
-
-
-### Parameters
- 
-| Name        	| Type   | Description    | Default value  | Optional |
-| :------------ |:-------| :--------------| :------------- | :--------|  
-| text     | string   |   |    | false |
-| dy     | unit   |   | -1   | true |
-| textformat     | string   |   | lt   | true |
-| fsize     | unit   |   | 12pt   | true |
-
-
-<br />
 
