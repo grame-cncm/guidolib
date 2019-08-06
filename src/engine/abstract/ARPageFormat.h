@@ -29,10 +29,9 @@
 @tagtype:P
 @tagnotation:sets the page format
 @tagdesc
-@tagend
-
 The **\pageFormat** tag indicates the score page format. It should be set at the beginning of the first staff.
 When no page format is encountered, the default page format is 21cm x 29.6 (A4) and the margins are set to 2 cm.
+@tagend
 
 @params:
 @param:type:string:A4, A3 or letter:*none*:false when w and h are not present
@@ -43,6 +42,7 @@ When no page format is encountered, the default page format is 21cm x 29.6 (A4) 
 @param:rm:unit:the right margin size:2cm:true
 @param:bm:unit:the bottom margin size:3cm:true
 @paramdesc
+See the [Layout](/examples/layout/) example.
 @paramend
 
 */

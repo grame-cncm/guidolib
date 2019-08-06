@@ -32,9 +32,10 @@ The composer name is displayed on top of the first page, right aligned to the sc
 
 @params:
 @param:name:string:the composer name:*none*:false
-@param:pageformat:string:a page format:c2:true
-#fontparams:
+# @param:pageformat:string:a page format:c2:true   ????
+@fontparams:
 @paramdesc
+See the [Composer](/examples/mozart581/) example.
 @paramend
 
 */

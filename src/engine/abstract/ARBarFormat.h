@@ -20,6 +20,28 @@
 #include "ARMTParameter.h"
 #include "ARBar.h"
 
+/*@mkdoc
+
+@group:Barlines
+
+@tagname:\barFormat
+@tagalias:
+@tagtype:P
+@tagnotation:describes the span of a barline.
+@tagdesc
+@tagend
+
+@params:
+@param:style:string:system or staff:staff:true
+@param:range:string:only for system style - indicates the range of staves covered by the bar:*none*:true
+@paramdesc
+- the **range** string must be in the form *"n-m"* where 'n' and 'm' are integer numbers denoting staff indexes (starting from 1)
+
+See the [Barlines](/examples/barlines/) example.
+@paramend
+
+*/
+
 /** \brief the bar format tag parameter.
 */
 class ARBarFormat : public ARMTParameter

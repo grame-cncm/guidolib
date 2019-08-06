@@ -19,29 +19,6 @@
 
 class TagParameterList;
 
-/*@mkdoc
-
-@group:Articulations
-
-@tagname:\marcato
-@tagalias:
-@tagtype:RP
-@tagnotation:marcato sign
-@tagdesc
-The **\arpeggio** tag displays arpeggio signs and should be applied to chords only.
-It has no effect on single notes.
-@tagend
-
-@params:
-@param:position:string:above or below:above:true
-@paramdesc
-Note that depending on the position, the glyph for the marcato sign is not the same.
-
-See the [Articulations](/examples/articulations/) example.
-@paramend
-
-*/
-
 /** \brief not yet documented
 */
 class ARMTParameter : public ARMusicalTag

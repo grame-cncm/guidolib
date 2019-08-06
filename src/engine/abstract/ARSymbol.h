@@ -19,6 +19,31 @@ research@grame.fr
 #include "ARPositionTag.h"
 #include "ARMusic.h"
 
+/*
+// documentation is hidden, the tag is not supported by the SVG backend
+@mkdoc
+
+@group:Miscellaneous
+
+@tagname:\symbol
+@tagalias:\s
+@tagtype:RP
+@tagnotation:intended to include arbitrary graphics.
+@tagdesc
+The **\symbol** tag allows to include arbitrary graphics using an image file.
+@tagend
+
+@params:
+@param:file:string:a file name:*none*:false
+@param:position:string:top, bottom, bot or over:over:true
+@param:w:integer:the image width:*none*:true
+@param:h:integer:the image height:*none*:true
+@paramdesc
+Note: the **\symbol** tag is not supported by the SVG backend.
+@paramend
+
+*/
+
 /** \brief The symbol tag
 */
 class ARSymbol : public ARMTParameter, public ARPositionTag

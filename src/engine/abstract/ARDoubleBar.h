@@ -30,6 +30,8 @@
 
 @paramdesc
 The **\doubleBar** tag supports the same parameters than the **\bar** tag.
+
+See the [Barlines](/examples/barlines/) example.
 @paramend
 
 */

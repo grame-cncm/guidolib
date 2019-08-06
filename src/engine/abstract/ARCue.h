@@ -21,6 +21,27 @@
 
 class TagParameterString;
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\cue
+@tagalias:
+@tagtype:R
+@tagnotation:cue notes
+@tagdesc
+Regarding the notes, the **\cue** tag is equivalent to **\noteFormat<color="blue", size=0.6>** tag.
+Cue notes are colored in blue by default. You can override that with  [**\noteFormat**](#noteFormat)
+@tagend
+
+@params:
+@param:name:string:the cue description:*none*:true
+@fontparams:
+@paramdesc
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARCue : public ARFontAble, public ARPositionTag

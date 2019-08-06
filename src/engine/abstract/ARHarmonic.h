@@ -16,6 +16,22 @@
 
 #include "ARArticulation.h"
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\harmonic
+@tagalias:
+@tagtype:R
+@tagnotation:an harmonic sign
+@tagdesc
+@tagend
+
+@paramdesc
+@paramend
+
+*/
+
 /*brief		The harmonic tag */
 class ARHarmonic : public ARArticulation
 {

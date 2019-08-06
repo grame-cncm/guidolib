@@ -37,6 +37,8 @@ class TagParameterString;
 @param:distance:unit:sets a fixed distance to the preceding staff:0hs:true
 @paramdesc
 Note: the **\staffFormat** tag supports common parameters but dx has no effect.
+
+See the [Layout](/examples/layout/) example.
 @paramend
 
 */

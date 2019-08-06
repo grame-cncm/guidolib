@@ -31,9 +31,10 @@
 The **\staff** tag is used to write multi-voice music on the same staff.
 
 @params:
-@param:id:integer:a staff number:*none*:false"
+@param:id:integer:a staff index:*none*:false
+@param:dy:unit:set the distance to the next staff:*none*:false
 @paramdesc
-'id' indicates a staff numer. All the elements between a \staff tag and the newt one
+'id' indicates a staff index (starting from 1). All the elements between a **\staff** tag and the next one
 (or the end of the voice) are assigned to the staff designated by id.
 
 See the [4 voices](/examples/4voices/) example.

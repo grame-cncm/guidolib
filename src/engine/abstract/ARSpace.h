@@ -16,7 +16,26 @@
 */
 
 #include "ARMTParameter.h"
-//#include "GuidoDefs.h"
+
+/*@mkdoc
+
+@group:Miscellaneous
+
+@tagname:\space
+@tagalias:
+@tagtype:P
+@tagnotation:insert space at any position.
+@tagdesc
+The **\space** tag can be used to save space for notation elements that do not take up space.
+@tagend
+
+@params:
+@param:dd:unit:the amount of space:0:false
+@paramdesc
+See the [Space](/examples/space/) example.
+@paramend
+
+*/
 
 /** \brief not yet documented
 */

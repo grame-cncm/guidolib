@@ -20,6 +20,24 @@
 
 class TagParameterInt;
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\octava
+@tagalias:\oct
+@tagtype:RP
+@tagnotation:displays an octava sign and transposes the notes accordingly
+@tagdesc
+@tagend
+
+@params:
+@param:i:integer:a signed number of octaves (up or down):*none*:false
+@paramdesc
+@paramend
+
+*/
+
 /** \brief The Octava tag
 */
 class AROctava : public ARMTParameter, public ARPositionTag

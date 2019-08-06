@@ -18,6 +18,27 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Articulations
+
+@tagname:\marcato
+@tagalias:
+@tagtype:RP
+@tagnotation:marcato sign
+@tagdesc
+@tagend
+
+@params:
+@param:position:string:above or below:above:true
+@paramdesc
+Note that depending on the position, the glyph for the marcato sign is not the same.
+
+See the [Articulations](/examples/articulations/) example.
+@paramend
+
+*/
+
 /** \brief The marcato articulation tag
 */
 class ARMarcato : public ARMTParameter, public ARPositionTag

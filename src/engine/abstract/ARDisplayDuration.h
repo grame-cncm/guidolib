@@ -20,6 +20,27 @@
 
 class TagParameterInt;
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\displayDuration
+@tagalias:\dispDur
+@tagtype:RP
+@tagnotation:display an arbitrary duration for a note
+@tagdesc
+The duration to display is indicated by a rational value. Provision is also made to display dots.
+@tagend
+
+@params:
+@param:n:integer:the duration numerator:*none*:false
+@param:d:integer:the duration denominator:*none*:false
+@param:ndots:integer:the number of dots:0:true
+@paramdesc
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARDisplayDuration : public ARMTParameter, public ARPositionTag

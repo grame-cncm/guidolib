@@ -19,6 +19,26 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\cluster
+@tagalias:
+@tagtype:R
+@tagnotation:transform chords into clusters
+@tagdesc
+The **\cluster** takes the highest and lowest notes of a chord and transforms the range into a cluster
+@tagend
+
+@params:
+@param:hdx:unit:displacement relative to the chord:0hs:true
+@param:hdy:unit:displacement relative to the chord:0hs:true
+@paramdesc
+@paramend
+
+*/
+
 class ARNote;
 
 /** \brief not yet documented

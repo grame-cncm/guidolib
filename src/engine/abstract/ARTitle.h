@@ -32,9 +32,10 @@ The piece title is displayed centered on top of the first page.
 
 @params:
 @param:name:string:the title of the piece:*none*:false
-@param:pageformat:string:a page format:c2:true
-#fontparams:
+# @param:pageformat:string:a page format:c2:true ???
+@fontparams:
 @paramdesc
+See the [Title](/examples/mozart581/) example.
 @paramend
 
 */

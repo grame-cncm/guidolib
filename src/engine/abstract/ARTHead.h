@@ -20,6 +20,52 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\headsCenter
+@tagtype:RP
+@tagnotation:moves the notehead centered on the stem
+@tagdesc
+The **\headsCenter** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+@tagend
+
+@tagname:\headsLeft
+@tagtype:RP
+@tagnotation:force the notehead to the left of the stem
+@tagdesc
+The **\headsLeft** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+@tagend
+
+@tagname:\headsRight
+@tagtype:RP
+@tagnotation:force the notehead to the right of the stem
+@tagdesc
+The **\headsRight** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+@tagend
+
+@tagname:\headsNormal
+@tagtype:RP
+@tagnotation:cancel a previous *head* specification and reverts to normal head position.
+@tagdesc
+The **\headsNormal** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+@tagend
+
+@tagname:\headsReverse
+@tagtype:RP
+@tagnotation:moves the notehead on the opposite side of the normal position
+@tagdesc
+The **\headsReverse** tag supports both a range and a position form.
+For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+@tagend
+
+*/
+
 /** \brief not yet documented
 */
 class ARTHead : public ARMTParameter, public ARPositionTag

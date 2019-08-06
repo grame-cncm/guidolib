@@ -18,6 +18,32 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\noteFormat
+@tagalias:
+@tagtype:RP
+@tagnotation:control the notes format
+@tagdesc
+The **\noteFormat** tag supports both a range and a position form.
+For the latter, the format is applied up to the next format specification or to the end of the voice.
+
+**\noteFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to notes.
+@tagend
+
+@params:
+@param:style:string:the notehead style (see below):standard:true
+@paramdesc
+The notehead style should be among "diamond", "x", "square", "round", "triangle" and "reversedTriangle".
+
+In addition, each style supports 3 types of variations that consist in enclosing the string into (), <> or [].<br />
+For standard notehead, these variations are simply the  "()", "<>" or "[]" strings.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARNoteFormat :  public ARMTParameter //, public ARPositionTag

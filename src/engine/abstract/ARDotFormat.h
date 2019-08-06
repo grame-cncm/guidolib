@@ -18,6 +18,23 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\dotFormat
+@tagalias:
+@tagtype:RP
+@tagnotation:control the dots format
+@tagdesc
+The **\dotFormat** tag supports both a range and a position form.
+For the latter, the format is applied up to the next format specification or to the end of the voice.
+
+**\dotFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to dots.
+@tagend
+
+*/
+
 /** \brief not yet documented
 */
 class ARDotFormat : public ARMTParameter, public ARPositionTag

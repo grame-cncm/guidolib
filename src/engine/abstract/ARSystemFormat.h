@@ -31,9 +31,11 @@
 The **\systemFormat** tag is mainly used for indentation of the first system.
 
 @params:
-@param:dx:unit:sets a fixed distance to the preceding staff:0hs:true
+@param:dx:unit:set an horizontal offset to the first system:0hs:true
 @paramdesc
-Note: the **\staffFormat** tag supports common parameters but only dx has an effect.
+Note: the **\systemFormat** tag supports common parameters but only dx has an effect.
+
+See the [Mozart](/examples/mozart581/) example.
 @paramend
 
 */

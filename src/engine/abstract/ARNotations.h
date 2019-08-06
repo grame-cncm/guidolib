@@ -18,6 +18,30 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
+/*@mkdoc
+
+@group:Articulations
+
+@tagname:\pedalOn
+@tagalias:
+@tagtype:P
+@tagnotation:a pedal indication
+@tagdesc
+@tagend
+@paramdesc
+@paramend
+
+@tagname:\pedalOff
+@tagalias:
+@tagtype:P
+@tagnotation:a pedal indication
+@tagdesc
+@tagend
+@paramdesc
+@paramend
+
+*/
+
 /** \brief The Pedal tag
 */
 class ARNotations : public ARMTParameter

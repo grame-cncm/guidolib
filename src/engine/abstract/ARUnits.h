@@ -19,6 +19,36 @@
 
 #include "ARMTParameter.h"
 
+
+/*
+ignored, the tag is not used
+@mkdoc
+
+@group:Miscellaneous
+
+@tagname:\unit
+@tagalias:
+@tagtype:P
+@tagnotation:changes the default unit
+@tagdesc
+@tagend
+
+@params:
+@param:type:string:m, cm, mm, in, pt, pc, hs:cm:false
+@paramdesc
+- *m* is for meter
+- *cm* is for centimeter
+- *mm* is for millimeter
+- *pt* is for point
+- *pc* is for pica
+- *hs* is for half space
+
+See also the [Tag Parameters](/refs/tagsparams/#units) section.
+@paramend
+
+*/
+
+
 /** \brief not yet documented
 */
 

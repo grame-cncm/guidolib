@@ -18,6 +18,25 @@
 
 #include "ARBowing.h"
 
+/*@mkdoc
+
+@group:Notes
+
+@tagname:\tie
+@tagalias:\tieBegin \tieEnd
+@tagtype:R
+@tagnotation:tie between successive notes
+@tagdesc
+The ties parameters are similar to those of [slurs](/refs/tags/Articulations/#slur).
+Apart from moving the curve 'up' or 'down', there is no reason to change the other parameters
+@tagend
+
+@paramdesc
+See the [Tie](/examples/space/) example.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARTie : public ARBowing  

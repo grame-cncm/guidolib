@@ -36,11 +36,12 @@
 @param:type:string:a dynamic string:*none*:false
 @param:before:string:a string displayed before the dynamic mark:*none*:true
 @param:after:string:a string displayed after the dynamic mark:*none*:true
-@param:autopos:boolean:automatic position control:off:true
+@param:autopos:boolean:when 'on', try to automatically avoid collisions:off:true
 #fontparams:
 @paramdesc
-- dynamic strings should be among "p", "f", "ff", "fff", "ffff", "mf", "mp", "sf", "pp", "ppp", "pppp", "sfz", "rfz" and "fz"
-- when autopos is on, the engine will automatically move the dynamic mark in case of collision.
+- supported dynamic strings are "p", "pp", "ppp", "pppp", "f", "ff", "fff", "ffff", "mf", "mp", "sf", "sfz", "rfz" and "fz"
+
+See the [Dynamics](/examples/dynamics/) example.
 @paramend
 
 */

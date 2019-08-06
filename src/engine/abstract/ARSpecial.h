@@ -16,6 +16,32 @@
 
 #include "ARMTParameter.h"
 
+/*@mkdoc
+
+@group:Miscellaneous
+
+@tagname:\special
+@tagalias:
+@tagtype:P
+@tagnotation:insert a musical glyph
+@tagdesc
+@tagend
+
+@params:
+@param:char:string:the character to display:*none*:false
+@paramdesc
+**char** may be specified as:
+
+- a litteral character
+- an hexadecimal number i.e. a number prefixed with "\x" (e.g. "\xa0")
+- an octal number i.e. a number prefixed with "\o" (e.g. "\o130")
+- a decimal number i.e. a number prefixed with "\"
+
+See the [Special](/examples/space/) example.
+@paramend
+
+*/
+
 /** \brief not yet documented
 */
 class ARSpecial :  public ARMTParameter

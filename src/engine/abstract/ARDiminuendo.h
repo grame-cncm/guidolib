@@ -28,11 +28,10 @@
 @tagdesc
 @tagend
 
-
-@params:
-
 @paramdesc
 Parameters for decrescendo are the same as for crescendo
+
+See the [Dynamics](/examples/dynamics/) example.
 @paramend
 
 */

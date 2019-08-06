@@ -39,6 +39,9 @@
 - the accolade range describes the staves covered by the accolade. It's a string in the form "n-m" or "n",
 where 'n' and 'm' are staves indexes (starting from 1)
 - straightBrace and standard are equivalent
+
+See the [Barlines](/examples/barlines/) example.
+
 @paramend
 
 */

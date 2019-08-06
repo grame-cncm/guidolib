@@ -20,7 +20,7 @@
 
 /*@mkdoc
 
-@group:Articulations
+@group:Ornaments
 
 @tagname:\arpeggio
 @tagalias:

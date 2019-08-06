@@ -38,6 +38,9 @@ Beaming is automatically computed according to the current meter. Manual beaming
 *dy* parameters adjust the position of the beams relative to the note head.
 
 Known issue: *dy* fails when the stems are down.
+
+See the [Beaming](/examples/beaming/) example.
+
 @paramend
 
 */

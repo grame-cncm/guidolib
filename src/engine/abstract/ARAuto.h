@@ -19,6 +19,47 @@
 
 class ARMusicalVoiceState;
 
+
+/*@mkdoc
+
+@group:Miscellaneous
+
+@tagname:\auto
+@tagalias:\set
+@tagtype:P
+@tagnotation:sets voice level global settings
+@tagdesc
+@tagend
+
+@params:
+@param:autoEndBar:string:automatic end bar:on:true
+@param:endBar:string:variant for autoEndBar:on:true
+
+@param:autoPageBreak:string:automatic page break:on:true
+@param:pageBreak:string:variant for autoPageBreak:on:true
+
+@param:autoSystemBreak:string:automatic system break:on:true
+@param:systemBreak:string:variant for autoSystemBreak:on:true
+
+@param:autoClefKeyMeterOrder:string:automatic reordering of clef, key and meter:on:true
+@param:clefKeyMeterOrder:string:variant for autoClefKeyMeterOrder:on:true
+
+@param:autoLyricsPos:string:automatic collision avoidance for \lyrics:off:true
+@param:lyricsAutoPos:string:ariant for autoLyricsPos:off:true
+
+@param:autoInstrPos:string:automatic positionning for \instr:off:true
+@param:instrAutoPos:string:variant for autoInstrPos:off:true
+
+@param:autoIntensPos:string:automatic collision avoidance for \intens:off:true
+@param:intensAutoPos:string:variant for autoIntensPos:off:true
+@paramdesc
+Collision management strategies can produce unexpected results or even create new collisions.
+In this case, you should switch to manual layout using the 'dx' and 'dy' [common parameters](/refs/tagsparams/#common-parameters).
+@paramend
+
+*/
+
+
 /** \brief Auto tag
 */
 class ARAuto : public ARMTParameter
@@ -32,8 +73,8 @@ class ARAuto : public ARMTParameter
 				 ARAuto();
 		virtual ~ARAuto() {}
 
-		state getStretchLastLineState() const		{ return fStretchLastLineState; }
-		state getStretchFirstLineState() const		{ return fStretchFirstLineState; }
+//		state getStretchLastLineState() const		{ return fStretchLastLineState; }
+//		state getStretchFirstLineState() const		{ return fStretchFirstLineState; }
 		state getClefKeyMeterOrderState() const		{ return fClefKeyMeterOrderState; }
 		state getEndBarState() const				{ return fEndBarState; }
 		state getSystemBreakState() const			{ return fSystemBreakState; }
@@ -59,8 +100,8 @@ class ARAuto : public ARMTParameter
 		state fPageBreakState;
 		state fSystemBreakState;
 		state fClefKeyMeterOrderState;
-		state fStretchLastLineState;
-		state fStretchFirstLineState;
+//		state fStretchLastLineState;
+//		state fStretchFirstLineState;
 		state fLyricsAutoPos;
 		state fInstrAutoPos;
 		state fIntensAutoPos;

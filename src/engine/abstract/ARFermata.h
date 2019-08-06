@@ -26,8 +26,6 @@
 @tagtype:RP
 @tagnotation:fermata signs
 @tagdesc
-The **\arpeggio** tag displays arpeggio signs and should be applied to chords only.
-It has no effect on single notes.
 @tagend
 
 @params:
