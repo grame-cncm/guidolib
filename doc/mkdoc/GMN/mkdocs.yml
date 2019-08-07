@@ -40,11 +40,11 @@ nav:
         - 'Beaming': examples/beaming.md
         - 'ClefKeyMeter': examples/clefkeymeter.md
         - 'Dynamics': examples/dynamics.md
-        - 'Faur': examples/faure.md
+        - 'Fauré': examples/faure.md
         - 'Layout': examples/layout.md
-        - 'MozartClarinetQuintet': examples/mozart581.md
+        - 'Mozart Quintet': examples/mozart581.md
         - 'Slurs': examples/slurs.md
-        - 'TiesSpace': examples/space.md
+        - 'Ties & Space': examples/space.md
     - About: about.md
 
 #theme: readthedocs

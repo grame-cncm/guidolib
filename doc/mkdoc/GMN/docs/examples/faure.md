@@ -17,6 +17,7 @@ Excerpt from "Après un rêve", a work by Gabriel Fauré.
 	\clef<"g"> \key<-3> \meter<"3/4">
 	\tempo<"Andantino">  \beamsOff
 	_*3/4
+
 	\lyrics<"Dans un som-meil  que char mait ton i-ma-ge">(
 	\text<"dolce", dy=13, fattrib="i", fsize=10pt>(g/4) \cresc<dy=15, deltaY=2>(c2 d)  
 	\tieBegin e& \tuplet<format="3", position="above"> (e&/12 \tieEnd d \space<7.5mm> c) \space<9mm>
