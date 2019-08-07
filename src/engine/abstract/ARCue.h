@@ -31,7 +31,7 @@ class TagParameterString;
 @tagnotation:cue notes
 @tagdesc
 Regarding the notes, the **\cue** tag is equivalent to **\noteFormat<color="blue", size=0.6>** tag.
-Cue notes are colored in blue by default. You can override that with  [**\noteFormat**](#noteFormat)
+Cue notes are colored in blue by default. You can override that with  [**\noteFormat**](#noteformat)
 @tagend
 
 @params:

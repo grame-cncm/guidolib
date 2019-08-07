@@ -48,6 +48,7 @@ See the [Barlines](../../../examples/barlines/) example.
 | :----| :--------| :----| :----------------|
 | \newPage | \newSystem | P | force a page break |
 
+See the [Bach](../../../examples/bach/) example.
 
 
 

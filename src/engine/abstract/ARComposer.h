@@ -35,7 +35,7 @@ The composer name is displayed on top of the first page, right aligned to the sc
 # @param:pageformat:string:a page format:c2:true   ????
 @fontparams:
 @paramdesc
-See the [Composer](@EXAMPLES/mozart581/) example.
+See the [Mozart](@EXAMPLES/mozart581/) or [Fauré](@EXAMPLES/faure/) examples.
 @paramend
 
 */

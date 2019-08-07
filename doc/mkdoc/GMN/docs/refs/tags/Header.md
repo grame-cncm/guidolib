@@ -23,7 +23,7 @@
 | name | string | the composer name | *none* | false |
 Supports [font parameters](../../tagsparams#text-parameters)
 
-See the [Composer](../../../examples/mozart581/) example.
+See the [Mozart](../../../examples/mozart581/) or [Fauré](../../../examples/faure/) examples.
 
 
 
@@ -52,7 +52,7 @@ See the [Composer](../../../examples/mozart581/) example.
 | name | string | the title of the piece | *none* | false |
 Supports [font parameters](../../tagsparams#text-parameters)
 
-See the [Title](../../../examples/mozart581/) example.
+See the [Mozart](../../../examples/mozart581/) or [Fauré](../../../examples/faure/) examples.
 
 
 

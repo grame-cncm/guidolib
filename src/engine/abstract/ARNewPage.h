@@ -26,6 +26,7 @@
 @tagtype:P
 @tagnotation:force a page break
 @tagdesc
+See the [Bach](@EXAMPLES/bach/) example.
 @tagend
 
 */
