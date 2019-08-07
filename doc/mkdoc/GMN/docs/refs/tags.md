@@ -10,10 +10,10 @@ Tags may be indicated using shortcuts or alternate names (e.g. \t for \text). Th
 ## Tags types
 We make the distinction between:
 
-- range tags: tags applied to a series of notes (e.g. \slur(a b c)). They have a time position and we can consider that their duration is the duration of the enclosed events.
-- position tags: tags that have a time position but no explicit time extent (e.g. \meter<"4/4">). These tags can be seen as lasting until otherwise indicated or until the end of the current voice.
+- *range tags*: tags applied to a series of notes (e.g. \slur(a b c)). They have a time position and we can consider that their duration is the duration of the enclosed events.
+- *position tags*: tags that have a time position but no explicit time extent (e.g. \meter<"4/4">). These tags can be seen as lasting until otherwise indicated or until the end of the current voice.
 
-The type of a tag (range or position) is indicated in the 'Type' column of the tag description with the letter 'R' for range tags and 'P' for position tags. Note that some tags support both forms; their type will be 'RP'.
+The type of a tag (range or position) is indicated in the 'Type' column of the tag description with the letter 'R' for range tags and 'P' for position tags. Note that some tags support both forms; the corresponding type is 'RP'.
 
 ## Range tags forms
 Almost all the range tags support an alternate *begin_end* form. Let's consider a tag name \xxx, when this form is supported you can write either:

@@ -11,9 +11,11 @@ The parameters specific to a given tag are described with the corresponding tag.
 The general syntax for tag parameters is the following:
 {!BNF/tagsparam.html!}
 
-where `value` is among:
+where `param` is the parameter name and `value` is among:
 {!BNF/value.html!}
 
+The parameter name may be omitted when there is no ambiguity: single parameter, first parameter in the parameters list or parameters given in the parameters list order.   
+For example, you can write \meter<"4/4"> instead of \meter< type="4/4">
 
 
 ## Values
@@ -93,7 +95,7 @@ Common parameters are tag parameters supported by all tags.
 
 ## Text parameters
 
-Text parameters are tag parameters supported by text based tags such as `\text`, `\lirycs`.
+Text parameters are tag parameters supported by text based tags such as `\text`, `\lyrics`.
 
 | Name        	| Type   | Description    | Default value  | Optional |
 | ------------- |:-------| :--------------| :------------- | :--------|  
@@ -101,6 +103,9 @@ Text parameters are tag parameters supported by text based tags such as `\text`,
 | font      	| string | a font name | Times | true |
 | fsize      	| unit   | the font size | 9pt | true |
 | fattrib      	| string | the font attributes (see below) | *none* | true |
+
+Note that the default value for the font size may change depending on the tag, 
+
 
 ### Format string
 A format string is in the form 'hv' where :
@@ -120,7 +125,7 @@ A combination of the following characters:
 - 'b' for bold 
 - 'i' for italic 
 - 'u' for underline 
-  
+
 ### Examples
 ~~~~~~
 [ \clef<"f"> \text<"hello world", fsize=6pt, fattrib="bi", dy=3.9> ]

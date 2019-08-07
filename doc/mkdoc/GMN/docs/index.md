@@ -18,10 +18,7 @@ representation formalism for score-level music over a broad range of application
 application areas include notation software, compositional and analytical systems and tools, large
 musical databases, performance systems, and music on the World Wide Web.
 
-The GUIDO Notation Format has been developed by Holger H. Hoos, *Technical University of Darmstadt, Germany* and Keith Hamel, *University of British Columbia in Vancouver, Canada*; some features are based on discussions with Michael Fuhlbrugge, Kai Flade, Thomas Helbich and Jurgen
+The GUIDO Music Notation Format has been developed by Holger H. Hoos, *Technical University of Darmstadt, Germany* and Keith Hamel, *University of British Columbia in Vancouver, Canada*; some features are based on discussions with Michael Fuhlbrugge, Kai Flade, Thomas Helbich and Jurgen
 Kilian. It is named after [Guido d'Arezzo](https://en.wikipedia.org/wiki/Guido_of_Arezzo) (990-1050), a renowned music theorist of his time and
 important contributor to today's conventional musical notation (CMN). His achievements include
 the perfection of the staff system for music notation and the invention of solmisation (solfege).
-
-The GUIDO Notation Format is publicly and freely available and can be used for arbitrary scientific, educational or commercial purposes. However, the GUIDO Notation Format specification remains the intellectual property of the authors of this document. It is our wish that every publicly available software supporting GUIDO and every
-extension of GUIDO as specified in this document should be brought to our attention.
