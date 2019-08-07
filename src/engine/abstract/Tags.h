@@ -168,6 +168,8 @@ extern const char* kTagTrill;
 extern const char* kTagTrillBegin;
 extern const char* kTagTrillEnd;
 extern const char* kTagTuplet;
+extern const char* kTagTupletBegin;
+extern const char* kTagTupletEnd;
 extern const char* kTagTurn;
 extern const char* kTagUnits;
 extern const char* kTagVolta;

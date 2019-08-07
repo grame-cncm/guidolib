@@ -1546,12 +1546,19 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);		
 			}
-			else if (!strcmp(name, kTagTuplet ))
+			else if (!strcmp(name, kTagTuplet ) || !strcmp(name, kTagTupletBegin ))
 			{
 				ARTuplet * tmp = new ARTuplet;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
                 mCurrentTuplet = tmp;
+			}
+			else if (!strcmp(name, kTagTupletEnd))
+			{
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagTupletEnd) );
+				tmp->setID(no);
+				mCurrentVoice->setPositionTagEndPos(no, tmp);
+				mTags.AddHead(tmp);
 			}
 			else if (!strcmp(name, kTagTitle ))
 			{

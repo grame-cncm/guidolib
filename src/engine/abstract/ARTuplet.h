@@ -70,7 +70,8 @@ class ARTuplet :  public ARMTParameter, public ARPositionTag
 		virtual const char*	getParamsStr() const	{ return kARTupletParams; };
 		virtual const char*	getTagName() const		{ return "ARTuplet"; };
 		virtual std::string getGMNName() const		{ return "\\tuplet"; };
- 
+ 		virtual bool MatchEndTag(const char * s);
+
             void  setupTuplet( ARBase * inBase );
             void  parseTupletFormatString();
 

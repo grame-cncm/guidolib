@@ -23,6 +23,12 @@
 using namespace std;
 
 
+/*
+ the Begin End implementation is currently in progress.
+ yet it doesn't work since an auto tuplet is created by the voice manager
+*/
+
+
 //--------------------------------------------------------------------------
 ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(0), fDy1(0), fDy2(0), fLineThickness(kDefaultThickness),
     fTextBold(false), fTextSize(1), fDispNote("") /*, fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)*/
@@ -60,6 +66,17 @@ void ARTuplet::setTagParameters (const TagParameterMap& params)
 	p = getParameter<TagParameterString>(kDispNoteStr);
 	if (p) fDispNote = p->getValue();
 }
+
+
+bool ARTuplet::MatchEndTag(const char * s)
+{
+	if (ARMusicalTag::MatchEndTag(s))
+		return true;
+	if (!getRange() && !strcmp("\\tupletEnd",s))
+		return true;
+	return false;
+}
+
 
 /** \brief Called for auto tuplet.
 */
