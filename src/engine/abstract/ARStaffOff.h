@@ -30,6 +30,8 @@
 The **\staffOff** tag effect is to hide the staff and all the staff elements up to the next **\staffOn** tag.
 
 The **\staffOn** and **\staffOff** tags are still experimental and may not provide the expected result depending on the context.
+
+See the [Layout](/examples/layout/) example.
 @tagend
 
 */

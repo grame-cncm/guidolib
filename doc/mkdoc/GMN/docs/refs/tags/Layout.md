@@ -187,6 +187,8 @@ The **\staffOff** tag effect is to hide the staff and all the staff elements up 
 
 The **\staffOn** and **\staffOff** tags are still experimental and may not provide the expected result depending on the context.
 
+See the [Layout](/examples/layout/) example.
+
 
 
 
@@ -204,6 +206,8 @@ The **\staffOn** and **\staffOff** tags are still experimental and may not provi
 | \staffOn |  | P | cancel the effect of \staffOff |
 
 The **\staffOn** and **\staffOff** tags are still experimental and may not provide the expected result depending on the context.
+
+See the [Layout](/examples/layout/) example.
 
 
 
