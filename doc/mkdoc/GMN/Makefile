@@ -1,6 +1,7 @@
 
 
 IGNORED := "shareLocation|splitChord|chord|bembel|merge|port|shortFermata|color|colour|symbol|unit"
+TAGSDEST := docs/refs/tags
 .PHONY: tagslist.txt
 
 
@@ -20,7 +21,7 @@ build:
 	mkdocs build
 
 pdfbuild:
-	ENABLE_PDF_EXPORT=1 && mkdocs build
+	export ENABLE_PDF_EXPORT=1 && mkdocs build
 
 serve:
 	mkdocs serve
@@ -29,6 +30,7 @@ tagfiles:
 	rm -rf tmptags
 	[ -d tmptags ] || mkdir tmptags
 	awk -v OUT=tmptags -f maketag.awk ../../../src/engine/abstract/AR*.h
+	mv -f tmptags/*.md $(TAGSDEST)
 
 tagslist: tagslist.txt
 
