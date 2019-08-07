@@ -52,7 +52,7 @@ Cue notes are colored in blue by default. You can override that with  [**\noteFo
 | Name        	| Type   | Description    | Default value  | Optional |
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | name | string | the cue description | *none* | true |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 
 

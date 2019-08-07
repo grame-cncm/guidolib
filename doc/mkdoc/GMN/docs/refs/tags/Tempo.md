@@ -22,7 +22,7 @@
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | tempo | string | the tempo at the beginning | *none* | true |
 | abstempo | string | the tempo at the end | *none* | true |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 - **tempo** and **abstempo** are intended to be tempo values. A quarter note is inserted before these strings.
 

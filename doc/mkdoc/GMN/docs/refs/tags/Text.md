@@ -21,7 +21,7 @@
 | Name        	| Type   | Description    | Default value  | Optional |
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | position | string | above or below | *none* | true |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 The default position for fingering is close to the note head. When **position** is specified, the fingering is placed above or below the note, avoiding collisions with the stems and always outside the staff.
 
@@ -52,7 +52,7 @@ The default position for fingering is close to the note head. When **position** 
 | name | string | the instrument name | *none* | false |
 | transp | string | a transposition string | *none* | true |
 | autopos | boolean | automatic position control | off | true |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 
 
@@ -81,7 +81,7 @@ Supports [font parameters](/refs/tagsparams/#text-parameters)
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | text | string | the lyrics | *none* | false |
 | autopos | string |  | off | true |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 The lyrics are mapped onto the enclosed notes and rests according to the following rules:
 
@@ -123,7 +123,7 @@ With no range, the text is inserted at its position.
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | text | string | the mark | *none* | false |
 | enclosure | string | none, square, rectangle, oval, circle, bracket, triangle, diamond | none | true |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 
 
@@ -153,7 +153,7 @@ With no range, the text is inserted at its position.
 | Name        	| Type   | Description    | Default value  | Optional |
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | text | string | the text | *none* | false |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 
 
@@ -181,7 +181,7 @@ Supports [font parameters](/refs/tagsparams/#text-parameters)
 | Name        	| Type   | Description    | Default value  | Optional |
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | text | string | the harmony string (e.g. C7) | *none* | false |
-Supports [font parameters](/refs/tagsparams/#text-parameters)
+Supports [font parameters](../../tagsparams#text-parameters)
 
 
 

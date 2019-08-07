@@ -42,7 +42,7 @@ return "\n### Parameters\n\n\
 }
 
 function fontparams () {
-return "Supports [font parameters](/refs/tagsparams/#text-parameters)"
+return "Supports [font parameters](../../tagsparams#text-parameters)"
 }
 
 

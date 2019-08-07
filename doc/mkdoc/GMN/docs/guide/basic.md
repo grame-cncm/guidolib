@@ -12,4 +12,4 @@ This user guide describes
 - the concept of [score](scores.md)
 
 The reference section describes all the supported tags and tags parameters.   
-It includes also the Guido Music Notation format full [specification](/refs/gmnf). 
+It includes also the Guido Music Notation format full [specification](../../refs/gmnf). 
