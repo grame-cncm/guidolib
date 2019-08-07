@@ -37,7 +37,7 @@ The **\staff** tag is used to write multi-voice music on the same staff.
 'id' indicates a staff index (starting from 1). All the elements between a **\staff** tag and the next one
 (or the end of the voice) are assigned to the staff designated by id.
 
-See the [4 voices](/examples/4voices/) example.
+See the [4 voices](@EXAMPLES/4voices/) example.
 
 @paramend
 

@@ -35,8 +35,9 @@ class ARText;
 @param:text:string:the lyrics:*none*:false
 @param:autopos:string::off:true
 @fontparams:
-@paramdes:
-The lyrics are mapped onto the following notes and rests according to the following rules:
+@paramdesc
+The lyrics are mapped onto the enclosed notes and rests according to the following rules:
+
 - a " " (space) after a word (or syllable) progresses to the following event.
 - a "~" (tilde) between characters specifies a blank within the lyrics. There is no progression to the following event. The tilde is used to place more than one word on a single note.
 - a "-" (hyphen) progresses to the following event. The hyphen is also printed in the score.
@@ -44,6 +45,8 @@ The lyrics are mapped onto the following notes and rests according to the follow
 - a "<n>" progresses to the event that is marked with the \mark<n>-tag. If the <n> is proceeded by a hyphen ("-"), a series of hyphens is printed from the current event to the target event.
 
 When **autopos** is on, the system moves the lyrics in case of collision.
+
+See the [Faure](@EXAMPLES/faure/) example.
 @paramend
 
 */

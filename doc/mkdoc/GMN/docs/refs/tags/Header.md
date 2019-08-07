@@ -23,7 +23,7 @@
 | name | string | the composer name | *none* | false |
 Supports [font parameters](/refs/tagsparams/#text-parameters)
 
-See the [Composer](/examples/mozart581/) example.
+See the [Composer](../../../examples/mozart581/) example.
 
 
 
@@ -52,7 +52,7 @@ See the [Composer](/examples/mozart581/) example.
 | name | string | the title of the piece | *none* | false |
 Supports [font parameters](/refs/tagsparams/#text-parameters)
 
-See the [Title](/examples/mozart581/) example.
+See the [Title](../../../examples/mozart581/) example.
 
 
 

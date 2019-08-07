@@ -35,7 +35,7 @@
 @paramdesc
 The default tenuto position is close to the note head, on the opposite side of the stem.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](@EXAMPLES/articulations/) example.
 @paramend
 
 */

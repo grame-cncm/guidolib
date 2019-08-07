@@ -31,7 +31,7 @@
 @paramdesc
 Parameters for decrescendo are the same as for crescendo
 
-See the [Dynamics](/examples/dynamics/) example.
+See the [Dynamics](@EXAMPLES/dynamics/) example.
 @paramend
 
 */

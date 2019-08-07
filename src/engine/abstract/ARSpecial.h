@@ -37,7 +37,7 @@
 - an octal number i.e. a number prefixed with "\o" (e.g. "\o130")
 - a decimal number i.e. a number prefixed with "\"
 
-See the [Special](/examples/space/) example.
+See the [Special](@EXAMPLES/space/) example.
 @paramend
 
 */

@@ -34,7 +34,7 @@
 @paramdesc
 Note that depending on the position, the glyph for the marcato sign is not the same.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](@EXAMPLES/articulations/) example.
 @paramend
 
 */

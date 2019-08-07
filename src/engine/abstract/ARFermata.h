@@ -32,7 +32,7 @@
 @param:type:string:short, regular or long:regular:true
 @param:position:string:above or below:above:true
 @paramdesc
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](@EXAMPLES/articulations/) example.
 @paramend
 
 */

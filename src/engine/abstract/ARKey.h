@@ -43,7 +43,7 @@ The **\key** tag displays a key signature specified as tonality or as a number o
 - B and H are equivalent to 5
 - a **free key** string is an arbitrary list of notes with accidentals separated by spaces. When not indicated, an accidental takes the previous value, Accidentals support micro-tonality using signed floating point numbers inside brackets. Example: "g#d&" denotes a key signature with a 'g' sharp and a 'd' flat; "f[0.5]c" denotes a key with a quarter tone sharp on 'f' and 'c'.
 
-See the [Key](/examples/clefkeymeter/) example.
+See the [Key](@EXAMPLES/clefkeymeter/) example.
 @paramend
 
 */

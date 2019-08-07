@@ -36,7 +36,7 @@
 - perc1, perc2, perc4, perc5 represent a percussion clef on the 1st, 2nd, 4th and 5th staff line
 - none, off prevents the clef to be displayed
 
-See the [Clefs](/examples/clefkeymeter/) example.
+See the [Clefs](../../../examples/clefkeymeter/) example.
 
 
 
@@ -73,7 +73,7 @@ The **\key** tag displays a key signature specified as tonality or as a number o
 - B and H are equivalent to 5
 - a **free key** string is an arbitrary list of notes with accidentals separated by spaces. When not indicated, an accidental takes the previous value, Accidentals support micro-tonality using signed floating point numbers inside brackets. Example: "g#d&" denotes a key signature with a 'g' sharp and a 'd' flat; "f[0.5]c" denotes a key with a quarter tone sharp on 'f' and 'c'.
 
-See the [Key](/examples/clefkeymeter/) example.
+See the [Key](../../../examples/clefkeymeter/) example.
 
 
 
@@ -116,7 +116,7 @@ The **\meter** tag displays a time signature.
 	- page: the measure number is displayed on every page only
 - **group** applies to complex time signatures and control how the a) form encountered in a c) form is displayed: when **group** if off, the a) form is transformed in a b) form
 
-See the [Meter](/examples/clefkeymeter/) example.
+See the [Meter](../../../examples/clefkeymeter/) example.
 
 
 

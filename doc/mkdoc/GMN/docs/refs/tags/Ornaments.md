@@ -27,7 +27,7 @@ It has no effect on single notes.
 - up: to display an up arrow
 - down: to display a down arrow
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -62,10 +62,10 @@ See the [Articulations](/examples/articulations/) example.
 | position | string | above, below | above | true |
 
 - **note** is intended to indicate accidentals, the note itself is not displayed but the possible accidental does.
-- **detune** is applied to the **note** parameter and works similarly as [\alter](/refs/tags/Accidentals#alter)
+- **detune** is applied to the **note** parameter and works similarly as [\alter](../Accidentals#alter)
 - **accidental** is intended is intended to control how the accidental is displayed
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -100,7 +100,7 @@ See the [Articulations](/examples/articulations/) example.
 
 other parameters have the same effect as for [\mordent](#mordent)
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 

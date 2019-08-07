@@ -24,7 +24,7 @@
 
 Accent position is determined by the stem direction: the accent should be placed on the opposite side of the stem. When no stem is present, the accent is placed above.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -43,7 +43,7 @@ See the [Articulations](/examples/articulations/) example.
 | :----| :--------| :----| :----------------|
 | \breathMark |  | P | a breath mark |
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -71,7 +71,7 @@ See the [Articulations](/examples/articulations/) example.
 | type | string | short, regular or long | regular | true |
 | position | string | above or below | above | true |
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -107,7 +107,7 @@ It is the position of the notes in the GMN code that determines the corresponden
 | fill | boolean@param | fill space between lines when applied to a chord | false | true |
 | thickness | unit | line thickness | 0.3 | true |
 
-See a [glissando](/examples/articulations/) example.
+See a [glissando](../../../examples/articulations/) example.
 
 
 
@@ -137,7 +137,7 @@ See a [glissando](/examples/articulations/) example.
 
 Note that depending on the position, the glyph for the marcato sign is not the same.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -206,7 +206,7 @@ The **\pizzicato** tag supports various shapes, intended to different instrument
 
 Note that snap and bartok types are equivalent.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -242,7 +242,7 @@ See the [Articulations](/examples/articulations/) example.
 
 The **r3** parameter should be between 0 (leftmost) and 1 (rightmost).
 
-See the [Slurs](/examples/slurs/) example.
+See the [Slurs](../../../examples/slurs/) example.
 
 
 
@@ -273,7 +273,7 @@ See the [Slurs](/examples/slurs/) example.
 
 The default staccato position is close to the note head, on the opposite side of the stem.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 
@@ -304,7 +304,7 @@ See the [Articulations](/examples/articulations/) example.
 
 The default tenuto position is close to the note head, on the opposite side of the stem.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](../../../examples/articulations/) example.
 
 
 

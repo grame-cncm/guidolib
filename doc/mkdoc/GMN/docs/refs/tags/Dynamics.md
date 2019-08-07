@@ -26,7 +26,7 @@
 | thickness | unit | the line thickness | 0.16 | true |
 | autopos | string | when 'on', try to automatically avoid collisions | off | true |
 
-See the [Dynamics](/examples/dynamics/) example.
+See the [Dynamics](../../../examples/dynamics/) example.
 
 
 
@@ -50,7 +50,7 @@ See the [Dynamics](/examples/dynamics/) example.
 
 Parameters for decrescendo are the same as for crescendo
 
-See the [Dynamics](/examples/dynamics/) example.
+See the [Dynamics](../../../examples/dynamics/) example.
 
 
 
@@ -83,7 +83,7 @@ See the [Dynamics](/examples/dynamics/) example.
 
 - supported dynamic strings are "p", "pp", "ppp", "pppp", "f", "ff", "fff", "ffff", "mf", "mp", "sf", "sfz", "rfz" and "fz"
 
-See the [Dynamics](/examples/dynamics/) example.
+See the [Dynamics](../../../examples/dynamics/) example.
 
 
 

@@ -37,7 +37,7 @@
 @paramdesc
 - the **range** string must be in the form *"n-m"* where 'n' and 'm' are integer numbers denoting staff indexes (starting from 1)
 
-See the [Barlines](/examples/barlines/) example.
+See the [Barlines](@EXAMPLES/barlines/) example.
 @paramend
 
 */

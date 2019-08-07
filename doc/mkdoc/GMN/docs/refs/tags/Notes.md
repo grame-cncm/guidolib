@@ -105,7 +105,7 @@ The duration to display is indicated by a rational value. Provision is also made
 The **\dotFormat** tag supports both a range and a position form.
 For the latter, the format is applied up to the next format specification or to the end of the voice.
 
-**\dotFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to dots.
+**\dotFormat** is a way to introduce [common parameters](../../tagsparams#common-parameters) to dots.
 
 
 
@@ -164,7 +164,7 @@ For the latter, the format is applied up to the next format specification or to 
 The **\noteFormat** tag supports both a range and a position form.
 For the latter, the format is applied up to the next format specification or to the end of the voice.
 
-**\noteFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to notes.
+**\noteFormat** is a way to introduce [common parameters](../../tagsparams#common-parameters) to notes.
 
 
 
@@ -226,7 +226,7 @@ For standard notehead, these variations are simply the  "()", "<>" or "[]" strin
 The **\restFormat** tag supports both a range and a position form.
 For the latter, the format is applied up to the next format specification or to the end of the voice.
 
-**\restFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to rest.
+**\restFormat** is a way to introduce [common parameters](../../tagsparams#common-parameters) to rest.
 
 
 
@@ -362,7 +362,7 @@ For the latter, it is is applied up to the next *head* specification or to the e
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | length | unit | the stem length | 7.0 | true |
 
-See the [4 voices](/examples/4voices/) example.
+See the [4 voices](../../../examples/4voices/) example.
 
 
 
@@ -385,7 +385,7 @@ See the [4 voices](/examples/4voices/) example.
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | length | unit | the stem length | 7.0 | true |
 
-See the [4 voices](/examples/4voices/) example.
+See the [4 voices](../../../examples/4voices/) example.
 
 
 
@@ -404,12 +404,12 @@ See the [4 voices](/examples/4voices/) example.
 | :----| :--------| :----| :----------------|
 | \tie | \tieBegin \tieEnd | R | tie between successive notes |
 
-The ties parameters are similar to those of [slurs](/refs/tags/Articulations/#slur).
+The ties parameters are similar to those of [slurs](../Articulations#slur).
 Apart from moving the curve 'up' or 'down', there is no reason to change the other parameters
 
 
 
-See the [Tie](/examples/space/) example.
+See the [Tie](../../../examples/space/) example.
 
 
 

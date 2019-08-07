@@ -38,7 +38,7 @@ It can be used with or without a range: in the latter, it takes effect until the
 @params:
 @param:detune:float:a signed floating point value representing semi-tones:0:false
 @paramdesc
-See the [Accidentals](/examples/accidentals/) example.
+See the [Accidentals](@EXAMPLES/accidentals/) example.
 @paramend
 
 */

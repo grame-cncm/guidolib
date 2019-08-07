@@ -26,9 +26,9 @@
 
 Measure numbering is attached to barlines. The **displayMeasNum** parameter activates or inhibits measures numbering.
 
-Measure numbering may also be activated at [\meter](/refs/tags/ClefKeyMeter) level.
+Measure numbering may also be activated at [\meter](../ClefKeyMeter) level.
 
-See the [Barlines](/examples/barlines/) example.
+See the [Barlines](../../../examples/barlines/) example.
 
 
 
@@ -59,7 +59,7 @@ See the [Barlines](/examples/barlines/) example.
 
 - the **range** string must be in the form *"n-m"* where 'n' and 'm' are integer numbers denoting staff indexes (starting from 1)
 
-See the [Barlines](/examples/barlines/) example.
+See the [Barlines](../../../examples/barlines/) example.
 
 
 
@@ -83,7 +83,7 @@ See the [Barlines](/examples/barlines/) example.
 
 The **\doubleBar** tag supports the same parameters than the **\bar** tag.
 
-See the [Barlines](/examples/barlines/) example.
+See the [Barlines](../../../examples/barlines/) example.
 
 
 
@@ -103,7 +103,7 @@ See the [Barlines](/examples/barlines/) example.
 | \endBar |  | P | an end bar line |
 
 A finish bar is automatically inserted at the end of a piece, unless otherwise specified.
-See also the [auto](/refs/tags/Settings) tag.
+See also the [auto](../Miscellaneous) tag.
 
 
 

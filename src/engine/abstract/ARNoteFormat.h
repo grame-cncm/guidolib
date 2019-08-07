@@ -30,7 +30,7 @@
 The **\noteFormat** tag supports both a range and a position form.
 For the latter, the format is applied up to the next format specification or to the end of the voice.
 
-**\noteFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to notes.
+**\noteFormat** is a way to introduce [common parameters](../../tagsparams#common-parameters) to notes.
 @tagend
 
 @params:

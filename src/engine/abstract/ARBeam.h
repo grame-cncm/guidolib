@@ -39,7 +39,7 @@ Beaming is automatically computed according to the current meter. Manual beaming
 
 Known issue: *dy* fails when the stems are down.
 
-See the [Beaming](/examples/beaming/) example.
+See the [Beaming](@EXAMPLES/beaming/) example.
 
 @paramend
 

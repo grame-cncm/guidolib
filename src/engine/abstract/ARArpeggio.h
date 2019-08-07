@@ -37,7 +37,7 @@ It has no effect on single notes.
 - up: to display an up arrow
 - down: to display a down arrow
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](@EXAMPLES/articulations/) example.
 @paramend
 
 */

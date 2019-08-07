@@ -34,7 +34,7 @@ The **\pizzicato** tag supports various shapes, intended to different instrument
 @paramdesc
 Note that snap and bartok types are equivalent.
 
-See the [Articulations](/examples/articulations/) example.
+See the [Articulations](@EXAMPLES/articulations/) example.
 @paramend
 
 */

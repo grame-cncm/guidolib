@@ -29,7 +29,7 @@
 @tagdesc
 The **\staffOn** and **\staffOff** tags are still experimental and may not provide the expected result depending on the context.
 
-See the [Layout](/examples/layout/) example.
+See the [Layout](@EXAMPLES/layout/) example.
 @tagend
 
 */

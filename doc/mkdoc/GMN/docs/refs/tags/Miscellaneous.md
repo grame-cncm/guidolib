@@ -36,7 +36,7 @@
 | intensAutoPos | string | variant for autoIntensPos | off | true |
 
 Collision management strategies can produce unexpected results or even create new collisions.
-In this case, you should switch to manual layout using the 'dx' and 'dy' [common parameters](/refs/tagsparams/#common-parameters).
+In this case, you should switch to manual layout using the 'dx' and 'dy' [common parameters](../../tagsparams#common-parameters).
 
 
 
@@ -65,7 +65,7 @@ The **\space** tag can be used to save space for notation elements that do not t
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | dd | unit | the amount of space | 0 | false |
 
-See the [Space](/examples/space/) example.
+See the [Space](../../../examples/space/) example.
 
 
 
@@ -100,7 +100,7 @@ See the [Space](/examples/space/) example.
 - an octal number i.e. a number prefixed with "\o" (e.g. "\o130")
 - a decimal number i.e. a number prefixed with "\"
 
-See the [Special](/examples/space/) example.
+See the [Special](../../../examples/space/) example.
 
 
 

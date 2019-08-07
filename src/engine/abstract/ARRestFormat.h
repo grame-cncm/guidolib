@@ -31,7 +31,7 @@
 The **\restFormat** tag supports both a range and a position form.
 For the latter, the format is applied up to the next format specification or to the end of the voice.
 
-**\restFormat** is a way to introduce [common parameters](/refs/tagsparams/#common-parameters) to rest.
+**\restFormat** is a way to introduce [common parameters](../../tagsparams#common-parameters) to rest.
 @tagend
 
 */

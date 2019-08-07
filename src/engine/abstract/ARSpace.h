@@ -32,7 +32,7 @@ The **\space** tag can be used to save space for notation elements that do not t
 @params:
 @param:dd:unit:the amount of space:0:false
 @paramdesc
-See the [Space](/examples/space/) example.
+See the [Space](@EXAMPLES/space/) example.
 @paramend
 
 */

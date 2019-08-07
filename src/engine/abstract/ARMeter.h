@@ -50,7 +50,7 @@ The **\meter** tag displays a time signature.
 	- page: the measure number is displayed on every page only
 - **group** applies to complex time signatures and control how the a) form encountered in a c) form is displayed: when **group** if off, the a) form is transformed in a b) form
 
-See the [Meter](/examples/clefkeymeter/) example.
+See the [Meter](@EXAMPLES/clefkeymeter/) example.
 @paramend
 
 */

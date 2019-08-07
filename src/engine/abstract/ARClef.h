@@ -49,7 +49,7 @@
 - perc1, perc2, perc4, perc5 represent a percussion clef on the 1st, 2nd, 4th and 5th staff line
 - none, off prevents the clef to be displayed
 
-See the [Clefs](/examples/clefkeymeter/) example.
+See the [Clefs](@EXAMPLES/clefkeymeter/) example.
 @paramend
 
 */

@@ -39,7 +39,7 @@
 @paramdesc
 The **r3** parameter should be between 0 (leftmost) and 1 (rightmost).
 
-See the [Slurs](/examples/slurs/) example.
+See the [Slurs](@EXAMPLES/slurs/) example.
 @paramend
 
 */

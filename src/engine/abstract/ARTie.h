@@ -27,12 +27,12 @@
 @tagtype:R
 @tagnotation:tie between successive notes
 @tagdesc
-The ties parameters are similar to those of [slurs](/refs/tags/Articulations/#slur).
+The ties parameters are similar to those of [slurs](../Articulations#slur).
 Apart from moving the curve 'up' or 'down', there is no reason to change the other parameters
 @tagend
 
 @paramdesc
-See the [Tie](/examples/space/) example.
+See the [Tie](@EXAMPLES/space/) example.
 @paramend
 
 */

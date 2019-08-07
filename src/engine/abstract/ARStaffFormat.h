@@ -38,7 +38,7 @@ class TagParameterString;
 @paramdesc
 Note: the **\staffFormat** tag supports common parameters but dx has no effect.
 
-See the [Layout](/examples/layout/) example.
+See the [Layout](@EXAMPLES/layout/) example.
 @paramend
 
 */

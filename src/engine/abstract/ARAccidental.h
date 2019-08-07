@@ -37,7 +37,7 @@ Used without parameter, it forces the display of an accidental (flat, sharp or n
 @params:
 @param:style:string:"cautionary" to enforce a cautionary accidental<br/>"none" to prevent an accidental display:*none*:true
 @paramdesc
-See the [Accidentals](/examples/accidentals/) example.
+See the [Accidentals](@EXAMPLES/accidentals/) example.
 @paramend
 
 */

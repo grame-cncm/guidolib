@@ -28,7 +28,7 @@
 where 'n' and 'm' are staves indexes (starting from 1)
 - straightBrace and standard are equivalent
 
-See the [Barlines](/examples/barlines/) example.
+See the [Barlines](../../../examples/barlines/) example.
 
 
 
@@ -99,7 +99,7 @@ When no page format is encountered, the default page format is 21cm x 29.6 (A4) 
 | rm | unit | the right margin size | 2cm | true |
 | bm | unit | the bottom margin size | 3cm | true |
 
-See the [Layout](/examples/layout/) example.
+See the [Layout](../../../examples/layout/) example.
 
 
 
@@ -131,7 +131,7 @@ See the [Layout](/examples/layout/) example.
 'id' indicates a staff index (starting from 1). All the elements between a **\staff** tag and the next one
 (or the end of the voice) are assigned to the staff designated by id.
 
-See the [4 voices](/examples/4voices/) example.
+See the [4 voices](../../../examples/4voices/) example.
 
 
 
@@ -164,7 +164,7 @@ See the [4 voices](/examples/4voices/) example.
 
 Note: the **\staffFormat** tag supports common parameters but dx has no effect.
 
-See the [Layout](/examples/layout/) example.
+See the [Layout](../../../examples/layout/) example.
 
 
 
@@ -187,7 +187,7 @@ The **\staffOff** tag effect is to hide the staff and all the staff elements up 
 
 The **\staffOn** and **\staffOff** tags are still experimental and may not provide the expected result depending on the context.
 
-See the [Layout](/examples/layout/) example.
+See the [Layout](../../../examples/layout/) example.
 
 
 
@@ -207,7 +207,7 @@ See the [Layout](/examples/layout/) example.
 
 The **\staffOn** and **\staffOff** tags are still experimental and may not provide the expected result depending on the context.
 
-See the [Layout](/examples/layout/) example.
+See the [Layout](../../../examples/layout/) example.
 
 
 
@@ -236,7 +236,7 @@ See the [Layout](/examples/layout/) example.
 
 Note: the **\systemFormat** tag supports common parameters but only dx has an effect.
 
-See the [Mozart](/examples/mozart581/) example.
+See the [Mozart](../../../examples/mozart581/) example.
 
 
 

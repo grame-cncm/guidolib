@@ -43,7 +43,7 @@ ignored, the tag is not used
 - *pc* is for pica
 - *hs* is for half space
 
-See also the [Tag Parameters](/refs/tagsparams/#units) section.
+See also the [Tag Parameters](../../tagsparams#units) section.
 @paramend
 
 */

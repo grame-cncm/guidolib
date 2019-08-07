@@ -52,6 +52,8 @@ function param (name, type, desc, def, opt ) {
 
 function add_desc (content) {
 	if (INDOC) {
+		gsub(/@EXAMPLES/, "../../../examples", content)
+
 		if (INDESC) {
 			DESC = DESC content "\n";
 		}

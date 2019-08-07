@@ -24,7 +24,7 @@ Used without parameter, it forces the display of an accidental (flat, sharp or n
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | style | string | "cautionary" to enforce a cautionary accidental<br/>"none" to prevent an accidental display | *none* | true |
 
-See the [Accidentals](/examples/accidentals/) example.
+See the [Accidentals](../../../examples/accidentals/) example.
 
 
 
@@ -56,7 +56,7 @@ It can be used with or without a range: in the latter, it takes effect until the
 | :------------ |:-------| :--------------| :------------- | :--------| 
 | detune | float | a signed floating point value representing semi-tones | 0 | false |
 
-See the [Accidentals](/examples/accidentals/) example.
+See the [Accidentals](../../../examples/accidentals/) example.
 
 
 

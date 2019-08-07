@@ -52,7 +52,7 @@ class TagParameterFloat;
 @params:
 @param:length:unit:the stem length:7.0:true
 @paramdesc
-See the [4 voices](/examples/4voices/) example.
+See the [4 voices](@EXAMPLES/4voices/) example.
 @paramend
 
 @tagname:\stemsUp
@@ -64,7 +64,7 @@ See the [4 voices](/examples/4voices/) example.
 @params:
 @param:length:unit:the stem length:7.0:true
 @paramdesc
-See the [4 voices](/examples/4voices/) example.
+See the [4 voices](@EXAMPLES/4voices/) example.
 @paramend
 
 */

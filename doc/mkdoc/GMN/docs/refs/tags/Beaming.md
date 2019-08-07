@@ -29,7 +29,7 @@ Beaming is automatically computed according to the current meter. Manual beaming
 
 Known issue: *dy* fails when the stems are down.
 
-See the [Beaming](/examples/beaming/) example.
+See the [Beaming](../../../examples/beaming/) example.
 
 
 
@@ -112,7 +112,7 @@ It must be a string in the form "n/d,m/e" that express the number of beams for t
 under the form of two rationals denoting durations. For example, "1/8,1/32" indicates that the group starts with
 - **drawDuration** is used to display the actual total duration of the beamed group under the form of a rational value.
 
-See the [Beaming](/examples/beaming/) example.
+See the [Beaming](../../../examples/beaming/) example.
 
 
 

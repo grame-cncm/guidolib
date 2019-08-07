@@ -40,7 +40,7 @@
 where 'n' and 'm' are staves indexes (starting from 1)
 - straightBrace and standard are equivalent
 
-See the [Barlines](/examples/barlines/) example.
+See the [Barlines](@EXAMPLES/barlines/) example.
 
 @paramend
 

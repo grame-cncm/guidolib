@@ -35,7 +35,7 @@ The **\systemFormat** tag is mainly used for indentation of the first system.
 @paramdesc
 Note: the **\systemFormat** tag supports common parameters but only dx has an effect.
 
-See the [Mozart](/examples/mozart581/) example.
+See the [Mozart](@EXAMPLES/mozart581/) example.
 @paramend
 
 */

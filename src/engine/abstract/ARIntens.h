@@ -41,7 +41,7 @@
 @paramdesc
 - supported dynamic strings are "p", "pp", "ppp", "pppp", "f", "ff", "fff", "ffff", "mf", "mp", "sf", "sfz", "rfz" and "fz"
 
-See the [Dynamics](/examples/dynamics/) example.
+See the [Dynamics](@EXAMPLES/dynamics/) example.
 @paramend
 
 */

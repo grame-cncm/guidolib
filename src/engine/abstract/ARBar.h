@@ -37,9 +37,9 @@
 @paramdesc
 Measure numbering is attached to barlines. The **displayMeasNum** parameter activates or inhibits measures numbering.
 
-Measure numbering may also be activated at [\meter](/refs/tags/ClefKeyMeter) level.
+Measure numbering may also be activated at [\meter](../ClefKeyMeter) level.
 
-See the [Barlines](/examples/barlines/) example.
+See the [Barlines](@EXAMPLES/barlines/) example.
 @paramend
 
 */

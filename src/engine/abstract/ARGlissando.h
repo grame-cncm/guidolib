@@ -39,7 +39,7 @@ It is the position of the notes in the GMN code that determines the corresponden
 @param:fill:boolean@param:fill space between lines when applied to a chord:false:true
 @param:thickness:unit:line thickness:0.3:true
 @paramdesc
-See a [glissando](/examples/articulations/) example.
+See a [glissando](@EXAMPLES/articulations/) example.
 @paramend
 
 */

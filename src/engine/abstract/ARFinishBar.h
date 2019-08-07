@@ -28,7 +28,7 @@
 @tagnotation:an end bar line
 @tagdesc
 A finish bar is automatically inserted at the end of a piece, unless otherwise specified.
-See also the [auto](/refs/tags/Settings) tag.
+See also the [auto](../Miscellaneous) tag.
 @tagend
 
 @paramdesc

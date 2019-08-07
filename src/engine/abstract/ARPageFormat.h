@@ -42,7 +42,7 @@ When no page format is encountered, the default page format is 21cm x 29.6 (A4) 
 @param:rm:unit:the right margin size:2cm:true
 @param:bm:unit:the bottom margin size:3cm:true
 @paramdesc
-See the [Layout](/examples/layout/) example.
+See the [Layout](@EXAMPLES/layout/) example.
 @paramend
 
 */

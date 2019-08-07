@@ -37,7 +37,7 @@
 @param:thickness:unit:the line thickness:0.16:true
 @param:autopos:string:when 'on', try to automatically avoid collisions:off:true
 @paramdesc
-See the [Dynamics](/examples/dynamics/) example.
+See the [Dynamics](@EXAMPLES/dynamics/) example.
 @paramend
 
 */
