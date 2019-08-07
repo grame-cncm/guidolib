@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 
 #include "ARTuplet.h"
 #include "ARBase.h"
