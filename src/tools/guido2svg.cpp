@@ -223,7 +223,7 @@ int main(int argc, char **argv)
 	VGDevice *dev = sys.CreateDisplayDevice();
     GuidoInitDesc gd = { dev, 0, musicfont, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
-
+	
 	GuidoErrCode err;
     ARHandler arh;
 
@@ -258,6 +258,7 @@ int main(int argc, char **argv)
 	if (getBoolOption(argc, argv, "-checkLyrics")) {
 		settings.checkLyricsCollisions = true;
 	}
+	settings.optimalPageFill = false;
 	err = GuidoAR2GR (arh, &settings, &grh);
     if (err != guidoNoErr)
         error(err);
