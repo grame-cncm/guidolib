@@ -737,7 +737,8 @@ void GRSystem::DrawAccolade( VGDevice & hdc, const GRSystemSlice * slice, const 
 				NVPoint endpos = NVPoint(slice->mStaffs->Get(end)->getPosition().x, slice->mStaffs->Get(end)->getPosition().y);
 				float staffHeight = (staff->getNumlines() - 1) * staff->getStaffLSPACE();
 				endpos.y += staffHeight;
-				accol->draw(hdc, slice->mStaffs->Get(begin)->getPosition(), endpos);
+				GRStaff * staff = slice->mStaffs->Get(begin);
+				if (staff) accol->draw(hdc, staff->getPosition(), endpos);
 			}
 		}
 	}
