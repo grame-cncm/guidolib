@@ -6,7 +6,8 @@
 	\composer<"Gabriel Fauré", fsize=12pt, dy=9>
 	\composer<"Poésie de Romain Bussine", fsize=12pt, dx=-12.5cm, dy=9>
 
-	\instr<"Chant", autopos="on"> \accol<type="none"> \barFormat<"system", range="1-1">
+	\instr<"Chant", autopos="on"> \accol<type="none"> 
+	\systemFormat<dx=1.2cm> \barFormat<"system", range="1-1">
 	\clef<"g"> \key<-3> \meter<"3/4">
 	\tempo<"Andantino">  \beamsOff
 	_*3/4
