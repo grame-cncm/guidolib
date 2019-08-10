@@ -52,6 +52,9 @@ class ARMusicalVoiceState;
 
 @param:autoIntensPos:string:automatic collision avoidance for \intens:off:true
 @param:intensAutoPos:string:variant for autoIntensPos:off:true
+
+@param:fingeringPos:string:above or below (see [\fingering](../Text/#fingering)):off:true
+
 @paramdesc
 Collision management strategies can produce unexpected results or even create new collisions.
 In this case, you should switch to manual layout using the 'dx' and 'dy' [common parameters](../../tagsparams#common-parameters).
