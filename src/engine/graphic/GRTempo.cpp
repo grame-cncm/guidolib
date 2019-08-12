@@ -75,11 +75,6 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
 }
 
 // ----------------------------------------------------------------------------
-GRTempo::~GRTempo()
-{
-}
-
-// ----------------------------------------------------------------------------
 //TYPE_DURATION GRTempo::getDuration (const char * str) const
 //{
 //	int num, denom;
@@ -110,7 +105,7 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 		GuidoPos pos = elts->GetHeadPosition();
 		while (pos) {
 			GRNotationElement * e = elts->GetNext(pos);
-			if (e->getRelativeTimePosition() >= fDate) {
+			if ((e->getRelativeTimePosition() >= fDate) && e->isGREvent()) {
 				currX += e->getPosition().x - mPosition.x;
 				if (e->isGREvent()) currX -= e->getBoundingBox().Width()/2;
 				break;
