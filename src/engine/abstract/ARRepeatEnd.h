@@ -29,6 +29,7 @@ class ARRepeatBegin;
 @tagtype:P
 @tagnotation:An end repeat bar
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 */

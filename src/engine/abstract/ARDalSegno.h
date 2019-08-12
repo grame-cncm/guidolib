@@ -27,6 +27,7 @@
 @tagtype:P
 @tagnotation:Dal Segno
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 @tagname:\dalSegnoAlFine
@@ -34,6 +35,7 @@
 @tagtype:P
 @tagnotation:Dal Segno al Fine
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 */

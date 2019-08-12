@@ -40,6 +40,7 @@ class TagParameterString;
 @param:thickness:unit:the stroke thickness:0.75:true
 @param:text:string:a string displayed over the strokes:*none*:true
 @paramdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @paramend
 
 */

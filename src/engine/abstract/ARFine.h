@@ -26,6 +26,7 @@
 @tagtype:P
 @tagnotation:Fine
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 */

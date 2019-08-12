@@ -33,6 +33,8 @@
 @param:format:string:the volta format:*none*:true
 @paramdesc
 - the **format** is a string in the form "|-|", "|-", "-|" or "-", that describes the shape of the line over the repeated section.
+
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @paramend
 
 */

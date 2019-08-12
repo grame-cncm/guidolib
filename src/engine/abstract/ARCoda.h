@@ -26,6 +26,7 @@
 @tagtype:P
 @tagnotation:the code sign
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 */

@@ -26,6 +26,7 @@
 @tagtype:P
 @tagnotation:Da Capo
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 @tagname:\daCapoAlFine
@@ -33,6 +34,7 @@
 @tagtype:P
 @tagnotation:Da Capo al Fine
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 */

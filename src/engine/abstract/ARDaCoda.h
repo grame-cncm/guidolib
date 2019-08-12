@@ -26,6 +26,7 @@
 @tagtype:P
 @tagnotation:Da Coda
 @tagdesc
+See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagend
 
 */
