@@ -30,6 +30,8 @@
 @tagdesc
 The **\headsCenter** tag supports both a range and a position form.
 For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+See the [notes](@EXAMPLES/notes/) example.
 @tagend
 
 @tagname:\headsLeft
@@ -38,6 +40,8 @@ For the latter, it is is applied up to the next *head* specification or to the e
 @tagdesc
 The **\headsLeft** tag supports both a range and a position form.
 For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+See the [notes](@EXAMPLES/notes/) example.
 @tagend
 
 @tagname:\headsRight
@@ -46,6 +50,8 @@ For the latter, it is is applied up to the next *head* specification or to the e
 @tagdesc
 The **\headsRight** tag supports both a range and a position form.
 For the latter, it is is applied up to the next *head* specification or to the end of the voice.
+
+See the [notes](@EXAMPLES/notes/) example.
 @tagend
 
 @tagname:\headsNormal

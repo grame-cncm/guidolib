@@ -48,7 +48,9 @@ class ARKey;
 - **detune** is applied to the **note** parameter and works similarly as [\alter](../Accidentals#alter)
 - **accidental** is intended is intended to control how the accidental is displayed
 
-See the [Articulations](@EXAMPLES/articulations/) example.
+See the [Ornaments](@EXAMPLES/ornaments/) example.<br />
+See the [Bach](@EXAMPLES/bach/) example.<br />
+See the [Sonata](@EXAMPLES/cpebach/) example.
 @paramend
 
 
@@ -74,7 +76,8 @@ See the [Articulations](@EXAMPLES/articulations/) example.
 
 other parameters have the same effect as for [\mordent](#mordent)
 
-See the [Articulations](@EXAMPLES/articulations/) example.
+See the [Ornaments](@EXAMPLES/ornaments/) example.<br />
+See the [Sonata](@EXAMPLES/cpebach/) example.
 @paramend
 
 
@@ -96,6 +99,9 @@ See the [Articulations](@EXAMPLES/articulations/) example.
 @param:position:string:above, below:above:true
 @paramdesc
 The parameters have the same effect as for [\mordent](#mordent)
+
+See the [Ornaments](@EXAMPLES/ornaments/) example.<br />
+See the [Sonata](@EXAMPLES/cpebach/) example.
 @paramend
 
 

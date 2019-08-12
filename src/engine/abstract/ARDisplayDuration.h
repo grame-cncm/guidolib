@@ -37,6 +37,7 @@ The duration to display is indicated by a rational value. Provision is also made
 @param:d:integer:the duration denominator:*none*:false
 @param:ndots:integer:the number of dots:0:true
 @paramdesc
+See the [notes](@EXAMPLES/notes/) example.
 @paramend
 
 */

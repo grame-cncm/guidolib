@@ -30,6 +30,7 @@ class TagParameterFloat;
 @tagtype:P
 @tagnotation:disable stems drawing
 @tagdesc
+See the [notes](@EXAMPLES/notes/) example.
 @tagend
 
 @tagname:\stemsAuto
@@ -41,6 +42,8 @@ class TagParameterFloat;
 @params:
 @param:length:unit:the stem length:7.0:true
 @paramdesc
+See the [notes](@EXAMPLES/notes/) example. <br />
+See the [notes](@EXAMPLES/notes/) example.
 @paramend
 
 @tagname:\stemsDown
@@ -52,7 +55,8 @@ class TagParameterFloat;
 @params:
 @param:length:unit:the stem length:7.0:true
 @paramdesc
-See the [4 voices](@EXAMPLES/4voices/) example.
+See the [4 voices](@EXAMPLES/4voices/) example. <br />
+See the [notes](@EXAMPLES/notes/) example.
 @paramend
 
 @tagname:\stemsUp
@@ -64,7 +68,8 @@ See the [4 voices](@EXAMPLES/4voices/) example.
 @params:
 @param:length:unit:the stem length:7.0:true
 @paramdesc
-See the [4 voices](@EXAMPLES/4voices/) example.
+See the [4 voices](@EXAMPLES/4voices/) example. <br />
+See the [notes](@EXAMPLES/notes/) example.
 @paramend
 
 */

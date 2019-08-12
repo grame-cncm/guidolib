@@ -51,6 +51,8 @@ The **\meter** tag displays a time signature.
 - **group** applies to complex time signatures and control how the a) form encountered in a c) form is displayed: when **group** if off, the a) form is transformed in a b) form
 
 See the [Meter](@EXAMPLES/clefkeymeter/) example.
+
+See also the [Sonata](@EXAMPLES/cpebach/) example for measure numbers at system level.
 @paramend
 
 */

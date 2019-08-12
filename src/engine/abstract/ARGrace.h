@@ -30,6 +30,7 @@ class TagParameterInt;
 @tagtype:R
 @tagnotation:display grace notes
 @tagdesc
+See the [notes](@EXAMPLES/notes/) example.
 @tagend
 
 */

@@ -26,6 +26,7 @@
 @tagtype:P
 @tagnotation:force a line break
 @tagdesc
+See the [notes](@EXAMPLES/notes/) example.
 @tagend
 
 */

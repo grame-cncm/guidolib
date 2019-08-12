@@ -40,6 +40,8 @@ The notehead style should be among "diamond", "x", "square", "round", "triangle"
 
 In addition, each style supports 3 types of variations that consist in enclosing the string into (), <> or [].<br />
 For standard notehead, these variations are simply the  "()", "<>" or "[]" strings.
+
+See the [notes](@EXAMPLES/notes/) example.
 @paramend
 
 */

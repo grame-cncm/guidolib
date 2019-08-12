@@ -28,7 +28,7 @@
 @tagnotation:tie between successive notes
 @tagdesc
 The ties parameters are similar to those of [slurs](../Articulations#slur).
-Apart from moving the curve 'up' or 'down', there is no reason to change the other parameters
+However, apart from moving the curve 'up' or 'down', there is no reason to change the other parameters.
 @tagend
 
 @paramdesc

@@ -49,6 +49,8 @@ class TagParameterString;
 where 'x' and 'y' are the numbers and '-' denotes the presence of left and right tuplet braces.
 - **textSize** is a ratio: 1 is for nominal size
 - **dispNote** is similar to [\displayDuration](#displayduration): it forces the notes appearance whatever their duration. The **dispNote** string must be in the form "/n", where n is a number (e.g. "/16" to display sixteenth notes)
+
+See the [notes](@EXAMPLES/notes/) example.
 @paramend
 
 */

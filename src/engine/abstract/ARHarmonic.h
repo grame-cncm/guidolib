@@ -28,6 +28,7 @@
 @tagend
 
 @paramdesc
+See the [notes](@EXAMPLES/notes/) example.
 @paramend
 
 */
