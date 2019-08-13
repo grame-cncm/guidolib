@@ -53,7 +53,9 @@ class ARMusicalVoiceState;
 @param:autoIntensPos:string:automatic collision avoidance for \intens:off:true
 @param:intensAutoPos:string:variant for autoIntensPos:off:true
 
-@param:fingeringPos:string:above or below (see [\fingering](../Text/#fingering)):off:true
+@param:harmonyPos:string:above or below (see [\harmony](../Text/#harmony)):*none*:true
+@param:fingeringPos:string:above or below (see [\fingering](../Text/#fingering)):*none*:true
+@param:fingeringSize:float:the fingering text size (see [\fingering](../Text/#fingering)):*none*:true
 
 @paramdesc
 Collision management strategies can produce unexpected results or even create new collisions.
@@ -85,10 +87,12 @@ class ARAuto : public ARMTParameter
 		state getAutoLyricsPos() const				{ return fLyricsAutoPos; }
 		state getAutoInstrPos() const				{ return fInstrAutoPos; }
 		state getAutoIntensPos() const				{ return fIntensAutoPos; }
+		position getHarmonyPos() const				{ return fHarmonyPos; }
 		position getFingeringPos() const			{ return fFingeringPos; }
 		float    getFingeringSize() const			{ return fFingeringSize; }
 		bool 	 hasFingeringPos() const			{ return fHasFingeringPos; }
 		bool     hasFingeringSize() const			{ return fHasFingeringSize; }
+		bool     hasHarmonyPos() const				{ return fHasHarmonyPos; }
 
 		virtual void setTagParameters (const TagParameterMap& params);
 
@@ -110,8 +114,10 @@ class ARAuto : public ARMTParameter
 		state fIntensAutoPos;
 
 		bool		fHasFingeringPos 	= false;
+		bool		fHasHarmonyPos		= false;
 		bool		fHasFingeringSize	= false;
 		position 	fFingeringPos;
+		position 	fHarmonyPos;
 		float		fFingeringSize;
 };
 

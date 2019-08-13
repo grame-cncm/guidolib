@@ -170,6 +170,7 @@ protected:
 	bool				mAutoInstrPos;
 	bool				mAutoIntensPos;
 	ARAuto::position 	mFingeringPos;
+	ARAuto::position 	mHarmonyPos;
 	float				mFingeringSize;
 
     NVstring mFilePath;

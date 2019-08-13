@@ -202,6 +202,7 @@ extern const char* kAutoStretchFirstLineStr;
 extern const char* kAutoInstrPosStr; 
 extern const char* kAutoLyricsPosStr;
 extern const char* kAutoIntensPosStr;
+extern const char* kHarmonyPosStr;
 extern const char* kFingeringPosStr;
 extern const char* kFingeringSizeStr;
 

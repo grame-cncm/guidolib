@@ -35,10 +35,12 @@ class TagParameterString;
 
 @params:
 @param:text:string:the harmony string (e.g. C7):*none*:false
+@param:position:string:above or below:below:false
 @fontparams:
-@paramdes:
-**Note**: default settings (size, position) are still to be defined for the **\harmony** tag.
-The current settings are therefore subject to change.
+@paramdesc:
+The harmony string may contain # and & characters. They are converted to sharp and flat symbols.
+
+See the [jazz](@EXAMPLES/allthethings/) example.
 @paramend
 
 */
@@ -48,19 +50,22 @@ The current settings are therefore subject to change.
 class ARTextHarmony : public ARFontAble, public ARPositionTag
 {
 	public:
-					 ARTextHarmony();
+		enum { kUndefined, kAbove, kBelow  };
+					 ARTextHarmony( int position = kUndefined);
 		virtual		~ARTextHarmony() {}
 
 		virtual void		setTagParameters (const TagParameterMap& params);
 
-		virtual const char* getText() const		{ return text ? text->getValue() : 0; }
+		virtual const char* getText() const			{ return fText ? fText->getValue() : 0; }
+		int 				position() const		{ return fPosition; }
 
 		virtual const char*	getParamsStr() const	{ return kARTextHarmonyParams; };
 		virtual const char*	getTagName() const		{ return "ARTextHarmony"; };
 		virtual std::string getGMNName() const		{ return "\\harmony"; };
 
-	protected:
-		const TagParameterString * text; // der entsprechende Text ...
+	private:
+		const TagParameterString * fText = 0;
+		int fPosition = kUndefined;
 };
 
 

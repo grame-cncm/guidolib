@@ -22,6 +22,7 @@
 class ARTextHarmony;
 class GRStaff;
 class GRRod;
+class VGFont;
 
 /** \brief A chord symbol string.
 
@@ -64,11 +65,14 @@ public:
 
 protected:
 
-    virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()
-    { return new GRTextSaveStruct; }
+    virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() { return new GRTextSaveStruct; }
 
     unsigned int mTextAlign;
     bool	mMustFollowPitch; // (when the text tag has a range)
+
+private:
+	void 	DrawHarmonyString (VGDevice & hdc, const VGFont* font, const std::string& str, float x, float y) const;
+	float 	CharExtend (const char* c, const VGFont* font, VGDevice* hdc) const;
 };
 
 #endif

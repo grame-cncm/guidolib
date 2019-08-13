@@ -3,6 +3,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.7
+- correctly handle harmony string in harmony tag
+- add position attribute to harmony tag
+- add harmonyPos attribute to auto tag
 - add new GuidoGetTempoList API
 - add new GuidoGR2SVGColored API
 - update wasm bindings

@@ -147,6 +147,7 @@ ARFactory::ARFactory()
 	mAutoInstrPos(false),
 	mAutoIntensPos(false),
 	mFingeringPos(ARAuto::kDefault),
+	mHarmonyPos(ARAuto::kDefault),
 	mFingeringSize(0),
     mFilePath()
 {
@@ -244,6 +245,7 @@ void ARFactory::createVoice()
 	mAutoInstrPos = false;
 	mAutoIntensPos= false;
 	mFingeringPos = ARAuto::kDefault;
+	mHarmonyPos = ARAuto::kDefault;
 	mFingeringSize = 0;
 	mCurrentKey = 0;
 }
@@ -1035,12 +1037,12 @@ void ARFactory::createTag( const char * name, int no )
 
 		case 'h':
 			if (!strcmp(name,  kTagHarmonic )) {
-				ARHarmonic * tmp = new ARHarmonic;
+				ARHarmonic * tmp = new ARHarmonic ();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
             if (!strcmp(name,  kTagHarmony )) {
-                ARTextHarmony * tmp = new ARTextHarmony;
+                ARTextHarmony * tmp = new ARTextHarmony(mHarmonyPos);
                 mTags.AddHead(tmp);
                 mCurrentVoice->AddPositionTag(tmp);
             }
@@ -1974,6 +1976,7 @@ void ARFactory::addTag()
 		mAutoIntensPos = (autoTag->getAutoIntensPos() == ARAuto::kOn);
 		if (autoTag->hasFingeringPos())  mFingeringPos  = autoTag->getFingeringPos();
 		if (autoTag->hasFingeringSize()) mFingeringSize = autoTag->getFingeringSize();
+		if (autoTag->hasHarmonyPos()) mHarmonyPos = autoTag->getHarmonyPos();
 	}
 	mTagParameters.clear();
 }
