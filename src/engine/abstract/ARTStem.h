@@ -42,7 +42,6 @@ See the [notes](@EXAMPLES/notes/) example.
 @params:
 @param:length:unit:the stem length:7.0:true
 @paramdesc
-See the [notes](@EXAMPLES/notes/) example. <br />
 See the [notes](@EXAMPLES/notes/) example.
 @paramend
 

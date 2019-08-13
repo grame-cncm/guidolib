@@ -38,7 +38,8 @@ With no range, the text is inserted at its position.
 @params:
 @param:text:string:the text:*none*:false
 @fontparams:
-@paramdes:
+@paramdesc
+See the [Notes](@EXAMPLES/notes/) example.
 @paramend
 
 */

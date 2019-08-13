@@ -35,9 +35,11 @@ With no range, the text is inserted at its position.
 
 @params:
 @param:text:string:the mark:*none*:false
-@param:enclosure:string:none, square, rectangle, oval, circle, bracket, triangle, diamond:none:true
+@param:enclosure:string:none, square, rectangle, bracket, triangle, diamond:none:true
 @fontparams:
-@paramdes:
+@paramdesc
+
+See the [Tempo](@EXAMPLES/tempo/) example.
 @paramend
 
 */

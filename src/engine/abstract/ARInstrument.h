@@ -36,10 +36,14 @@
 @param:transp:string:a transposition string:*none*:true
 @param:autopos:boolean:automatic position control:off:true
 @fontparams:
-@paramdes:
+@paramdesc
 - **name** is the instrument name (e.g. "Violin I")
-- **transp** is provided for transposing instruments. For example, with a Trumpet in B flat, you should set **transp** to "B&". When **transp** is set, a transposing key is automatically inserted and the notes are automatically transposed to the corresponding interval.
-- **autopos** when "on", put the instrument string centered to the left of the corresponding staff. The default position if on top, left of the staff.
+- **transp** is provided for transposing instruments. For example, with a Trumpet in B flat, you should set **transp** to "B&". When *transp* is set, a transposing key is automatically inserted and the notes are automatically transposed to the corresponding interval.
+- **autopos**: when "on", put the instrument string centered to the left of the corresponding staff. The default position if on top, left of the staff.
+
+See the [Articulations](@EXAMPLES/articulations/) example.<br />
+See the [Mozart](@EXAMPLES/mozart581/) example.<br />
+See the [Fauré](@EXAMPLES/faure/) example.
 @paramend
 
 */
