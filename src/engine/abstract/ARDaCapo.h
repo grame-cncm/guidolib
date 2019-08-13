@@ -34,7 +34,8 @@ See the [Repeat Signs](@EXAMPLES/repeats/) example.
 @tagtype:P
 @tagnotation:Da Capo al Fine
 @tagdesc
-See the [Repeat Signs](@EXAMPLES/repeats/) example.
+See the [Repeat Signs](@EXAMPLES/repeats/) example.<br/>
+See the [Brown](@EXAMPLES/brown/) example.
 @tagend
 
 */
