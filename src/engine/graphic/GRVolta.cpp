@@ -192,8 +192,10 @@ void GRVolta::tellPosition(GObject * caller, const NVPoint & newPosition)
 	if (grne == 0 ) return;
     NEPointerList * assoc = getAssociations();
 	if (assoc == 0 ) return;
+	GRStaff * staff = grne->getGRStaff();
+	if (staff == 0 ) return;
 
-	bool newSystem = mCurrSystem && (mCurrSystem != grne->getGRStaff()->getGRSystem());
+	bool newSystem = mCurrSystem && (mCurrSystem != staff->getGRSystem());
     if (newSystem) {
         mFirstPart = mBoundingBox;
         mFirstPosition = mPosition;
@@ -203,7 +205,7 @@ void GRVolta::tellPosition(GObject * caller, const NVPoint & newPosition)
     if( (!mBeg && (grne == assoc->front())) || newSystem) {
         // this is the first element on a system, we collect the current system,
         // initialize the bounding box and set the position
-        mCurrSystem = grne->getGRStaff()->getGRSystem();
+        mCurrSystem = staff->getGRSystem();
         mBoundingBox.Set (0, -2*LSPACE, 0, 0);
         mPosition.x = grne->getBoundingBox().left + grne->getPosition().x;
         mPosition.y = getOffset().y;
@@ -224,15 +226,15 @@ void GRVolta::tellPosition(GObject * caller, const NVPoint & newPosition)
             if (!e) break;      // this shouldn't happend
 
             // ignore elements not on the current system
-            GRStaff * staff = e->getGRStaff();
-			if (!staff) continue;
-			if (staff->getGRSystem() != mCurrSystem) continue;
+            GRStaff * estaff = e->getGRStaff();
+			if (!estaff) continue;
+			if (estaff->getGRSystem() != mCurrSystem) continue;
 
             // we get the element positionned bouding box
             NVRect r = e->getBoundingBox();
             r += e->getPosition();
             // and we move the volta bounding box to the element right position
-			mBoundingBox.right = r.right - e->getGRStaff()->getPosition().x;
+			mBoundingBox.right = r.right - estaff->getPosition().x;
 
             // the next part computes the y position, it is ignored when an y offset has been specified
             if (getOffset().y) continue;
@@ -294,10 +296,12 @@ GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
     if (!staffEvs) return 0;
 
     // computes now the end range next element
+	TYPE_TIMEPOSITION date = after->getRelativeTimePosition();
     GuidoPos pos = staffEvs->GetElementPos(after);
     while (pos) {
         GRNotationElement * elt = staffEvs->GetNext(pos);
         if (elt == after) continue;
+        if (elt->getRelativeTimePosition() <= date) continue;
         if (dynamic_cast<GRBar *>(elt) || dynamic_cast<GRNote *>(elt) || dynamic_cast<GRRest *>(elt)) {
             return elt;
         }
