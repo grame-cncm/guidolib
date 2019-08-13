@@ -244,11 +244,11 @@ svgclean:
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2svg) -o $@ $<
+	$(guido2svg) -optimalPageFill -o $@ $<
 
 $(version)/lyrics/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2svg) -checkLyrics -o $@ $< 
+	$(guido2svg) -optimalPageFill -checkLyrics -o $@ $< 
 
 
 #########################################################################
@@ -257,15 +257,15 @@ map: $(mapsout)
 
 $(version)/maps/system/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2svg) -systemmap true  -o $@ $<
+	$(guido2svg) -optimalPageFill -systemmap true  -o $@ $<
 
 $(version)/maps/staff/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2svg) -staffmap true  -o $@ $<
+	$(guido2svg) -optimalPageFill -staffmap true  -o $@ $<
 
 $(version)/maps/voice/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2svg) -voicemap true  -o $@ $<
+	$(guido2svg) -optimalPageFill -voicemap true  -o $@ $<
 
 	
 #########################################################################
