@@ -44,6 +44,8 @@ class TagParameterString;
 
 **Note**: the implementation of the parameters is not satisfactory, in particular because the value of the time unit is hard coded.
 It will be revised in the future to integrate the encoding of the time unit into the tempo string.
+
+See the [Tempo](@EXAMPLES/tempo/) example.
 @paramend
 
 */

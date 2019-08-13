@@ -25,7 +25,7 @@
 @group:Dynamics
 
 @tagname:\intensity
-@tagalias:\intens \i
+@tagalias:\intens<br />\i
 @tagtype:P
 @tagnotation:dynamic marks
 @tagdesc

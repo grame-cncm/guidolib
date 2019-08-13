@@ -30,6 +30,9 @@ class TagParameterString;
 @tagnotation:ritardando marks
 @tagdesc
 Supports the same parameters and the same note than [\accelerando](#accelerando)
+
+See the [Tempo](@EXAMPLES/tempo/) example. <br />
+See the [Lutkin](@EXAMPLES/lutkin/) example.
 @tagend
 
 */
