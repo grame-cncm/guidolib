@@ -25,7 +25,8 @@
 @tagtype:P
 @tagnotation:a breath mark
 @tagdesc
-See the [Articulations](@EXAMPLES/articulations/) example.
+See the [Articulations](@EXAMPLES/articulations/) example.<br />
+See the [Lutkin](@EXAMPLES/lutkin/) example.
 @tagend
 
 */
