@@ -26,7 +26,8 @@
 @tagtype:P
 @tagnotation:force a line break
 @tagdesc
-See the [notes](@EXAMPLES/notes/) example.
+See the [notes](@EXAMPLES/notes/) example. <br />
+See the [Bartok](@EXAMPLES/bartok/) example.
 @tagend
 
 */
