@@ -80,9 +80,7 @@ void GRNote::setNoteFormat(const ARNoteFormat * frmt)
 /*
 	outAccidental will be negative if note has flats and positive if note has sharps
 */
-void GRNote::getPitchAndOctave( int * outPitch,
-								int * outOctave,
-								int * outAccidentals ) const
+void GRNote::getPitchAndOctave( int * outPitch, int * outOctave, int * outAccidentals ) const
 {
 	const ARNote * ar = getARNote();
 
@@ -92,8 +90,7 @@ void GRNote::getPitchAndOctave( int * outPitch,
 }
 
 // -----------------------------------------------------------------------------
-GDirection
-GRNote::getDefaultThroatDirection() const
+GDirection GRNote::getDefaultThroatDirection() const
 {
 	if( mGrStaff == 0 ) return dirOFF;
 
@@ -112,8 +109,7 @@ GRNote::getDefaultThroatDirection() const
 
 	on return: -1: downward, 1 : upward.
 */
-GDirection
-GRNote::getThroatDirection() const
+GDirection GRNote::getThroatDirection() const
 {
 	GDirection dir = getStemDirection();
 	if(( dir != dirUP ) && ( dir != dirDOWN ))
