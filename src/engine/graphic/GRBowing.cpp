@@ -371,6 +371,12 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 			}
 			else break;
 		} while (count < 3);
+		float width = bowInfos->offsets[2].x - bowInfos->offsets[0].x;
+		if (context.openLeft && (width < 110)) {
+			bowInfos->offsets[0].x -= 110 - width;
+			bowInfos->offsets[1].y = bowInfos->offsets[2].y - ((context.curveDir > 0) ? LSPACE : -LSPACE);
+			bowInfos->offsets[0].y = bowInfos->offsets[1].y;
+		}
 		return;
 #else
 		automaticControlPoints( &context, arBow, sse );
@@ -682,7 +688,6 @@ void GRBowing::OnDraw( VGDevice & hdc) const
 
 	const float x = bowInfos->position.x;
 	const float y = bowInfos->position.y;
-// keith hamel
 	::drawSlur( hdc,
 				x + bowInfos->offsets[0].x,
 				y + bowInfos->offsets[0].y,
@@ -691,10 +696,6 @@ void GRBowing::OnDraw( VGDevice & hdc) const
 				x + bowInfos->offsets[2].x,
 				y + bowInfos->offsets[2].y,
 				bowInfos->inflexion );
-
-	// no floodfill until point-issue is eliminated
-	///ExtFloodFill(hdc,pmid.x,pmid.y,fg,FLOODFILLSURFACE);
-	// FloodFill(hdc,pmid.x,pmid.y,fg);
 
 	// restore old pen and brush
 	if (mColRef) hdc.PopFillColor();

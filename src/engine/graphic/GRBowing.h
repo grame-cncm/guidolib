@@ -116,7 +116,6 @@ class GRBowing : public GRPTagARNotationElement
 		virtual void manualControlPoints		( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void applyAnchorPointsOffsets	( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 
-	private:
 		GRSystemStartEndStruct * initGRBowing( GRStaff * grstaff );
 };
 
