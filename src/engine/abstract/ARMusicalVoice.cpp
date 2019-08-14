@@ -4256,7 +4256,6 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
         ARNote * n2 = static_cast<ARNote *>(ev2->isARNote());
 		// now look, if there are any ties
 		// and merge-tags ..
-//		if (tiemergecount==0 && n2 && !(n2->getName().operator==(ARNoteName::empty)))
 		if (tiemergecount==0 && n2 && !(n2->getName() == ARNoteName::empty))
 		{
 			if (mPosTagList == NULL)
