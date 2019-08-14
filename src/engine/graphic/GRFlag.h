@@ -19,6 +19,7 @@
 
 class GREvent;
 class GRGlobalStem;
+class GRStem;
 
 
 /** \brief Flags attached to a note stem.
@@ -69,6 +70,8 @@ public:
 	virtual int getNumFaehnchen() const;
 	virtual void setColRef(const unsigned char * tmpcolref);
 
+	void changeOffset (GRStem * stem);
+	
 protected:
 			void	calcFlagExtent( float inNoteBreite );
 			void	initialize(const TYPE_DURATION & duration, GDirection stemdir, float notebreite);
@@ -77,12 +80,14 @@ protected:
 
 	float				mSize;
 	unsigned char * 	mColRef;
-	NVPoint 			mOffset;
 	bool 				mFlagOn;
 
 	// is set to one, if the flag should be drawn straight...
 	bool 				mStraight;
 
+
+private:
+	NVPoint 			mOffset;
     GDirection     fStemdir;
     float          fStemlength;
     float          fNotebreite;

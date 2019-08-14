@@ -17,6 +17,7 @@ using namespace std;
 
 #include "GRFlag.h"
 #include "GRGlobalStem.h"
+#include "GRStem.h"
 #include "GREvent.h"
 #include "ARMusicalObject.h"	// for DURATIONs
 #include "VGDevice.h"
@@ -63,6 +64,14 @@ GRFlag::~GRFlag()
     mColRef = 0;
 }
 
+void GRFlag::changeOffset (GRStem * stem) {
+	mOffset = stem->getOffset();
+	if (fStemdir == dirUP)
+		mOffset.y -= stem->getStemLength();
+	else if (fStemdir == dirDOWN)
+		mOffset.y += stem->getStemLength();
+}
+
 void GRFlag::configureForChord(GRGlobalStem *gstem, const TYPE_DURATION& duration) {
 	mFlagOn   = true;
 	mStraight = false;
@@ -79,9 +88,9 @@ void GRFlag::configureForChord(GRGlobalStem *gstem, const TYPE_DURATION& duratio
 
 	// the stemlength is not changed by size parameter!
 	if (fStemdir == dirUP)
-		mOffset.y += (GCoord) (- fStemlength);
+		mOffset.y -= gstem->getStemLength();
 	else if (fStemdir == dirDOWN)
-		mOffset.y += (GCoord) (  fStemlength);
+		mOffset.y += gstem->getStemLength();
 }
 
 void GRFlag::configureForSingleNote(GREvent *sngnot, const TYPE_DURATION& duration) {

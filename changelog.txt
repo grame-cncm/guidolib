@@ -22,6 +22,7 @@ GUIDO Engine history
 - fix incorrect beaming with chords spanning different staves
 - fix incorrect slur position with different staves
 - fix incorrect tempo position (stacked on the beginning of the staff)
+- fix incorrect flag position with multi staves chords
 
 ----------------------------------------------------------------
   version 1.6.6

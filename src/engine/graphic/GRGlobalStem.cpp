@@ -902,16 +902,15 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 				fStem->setStemLength(theLength);
 			}
 			
-			if (stemdir == dirUP)			fFlag->setPosition(NVPoint(0, (GCoord)fHighestY));
-			else if (stemdir == dirDOWN)	fFlag->setPosition(NVPoint(0, (GCoord)fLowestY));
-
+			if (stemdir == dirUP)			fFlag->setPosition( NVPoint(0, fHighestY ));
+			else if (stemdir == dirDOWN)	fFlag->setPosition( NVPoint(0, fLowestY ));
+			fFlag->changeOffset(fStem);
 			GRNotationElement * tmpel = mAssociated->GetHead();
 			if (tmpel)
 				updateGlobalStem(tmpel->getGRStaff());
 		}
 		setHPosition(pt.x);
 		if (fBeam) fBeam->refreshPosition();
-//cerr << (void*)this << " GRGlobalStem::tellPosition " << getStemStartPos() << " " << fStem->getStemLength() << endl;
 	}
 }
 
