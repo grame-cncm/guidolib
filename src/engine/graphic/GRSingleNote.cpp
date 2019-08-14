@@ -122,10 +122,16 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
 	if (!mDraw || !mShow) return;
 
-//    int numVoice = getAbstractRepresentation()->getVoiceNum();
     float incy = 1;
     float posy = 0;
     int sum = mNumHelpLines;
+
+//	NVRect r = getEnclosingBox(false, false, false);
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
+//	NVPoint p = getStemEndPos();
+//	float w = 25.f;
+//	hdc.Rectangle(p.x-w, p.y-w, p.x+w, p.y+w);
+//cerr << "GRSingleNote::OnDraw " << this << " box: " << r << endl;
 
     if (mNumHelpLines > 0) { 	// ledger lines up
         incy = -mCurLSPACE;
@@ -196,13 +202,6 @@ void GRSingleNote::updateBoundingBox()
 {
 	// - Call inherited
 	GRNote::updateBoundingBox();
-
-	// - Check for notebreite (?)
-//	if (mBoundingBox.left > (-mNoteBreite * 0.5f))
-//		mBoundingBox.left = (-mNoteBreite * 0.5f);	// (JB) test, was: 0
-//
-//	if (mBoundingBox.right < (mNoteBreite * 0.5f))
-//		mBoundingBox.right = (mNoteBreite * 0.5f);	// width of the note. (JB) test, was: 0
 
 	// - Check for ledger lines
 	//  (note that the bounding box does not take account of ledger lines, for now)
@@ -352,7 +351,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 
 	// now we adjust the stemlength (in certain cases, just when it is not long enough)
 	if (!mStemLengthSet && !mGlobalStem) {
-		GRStem * stem = getStem();
+		const GRStem * stem = getStem();
 		if (stem) {
 			if (stem->getStemDir() == dirUP) {
 				NVPoint stemendpos (stem->getPosition());
@@ -451,7 +450,7 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 	if (mGlobalStem)
 		stemdir = mGlobalStem->getStemDir();			// we have a shared stem
 	else {
-		GRStem * stem = getStem();
+		const GRStem * stem = getStem();
 		if (stem) stemdir = stem->getStemDir();
 	}
 
@@ -741,8 +740,7 @@ void GRSingleNote::setStemDirection(GDirection dir)
 void GRSingleNote::setFlagOnOff(bool p)
 {
 	GRFlag * flag = getFlag();
-	if (flag)
-	{
+	if (flag) {
 		flag->setFlagOnOff(p);
 		updateBoundingBox();
 	}
@@ -752,14 +750,10 @@ void GRSingleNote::setFlagOnOff(bool p)
 void GRSingleNote::setStemOnOff(bool p)
 {
 	GRStem * stem = getStem();
-	if (stem)
-	{
-		if (p)
-			stem->setStemDir(dirAUTO);
-		else
-			stem->setStemDir(dirOFF);
+	if (stem) {
+		stem->setStemDir( p ? dirAUTO : dirOFF);
+		updateBoundingBox();
 	}
-	updateBoundingBox();
 }
 
 //____________________________________________________________________________________
@@ -824,6 +818,13 @@ float GRSingleNote::changeStemLength( float inLen )
 	for( GRNEList::iterator i = articulations.begin(); i != articulations.end(); i++ ) {
 		(*i)->tellPosition( this, mPosition );
 	}
+
+//	NEPointerList & list = GetCompositeElements();
+//	GuidoPos pos = list.GetHeadPosition();
+//	while (pos) {
+//		GRNotationElement* e = list.GetNext(pos);
+//		e->tellPosition( this, mPosition );
+//	}
 	return mStemLen;
 }
 
@@ -848,21 +849,18 @@ float GRSingleNote::getStemLength() const
 */
 NVPoint GRSingleNote::getStemStartPos() const
 {
-	const GRStem * stem = getStem();
 	NVPoint pnt( mPosition );
-	if (stem)
+	GDirection dir = getStemDirection();
+	if (dir == dirUP)
 	{
-		if (mStemDir == dirUP)
-		{
-			const GCoord leftUpOffset = - 4 * mSize;		// (JB) was (4 * size) (???)
-			pnt.x += (GCoord)((mNoteBreite * 0.5f * mSize) + mOffset.x + leftUpOffset);
-			pnt.y -= (GCoord)(mStemLen - mOffset.y);
-		}
-		else if (mStemDir == dirDOWN)
-		{
-			pnt.x -= (GCoord)((mNoteBreite * 0.5f * mSize) - mOffset.x - (0 * mSize));// (JB) was (0 * size)
-			pnt.y += (GCoord)(mStemLen + mOffset.y);
-		}
+		const GCoord leftUpOffset = - 4 * mSize;
+		pnt.x += (GCoord)((mNoteBreite * 0.5f * mSize) + mOffset.x + leftUpOffset);
+		pnt.y -= (GCoord)(mStemLen - mOffset.y);
+	}
+	else if (dir == dirDOWN)
+	{
+		pnt.x -= (GCoord)((mNoteBreite * 0.5f * mSize) - mOffset.x - (0 * mSize));
+		pnt.y += (GCoord)(mStemLen + mOffset.y);
 	}
 	return pnt;
 }
@@ -870,21 +868,18 @@ NVPoint GRSingleNote::getStemStartPos() const
 //____________________________________________________________________________________
 NVPoint GRSingleNote::getStemEndPos() const
 {
-	const GRStem * stem = getStem();
-	NVPoint pnt(mPosition);
-	if (stem)
+	NVPoint pnt( mPosition );
+	GDirection dir = getStemDirection();
+	if (dir == dirUP)
 	{
-		if (mStemDir == dirUP)
-		{
-			const GCoord rightUpOffset = - 6 * mSize;		 // (JB) was (1 * size)
-			pnt.x += (GCoord)((mNoteBreite * 0.5f * mSize) + mOffset.x + rightUpOffset );
-			pnt.y -= (GCoord)(mStemLen - mOffset.y);
-		}
-		else if (mStemDir == dirDOWN)
-		{
-			pnt.x -= (GCoord)((mNoteBreite * 0.5f * mSize) - mOffset.x - (0 * mSize)); // (JB) was (4 * size)
-			pnt.y += (GCoord)(mStemLen + mOffset.y);
-		}
+		const GCoord rightUpOffset = - 6 * mSize;		 // (JB) was (1 * size)
+		pnt.x += (GCoord)((mNoteBreite * 0.5f * mSize) + mOffset.x + rightUpOffset );
+		pnt.y -= (GCoord)(mStemLen - mOffset.y);
+	}
+	else if (dir == dirDOWN)
+	{
+		pnt.x -= (GCoord)((mNoteBreite * 0.5f * mSize) - mOffset.x - (0 * mSize)); // (JB) was (4 * size)
+		pnt.y += (GCoord)(mStemLen + mOffset.y);
 	}
 	return pnt;
 }
