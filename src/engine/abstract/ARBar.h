@@ -61,11 +61,11 @@ class ARBar : public ARMTParameter
 
 		virtual void setTagParameters (const TagParameterMap& params);
 
-		void  setMeasureNumber(int inMeasureNumber)   { measureNumber = inMeasureNumber; }
-		int   getMeasureNumber()          const       { return measureNumber; }
-        int   getMeasureNumberDisplayed() const       { return measureNumberDisplayed; }
-        void  setMeasureNumberDisplayed(int mode)	  { measureNumberDisplayed = mode; }
-        bool  isMeasureNumberDisplayedSet() const     { return measureNumberDisplayedIsSet; }
+		void  setMeasureNumber(int inMeasureNumber)   { fMeasureNumber = inMeasureNumber; }
+		int   getMeasureNumber()          const       { return fMeasureNumber; }
+        int   getMeasureNumberDisplayed() const       { return fMeasureNumberDisplayed; }
+        void  setMeasureNumberDisplayed(int mode)	  { fMeasureNumberDisplayed = mode; }
+        bool  isMeasureNumberDisplayedSet() const     { return fMeasureNumberDisplayedIsSet; }
 
         bool isMeasureNumSkipped() const                       { return fSkippedMeasureNum; }
      
@@ -82,14 +82,14 @@ class ARBar : public ARMTParameter
   private:
 		TRanges	fRanges;
 
-		int   measureNumber;
-        int   measureNumberDisplayed;
+		int   fMeasureNumber;
+        int   fMeasureNumberDisplayed;
         bool  fSkippedMeasureNum;
 		float numDx;
 		float numDy;
 		const ARBar*	fLastBar;
 
-        bool measureNumberDisplayedIsSet;
+        bool fMeasureNumberDisplayedIsSet;
 };
 
 #endif

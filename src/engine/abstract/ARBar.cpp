@@ -26,9 +26,9 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 {
 	setupTagParameters (gMaps->sARBarMap);
 
-	measureNumber               = 0;
-    measureNumberDisplayed      = kNoNum;
-    measureNumberDisplayedIsSet = false;
+	fMeasureNumber               = 0;
+    fMeasureNumberDisplayed      = kNoNum;
+    fMeasureNumberDisplayedIsSet = false;
     fSkippedMeasureNum          = false;
 	numDx = numDy = 0;
 }
@@ -37,9 +37,9 @@ ARBar::ARBar()
 {
 	setupTagParameters (gMaps->sARBarMap);
 
-	measureNumber               = 0;
-    measureNumberDisplayed      = kNoNum;
-    measureNumberDisplayedIsSet = false;
+	fMeasureNumber               = 0;
+    fMeasureNumberDisplayed      = kNoNum;
+    fMeasureNumberDisplayedIsSet = false;
     fSkippedMeasureNum          = false;
 	numDx = numDy = 0;
 }
@@ -52,8 +52,8 @@ void ARBar::setTagParameters (const TagParameterMap& params)
 		const char* displayMeasNum = p->getValue();
 		
 		fSkippedMeasureNum = (skipped == displayMeasNum);
-		measureNumberDisplayed = (p->getBool() ? kNumAll : kNoNum);
-		measureNumberDisplayedIsSet = true;
+		fMeasureNumberDisplayed = (p->getBool() ? kNumAll : kNoNum);
+		fMeasureNumberDisplayedIsSet = true;
 	}
 
     const TagParameterFloat* num = getParameter<TagParameterFloat>(kNumDxStr);
