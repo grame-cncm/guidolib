@@ -62,6 +62,11 @@ class ARMusicalVoiceState;
 @paramdesc
 Collision management strategies can produce unexpected results or even create new collisions.
 In this case, you should switch to manual layout using the 'dx' and 'dy' [common parameters](../../tagsparams#common-parameters).
+
+See the [Jazz](@EXAMPLES/allthethings/) example.<br />
+See the [Beethoven](@EXAMPLES/beethoven/) example.<br />
+See the [Sonata](@EXAMPLES/cpebach/) example.
+
 @paramend
 
 */
