@@ -178,23 +178,9 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 		el->OnDraw(hdc);
 	}
 
-//	if (fOrnament) {
-//        float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
-//		// to draw the trill line...
-////		float Y = getPosition().y + getBoundingBox().Height() / 2;
-////		fOrnament->OnDraw(hdc, X, Y, numVoice);
-//		fOrnament->OnDraw(hdc, X, getPosition().y, numVoice);
-//	}
-
-	// - Restore
-	if (mColRef)
-        hdc.SetFontColor(oldcolor);
-
-	if (gBoundingBoxesMap & kEventsBB)
-		DrawBoundingBox(hdc, kEventBBColor);
-
-	if (fClusterHaveToBeDrawn)
-		fCluster->OnDraw(hdc);
+	if (mColRef) 						hdc.SetFontColor(oldcolor);
+	if (gBoundingBoxesMap & kEventsBB) 	DrawBoundingBox(hdc, kEventBBColor);
+	if (fClusterHaveToBeDrawn) 			fCluster->OnDraw(hdc);
 }
 
 //____________________________________________________________________________________
