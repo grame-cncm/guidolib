@@ -205,6 +205,7 @@ extern const char* kAutoIntensPosStr;
 extern const char* kHarmonyPosStr;
 extern const char* kFingeringPosStr;
 extern const char* kFingeringSizeStr;
+extern const char* kAutoHideTiedAccidentals;
 
 #endif
 

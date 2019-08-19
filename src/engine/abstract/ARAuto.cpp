@@ -30,12 +30,11 @@ ARAuto::ARAuto()
 	fPageBreakState         = kOn;
 	fSystemBreakState       = kOn;
 	fClefKeyMeterOrderState = kOn;
-//	fStretchLastLineState   = kOff;
-//	fStretchFirstLineState  = kOff;
 	fLyricsAutoPos		    = kOff;
 	fInstrAutoPos		    = kOff;
 	fIntensAutoPos		    = kOff;
 	fFingeringPos			= kDefault;
+	fAutoHideTiedAccidentals = kOff;
 	fHarmonyPos				= kDefault;
 	fFingeringSize			= 0;
 }
@@ -45,31 +44,28 @@ void ARAuto::setTagParameters (const TagParameterMap& params)
 	const string off("off");
 	const string on("on");
 	const TagParameterString * p = getParameter<TagParameterString>(kAutoEndBarStr, kEndBarStr);
-	if (p && (off == p->getValue())) fEndBarState = kOff;
+	if ( p ) fEndBarState = p->getBool() ? kOn : kOff;
 
 	p = getParameter<TagParameterString>(kAutoPageBreakStr, kPageBreakStr);
-	if (p && (off == p->getValue())) fPageBreakState = kOff;
+	if ( p ) fPageBreakState = p->getBool() ? kOn : kOff;
 
 	p = getParameter<TagParameterString>(kAutoSystemBreakStr, kSystemBreakStr);
-	if (p && (off == p->getValue())) fSystemBreakState = kOff;
+	if ( p ) fSystemBreakState = p->getBool() ? kOn : kOff;
 
 	p = getParameter<TagParameterString>(kAutoClefKeyMeterOrderStr, kClefKeyMeterOrderStr);
-	if (p && (off == p->getValue())) fClefKeyMeterOrderState = kOff;
-
-//	p = getParameter<TagParameterString>(kAutoStretchLastLineStr, kStretchLastLineStr);
-//	if (p && (on == p->getValue())) fStretchLastLineState = kOn;
-//
-//	p = getParameter<TagParameterString>(kAutoStretchFirstLineStr, kStretchFirstLineStr);
-//	if (p && (on == p->getValue())) fStretchFirstLineState = kOn;
+	if ( p ) fClefKeyMeterOrderState = p->getBool() ? kOn : kOff;
 
 	p = getParameter<TagParameterString>(kAutoInstrPosStr, kInstrAutoPosStr);
-	if (p && (on == p->getValue())) fInstrAutoPos = kOn;
+	if ( p ) fInstrAutoPos = p->getBool() ? kOn : kOff;
 
 	p = getParameter<TagParameterString>(kAutoLyricsPosStr, kLyricsAutoPosStr);
-	if (p && (on == p->getValue())) fLyricsAutoPos = kOn;
+	if ( p ) fLyricsAutoPos = p->getBool() ? kOn : kOff;
 
 	p = getParameter<TagParameterString>(kAutoIntensPosStr, kIntensAutoPosStr);
-	if (p && (on == p->getValue())) fIntensAutoPos = kOn;
+	if ( p ) fIntensAutoPos = p->getBool() ? kOn : kOff;
+
+	p = getParameter<TagParameterString>(kAutoHideTiedAccidentals);
+	if ( p ) fAutoHideTiedAccidentals = p->getBool() ? kOn : kOff;
 
 	p = getParameter<TagParameterString>(kFingeringPosStr);
 	if (p) {

@@ -146,6 +146,7 @@ ARFactory::ARFactory()
 	mAutoLyricsPos(false),
 	mAutoInstrPos(false),
 	mAutoIntensPos(false),
+	mAutoHideTiedAccidentals(false),
 	mFingeringPos(ARAuto::kDefault),
 	mHarmonyPos(ARAuto::kDefault),
 	mFingeringSize(0),
@@ -244,6 +245,7 @@ void ARFactory::createVoice()
 	mAutoLyricsPos = false;
 	mAutoInstrPos = false;
 	mAutoIntensPos= false;
+	mAutoHideTiedAccidentals = false;
 	mFingeringPos = ARAuto::kDefault;
 	mHarmonyPos = ARAuto::kDefault;
 	mFingeringSize = 0;
@@ -1443,14 +1445,14 @@ void ARFactory::createTag( const char * name, int no )
 		case 't':	
 			if(!strcmp(name, kTagTie ))
 			{
-				ARTie * tmp = new ARTie;
+				ARTie * tmp = new ARTie (mAutoHideTiedAccidentals);
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddPositionTag(tmp);
 			}
 			else if (!strcmp(name, kTagTieBegin ))
 			{
 				// this is the id-number!
-				ARTie * tmp = new ARTie;
+				ARTie * tmp = new ARTie (mAutoHideTiedAccidentals);
 				tmp->setAssociation(ARMusicalTag::ER);
 				tmp->setAllowRange(0);
 				tmp->setID(no);
@@ -1974,6 +1976,7 @@ void ARFactory::addTag()
 		mAutoLyricsPos = (autoTag->getAutoLyricsPos() == ARAuto::kOn);
 		mAutoInstrPos = (autoTag->getAutoInstrPos() == ARAuto::kOn);
 		mAutoIntensPos = (autoTag->getAutoIntensPos() == ARAuto::kOn);
+		mAutoHideTiedAccidentals = (autoTag->getAutoHideTiedAccidentals() == ARAuto::kOn);
 		if (autoTag->hasFingeringPos())  mFingeringPos  = autoTag->getFingeringPos();
 		if (autoTag->hasFingeringSize()) mFingeringSize = autoTag->getFingeringSize();
 		if (autoTag->hasHarmonyPos()) mHarmonyPos = autoTag->getHarmonyPos();

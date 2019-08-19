@@ -22,7 +22,7 @@ const char* kARFontAbleParams	= "S,textformat,rc,o;S,font,Times,o;U,fsize,9pt,o;
 
 //---------------------------------------------
 // specific tags parameters strings
-const char* kARAutoParams		= "S,endBar,on,o;S,pageBreak,on,o;S,systemBreak,on,o;S,clefKeyMeterOrder,on,o;S,stretchLastLine,off,o;S,stretchFirstLine,off,o;S,lyricsAutoPos,off,o;S,instrAutoPos,off,o;S,intensAutoPos,off,o;S,autoEndBar,on,o;S,autoPageBreak,on,o;S,autoSystemBreak,on,o;S,autoClefKeyMeterOrder,on,o;S,autoStretchLastLine,off,o;S,autoStretchFirstLine,off,o;S,autoInstrPos,off,o;S,autoLyricsPos,off,o;S,autoIntensPos,off,o;S,fingeringPos,,o;F,fingeringSize,,o;S,harmonyPos,,o";
+const char* kARAutoParams		= "S,endBar,on,o;S,pageBreak,on,o;S,systemBreak,on,o;S,clefKeyMeterOrder,on,o;S,stretchLastLine,off,o;S,stretchFirstLine,off,o;S,lyricsAutoPos,off,o;S,instrAutoPos,off,o;S,intensAutoPos,off,o;S,autoEndBar,on,o;S,autoPageBreak,on,o;S,autoSystemBreak,on,o;S,autoClefKeyMeterOrder,on,o;S,autoStretchLastLine,off,o;S,autoStretchFirstLine,off,o;S,autoInstrPos,off,o;S,autoLyricsPos,off,o;S,autoIntensPos,off,o;S,fingeringPos,,o;F,fingeringSize,,o;S,harmonyPos,,o;S,autoHideTiedAccidentals,,o";
 
 const char* kARDrHoosParams		= "I,inverse,0,o";
 const char* kARDrRenzParams		= "I,inverse,0,o";
@@ -204,6 +204,7 @@ const char* kAutoIntensPosStr		= "autoIntensPos";
 const char* kHarmonyPosStr			= "harmonyPos";
 const char* kFingeringPosStr		= "fingeringPos";
 const char* kFingeringSizeStr		= "fingeringSize";
+const char* kAutoHideTiedAccidentals = "autoHideTiedAccidentals";
 
 
 

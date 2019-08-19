@@ -32,29 +32,31 @@ class ARMusicalVoiceState;
 @tagend
 
 @params:
-@param:autoEndBar:string:automatic end bar:on:true
-@param:endBar:string:variant for autoEndBar:on:true
+@param:autoEndBar:boolean:automatic end bar:on:true
+@param:endBar:boolean:variant for autoEndBar:on:true
 
-@param:autoPageBreak:string:automatic page break:on:true
-@param:pageBreak:string:variant for autoPageBreak:on:true
+@param:autoPageBreak:boolean:automatic page break:on:true
+@param:pageBreak:boolean:variant for autoPageBreak:on:true
 
-@param:autoSystemBreak:string:automatic system break:on:true
-@param:systemBreak:string:variant for autoSystemBreak:on:true
+@param:autoSystemBreak:boolean:automatic system break:on:true
+@param:systemBreak:boolean:variant for autoSystemBreak:on:true
 
-@param:autoClefKeyMeterOrder:string:automatic reordering of clef, key and meter:on:true
-@param:clefKeyMeterOrder:string:variant for autoClefKeyMeterOrder:on:true
+@param:autoClefKeyMeterOrder:boolean:automatic reordering of clef, key and meter:on:true
+@param:clefKeyMeterOrder:boolean:variant for autoClefKeyMeterOrder:on:true
 
-@param:autoLyricsPos:string:automatic collision avoidance for \lyrics:off:true
-@param:lyricsAutoPos:string:ariant for autoLyricsPos:off:true
+@param:autoLyricsPos:boolean:automatic collision avoidance for \lyrics:off:true
+@param:lyricsAutoPos:boolean:ariant for autoLyricsPos:off:true
 
-@param:autoInstrPos:string:automatic positionning for \instr:off:true
-@param:instrAutoPos:string:variant for autoInstrPos:off:true
+@param:autoInstrPos:boolean:automatic positionning for \instr:off:true
+@param:instrAutoPos:boolean:variant for autoInstrPos:off:true
 
-@param:autoIntensPos:string:automatic collision avoidance for \intens:off:true
-@param:intensAutoPos:string:variant for autoIntensPos:off:true
+@param:autoIntensPos:boolean:automatic collision avoidance for \intens:off:true
+@param:intensAutoPos:boolean:variant for autoIntensPos:off:true
 
-@param:harmonyPos:string:above or below (see [\harmony](../Text/#harmony)):*none*:true
-@param:fingeringPos:string:above or below (see [\fingering](../Text/#fingering)):*none*:true
+@param:autoHideTiedAccidentals:boolean:hide all acidentals on tied notes:off:true
+
+@param:harmonyPos:boolean:above or below (see [\harmony](../Text/#harmony)):*none*:true
+@param:fingeringPos:boolean:above or below (see [\fingering](../Text/#fingering)):*none*:true
 @param:fingeringSize:float:the fingering text size (see [\fingering](../Text/#fingering)):*none*:true
 
 @paramdesc
@@ -78,8 +80,6 @@ class ARAuto : public ARMTParameter
 				 ARAuto();
 		virtual ~ARAuto() {}
 
-//		state getStretchLastLineState() const		{ return fStretchLastLineState; }
-//		state getStretchFirstLineState() const		{ return fStretchFirstLineState; }
 		state getClefKeyMeterOrderState() const		{ return fClefKeyMeterOrderState; }
 		state getEndBarState() const				{ return fEndBarState; }
 		state getSystemBreakState() const			{ return fSystemBreakState; }
@@ -87,6 +87,8 @@ class ARAuto : public ARMTParameter
 		state getAutoLyricsPos() const				{ return fLyricsAutoPos; }
 		state getAutoInstrPos() const				{ return fInstrAutoPos; }
 		state getAutoIntensPos() const				{ return fIntensAutoPos; }
+		state getAutoHideTiedAccidentals() const	{ return fAutoHideTiedAccidentals; }
+
 		position getHarmonyPos() const				{ return fHarmonyPos; }
 		position getFingeringPos() const			{ return fFingeringPos; }
 		float    getFingeringSize() const			{ return fFingeringSize; }
@@ -107,12 +109,11 @@ class ARAuto : public ARMTParameter
 		state fPageBreakState;
 		state fSystemBreakState;
 		state fClefKeyMeterOrderState;
-//		state fStretchLastLineState;
-//		state fStretchFirstLineState;
 		state fLyricsAutoPos;
 		state fInstrAutoPos;
 		state fIntensAutoPos;
-
+		state fAutoHideTiedAccidentals;
+	
 		bool		fHasFingeringPos 	= false;
 		bool		fHasHarmonyPos		= false;
 		bool		fHasFingeringSize	= false;
