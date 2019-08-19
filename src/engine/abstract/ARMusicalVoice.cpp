@@ -2243,7 +2243,7 @@ void ARMusicalVoice::doAutoBarlines()
 					// tie repositioning works ...
 					GuidoPos newptagpos = NULL;
 					ARNote *nt = static_cast<ARNote *>(ev2->isARNote());
-					if (!nt || nt->getName() != ARNoteName::empty) {
+					if (!nt || !nt->isEmptyNote()) {
 						// new: just insert a tie anyways ....
 						if (mPosTagList == NULL) {
 							mPosTagList = createPositionTagList();
@@ -4137,71 +4137,45 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 */
 void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIMEPOSITION & tp, int /*tieormerge*/)
 {
-	// a number for the automatic ties ...
-	// int autotie = 38001;
-
 	ARMusicalEvent *ev = ARMusicalEvent::cast(GetAt(vst.vpos));
 	assert(ev);
 
 	// first, we calculate the tie-merge-count
 	int tiemergecount = 0;
-
-	if (vst.curpositiontags)
-	{
+	if (vst.curpositiontags) {
 		GuidoPos pos = vst.curpositiontags->GetHeadPosition();
-		while (pos)
-		{
+		while (pos) {
 			ARPositionTag * arpt = vst.curpositiontags->GetNext(pos);
-			if (dynamic_cast<ARTie *>(arpt)
-				|| dynamic_cast<ARMerge *>(arpt))
+			if (dynamic_cast<ARTie *>(arpt) || dynamic_cast<ARMerge *>(arpt))
 				++ tiemergecount;
 		}
 	}
 
-	// now, we need to split the event ...
-	// (just like during bar-creation)
+	// now, we need to split the event ... (just like during bar-creation)
 
-	// this is the position within
-	// the positiontags where
-	// a tie/merge-tag can be inserted.
-	// it lies just after the current event
-	// or is NULL (no mPosTagList, end of mPosTagList)
-
-	// GuidoPos FLA = vst.ptagpos;
+	// this is the position within the positiontags where a tie/merge-tag can be inserted.
+	// it lies just after the current event or is NULL (no mPosTagList, end of mPosTagList)
 
 	// now calculate the durations ...
-
 	const TYPE_DURATION olddur (ev->getDuration());
 	const TYPE_DURATION newdur (tp - ev->getRelativeTimePosition());
 
 	// copy this from other location ...
-	if (vst.curchordtag)
-	{
-		// we are within a chord!
-		// then, we have to set the duration also of
-		// the dispDur tag that must be present
-		// somewhere ....
+	if (vst.curchordtag) {
+		// we are within a chord! then, we have to set the duration also of
+		// the dispDur tag that must be present somewhere ....
 		if (vst.fCurdispdur)
-		{
-			// how can we make sure, that the
-			// new duration is displayable?
-			// must be checked in doAutoDisplayCheck!
 			vst.fCurdispdur->setDisplayDuration(newdur);
 
-		}
-		// we have to set the timepositions of the other
-		// events and tags within the chord-range ....
+		// we have to set the timepositions of the other events and tags within the chord-range ....
 		const TYPE_TIMEPOSITION mytp (ev->getRelativeTimePosition() + newdur);
 		GuidoPos startpos = vst.curchordtag->getPosition();
-		while (startpos)
-		{
+		while (startpos) {
 			GuidoPos tmppos = startpos;
 			ARMusicalObject * obj = ObjectList::GetNext(startpos);
-
 			if (obj && obj->getDuration() == DURATION_0)
-			{
 				obj->setRelativeTimePosition(mytp);
-			}
+
 			if (tmppos == vst.curchordtag->getEndPosition())
 				break;
 		}
@@ -4209,44 +4183,26 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 	// this sets the duration to the shorter length ...
 	ev->setDuration(newdur);
 
-
 	GuidoPos pos = vst.vpos;
 	GuidoPos newpos = vst.vpos;
-
-	if (vst.curchordtag)
-	{
-		// if we have a chord(tag), we
-		// need to copy the whole chord
-		// (including tags ....)
+	if (vst.curchordtag) {
+		// if we have a chord(tag), we need to copy the whole chord (including tags ....)
 		// how do we do that?
-		// copychord returns the position
-		// of the first event in the new
-		// (copied) chord.
+		// copychord returns the position of the first event in the new (copied) chord.
 		newpos = CopyChord(vst, tp, olddur - newdur);
-
-		// in chordmode ... this should
-		// get to the first event
-		// after the chord ....
+		// in chordmode ... this should get to the first event after the chord ....
 		GetNext(vst.vpos,vst);
-
 		pos = vst.vpos;
 	}
-	else
-	{
-		// now we create a new event, that
-		// is a copy of ev and has a
-		// new duration ...
-
+	else {
+		// now we create a new event, that is a copy of ev and has a new duration ...
 		ARMusicalEvent * ev2 = ARMusicalEvent::cast(ev->Copy());
-		if (ev2)
-		{
+		if (ev2) {
 			ev2->setRelativeTimePosition( tp);
 			ev2->setDuration( olddur - newdur);
-
 			newpos = AddElementAfter(newpos,ev2);
 		}
-		else
-			assert(false);
+		else assert(false);
 
 		// this position remembers the location of the MergeEnd or
 		// tieEnd that could be introduced.
@@ -4254,12 +4210,10 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 		GuidoPos newptagpos = NULL;
 
         ARNote * n2 = static_cast<ARNote *>(ev2->isARNote());
-		// now look, if there are any ties
-		// and merge-tags ..
+		// now look, if there are any ties and merge-tags ..
 		if (tiemergecount==0 && n2 && !(n2->getName() == ARNoteName::empty))
 		{
-			if (mPosTagList == NULL)
-			{
+			if (mPosTagList == NULL) {
 				mPosTagList = createPositionTagList();
 				vst.ptagpos = mPosTagList->GetHeadPosition();
 			}
@@ -4269,8 +4223,6 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 			artie->setID(gCurArMusic->mMaxTagId++);
 			artie->setIsAuto(true);
 			artie->setRelativeTimePosition( ev->getRelativeTimePosition());
-			// the tie has a range!
-			// artie->setRange(1);
 			artie->setPosition(pos);
 			ARDummyRangeEnd * arde = new ARDummyRangeEnd(TIEEND);
 			arde->setID(artie->getID());
@@ -4278,45 +4230,30 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 			artie->setCorrespondence(arde);
 			arde->setCorrespondence(artie);
 
-			if (vst.ptagpos != NULL)
-			{
+			if (vst.ptagpos != NULL) {
 				mPosTagList->AddElementAt(vst.ptagpos,artie);
 				// the position of this element must be saved!
 				newptagpos = mPosTagList->AddElementAt(vst.ptagpos,arde);
 			}
-			else
-			{
+			else {
 				mPosTagList->AddTail(artie);
-
 				// remember this position!
 				newptagpos = mPosTagList->AddTail(arde);
 			}
 
-			// add the tag to the currentposition-
-			// tags, but don't add it to the
-			// addedtaglist ... this would
-			// otherwise confuse the beginning
-			// of this function.
+			// add the tag to the currentposition-tags, but don't add it to the
+			// addedtaglist ... this would otherwise confuse the beginning of this function.
 			vst.AddPositionTag(artie,0);
+		}
 
-
-		} // if tiemergecount == 0
-
-		// now we need to "repointer" the
-		// position tags that formerly
-		// were attached to ev -> they
-		// now need to be attached to ev2
-		// (which is at newpos)
-
+		// now we need to "repointer" the position tags that formerly were attached to ev -> they
+		// now need to be attached to ev2 (which is at newpos)
 		GuidoPos tmppos = vst.ptagpos;
-		while (tmppos)
-		{
+		while (tmppos) {
 			ARPositionTag * arpt = mPosTagList->GetNext(tmppos);
 			ARTagEnd * arte = ARTagEnd::cast(arpt);
-			if (arte)
-			{
-				if (arte->getPosition() == pos)
-				{
+			if (arte) {
+				if (arte->getPosition() == pos) {
 					arte->setPosition(newpos);
 					continue;
 				}
@@ -4324,15 +4261,13 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 			break;
 		}
 
-		// the positiontagpointer now points
-		// on the FLA of ev_2 ...
+		// the positiontagpointer now points on the FLA of ev_2 ...
 		// (which is the added tie or merge)
 		if (newptagpos != NULL)
 			vst.ptagpos = newptagpos;
 
 		// now, the added and removedposition
-		// tags are removed ... cannot
-		// be of interest ....
+		// tags are removed ... cannot be of interest ....
 		vst.DeleteAddedAndRemovedPTags();
 
 		pos = newpos;
@@ -4605,7 +4540,6 @@ void ARMusicalVoice::doAutoTies()
 					}
 
 					if (postiestructlist) {
-						//ARTieStruct *tiestruct = tiestructlist.GetAt(postiestructlist);
 						// then we have to find the ones in the autostructlist and remove them...
 						ARTieStruct *atstruct = NULL;
                         do {
