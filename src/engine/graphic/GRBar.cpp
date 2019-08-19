@@ -203,13 +203,14 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
             fCurrentSystem = system;
             
             if (analyzedBar != NULL && analyzedBar->getMeasureNumber() != 1) {
-                pageNumbering = newPage && (analyzedBar->getMeasureNumberDisplayed() == ARBar::kNumPage);
-                systemNumbering = newSystem && (analyzedBar->getMeasureNumberDisplayed() == ARBar::kNumSystem);
+            	int disp = analyzedBar->getMeasureNumberDisplayed();
+                pageNumbering = newPage && (disp == ARBar::kNumPage);
+                systemNumbering = newSystem && ((disp == ARBar::kNumSystem) || (disp == ARBar::kNumAll));
             }
 		}
 	}
 
-    if ((arBar->getMeasureNumberDisplayed() == ARBar::kNumAll || systemNumbering || pageNumbering) && arBar->getMeasureNumber() != 0) {
+    if ((arBar->getMeasureNumberDisplayed() == ARBar::kNumAll || systemNumbering || pageNumbering) && (arBar->getMeasureNumber() != 0)) {
         const NVstring fontName("Arial");
         string attr("");
         const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), &fontName, &attr);
@@ -245,7 +246,8 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
         float totalXOffset = mPosition.x - 18  - 20 * (mTagSize - 1) + measureNumDxOffset + mDx;
         float totalYOffset = mPosition.y - 40 - 110 * (mTagSize - 1) + measureNumDyOffset - mDy;
 
-		if (arBar->getMeasureNumberDisplayed() == ARBar::kNumAll) {
+		float endgap = fCurrentSystem->getBoundingBox().Width() - getPosition().x;		// used to detect last bar of the system
+		if ((arBar->getMeasureNumberDisplayed() == ARBar::kNumAll) && (endgap > 5)) {
 			int fontalign = hdc.GetFontAlign();
 			hdc.SetFontAlign (0);
 			hdc.DrawString	 (totalXOffset, totalYOffset, barNumberString.c_str(), (int)barNumberString.size());

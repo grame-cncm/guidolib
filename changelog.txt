@@ -25,6 +25,7 @@ GUIDO Engine history
 - fix incorrect tempo position (stacked on the beginning of the staff)
 - fix incorrect flag position with multi staves chords
 - fix crash bug with nested beams (issue #86)
+- fix incorrect last bar numbering (issue #25)
 
 ----------------------------------------------------------------
   version 1.6.6
