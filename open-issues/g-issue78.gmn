@@ -1,8 +1,11 @@
 (*
 	Accidental on Tied notes should not appear on Measure Change
+
+	solved using a global setting
 *)
 {
 [ 
+	\set<autoHideTiedAccidentals="on">
 	(* meas. 1 *)  \clef<"g2"> \key<-3> \meter<"3/8"> 
    (* meas. 2 *)  \stemsDown \beamBegin:1 e&/8 d/8  \tie( e/8 \beamEnd:1 \bar 
    (* meas. 3 *)  \stemsDown \beamBegin:1 e/8) d/8  \tieBegin c#/8 \beamEnd:1 \bar 
