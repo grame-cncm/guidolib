@@ -105,7 +105,7 @@ void GRAccidental::setStyleNone()	{ mAccidentalSize = 0; }
 //____________________________________________________________________________________
 void GRAccidental::OnDraw(VGDevice & hdc) const
 {
-	if (mAccidentalSize && fAlterSize && mSymbol) {
+	if (mDraw && mAccidentalSize && fAlterSize && mSymbol) {
 		GRNotationElement::OnDrawSymbol (hdc, mSymbol, fDxy.x, -fDxy.y, (fAlterSize == 1) ? 0 : fAlterSize);
 	}
 }
@@ -301,6 +301,7 @@ void GRAccidental::setCautionary(int noteoffset, float notebreite, float curLSPA
 		offset.x = (float)noteoffset;
 		setAccidentalLayout (notebreite, curLSPACE);
 	}
+	fCautionary = true;
 }
 
 //____________________________________________________________________________________

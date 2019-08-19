@@ -58,7 +58,8 @@ class GRAccidental : public GRNotationElement
 	 virtual void setAlterSize(float size)		{ fAlterSize = size; }
 
 	 virtual void setSize( float newsize )		{ mAccidentalSize = newsize; }
-	 bool getOffsetSet() const					{ return offsetset; }
+	 		 bool getOffsetSet() const			{ return offsetset; }
+	 		 bool isCautionary() const			{ return fCautionary; }
 
   protected:
 	  bool   offsetset; 
@@ -82,9 +83,11 @@ class GRAccidental : public GRNotationElement
 	  NVPoint 	fDxy;				// can only be set with alter tag
 	  float 	fAlterSize = 1;		// can only be set with alter tag
 	  unsigned char * mColRef;
-	  float mAccidentalSize;
-	
+	  float 		mAccidentalSize;
+
 	private:
+		bool			fCautionary = false;
+
 		void 			initialize			(GREvent * sngnot, float p_size);
 		int				accidentalID2acc	(int inAccidentalID, bool& cautionary) const;
 		unsigned int	accidentalID2symbol	(int inAccidentalID) const;
