@@ -58,6 +58,7 @@
 #include "ARInstrument.h"
 #include "ARIntens.h"
 #include "ARLabel.h"
+#include "ARLyrics.h"
 #include "ARMarcato.h"
 #include "ARMark.h"
 #include "ARMeter.h"
@@ -640,10 +641,9 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 					}
 				}
 				else {
-					// not handled !?
 					const ARMusicalTag *armt = static_cast<const ARMusicalTag *>(o->isARMusicalTag());
 					if (!armt || !armt->IsStateTag())
-						GuidoTrace("Warning, Tag not handled");
+						cerr << "Warning: " << armt->getGMNName() << " not handled" << endl;
 				}
 			}
 
@@ -1304,7 +1304,8 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 	else if (tinf == typeid(ARTie))
 	{
 		// No tie starts at the end. if (atEnd) return retval;
-		GRTie * grtie = new GRTie(mCurGrStaff, static_cast<const ARTie *>(apt));
+		const ARTie * tie = static_cast<const ARTie *>(apt);
+		GRTie * grtie = new GRTie(mCurGrStaff, tie, tie->hideAccidentals());
 		addGRTag(grtie,0);
 		mCurGrStaff->AddTag(grtie);
 		fMusic->addVoiceElement(arVoice,grtie);
@@ -1594,8 +1595,8 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
         mCurGrStaff->AddTag(grSymb);
         fMusic->addVoiceElement(arVoice,grSymb);
 	}
-	else
-		GuidoTrace("Warning, PositionTag not handled");
+    else if (tinf == typeid(ARLyrics)) {}		// do nothing
+	else cerr << "Warning: " << apt->getGMNName() << " not handled" << endl;
 }
 
 /** \brief Checks whether Tags can be removed due to matching end-Positions

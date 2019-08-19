@@ -26,23 +26,19 @@ class GRStaff;
 class GRTie : public GRBowing
 {
 	public:
-	 
-	 			GRTie(GRStaff * grstaff, GRNotationElement * start, GRNotationElement * end = 0);
-	 										
-				GRTie(GRStaff * grstaff);
-				GRTie(GRStaff * grstaff, const ARTie * abstractRepresentationOfBowing);
-	
+				 GRTie(GRStaff * grstaff, const ARTie * ar, bool hideAccidentals) : GRBowing(grstaff, ar), fHideAccidentals(hideAccidentals) {}
 		virtual	~GRTie() {}
-
-	  	virtual bool IsFull();
 
 		virtual void addAssociation(GRNotationElement *el);
 
 	protected:
-
 		virtual void automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticControlPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 
+	private:
+		bool	fHideAccidentals;		// used to hide accidentals after a bar
+		bool 	fAssoc = false;			// becomes true at first association
+		int	 	fPitch = -1;			// used for chords associations
 };
 
 #endif

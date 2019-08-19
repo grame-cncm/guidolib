@@ -13,47 +13,46 @@
 */
 
 #include "ARTie.h"
+#include "ARNote.h"
+#include "GRAccidental.h"
 #include "GRTie.h"
 #include "GRRest.h"
 #include "GREmpty.h"
 #include "GRDefine.h"
+#include "GRSingleNote.h"
 #include "GRStdNoteHead.h"
 #include "GRStaff.h"
 #include "TagParameterString.h"
 
+using namespace std;
+
 const int kGuidoLongTieDistance = 12; // unit: dent. // 30 is too much
-
-/** \brief Constructor without REAL abstract element.
-*/
-GRTie::GRTie(GRStaff * grstaff) : GRBowing(grstaff)
-{
-}
-
-
-GRTie::GRTie(GRStaff * grstaff, const ARTie * ar) : GRBowing(grstaff, ar)
-{
-}
-
-
-GRTie::GRTie(GRStaff * grstaff,GRNotationElement * start, GRNotationElement * end)
-	: GRBowing(grstaff, start, end)
-{
-}
-
-bool GRTie::IsFull()
-{
-	assert(false);
-	return false;
-}
 
 void GRTie::addAssociation(GRNotationElement * el)
 {
-	if (dynamic_cast<GRRest *>(el))
-	{
+	if (dynamic_cast<GRRest *>(el)) {
 		setError(1);
 		return;
 	}
 	GRBowing::addAssociation(el);
+	if (!fHideAccidentals) return;
+
+	GRSingleNote* note = el->isSingleNote();
+	if (!note) return;
+	if (fAssoc) {
+		if (fPitch >=0) {
+			if (note->getARNote()->getPitch() == fPitch)
+				note->hideAccidentals ();
+		}
+		else  note->hideAccidentals ();
+	}
+	else {
+		if (!note->getDuration()) {		// a note with a null duration denotes a chord
+			fPitch = note->getARNote()->getPitch();
+			fAssoc = true;
+		}
+		if (!el->isEmpty()) fAssoc = true;
+	}
 }
 
 // -----------------------------------------------------------------------------

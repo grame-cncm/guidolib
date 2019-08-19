@@ -42,14 +42,19 @@ See the [Tie](@EXAMPLES/space/) example.
 class ARTie : public ARBowing  
 {
   	public:
-				 	 ARTie() {}
-      	virtual 	~ARTie() {}
+				 	 ARTie (bool hideAccidentals=false) : fHideAccidentals(hideAccidentals) {}
+      	virtual 	~ARTie () {}
 
 	  	virtual bool MatchEndTag(const char * s);
 
 	  	virtual void browse(TimeUnwrap& mapper) const;
 		virtual const char*	getTagName() const		{ return "ARTie"; };
 		virtual std::string getGMNName() const		{ return "\\tie"; };
+
+		bool hideAccidentals() const 				{ return fHideAccidentals; }
+
+  	private:
+  		bool fHideAccidentals;
 };
 
 #endif
