@@ -63,7 +63,8 @@ class GRNote : public GREvent
 
 	// Tell me: is a note splitted over several systems?
 	// should only occur for CompositeNotes.
-	virtual bool isSplit(); // const;
+	virtual bool 	isSplit(); // const;
+	void 			hideAccidentals();
 
     /**** Function to avoid dynamic_cast ****/
     const GRNote * isGRNote() const { return this; }
