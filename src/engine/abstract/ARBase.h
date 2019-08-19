@@ -26,6 +26,8 @@ public:
 			 ARBase() { rangesetting = ONLY; setAssociation(ARMusicalTag::RA); }
 	virtual	~ARBase() {}
 
+	virtual std::string getGMNName() const			{ return "ARBase"; };
+
 	void setBaseDuration(const TYPE_DURATION & tmp) { dur = tmp; }
 	void setBase(const TYPE_DURATION & tmp)         { base = tmp; }
 	const TYPE_DURATION & getBaseDuration() const   { return dur; }
@@ -33,16 +35,10 @@ public:
 
 	void addEvent(const ARMusicalEvent * ev)		{ dur += ev->getDuration(); }
 
-	// called, to finish a base. this calculates
-	// the equivalence ....
+	// called, to finish a base. this calculates the equivalence ....
 	// different algorithms can be used (hindemith ...)
 	// right now, the next smaller note is taken
-	void finish()
-		{
-			// needs to be revised ...
-			// TYPE_DURATION tmp(1,2);
-			// equiv2 = equiv1 * base * tmp;
-		}
+	void finish()		{}
 
 protected:
 	// the parameters ...

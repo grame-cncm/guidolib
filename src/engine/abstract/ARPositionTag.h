@@ -27,8 +27,7 @@ class ARPositionTag
 {
 	public:
 				 ARPositionTag() : pos(0), ep(0), mPositionTag(0) { mParentCorrespondence=0; }
-		virtual ~ARPositionTag()
-		{
+		virtual ~ARPositionTag() {
 			if(mPositionTag) {
 				mPositionTag->setParentCorrespondence(0);
 				mPositionTag = 0;
@@ -43,32 +42,22 @@ class ARPositionTag
 		virtual void setPosition(GuidoPos p_pos)		{ pos = p_pos ;  }
 		virtual GuidoPos getPosition() const			{ return pos; }
 		virtual GuidoPos getStartPosition() const		{ return pos; }
-
 		virtual void setStartPosition(GuidoPos p_pos)	{ pos = p_pos; }
+		virtual std::string getGMNName() const			= 0;
 
-		virtual GuidoPos getEndPosition() const
-		{
-			if (mPositionTag)
-				return mPositionTag->getPosition();
-			else 
-				return ep;
+		virtual GuidoPos getEndPosition() const {
+			if (mPositionTag) return mPositionTag->getPosition();
+			else 			  return ep;
 		}
 
-		virtual void setEndPosition(GuidoPos p_pos)
-		{
-			if (mPositionTag)
-				mPositionTag->setPosition(p_pos);
-			else
-				ep = p_pos;
+		virtual void setEndPosition(GuidoPos p_pos) {
+			if (mPositionTag) 	mPositionTag->setPosition(p_pos);
+			else 				ep = p_pos;
 		}
 
-
-		virtual void setCorrespondence(ARPositionTag *p_cor)
-		{
+		virtual void setCorrespondence(ARPositionTag *p_cor) {
 			mPositionTag = p_cor;
-			if(mPositionTag) {
-				mPositionTag->setParentCorrespondence(this);
-			}
+			if(mPositionTag) 	mPositionTag->setParentCorrespondence(this);
 		}
 
 		virtual ARPositionTag * getCorrespondence()	const			{ return mPositionTag; }
