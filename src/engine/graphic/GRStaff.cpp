@@ -958,12 +958,6 @@ void GRStaff::DebugPrintState(const char * info) const
 */
 void GRStaff::newMeasure(const TYPE_TIMEPOSITION & tp)
 {
-staff_debug("newMeasure");
-	if (mStaffState.meterset)
-	{
-		//mStaffState.nextmeasuretime = tp + mStaffState.measurelength;
-	}
-
 	// reset of accidentals
 	// quick-hack-implementation -> encode which accidentals are already set
 	// and which must be deleted in the next measure etc.
@@ -1255,8 +1249,6 @@ staff_debug("AddBar");
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
 		mGrSystemSlice->addBar(bar, mStaffState.curbarfrmt->getRanges(), this);
-	// change of  Measuretime ...
-	mStaffState.reset2key ();
 	addNotationElement(bar);
 	return bar;
 }
