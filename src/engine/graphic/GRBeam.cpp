@@ -1356,7 +1356,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			float ratio = startEl->getGRStaff()->getSizeRatio() * endEl->getGRStaff()->getSizeRatio();
 			endEl->setStemLength(endEl->getStemLength() + LSPACE * ratio);
 		}
-		else checkEndStemsReverse(endEl, st->simpleBeams);
+		else if (st->simpleBeams) checkEndStemsReverse(endEl, st->simpleBeams);
+		else { mDraw = false; } 	// fix issue #86
 	}
 
 	// now we have to make sure, that the original positions for the beam are set for the right staff
