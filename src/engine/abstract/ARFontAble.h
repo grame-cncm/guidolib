@@ -35,7 +35,7 @@ class ARFontAble : public ARMTParameter
 	protected:
 		std::string fTextFormat;
 		std::string fFontName;
-		float		fFontSize;
+		float		fFontSize = 0.f;
 		std::string fTextAttributes;
 };
 
