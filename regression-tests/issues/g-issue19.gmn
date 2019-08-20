@@ -2,6 +2,9 @@
 	issue #19
 	rehearshal marks are moving when the score is reloaded
 	+ a cresc sign cross almost the score although none is written before measure 136
+
+	cresc issue is due to inconsistent use of dimBegin \dimEnd
+	removing the 2 orphan successives \dimEnd solves the problem
 *)
 { [ \staff<1> \instr<"[Unnamed (treble staff)]", dx=-48hs, dy=-5hs> \systemFormat<"", dx=48hs> \barFormat<style= "system", range="1"> 
    (* meas. 1 *)  \clef<"g2"> \key<3> \meter<"2/8", autoBarlines="off", autoMeasuresNum="page"> \tempo<"Allegro vivo [1/4] = 152", dy=4> _/4 \bar 
@@ -271,7 +274,7 @@
    (* meas. 265 *)  \mark<"H", enclosure="square", dx=-5hs, dy=1hs> \space<0> \text<"p leggiero",font="Plantin MT Std", dx=-1.2hs, dy=-3hs>( \text<"arco",font="Plantin MT Std", dx=-1.2hs, dy=15hs>( \stemsUp \beam( \stacc<position="above">( a1/16) \stacc<position="below">( a/16) \stacc<position="below">( b/16) \stacc<position="below">( c#2/16)))) \bar 
    (* meas. 266 *)  \stemsDown \beam( \stacc<position="above">( d/16) \stacc<position="above">( d/16) \stacc<position="above">( e/16) \stacc<position="above">( f#/16)) \bar 
    (* meas. 267 *)  \beamsOff \stacc<position="above">( a/8) \beamsOff \accent<position="above">( { a1/8, a2/8 }) \bar 
-   (* meas. 268 *)  \dimEnd \dimEnd \dimEnd \dimBegin<autopos="on", dy=1hs> \dimBegin<autopos="on", dy=1hs> \dimBegin<autopos="on", dy=1hs> \beam( \stacc<position="above">( c#3/16) \stacc<position="above">( b2/16) \stacc<position="above">( a/16) \stacc<position="above">( f#/16)) \bar 
+   (* meas. 268 *)  \dimBegin<autopos="on", dy=1hs> \dimBegin<autopos="on", dy=1hs> \dimBegin<autopos="on", dy=1hs> \beam( \stacc<position="above">( c#3/16) \stacc<position="above">( b2/16) \stacc<position="above">( a/16) \stacc<position="above">( f#/16)) \bar 
    (* meas. 269 *)  \beam( \stacc<position="above">( d/16) \stacc<position="above">( d/16) \stacc<position="above">( c#/16) \stacc<position="above">( b1/16)) \bar 
    (* meas. 270 *)  \beamsOff \stacc<position="above">( a2/8) \beamsOff \accent<position="above">( { a1/8, a2/8 }) \bar 
    (* meas. 271 *)  \stemsUp \beam( \stacc<position="above">( a1/16) \stacc<position="below">( a/16) \stacc<position="below">( b/16) \stacc<position="below">( c#2/16)) \bar 
