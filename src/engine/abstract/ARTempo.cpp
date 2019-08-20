@@ -72,6 +72,7 @@ TYPE_DURATION ARTempo::getDuration (const char * str) const
 // --------------------------------------------------------------------------
 void ARTempo::setTagParameters(const TagParameterMap& map)
 {
+	ARFontAble::setTagParameters (map);
 	const TagParameterString * tempo = getParameter<TagParameterString>(kTempoStr);
 	if (tempo) {
 		std::string value (tempo->getValue());

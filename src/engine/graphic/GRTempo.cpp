@@ -31,11 +31,8 @@
 
 using namespace std;
 
-const VGFont* GRTempo::mFont = 0;
-
 // ----------------------------------------------------------------------------
-GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
-					: GRTagARNotationElement( inAR, LSPACE )
+GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR ) : GRTagARNotationElement( inAR, LSPACE )
 {
 	assert(inAR);
 
@@ -46,28 +43,30 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
 	VGDevice * hdc = gGlobalSettings.gDevice;
 	mBoundingBox.Set (0, -2*LSPACE, 0, 0);
 
-	if (!mFont) {
-		const NVstring fontname("Times New Roman");
-		NVstring attrs ("");
-		mFont = FontManager::FindOrCreateFont( 90, &fontname, &attrs);
-	}
+	string fontName = inAR->getFont();
+	fFormat = inAR->getTextFormat();
+	string attrib = inAR->getTextAttributes();
+	float fsize = inAR->getFSize();
+	fFont = FontManager::FindOrCreateFont( fsize, &fontName, &attrib);
+	fNoteScale = fsize / 90.f * 0.7f;  // 90 is the font nominal size and 0.7 is the note scaling
+	fYAlign = getYAlign(fsize);
 
-	if (inAR) {
-		FormatStringParserResult::const_iterator assoc;
-		for (assoc = inAR->getTempoMark().begin(); assoc != inAR->getTempoMark().end(); assoc++) {
-			if (assoc->second == FormatStringParser::kSpecial) {
-				TYPE_DURATION duration = inAR->getDuration(assoc->first.c_str());
-				mBoundingBox.right += GetSymbolExtent( kFullHeadSymbol );
-				if (duration.getNumerator() == 3) {
-					mBoundingBox.right += LSPACE;
-				}
-			}
-			else if( hdc ) {
-				float w, h;
-				const char * str = assoc->first.c_str();
-				mFont->GetExtent( str, int(assoc->first.size()), &w, &h, hdc );
-				mBoundingBox.right += w;
-			}
+	string mfontName = kMusicFontStr;
+	float mfontsize = 200.f;
+	string mattr = "";
+	fMusicFont = FontManager::FindOrCreateFont(  mfontsize * fNoteScale, &mfontName, &mattr);
+
+	for (auto l : inAR->getTempoMark()) {
+		if (l.second == FormatStringParser::kSpecial) {
+			TYPE_DURATION duration = inAR->getDuration(l.first.c_str());
+			mBoundingBox.right += GetSymbolExtent( kFullHeadSymbol );
+			if (duration.getNumerator() == 3) mBoundingBox.right += LSPACE;
+		}
+		else if( hdc ) {
+			float w, h;
+			const char * str = l.first.c_str();
+			fFont->GetExtent( str, int(l.first.size()), &w, &h, hdc );
+			mBoundingBox.right += w;
 		}
 	}
 	setGRStaff(staff);
@@ -75,62 +74,74 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
 }
 
 // ----------------------------------------------------------------------------
-//TYPE_DURATION GRTempo::getDuration (const char * str) const
-//{
-//	int num, denom;
-//	TYPE_DURATION duration;
-//	if( sscanf( str,"%d/%d", &num, &denom ) == 2 ) {
-//		duration.set ( num, denom );
-//		duration.normalize();
-//	}
-//	return duration;
-//}
-
-// ----------------------------------------------------------------------------
-void GRTempo::OnDraw( VGDevice & hdc ) const
+float GRTempo::getXPos() const
 {
-	if(!mDraw || !mShow) return;
-	
-    const ARTempo *ar = static_cast<const ARTempo *>(mAbstractRepresentation);
-    if (!ar) return;
-
-    VGColor prevFontColor = hdc.GetFontColor();
-    if (mColRef) hdc.SetFontColor(VGColor(mColRef));
-
-	const float noteOffsetY = 0; // LSPACE * 1.85f;
-	float currX = getOffset().x;
-
+	float x = getOffset().x;
 	if (fDate) {
 		NEPointerList * elts = getGRStaff()->getElements();
 		GuidoPos pos = elts->GetHeadPosition();
 		while (pos) {
 			GRNotationElement * e = elts->GetNext(pos);
 			if ((e->getRelativeTimePosition() >= fDate) && e->isGREvent()) {
-				currX += e->getPosition().x - mPosition.x;
-				if (e->isGREvent()) currX -= e->getBoundingBox().Width()/2;
+				x += e->getPosition().x - mPosition.x;
+				if (e->isGREvent()) x -= e->getBoundingBox().Width()/2;
 				break;
 			}
 		}
 	}
+	return x;
+}
 
-	float dy = 0;
-	if (ar->getDY())
-		dy = - ar->getDY()->getValue(LSPACE);
+// ----------------------------------------------------------------------------
+void GRTempo::OnDraw( VGDevice & hdc ) const
+{
+	if(!mDraw || !mShow) return;
 
-	FormatStringParserResult::const_iterator assoc;
-	for (assoc = ar->getTempoMark().begin(); assoc != ar->getTempoMark().end(); assoc++) {
-		if (assoc->second == FormatStringParser::kSpecial) {
-			TYPE_DURATION duration = ar->getDuration(assoc->first.c_str());
-			currX += DrawNote( hdc, duration, currX + LSPACE, noteOffsetY + dy ) + LSPACE;
+    const ARTempo *ar = static_cast<const ARTempo *>(mAbstractRepresentation);
+    if (!ar) return;
+
+    VGColor prevFontColor = hdc.GetFontColor();
+    if (mColRef) hdc.SetFontColor(VGColor(mColRef));
+
+	float space = getGRStaff()->getStaffLSPACE() / 2 * fNoteScale;
+	float currX = getXPos();
+	float dy = ar->getDY() ? - ar->getDY()->getValue(LSPACE) : 0.f;
+	for (auto l : ar->getTempoMark()) {
+		if (l.second == FormatStringParser::kSpecial) {
+			TYPE_DURATION duration = ar->getDuration(l.first.c_str());
+			currX += DrawNote( hdc, duration, currX, dy ) + space;
 		}
 		else {
-			float textwidth;
-			DrawText( hdc, assoc->first.c_str(), currX, dy, &textwidth );
-			currX += textwidth;
+			currX += DrawText( hdc, l.first.c_str(), currX, dy ) + space;
 		}
 	}
-
     if (mColRef) hdc.SetFontColor(prevFontColor);
+}
+
+// ----------------------------------------------------------------------------
+unsigned int GRTempo::getSymbol(const TYPE_DURATION & noteDur) const
+{
+	// - Choose notehead
+	if (noteDur>=DURATION_1)
+		return kWholeNoteHeadSymbol;
+	if (noteDur == DURATION_2 || noteDur == DURATION_3_4 || noteDur == DURATION_7_8)
+	 	return kHalfNoteHeadSymbol;
+	return kFullHeadSymbol;
+}
+
+// ----------------------------------------------------------------------------
+unsigned int GRTempo::getFlags(const TYPE_DURATION & noteDur) const
+{
+	// - Choose flag
+	if (noteDur == DURATION_8 ||  noteDur == DURATION_3_16 || noteDur == DURATION_7_32)
+		return GRFlag::H8U;
+	if (noteDur == DURATION_16 || noteDur == DURATION_3_32 || noteDur == DURATION_7_64)
+		return GRFlag::H16U;
+	if (noteDur == DURATION_32)
+		return  GRFlag::H32U;
+	if (noteDur == DURATION_64)
+		return GRFlag::H64U;
+	return kNoneSymbol;
 }
 
 // ----------------------------------------------------------------------------
@@ -138,77 +149,36 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 */
 float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xOffset, float yOffset ) const
 {
-	float offsetX = 0;
-
 	// - Choose notehead
-	unsigned int theSymbol = kNoneSymbol;
-	if (noteDur>=DURATION_1) {
-		theSymbol = kWholeNoteHeadSymbol;
-	}
-	else if (noteDur == DURATION_2 || noteDur == DURATION_3_4 || noteDur == DURATION_7_8) {
-   		theSymbol = kHalfNoteHeadSymbol;
-	}
-	else {
-		theSymbol = kFullHeadSymbol;
-	}
+	unsigned int theSymbol = getSymbol (noteDur);
+	unsigned int theFlagSymbol = getFlags (noteDur);
+	unsigned int theDotSymbol = (noteDur.getNumerator() == 3) ? kNoteDotSymbol : kNoneSymbol;
 
-	// - Choose flag
-	unsigned int theFlagSymbol = kNoneSymbol;
-	if (noteDur==DURATION_8 ||  noteDur == DURATION_3_16 || noteDur == DURATION_7_32) {
-		theFlagSymbol = GRFlag::H8U;
-	}
-	else if(noteDur==DURATION_16 || noteDur == DURATION_3_32 || noteDur == DURATION_7_64) {
-		theFlagSymbol = GRFlag::H16U;
-	}
-	else if(noteDur == DURATION_32) {
-		theFlagSymbol =  GRFlag::H32U;
-	}
-	else if (noteDur == DURATION_64) {
-		theFlagSymbol = GRFlag::H64U;
-	}
-
-	// - Choose dot
-	unsigned int theDotSymbol = kNoneSymbol;
-//	if (noteDur == DURATION_3_4 || noteDur == DURATION_3_8 || noteDur == DURATION_3_16 || noteDur == DURATION_3_32) {
-	if (noteDur.getNumerator() == 3) {
-		theDotSymbol = kNoteDotSymbol;
-	}
-
-	// - Setup zoom
-    hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
-	const float cueScale = 0.70f;
-	hdc.SetScale(cueScale, cueScale);
-
-	// - Calculate the position of the head
-	if (!hdc.GetMusicFont()) hdc.SetMusicFont(FontManager::gFontScriab);
+	unsigned int align = hdc.GetFontAlign();
+	hdc.SetFontAlign(VGDevice::kAlignLeft + VGDevice::kAlignBase);
+	hdc.SetMusicFont (fMusicFont);
 	float w = GetSymbolExtent(theSymbol);
-	float xPos = (xOffset + mPosition.x) / cueScale;
-	float yPos = (yOffset + mPosition.y - w / 2.5f) / cueScale;
+	float xPos = xOffset + mPosition.x;
+	float yPos = fYAlign + yOffset + mPosition.y - w/3.f;
 
 	// - Draw Head
 	hdc.DrawMusicSymbol(xPos, yPos, theSymbol);
-	offsetX = w * cueScale;
+	float width = w * fNoteScale;
 
 	// - Draw Stem
-	if (theSymbol != kWholeNoteHeadSymbol)
-    {
-		float		stemLen = 3 * LSPACE;
+	if (theSymbol != kWholeNoteHeadSymbol) {
+		float		stemLen = 3 * LSPACE * fNoteScale;
 		float		stemTagSize = 1;
 
 		const float stemCharSize = LSPACE * stemTagSize;
 		const float halfStemCharSize = 0.5f * stemCharSize;
-
 		hdc.DrawMusicSymbol( xPos, yPos, kStemUp1Symbol );
 
 		// - Draws until the length has been completed ...
 		float offsy = -halfStemCharSize;
-
-		while( -offsy < stemLen ) // * mSize)
-		{
-			if(( stemCharSize - offsy ) > stemLen ) // * mSize)
-			{
-				offsy =  (-(stemLen) // * mSize)
-					+ stemCharSize );
+		while( -offsy < stemLen ) {
+			if(( stemCharSize - offsy ) > stemLen ) {
+				offsy =  (-(stemLen) + stemCharSize );
 				hdc.DrawMusicSymbol( xPos, yPos + offsy, kStemUp2Symbol );
 				break;
 			}
@@ -218,46 +188,62 @@ float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xO
 	}
 
 	// - Draw flag
-	if (theFlagSymbol != kNoneSymbol) hdc.DrawMusicSymbol( xPos, yPos - 4 * LSPACE, theFlagSymbol );
+	if (theFlagSymbol != kNoneSymbol) hdc.DrawMusicSymbol( xPos, yPos - 3.5 * LSPACE * fNoteScale, theFlagSymbol );
 
 	// - Draw Dot
-	if (theDotSymbol != kNoneSymbol)
-    {
-//		float w = GetSymbolExtent (theDotSymbol);
-		hdc.DrawMusicSymbol( xPos + 2 * LSPACE, yPos, theDotSymbol);
-		offsetX += LSPACE;
+	if (theDotSymbol != kNoneSymbol) {
+		float space = LSPACE * fNoteScale * 0.5;
+		hdc.DrawMusicSymbol( xPos + width + space, yPos, theDotSymbol);
+		width += space * 1.3;
 	}
 
 	// - Cleanup
-	hdc.SetScale(1 / cueScale, 1 / cueScale);
-	return offsetX;
+	hdc.SetFontAlign(align);
+	return width;
 }
 
 // ----------------------------------------------------------------------------
-void GRTempo::DrawText( VGDevice & hdc, const char * cp, float xOffset, float yOffset, float * outWidth ) const
+float GRTempo::DrawText( VGDevice & hdc, const char * cp, float xOffset, float yOffset) const
 {
-//	hdc.SelectFont( mFont );
-	hdc.SetTextFont( mFont );
+	hdc.SetTextFont( fFont );
     hdc.SetFontAlign (getTextAlign());
 	hdc.DrawString ( xOffset + mPosition.x, yOffset + mPosition.y, cp, (int)strlen(cp) );
-	if( outWidth ) {
-		float fooHeight;
-//		hdc.GetTextExtent(cp, (int)strlen(cp), outWidth, &fooHeight);
-                const VGFont *font = hdc.GetTextFont();
-                if (!font) {
-                        font = FontManager::gFontText;
-                }
-                if (!font) {
-                        std::cerr << "Cannot find text font" << std::endl;
-                        *outWidth = 0;
-                } else {
-		        font->GetExtent(cp, (int)strlen(cp), outWidth, &fooHeight, &hdc);
-                }
-	}
+
+	float h, width;
+	fFont->GetExtent(cp, (int)strlen(cp), &width, &h, &hdc);
+	return width;
 }
 
 // ----------------------------------------------------------------------------
 unsigned int GRTempo::getTextAlign() const
 {
-	return VGDevice::kAlignBaseLeft;
+	unsigned int xdir = VGDevice::kAlignLeft;
+	unsigned int ydir = VGDevice::kAlignBase;
+	if (fFormat.size() == 2) {
+//		switch (fFormat[0]) {		// horizontal alignment ignored - to do
+//			case 'l':	xdir = VGDevice::kAlignLeft; break;
+//			case 'c':	xdir = VGDevice::kAlignCenter; break;
+//			case 'r':	xdir = VGDevice::kAlignRight; break;
+//		}
+
+		switch (fFormat[1]) {
+			case 't':	ydir = VGDevice::kAlignTop; break;
+			case 'c':	ydir = VGDevice::kAlignBase; break;
+			case 'b':	ydir = VGDevice::kAlignBottom; break;
+		}
+	}
+	return xdir | ydir;
+}
+
+// ----------------------------------------------------------------------------
+float GRTempo::getYAlign(float fsize) const
+{
+	if (fFormat.size() == 2) {
+		switch (fFormat[1]) {
+			case 't':	return fsize * 0.8f;
+			case 'c':	return 0.f;
+			case 'b':	return -fsize/3.f;
+		}
+	}
+	return 0.f;
 }
