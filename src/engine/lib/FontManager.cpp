@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 
 #include "GuidoDefs.h"	// for gGlobalSettings.gDevice
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
