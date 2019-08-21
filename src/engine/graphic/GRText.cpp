@@ -71,7 +71,7 @@ GRText::GRText(GRStaff * staff, const ARText * ar) : GRPTagARNotationElement(ar)
 
 	if (font && font->length() > 0) {
 		// handle font-attributes ...
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+		hmyfont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
 	}
 
 	// depending on the textformat ...
@@ -184,7 +184,7 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 
 	const VGFont* hmyfont;
 	if (font && font->length() > 0)
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+		hmyfont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
 	else
 		hmyfont = FontManager::gFontText;
 
@@ -216,7 +216,7 @@ void GRText::OnDraw( VGDevice & hdc ) const
 
 	// - Setup font ....
 	const VGFont* hmyfont;
-	if (font && font->length() > 0)	hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+	if (font && font->length() > 0)	hmyfont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
 	else							hmyfont = FontManager::gFontText;
 
 	hdc.SetTextFont( hmyfont );

@@ -38,11 +38,11 @@ public:
 	virtual float getSize() const
 			{ return GRPositionTag::getSize(); }
 
-	virtual const NVstring * getFont() const
-			{ return GRPositionTag::getFont(); }
-	
-	virtual const NVstring *getFontAttrib() const
-			{ return GRPositionTag::getFontAttrib(); }
+//	virtual const NVstring * getFont() const
+//			{ return GRPositionTag::getFont(); }
+//	
+//	virtual const NVstring *getFontAttrib() const
+//			{ return GRPositionTag::getFontAttrib(); }
 	
 	virtual int getFontSize() const
 			{ return GRPositionTag::getFontSize(); }

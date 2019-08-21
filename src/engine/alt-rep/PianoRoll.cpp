@@ -429,14 +429,10 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
     ostringstream octaveString;
     std::string cNoteString;
     
-    NVstring font("Arial");
-    const VGFont *hTextFont = 0;
-	if (font.length() > 0)
-		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), &font, new NVstring(""));
+	const VGFont *hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), "Arial", "");
 
 	drawParams.dev->SetTextFont(hTextFont);
 	drawParams.dev->PushPenWidth(0.8f);
-
     for (int i = fHighPitch + 1; i >= fLowPitch; i--) {
         int   step = i % 12;
         float y    = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -454,18 +450,10 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
                     drawParams.untimedLeftElementWidth * 0.75f,
                     y - drawParams.noteHeight * 0.25f, cNoteString.c_str(), 2);
             }
-
-            drawParams.dev->Line( 0,
-                roundFloat(y),
-                roundFloat(drawParams.untimedLeftElementWidth),
-                roundFloat(y));
-
+            drawParams.dev->Line( 0, roundFloat(y), roundFloat(drawParams.untimedLeftElementWidth), roundFloat(y));
             break;
         case 5:
-            drawParams.dev->Line( 0,
-                roundFloat(y),
-                roundFloat(drawParams.untimedLeftElementWidth),
-                roundFloat(y));
+            drawParams.dev->Line( 0, roundFloat(y), roundFloat(drawParams.untimedLeftElementWidth), roundFloat(y));
             break;
         case 2:
         case 4:
@@ -545,14 +533,6 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, const DrawParams& drawParams)
             handleColor(static_cast<const ARNoteFormat *>(e->isARNoteFormat()), drawParams);
         else if (e->isARBar() && fMeasureBarsEnabled)
             DrawMeasureBar(date, drawParams);
-//        if (dynamic_cast<ARRest *>(e->isARRest()))
-//			fChord = false;
-//        else if (dynamic_cast<const ARChordComma *>(e->isARChordComma()))
-//			fChord = true;
-//        else if (dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()))
-//            handleColor(dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
-//        else if (dynamic_cast<const ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
-//            DrawMeasureBar(date, drawParams);
 	}
 
 	while (fNoteColor) {		// check for possible color from noteFormat tag
@@ -955,7 +935,6 @@ int PianoRoll::detectMidiExtremePitch(bool detectLowerPitch)
 
         mf.midi()->FreeSeq(vseq[i]);
     }
-
     mf.Close();
 
     if (detectLowerPitch) {

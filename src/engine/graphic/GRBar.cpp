@@ -211,9 +211,7 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 	}
 
     if ((arBar->getMeasureNumberDisplayed() == ARBar::kNumAll || systemNumbering || pageNumbering) && (arBar->getMeasureNumber() != 0)) {
-        const NVstring fontName("Arial");
-        string attr("");
-        const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), &fontName, &attr);
+        const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), "Arial", "");
 		hdc.SetTextFont(hmyfont);
 
 		int num = arBar->getMeasureNumber();
@@ -300,7 +298,6 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     const float x  = getXPos(staffSize);
 	if (fRanges.empty()) {
-		NVRect r = mBoundingBox	+ mPosition;
 		float y1 = getY1(mBoundingBox.top) + lineThickness / 2;
 		float y2 = getY2(y1, mBoundingBox.bottom) - lineThickness / 2;
 		hdc.Line(x, y1, x, y2);

@@ -28,87 +28,54 @@ extern GRSystem * gCurSystem;
 GRAccelerando::GRAccelerando( GRStaff * inStaff, const ARAccelerando * artrem )
   : GRPTagARNotationElement(artrem)
 {
-  assert(inStaff);
-  GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
-  sse->grsystem = inStaff->getGRSystem(); 
-  sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-  
-  sse->p = (void *) getNewGRSaveStruct();
-  
-  mStartEndList.AddTail(sse);
-  
-  if(artrem->getTempo()) {
-	  tempo1 = artrem->getTempo()->getValue();
+	assert(inStaff);
+	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
+	sse->grsystem = inStaff->getGRSystem();
+	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 
-	  if (tempo1 != "")
-		   isTempoSet = true;
-	  else
-		  isTempoSet = false;
-  }
-  else
-	  isTempoSet = false;
+	sse->p = (void *) getNewGRSaveStruct();
 
-  if (artrem->getAbsTempo()) {
-	  tempo2 = artrem->getAbsTempo()->getValue();
+	mStartEndList.AddTail(sse);
 
-	  if (tempo2 != "")
-		  isTempoAbsSet = true;
-	  else
-		  isTempoAbsSet = false;
-  }
-  else
-	  isTempoAbsSet = false;
+	if(artrem->getTempo()) {
+		tempo1 = artrem->getTempo()->getValue();
+		if (tempo1 != "") isTempoSet = true;
+	}
 
-  if (artrem->getDX())
-	  mdx = artrem->getDX()->getValue();
-  else
-      mdx = 0;
+	if (artrem->getAbsTempo()) {
+		tempo2 = artrem->getAbsTempo()->getValue();
+		if (tempo2 != "") isTempoAbsSet = true;
+	}
+	mdx = artrem->getDX()->getValue();
+	mdy = artrem->getDY()->getValue();
+	float curLSPACE = inStaff ? inStaff->getStaffLSPACE() : LSPACE;
 
-  if (artrem->getDY())
-	  mdy = artrem->getDY()->getValue();
-  else
-      mdy = 0;
+	mFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
 
-  float curLSPACE = LSPACE;
+	if (mFontSize == 0)
+		mFontSize = (int)(1.5f * LSPACE);
 
-  if (inStaff)
-	  curLSPACE = inStaff->getStaffLSPACE();
-
-//  mFontSize = artrem->getFSize(curLSPACE);
-  mFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
-
-  if (mFontSize == 0)
-	  mFontSize = (int)(1.5f * LSPACE);
-
-  font       = new NVstring(artrem->getFont());
-  fontAttrib = new NVstring(artrem->getTextAttributes());
-//  fontAttrib = new NVstring(artrem->getFAttrib());
+	font       = new NVstring(artrem->getFont());
+	fontAttrib = new NVstring(artrem->getTextAttributes());
 }
 
-unsigned int GRAccelerando::getTextAlign() const
-{
-	return (VGDevice::kAlignLeft | VGDevice::kAlignTop);
-}
+unsigned int GRAccelerando::getTextAlign() const	{ return (VGDevice::kAlignLeft | VGDevice::kAlignTop); }
 
 void GRAccelerando::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw || !mShow)
-        return;
+	if(!mDraw || !mShow) return;
 	
 	assert(gCurSystem);
-
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
-	if (sse == 0)
-		return; // don't draw
+	if (sse == 0) return;
 
 	float xStart = startPos.x;
 	float xEnd   = endPos.x;
 
 	// - Setup font ....
 	const VGFont *hTextFont;
-
 	if (font && font->length() > 0)
-		hTextFont = FontManager::FindOrCreateFont(mFontSize, font, fontAttrib);
+		hTextFont = FontManager::FindOrCreateFont(mFontSize, font->c_str(), fontAttrib->c_str());
 	else
 		hTextFont = FontManager::gFontText;
 
@@ -134,17 +101,13 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		hdc.DrawMusicSymbol(2 * getPosition().x, 2 * getPosition().y, kFullHeadSymbol);
 
 		float y = 2 * getPosition().y;
-
 		for (int i = 0; i < 3; i++) {
 			hdc.DrawMusicSymbol(2 * getPosition().x, y, kStemUp2Symbol);
 			y -= LSPACE;
 		}
-
         hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
-
         hdc.SetTextFont(hTextFont);
 		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, (int)n);
-		
         xStart += (n - 4) * LSPACE / 2;
 	}
 	else if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
@@ -166,17 +129,13 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		hdc.DrawMusicSymbol(2 * (endPos.x - n * LSPACE), 2 * endPos.y, kFullHeadSymbol);
 		
         float y = 2 * endPos.y;
-
 		for (int i = 0; i < 3; i++) {
 			hdc.DrawMusicSymbol(2 * (endPos.x - n * LSPACE), y, kStemUp2Symbol);
 			y -= LSPACE;
 		}
-
         hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
-
         hdc.SetTextFont(hTextFont);
 		hdc.DrawString(endPos.x - (n - 1) * LSPACE, endPos.y, t2, (int)n);
-
 		xEnd -= (n + 1) * LSPACE;
 	}
 
@@ -207,40 +166,23 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 
 void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
 {
-	if (caller != /*dynamic cast<GObject *>*/(getAssociations()->GetTail())) // useless dynamic cast ?
-		return;
+	if (caller != getAssociations()->GetTail()) return;
 
-	GRSingleNote * note = dynamic_cast<GRSingleNote *>(getAssociations()->GetHead());
-	if (note)
-		startPos = note->getStemStartPos();
+	const GRSingleNote * note = getAssociations()->GetHead()->isSingleNote();
+	if (note) 	startPos = note->getStemStartPos();
 
-	GRSingleNote * noteEnd = dynamic_cast<GRSingleNote *>(getAssociations()->GetTail());
-	if(noteEnd)
-		endPos = noteEnd->getStemStartPos();
-/*
-	float minY = startPos.y;
-	for(int i=1; i<= getAssociations()->GetCount(); i++)
-	{
-		GRSingleNote * n = dynamic_cast<GRSingleNote *>(getAssociations()->Get(i));
-		if(n && n->getStemDirection() == 1)
-			minY = std::min(minY, n->getStemStartPos().y);
-		else if(n)
-			minY = std::min(minY, n->getPosition().y - LSPACE/2);
-	}
-	if(minY > 0)
-		minY = 0;
-*/	
+	const GRSingleNote * noteEnd = getAssociations()->GetTail()->isSingleNote();
+	if (noteEnd) endPos = noteEnd->getStemStartPos();
+
 	float maxY = startPos.y;
-	for(int i=1; i<= getAssociations()->GetCount(); i++)
-	{
+	for(int i=1; i<= getAssociations()->GetCount(); i++) {
 		GRSingleNote * n = dynamic_cast<GRSingleNote *>(getAssociations()->Get(i));
 		if(n && n->getStemDirection() == -1)
 			maxY = std::max(maxY, n->getStemStartPos().y);
 		else if (n)
 			maxY = std::max(maxY, n->getPosition().y + LSPACE);
 	}
-	if(maxY<5*LSPACE)
-		maxY = 5*LSPACE;
+	if (maxY < 5*LSPACE) maxY = 5*LSPACE;
 	
 	startPos.y = endPos.y = maxY+LSPACE-mdy;
 	startPos.x += mdx;

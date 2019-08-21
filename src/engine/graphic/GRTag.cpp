@@ -18,8 +18,6 @@
 #include "GRDefine.h"
 #include "GRTag.h"
 
-// #include "GRStaff.h"
-
 GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) : 
 			error(0), 
 			tagtype(VOICETAG), 

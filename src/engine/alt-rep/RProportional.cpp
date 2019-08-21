@@ -68,8 +68,7 @@ void RProportional::onDraw(int width, int height, VGDevice *dev)
 {
 	fLineHeight = float(height) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves-1) * kStaffSpacing) + (kStaffBorder * 2));
 	int fontsize = int(fLineHeight * 3.5);		// value experimentaly defined
-	string fname (kMusicFontStr);
-	const VGFont * font = FontManager::FindOrCreateFont( dev->getVGSystem(), fontsize, &fname);
+	const VGFont * font = FontManager::FindOrCreateFont( dev->getVGSystem(), fontsize, kMusicFontStr);
 	dev->SetMusicFont (font);
 	PianoRoll::onDraw(width, height, dev);
 }

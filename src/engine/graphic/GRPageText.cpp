@@ -47,17 +47,15 @@ GRPageText::GRPageText ( const ARMusicalTag * o, GRPage * p_grpage,
 	// this was done in special?
 	const VGFont* myfont = FontManager::gFontText;
 
-	if (font && font->length() > 0)
-	{
+	if (font && font->length() > 0) {
 		// here, size and attributes must be regarded!!!!!
-		myfont = FontManager::FindOrCreateFont(mFontSize, font, fontAttrib);
+		myfont = FontManager::FindOrCreateFont(mFontSize, font->c_str(), fontAttrib->c_str());
 	}
 
 	// depending on the textformat ...
 	unsigned int xdir = VGDevice::kAlignLeft;
 	unsigned int ydir = VGDevice::kAlignTop;
-	if( fTextformat.size() == 2 )
-	{
+	if( fTextformat.size() == 2 ) {
 		switch (fTextformat[0]) {
 			case 'l':	xdir = VGDevice::kAlignLeft; break;
 			case 'c':	xdir = VGDevice::kAlignCenter; break;

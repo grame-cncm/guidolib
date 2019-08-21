@@ -43,18 +43,14 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR ) : GRTagARNotationEleme
 	VGDevice * hdc = gGlobalSettings.gDevice;
 	mBoundingBox.Set (0, -2*LSPACE, 0, 0);
 
-	string fontName = inAR->getFont();
 	fFormat = inAR->getTextFormat();
-	string attrib = inAR->getTextAttributes();
 	float fsize = inAR->getFSize();
-	fFont = FontManager::FindOrCreateFont( fsize, &fontName, &attrib);
+	fFont = FontManager::FindOrCreateFont( fsize, inAR->getFont(), inAR->getTextAttributes());
 	fNoteScale = fsize / 90.f * 0.7f;  // 90 is the font nominal size and 0.7 is the note scaling
 	fYAlign = getYAlign(fsize);
 
-	string mfontName = kMusicFontStr;
 	float mfontsize = 200.f;
-	string mattr = "";
-	fMusicFont = FontManager::FindOrCreateFont(  mfontsize * fNoteScale, &mfontName, &mattr);
+	fMusicFont = FontManager::FindOrCreateFont(  mfontsize * fNoteScale, kMusicFontStr, "");
 
 	for (auto l : inAR->getTempoMark()) {
 		if (l.second == FormatStringParser::kSpecial) {

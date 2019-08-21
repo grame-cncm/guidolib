@@ -150,39 +150,32 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 	ARClef::octavatype oct = arClef->getOctavaType();
 	if (oct != ARClef::NONE) // d.h. -8,+8,-15,+15
 	{
-		mOctaveOffset.x  = 0; // (GCoord)(curLSPACE*1.25f) - mBoundingBox.left;
-		const float textHeight = float(1.5) * LSPACE; 
-		
-		switch( oct )
-		{
+		mOctaveOffset.x  = 0;
+		const float textHeight = float(1.5) * LSPACE;
+		switch( oct ) {
 			case ARClef::LOW8:
-			{
 				mOctaveStr = clef_cp8;
 				mBoundingBox.bottom += textHeight;
 				mOctaveOffset.y = mBoundingBox.bottom;
 				break;
-			}
+
 			case ARClef::HIGH8:
-			{
 				mOctaveStr = clef_cp8;
 				mOctaveOffset.y = mBoundingBox.top;
 				mBoundingBox.top -= textHeight;
 				break;
-			}
+
 			case ARClef::LOW15:
-			{
 				mOctaveStr = clef_cp15;
 				mBoundingBox.bottom += textHeight;
 				mOctaveOffset.y = mBoundingBox.bottom;
 				break;
-			}
 			case ARClef::HIGH15:
-			{
 				mOctaveStr = clef_cp15;
 				mOctaveOffset.y = mBoundingBox.top;
 				mBoundingBox.top -= textHeight;
 				break;
-			}			
+
 			case ARClef::NONE:  // just to avoid a warning
 				break;
 		}
@@ -267,9 +260,6 @@ void GRClef::OnDraw(VGDevice & hdc) const
 {
 	if (error || !mDraw || !mShow) return;
 
-//	NVRect r = mBoundingBox + mPosition;
-//	hdc.Frame(r.left, r.top, r.right, r.bottom);
-
 	GRTagARNotationElement::OnDraw(hdc);
 	if (mDoubleTreble)
 	{
@@ -279,8 +269,7 @@ void GRClef::OnDraw(VGDevice & hdc) const
 	else if (mOctaveStr) // Draws the octava
 	{
 		const int fontSize = (int)(float(1.5) * LSPACE);
-		NVstring textFont ( FontManager::kDefaultTextFont );
-		const VGFont* fontRef = FontManager::FindOrCreateFont( fontSize, &textFont );
+		const VGFont* fontRef = FontManager::FindOrCreateFont( fontSize, FontManager::kDefaultTextFont.c_str());
 
 		const float octX = mPosition.x + mOctaveOffset.x;
 		const float octY = mPosition.y +  mOctaveOffset.y;

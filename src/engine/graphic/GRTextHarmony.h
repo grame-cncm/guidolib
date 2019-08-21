@@ -61,7 +61,7 @@ public:
 
     virtual void 	setPosition(const NVPoint & inPosition );
     virtual void 	setHPosition( float nx );
-				void	mustFollowPitch( bool flag ) { mMustFollowPitch = flag; }
+			void	mustFollowPitch( bool flag ) { mMustFollowPitch = flag; }
 
 protected:
 
@@ -73,6 +73,8 @@ protected:
 private:
 	void 	DrawHarmonyString (VGDevice & hdc, const VGFont* font, const std::string& str, float x, float y) const;
 	float 	CharExtend (const char* c, const VGFont* font, VGDevice* hdc) const;
+	
+	const VGFont* fFont = 0;
 };
 
 #endif

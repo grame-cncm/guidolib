@@ -56,8 +56,8 @@ class FontManager
 				 FontManager() {}
 		virtual ~FontManager();
 
-	static const VGFont * FindOrCreateFont(VGSystem* sys, int size, const std::string * iname = 0, const std::string * attributes = 0 );
-	static const VGFont * FindOrCreateFont( int size, const std::string * iname = 0, const std::string * attributes = 0 );
+	static const VGFont * FindOrCreateFont(VGSystem* sys, int size, const char* name = 0, const char * attributes = 0 );
+	static const VGFont * FindOrCreateFont( int size, const char * name = 0, const char * attributes = 0 );
 	static void	 ReleaseAllFonts();
 
 	static const VGFont * gFontScriab;

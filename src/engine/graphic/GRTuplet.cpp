@@ -220,12 +220,11 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
         charCount = fText.size();
 
         const VGFont *font = 0;
-        const NVstring fontName("Times New Roman");
-        NVstring attrs ("i");
+        string attrs ("i");
         if (arTuplet->isTextBold())
             attrs += "b";
 
-        font = FontManager::FindOrCreateFont(int(80 * arTuplet->getTextSize()), &fontName, &attrs);
+        font = FontManager::FindOrCreateFont(int(80 * arTuplet->getTextSize()), "Times New Roman", attrs.c_str());
         hdc.SetTextFont(font);
 
         /* In order that numerator/denominator stays at the same vertical position even if size is changed */

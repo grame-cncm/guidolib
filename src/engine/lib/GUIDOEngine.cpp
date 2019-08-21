@@ -143,20 +143,15 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
     if( gInited == false )
     {
 		// gets the standard-scriabin font at 4 times LSPACE (4*2*HSPACE)
-		NVstring musicFontStr ( musicFont );
-
-		FontManager::gFontScriab = FontManager::FindOrCreateFont((int)(4 * LSPACE), &musicFontStr );
+		FontManager::gFontScriab = FontManager::FindOrCreateFont((int)(4 * LSPACE), musicFont );
 
 	    // gets the standard Text-Font..
-		NVstring textFontStr ( textFont );
-		FontManager::gFontText = FontManager::FindOrCreateFont((int)(1.5f * LSPACE), &textFontStr );
+		FontManager::gFontText = FontManager::FindOrCreateFont((int)(1.5f * LSPACE), textFont );
 		
 		gMaps = new TagParametersMaps;
 		gARPageFormat = new ARPageFormat;
-
 		gInited = true;
 	}
-	// Create default page format
 	return guidoNoErr;
 }
 

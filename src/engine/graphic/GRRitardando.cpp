@@ -113,7 +113,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 	// - Setup font ....
 	const VGFont *hTextFont;
 	if (font && font->length() > 0)
-		hTextFont = FontManager::FindOrCreateFont(mFontSize, font, fontAttrib);
+		hTextFont = FontManager::FindOrCreateFont(mFontSize, font->c_str(), fontAttrib->c_str());
 	else
 		hTextFont = FontManager::gFontText;
 

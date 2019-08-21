@@ -54,24 +54,24 @@ GRTextHarmony::GRTextHarmony(GRStaff * p_staff, const ARTextHarmony * ar)
 	if (p_staff)
 		curLSPACE = p_staff->getStaffLSPACE();
 
-	const VGFont* hmyfont = FontManager::gFontText;
-	const ARTextHarmony * myar = getARTextHarmony();
-	if (myar)
-	{
-		mFontSize = int(myar->getFSize() * curLSPACE / LSPACE);
+	fFont = FontManager::gFontText;
+	if (ar) {
+		mFontSize = int(ar->getFSize() * curLSPACE / LSPACE);
 		if (mFontSize == 0)
 			mFontSize = (int)(1.5f * LSPACE);
-		font = new NVstring(myar->getFont());
-		fontAttrib = new NVstring(myar->getTextAttributes());
+		font = new NVstring(ar->getFont());
+		fontAttrib = new NVstring(ar->getTextAttributes());
+
+		st->text = ar->getText() ? ar->getText() : "";
 	}
 
-	if (font && font->length() > 0)
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+	if (!font->empty())
+		fFont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
 
 	// depending on the textformat ...
 	unsigned int xdir = VGDevice::kAlignLeft;
 	unsigned int ydir = VGDevice::kAlignTop;
-	const char* tf = myar->getTextFormat();
+	const char* tf = ar->getTextFormat();
 	if (tf && (strlen(tf) == 2))
 	{
 		switch (tf[0]) {
@@ -91,22 +91,13 @@ GRTextHarmony::GRTextHarmony(GRStaff * p_staff, const ARTextHarmony * ar)
 	st->boundingBox.left = 0;
 	st->boundingBox.top  = 0;
 
-	if (myar && myar->getText())
-		st->text = myar->getText();
-	else
-		st->text = "";
-
-//	if (st->text)
-//	{
-	const char * cp = st->text.c_str();
 	float sizex = 0;
 	float sizey = 0;
-	if( gGlobalSettings.gDevice )
-		hmyfont->GetExtent( cp, (int)st->text.size(), &sizex, &sizey, gGlobalSettings.gDevice );
+	if( gGlobalSettings.gDevice)
+		fFont->GetExtent( st->text.c_str(), (int)st->text.size(), &sizex, &sizey, gGlobalSettings.gDevice );
 
     st->boundingBox.right = 0; //sizex;
 	st->boundingBox.top = sizey;
-//	}
 	st->boundingBox.bottom = 4 * LSPACE;
 }
 
@@ -115,14 +106,10 @@ GRTextHarmony::~GRTextHarmony()
 {
 	assert(mStartEndList.empty());
 	// this is important ...
-	// All associaions that have been made
-	// are dealt with in GRPositionTag ...
+	// All associaions that have been made are dealt with in GRPositionTag ...
 
-	// this makes sure, that we don't remove
-	// associations, that are no longer there
-	// after the Tag has been delete
-	// (especially, if more than one system
-	//  is handled.)
+	// this makes sure, that we don't remove associations, that are no longer there
+	// after the Tag has been delete (especially, if more than one system is handled.)
 	delete mAssociated;
 	mAssociated = 0;
 }
@@ -166,23 +153,11 @@ void GRTextHarmony::OnDraw( VGDevice & hdc ) const
 	float dx = arText->getDX()->getValue( curLSPACE );
 	float dy = -arText->getDY()->getValue( curLSPACE );;
 
-	// - Setup font ....
-	const VGFont* hmyfont;
-	if (font && font->length() > 0)
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
-	else
-		hmyfont = FontManager::gFontText;
-	hdc.SetTextFont( hmyfont );
+	hdc.SetTextFont( fFont);
 	const VGColor prevTextColor = hdc.GetFontColor();
 	if( mColRef ) hdc.SetFontColor( VGColor( mColRef ));
 	hdc.SetFontAlign( mTextAlign );
-
-	// - Print text
-//	const char * theText = st->text.c_str();
-//	const int charCount = (int)st->text.size();
-	DrawHarmonyString (hdc, hmyfont, st->text, drawPos.x + st->boundingBox.left + dx, drawPos.y + dy);
-//    if (charCount > 0)
-//	    hdc.DrawString( drawPos.x + st->boundingBox.left + dx, drawPos.y + dy, theText, charCount);
+	DrawHarmonyString (hdc, fFont, st->text, drawPos.x + st->boundingBox.left + dx, drawPos.y + dy);
 
 	if( mColRef ) hdc.SetFontColor( prevTextColor );
 }
@@ -199,14 +174,11 @@ void GRTextHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const
 	if (str.empty()) return;
 
 	const VGFont* mfont = hdc.GetMusicFont();
-	string mfontName = mfont->GetName();
-	string mFontAttr;
-	string tfontName = font->GetName();
 	float ratio = font->GetSize() / 150.f; // 150 is the default font size for harmony (20 pt)
 
-	const VGFont* mBigFont = FontManager::FindOrCreateFont( mfont->GetSize() * 1.3 * ratio, &mfontName, &mFontAttr);
-	const VGFont* mSmallFont = FontManager::FindOrCreateFont( mfont->GetSize() * 0.8 * ratio, &mfontName, &mFontAttr);
-	const VGFont* tSmallFont = FontManager::FindOrCreateFont( font->GetSize() * 0.8, &tfontName, &mFontAttr);
+	const VGFont* mBigFont = FontManager::FindOrCreateFont( mfont->GetSize() * 1.3 * ratio, mfont->GetName(), "");
+	const VGFont* mSmallFont = FontManager::FindOrCreateFont( mfont->GetSize() * 0.8 * ratio, mfont->GetName(), "");
+	const VGFont* tSmallFont = FontManager::FindOrCreateFont( font->GetSize() * 0.8, font->GetName(), "");
 	const VGFont* curmfont = mBigFont;
 	const VGFont* curtfont = font;
 	const char * ptr = str.c_str();
@@ -254,7 +226,7 @@ void GRTextHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const
 
 const ARTextHarmony * GRTextHarmony::getARTextHarmony() const
 {
-	return /*dynamic*/static_cast<const ARTextHarmony*>(getAbstractRepresentation());
+	return static_cast<const ARTextHarmony*>(getAbstractRepresentation());
 }
 
 void GRTextHarmony::addAssociation(GRNotationElement * el)
@@ -269,15 +241,12 @@ void GRTextHarmony::setPosition(const NVPoint & inPosition)
 {
 	GRPTagARNotationElement::setPosition(inPosition);
 
-	// how do I get the current sse?
-
 	// there can be only one sse! -> no overlap
 	assert(mStartEndList.size() == 1);
 	GRSystemStartEndStruct * sse = mStartEndList.GetHead();
 
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	assert(st);
-
 	st->position = inPosition;
 }
 
@@ -290,7 +259,6 @@ void GRTextHarmony::setHPosition( GCoord nx )
 
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	assert(st);
-
 	st->position.x = nx;
 }
 

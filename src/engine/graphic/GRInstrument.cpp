@@ -93,7 +93,7 @@ void GRInstrument::OnDraw(VGDevice & hdc) const
 	const string name = getARInstrument()->getName();
 	if (name.empty()) return;
 
-	const VGFont* font = FontManager::FindOrCreateFont( int(fSize), &fFont, &fFontAttributes );
+	const VGFont* font = FontManager::FindOrCreateFont( int(fSize), fFont.c_str(), fFontAttributes.c_str() );
 	hdc.SetTextFont( font );
 	const VGColor prevTextColor = hdc.GetFontColor();
 

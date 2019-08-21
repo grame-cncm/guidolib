@@ -35,10 +35,7 @@ GRJump::GRJump( const ARJump * ar, bool rightJustified )
 	if (mSymbols.empty()) {				// first time initialization
 		mSymbols["coda"] = kCodaSymbol;
 		mSymbols["segno"] = kSegnoSymbol;
-
-		const NVstring fontname("Times New Roman Bold Italic");
-		NVstring attrs ("bi");
-		mFont = FontManager::FindOrCreateFont( 110, &fontname, &attrs);
+		mFont = FontManager::FindOrCreateFont( 110, "Times New Roman Bold Italic", "bi");
 	}
 
 	mNeedsSpring = 1;

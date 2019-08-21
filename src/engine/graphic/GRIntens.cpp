@@ -97,9 +97,7 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 
 	const float space = (mGrStaff ? mGrStaff->getStaffLSPACE() : LSPACE) / 2;
 	const ARIntens* ar = getARIntens();
-	const string font = ar->getFont();
-	const string attr = ar->getTextAttributes();
-	const VGFont* hmyfont = FontManager::FindOrCreateFont( int(ar->getFSize()), &font, &attr );
+	const VGFont* hmyfont = FontManager::FindOrCreateFont( int(ar->getFSize()), ar->getFont(), ar->getTextAttributes() );
 
 	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();
