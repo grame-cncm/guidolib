@@ -35,59 +35,33 @@ GRRitardando::GRRitardando( GRStaff * stf, const ARRitardando * artrem )
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse= new GRSystemStartEndStruct;
-	sse->grsystem = stf->getGRSystem(); 
+	sse->grsystem = stf->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-	
 	sse->p = (void *) getNewGRSaveStruct();
-
 	mStartEndList.AddTail(sse);
-	
-  if(artrem->getTempo())
-  {
-	  tempo1 = artrem->getTempo()->getValue();
-	  if(tempo1 != "")
-		   isTempoSet = true;
-	  else
-		  isTempoSet = false;
-  }
-  else
-	  isTempoSet = false;
 
-  if(artrem->getAbsTempo())
-  {
-	  tempo2 = artrem->getAbsTempo()->getValue();
-	  if(tempo2 != "")
-		  isTempoAbsSet = true;
-	  else
-		  isTempoAbsSet = false;
-  }
-  else
-	  isTempoAbsSet = false;
+	if(artrem->getTempo()) {
+		tempo1 = artrem->getTempo()->getValue();
+		if(tempo1 != "") isTempoSet = true;
+	}
 
-  if(artrem->getDX())
-	  mdx = artrem->getDX()->getValue();
-  else mdx = 0;
+	if(artrem->getAbsTempo()) {
+		tempo2 = artrem->getAbsTempo()->getValue();
+		if(tempo2 != "") isTempoAbsSet = true;
+	}
 
-  if(artrem->getDY())
-	  mdy = artrem->getDY()->getValue();
-  else mdy = 0;
-  
-  
-  float curLSPACE = LSPACE;
-  if (stf)
-  {
-	  curLSPACE = stf->getStaffLSPACE();
-  }
+	mdx = artrem->getDX()->getValue();
+	mdy = artrem->getDY()->getValue();
 
-//  mFontSize = artrem->getFSize(curLSPACE);
-  mFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
-  if (mFontSize == 0)
-	  mFontSize = (int)(1.5f * LSPACE);
-  
-  font = new NVstring(artrem->getFont());
-  fontAttrib = new NVstring(artrem->getTextAttributes());
-//  fontAttrib = new NVstring(artrem->getFAttrib());
+	float curLSPACE = LSPACE;
+	if (stf) curLSPACE = stf->getStaffLSPACE();
 
+	fFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
+	if (fFontSize == 0)
+		fFontSize = (int)(1.5f * LSPACE);
+
+	fFontName 	= artrem->getFont();
+	fFontAttrib 	= artrem->getTextAttributes();
 }
 
 GRRitardando::~GRRitardando()
@@ -112,8 +86,8 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 
 	// - Setup font ....
 	const VGFont *hTextFont;
-	if (font && font->length() > 0)
-		hTextFont = FontManager::FindOrCreateFont(mFontSize, font->c_str(), fontAttrib->c_str());
+	if (!fFontName.empty())
+		hTextFont = FontManager::FindOrCreateFont(fFontSize, fFontName.c_str(), fFontAttrib.c_str());
 	else
 		hTextFont = FontManager::gFontText;
 

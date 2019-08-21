@@ -59,20 +59,15 @@ GRText::GRText(GRStaff * staff, const ARText * ar) : GRPTagARNotationElement(ar)
 	const VGFont* hmyfont = FontManager::gFontText;
 	const ARText * myar = getARText();
 	if (myar) {
-//		mFontSize = myar->getFSize(curLSPACE);
-		mFontSize = int(myar->getFSize() * curLSPACE / LSPACE);
-		if (mFontSize == 0)
-			mFontSize = (int)(1.5f * LSPACE);
-		// we do not want that (do we?)
-		font = new NVstring(myar->getFont());
-//		fontAttrib = new NVstring(myar->getFAttrib());
-		fontAttrib = new NVstring(myar->getTextAttributes());
+		fFontSize = int(myar->getFSize() * curLSPACE / LSPACE);
+		if (fFontSize == 0)
+			fFontSize = (int)(1.5f * LSPACE);
+		fFontName 	= myar->getFont();
+		fFontAttrib = myar->getTextAttributes();
 	}
 
-	if (font && font->length() > 0) {
-		// handle font-attributes ...
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
-	}
+	if (!fFontName.empty())
+		hmyfont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
 
 	// depending on the textformat ...
 	unsigned int xdir = VGDevice::kAlignLeft;
@@ -183,8 +178,8 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 	float h = 0;
 
 	const VGFont* hmyfont;
-	if (font && font->length() > 0)
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
+	if (!fFontName.empty())
+		hmyfont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
 	else
 		hmyfont = FontManager::gFontText;
 
@@ -216,8 +211,8 @@ void GRText::OnDraw( VGDevice & hdc ) const
 
 	// - Setup font ....
 	const VGFont* hmyfont;
-	if (font && font->length() > 0)	hmyfont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
-	else							hmyfont = FontManager::gFontText;
+	if (!fFontName.empty())	hmyfont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
+	else				hmyfont = FontManager::gFontText;
 
 	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();

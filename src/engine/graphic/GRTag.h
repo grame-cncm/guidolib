@@ -56,10 +56,10 @@ public:
 	virtual float       getSConst() const       { return sconst; }
 
     // returns name of a font if present ...
-	virtual const NVstring *        getFont() const         { return font; }
-	virtual const NVstring *        getFontAttrib() const   { return fontAttrib; }
-    // this is the standard size ...
-	virtual int                     getFontSize() const     { return mFontSize; }
+	virtual const char*  getFont() const         { return fFontName.c_str(); }
+	virtual const char*  getFontAttrib() const   { return fFontAttrib.c_str(); }
+	virtual int          getFontSize() const     { return fFontSize; }
+
 	virtual const unsigned char *   getColRef() const       { return mColRef; }
 
 	virtual void        setSConst(float val)                { sconst = val; }
@@ -79,10 +79,9 @@ protected:
 	
 	unsigned char * mColRef;	// for the color-parameter ... (RGBA) [0, 255]
 
-	NVstring * font;
-	NVstring * fontAttrib;
-
-	int mFontSize;
+	std::string fFontName;
+	std::string fFontAttrib;
+	int 		fFontSize;
 
 	float mTagSize;
 	NVPoint mTagOffset;

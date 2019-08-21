@@ -56,17 +56,17 @@ GRTextHarmony::GRTextHarmony(GRStaff * p_staff, const ARTextHarmony * ar)
 
 	fFont = FontManager::gFontText;
 	if (ar) {
-		mFontSize = int(ar->getFSize() * curLSPACE / LSPACE);
-		if (mFontSize == 0)
-			mFontSize = (int)(1.5f * LSPACE);
-		font = new NVstring(ar->getFont());
-		fontAttrib = new NVstring(ar->getTextAttributes());
+		fFontSize = int(ar->getFSize() * curLSPACE / LSPACE);
+		if (fFontSize == 0)
+			fFontSize = (int)(1.5f * LSPACE);
+		fFontName 	= ar->getFont();
+		fFontAttrib = ar->getTextAttributes();
 
 		st->text = ar->getText() ? ar->getText() : "";
 	}
 
-	if (!font->empty())
-		fFont = FontManager::FindOrCreateFont( mFontSize, font->c_str(), fontAttrib->c_str() );
+	if (!fFontName.empty())
+		fFont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
 
 	// depending on the textformat ...
 	unsigned int xdir = VGDevice::kAlignLeft;

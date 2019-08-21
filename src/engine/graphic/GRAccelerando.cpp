@@ -50,13 +50,13 @@ GRAccelerando::GRAccelerando( GRStaff * inStaff, const ARAccelerando * artrem )
 	mdy = artrem->getDY()->getValue();
 	float curLSPACE = inStaff ? inStaff->getStaffLSPACE() : LSPACE;
 
-	mFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
+	fFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
 
-	if (mFontSize == 0)
-		mFontSize = (int)(1.5f * LSPACE);
+	if (fFontSize == 0)
+		fFontSize = (int)(1.5f * LSPACE);
 
-	font       = new NVstring(artrem->getFont());
-	fontAttrib = new NVstring(artrem->getTextAttributes());
+	fFontName   = artrem->getFont();
+	fFontAttrib = artrem->getTextAttributes();
 }
 
 unsigned int GRAccelerando::getTextAlign() const	{ return (VGDevice::kAlignLeft | VGDevice::kAlignTop); }
@@ -74,8 +74,8 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 
 	// - Setup font ....
 	const VGFont *hTextFont;
-	if (font && font->length() > 0)
-		hTextFont = FontManager::FindOrCreateFont(mFontSize, font->c_str(), fontAttrib->c_str());
+	if (!fFontName.empty())
+		hTextFont = FontManager::FindOrCreateFont (getFontSize(), fFontName.c_str(), fFontAttrib.c_str());
 	else
 		hTextFont = FontManager::gFontText;
 

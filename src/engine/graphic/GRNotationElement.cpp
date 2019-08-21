@@ -149,11 +149,10 @@ void GRNotationElement::OnDrawText( VGDevice & hdc, NVPoint pos, const char * te
 	
 	const VGFont* hmyfont = FontManager::gFontText;
 	const int size = getFontSize();
-	const NVstring * font = getFont();
 	const unsigned char * colref = getColRef();
 	
-	if (font && font->length() > 0)
-		hmyfont = FontManager::FindOrCreateFont( size, font->c_str(), getFontAttrib()->c_str());
+	if (getFont())
+		hmyfont = FontManager::FindOrCreateFont( size, getFont(), getFontAttrib());
 	
 	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();

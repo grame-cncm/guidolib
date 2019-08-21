@@ -38,18 +38,18 @@ GRPageText::GRPageText ( const ARMusicalTag * o, GRPage * p_grpage,
 	if (p_pageformat)	fPageformat = p_pageformat;
 	if (p_textformat) 	fTextformat =  p_textformat;
 	else				fTextformat = "lt";
-	if (p_textfont)		font = new NVstring(p_textfont);
-	if (p_textattrib)	fontAttrib = new NVstring(p_textattrib);
-	mFontSize = p_textsize;
+	if (p_textfont)		fFontName   = p_textfont;
+	if (p_textattrib)	fFontAttrib = p_textattrib;
+	fFontSize = p_textsize;
 
 	// now, we have to get a font ...
 	// this is plattform-dependant code ...
 	// this was done in special?
 	const VGFont* myfont = FontManager::gFontText;
 
-	if (font && font->length() > 0) {
+	if (!fFontName.empty()) {
 		// here, size and attributes must be regarded!!!!!
-		myfont = FontManager::FindOrCreateFont(mFontSize, font->c_str(), fontAttrib->c_str());
+		myfont = FontManager::FindOrCreateFont(fFontSize, fFontName.c_str(), fFontAttrib.c_str());
 	}
 
 	// depending on the textformat ...

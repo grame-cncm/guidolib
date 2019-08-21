@@ -34,8 +34,8 @@ class GRRitardando : public GRPTagARNotationElement
 
 		
 	private:
-		bool isTempoAbsSet;
-		bool isTempoSet;
+		bool isTempoAbsSet = false;
+		bool isTempoSet = false;
 		NVPoint startPos;
 		NVPoint endPos;
 		std::string tempo1;

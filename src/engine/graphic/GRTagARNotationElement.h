@@ -35,8 +35,8 @@ public:
 
 	virtual const NVPoint &     getOffset() const       { return GRTag::getOffset(); }
 	virtual float               getSize() const         { return GRTag::getSize(); }
-	virtual const NVstring *    getFont() const         { return GRTag::getFont(); }
-	virtual const NVstring *    getFontAttrib() const   { return GRTag::getFontAttrib(); }
+	virtual const char *    	getFont() const         { return GRTag::getFont(); }
+	virtual const char *    	getFontAttrib() const   { return GRTag::getFontAttrib(); }
 	virtual int                 getFontSize() const     { return GRTag::getFontSize(); }
 	virtual const unsigned char * getColRef() const     { return GRTag::getColRef(); }
 };

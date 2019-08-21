@@ -18,11 +18,8 @@
 #include "GRDefine.h"
 #include "GRTag.h"
 
-GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) : 
-			error(0), 
-			tagtype(VOICETAG), 
-			isautotag(0),
-			sconst(SCONST_DEFAULT)
+GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE )
+	:  error(0), tagtype(VOICETAG), isautotag(0), sconst(SCONST_DEFAULT)
 {
 	if (artag) {
 		if (artag->IsStateTag())
@@ -33,9 +30,7 @@ GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) :
 			error = artag->getError();
 	}
 	mColRef = NULL;
-	font = NULL;
-	fontAttrib = NULL;
-	mFontSize = (int) (1.5f * LSPACE); // default ...
+	fFontSize = (int) (1.5f * LSPACE); // default ...
 	
 	if (artag) {
 		const TagParameterString *color = artag->getColor();
@@ -58,8 +53,6 @@ GRTag::~GRTag()
 {
 	delete [] mColRef;
     mColRef = 0;
-	delete font;
-	delete fontAttrib;
 }
 
 void GRTag::RangeEnd(GRStaff * grstaff)			{}
