@@ -38,8 +38,6 @@
 - **tempo** is an arbitrary string that may contain a marker for note duration in the form "[n/d]" where 'n' and 'd' are integers.
 The corresponding mark is decoded as a note duration and replaced with the corresponding note symbol. <br/>Example: "Andante [1/4] = 80"
 
-**Note**: [font parameters](../../tagsparams/#text-parameters) are supported but not horizontal alignment (see *textformat*)
-
 See the [Tempo](@EXAMPLES/tempo/) example. <br />
 See the [Lutkin](@EXAMPLES/lutkin/) example.
 @paramend

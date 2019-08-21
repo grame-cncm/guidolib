@@ -47,12 +47,14 @@ class GRTempo : public GRTagARNotationElement
 		unsigned int 	getFlags	(const TYPE_DURATION & noteDur) const;
 		float 			getXPos		() const;
 		float 			getYAlign	(float fsize) const;
-
+		float 			getXAlign	() const;
+	
 		const VGFont* fFont = 0;
 		const VGFont* fMusicFont = 0;
 		std::string   fFormat;
 		float   	  fNoteScale = 1.f;		// used to scale the note according to the font size
 		float   	  fYAlign = 0.f;		// used as note Y offset acording to text vertical align
+		float   	  fXAlign = 0.f;		// used as note X offset acording to text horizontal align
 };
 
 #endif

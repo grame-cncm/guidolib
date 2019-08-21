@@ -47,7 +47,6 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR ) : GRTagARNotationEleme
 	float fsize = inAR->getFSize();
 	fFont = FontManager::FindOrCreateFont( fsize, inAR->getFont(), inAR->getTextAttributes());
 	fNoteScale = fsize / 90.f * 0.7f;  // 90 is the font nominal size and 0.7 is the note scaling
-	fYAlign = getYAlign(fsize);
 
 	float mfontsize = 200.f;
 	fMusicFont = FontManager::FindOrCreateFont(  mfontsize * fNoteScale, kMusicFontStr, "");
@@ -67,6 +66,8 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR ) : GRTagARNotationEleme
 	}
 	setGRStaff(staff);
 	fDate = inAR->getRelativeTimePosition();
+	fYAlign = getYAlign(fsize);
+	fXAlign = getXAlign();
 }
 
 // ----------------------------------------------------------------------------
@@ -86,32 +87,6 @@ float GRTempo::getXPos() const
 		}
 	}
 	return x;
-}
-
-// ----------------------------------------------------------------------------
-void GRTempo::OnDraw( VGDevice & hdc ) const
-{
-	if(!mDraw || !mShow) return;
-
-    const ARTempo *ar = static_cast<const ARTempo *>(mAbstractRepresentation);
-    if (!ar) return;
-
-    VGColor prevFontColor = hdc.GetFontColor();
-    if (mColRef) hdc.SetFontColor(VGColor(mColRef));
-
-	float space = getGRStaff()->getStaffLSPACE() / 2 * fNoteScale;
-	float currX = getXPos();
-	float dy = ar->getDY() ? - ar->getDY()->getValue(LSPACE) : 0.f;
-	for (auto l : ar->getTempoMark()) {
-		if (l.second == FormatStringParser::kSpecial) {
-			TYPE_DURATION duration = ar->getDuration(l.first.c_str());
-			currX += DrawNote( hdc, duration, currX, dy ) + space;
-		}
-		else {
-			currX += DrawText( hdc, l.first.c_str(), currX, dy ) + space;
-		}
-	}
-    if (mColRef) hdc.SetFontColor(prevFontColor);
 }
 
 // ----------------------------------------------------------------------------
@@ -138,6 +113,32 @@ unsigned int GRTempo::getFlags(const TYPE_DURATION & noteDur) const
 	if (noteDur == DURATION_64)
 		return GRFlag::H64U;
 	return kNoneSymbol;
+}
+
+// ----------------------------------------------------------------------------
+void GRTempo::OnDraw( VGDevice & hdc ) const
+{
+	if(!mDraw || !mShow) return;
+
+    const ARTempo *ar = static_cast<const ARTempo *>(mAbstractRepresentation);
+    if (!ar) return;
+
+    VGColor prevFontColor = hdc.GetFontColor();
+    if (mColRef) hdc.SetFontColor(VGColor(mColRef));
+
+	float space = getGRStaff()->getStaffLSPACE() / 2 * fNoteScale;
+	float currX = getXPos() + fXAlign;
+	float dy = ar->getDY() ? - ar->getDY()->getValue(LSPACE) : 0.f;
+	for (auto l : ar->getTempoMark()) {
+		if (l.second == FormatStringParser::kSpecial) {
+			TYPE_DURATION duration = ar->getDuration(l.first.c_str());
+			currX += DrawNote( hdc, duration, currX, dy ) + space;
+		}
+		else {
+			currX += DrawText( hdc, l.first.c_str(), currX, dy ) + space;
+		}
+	}
+    if (mColRef) hdc.SetFontColor(prevFontColor);
 }
 
 // ----------------------------------------------------------------------------
@@ -216,7 +217,7 @@ unsigned int GRTempo::getTextAlign() const
 	unsigned int xdir = VGDevice::kAlignLeft;
 	unsigned int ydir = VGDevice::kAlignBase;
 	if (fFormat.size() == 2) {
-//		switch (fFormat[0]) {		// horizontal alignment ignored - to do
+//		switch (fFormat[0]) {		// horizontal alignment ignored - manually done using xoffset
 //			case 'l':	xdir = VGDevice::kAlignLeft; break;
 //			case 'c':	xdir = VGDevice::kAlignCenter; break;
 //			case 'r':	xdir = VGDevice::kAlignRight; break;
@@ -239,6 +240,19 @@ float GRTempo::getYAlign(float fsize) const
 			case 't':	return fsize * 0.8f;
 			case 'c':	return 0.f;
 			case 'b':	return -fsize/3.f;
+		}
+	}
+	return 0.f;
+}
+
+// ----------------------------------------------------------------------------
+float GRTempo::getXAlign() const
+{
+	if (fFormat.size() == 2) {
+		switch (fFormat[0]) {
+			case 'l':	return 0.f;
+			case 'c':	return -mBoundingBox.Width() / 2;
+			case 'r':	return -mBoundingBox.Width();
 		}
 	}
 	return 0.f;
