@@ -21,6 +21,7 @@
 #include "NVRect.h"
 #include "MusicalSymbols.h"
 #include "GUIDOScoreMap.h"
+#include "GuidoDefs.h"
 #include "defines.h"
 
 class NVstring;
@@ -58,12 +59,12 @@ class GObject
 		virtual void addToOffset(const NVPoint &)		{ }
 
 		virtual const NVPoint & getOffset() const		{ return sRefposNone; }
-		virtual const NVstring * getFont() const		{ return 0; }
-		virtual const NVstring * getFontAttrib() const	{ return 0; }
+		virtual const char * 	getFont() const			{ return 0; }
+		virtual const char * 	getFontAttrib() const	{ return 0; }
 		virtual const unsigned char * getColRef() const { return 0; }
 
-		virtual int		getFontSize() const;
-		virtual float	getSize() const { return 1.0f; }
+		virtual int		getFontSize() const				{ return (int)(1.5f * LSPACE); } // default
+		virtual float	getSize() const 				{ return 1.0f; }
 
 		/** \brief Retrieves the Symbol-reference-position with respect to the GUIDO-reference-position.
 		
@@ -74,12 +75,11 @@ class GObject
 		*/
 		virtual const NVPoint & getReferencePosition() const { return sRefposNone; }
 		
-		virtual void setPosition( const NVPoint & newPosition );	
-		virtual void setHPosition( float nx );	
-		virtual void tellPosition( GObject * caller, const NVPoint & newPosition ); 
-		
-				const NVPoint & getPosition() const { return mPosition; }	
-		
+		virtual void setPosition( const NVPoint & pos )					{ mPosition = pos; }
+		virtual void setHPosition( float nx )							{ mPosition.x = nx; }
+				const NVPoint & getPosition() const 					{ return mPosition; }
+		virtual void tellPosition( GObject * caller, const NVPoint & newPosition );
+
 		// it could be, that we do not need this ...
 		// we should have a bounding-polygon instead 
 		// ((JB) or many rectangles)

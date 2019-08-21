@@ -37,29 +37,6 @@ GObject::GObject( const GObject & in )
 }
 
 // --------------------------------------------------------------------------
-int GObject::getFontSize() const
-{
-	return (int)(1.5f * LSPACE); // default?
-}
-
-// --------------------------------------------------------------------------
-void GObject::setHPosition( float nx )
-{
-	// Should call setPosition(), or being kept distinct for optimisation ?
-	
-	mPosition.x = nx;
-
-	// I don't know, wether this
-	// should be called that way? 
-}
-
-// --------------------------------------------------------------------------
-void GObject::setPosition( const NVPoint & inPos )
-{
-	mPosition = inPos;//  + offset;
-}
-
-// --------------------------------------------------------------------------
 /** \brief Used with associations to tell associated elements the new position.
 */ 
 void GObject::tellPosition(GObject *, const NVPoint &)
