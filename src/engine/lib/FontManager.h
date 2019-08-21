@@ -26,6 +26,8 @@
 #endif
 
 class VGFont;
+class ARFontAble;
+
 /** \brief Description of a font: name, font size and attributes.
 
 	bold, underline, italic.
@@ -58,6 +60,7 @@ class FontManager
 
 	static const VGFont * FindOrCreateFont(VGSystem* sys, int size, const char* name = 0, const char * attributes = 0 );
 	static const VGFont * FindOrCreateFont( int size, const char * name = 0, const char * attributes = 0 );
+	static const VGFont * GetTextFont( const ARFontAble* ar, float lspace, unsigned int& textalign);
 	static void	 ReleaseAllFonts();
 
 	static const VGFont * gFontScriab;

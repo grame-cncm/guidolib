@@ -14,9 +14,11 @@
 
 #include <iostream>
 
+#include "GuidoDefs.h"	// for gGlobalSettings.gDevice
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
 #include "VGFont.h"
 #include "FontManager.h"
+#include "ARFontAble.h"
 
 using namespace std;
 
@@ -60,6 +62,39 @@ static FontManager gFontManager;
 // --------------------------------------------------------------------------
 FontManager::~FontManager()	{ ReleaseAllFonts(); }
 
+
+// --------------------------------------------------------------------------
+const VGFont * FontManager::GetTextFont( const ARFontAble* ar, float lspace, unsigned int& textalign)
+{
+	if (ar) {
+		int size = int(ar->getFSize() * lspace / LSPACE);
+		if (size == 0)
+			size = (int)(1.5f * lspace);
+		const char* name = ar->getFont();
+		const char* attr = ar->getTextAttributes();
+		if (*name) return FontManager::FindOrCreateFont( size, name, attr );
+
+		const char* tf = ar->getTextFormat();
+		if (tf && (strlen(tf) == 2)) {
+			unsigned int align = 0;
+			switch (tf[0]) {
+				case 'l':	align = VGDevice::kAlignLeft; break;
+				case 'c':	align = VGDevice::kAlignCenter; break;
+				case 'r':	align = VGDevice::kAlignRight; break;
+			}
+
+			switch (tf[1]) {
+				case 't':	align += VGDevice::kAlignTop; break;
+				case 'c':	align += VGDevice::kAlignBase; break;
+				case 'b':	align += VGDevice::kAlignBottom; break;
+			}
+			textalign = align;
+		}
+	}
+	return gFontText;
+}
+
+
 // --------------------------------------------------------------------------
 // TODO: currently, only text fonts can have different attributes (bold, underline, italic).
 // Many text and musical fonts with different sizes can exists.
@@ -94,13 +129,9 @@ const VGFont* FontManager::FindOrCreateFont(VGSystem* sys, int size, const char*
 	else 			cerr << "Guido error: \"" <<  fontName << "\" font creation failed !" << endl;
 	return fontRef;
 }
-// --------------------------------------------------------------------------
-// TODO: currently, only text fonts can have different attributes (bold, underline, italic).
-// Many text and musical fonts with different sizes can exists.
-// In the futur, we could have only one musical font at one size, and scale the context to
-// draw musical symbols at any size.
 
-/** \brief Looks for a font in the font list, and returns it. If the font does not exist, it 
+// --------------------------------------------------------------------------
+/** \brief Looks for a font in the font list, and returns it. If the font does not exist, it
 	is created and added to the font list.
 */
 const VGFont* FontManager::FindOrCreateFont( int size, const char* name, const char* attributes )

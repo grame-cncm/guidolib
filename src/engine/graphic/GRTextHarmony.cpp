@@ -50,44 +50,13 @@ GRTextHarmony::GRTextHarmony(GRStaff * p_staff, const ARTextHarmony * ar)
 	mMustFollowPitch = false;
 	mStartEndList.AddTail(sse);
 
-	float curLSPACE = LSPACE;
-	if (p_staff)
-		curLSPACE = p_staff->getStaffLSPACE();
+	float curLSPACE = p_staff ? p_staff->getStaffLSPACE() : LSPACE;
 
-	fFont = FontManager::gFontText;
-	if (ar) {
-		fFontSize = int(ar->getFSize() * curLSPACE / LSPACE);
-		if (fFontSize == 0)
-			fFontSize = (int)(1.5f * LSPACE);
-		fFontName 	= ar->getFont();
-		fFontAttrib = ar->getTextAttributes();
+	if (ar) st->text = ar->getText() ? ar->getText() : "";
+	
+	mTextAlign = VGDevice::kAlignLeft + VGDevice::kAlignTop;
+	fFont = FontManager::GetTextFont(ar, curLSPACE, mTextAlign);
 
-		st->text = ar->getText() ? ar->getText() : "";
-	}
-
-	if (!fFontName.empty())
-		fFont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
-
-	// depending on the textformat ...
-	unsigned int xdir = VGDevice::kAlignLeft;
-	unsigned int ydir = VGDevice::kAlignTop;
-	const char* tf = ar->getTextFormat();
-	if (tf && (strlen(tf) == 2))
-	{
-		switch (tf[0]) {
-			case 'l':	xdir = VGDevice::kAlignLeft; break;
-			case 'c':	xdir = VGDevice::kAlignCenter; break;
-			case 'r':	xdir = VGDevice::kAlignRight; break;
-		}
-
-		switch (tf[1]) {
-			case 't':	ydir = VGDevice::kAlignTop; break;
-			case 'c':	ydir = VGDevice::kAlignBase; break;
-			case 'b':	ydir = VGDevice::kAlignBottom; break;
-		}
-	}
-
-	mTextAlign = xdir | ydir;
 	st->boundingBox.left = 0;
 	st->boundingBox.top  = 0;
 
