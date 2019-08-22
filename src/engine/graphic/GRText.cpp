@@ -35,6 +35,7 @@ using namespace std;
 
 extern GRStaff * gCurStaff;
 
+// -----------------------------------------------------------------------------
 GRText::GRText(GRStaff * staff, const ARText * ar) : GRPTagARNotationElement(ar)
 {
 	assert(ar);
@@ -51,70 +52,29 @@ GRText::GRText(GRStaff * staff, const ARText * ar) : GRPTagARNotationElement(ar)
 
 	float curLSPACE = staff->getStaffLSPACE();
 	mPosition.y = staff->getDredgeSize();
-//	if( ar->getYPos())
-//		mPosition.y -= (ar->getYPos()->getValue(curLSPACE));
-	if (ar->getDY())
-		mPosition.y -= ar->getDY()->getValue( curLSPACE );
+	mPosition.y -= ar->getDY()->getValue( curLSPACE );
 
-	const VGFont* hmyfont = FontManager::gFontText;
-	const ARText * myar = getARText();
-	if (myar) {
-		fFontSize = int(myar->getFSize() * curLSPACE / LSPACE);
-		if (fFontSize == 0)
-			fFontSize = (int)(1.5f * LSPACE);
-		fFontName 	= myar->getFont();
-		fFontAttrib = myar->getTextAttributes();
-	}
-
-	if (!fFontName.empty())
-		hmyfont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
-
-	// depending on the textformat ...
-	unsigned int xdir = VGDevice::kAlignLeft;
-	unsigned int ydir = VGDevice::kAlignTop;
-	const char* tf = myar->getTextFormat();
-	if (tf && (strlen(tf) == 2))
-	{
-		switch (tf[0]) {
-			case 'l':	xdir = VGDevice::kAlignLeft; break;
-			case 'c':	xdir = VGDevice::kAlignCenter; break;
-			case 'r':	xdir = VGDevice::kAlignRight; break;
-		}
-
-		switch (tf[1]) {
-			case 't':	ydir = VGDevice::kAlignTop; break;
-			case 'c':	ydir = VGDevice::kAlignBase; break;
-			case 'b':	ydir = VGDevice::kAlignBottom; break;
-		}
-	}
-	mTextAlign = xdir | ydir;
-
+	mTextAlign = VGDevice::kAlignLeft + VGDevice::kAlignTop;
+	fFont = FontManager::GetTextFont(ar, curLSPACE, mTextAlign);
+	
 	st->boundingBox.left = 0;
 	st->boundingBox.top  = 0;
+	st->text = ar->getText() ? ar->getText() : "";
 
-	if (myar && myar->getText())
-		st->text = myar->getText();
-	else
-		st->text = "";
+	const char * cp = st->text.c_str();
+	float sizex = 0;
+	float sizey = 0;
+	if( gGlobalSettings.gDevice )
+		fFont->GetExtent( cp, (int)st->text.size(), &sizex, &sizey, gGlobalSettings.gDevice );
 
-//	if (st->text)
-//	{
-		const char * cp = st->text.c_str();
-		float sizex = 0;
-		float sizey = 0;
-		if( gGlobalSettings.gDevice )
-			hmyfont->GetExtent( cp, (int)st->text.size(), &sizex, &sizey, gGlobalSettings.gDevice );
-
-		st->boundingBox.right = sizex;
-		st->boundingBox.top = sizey;
-//	}
-
+	st->boundingBox.right = sizex;
+	st->boundingBox.top = sizey;
 	st->boundingBox.bottom = 4 * LSPACE;
-//	mStaffBottom = staff->getStaffBottom();
 	mStaffBottom = 0;
 }
 
 
+// -----------------------------------------------------------------------------
 GRText::~GRText()
 {
 	assert(mStartEndList.empty());
@@ -136,6 +96,7 @@ void GRText::accept (GRVisitor& visitor)
 	visitor.visitEnd (this);
 }
 
+// -----------------------------------------------------------------------------
 FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 {
 	FloatRect r;
@@ -151,8 +112,7 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 	if( arText->isAutoPos() && staff) {
 		drawPos.y = mStaffBottom;
 	}
-	else if( mMustFollowPitch == false )
-	{
+	else if( mMustFollowPitch == false ) {
 		// - Force the position to be relative to the bottom line of the staff
 		if (staff) // else ?
 			drawPos.y = staff->getDredgeSize();
@@ -160,42 +120,27 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 			drawPos.y = 0;
 	}
 
-//cerr << (void*)arText << " GRText::getTextMetrics: ARText params" << endl;
-//cerr << arText->getSupportedTagParameters() ;
-	float dx = 0;
-	float dy = 0;
+	float dx = arText->getDX()->getValue( curLSPACE );
+	float dy = -arText->getDY()->getValue( curLSPACE );
 
-	if (arText->getDY())
-		dy = -arText->getDY()->getValue( curLSPACE );
-	if (arText->getDX())
-		dx = arText->getDX()->getValue( curLSPACE );
-
-	const char * theText = st->text.c_str();
-	const int charCount = (int)st->text.size();
 	float x = drawPos.x + st->boundingBox.left + dx;
 	float y = drawPos.y + dy;
 	float w = 0;
 	float h = 0;
 
-	const VGFont* hmyfont;
-	if (!fFontName.empty())
-		hmyfont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
-	else
-		hmyfont = FontManager::gFontText;
-
 	const VGFont* savedFont = hdc.GetTextFont();
-	hdc.SetTextFont( hmyfont );
-	hmyfont->GetExtent(theText, charCount, &w, &h, &hdc);
+	hdc.SetTextFont( fFont );
+	fFont->GetExtent(st->text.c_str(), (int)st->text.size(), &w, &h, &hdc);
 	hdc.SetTextFont( savedFont );
 	if( arText->isLyric() && arText->isAutoPos() ) {
 		y += curLSPACE * 0.75f;
 		r.Set(x, y-h, x+w, y);
 	}
-	else
-		r.Set(x, y, x+w, y+h);
+	else r.Set(x, y, x+w, y+h);
 	return r;
 }
 
+// -----------------------------------------------------------------------------
 /**
 	Here, we must handle two different cases:
 		(1) The text position must be relative to the last staff-line. (i.e: Lyrics)
@@ -209,30 +154,16 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 
-	// - Setup font ....
-	const VGFont* hmyfont;
-	if (!fFontName.empty())	hmyfont = FontManager::FindOrCreateFont( fFontSize, fFontName.c_str(), fFontAttrib.c_str() );
-	else				hmyfont = FontManager::gFontText;
+	hdc.SetTextFont( fFont );
 
-	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();
-
 	if( mColRef )
 		hdc.SetFontColor( VGColor( mColRef ));
-
 	hdc.SetFontAlign( mTextAlign );
 
 	// - Print text
-	const char * theText = st->text.c_str();
-	const int charCount = (int)st->text.size();
-    if (charCount > 0) {
-#if 0
-		FloatRect r = getTextMetrics (hdc, gCurStaff);
-	    hdc.DrawString( r.left, r.top, theText, charCount);
-#else
-	    hdc.DrawString( mPosition.x, mPosition.y, theText, charCount);
-#endif
-	}
+    if (!st->text.empty())
+	    hdc.DrawString( mPosition.x, mPosition.y, st->text.c_str(), (int)st->text.size());
 
 	if( mColRef )
 		hdc.SetFontColor( prevTextColor );
@@ -241,16 +172,20 @@ void GRText::OnDraw( VGDevice & hdc ) const
 		DrawBoundingBox(hdc, kStaffBBColor);
 }
 
+// -----------------------------------------------------------------------------
 const ARText * GRText::getARText() const
 {
 	return static_cast<const ARText*>(getAbstractRepresentation());
 }
 
+// -----------------------------------------------------------------------------
 void GRText::addAssociation(GRNotationElement * el)
 {
 	GRNotationElement::addAssociation(el);
 	GRPositionTag::addAssociation(el);
 }
+
+// -----------------------------------------------------------------------------
 /** \brief Called directly by a spring. Then we know that we
 	do not have a position tag.
 */
@@ -269,6 +204,7 @@ void GRText::setPosition(const NVPoint & inPosition)
 	st->position = inPosition;
 }
 
+// -----------------------------------------------------------------------------
 void GRText::setHPosition( GCoord nx )
 {
 	GRPTagARNotationElement::setHPosition(nx);
@@ -290,6 +226,7 @@ void GRText::setHPosition( GCoord nx )
 	st->position.x = nx;
 }
 
+// -----------------------------------------------------------------------------
 void GRText::tellPosition(GObject * caller, const NVPoint & inPosition)
 {
 	// this can be only called by an event, that is there ..
@@ -342,12 +279,14 @@ void GRText::tellPosition(GObject * caller, const NVPoint & inPosition)
 	}
 }
 
+// -----------------------------------------------------------------------------
 void GRText::removeAssociation(GRNotationElement * el)
 {
 	GRPositionTag::removeAssociation(el);
 	GRARNotationElement::removeAssociation(el);
 }
 
+// -----------------------------------------------------------------------------
 GCoord GRText::getLeftSpace() const
 {
 	GRSystemStartEndStruct * sse = mStartEndList.GetHead();
@@ -359,6 +298,7 @@ GCoord GRText::getLeftSpace() const
 	return -st->boundingBox.left;
 }
 
+// -----------------------------------------------------------------------------
 GCoord GRText::getRightSpace() const
 {
 	GRSystemStartEndStruct * sse = mStartEndList.GetHead();

@@ -23,6 +23,7 @@
 class ARText;
 class GRStaff;
 class GRRod;
+class VGFont;
 
 /** \brief A text string.
 
@@ -79,6 +80,9 @@ class GRText : public GRPTagARNotationElement
 		unsigned int mTextAlign;
 		bool	mMustFollowPitch; // (when the text tag has a range)
 		float	mStaffBottom;
+
+	private:
+		const VGFont* fFont;
 };
 
 #endif
