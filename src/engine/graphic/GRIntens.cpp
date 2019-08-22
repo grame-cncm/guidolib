@@ -61,8 +61,10 @@ GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
 	else if (intens == "fz")	mSymbol = kIntensFZSymbol;
 	else mSymbol = 0;
 
-
 	const float curLSPACE = mGrStaff ? mGrStaff->getStaffLSPACE() : LSPACE;
+	fTextAlign = VGDevice::kAlignBase;
+	fFont = FontManager::GetTextFont(ar, curLSPACE, fTextAlign);
+
 	if (mSymbol != 0) {
 		float x = GetSymbolExtent(mSymbol);
 		fDx = ar->getDX()->getValue();
@@ -79,7 +81,6 @@ GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
 	else mBoundingBox.Set( 0, 0, 0, 0 );
 	mLeftSpace = 0;
 	mRightSpace = 0;
-
 	mPosition.y =  6 * curLSPACE;
 }
 
@@ -97,9 +98,8 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 
 	const float space = (mGrStaff ? mGrStaff->getStaffLSPACE() : LSPACE) / 2;
 	const ARIntens* ar = getARIntens();
-	const VGFont* hmyfont = FontManager::FindOrCreateFont( int(ar->getFSize()), ar->getFont(), ar->getTextAttributes() );
 
-	hdc.SetTextFont( hmyfont );
+	hdc.SetTextFont( fFont );
 	const VGColor prevTextColor = hdc.GetFontColor();
 	if( mColRef )
 		hdc.SetFontColor( VGColor( mColRef ));
@@ -115,19 +115,19 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 	float y = mPosition.y - fDy + sy;
 	float x = mPosition.x + fDx - w;
 
-//	GRTagARNotationElement::OnDraw( hdc );
 	if (mSymbol) OnDrawSymbol (hdc, mSymbol, -w, sy, 0);
 
 	// - Print text
 	const string& textafter  = ar->getTextAfter();
 	const string& textbefore = ar->getTextBefore();
+	unsigned int valign = fTextAlign & (VGDevice::kAlignBase + VGDevice::kAlignTop + VGDevice::kAlignBottom);
     if (!textafter.empty()) {
-		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignLeft );
+		hdc.SetFontAlign( valign + VGDevice::kAlignLeft );
 	    hdc.DrawString( x + mBoundingBox.Width() * fSize + space, y, textafter.c_str(), int(textafter.size()));
 	}
 
     if (!textbefore.empty()) {
-		hdc.SetFontAlign( VGDevice::kAlignBase + VGDevice::kAlignRight );
+		hdc.SetFontAlign( valign + VGDevice::kAlignRight );
 		hdc.DrawString( x - space/2, y, textbefore.c_str(), int(textbefore.size()));
 	}
 

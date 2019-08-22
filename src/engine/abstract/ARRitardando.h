@@ -15,10 +15,11 @@
 
 */
 
-#include "ARFontAble.h"
-#include "ARPositionTag.h"
+//#include "ARFontAble.h"
+//#include "ARPositionTag.h"
+#include "TempoChange.h"
 
-class TagParameterString;
+//class TagParameterString;
 
 /*@mkdoc
 
@@ -40,8 +41,9 @@ See the [Lutkin](@EXAMPLES/lutkin/) example.
 /** \brief Ritardando tag
 */
 
-class ARRitardando : public ARFontAble,  public ARPositionTag
-{		
+//class ARRitardando : public ARFontAble,  public ARPositionTag
+class ARRitardando : public TempoChange
+{
 	public:			
 
 		virtual bool MatchEndTag(const char * s);
@@ -49,18 +51,14 @@ class ARRitardando : public ARFontAble,  public ARPositionTag
 						 ARRitardando();
 		virtual 		~ARRitardando() {}
 
-		virtual void setTagParameters (const TagParameterMap& params);
+//		virtual void setTagParameters (const TagParameterMap& params);
 
 		virtual const char*	getParamsStr() const	{ return kARRitardandoParams; };
 		virtual const char*	getTagName() const		{ return "ARRitardando"; };
 		virtual std::string getGMNName() const		{ return "\\ritardando"; };
 
-		const TagParameterString * getTempo() const       { return tempo; }
-		const TagParameterString * getAbsTempo() const    { return abstempo; }
-
-	protected:
-		const TagParameterString *tempo;
-		const TagParameterString *abstempo;
+//		const TagParameterString * getTempo() const      { return getParameter<TagParameterString>(kTempoStr, true); }
+//		const TagParameterString * getAbsTempo() const   { return getParameter<TagParameterString>(kAbsTempoStr, true);}
 };
 
 #endif

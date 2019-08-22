@@ -164,6 +164,7 @@
 #include "GRSystemTag.h"
 #include "GRTag.h"
 #include "GRTempo.h"
+#include "GRTempoChange.h"
 #include "GRText.h"
 #include "GRHarmony.h"
 #include "GRTie.h"
@@ -1415,14 +1416,14 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 	}
 	else if (tinf == typeid(ARRitardando))
 	{
-		GRRitardando * tmp = new GRRitardando(mCurGrStaff, static_cast<const ARRitardando *>(apt));
+		GRTempoChange * tmp = new GRTempoChange(mCurGrStaff, static_cast<const ARAccelerando *>(apt), "rit.");
 		addGRTag(tmp);
 		mCurGrStaff->AddTag(tmp);
 		fMusic->addVoiceElement(arVoice,tmp);
 	}
 	else if (tinf == typeid(ARAccelerando))
 	{
-		GRAccelerando * tmp = new GRAccelerando(mCurGrStaff, static_cast<const ARAccelerando *>(apt));
+		GRTempoChange * tmp = new GRTempoChange(mCurGrStaff, static_cast<const ARAccelerando *>(apt), "accel.");
 		addGRTag(tmp);
 		mCurGrStaff->AddTag(tmp);
 		fMusic->addVoiceElement(arVoice,tmp);

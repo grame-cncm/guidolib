@@ -20,6 +20,7 @@
 class ARIntens;
 class GRStaff;
 class VGDevice;
+class VGFont;
 
 
 /** \brief not yet documented
@@ -41,6 +42,10 @@ class GRIntens : public GRTagARNotationElement
 		const ARIntens* getARIntens() const;
 		void setNote (const GRSingleNote* note) 	{ fNote = note; }
 		const GRSingleNote* getNote() const 		{ return fNote; }
+
+	private:
+		const VGFont *	fFont;
+		unsigned int  	fTextAlign;
 };
 
 #endif

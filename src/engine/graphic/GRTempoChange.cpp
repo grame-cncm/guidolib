@@ -14,54 +14,51 @@
 
 #include <algorithm>
 
-#include "ARAccelerando.h"
-#include "GRStaff.h"
-#include "GRAccelerando.h"
-#include "VGDevice.h"
-#include "GRSingleNote.h"
-#include "TagParameterString.h"
-#include "TagParameterFloat.h"
+#include "TempoChange.h"
 #include "FontManager.h"
+#include "GRTempoChange.h"
+#include "GRSingleNote.h"
+#include "GRStaff.h"
+#include "TagParameterFloat.h"
+//#include "TagParameterString.h"
+#include "VGDevice.h"
 
 extern GRSystem * gCurSystem;
 
-GRAccelerando::GRAccelerando( GRStaff * inStaff, const ARAccelerando * artrem )
-  : GRPTagARNotationElement(artrem)
+//----------------------------------------------------------------------------------------
+GRTempoChange::GRTempoChange( GRStaff * inStaff, const TempoChange * ar, const char* text )
+  : GRPTagARNotationElement(ar), fText (text)
 {
 	assert(inStaff);
+
+	setGRStaff(inStaff);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	sse->grsystem = inStaff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-
 	sse->p = (void *) getNewGRSaveStruct();
-
 	mStartEndList.AddTail(sse);
 
-	if(artrem->getTempo()) {
-		tempo1 = artrem->getTempo()->getValue();
-		if (tempo1 != "") isTempoSet = true;
-	}
+	tempo1 = ar->getBefore();
+	tempo2 = ar->getAfter();
+//	if(ar->getTempo()) {
+//		tempo1 = ar->getTempo()->getValue();
+//		if (tempo1 != "") isTempoSet = true;
+//	}
 
-	if (artrem->getAbsTempo()) {
-		tempo2 = artrem->getAbsTempo()->getValue();
-		if (tempo2 != "") isTempoAbsSet = true;
-	}
-	mdx = artrem->getDX()->getValue();
-	mdy = artrem->getDY()->getValue();
+//	if (ar->getAbsTempo()) {
+//		tempo2 = ar->getAbsTempo()->getValue();
+//		if (tempo2 != "") isTempoAbsSet = true;
+//	}
+	mdx = ar->getDX()->getValue();
+	mdy = ar->getDY()->getValue();
 	float curLSPACE = inStaff ? inStaff->getStaffLSPACE() : LSPACE;
 
-	fFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
-
-	if (fFontSize == 0)
-		fFontSize = (int)(1.5f * LSPACE);
-
-	fFontName   = artrem->getFont();
-	fFontAttrib = artrem->getTextAttributes();
+	fTextAlign = VGDevice::kAlignLeft | VGDevice::kAlignTop;
+	fFont = FontManager::GetTextFont(ar, curLSPACE, fTextAlign);
 }
 
-unsigned int GRAccelerando::getTextAlign() const	{ return (VGDevice::kAlignLeft | VGDevice::kAlignTop); }
-
-void GRAccelerando::OnDraw( VGDevice & hdc ) const
+//----------------------------------------------------------------------------------------
+void GRTempoChange::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow) return;
 	
@@ -72,13 +69,6 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 	float xStart = startPos.x;
 	float xEnd   = endPos.x;
 
-	// - Setup font ....
-	const VGFont *hTextFont;
-	if (!fFontName.empty())
-		hTextFont = FontManager::FindOrCreateFont (getFontSize(), fFontName.c_str(), fFontAttrib.c_str());
-	else
-		hTextFont = FontManager::gFontText;
-
 	// set up color
 	if (mColRef) {
 		VGColor color (mColRef); 	// custom or black
@@ -87,10 +77,11 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		hdc.SetFontColor(color);
 	}
 
-	if (isTempoSet && sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
+	float curLSpace = getGRStaff()->getStaffLSPACE();
+	if (tempo1.size() && sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
 		std::string toPrint ("= ");
 		toPrint += tempo1;
-		toPrint += " accel.";
+		toPrint += " " + fText;
 		const char * t1 = toPrint.c_str();
 		size_t n = toPrint.length();
 		
@@ -106,16 +97,16 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 			y -= LSPACE;
 		}
         hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
-        hdc.SetTextFont(hTextFont);
+        hdc.SetTextFont(fFont);
 		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, (int)n);
         xStart += (n - 4) * LSPACE / 2;
 	}
 	else if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
-        hdc.SetTextFont(hTextFont);
-		hdc.DrawString(getPosition().x, getPosition().y, "accel.", 6);
+        hdc.SetTextFont(fFont);
+		hdc.DrawString(getPosition().x, getPosition().y, fText.c_str(), int(fText.size()));
     }
 
-	if (isTempoAbsSet && sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
+	if (tempo2.size() && sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
 	{
 		std::string toPrint2 ("= ");
 		toPrint2 += tempo2;
@@ -134,7 +125,7 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 			y -= LSPACE;
 		}
         hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
-        hdc.SetTextFont(hTextFont);
+        hdc.SetTextFont(fFont);
 		hdc.DrawString(endPos.x - (n - 1) * LSPACE, endPos.y, t2, (int)n);
 		xEnd -= (n + 1) * LSPACE;
 	}
@@ -145,14 +136,11 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		xStart = sse->startElement->getPosition().x;
 
     hdc.PushPenWidth(2);
-
+	float len = curLSpace * 0.7;
 	while (xStart < xEnd) {
-		if (xStart + LSPACE > xEnd)
-			hdc.Line(xStart, startPos.y, xEnd, endPos.y);
-		else
-			hdc.Line(xStart, startPos.y, xStart + LSPACE, endPos.y);
-
-		xStart += 2 * LSPACE;
+		float x2 = (xStart + len > xEnd) ? xEnd : xStart + len;
+		hdc.Line(xStart, startPos.y, x2, endPos.y);
+		xStart += 2 * len;
 	}
 	
 	if (mColRef) {
@@ -164,7 +152,8 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
     hdc.PopPenWidth();
 }
 
-void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
+//----------------------------------------------------------------------------------------
+void GRTempoChange::tellPosition(GObject * caller, const NVPoint & np)
 {
 	if (caller != getAssociations()->GetTail()) return;
 
@@ -189,5 +178,5 @@ void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
 	endPos.x += mdx;
 
 	setPosition(startPos);
-	startPos.x += 4.5f * LSPACE;
+	startPos.x += 2.5f * LSPACE;
 }

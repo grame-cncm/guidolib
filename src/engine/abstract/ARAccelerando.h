@@ -16,13 +16,15 @@
 */
 
 
-#include "ARFontAble.h"
-#include "ARPositionTag.h"
-#include "TagParameterStrings.h"
-#include "TagParameterString.h"
-#include "TagParameterFloat.h"
+//#include "ARFontAble.h"
+//#include "ARPositionTag.h"
+//#include "TagParameterStrings.h"
+//#include "TagParameterString.h"
+//#include "TagParameterFloat.h"
 
-class TagParameterString;
+#include "TempoChange.h"
+
+//class TagParameterString;
 
 /*@mkdoc
 
@@ -52,8 +54,9 @@ See the [Tempo](@EXAMPLES/tempo/) example.
 
 /** \brief The Accelerando position tag
 */
-class ARAccelerando :  public ARFontAble,  public ARPositionTag
-{		
+//class ARAccelerando :  public ARFontAble,  public ARPositionTag
+class ARAccelerando :  public TempoChange
+{
 	public:			
 
 		virtual bool MatchEndTag(const char * s);
@@ -61,12 +64,14 @@ class ARAccelerando :  public ARFontAble,  public ARPositionTag
 				 ARAccelerando();
 		virtual ~ARAccelerando() {}
 
+//		virtual void setTagParameters (const TagParameterMap& params);
+
 		virtual const char*	getParamsStr() const	{ return kARAccelerandoParams; };
 		virtual const char*	getTagName () const		{ return "ARAccelerando"; };
 		virtual std::string getGMNName () const		{ return "\\accelerando"; };
 
-		const TagParameterString * getTempo() const      { return getParameter<TagParameterString>(kTempoStr, true); }
-		const TagParameterString * getAbsTempo() const   { return getParameter<TagParameterString>(kAbsTempoStr, true);}
+//		const TagParameterString * getTempo() const      { return getParameter<TagParameterString>(kTempoStr, true); }
+//		const TagParameterString * getAbsTempo() const   { return getParameter<TagParameterString>(kAbsTempoStr, true);}
 };
 
 #endif

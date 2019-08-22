@@ -18,13 +18,13 @@
     [
         \rit(e g b f a) 
 
-        \accel<tempo="60", color="red", abstempo="80", dy=22, font="Andalus">
+        \accel<before="60", color="red", after="80", dy=22, font="Andalus">
         (
-            e d e2 e3 f1 a
+            e d e2 e3 f1 a 
         )
     ],
     [
-        \rit<abstempo="120", tempo="100", color="blue">
+        \rit<after="120", before="100", color="blue">
         (
             e c b f a
         )

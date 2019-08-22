@@ -1,10 +1,10 @@
-#ifndef GRAccelerando_H
-#define GRAccelerando_H
+
+#pragma once
 
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2017 Grame
+  Copyright (C) 2002-2019 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,33 +18,34 @@
 #include "GRPTagARNotationElement.h"
 
 
-class ARAccelerando;
+class TempoChange;
 class GRStaff;
+class VGFont;
 
 
 /** \brief The Accelerando notation element
 */
-class GRAccelerando : public GRPTagARNotationElement
+class GRTempoChange : public GRPTagARNotationElement
 {
 	public:
-						 GRAccelerando( GRStaff * stf, const ARAccelerando * artrem );
-		virtual			~GRAccelerando() {}
+						 GRTempoChange( GRStaff * stf, const TempoChange * ar, const char* text );
+		virtual			~GRTempoChange() {}
 
-		virtual unsigned int getTextAlign() const;
-		virtual void	OnDraw( VGDevice & hdc) const;
-
-	    
-		virtual void	tellPosition( GObject * caller,const NVPoint & np );
+		virtual unsigned int getTextAlign() const	{ return fTextAlign; }
+		virtual void		OnDraw( VGDevice & hdc) const;
+		virtual void		tellPosition( GObject * caller,const NVPoint & np );
 
 	private:
-		bool isTempoAbsSet 	= false;
-		bool isTempoSet 	= false;
+//		bool isTempoAbsSet 	= false;
+//		bool isTempoSet 	= false;
 		NVPoint startPos;
 		NVPoint endPos;
 		std::string tempo1;
 		std::string tempo2;
 		float mdx;
 		float mdy;
-};
 
-#endif
+		const VGFont* 	fFont;
+		unsigned int  	fTextAlign;
+		std::string		fText;
+};
