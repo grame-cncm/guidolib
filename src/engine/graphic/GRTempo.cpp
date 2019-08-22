@@ -25,6 +25,7 @@
 #include "GuidoDefs.h"
 #include "GUIDOInternal.h"
 #include "MusicalSymbols.h"
+#include "NoteDrawer.h"
 #include "TagParameterFloat.h"
 #include "VGDevice.h"
 #include "VGFont.h"
@@ -45,6 +46,7 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR ) : GRTagARNotationEleme
 
 	fTextAlign = VGDevice::kAlignLeft + VGDevice::kAlignBase;
 	fFont = FontManager::GetTextFont(inAR, staff->getStaffLSPACE(), fTextAlign);
+	fFormat = inAR->getTextFormat();
 
 	float fsize = inAR->getFSize();
 	fNoteScale = fsize / 90.f * 0.7f;  // 90 is the font nominal size and 0.7 is the note scaling
@@ -133,7 +135,8 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 	for (auto l : ar->getTempoMark()) {
 		if (l.second == FormatStringParser::kSpecial) {
 			TYPE_DURATION duration = ar->getDuration(l.first.c_str());
-			currX += DrawNote( hdc, duration, currX, dy ) + space;
+			NoteDrawer nd (fMusicFont, mPosition, fNoteScale, fYAlign);
+			currX += nd.DrawNote( hdc, duration, currX, dy ) + space;
 		}
 		else {
 			currX += DrawText( hdc, l.first.c_str(), currX, dy ) + space;
@@ -216,7 +219,7 @@ float GRTempo::DrawText( VGDevice & hdc, const char * cp, float xOffset, float y
 unsigned int GRTempo::getTextAlign() const
 {
 	// horizontal alignment is ignored - achieved manually using xoffset
-	return fTextAlign & 0x80 + VGDevice::kAlignLeft;
+	return fTextAlign & 0x07 + VGDevice::kAlignLeft;
 }
 
 // ----------------------------------------------------------------------------
