@@ -1,5 +1,5 @@
-#ifndef ARTextHarmony_H
-#define ARTextHarmony_H
+
+#pragma once
 
 /*
   GUIDO Library
@@ -47,26 +47,23 @@ See the [jazz](@EXAMPLES/allthethings/) example.
 
 /** \brief The text tag
  */
-class ARTextHarmony : public ARFontAble, public ARPositionTag
+class ARHarmony : public ARFontAble, public ARPositionTag
 {
 	public:
 		enum { kUndefined, kAbove, kBelow  };
-					 ARTextHarmony( int position = kUndefined);
-		virtual		~ARTextHarmony() {}
+					 ARHarmony( int position = kUndefined);
+		virtual		~ARHarmony() {}
 
 		virtual void		setTagParameters (const TagParameterMap& params);
 
 		virtual const char* getText() const			{ return fText ? fText->getValue() : 0; }
 		int 				position() const		{ return fPosition; }
 
-		virtual const char*	getParamsStr() const	{ return kARTextHarmonyParams; };
-		virtual const char*	getTagName() const		{ return "ARTextHarmony"; };
+		virtual const char*	getParamsStr() const	{ return kARHarmonyParams; };
+		virtual const char*	getTagName() const		{ return "ARHarmony"; };
 		virtual std::string getGMNName() const		{ return "\\harmony"; };
 
 	private:
 		const TagParameterString * fText = 0;
 		int fPosition = kUndefined;
 };
-
-
-#endif

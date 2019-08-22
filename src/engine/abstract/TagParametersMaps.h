@@ -46,6 +46,7 @@ typedef struct TagParametersMaps {
 	const TagParameterMap sARFooterMap;
 	const TagParameterMap sARGlissandoMap;
 	const TagParameterMap sARGraceMap;
+	const TagParameterMap sARHarmonyMap;
 	const TagParameterMap sARInstrumentMap;
 	const TagParameterMap sARIntensMap;
 	const TagParameterMap sARJumpMap;
@@ -69,7 +70,6 @@ typedef struct TagParametersMaps {
 	const TagParameterMap sARTStemMap;
 	const TagParameterMap sARTempoMap;
 	const TagParameterMap sARTextMap;
-	const TagParameterMap sARTextHarmonyMap;
 	const TagParameterMap sARTitleMap;
 	const TagParameterMap sARTremoloMap;
 	const TagParameterMap sARTrillMap;
@@ -106,6 +106,7 @@ typedef struct TagParametersMaps {
 			sARFooterMap (kARFooterParams),
 			sARGlissandoMap (kARGlissandoParams),
 			sARGraceMap (kARGraceParams),
+			sARHarmonyMap (kARHarmonyParams),
 			sARInstrumentMap (kARInstrumentParams),
 			sARIntensMap (kARIntensParams),
 			sARJumpMap (kARJumpParams),
@@ -129,7 +130,6 @@ typedef struct TagParametersMaps {
 			sARTStemMap (kARTStemParams),
 			sARTempoMap (kARTempoParams),
 			sARTextMap (kARTextParams),
-			sARTextHarmonyMap (kARTextHarmonyParams),
 			sARTitleMap (kARTitleParams),
 			sARTremoloMap (kARTremoloParams),
 			sARTrillMap (kARTrillParams),

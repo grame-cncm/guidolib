@@ -1,5 +1,5 @@
-#ifndef GRTextHarmony_H
-#define GRTextHarmony_H
+#ifndef GRHarmony_H
+#define GRHarmony_H
 
 /*
   GUIDO Library
@@ -19,7 +19,7 @@
 
 #include "GRPTagARNotationElement.h"
 
-class ARTextHarmony;
+class ARHarmony;
 class GRStaff;
 class GRRod;
 class VGFont;
@@ -29,7 +29,7 @@ class VGFont;
 	Can represent standard text, lyrics, fingering, label, cue-text, marks...
 
 */
-class GRTextHarmony : public GRPTagARNotationElement
+class GRHarmony : public GRPTagARNotationElement
 {
 public:
     class GRTextSaveStruct : public GRPositionTag::GRSaveStruct
@@ -43,8 +43,8 @@ public:
         std::string text;
     };
 
-					 GRTextHarmony( GRStaff *, const ARTextHarmony * abstractRepresentationOfText );
-    virtual 		~GRTextHarmony();
+					 GRHarmony( GRStaff *, const ARHarmony * abstractRepresentationOfText );
+    virtual 		~GRHarmony();
 
     virtual void 	removeAssociation( GRNotationElement * el );
     virtual void 	tellPosition( GObject * caller, const NVPoint & inPosition );
@@ -52,7 +52,7 @@ public:
 
     virtual void 	OnDraw( VGDevice & hdc ) const;
 
-    const ARTextHarmony * 	getARTextHarmony() const;
+    const ARHarmony * 	getARHarmony() const;
 
     virtual unsigned int getTextAlign() const { return mTextAlign; }
 

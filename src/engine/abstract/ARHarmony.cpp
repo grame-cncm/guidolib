@@ -14,14 +14,14 @@
 
 #include <iostream>
 
-#include "ARTextHarmony.h"
+#include "ARHarmony.h"
 #include "TagParameterStrings.h"
 
 using namespace std;
 
-ARTextHarmony::ARTextHarmony(int position)
+ARHarmony::ARHarmony(int position)
 {
-	setupTagParameters (gMaps->sARTextHarmonyMap);
+	setupTagParameters (gMaps->sARHarmonyMap);
 	
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
     setDuration( DURATION_0 );
@@ -29,7 +29,7 @@ ARTextHarmony::ARTextHarmony(int position)
     fPosition = position;
 }
 
-void ARTextHarmony::setTagParameters (const TagParameterMap& params)
+void ARHarmony::setTagParameters (const TagParameterMap& params)
 {
 	ARFontAble::setTagParameters(params);
 	fText		= getParameter<TagParameterString>(kTextStr);

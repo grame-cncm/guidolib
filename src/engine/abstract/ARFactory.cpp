@@ -100,7 +100,7 @@
 #include "ARTempo.h"
 #include "ARTenuto.h"
 #include "ARText.h"
-#include "ARTextHarmony.h"
+#include "ARHarmony.h"
 #include "ARTHead.h"
 #include "ARTie.h"
 #include "ARTitle.h"
@@ -1050,7 +1050,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddPositionTag(tmp);
 			}
             if (!strcmp(name,  kTagHarmony )) {
-                ARTextHarmony * tmp = new ARTextHarmony(mHarmonyPos);
+                ARHarmony * tmp = new ARHarmony(mHarmonyPos);
                 mTags.AddHead(tmp);
                 mCurrentVoice->AddPositionTag(tmp);
             }

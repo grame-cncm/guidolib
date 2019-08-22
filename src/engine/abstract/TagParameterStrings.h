@@ -71,7 +71,6 @@ extern const char* kARStaffFormatParams;
 extern const char* kARStaffParams;
 extern const char* kARSymbolParams;
 extern const char* kARTempoParams;
-extern const char* kARTextHarmonyParams;
 extern const char* kARTextParams;
 extern const char* kARTextParams;
 extern const char* kARTitleParams;

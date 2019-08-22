@@ -16,8 +16,8 @@
 #include <string.h>
 #include <cctype>
 
-#include "ARTextHarmony.h"
-#include "GRTextHarmony.h"
+#include "ARHarmony.h"
+#include "GRHarmony.h"
 
 #include "GRDefine.h"
 #include "FontManager.h"
@@ -36,7 +36,7 @@ using namespace std;
 
 extern GRStaff * gCurStaff;
 
-GRTextHarmony::GRTextHarmony(GRStaff * p_staff, const ARTextHarmony * ar)
+GRHarmony::GRHarmony(GRStaff * p_staff, const ARHarmony * ar)
   : GRPTagARNotationElement(ar)
 {
 	assert(ar);
@@ -71,7 +71,7 @@ GRTextHarmony::GRTextHarmony(GRStaff * p_staff, const ARTextHarmony * ar)
 }
 
 
-GRTextHarmony::~GRTextHarmony()
+GRHarmony::~GRHarmony()
 {
 	assert(mStartEndList.empty());
 	// this is important ...
@@ -88,7 +88,7 @@ GRTextHarmony::~GRTextHarmony()
 		(1) The text position must be relative to the last staff-line. (i.e: Lyrics)
 		(2) The text position must follow the y-position of the note. (i.e: Fingering)
 */
-void GRTextHarmony::OnDraw( VGDevice & hdc ) const
+void GRHarmony::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow)
 		return;
@@ -96,7 +96,7 @@ void GRTextHarmony::OnDraw( VGDevice & hdc ) const
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 
-	const ARTextHarmony * arText = getARTextHarmony();
+	const ARHarmony * arText = getARHarmony();
 	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
 
 	// - Setup position.
@@ -108,11 +108,11 @@ void GRTextHarmony::OnDraw( VGDevice & hdc ) const
 		int pos = arText->position();
 		if (gCurStaff) {
 			switch (pos) {
-				case ARTextHarmony::kUndefined:
-				case ARTextHarmony::kBelow:
+				case ARHarmony::kUndefined:
+				case ARHarmony::kBelow:
 					drawPos.y = gCurStaff->getDredgeSize(); // + curLSPACE;
 					break;
-				case ARTextHarmony::kAbove:
+				case ARHarmony::kAbove:
 					drawPos.y = -gCurStaff->getDredgeSize() - curLSPACE/2;
 					break;
 			}
@@ -131,14 +131,14 @@ void GRTextHarmony::OnDraw( VGDevice & hdc ) const
 	if( mColRef ) hdc.SetFontColor( prevTextColor );
 }
 
-float GRTextHarmony::CharExtend (const char* c, const VGFont* font, VGDevice* hdc) const
+float GRHarmony::CharExtend (const char* c, const VGFont* font, VGDevice* hdc) const
 {
 	float w, h;
 	font->GetExtent (c, 1, &w, &h, hdc);
 	return w;
 }
 
-void GRTextHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const string& str, float x, float y) const
+void GRHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const string& str, float x, float y) const
 {
 	if (str.empty()) return;
 
@@ -193,12 +193,12 @@ void GRTextHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const
 	hdc.SetMusicFont (mfont);
 }
 
-const ARTextHarmony * GRTextHarmony::getARTextHarmony() const
+const ARHarmony * GRHarmony::getARHarmony() const
 {
-	return static_cast<const ARTextHarmony*>(getAbstractRepresentation());
+	return static_cast<const ARHarmony*>(getAbstractRepresentation());
 }
 
-void GRTextHarmony::addAssociation(GRNotationElement * el)
+void GRHarmony::addAssociation(GRNotationElement * el)
 {
 	GRNotationElement::addAssociation(el);
 	GRPositionTag::addAssociation(el);
@@ -206,7 +206,7 @@ void GRTextHarmony::addAssociation(GRNotationElement * el)
 /** \brief Called directly by a spring. Then we know that we
 	do not have a position tag.
 */
-void GRTextHarmony::setPosition(const NVPoint & inPosition)
+void GRHarmony::setPosition(const NVPoint & inPosition)
 {
 	GRPTagARNotationElement::setPosition(inPosition);
 
@@ -219,7 +219,7 @@ void GRTextHarmony::setPosition(const NVPoint & inPosition)
 	st->position = inPosition;
 }
 
-void GRTextHarmony::setHPosition( GCoord nx )
+void GRHarmony::setHPosition( GCoord nx )
 {
 	GRPTagARNotationElement::setHPosition(nx);
 	// there can be only one sse! -> no overlap
@@ -231,7 +231,7 @@ void GRTextHarmony::setHPosition( GCoord nx )
 	st->position.x = nx;
 }
 
-void GRTextHarmony::tellPosition(GObject * caller, const NVPoint & inPosition)
+void GRHarmony::tellPosition(GObject * caller, const NVPoint & inPosition)
 {
 	// this can be only called by an event, that is there ..
 	GRNotationElement * grel =  dynamic_cast<GRNotationElement *>(caller);
@@ -267,19 +267,19 @@ void GRTextHarmony::tellPosition(GObject * caller, const NVPoint & inPosition)
 		newPos.y = grel->getPosition().y;
 		st->position = newPos;
 
-		const ARTextHarmony* arText = getARTextHarmony();
+		const ARHarmony* arText = getARHarmony();
 		const char* text = arText ? arText->getText() : 0;
 		if (text) st->text = text;
 	}
 }
 
-void GRTextHarmony::removeAssociation(GRNotationElement * el)
+void GRHarmony::removeAssociation(GRNotationElement * el)
 {
 	GRPositionTag::removeAssociation(el);
 	GRARNotationElement::removeAssociation(el);
 }
 
-GCoord GRTextHarmony::getLeftSpace() const
+GCoord GRHarmony::getLeftSpace() const
 {
 	GRSystemStartEndStruct * sse = mStartEndList.GetHead();
 	if (!sse) return 0;
@@ -289,7 +289,7 @@ GCoord GRTextHarmony::getLeftSpace() const
 	return -st->boundingBox.left;
 }
 
-GCoord GRTextHarmony::getRightSpace() const
+GCoord GRHarmony::getRightSpace() const
 {
 	GRSystemStartEndStruct * sse = mStartEndList.GetHead();
 	if (!sse) return 0;

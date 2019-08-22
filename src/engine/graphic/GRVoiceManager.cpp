@@ -94,7 +94,7 @@
 #include "ARSystemFormat.h"
 #include "ARTempo.h"
 #include "ARTenuto.h"
-#include "ARTextHarmony.h"
+#include "ARHarmony.h"
 #include "ARTHead.h"
 #include "ARTie.h"
 #include "ARTitle.h"
@@ -165,7 +165,7 @@
 #include "GRTag.h"
 #include "GRTempo.h"
 #include "GRText.h"
-#include "GRTextHarmony.h"
+#include "GRHarmony.h"
 #include "GRTie.h"
 #include "GRTremolo.h"
 #include "GRTrill.h"
@@ -912,10 +912,10 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		fMusic->addVoiceElement(arVoice,grtxt);
 		grne = grtxt;
 	}
-    else if (tinf == typeid(ARTextHarmony))
+    else if (tinf == typeid(ARHarmony))
     {
         // this is a No-Range Text-Tag...
-        GRTextHarmony * grtxt = new GRTextHarmony(mCurGrStaff, static_cast<const ARTextHarmony *>(arOfCompleteObject));
+        GRHarmony * grtxt = new GRHarmony(mCurGrStaff, static_cast<const ARHarmony *>(arOfCompleteObject));
 
         grtxt->setNeedsSpring(1);	// needs a Spring
         mCurGrStaff->AddTag(grtxt);
