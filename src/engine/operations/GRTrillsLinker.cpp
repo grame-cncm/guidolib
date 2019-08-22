@@ -16,7 +16,6 @@
 
 #include "GRTrillsLinker.h"
 
-#include "GRPage.h"
 #include "GRBar.h"
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
