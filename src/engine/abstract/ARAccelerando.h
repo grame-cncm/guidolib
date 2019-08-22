@@ -16,15 +16,7 @@
 */
 
 
-//#include "ARFontAble.h"
-//#include "ARPositionTag.h"
-//#include "TagParameterStrings.h"
-//#include "TagParameterString.h"
-//#include "TagParameterFloat.h"
-
 #include "TempoChange.h"
-
-//class TagParameterString;
 
 /*@mkdoc
 
@@ -38,14 +30,12 @@
 @tagend
 
 @params:
-@param:tempo:string:the tempo at the beginning:*none*:true
-@param:abstempo:string:the tempo at the end:*none*:true
+@param:before:string:a string placed before 'accel.':*none*:true
+@param:after:string:a string placed after the accel range:*none*:true
 @fontparams:
 @paramdesc
-- **tempo** and **abstempo** are intended to be tempo values. A quarter note is inserted before these strings.
-
-**Note**: the implementation of the parameters is not satisfactory, in particular because the value of the time unit is hard coded.
-It will be revised in the future to integrate the encoding of the time unit into the tempo string.
+- **before** and **after** ara arbitrary strings that may contain a marker for note duration in the form "[n/d]" where 'n' and 'd' are integers.
+The corresponding mark is decoded as a note duration and replaced with the corresponding note symbol. <br/>Example: *before="[1/4] = 80"*
 
 See the [Tempo](@EXAMPLES/tempo/) example.
 @paramend

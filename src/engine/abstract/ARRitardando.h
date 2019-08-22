@@ -30,11 +30,20 @@
 @tagtype:R
 @tagnotation:ritardando marks
 @tagdesc
-Supports the same parameters and the same note than [\accelerando](#accelerando)
+Works similarly to [\accelerando](#accelerando)
+@tagend
+
+@params:
+@param:before:string:a string placed before 'accel.':*none*:true
+@param:after:string:a string placed after the accel range:*none*:true
+@fontparams:
+@paramdesc
+- **before** and **after** ara arbitrary strings that may contain a marker for note duration in the form "[n/d]" where 'n' and 'd' are integers.
+The corresponding mark is decoded as a note duration and replaced with the corresponding note symbol. <br/>Example: *before="[1/4] = 80"*
 
 See the [Tempo](@EXAMPLES/tempo/) example. <br />
 See the [Lutkin](@EXAMPLES/lutkin/) example.
-@tagend
+@paramend
 
 */
 
