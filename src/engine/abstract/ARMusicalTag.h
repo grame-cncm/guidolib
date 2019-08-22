@@ -37,7 +37,7 @@ class ARMusicalTag : public ARMusicalObject
 
 	public:
 		// the tags order at the beginning of a voice
-		enum ORDER { kDontMove=-1, kStartOrder, kStaffOrder, kInstrumentOrder, kClefOrder, kKeyOrder, kMeterOrder, kTitleOrder, kComposerOrder, kSystemFormatOrder, kAccoladeOrder,
+		enum ORDER { kDontMove=-1, kStartOrder, kStaffOrder, kInstrumentOrder, kClefOrder, kKeyOrder, kMeterOrder, kTitleOrder, kComposerOrder, kFooterOrder, kSystemFormatOrder, kAccoladeOrder,
 					kDefaultOrder };
 
 		enum ASSOCIATION { LA, RA, DC, EL, ER }; // Left, Right, Don't Care, Error Left, Error Right

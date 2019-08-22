@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.7
+- new \footer tag
 - tempo support text parameters (issue #23)
 - new global setting (\auto) to hide accidentals on tied notes (issue #78)
 - correctly handle harmony string in harmony tag

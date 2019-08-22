@@ -47,6 +47,7 @@ extern const char* kARDynamicParams;
 extern const char* kARFeatheredBeamParams;
 extern const char* kARFermataParams;
 extern const char* kARFingeringParams;
+extern const char* kARFooterParams;
 extern const char* kARGlissandoParams;
 extern const char* kARGraceParams;
 extern const char* kARHarmonyParams;

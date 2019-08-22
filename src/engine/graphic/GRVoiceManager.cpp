@@ -15,8 +15,6 @@
 #include <typeinfo>
 #include <iostream>
 
-#include "TagList.h"
-#include "TagParameterFloat.h"
 
 #include "ARAccelerando.h"
 #include "ARAccent.h"
@@ -52,6 +50,7 @@
 #include "ARFine.h"
 #include "ARFingering.h"
 #include "ARFinishBar.h"
+#include "ARFooter.h"
 #include "ARGlissando.h"
 #include "ARGrace.h"
 #include "ARHarmonic.h"
@@ -107,10 +106,12 @@
 #include "ARUserChordTag.h"
 #include "ARVolta.h"
 
+#include "TagList.h"
+#include "TagParameterFloat.h"
 
 #include "GRAccelerando.h"
-#include "GRArticulation.h"
 #include "GRArpeggio.h"
+#include "GRArticulation.h"
 #include "GRAutoBeam.h"
 #include "GRBar.h"
 #include "GRBeam.h"
@@ -126,8 +127,8 @@
 #include "GRDrRenz.h"
 #include "GRDummy.h"
 #include "GREmpty.h"
-#include "GRFinishBar.h"
 #include "GRFingering.h"
+#include "GRFinishBar.h"
 #include "GRGlissando.h"
 #include "GRGlobalLocation.h"
 #include "GRGlobalStem.h"
@@ -169,10 +170,9 @@
 #include "GRTremolo.h"
 #include "GRTrill.h"
 #include "GRTuplet.h"
+#include "GRVoiceManager.h"
 #include "GRVolta.h"
 
-
-#include "GRVoiceManager.h"
 
 using namespace std;
 
@@ -1067,6 +1067,12 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		ARComposer * arcomp = static_cast<ARComposer *>(arOfCompleteObject);
 		GRPageText * tmp = new GRPageText (arcomp, NULL, arcomp->getName(), arcomp->getPageFormat());
+		grne = tmp;
+	}
+	else if (tinf == typeid(ARFooter))
+	{
+		ARFooter * footer = static_cast<ARFooter *>(arOfCompleteObject);
+		GRPageText * tmp = new GRPageText (footer, NULL, footer->getName(), footer->getPageFormat());
 		grne = tmp;
 	}
 	else if (tinf == typeid(AROctava))

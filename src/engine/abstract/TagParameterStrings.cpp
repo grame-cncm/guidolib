@@ -48,6 +48,7 @@ const char* kARDynamicParams	= "U,dx1,0,o;U,dx2,0,o;U,deltaY,3,o;U,thickness,0.1
 const char* kARFeatheredBeamParams= "S,durations,,o;S,drawDuration,false,o";
 const char* kARFermataParams	= "S,type,,o;S,position,above,o";
 const char* kARFingeringParams	= "S,position,,o;U,fsize,10pt,o;";
+const char* kARFooterParams		= "S,text,,r;S,pageformat,c6,o;S,font,Times,o;U,fsize,10pt,o;S,textformat,cc,o";
 const char* kARGlissandoParams	= "U,dx1,0,o;U,dy1,0,o;U,dx2,0,o;U,dy2,0,o;S,fill,false,o;U,thickness,0.3,o";
 const char* kARGraceParams		= "I,i,,o";
 const char* kARHarmonyParams	= "S,text,,r;S,position,,o;U,dy,0,o;U,ypos,0hs,o;S,textformat,cc,o;S,font,Arial,o;U,fsize,20pt,o;S,fattrib,,o";

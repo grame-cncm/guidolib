@@ -55,6 +55,7 @@
 #include "ARFine.h"
 #include "ARFingering.h"
 #include "ARFinishBar.h"
+#include "ARFooter.h"
 #include "ARGlissando.h"
 #include "ARGrace.h"
 #include "ARHarmonic.h"
@@ -985,7 +986,12 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
-			break;
+			else if(!strcmp(name, kTagFooter ))
+			{
+				ARFooter * tmp = new ARFooter;
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddTail(tmp);
+			}
 
 		case 'g':
 			if (!strcmp(name, kTagGrace ))
@@ -1569,7 +1575,6 @@ void ARFactory::createTag( const char * name, int no )
 				ARTitle * tmp = new ARTitle;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
-				
 			}
 			break;
 		

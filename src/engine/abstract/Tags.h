@@ -79,6 +79,7 @@ extern const char* kTagFBeamEnd;
 extern const char* kTagFermata;
 extern const char* kTagFine;
 extern const char* kTagFingering;
+extern const char* kTagFooter;
 extern const char* kTagShortFingering;
 extern const char* kTagGlissando;
 extern const char* kTagGlissandoBegin;
