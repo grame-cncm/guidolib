@@ -47,18 +47,11 @@ See the [Layout](@EXAMPLES/layout/) example.
 
 */
 
-//class GRPage;
-
 /** \brief not yet documented
 */
 class ARPageFormat :  public ARMTParameter
 {
-//    friend class GRPage;
-
 	public:
-	//				 ARPageFormat( float px, float py, float ml, float mt, float mr, float mb );
-	//				 ARPageFormat( char * px, char * py, char * ml, char * mt, char * mr, char * mb );
-	//				 ARPageFormat( const ARPageFormat & arp );
 					 ARPageFormat();
 		virtual 	~ARPageFormat() {}
 
