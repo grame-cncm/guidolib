@@ -33,7 +33,7 @@ GRPageText::GRPageText ( const ARText * ar, GRPage * page, const char* txt, cons
 
 	fGRPage = page;
 	if (txt)		fPageText = txt ;
-	if (format)		fLocation = location;
+	if (location)	fLocation = location;
 
 	fFontName   = ar->getFont();
 	fFontAttrib = ar->getTextAttributes();
