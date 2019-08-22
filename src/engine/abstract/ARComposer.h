@@ -59,8 +59,8 @@ class ARComposer : public ARText
 		virtual void setTagParameters (const TagParameterMap& params);
 
 	private:
-		const TagParameterString * name;
-		const TagParameterString * pageformat;
+		const TagParameterString * fName 		= 0;
+		const TagParameterString * fPageformat  = 0;
 };
 
 

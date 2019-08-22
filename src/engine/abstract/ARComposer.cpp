@@ -24,20 +24,18 @@ ARComposer::ARComposer()
 {
 	setupTagParameters (gMaps->sARComposerMap);
 	clearTagDefaultParameter(kTextStr);		// this is to avoid a warning regarding inherited required parameter for ARText
-	name         = 0;
-    pageformat   = 0;
     rangesetting = NO;
 }
 
 void ARComposer::setTagParameters (const TagParameterMap& params)
 {
 	ARText::setTagParameters(params);
-	name = getParameter<TagParameterString>(kNameStr, true);
-	pageformat = getParameter<TagParameterString>(kPageFormatStr, true);
+	fName = getParameter<TagParameterString>(kNameStr, true);
+	fPageformat = getParameter<TagParameterString>(kPageFormatStr, true);
 }
 
-const char* ARComposer::getName() const			{ return name ? name->getValue() : 0; }
-const char* ARComposer::getPageFormat() const	{ return pageformat ? pageformat->getValue() : 0; }
+const char* ARComposer::getName() const			{ return fName ? fName->getValue() : 0; }
+const char* ARComposer::getPageFormat() const	{ return fPageformat ? fPageformat->getValue() : 0; }
 
 
 
