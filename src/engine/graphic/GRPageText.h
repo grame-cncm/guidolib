@@ -20,6 +20,7 @@
 #include "GRTagARNotationElement.h"
 #include "GuidoDefs.h"	// for LSPACE
 
+class ARText;
 class GRPage;
 
 
@@ -28,15 +29,11 @@ class GRPage;
 class GRPageText : public GRTagARNotationElement
 {
 	public:
-				GRPageText (const ARMusicalTag *o, GRPage *,
-					const char* p_txt, const char* p_pageform,
-					const char* p_textform = NULL, const char* p_textfont = NULL,
-					int p_textsize = (int)(4*LSPACE), const char* p_textattr = NULL);
-
+				 GRPageText (const ARText *ar, GRPage *, const char* text, const char* pageform);
 		virtual ~GRPageText() {}
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-				void setGRPage(GRPage * page)			{ fGRPage = page; }
+				void setGRPage(GRPage * page)	{ fGRPage = page; }
 
 		virtual void			calcPosition();
 		virtual unsigned int	getTextAlign() const	{ return fTextalign; }
@@ -46,7 +43,7 @@ class GRPageText : public GRTagARNotationElement
 		GRPage *	fGRPage;
 		std::string fPageText;
 		std::string fPageformat;
-		std::string fTextformat;
+//		std::string fTextformat;
 
 		unsigned int fTextalign;
 };

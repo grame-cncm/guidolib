@@ -1061,22 +1061,12 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	else if (tinf == typeid(ARTitle))
 	{
 		ARTitle * artitle = static_cast<ARTitle *>(arOfCompleteObject);
-		grne = new GRPageText (artitle, NULL, artitle->getName(), artitle->getPageFormat(), artitle->getTextFormat(),
-			artitle->getFont(), (int)artitle->getFSize(), artitle->getTextAttributes());
+		grne = new GRPageText (artitle, NULL, artitle->getName(), artitle->getPageFormat());
 	}
 	else if (tinf == typeid(ARComposer))
 	{
 		ARComposer * arcomp = static_cast<ARComposer *>(arOfCompleteObject);
-		GRPageText * tmp = new GRPageText(
-			arcomp,
-			NULL,
-			arcomp->getName(),
-			arcomp->getPageFormat(),
-			arcomp->getTextFormat(),
-			arcomp->getFont(),
-			(int)arcomp->getFSize(),
-			arcomp->getTextAttributes());
-
+		GRPageText * tmp = new GRPageText (arcomp, NULL, arcomp->getName(), arcomp->getPageFormat());
 		grne = tmp;
 	}
 	else if (tinf == typeid(AROctava))

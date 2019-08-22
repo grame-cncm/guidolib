@@ -12,6 +12,7 @@
 
 */
 
+#include "ARText.h"
 #include "GRPageText.h"
 #include "GRStaff.h"
 #include "GRPage.h"
@@ -25,99 +26,62 @@
 #include "FontManager.h"
 
 
-GRPageText::GRPageText ( const ARMusicalTag * o, GRPage * p_grpage,
-				 const char* p_txt, const char* p_pageformat,
-				 const char* p_textformat, const char* p_textfont,
-				 int p_textsize, const char* p_textattrib)
-  : GRTagARNotationElement(o, LSPACE)
+GRPageText::GRPageText ( const ARText * ar, GRPage * page, const char* txt, const char* format)
+  : GRTagARNotationElement(ar, LSPACE)
 {
 	setTagType(GRTag::PAGETAG);
 
-	if (p_grpage)		fGRPage = p_grpage;
-	if (p_txt)			fPageText = p_txt ;
-	if (p_pageformat)	fPageformat = p_pageformat;
-	if (p_textformat) 	fTextformat =  p_textformat;
-	else				fTextformat = "lt";
-	if (p_textfont)		fFontName   = p_textfont;
-	if (p_textattrib)	fFontAttrib = p_textattrib;
-	fFontSize = p_textsize;
+	fGRPage = page;
+	if (txt)		fPageText = txt ;
+	if (format)		fPageformat = format;
 
-	// now, we have to get a font ...
-	// this is plattform-dependant code ...
-	// this was done in special?
-	const VGFont* myfont = FontManager::gFontText;
+	fFontName   = ar->getFont();
+	fFontAttrib = ar->getTextAttributes();
+	fFontSize   = ar->getFSize();
 
-	if (!fFontName.empty()) {
-		// here, size and attributes must be regarded!!!!!
-		myfont = FontManager::FindOrCreateFont(fFontSize, fFontName.c_str(), fFontAttrib.c_str());
-	}
-
-	// depending on the textformat ...
-	unsigned int xdir = VGDevice::kAlignLeft;
-	unsigned int ydir = VGDevice::kAlignTop;
-	if( fTextformat.size() == 2 ) {
-		switch (fTextformat[0]) {
-			case 'l':	xdir = VGDevice::kAlignLeft; break;
-			case 'c':	xdir = VGDevice::kAlignCenter; break;
-			case 'r':	xdir = VGDevice::kAlignRight; break;
-		}	  
-		switch (fTextformat[1]) {
-			case 't':	ydir = VGDevice::kAlignTop; break;
-			case 'c':	ydir = VGDevice::kAlignBase; break;
-			case 'b':	ydir = VGDevice::kAlignBottom; break;
-		}
-	}
-
-    fTextalign = (xdir | ydir);
+	fTextalign = VGDevice::kAlignLeft + VGDevice::kAlignTop;
+	const VGFont* myfont = FontManager::GetTextFont(ar, LSPACE, fTextalign);
 
 	const char * cp = fPageText.c_str();
-
 	float width = 0;
 	float height = 0;
 	if( gGlobalSettings.gDevice && fPageText.size())	
 		myfont->GetExtent( cp, (int)fPageText.size(), &width, &height, gGlobalSettings.gDevice );
 	
-	// left and right Space is not
-	// useful -> these are PageTexts
-
-	if (xdir == VGDevice::kAlignLeft)
-	{
-		mBoundingBox.right = (GCoord)width;
+	if (fTextalign & VGDevice::kAlignLeft) {
+		mBoundingBox.right = width;
 		mBoundingBox.left = 0;
 	}
-	else if (xdir == VGDevice::kAlignRight)
-	{
-		mBoundingBox.left = (GCoord)(-width);
+	else if (fTextalign & VGDevice::kAlignRight) {
+		mBoundingBox.left  = -width;
 		mBoundingBox.right = 0;
 	}
-	else if (xdir == VGDevice::kAlignCenter)
-	{
-		mBoundingBox.left = (GCoord)(-width * 0.5f);
-		mBoundingBox.right = (GCoord)(width * 0.5f);
+	else if (fTextalign & VGDevice::kAlignCenter) {
+		mBoundingBox.left  = -width * 0.5f;
+		mBoundingBox.right = width * 0.5f;
 	}
 
-	if (ydir == VGDevice::kAlignTop)
-	{
-		mBoundingBox.top = 0;
-		mBoundingBox.bottom = (GCoord)height;
+	if (fTextalign & VGDevice::kAlignTop) {
+		mBoundingBox.top    = 0;
+		mBoundingBox.bottom = height;
 	}
-	else if (ydir == VGDevice::kAlignBase)
-	{
-		mBoundingBox.top = (GCoord)(-height);
-		mBoundingBox.bottom = (GCoord)(2 * LSPACE);
+	else if (fTextalign & VGDevice::kAlignBase) {
+		mBoundingBox.top    = -height;
+		mBoundingBox.bottom = 2 * LSPACE;
 	}
-	else if (ydir == VGDevice::kAlignBottom)
-	{
-		mBoundingBox.top = (GCoord)(-height);
+	else if (fTextalign & VGDevice::kAlignBottom) {
+		mBoundingBox.top    = -height;
 		mBoundingBox.bottom = 0;
 	}
 }
 
+//-------------------------------------------------------------------------------
 void GRPageText::OnDraw(VGDevice & hdc) const
 {
 	if (fPageText.size()) GRTagARNotationElement::OnDrawText(hdc, fPageText.c_str(), (int)fPageText.size());
 }
 
+//-------------------------------------------------------------------------------
 /** \brief Calculates the position of
 	the text using the grpage and the format tag.
 */
@@ -125,18 +89,13 @@ void GRPageText::calcPosition()
 {
 	if (fGRPage == 0) return;
 
-	// now we have the grpage and we have the
-	// Format string.
+	// now we have the grpage and we have the Format string.
 
 	if (fPageformat.size() != 2) return;
 	char first  = fPageformat[0];
 	char second = fPageformat[1];
 
-	float ml;
-	float mt;
-	float mr;
-	float mb;
-
+	float ml, mt, mr, mb;
 	fGRPage->getMarginsCm(&ml, &mt, &mr, &mb);
 
 	const float pageWidth = fGRPage->getPageWidth();
