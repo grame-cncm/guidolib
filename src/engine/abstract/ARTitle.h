@@ -19,7 +19,7 @@
 
 /*@mkdoc
 
-@group:Header
+@group:Text
 
 @tagname:\title
 @tagalias:
@@ -32,10 +32,36 @@ The piece title is displayed centered on top of the first page.
 
 @params:
 @param:name:string:the title of the piece:*none*:false
-# @param:pageformat:string:a page format:c2:true ???
+@param:pageformat:string:a page location:c2:true
 @fontparams:
 @paramdesc
-See the [Mozart](@EXAMPLES/mozart581/) or [Fauré](@EXAMPLES/faure/) examples.
+**pageformat** is a 2 chars string that describes the location of the title on the page: the first char gives the x position, and the secod the y position.
+This location is relative to the page size and to the page margins (see [\pageFormat](../Layout/#pageformat)).
+
+Values for the first char must be in:
+
+- **1** or **l**: the x position is set to the left side of the page
+- **2**: the x position is set to the middle of left margin.
+- **3**: the x position is set to the left margin.
+- **4** or **c**: the x position is centered on the page
+- **5**: the x position is set to the right margin.
+- **6**: the x position is set to the middle of right margin.
+- **7** or **r**: the x position is set to the right side of the page
+
+Values for the second char must be in:
+
+- **1** or **t**: the y position is set to the top side of the page
+- **2**: the y position is set to the middle of top margin.
+- **3**: the y position is set to the top margin.
+- **4** or **c**: the y position is centered on the page
+- **5**: the y position is set to the bottom margin.
+- **6**: the y position is set to the middle of bottom margin.
+- **7** or **b**: the y position is set to the bottom side of the page
+
+
+See the [Mozart](@EXAMPLES/mozart581/) example.<br />
+See the [Fauré](@EXAMPLES/faure/) example.<br />
+See the [Jazz](@EXAMPLES/allthethings/) example.
 @paramend
 
 */

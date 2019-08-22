@@ -19,7 +19,7 @@
 
 /*@mkdoc
 
-@group:Header
+@group:Text
 
 @tagname:\composer
 @tagalias:
@@ -32,10 +32,14 @@ The composer name is displayed on top of the first page, right aligned to the sc
 
 @params:
 @param:name:string:the composer name:*none*:false
-# @param:pageformat:string:a page format:c2:true   ????
+@param:pageformat:string:a page location:53:true
 @fontparams:
 @paramdesc
-See the [Mozart](@EXAMPLES/mozart581/) or [Fauré](@EXAMPLES/faure/) examples.
+**pageformat** works similarly to [\title](#title).
+
+See the [Mozart](@EXAMPLES/mozart581/) example.<br />
+See the [Fauré](@EXAMPLES/faure/) example.<br />
+See the [Jazz](@EXAMPLES/allthethings/) example.
 @paramend
 
 */
