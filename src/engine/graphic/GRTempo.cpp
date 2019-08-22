@@ -43,13 +43,14 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR ) : GRTagARNotationEleme
 	VGDevice * hdc = gGlobalSettings.gDevice;
 	mBoundingBox.Set (0, -2*LSPACE, 0, 0);
 
-	fFormat = inAR->getTextFormat();
+	fTextAlign = VGDevice::kAlignLeft + VGDevice::kAlignBase;
+	fFont = FontManager::GetTextFont(inAR, staff->getStaffLSPACE(), fTextAlign);
+
 	float fsize = inAR->getFSize();
-	fFont = FontManager::FindOrCreateFont( fsize, inAR->getFont(), inAR->getTextAttributes());
 	fNoteScale = fsize / 90.f * 0.7f;  // 90 is the font nominal size and 0.7 is the note scaling
 
-	float mfontsize = 200.f;
-	fMusicFont = FontManager::FindOrCreateFont(  mfontsize * fNoteScale, kMusicFontStr, "");
+	float musicfontsize = 200.f;
+	fMusicFont = FontManager::FindOrCreateFont(  musicfontsize * fNoteScale, kMusicFontStr, "");
 
 	for (auto l : inAR->getTempoMark()) {
 		if (l.second == FormatStringParser::kSpecial) {
@@ -214,22 +215,8 @@ float GRTempo::DrawText( VGDevice & hdc, const char * cp, float xOffset, float y
 // ----------------------------------------------------------------------------
 unsigned int GRTempo::getTextAlign() const
 {
-	unsigned int xdir = VGDevice::kAlignLeft;
-	unsigned int ydir = VGDevice::kAlignBase;
-	if (fFormat.size() == 2) {
-//		switch (fFormat[0]) {		// horizontal alignment ignored - manually done using xoffset
-//			case 'l':	xdir = VGDevice::kAlignLeft; break;
-//			case 'c':	xdir = VGDevice::kAlignCenter; break;
-//			case 'r':	xdir = VGDevice::kAlignRight; break;
-//		}
-
-		switch (fFormat[1]) {
-			case 't':	ydir = VGDevice::kAlignTop; break;
-			case 'c':	ydir = VGDevice::kAlignBase; break;
-			case 'b':	ydir = VGDevice::kAlignBottom; break;
-		}
-	}
-	return xdir | ydir;
+	// horizontal alignment is ignored - achieved manually using xoffset
+	return fTextAlign & 0x80 + VGDevice::kAlignLeft;
 }
 
 // ----------------------------------------------------------------------------

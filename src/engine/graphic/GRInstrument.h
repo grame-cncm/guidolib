@@ -19,6 +19,7 @@
 
 class ARInstrument;
 class GRStaff;
+class VGFont;
 
 /** \brief not yet documented
 */
@@ -27,17 +28,15 @@ class GRInstrument : public GRTagARNotationElement
 	public:
 
 			 GRInstrument(const ARInstrument * par, GRStaff* staff);
-	virtual ~GRInstrument();
+	virtual ~GRInstrument() {}
 	
 	const ARInstrument* getARInstrument() const;
 	virtual void OnDraw(VGDevice & hdc ) const;
 	virtual const NVPoint & getReferencePosition() const;
 	
 	private:
-		std::string		fFont;
-		std::string		fFontAttributes;
-		unsigned int	fTextFormat;
-		float			fSize;
+		const VGFont* 	fFont = 0;
+		unsigned int	fTextAlign = 0;
 		NVPoint			fRefPos;
 };
 

@@ -55,6 +55,8 @@ class GRTempo : public GRTagARNotationElement
 		float   	  fNoteScale = 1.f;		// used to scale the note according to the font size
 		float   	  fYAlign = 0.f;		// used as note Y offset acording to text vertical align
 		float   	  fXAlign = 0.f;		// used as note X offset acording to text horizontal align
+
+		unsigned int  fTextAlign;
 };
 
 #endif

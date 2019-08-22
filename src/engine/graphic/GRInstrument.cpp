@@ -21,6 +21,7 @@
 #include "ARInstrument.h"
 #include "FontManager.h"
 #include "VGDevice.h"
+#include "VGFont.h"
 
 using namespace std;
 
@@ -30,8 +31,6 @@ GRInstrument::GRInstrument(const ARInstrument * ar, GRStaff* staff)
 {
 	mBoundingBox.left = 0;
 	mBoundingBox.top = 0;
-
-	// No!
 	mNeedsSpring = 1;
 
 	// to do: read real text ...
@@ -44,31 +43,12 @@ GRInstrument::GRInstrument(const ARInstrument * ar, GRStaff* staff)
 	mLeftSpace = 0;
 	mRightSpace = 0;
 
-	// no reference position ...
-	fFont = ar->getFont();
-	string attr = ar->getTextFormat();
-	unsigned int xdir = VGDevice::kAlignLeft;
-	unsigned int ydir = VGDevice::kAlignBase;
-	if (ar->autoPos()) {
-		if( attr.size() == 2 )
-		{
-			switch (attr[0]) {
-				case 'l':	xdir = VGDevice::kAlignLeft; break;
-				case 'c':	xdir = VGDevice::kAlignCenter; break;
-				case 'r':	xdir = VGDevice::kAlignRight; break;
-			}	  
-			switch (attr[1]) {
-				case 't':	ydir = VGDevice::kAlignTop; break;
-				case 'c':	ydir = VGDevice::kAlignBase; break;
-				case 'b':	ydir = VGDevice::kAlignBottom; break;
-			}
-		}
-		fTextFormat = xdir | ydir;
-	}
-	else fTextFormat = xdir | ydir;
+	fTextAlign = VGDevice::kAlignLeft + VGDevice::kAlignBase;
+	fFont = FontManager::GetTextFont(ar, staff->getStaffLSPACE(), fTextAlign);
 
-    fFontAttributes = ar->getTextAttributes();
-	fSize = ar->getFSize();
+	// when autopos is set, text alignment is ignored
+	if (!ar->autoPos()) fTextAlign = VGDevice::kAlignLeft + VGDevice::kAlignBase;
+
 	setGRStaff(staff);
 	if (ar->autoPos())
 		fRefPos = NVPoint(-LSPACE*2, (staff->getDredgeSize() + LSPACE) / 2);
@@ -76,9 +56,6 @@ GRInstrument::GRInstrument(const ARInstrument * ar, GRStaff* staff)
 		fRefPos = NVPoint(0,0);
 }
 
-GRInstrument::~GRInstrument()
-{
-}
 
 const NVPoint& GRInstrument::getReferencePosition() const { return fRefPos; }
 
@@ -93,13 +70,12 @@ void GRInstrument::OnDraw(VGDevice & hdc) const
 	const string name = getARInstrument()->getName();
 	if (name.empty()) return;
 
-	const VGFont* font = FontManager::FindOrCreateFont( int(fSize), fFont.c_str(), fFontAttributes.c_str() );
-	hdc.SetTextFont( font );
+	hdc.SetTextFont( fFont );
 	const VGColor prevTextColor = hdc.GetFontColor();
 
 	if( mColRef )
 		hdc.SetFontColor( VGColor( mColRef ));
-	hdc.SetFontAlign( fTextFormat );
+	hdc.SetFontAlign( fTextAlign );
 
 	const NVPoint & refpos = getReferencePosition();
 	const NVPoint & offset = getOffset();
