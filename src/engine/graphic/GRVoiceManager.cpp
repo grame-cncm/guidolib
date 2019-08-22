@@ -109,7 +109,6 @@
 #include "TagList.h"
 #include "TagParameterFloat.h"
 
-#include "GRAccelerando.h"
 #include "GRArpeggio.h"
 #include "GRArticulation.h"
 #include "GRAutoBeam.h"
@@ -148,7 +147,6 @@
 #include "GRRepeatBegin.h"
 #include "GRRepeatEnd.h"
 #include "GRRest.h"
-#include "GRRitardando.h"
 #include "GRSegno.h"
 #include "GRSimpleBeam.h"
 #include "GRSingleNote.h"
