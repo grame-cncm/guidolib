@@ -67,14 +67,13 @@ FontManager::~FontManager()	{ ReleaseAllFonts(); }
 // --------------------------------------------------------------------------
 const VGFont * FontManager::GetTextFont( const ARFontAble* ar, float lspace, unsigned int& textalign)
 {
+	const VGFont * font = gFontText;
 	if (ar) {
 		int size = int(ar->getFSize() * lspace / LSPACE);
 		if (size == 0)
 			size = (int)(1.5f * lspace);
-		const char* name = ar->getFont();
+		string name = ar->getFont();
 		const char* attr = ar->getTextAttributes();
-		if (*name) return FontManager::FindOrCreateFont( size, name, attr );
-
 		const char* tf = ar->getTextFormat();
 		if (tf && (strlen(tf) == 2)) {
 			unsigned int align = 0;
@@ -91,8 +90,10 @@ const VGFont * FontManager::GetTextFont( const ARFontAble* ar, float lspace, uns
 			}
 			textalign = align;
 		}
+		
+		font= FontManager::FindOrCreateFont( size, (name.empty() ? kDefaultTextFont : name).c_str(), attr );
 	}
-	return gFontText;
+	return font;
 }
 
 
