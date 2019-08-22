@@ -39,11 +39,9 @@ class GRPageText : public GRTagARNotationElement
 		virtual unsigned int	getTextAlign() const	{ return fTextalign; }
 
 	protected:
-
 		GRPage *	fGRPage;
 		std::string fPageText;
-		std::string fPageformat;
-//		std::string fTextformat;
+		std::string fLocation;
 
 		unsigned int fTextalign;
 };

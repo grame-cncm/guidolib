@@ -26,14 +26,14 @@
 #include "FontManager.h"
 
 
-GRPageText::GRPageText ( const ARText * ar, GRPage * page, const char* txt, const char* format)
+GRPageText::GRPageText ( const ARText * ar, GRPage * page, const char* txt, const char* location)
   : GRTagARNotationElement(ar, LSPACE)
 {
 	setTagType(GRTag::PAGETAG);
 
 	fGRPage = page;
 	if (txt)		fPageText = txt ;
-	if (format)		fPageformat = format;
+	if (format)		fLocation = location;
 
 	fFontName   = ar->getFont();
 	fFontAttrib = ar->getTextAttributes();
@@ -91,9 +91,9 @@ void GRPageText::calcPosition()
 
 	// now we have the grpage and we have the Format string.
 
-	if (fPageformat.size() != 2) return;
-	char first  = fPageformat[0];
-	char second = fPageformat[1];
+	if (fLocation.size() != 2) return;
+	char first  = fLocation[0];
+	char second = fLocation[1];
 
 	float ml, mt, mr, mb;
 	fGRPage->getMarginsCm(&ml, &mt, &mr, &mb);
