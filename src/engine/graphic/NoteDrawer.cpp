@@ -14,10 +14,11 @@
 
 #include <iostream>
 
-#include "NoteDrawer.h"
-#include "GRFlag.h"
 #include "defines.h"
+#include "FontManager.h"
+#include "GRFlag.h"
 #include "MusicalSymbols.h"
+#include "NoteDrawer.h"
 #include "VGDevice.h"
 #include "VGFont.h"
 
@@ -70,13 +71,12 @@ float NoteDrawer::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float
 	
 	float w, h;
 	fFont->GetExtent( symbol, &w, &h, &hdc );
-//	float w = GetSymbolExtent(symbol);
 	float xPos = xOffset + fPosition.x;
 	float yPos = fYAlign + yOffset + fPosition.y - w/3.f;
 
 	// - Draw Head
 	hdc.DrawMusicSymbol(xPos, yPos, symbol);
-	float width = w * fNoteScale;
+	float width = w; // * fNoteScale;
 
 	// - Draw Stem
 	if (symbol != kWholeNoteHeadSymbol) {
