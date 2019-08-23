@@ -119,7 +119,7 @@ class ARTempo : /* public ARMTParameter, */ public ARFontAble
 		virtual ARTempo	*isARTempo()		  { return this; }
 
 	private:
-		void		ParseBpm(const TagParameterString * inTag );
+		void		ParseBpm(const char* str );
 
 		FormatStringParserResult	mTempoMark;
 

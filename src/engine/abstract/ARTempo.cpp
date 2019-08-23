@@ -83,21 +83,16 @@ void ARTempo::setTagParameters(const TagParameterMap& map)
 		}
 	}
 	const TagParameterString * bpm = getParameter<TagParameterString>(kBPMStr);
-	if (bpm) ParseBpm (bpm);
+	if (bpm && bpm->TagIsSet()) ParseBpm (bpm->getValue());
 }
 
 // --------------------------------------------------------------------------
-void ARTempo::ParseBpm(const TagParameterString * inTag )
+void ARTempo::ParseBpm(const char * str )
 {
-	if( inTag == 0 ) return;
-	if( inTag->TagIsNotSet() ) return;
-
-	const NVstring & bpmString = inTag->getValue();
-
 	int num1, num2, denom1, denom2;
 
 	// - Look for something like "a/b=x/y" (note equivalent format)
-	if (sscanf(bpmString.c_str(),"%d/%d=%d/%d", &num1, &denom1, &num2, &denom2 ) == 4) {
+	if (sscanf(str,"%d/%d=%d/%d", &num1, &denom1, &num2, &denom2 ) == 4) {
 		mBpmUnit.set( num1, denom1 );
 		mBpmValue.set( num2, denom2 );
 		mBpmNoteEquiv = true;
@@ -105,7 +100,7 @@ void ARTempo::ParseBpm(const TagParameterString * inTag )
 	}
 
 	// Look for something like "a/b=x"
-	else if (sscanf( bpmString.c_str(),"%d/%d=%d", &num1, &denom1, &num2 ) == 3) {
+	else if (sscanf( str,"%d/%d=%d", &num1, &denom1, &num2 ) == 3) {
 		mBpmUnit.set( num1, denom1 );
 		mBpmValue.set( num2, 1 );
 		mBpmNoteEquiv = false;
