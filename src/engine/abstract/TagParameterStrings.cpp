@@ -28,7 +28,7 @@ const char* kARDrHoosParams		= "I,inverse,0,o";
 const char* kARDrRenzParams		= "I,inverse,0,o";
 const char* kARBembelParams		= "I,inverse,0,o";
 
-const char* kARAccelerandoParams= "S,before,,o;S,after,,o;S,font,Times New Roman,o;S,fattrib,,o;U,fsize,9pt,o";
+const char* kARAccelerandoParams= "S,before,,o;S,after,,o;U,dx2,0hs,o;S,font,Times New Roman,o;U,fsize,10pt,o;S,textformat,lc,o";
 const char* kARAccidentalParams	= "S,style,,o";
 const char* kARAccoladeParams	= "I,id,,r;S,range,,r;S,type,standard,o";
 const char* kARAlterParams		= "F,detune,0.0,r;S,text,,o";
@@ -64,7 +64,7 @@ const char* kARNoteFormatParams	= "S,style,standard,o";
 const char* kAROctavaParams		= "I,i,,r";
 const char* kARPageFormatParams	= "S,type,,r;U,w,,r;U,h,,r;U,lm,2cm,o;U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o";
 const char* kARPizzicatoParams	= "S,type,lefthand,o;S,position,,o";
-const char* kARRitardandoParams	= "S,before,,o;S,after,,o;S,font,Times New Roman,o;S,fattrib,,o;U,fsize,9pt,o";
+const char* kARRitardandoParams	= "S,before,,o;S,after,,o;U,dx2,0hs,o;S,font,Times New Roman,o;U,fsize,10pt,o;S,textformat,lc,o";
 const char* kARSpaceParams		= "U,dd,,r";
 const char* kARSpecialParams	= "S,char,,r";
 const char* kARStaccatoParams	= "S,type,,o;S,position,,o";
