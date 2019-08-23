@@ -16,6 +16,7 @@
 
 #include "ARFontAble.h"
 #include "ARPositionTag.h"
+#include "FormatStringParser.h"
 #include "TagParameterString.h"
 
 /** \brief the base class for accelerando and ritardando
@@ -27,6 +28,14 @@ class TempoChange : public ARFontAble,  public ARPositionTag
 						 TempoChange() {}
 		virtual 		~TempoChange() {}
 
-		const char * getBefore() const	{ return getParameter<TagParameterString>(kBeforeStr, true)->getValue(); }
-		const char * getAfter() const	{ return getParameter<TagParameterString>(kAfterStr, true)->getValue();}
+		virtual void setTagParameters (const TagParameterMap& params);
+
+		const FormatStringParserResult& getBefore() const	{ return fBefore; }
+		const FormatStringParserResult& getAfter() const	{ return fAfter;}
+		float 							getDx2() const		{ return fDx2;}
+
+	private:
+		FormatStringParserResult	fBefore;
+		FormatStringParserResult	fAfter;
+		float fDx2 = 0;
 };

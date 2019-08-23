@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.7
+- \accel and \rit tags revised: support now format strings (as \tempo do)
 - new \footer tag
 - tempo support text parameters (issue #23)
 - new global setting (\auto) to hide accidentals on tied notes (issue #78)

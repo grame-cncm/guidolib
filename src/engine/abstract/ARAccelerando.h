@@ -1,5 +1,4 @@
-#ifndef ARAccelerando_H
-#define ARAccelerando_H
+#pragma once
 
 /*
   GUIDO Library
@@ -32,6 +31,7 @@
 @params:
 @param:before:string:a string placed before 'accel.':*none*:true
 @param:after:string:a string placed after the accel range:*none*:true
+@param:dx2:unit:displacement of the right anchor point:0:true
 @fontparams:
 @paramdesc
 - **before** and **after** ara arbitrary strings that may contain a marker for note duration in the form "[n/d]" where 'n' and 'd' are integers.
@@ -54,14 +54,8 @@ class ARAccelerando :  public TempoChange
 				 ARAccelerando();
 		virtual ~ARAccelerando() {}
 
-//		virtual void setTagParameters (const TagParameterMap& params);
-
 		virtual const char*	getParamsStr() const	{ return kARAccelerandoParams; };
 		virtual const char*	getTagName () const		{ return "ARAccelerando"; };
 		virtual std::string getGMNName () const		{ return "\\accelerando"; };
 
-//		const TagParameterString * getTempo() const      { return getParameter<TagParameterString>(kTempoStr, true); }
-//		const TagParameterString * getAbsTempo() const   { return getParameter<TagParameterString>(kAbsTempoStr, true);}
 };
-
-#endif

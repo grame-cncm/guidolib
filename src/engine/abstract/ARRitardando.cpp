@@ -26,11 +26,6 @@ ARRitardando::ARRitardando()
 	rangesetting = ONLY;
 }
 
-//void ARRitardando::setTagParameters (const TagParameterMap& params)
-//{
-//	ARFontAble::setupTagParameters(params);
-//}
-
 bool ARRitardando::MatchEndTag(const char *s)
 {
 	if (ARMusicalTag::MatchEndTag(s))

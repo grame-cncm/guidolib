@@ -31,21 +31,32 @@ class GRTempoChange : public GRPTagARNotationElement
 						 GRTempoChange( GRStaff * stf, const TempoChange * ar, const char* text );
 		virtual			~GRTempoChange() {}
 
-		virtual unsigned int getTextAlign() const	{ return fTextAlign; }
+		virtual unsigned int getTextAlign() const			{ return fTextAlign; }
 		virtual void		OnDraw( VGDevice & hdc) const;
 		virtual void		tellPosition( GObject * caller,const NVPoint & np );
 
 	private:
-//		bool isTempoAbsSet 	= false;
-//		bool isTempoSet 	= false;
+		float 		getYAlign	(float fsize) const;
+		float 		getXAlign	(VGDevice & hdc) const;
+		float 		getFormatLength	(VGDevice * hdc, float lspace, const FormatStringParserResult& list) const;
+		float 		DrawFormatString(VGDevice& hdc, float offset, float dy, const FormatStringParserResult& list) const;
+		float		DrawText( VGDevice & hdc,  const char * cp, float xOffset, float yOffset, bool alignleft=false) const;
+
+
 		NVPoint startPos;
 		NVPoint endPos;
-		std::string tempo1;
-		std::string tempo2;
+
+		float fYAlign;
 		float mdx;
 		float mdy;
+		float fAfterWidth  = 0;
+		float fBeforeWidth = 0;
 
 		const VGFont* 	fFont;
+		const VGFont* 	fMusicFont;
+		float			fNoteScale;
 		unsigned int  	fTextAlign;
 		std::string		fText;
+	
+		const TempoChange * fTempoChge;
 };

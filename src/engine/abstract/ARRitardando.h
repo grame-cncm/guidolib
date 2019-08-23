@@ -36,6 +36,7 @@ Works similarly to [\accelerando](#accelerando)
 @params:
 @param:before:string:a string placed before 'accel.':*none*:true
 @param:after:string:a string placed after the accel range:*none*:true
+@param:dx2:unit:displacement of the right anchor point:0:true
 @fontparams:
 @paramdesc
 - **before** and **after** ara arbitrary strings that may contain a marker for note duration in the form "[n/d]" where 'n' and 'd' are integers.
@@ -49,8 +50,6 @@ See the [Lutkin](@EXAMPLES/lutkin/) example.
 
 /** \brief Ritardando tag
 */
-
-//class ARRitardando : public ARFontAble,  public ARPositionTag
 class ARRitardando : public TempoChange
 {
 	public:			
@@ -60,14 +59,9 @@ class ARRitardando : public TempoChange
 						 ARRitardando();
 		virtual 		~ARRitardando() {}
 
-//		virtual void setTagParameters (const TagParameterMap& params);
-
 		virtual const char*	getParamsStr() const	{ return kARRitardandoParams; };
 		virtual const char*	getTagName() const		{ return "ARRitardando"; };
 		virtual std::string getGMNName() const		{ return "\\ritardando"; };
-
-//		const TagParameterString * getTempo() const      { return getParameter<TagParameterString>(kTempoStr, true); }
-//		const TagParameterString * getAbsTempo() const   { return getParameter<TagParameterString>(kAbsTempoStr, true);}
 };
 
 #endif

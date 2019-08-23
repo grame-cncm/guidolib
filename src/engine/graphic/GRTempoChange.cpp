@@ -14,20 +14,25 @@
 
 #include <algorithm>
 
-#include "TempoChange.h"
+#include "ARTempo.h"
 #include "FontManager.h"
-#include "GRTempoChange.h"
 #include "GRSingleNote.h"
 #include "GRStaff.h"
+#include "GRTempoChange.h"
+#include "GUIDOInternal.h"
+#include "NoteDrawer.h"
 #include "TagParameterFloat.h"
-//#include "TagParameterString.h"
+#include "TempoChange.h"
 #include "VGDevice.h"
+#include "VGFont.h"
+
+using namespace std;
 
 extern GRSystem * gCurSystem;
 
 //----------------------------------------------------------------------------------------
 GRTempoChange::GRTempoChange( GRStaff * inStaff, const TempoChange * ar, const char* text )
-  : GRPTagARNotationElement(ar), fText (text)
+  : GRPTagARNotationElement(ar), fText (text), fTempoChge(ar)
 {
 	assert(inStaff);
 
@@ -38,36 +43,103 @@ GRTempoChange::GRTempoChange( GRStaff * inStaff, const TempoChange * ar, const c
 	sse->p = (void *) getNewGRSaveStruct();
 	mStartEndList.AddTail(sse);
 
-	tempo1 = ar->getBefore();
-	tempo2 = ar->getAfter();
-//	if(ar->getTempo()) {
-//		tempo1 = ar->getTempo()->getValue();
-//		if (tempo1 != "") isTempoSet = true;
-//	}
-
-//	if (ar->getAbsTempo()) {
-//		tempo2 = ar->getAbsTempo()->getValue();
-//		if (tempo2 != "") isTempoAbsSet = true;
-//	}
 	mdx = ar->getDX()->getValue();
 	mdy = ar->getDY()->getValue();
 	float curLSPACE = inStaff ? inStaff->getStaffLSPACE() : LSPACE;
 
 	fTextAlign = VGDevice::kAlignLeft | VGDevice::kAlignTop;
 	fFont = FontManager::GetTextFont(ar, curLSPACE, fTextAlign);
+
+	float fsize = ar->getFSize();
+	fNoteScale = NoteDrawer::GetScaling (fsize);
+	fMusicFont = NoteDrawer::GetMusicFont(fNoteScale);
+	fYAlign = getYAlign (fsize);
+
+	VGDevice * hdc = gGlobalSettings.gDevice;
+	fBeforeWidth = getFormatLength (hdc, curLSPACE, fTempoChge->getBefore());
+	fAfterWidth = getFormatLength (hdc, curLSPACE, fTempoChge->getAfter());
+}
+
+// ----------------------------------------------------------------------------
+float GRTempoChange::getFormatLength (VGDevice * hdc, float lspace, const FormatStringParserResult& list) const
+{
+	float w, h, result = 0;
+	for (auto l : list) {
+		if (l.second == FormatStringParser::kSpecial)
+			result += lspace;
+		else {
+			fFont->GetExtent( l.first.c_str(), l.first.size(), &w, &h, hdc);
+			result += w;
+		}
+	}
+	return result;
+}
+
+// ----------------------------------------------------------------------------
+float GRTempoChange::getYAlign(float fsize) const
+{
+	string format = fTempoChge->getTextFormat();
+	if (format.size() == 2) {
+		switch (format[1]) {
+			case 't':	return fsize * 0.8f;
+			case 'c':	return 0.f;
+			case 'b':	return -fsize/3.f;
+		}
+	}
+	return 0.f;
+}
+
+//----------------------------------------------------------------------------------------
+float GRTempoChange::getXAlign(VGDevice & hdc) const
+{
+	float tlen, h;
+	fFont->GetExtent(fText.c_str(), int(fText.size()), &tlen, &h, &hdc);
+	string format = fTempoChge->getTextFormat();
+	if (format.size() == 2) {
+		switch (format[0]) {
+			case 'l':	return 0;
+			case 'c':	return -tlen / 2;
+			case 'r':	return -tlen;
+		}
+	}
+	return 0.f;
+}
+
+//----------------------------------------------------------------------------------------
+float GRTempoChange::DrawText( VGDevice & hdc, const char * cp, float xOffset, float yOffset, bool alignleft) const
+{
+	hdc.SetTextFont( fFont );
+    hdc.SetFontAlign (alignleft ? VGDevice::kAlignLeft + fTextAlign & 0x07 : fTextAlign);
+	hdc.DrawString ( xOffset + mPosition.x, yOffset + mPosition.y, cp, (int)strlen(cp) );
+
+	float h, width;
+	fFont->GetExtent(cp, (int)strlen(cp), &width, &h, &hdc);
+	return width;
+}
+
+//----------------------------------------------------------------------------------------
+float GRTempoChange::DrawFormatString(VGDevice& hdc, float offset, float dy, const FormatStringParserResult& list) const
+{
+	const float space = 10;
+	for (auto l : list) {
+		if (l.second == FormatStringParser::kSpecial) {
+			NoteDrawer nd (fMusicFont, mPosition, fYAlign);
+			offset += nd.DrawNote( hdc, ARTempo::string2Duration(l.first.c_str()), offset, dy ) + space;
+		}
+		else {
+			offset += DrawText( hdc, l.first.c_str(), offset, dy, true ) + space;
+		}
+	}
+	return offset;
 }
 
 //----------------------------------------------------------------------------------------
 void GRTempoChange::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow) return;
-	
 	assert(gCurSystem);
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
 	if (sse == 0) return;
-
-	float xStart = startPos.x;
-	float xEnd   = endPos.x;
 
 	// set up color
 	if (mColRef) {
@@ -77,70 +149,44 @@ void GRTempoChange::OnDraw( VGDevice & hdc ) const
 		hdc.SetFontColor(color);
 	}
 
+	float currX = mPosition.x;
+	float xEnd   = endPos.x + fTempoChge->getDx2();
 	float curLSpace = getGRStaff()->getStaffLSPACE();
-	if (tempo1.size() && sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
-		std::string toPrint ("= ");
-		toPrint += tempo1;
-		toPrint += " " + fText;
-		const char * t1 = toPrint.c_str();
-		size_t n = toPrint.length();
-		
-		//to draw the little note
-        float scaleFactor = 0.5f;
-        hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
-		hdc.SetScale(scaleFactor, scaleFactor);
-		hdc.DrawMusicSymbol(2 * getPosition().x, 2 * getPosition().y, kFullHeadSymbol);
+	float dy = - fTempoChge->getDY()->getValue(curLSpace);
+	float space = curLSpace / 2 * fNoteScale;
+	float xoffset =  getXAlign(hdc);
 
-		float y = 2 * getPosition().y;
-		for (int i = 0; i < 3; i++) {
-			hdc.DrawMusicSymbol(2 * getPosition().x, y, kStemUp2Symbol);
-			y -= LSPACE;
+	const FormatStringParserResult& before = fTempoChge->getBefore();
+	if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
+		if (before.size()) {
+			float offset = xoffset - fBeforeWidth - space;
+			if (fTextAlign & VGDevice::kAlignRight) offset -= fYAlign;
+			else if (fTextAlign & VGDevice::kAlignCenter) offset -= fYAlign/2;
+			DrawFormatString(hdc, offset, dy, before);
 		}
-        hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
-        hdc.SetTextFont(fFont);
-		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, (int)n);
-        xStart += (n - 4) * LSPACE / 2;
+		currX += DrawText( hdc, fText.c_str(), 0, dy ) + xoffset + space * 2;
 	}
-	else if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
-        hdc.SetTextFont(fFont);
-		hdc.DrawString(getPosition().x, getPosition().y, fText.c_str(), int(fText.size()));
-    }
 
-	if (tempo2.size() && sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
-	{
-		std::string toPrint2 ("= ");
-		toPrint2 += tempo2;
-		const char * t2 = toPrint2.c_str();
-		size_t n = toPrint2.length();
-
-        //to draw the little note
-        float scaleFactor = 0.5f;
-        hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
-		hdc.SetScale(scaleFactor, scaleFactor);
-		hdc.DrawMusicSymbol(2 * (endPos.x - n * LSPACE), 2 * endPos.y, kFullHeadSymbol);
-		
-        float y = 2 * endPos.y;
-		for (int i = 0; i < 3; i++) {
-			hdc.DrawMusicSymbol(2 * (endPos.x - n * LSPACE), y, kStemUp2Symbol);
-			y -= LSPACE;
-		}
-        hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
-        hdc.SetTextFont(fFont);
-		hdc.DrawString(endPos.x - (n - 1) * LSPACE, endPos.y, t2, (int)n);
-		xEnd -= (n + 1) * LSPACE;
+	const FormatStringParserResult& after  = fTempoChge->getAfter();
+	if (after.size() && sse->endflag == GRSystemStartEndStruct::RIGHTMOST) {
+		float offset = xEnd - mPosition.x + space;
+		if (fTextAlign & VGDevice::kAlignRight) offset -= fYAlign;
+		if (fTextAlign & VGDevice::kAlignCenter) offset -= fYAlign/2;
+		DrawFormatString(hdc, offset, dy, after);
 	}
 
 	if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 		xEnd = sse->endElement->getPosition().x;
 	else if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
-		xStart = sse->startElement->getPosition().x;
+		currX = sse->startElement->getPosition().x;
 
-    hdc.PushPenWidth(2);
-	float len = curLSpace * 0.7;
-	while (xStart < xEnd) {
-		float x2 = (xStart + len > xEnd) ? xEnd : xStart + len;
-		hdc.Line(xStart, startPos.y, x2, endPos.y);
-		xStart += 2 * len;
+    hdc.PushPenWidth(4*fNoteScale);
+	float len = curLSpace * fNoteScale;
+	float y = mPosition.y + dy + fYAlign - 10;
+	while (currX < xEnd) {
+		float x2 = (currX + len > xEnd) ? xEnd : currX + len;
+		hdc.Line(currX, y, x2, y);
+		currX += 2 * len;
 	}
 	
 	if (mColRef) {

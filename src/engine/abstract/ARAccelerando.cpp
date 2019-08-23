@@ -30,11 +30,6 @@ ARAccelerando::ARAccelerando()
     rangesetting = ONLY;
 }
 
-//void ARAccelerando::setTagParameters (const TagParameterMap& params)
-//{
-//	ARFontAble::setupTagParameters(params);
-//}
-
 bool ARAccelerando::MatchEndTag(const char *s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
