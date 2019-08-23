@@ -12,7 +12,7 @@
 
 */
 
-#include <algorithm>
+#include <string.h>
 
 #include "ARTempo.h"
 #include "FontManager.h"
