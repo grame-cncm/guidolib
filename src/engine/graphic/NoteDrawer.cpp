@@ -25,9 +25,21 @@
 using namespace std;
 
 // ----------------------------------------------------------------------------
-NoteDrawer::NoteDrawer(const VGFont * font, const NVPoint& pos, float scale, float align )
-	: fFont (font), fPosition (pos), fNoteScale(scale), fYAlign(align) {}
+NoteDrawer::NoteDrawer(const VGFont * font, const NVPoint& pos, float align )
+	: fFont (font), fPosition (pos), fYAlign(align) {}
 
+// ----------------------------------------------------------------------------
+float NoteDrawer::GetScaling (float textfontsize )
+{
+	return textfontsize / 90.f * 0.7f;  // 90 is the font nominal size and 0.7 is the note scaling
+}
+
+// ----------------------------------------------------------------------------
+const VGFont* NoteDrawer::GetMusicFont( float scale )
+{
+	float musicfontsize = 200.f;
+	return FontManager::FindOrCreateFont(  musicfontsize * scale, kMusicFontStr, "");
+}
 
 // ----------------------------------------------------------------------------
 unsigned int NoteDrawer::getSymbol(const TYPE_DURATION & noteDur) const
@@ -69,18 +81,18 @@ float NoteDrawer::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float
 	hdc.SetFontAlign(VGDevice::kAlignLeft + VGDevice::kAlignBase);
 	hdc.SetMusicFont (fFont);
 	
-	float w, h;
-	fFont->GetExtent( symbol, &w, &h, &hdc );
+	float w, hh;
+	fFont->GetExtent( symbol, &w, &hh, &hdc );
 	float xPos = xOffset + fPosition.x;
-	float yPos = fYAlign + yOffset + fPosition.y - w/3.f;
+	float yPos = fYAlign + yOffset + fPosition.y - w / 2;
 
 	// - Draw Head
 	hdc.DrawMusicSymbol(xPos, yPos, symbol);
-	float width = w; // * fNoteScale;
+	float width = w;
 
 	// - Draw Stem
+	float		stemLen = w*2.8;
 	if (symbol != kWholeNoteHeadSymbol) {
-		float		stemLen = 3 * LSPACE * fNoteScale;
 		float		stemTagSize = 1;
 
 		const float stemCharSize = LSPACE * stemTagSize;
@@ -101,11 +113,11 @@ float NoteDrawer::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float
 	}
 
 	// - Draw flag
-	if (flagSymbol != kNoneSymbol) hdc.DrawMusicSymbol( xPos, yPos - 3.5 * LSPACE * fNoteScale, flagSymbol );
+	if (flagSymbol != kNoneSymbol) hdc.DrawMusicSymbol( xPos, yPos - stemLen, flagSymbol );
 
 	// - Draw Dot
 	if (dotSymbol != kNoneSymbol) {
-		float space = LSPACE * fNoteScale * 0.5;
+		float space = w/3;
 		hdc.DrawMusicSymbol( xPos + width + space, yPos, dotSymbol);
 		width += space * 1.3;
 	}

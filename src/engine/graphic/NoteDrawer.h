@@ -26,17 +26,18 @@ class VGFont;
 class NoteDrawer
 {
 	public:
-					 NoteDrawer(const VGFont * font, const NVPoint& pos, float scale, float align );
+					 NoteDrawer(const VGFont * font, const NVPoint& pos, float align );
 		virtual 	~NoteDrawer() {}
 		
-		float	DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xOffset, float yOffset ) const;
-	
+			float			DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xOffset, float yOffset ) const;
+	static 	float 			GetScaling (float textfontsize );
+	static 	const VGFont* 	GetMusicFont (float scale );
+
 	private:
 		unsigned int 	getSymbol	(const TYPE_DURATION & noteDur) const;
 		unsigned int 	getFlags	(const TYPE_DURATION & noteDur) const;
 	
 		const VGFont* 	fFont = 0;
 		NVPoint			fPosition;
-		float   	  	fNoteScale = 1.f;		// used to scale the note according to the font size
-		float   	  	fYAlign = 0.f;			// used as note Y offset acording to the context vertical align
+		float   	  	fYAlign = 0.f;			// used as Y offset acording to the context vertical align
 };

@@ -49,14 +49,12 @@ GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR ) : GRTagARNotationEleme
 	fFormat = inAR->getTextFormat();
 
 	float fsize = inAR->getFSize();
-	fNoteScale = fsize / 90.f * 0.7f;  // 90 is the font nominal size and 0.7 is the note scaling
-
-	float musicfontsize = 200.f;
-	fMusicFont = FontManager::FindOrCreateFont(  musicfontsize * fNoteScale, kMusicFontStr, "");
+	fNoteScale = NoteDrawer::GetScaling (fsize);
+	fMusicFont = NoteDrawer::GetMusicFont(fNoteScale);
 
 	for (auto l : inAR->getTempoMark()) {
 		if (l.second == FormatStringParser::kSpecial) {
-			TYPE_DURATION duration = inAR->getDuration(l.first.c_str());
+			TYPE_DURATION duration = inAR->string2Duration(l.first.c_str());
 			mBoundingBox.right += GetSymbolExtent( kFullHeadSymbol );
 			if (duration.getNumerator() == 3) mBoundingBox.right += LSPACE;
 		}
@@ -93,32 +91,6 @@ float GRTempo::getXPos() const
 }
 
 // ----------------------------------------------------------------------------
-unsigned int GRTempo::getSymbol(const TYPE_DURATION & noteDur) const
-{
-	// - Choose notehead
-	if (noteDur>=DURATION_1)
-		return kWholeNoteHeadSymbol;
-	if (noteDur == DURATION_2 || noteDur == DURATION_3_4 || noteDur == DURATION_7_8)
-	 	return kHalfNoteHeadSymbol;
-	return kFullHeadSymbol;
-}
-
-// ----------------------------------------------------------------------------
-unsigned int GRTempo::getFlags(const TYPE_DURATION & noteDur) const
-{
-	// - Choose flag
-	if (noteDur == DURATION_8 ||  noteDur == DURATION_3_16 || noteDur == DURATION_7_32)
-		return GRFlag::H8U;
-	if (noteDur == DURATION_16 || noteDur == DURATION_3_32 || noteDur == DURATION_7_64)
-		return GRFlag::H16U;
-	if (noteDur == DURATION_32)
-		return  GRFlag::H32U;
-	if (noteDur == DURATION_64)
-		return GRFlag::H64U;
-	return kNoneSymbol;
-}
-
-// ----------------------------------------------------------------------------
 void GRTempo::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow) return;
@@ -131,76 +103,18 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 
 	float space = getGRStaff()->getStaffLSPACE() / 2 * fNoteScale;
 	float currX = getXPos() + fXAlign;
-	float dy = ar->getDY() ? - ar->getDY()->getValue(LSPACE) : 0.f;
+//	float dy = ar->getDY() ? - ar->getDY()->getValue(LSPACE) : 0.f;
+	float dy = - ar->getDY()->getValue(LSPACE);
 	for (auto l : ar->getTempoMark()) {
 		if (l.second == FormatStringParser::kSpecial) {
-			TYPE_DURATION duration = ar->getDuration(l.first.c_str());
-			NoteDrawer nd (fMusicFont, mPosition, fNoteScale, fYAlign);
-			currX += nd.DrawNote( hdc, duration, currX, dy ) + space;
+			NoteDrawer nd (fMusicFont, mPosition, fYAlign);
+			currX += nd.DrawNote( hdc, ar->string2Duration(l.first.c_str()), currX, dy ) + space;
 		}
 		else {
 			currX += DrawText( hdc, l.first.c_str(), currX, dy ) + space;
 		}
 	}
     if (mColRef) hdc.SetFontColor(prevFontColor);
-}
-
-// ----------------------------------------------------------------------------
-/** Draws the note corresponding to a given symbolic musical duration.
-*/
-float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xOffset, float yOffset ) const
-{
-	// - Choose notehead
-	unsigned int theSymbol = getSymbol (noteDur);
-	unsigned int theFlagSymbol = getFlags (noteDur);
-	unsigned int theDotSymbol = (noteDur.getNumerator() == 3) ? kNoteDotSymbol : kNoneSymbol;
-
-	unsigned int align = hdc.GetFontAlign();
-	hdc.SetFontAlign(VGDevice::kAlignLeft + VGDevice::kAlignBase);
-	hdc.SetMusicFont (fMusicFont);
-	float w = GetSymbolExtent(theSymbol);
-	float xPos = xOffset + mPosition.x;
-	float yPos = fYAlign + yOffset + mPosition.y - w/3.f;
-
-	// - Draw Head
-	hdc.DrawMusicSymbol(xPos, yPos, theSymbol);
-	float width = w * fNoteScale;
-
-	// - Draw Stem
-	if (theSymbol != kWholeNoteHeadSymbol) {
-		float		stemLen = 3 * LSPACE * fNoteScale;
-		float		stemTagSize = 1;
-
-		const float stemCharSize = LSPACE * stemTagSize;
-		const float halfStemCharSize = 0.5f * stemCharSize;
-		hdc.DrawMusicSymbol( xPos, yPos, kStemUp1Symbol );
-
-		// - Draws until the length has been completed ...
-		float offsy = -halfStemCharSize;
-		while( -offsy < stemLen ) {
-			if(( stemCharSize - offsy ) > stemLen ) {
-				offsy =  (-(stemLen) + stemCharSize );
-				hdc.DrawMusicSymbol( xPos, yPos + offsy, kStemUp2Symbol );
-				break;
-			}
-			hdc.DrawMusicSymbol( xPos, yPos + offsy, kStemUp2Symbol );
-			offsy -= halfStemCharSize;
-		}
-	}
-
-	// - Draw flag
-	if (theFlagSymbol != kNoneSymbol) hdc.DrawMusicSymbol( xPos, yPos - 3.5 * LSPACE * fNoteScale, theFlagSymbol );
-
-	// - Draw Dot
-	if (theDotSymbol != kNoneSymbol) {
-		float space = LSPACE * fNoteScale * 0.5;
-		hdc.DrawMusicSymbol( xPos + width + space, yPos, theDotSymbol);
-		width += space * 1.3;
-	}
-
-	// - Cleanup
-	hdc.SetFontAlign(align);
-	return width;
 }
 
 // ----------------------------------------------------------------------------
