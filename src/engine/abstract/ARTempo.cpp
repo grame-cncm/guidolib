@@ -58,7 +58,7 @@ float ARTempo::getQpmValue() const
 }
 
 // ----------------------------------------------------------------------------
-TYPE_DURATION ARTempo::getDuration (const char * str) const
+TYPE_DURATION ARTempo::string2Duration (const char * str)
 {
 	int num, denom;
 	TYPE_DURATION duration;

@@ -91,10 +91,10 @@ void TempoVisitor::visitIn (ARMusicalTag* obj)
 			const FormatStringParserResult& s = ar->getTempoMark();
 			for (size_t i=0; i < s.size() - 1; i++) {
 				if (s[i].second == FormatStringParser::kSpecial) {
-					tempo.unit = toGuidoDate(ar->getDuration(s[i].first.c_str()));
+					tempo.unit = toGuidoDate(ar->string2Duration(s[i].first.c_str()));
 					if ((i < s.size() - 2) && (s[i+2].second == FormatStringParser::kSpecial)) {
 						tempo.type = kUnitUnitTempo;
-						tempo.unitvalue = toGuidoDate(ar->getDuration(s[i+2].first.c_str()));
+						tempo.unitvalue = toGuidoDate(ar->string2Duration(s[i+2].first.c_str()));
 						break;
 					}
 					else {

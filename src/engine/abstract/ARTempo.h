@@ -83,9 +83,6 @@ class ARTempo : /* public ARMTParameter, */ public ARFontAble
 
 		//! Gives the tempo information strings vector.
 		const FormatStringParserResult& getTempoMark() const { return mTempoMark; }		
-
-		//! Converts a string in the form "a/b" into a duration
-		TYPE_DURATION getDuration (const char * str) const;
 	
 		//! Tells if the optional bpm informations have been specified.
 		bool hasBpmInfos() const { return mHasBpmInfos; }
@@ -117,6 +114,9 @@ class ARTempo : /* public ARMTParameter, */ public ARFontAble
 
 		virtual void browse(TimeUnwrap& mapper) const;
 		virtual ARTempo	*isARTempo()		  { return this; }
+
+	//! Converts a string in the form "a/b" into a duration
+	static TYPE_DURATION string2Duration (const char * str);
 
 	private:
 		void		ParseBpm(const char* str );
