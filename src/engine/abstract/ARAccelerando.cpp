@@ -19,11 +19,6 @@
 
 using namespace std;
 
-#ifndef WIN32
-#warning ("TODO: revise ARAccelerando parameters implementation");
-#endif
-
-
 ARAccelerando::ARAccelerando()
 {
 	setupTagParameters (gMaps->sARAccelerandoMap);
