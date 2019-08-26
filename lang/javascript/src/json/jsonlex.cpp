@@ -1,5 +1,7 @@
 #line 2 "jsonlex.cpp"
 
+#define register
+
 #line 4 "jsonlex.cpp"
 
 #define  YY_INT_ALIGNED short int
