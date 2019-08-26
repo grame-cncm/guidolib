@@ -66,7 +66,7 @@ class GuidoEngine {
 	countVoices ( ar ) 				{ return this.fEngine.countVoices (ar); }
 	getPageCount ( gr ) 			{ return this.fEngine.getPageCount (gr); }
 	getSystemCount ( gr, page) 		{ return this.fEngine.getSystemCount ( gr, page ); }
-	duration ( gr ) 				{ return this.fEngine.duration(); }
+	duration ( gr ) 				{ return this.fEngine.duration(gr); }
 
 	findEventPage ( gr, date ) 		{ return this.fEngine.findEventPage ( gr, date ); }
 	findPageAt ( gr, date ) 		{ return this.fEngine.findPageAt (gr, date); }
@@ -109,8 +109,8 @@ class GuidoEngine {
 	closeStream	( stream ) 			{ return this.fEngine.closeStream ( stream ); }
 	getStream	( stream ) 			{ return this.fEngine.getStream ( stream ); }
 	stream2AR	( parser, stream ) 	{ return this.fEngine.stream2AR ( parser, stream ); }
-	writeStream	( stream, gmn ) 	{ return fthis.fEngine.writeStream ( stream, gmn ); }
-	resetStream	( stream ) 			{ return fthis.fEngine.resetStream ( stream ); }
+	writeStream	( stream, gmn ) 	{ return this.fEngine.writeStream ( stream, gmn ); }
+	resetStream	( stream ) 			{ return this.fEngine.resetStream ( stream ); }
 
 	getParsingTime 	( ar ) 			{ return this.fEngine.getParsingTime ( ar ); }
 	getAR2GRTime	( gr ) 			{ return this.fEngine.getAR2GRTime ( gr ); }
@@ -129,7 +129,7 @@ class GuidoEngine {
 
 	//------------------------------------------------------------------------
 	// Guido piano roll interface
-	ar2PianoRoll 		( type, ar )			{ return this.fPRoll.ar ( type, ar ); }
+	ar2PianoRoll 		( type, ar )			{ return this.fPRoll.ar2PianoRoll ( type, ar ); }
 	destroyPianoRoll 	( proll )				{ return this.fPRoll.destroyPianoRoll ( proll ); }
 	setLimits 			( proll, limits )		{ return this.fPRoll.setLimits ( proll, limits ); }
 	enableKeyboard 		( proll, status) 		{ return this.fPRoll.enableKeyboard ( proll, status ); }
@@ -172,6 +172,23 @@ class GuidoEngine {
 	setParameterName ( name )	{ return this.fFactory.setParameterName ( name ); }
 	setParameterUnit ( unit )	{ return this.fFactory.setParameterUnit ( unit ); }
 }
+
+// pîano roll: pitch line display modes
+const kPRCLine      =  1;
+const kPRCSharpLine =  1<<1;
+const kPRDLine      =  1<<2;
+const kPRDSharpLine =  1<<3;
+const kPRELine      =  1<<4;
+const kPRFLine      =  1<<5;
+const kPRFSharpLine =  1<<6;
+const kPRGLine      =  1<<7;
+const kPRGSharpLine =  1<<8;
+const kPRALine      =  1<<9;
+const kPRASharpLine =  1<<10;
+const kPRBLine      =  1<<11;
+const kPRAutoLines  =  0;
+const kPRNoLine     = -1;
+
 
 if ((typeof process !== 'undefined') && (process.release.name === 'node')) {
 	module.exports = GuidoEngine;
