@@ -10,6 +10,7 @@ class GuidoEngine {
 		this.fScoreMap = 0;
 		this.fPRoll = 0;
 		this.fSPR = 0;
+		this.fFactory = 0;
 	}
 	
 	//------------------------------------------------------------------------
@@ -42,7 +43,8 @@ class GuidoEngine {
 		this.fEngine.init();
 		this.fPRoll  	= new module.GUIDOPianoRollAdapter();
 		this.fSPR  		= new module.GUIDOReducedProportionalAdapter();
-		this.fScoreMap 	= new module.GUIDOScoreMap();		
+		this.fScoreMap 	= new module.GUIDOScoreMap();	
+		this.fFactory 	= new module.GUIDOFactoryAdapter();	
 	}
 		
 	//------------------------------------------------------------------------
@@ -125,6 +127,50 @@ class GuidoEngine {
 	getTimeMap	( gr ) 						{ return this.fScoreMap.getTimeMap ( gr ); }
 	getPianoRollMap ( proll, w, h ) 		{ return this.fScoreMap.getPianoRollMap ( proll, w, h ); }
 
+	//------------------------------------------------------------------------
+	// Guido piano roll interface
+	ar2PianoRoll 		( type, ar )			{ return this.fPRoll.ar ( type, ar ); }
+	destroyPianoRoll 	( proll )				{ return this.fPRoll.destroyPianoRoll ( proll ); }
+	setLimits 			( proll, limits )		{ return this.fPRoll.setLimits ( proll, limits ); }
+	enableKeyboard 		( proll, status) 		{ return this.fPRoll.enableKeyboard ( proll, status ); }
+	getKeyboardWidth 	( proll, height) 		{ return this.fPRoll.getKeyboardWidth ( proll, height ); }
+	enableAutoVoicesColoration (proll, status)	{ return this.fPRoll.enableAutoVoicesColoration ( proll, status ); }
+	setRGBColorToVoice 	( proll, voice, r, g, b, a)	{ return this.fPRoll.setRGBColorToVoice ( proll, voice, r, g, b, a ); }
+	setHtmlColorToVoice ( proll, voice, c)		{ return this.fPRoll.setHtmlColorToVoice ( proll, voice, c ); }
+	removeColorToVoice 	( proll, voice )		{ return this.fPRoll.removeColorToVoice ( proll, voice ); }
+	enableMeasureBars 	( proll, status )		{ return this.fPRoll.enableMeasureBars ( proll, status ); }
+	setPitchLinesDisplayMode (proll, mode)		{ return this.fPRoll.setPitchLinesDisplayMode ( proll, mode ); }
+	svgExport 			( proll, w, h )			{ return this.fPRoll.svgExport ( proll, w, h  ); }
+
+
+	//------------------------------------------------------------------------
+	// Guido factory interface
+	openMusic ()				{ return this.fFactory.openMusic (); }
+	closeMusic ()				{ return this.fFactory.closeMusic (); }
+	openVoice ()				{ return this.fFactory.openVoice (); }
+	closeVoice ()				{ return this.fFactory.closeVoice (); }
+	openChord ()				{ return this.fFactory.openChord (); }
+	closeChord ()				{ return this.fFactory.closeChord (); }
+	insertCommata ()			{ return this.fFactory.insertCommata (); }
+
+	openEvent (name)			{ return this.fFactory.openEvent ( name ); }
+	closeEvent ()				{ return this.fFactory.closeEvent (); }
+	addSharp ()					{ return this.fFactory.addSharp (); }
+	addFlat ()					{ return this.fFactory.addFlat (); }
+	setEventDots (ndots)		{ return this.fFactory.setEventDots ( ndots ); }
+	setEventAccidentals (acc)	{ return this.fFactory.setEventAccidentals ( acc ); }
+	setOctave (oct)				{ return this.fFactory.setOctave ( oct ); }
+	setDuration ( n, d )		{ return this.fFactory.setDuration ( n, d ); }
+
+	openTag ( name, id )		{ return this.fFactory.openTag ( name, id ); }
+	openRangeTag ( name, id )	{ return this.fFactory.openRangeTag ( name, id ); }
+	endTag ()					{ return this.fFactory.endTag ( ); }
+	closeTag ()					{ return this.fFactory.closeTag ( ); }
+	addTagParameterString (str)	{ return this.fFactory.addTagParameterString ( str ); }
+	addTagParameterInt ( val )	{ return this.fFactory.addTagParameterInt ( val ); }
+	addTagParameterFloat ( val)	{ return this.fFactory.addTagParameterFloat ( val ); }
+	setParameterName ( name )	{ return this.fFactory.setParameterName ( name ); }
+	setParameterUnit ( unit )	{ return this.fFactory.setParameterUnit ( unit ); }
 }
 
 if ((typeof process !== 'undefined') && (process.release.name === 'node')) {
