@@ -54,7 +54,7 @@ class GuidoEngine {
 	ar2gr (ar)						{ return this.fEngine.ar2gr (ar); }
 	ar2grSettings (ar, settings) 	{ return this.fEngine.ar2gr (ar, settings); }
 	updateGR (gr)					{ return this.fEngine.updateGR (gr); }
-	updateGRSettings (ar, settings)	{ return this.fEngine.updateGR (gr, settings); }
+	updateGRSettings (gr, settings)	{ return this.fEngine.updateGRSettings (gr, settings); }
 	freeAR (ar) 					{ this.fEngine.freeAR (ar); }
 	freeGR (gr) 					{ this.fEngine.freeGR (gr); }
 	getDefaultLayoutSettings () 	{ return this.fEngine.getDefaultLayoutSettings(); }
@@ -97,7 +97,7 @@ class GuidoEngine {
 	checkVersionNums(maj, min, sub) { return this.fEngine.checkVersionNums ( maj, min, sub ); }
 
 
-	markVoice ( gr, date, duration, r, g, b ) { return this.fEngine.markVoice( gr, date, duration, r, g, b ); }
+	markVoice ( gr, voice, date, duration, r, g, b ) { return this.fEngine.markVoice( gr, voice, date, duration, r, g, b ); }
 
 	openParser() 					{ return this.fEngine.openParser(); }
 	closeParser(parser) 			{ return this.fEngine.closeParser ( parser ); }
