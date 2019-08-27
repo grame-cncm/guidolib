@@ -147,7 +147,7 @@ ARFactory::ARFactory()
 	mAutoLyricsPos(false),
 	mAutoInstrPos(false),
 	mAutoIntensPos(false),
-	mAutoHideTiedAccidentals(false),
+	mAutoHideTiedAccidentals(true),
 	mFingeringPos(ARAuto::kDefault),
 	mHarmonyPos(ARAuto::kDefault),
 	mFingeringSize(0),
@@ -246,7 +246,7 @@ void ARFactory::createVoice()
 	mAutoLyricsPos = false;
 	mAutoInstrPos = false;
 	mAutoIntensPos= false;
-	mAutoHideTiedAccidentals = false;
+	mAutoHideTiedAccidentals = true;
 	mFingeringPos = ARAuto::kDefault;
 	mHarmonyPos = ARAuto::kDefault;
 	mFingeringSize = 0;
