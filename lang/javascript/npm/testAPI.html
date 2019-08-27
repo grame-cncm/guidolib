@@ -22,16 +22,17 @@
 <script>
 var div = document.getElementById("log");
 function log (str) 			{ div.innerHTML += str + '\n'; }
-function svg (str, name) 	{ 
-	var win = window.open("", name)
-	win.document.write ("<html><head><title>" + name + "</title></head><body>");
-	win.document.write (str);
-	win.document.write ("</body></html>");
-}
+function svg (str, name) 	{ log (str); }
+// function svg (str, name) 	{ 
+// 	var win = window.open("", name)
+// 	win.document.write ("<html><head><title>" + name + "</title></head><body>");
+// 	win.document.write (str);
+// 	win.document.write ("</body></html>");
+// }
 
 function doit (engine) {
 	log ("Guido Engine version " + engine.getVersion().str);
-	run (engine);
+	run (engine, log, svg);
 }
 
 

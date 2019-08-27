@@ -26,7 +26,7 @@ var settings= {
 //----------------------------------------------------------------------------
 // Parse to ar and convert to gr + change settings and convert to svg
 //----------------------------------------------------------------------------
-function ar2gr (engine )
+function ar2gr (engine, log, svg )
 {
 	log( "\nParse and AR to GR :");
 	var p = engine.openParser();
@@ -63,7 +63,7 @@ function ar2gr (engine )
 //----------------------------------------------------------------------------
 // test guido streams
 //----------------------------------------------------------------------------
-function streams ( engine ) {
+function streams ( engine, log, svg ) {
 	log( "\nGuido streams :");
 	
 	var p = engine.openParser();
@@ -95,7 +95,7 @@ function scanMap( map )
 	return m.length;
 }
 
-function maps( engine ) 
+function maps( engine, log ) 
 {
 	log( "\nMap tests :");
 	var p = engine.openParser();
@@ -128,7 +128,7 @@ function maps( engine )
 //----------------------------------------------------------------------------
 // Piano roll tests
 //----------------------------------------------------------------------------
-function pianoRollTest (engine)
+function pianoRollTest (engine, log, svg)
 {
 	log( "\nPiano roll tests :");
 	var p = engine.openParser();
@@ -149,7 +149,7 @@ function pianoRollTest (engine)
 	engine.setLimits(pr, limitParams);
 	engine.enableKeyboard(pr, true);
 	engine.enableAutoVoicesColoration(pr, true);
-	engine.setPitchLinesDisplayMode(pr, kPRDSharpLine + kPRGSharpLine);
+	engine.setPitchLinesDisplayMode(pr, engine.kPRDSharpLine + engine.kPRGSharpLine);
 	result = engine.svgExport(pr, -1, -1);
 	svg (result, "PianoRoll SVG2");
 	log ("  SVG flushed to PianoRoll SVG2");
@@ -163,7 +163,7 @@ function pianoRollTest (engine)
 //----------------------------------------------------------------------------
 // Misc. functions
 //----------------------------------------------------------------------------
-function misc (engine )
+function misc (engine, log )
 {
 	log( "\nConversion tools :");
 	log( "  unit2CM:     " + engine.unit2CM(237.10630798339844));
@@ -180,11 +180,14 @@ function misc (engine )
 }
 
 
-function run (engine) {
- 	ar2gr 	(engine);
-	streams (engine);
-	misc 	(engine);
-	maps 	(engine);
-	pianoRollTest (engine);
+function run (engine, log, svg) {
+ 	ar2gr 	(engine, log, svg);
+	streams (engine, log, svg);
+	misc 	(engine, log);
+	maps 	(engine, log);
+	pianoRollTest (engine, log, svg);
 }
 
+if ((typeof process !== 'undefined') && (process.release.name === 'node')) {
+	module.exports = run;
+}

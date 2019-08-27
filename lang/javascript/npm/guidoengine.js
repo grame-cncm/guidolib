@@ -11,6 +11,22 @@ class GuidoEngine {
 		this.fPRoll = 0;
 		this.fSPR = 0;
 		this.fFactory = 0;
+
+		// pîano roll: pitch line display modes
+		this.kPRCLine      =  1;
+		this.kPRCSharpLine =  1<<1;
+		this.kPRDLine      =  1<<2;
+		this.kPRDSharpLine =  1<<3;
+		this.kPRELine      =  1<<4;
+		this.kPRFLine      =  1<<5;
+		this.kPRFSharpLine =  1<<6;
+		this.kPRGLine      =  1<<7;
+		this.kPRGSharpLine =  1<<8;
+		this.kPRALine      =  1<<9;
+		this.kPRASharpLine =  1<<10;
+		this.kPRBLine      =  1<<11;
+		this.kPRAutoLines  =  0;
+		this.kPRNoLine     = -1;
 	}
 	
 	//------------------------------------------------------------------------
@@ -171,23 +187,8 @@ class GuidoEngine {
 	addTagParameterFloat ( val)	{ return this.fFactory.addTagParameterFloat ( val ); }
 	setParameterName ( name )	{ return this.fFactory.setParameterName ( name ); }
 	setParameterUnit ( unit )	{ return this.fFactory.setParameterUnit ( unit ); }
-}
 
-// pîano roll: pitch line display modes
-const kPRCLine      =  1;
-const kPRCSharpLine =  1<<1;
-const kPRDLine      =  1<<2;
-const kPRDSharpLine =  1<<3;
-const kPRELine      =  1<<4;
-const kPRFLine      =  1<<5;
-const kPRFSharpLine =  1<<6;
-const kPRGLine      =  1<<7;
-const kPRGSharpLine =  1<<8;
-const kPRALine      =  1<<9;
-const kPRASharpLine =  1<<10;
-const kPRBLine      =  1<<11;
-const kPRAutoLines  =  0;
-const kPRNoLine     = -1;
+}
 
 
 if ((typeof process !== 'undefined') && (process.release.name === 'node')) {
