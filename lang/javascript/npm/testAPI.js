@@ -41,14 +41,12 @@ function ar2gr (engine, log, svg )
 
 	var result = engine.gr2SVG(gr, 1, true, 0);
 	svg (result, "gr2SVG1");
-	log ("  SVG flushed to gr2SVG1");
 	
 	// Modify settings and re-draw
 	engine.updateGRSettings (gr, settings);
 	log ("  updateGRSettings");
 	result = engine.gr2SVG(gr, 1, true, 0);
 	svg (result, "gr2SVG2");
-	log ("  SVG flushed to gr2SVG2");
 
 	log ("  countVoices:    " + engine.countVoices(ar));
 	log ("  getPageCount:   " + engine.getPageCount(gr));
@@ -75,7 +73,6 @@ function streams ( engine, log, svg ) {
 	var gr = engine.ar2gr(ar);
 	var result = engine.gr2SVG(gr, 1, true, 0);
 	svg (result, "gr2SVG3");
-	log ("  SVG flushed to gr2SVG3");
 	
 	engine.resetStream(stream);
 	engine.getStream(stream);
@@ -136,9 +133,8 @@ function pianoRollTest (engine, log, svg)
 	engine.closeParser(p);
 
 	var pr = engine.ar2PianoRoll (0, ar);	
-	var result = engine.svgExport(pr, -1, -1);
+	var result = engine.proll2svg(pr, 1024, 512);
 	svg (result, "PianoRoll SVG1");
-	log ("  SVG flushed to PianoRoll SVG1");
 	
 	limitParams = {
 		startDate : {num : 1, denom : 4},
@@ -150,10 +146,9 @@ function pianoRollTest (engine, log, svg)
 	engine.enableKeyboard(pr, true);
 	engine.enableAutoVoicesColoration(pr, true);
 	engine.setPitchLinesDisplayMode(pr, engine.kPRDSharpLine + engine.kPRGSharpLine);
-	result = engine.svgExport(pr, -1, -1);
+	result = engine.proll2svg(pr, 1024, 512);
 	svg (result, "PianoRoll SVG2");
-	log ("  SVG flushed to PianoRoll SVG2");
-	pmap = engine.getPianoRollMap(pr, -1, -1);
+	pmap = engine.getPianoRollMap(pr, 1024, 512);
 	log ("  getPianoRollMap:\t" + scanMap(pmap) + " elements");
 
 	engine.freeAR(ar);

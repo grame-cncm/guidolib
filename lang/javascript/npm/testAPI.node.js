@@ -10,6 +10,7 @@ var engine = new GuidoEngine().initialize ("./libGUIDOEngine").then (doit);
 function log(str) 		{ console.log (str); }
 function svg(str, name) { 
 	fs.writeFileSync (name + ".svg", str, "utf8" );
+	log ("  SVG flushed to " + name);
 }
 
 function doit (engine) {
