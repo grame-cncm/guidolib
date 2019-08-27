@@ -156,7 +156,7 @@ class GuidoEngine {
 	removeColorToVoice 	( proll, voice )		{ return this.fPRoll.removeColorToVoice ( proll, voice ); }
 	enableMeasureBars 	( proll, status )		{ return this.fPRoll.enableMeasureBars ( proll, status ); }
 	setPitchLinesDisplayMode (proll, mode)		{ return this.fPRoll.setPitchLinesDisplayMode ( proll, mode ); }
-	svgExport 			( proll, w, h )			{ return this.fPRoll.svgExport ( proll, w, h  ); }
+	proll2svg 			( proll, w, h )			{ return this.fPRoll.svgExport ( proll, w, h  ); }
 
 
 	//------------------------------------------------------------------------
