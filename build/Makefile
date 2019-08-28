@@ -139,6 +139,14 @@ iosdir/guidolib.xcodeproj:
 	cd iosdir && cmake -DIOS=yes -DMIDIEXPORT=no .. -G Xcode
 
 #===============================================================
+# build the embedded svg font
+#===============================================================
+guido2: ../src/engine/lib/guido2.cpp
+
+../src/engine/lib/guido2.cpp : ../src/guido2.svg
+	cd ../src && makecppfont > engine/lib/guido2.cpp
+
+#===============================================================
 # extract the current tags list
 #===============================================================
 tags:

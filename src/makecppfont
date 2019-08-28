@@ -11,11 +11,14 @@ cat << !
 
 !
 
-/bin/echo -n "const char* ______src_guido2_svg = \""
-cat guido2.svg | sed -e 's/\\/\\\\/g' | sed -e 's/"/\\"/g' | sed -e 's/$/ /' | sed -e 's/[ 	][ 	]*/ /g' | tr -d '\n'
+# /bin/echo -n "const char* ______src_guido2_svg = \""
+# cat guido2.svg | sed -e 's/\\/\\\\/g' | sed -e 's/"/\\"/g' | sed -e 's/$/ /' | sed -e 's/[ 	][ 	]*/ /g' | tr -d '\n'
+
+/bin/echo -n "const char* ______src_guido2_svg = "
+cat guido2.svg | sed -e 's/\\/\\\\/g' | sed -e 's/"/\\"/g' | sed -e 's/$/ /' | sed -e 's/[ 	][ 	]*/ /g' | sed 's/^\(..*\)$/	"\1"/' 
 
 cat << !
-";
+;
 
 #endif
 
