@@ -5,7 +5,7 @@
 #ifndef _guido2_H_
 #define _guido2_H_
 
-extern const char* ______src_guido2_svg;
+extern const char* _src_guido2_svg;
 
 #endif
 

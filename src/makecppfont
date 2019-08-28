@@ -1,29 +1,41 @@
 #!/bin/sh
 #
 
+font=$1
+
 cat << !
 /*
 	This file has been generated using makecppfont
 */
-
-#ifndef _guido2_H_
-#define _guido2_H_
 
 !
 
 # /bin/echo -n "const char* ______src_guido2_svg = \""
 # cat guido2.svg | sed -e 's/\\/\\\\/g' | sed -e 's/"/\\"/g' | sed -e 's/$/ /' | sed -e 's/[ 	][ 	]*/ /g' | tr -d '\n'
 
-/bin/echo -n "const char* ______src_guido2_svg = "
-cat guido2.svg | sed -e 's/\\/\\\\/g' | sed -e 's/"/\\"/g' | sed -e 's/$/ /' | sed -e 's/[ 	][ 	]*/ /g' | sed 's/^\(..*\)$/	"\1"/' 
+/bin/echo -n "const char _src_guido2_svg_array [] = "
+./svg2carray $font
+/bin/echo -n "const char* _src_guido2_svg = _src_guido2_svg_array;"
 
-cat << !
-;
+# { "
+# cat $font 	| sed -e 's/\\/\\\\/g' \
+#  			| sed -e 's/[	 ]+/ /g' \
+# 			| sed -e "s/\([^\]\)/'\1', /g" 
+#			| sed -e "s/'\\\\',/'\\\\\',/g" \
+#			| sed -e "s/''',/'\\\\'',/g" 
+# 			| sed -e 's/"/\\"/g' \
+# 			| sed -e 's/$/ /' \
+# 			| sed -e 's/[	 ]+/ /g'  \
+# 			| sed -e 's/> />/g' \
+# 			| sed -e 's/ \/>/\/>/g' \
+# 			| sed -e 's/[ 	]*</</g' \
+# 			| sed 's/^\(..*\)$/	"\1"/' 
 
-#endif
-
-!
-exit
+# cat << !
+# };
+# 
+# !
+# exit
 
 # echo "#ifndef _guido2_H_"
 # echo "#define _guido2_H_"

@@ -169,7 +169,7 @@ string GuidoEngineAdapter::binaryExport(const GRHandler handle, int page)
 #ifdef CANVASSYSTEM
 GuidoErrCode GuidoEngineAdapter::javascriptExport(const GRHandler handle, int page)
 {
-	CanvasSystem sys(______src_guido2_svg);
+	CanvasSystem sys(_src_guido2_svg);
 	CanvasDevice dev(&sys);
 
 	GuidoOnDrawDesc desc;              // declare a data structure for drawing

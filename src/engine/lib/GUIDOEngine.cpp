@@ -116,7 +116,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
-	VGSystem * gSystem= new SVGSystem(______src_guido2_svg);
+	VGSystem * gSystem= new SVGSystem(_src_guido2_svg);
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
 	desc.musicFont = kMusicFontStr;
 	desc.textFont  = "Times";
@@ -769,7 +769,7 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont )
 {
-	SVGSystem sys(embedFont ? ______src_guido2_svg : 0);
+	SVGSystem sys(embedFont ? _src_guido2_svg : 0);
 	VGDevice    *dev  = sys.CreateDisplayDevice(out, 0);
 
 	GuidoResizePageToMusic (handle);
@@ -796,7 +796,7 @@ GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostre
 {
 	const char * fontUsed = font;
 	if(embedFont) {
-		fontUsed = ______src_guido2_svg;
+		fontUsed = _src_guido2_svg;
 	}
 
 	SVGSystem sys(fontUsed);
@@ -827,7 +827,7 @@ GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostre
 
 GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color, bool embedFont )
 {
-	const char * fontUsed = embedFont ? ______src_guido2_svg : 0;
+	const char * fontUsed = embedFont ? _src_guido2_svg : 0;
 
 	SVGSystem sys(fontUsed);
 	VGDevice    *dev    = sys.CreateDisplayDevice(out, 0);
