@@ -38,7 +38,7 @@ float NoteDrawer::GetScaling (float textfontsize )
 const VGFont* NoteDrawer::GetMusicFont( float scale )
 {
 	float musicfontsize = 200.f;
-	return FontManager::FindOrCreateFont(  musicfontsize * scale, kMusicFontStr, "");
+	return FontManager::FindOrCreateFont(  int(musicfontsize * scale), kMusicFontStr, "");
 }
 
 // ----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ float NoteDrawer::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float
 	float width = w;
 
 	// - Draw Stem
-	float		stemLen = w*2.8;
+	float		stemLen = w*2.8f;
 	if (symbol != kWholeNoteHeadSymbol) {
 		float		stemTagSize = 1;
 
@@ -119,7 +119,7 @@ float NoteDrawer::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float
 	if (dotSymbol != kNoneSymbol) {
 		float space = w/3;
 		hdc.DrawMusicSymbol( xPos + width + space, yPos, dotSymbol);
-		width += space * 1.3;
+		width += space * 1.3f;
 	}
 
 	// - Cleanup

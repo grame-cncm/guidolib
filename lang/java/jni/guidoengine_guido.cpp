@@ -25,6 +25,10 @@
 #include "musicxml.h"
 #include "device_specific_functions.h"
 
+#if WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 jmethodID getRGBID;
 
 VGSystem * gSystem;

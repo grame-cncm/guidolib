@@ -126,14 +126,14 @@ bool GRRepeatBegin::isSystemSlice() const
 float GRRepeatBegin::getXOffset() const
 {
 	// obscure computation, should be revised !!!
-	float v = (fStaffThickness - 4) * 0.5;
+	float v = (fStaffThickness - 4) * 0.5f;
 	return 40 - 30 * (fSize - 1) + v * fSize  - mBoundingBox.Width();  // ????????
 }
 
 // --------------------------------------------------------------------------
 void GRRepeatBegin::DrawDots( VGDevice & hdc ) const
 {
-	float hlspace = LSPACE * fSize * 0.5;
+	float hlspace = LSPACE * fSize * 0.5f;
 	float symh = 2;
 	float y1 = hlspace * (fLinesCount - 5) - symh;
 	if (! (fLinesCount % 2)) y1 += hlspace;
@@ -146,7 +146,7 @@ void GRRepeatBegin::DrawDots( VGDevice & hdc ) const
 		y2 = y1 + 20 * fSize;
 	}
 
-    float x  = getXOffset() + hlspace * 2.4;
+    float x  = getXOffset() + hlspace * 2.4f;
     DrawSymbol(hdc, kDotSymbol, x, y1, pointSize);
     DrawSymbol(hdc, kDotSymbol, x, y2, pointSize);
 }

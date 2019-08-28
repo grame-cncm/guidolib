@@ -98,12 +98,12 @@ void GRRepeatEnd::updateBoundingBox()
 }
 
 // --------------------------------------------------------------------------
-float GRRepeatEnd::getXOffset() const { return mBoundingBox.Width() / fSize + (LSPACE * 0.75 * fSize); }
+float GRRepeatEnd::getXOffset() const { return mBoundingBox.Width() / fSize + (LSPACE * 0.75f * fSize); }
 
 // --------------------------------------------------------------------------
 void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 {
-	float hlspace = LSPACE * fSize * 0.5;
+	float hlspace = LSPACE * fSize * 0.5f;
 	float symh = 2; //4;
 	float y1 = hlspace * (fLinesCount - 5) - symh;
 	if (! (fLinesCount % 2)) y1 += hlspace;
@@ -116,7 +116,7 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 		y2 = y1 + 20 * fSize;
 	}
 
-    float x  = -hlspace * 0.75 - getXOffset();
+    float x  = -hlspace * 0.75f - getXOffset();
     DrawSymbol(hdc, kDotSymbol, x, y1, pointSize);
     DrawSymbol(hdc, kDotSymbol, x, y2, pointSize);
 }

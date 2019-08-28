@@ -145,9 +145,9 @@ void GRHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const str
 	const VGFont* mfont = hdc.GetMusicFont();
 	float ratio = font->GetSize() / 150.f; // 150 is the default font size for harmony (20 pt)
 
-	const VGFont* mBigFont = FontManager::FindOrCreateFont( mfont->GetSize() * 1.3 * ratio, mfont->GetName(), "");
-	const VGFont* mSmallFont = FontManager::FindOrCreateFont( mfont->GetSize() * 0.8 * ratio, mfont->GetName(), "");
-	const VGFont* tSmallFont = FontManager::FindOrCreateFont( font->GetSize() * 0.8, font->GetName(), "");
+	const VGFont* mBigFont = FontManager::FindOrCreateFont( int(mfont->GetSize() * 1.3 * ratio), mfont->GetName(), "");
+	const VGFont* mSmallFont = FontManager::FindOrCreateFont( int(mfont->GetSize() * 0.8 * ratio), mfont->GetName(), "");
+	const VGFont* tSmallFont = FontManager::FindOrCreateFont( int(font->GetSize() * 0.8), font->GetName(), "");
 	const VGFont* curmfont = mBigFont;
 	const VGFont* curtfont = font;
 	const char * ptr = str.c_str();
@@ -186,7 +186,7 @@ void GRHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const str
 			hdc.SetTextFont (tSmallFont);
 			if (!inSecPart) {
 				curtfont = tSmallFont;
-				yoffset = font->GetSize() - curtfont->GetSize();
+				yoffset = float(font->GetSize() - curtfont->GetSize());
 			}
 		}
 	}

@@ -12,6 +12,7 @@
 
 */
 
+#include <algorithm>
 #include <string.h>
 
 #include "ARTempo.h"
@@ -68,7 +69,7 @@ float GRTempoChange::getFormatLength (VGDevice * hdc, float lspace, const Format
 		if (l.second == FormatStringParser::kSpecial)
 			result += lspace;
 		else {
-			fFont->GetExtent( l.first.c_str(), l.first.size(), &w, &h, hdc);
+			fFont->GetExtent( l.first.c_str(), int(l.first.size()), &w, &h, hdc);
 			result += w;
 		}
 	}

@@ -108,7 +108,7 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 	float w = 0;
 	if (ar->autoPos() && fNote) {
 		NVRect r = fNote->getEnclosingBox(false, false, false);
-		sy = (r.bottom - mPosition.y) + space * 3.5 * fSize;
+		sy = (r.bottom - mPosition.y) + space * 3.5f * fSize;
 		if (sy < 0) sy = 0;
 		w = GetSymbolExtent(mSymbol) / 3 * fSize;
 	}
