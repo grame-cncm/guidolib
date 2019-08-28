@@ -2,10 +2,10 @@
 "use strict";
 
 const fs = require ("fs");
-const GuidoEngine = require ("./guidoengine");
+const GuidoEngine = require ("../guidoengine");
 const run = require ("./testAPI");
 
-var engine = new GuidoEngine().initialize ("./libGUIDOEngine").then (doit);
+var engine = new GuidoEngine().initialize ("../libGUIDOEngine").then (doit);
 
 function log(str) 		{ console.log (str); }
 function svg(str, name) { 

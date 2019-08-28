@@ -38,6 +38,18 @@ OPT1    := -O3 --bind --memory-init-file 0
 
 all: $(library).js
 
+help :
+	@echo "Guido Engine Wasm makefile"
+	@echo "Available argets are :"
+	@echo "   all (default): build the libGUIDOEngine wasm library"	
+	@echo "   clean        : remove objects and output files"	
+	@echo "   depend       : recompute dependencies"	
+	@echo "   npm          : publish to npm (use with caution),"	
+	@echo "                  check the npm folder."	
+	@echo "Options:"
+	@echo "   SMUFL   use SMUFL Bravura font when set to 'yes' (default is $(SMUFL))"
+
+
 ##############################################################
 # building the library as wasm library
 ##############################################################
@@ -51,11 +63,16 @@ clean:
 # publishing to npm
 ##############################################################
 npmdir := npm
-npm: $(npmdir)/$(library).js
+npm: $(npmdir)/$(library).js $(npmdir)/$(library).wasm
+	cd $(npmdir) && npm run test 
 	npm publish $(npmdir) --access public
+	@echo "Guido Engine version " $(shell grep version $(npmdir)/package.json | cut -d: -f 2) "published"
 	
 $(npmdir)/$(library).js : $(library).js
 	cp $(library).js $(npmdir)/$(library).js
+	
+$(npmdir)/$(library).wasm : $(library).wasm
+	cp $(library).wasm $(npmdir)/$(library).wasm
 
 
 ##############################################################
