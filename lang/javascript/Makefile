@@ -16,7 +16,10 @@ srcdir := ../../src/engine
 subprojects :=  $(wildcard $(srcdir)/* src/*)
 sources = $(wildcard $(srcdir)/*/*.cpp src/*/*.cpp)
 objects = $(patsubst src%, obj/src%, $(patsubst ../../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
-npmdir := npm
+
+npmdir  := npm
+webfont := $(npmdir)/guido2-webfont/guido2-webfont.woff
+
 
 .PHONY: npm
 
@@ -72,7 +75,7 @@ test: $(npmdir)/$(library).js $(npmdir)/$(library).wasm
 ##############################################################
 # publishing to npm
 ##############################################################
-npm: $(npmdir)/$(library).js $(npmdir)/$(library).wasm
+npm: $(npmdir)/$(library).js $(npmdir)/$(library).wasm $(webfont)
 	cd $(npmdir) && npm run test 
 	npm publish $(npmdir) --access public
 	@echo "Guido Engine version " $(shell grep version $(npmdir)/package.json | cut -d: -f 2) "published"
@@ -82,6 +85,12 @@ $(npmdir)/$(library).js : $(library).js
 	
 $(npmdir)/$(library).wasm : $(library).wasm
 	cp $(library).wasm $(npmdir)/$(library).wasm
+
+webfont : $(webfont)
+$(webfont) : ../../src/guido2.ttf
+	@echo "you must regenerate $(webfont): we suggest to use fontsquirrel.com" 
+	@echo "open https://www.fontsquirrel.com/tools/webfont-generator" && false
+
 
 
 ##############################################################
