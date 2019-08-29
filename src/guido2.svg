@@ -2,7 +2,9 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 <metadata>
-Copyright (c) 1996-2001 Keith A. Hamel, 2009-2019 Grame. All rights reserved. To be used with GUIDO Engine. Version 3.7, Apr. 17 2019.
+Created by FontForge 20170730 at Thu Aug 29 10:01:07 2019
+ By Dominique Fober
+Copyright (c) 1996-2001 Keith A. Hamel, 2009-2019 Grame. All rights reserved. To be used with GUIDO Engine. Version 3.8 August 29 2019.
 </metadata>
 <defs>
 <font id="Guido2" horiz-adv-x="512" >
@@ -18,7 +20,7 @@ Copyright (c) 1996-2001 Keith A. Hamel, 2009-2019 Grame. All rights reserved. To
     cap-height="187"
     bbox="-261 -1236 1477.57 1315"
     underline-thickness="19"
-    underline-position="-215"
+    underline-position="-233"
     unicode-range="U+0003-00FF"
   />
 <missing-glyph 
@@ -644,14 +646,14 @@ q0 18 13 30zM-4 189q2 0 4.5 3t3.5 8q1 4 1 14q1 2 3 4.5t5 4t6 1.5t6 -1t6 -4l2.5 -
 q1 1 5 2t9.5 0t12.5 -3q2 0 6 -2q1 -1 2 -2.5t1 -3.5t-1 -5t-5 -7q-1 -2 -2 -5q-1 -2 0 -5.5t3 -7t5.5 -5t8.5 -2.5q2 -1 6 -1q3 0 9 3q3 1 9 6q2 2 4.5 6t3.5 10t-5 18q-4 7 -14 14.5t-24 13.5q-7 2 -21 3q-8 0 -24 -5q-9 -3 -26 -12q-9 10 -27.5 19t-45.5 8
 q-11 -2 -30 -16q-4 -4 -8 -12t-4 -20q0 -3 3 -9q1 -2 3.5 -3t5.5 -1zM390 240h83l3 -32h-92l-24 -109q-20 -97 -57 -164q-54 -95 -130 -100q-31 -2 -56 18t-28 52q-5 53 42 58q18 3 33 -11t15 -34q0 -14 -16 -28.5t-16 -19.5q-1 -9 10 -9q53 0 85 133q22 108 42 214h-63
 l-3 32h76q19 63 65 107q52 49 117 49q46 0 67 -44q3 -10 3 -21q0 -48 -49 -58q-13 -1 -24.5 11t-10.5 26q1 19 21 32.5t19 16.5q-2 11 -24 15q-32 3 -58 -47q-18 -33 -30 -87z" />
-    <glyph glyph-name="otilde" unicode="&#xf5;" 
-d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
-    <glyph glyph-name="odieresis" unicode="&#xf6;" 
-d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
-    <glyph glyph-name="divide" unicode="&#xf7;" 
-d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
-    <glyph glyph-name="oslash" unicode="&#xf8;" 
-d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
+    <glyph glyph-name="otilde" unicode="&#xf5;" horiz-adv-x="312" 
+d="M286 318q10 0 18 -8t8 -18v-280q0 -12 -12 -12h-13q-13 0 -13 12v164q0 17 -118 17t-118 -17v-164q0 -12 -12 -12h-14q-12 0 -12 12v280q0 10 8 18t18 8h260z" />
+    <glyph glyph-name="odieresis" unicode="&#xf6;" horiz-adv-x="312" 
+d="M286 0h-260q-10 0 -18 8t-8 18v280q0 12 12 12h14q12 0 12 -12v-164q0 -17 118 -17t118 17v164q0 12 13 12h13q12 0 12 -12v-280q0 -10 -8 -18t-18 -8z" />
+    <glyph glyph-name="divide" unicode="&#xf7;" horiz-adv-x="250" 
+d="M126 1q-16 0 -19 14l-105 459q-1 2 -1 5q0 13 14 16h4q13 0 18 -13l88 -385l89 385q3 13 17 13h4q14 -3 14 -17v-4l-106 -459q-3 -14 -17 -14z" />
+    <glyph glyph-name="oslash" unicode="&#xf8;" horiz-adv-x="250" 
+d="M126 495q14 0 17 -14l106 -459v-4q0 -14 -14 -17h-4q-14 0 -17 13l-89 385l-88 -385q-5 -13 -18 -13h-4q-14 3 -14 16q0 3 1 5l105 459q3 14 19 14z" />
     <glyph glyph-name="ugrave" unicode="&#xf9;" 
 d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
     <glyph glyph-name="uacute" unicode="&#xfa;" 
