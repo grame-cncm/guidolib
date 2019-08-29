@@ -2,6 +2,11 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+  version 1.6.8
+- fix svg export issue with '&' character
+
+
+----------------------------------------------------------------
   version 1.6.7
 - \accel and \rit tags revised: support now format strings (as \tempo do)
 - new \footer tag
