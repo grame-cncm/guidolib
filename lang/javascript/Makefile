@@ -16,6 +16,9 @@ srcdir := ../../src/engine
 subprojects :=  $(wildcard $(srcdir)/* src/*)
 sources = $(wildcard $(srcdir)/*/*.cpp src/*/*.cpp)
 objects = $(patsubst src%, obj/src%, $(patsubst ../../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
+npmdir := npm
+
+.PHONY: npm
 
 GCC = emcc
 SMUFL ?= no
@@ -44,6 +47,7 @@ help :
 	@echo "   all (default): build the libGUIDOEngine wasm library"	
 	@echo "   clean        : remove objects and output files"	
 	@echo "   depend       : recompute dependencies"	
+	@echo "   test         : run API tests"	
 	@echo "   npm          : publish to npm (use with caution),"	
 	@echo "                  check the npm folder."	
 	@echo "Options:"
@@ -60,9 +64,14 @@ clean:
 	rm -f $(objects) $(target) $(library).wasm.*
 
 ##############################################################
+# testing
+##############################################################
+test: $(npmdir)/$(library).js $(npmdir)/$(library).wasm
+	cd npm && npm run test
+
+##############################################################
 # publishing to npm
 ##############################################################
-npmdir := npm
 npm: $(npmdir)/$(library).js $(npmdir)/$(library).wasm
 	cd $(npmdir) && npm run test 
 	npm publish $(npmdir) --access public
