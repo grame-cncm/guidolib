@@ -47,13 +47,11 @@ GRBowing::GRBowing(GRStaff * grstaff, GRNotationElement * startEl, GRNotationEle
 	GRSystemStartEndStruct * sse = initGRBowing( grstaff );
 
 	// The timeposition is set. Because only timeordered
-	// Graphicalelements can be added into a staff, the end-time-position is chosen as a default
+	// Graphical elements can be added into a staff, the end-time-position is chosen as a default
 
 	// a new entry for the SSEList (SystemStartEnd) as defined in GRPositionTag
 
-	// - First, setup the start/end informations, check if we're
-	// opened to the left or to the right.
-
+	// - First, setup the start/end informations, check if we're opened to the left or to the right.
 	if (startEl)
 		setStartElement(grstaff, startEl);
 	else // no start element: we're left-opened
@@ -284,7 +282,7 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 	GRNotationElement * startElement = sse->startElement;
 	GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
-	
+
 	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT || !startElement)
 	{
 		context.openLeft = true;
@@ -346,12 +344,14 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 		manualControlPoints( &context, arBow, sse );
 	}
 	else { // Automatic placement of control points, it will try to avoid collisions.
-#ifdef FIX_SLOPE
+#ifdef NONE //FIX_SLOPE
 		NVRect rect = getAssociatedBoundingBox();
 		float limit = context.staff->getStaffLSPACE() * 6;
 		int count = 0;
 		float prevypos = bowInfos->position.y;
 		float prevgap = 10000;
+
+//cerr << "GRBowing::updateBow position 1: " << bowInfos->position << endl;
 		do {
 			automaticControlPoints( &context, arBow, sse );
 			updateBoundingBox();
@@ -368,6 +368,7 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 				float yAdjust  = context.staff->getStaffLSPACE() / (upward ? 2.f : -2.f);
 				bowInfos->position.y -= yAdjust;
 				count++;
+//cerr << "GRBowing::updateBow position 2: " << bowInfos->position << endl;
 			}
 			else break;
 		} while (count < 3);
@@ -377,12 +378,21 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 			bowInfos->offsets[1].y = bowInfos->offsets[2].y - ((context.curveDir > 0) ? LSPACE : -LSPACE);
 			bowInfos->offsets[0].y = bowInfos->offsets[1].y;
 		}
+cerr << "GRBowing::updateBow position 3: " << bowInfos->position << endl;
 		return;
 #else
 		automaticControlPoints( &context, arBow, sse );
+		float corr = LSPACE ;
+		float hcorr = LSPACE / 2;
+		if (context.openLeft) {
+			bowInfos->offsets[0].x -= corr;
+			bowInfos->offsets[0].y = bowInfos->offsets[1].y - ((context.curveDir > 0) ? hcorr : -hcorr);
+		}
+		if (context.openRight) {
+			bowInfos->offsets[2].x += corr;
+		}
 #endif
 	}
-
 	updateBoundingBox();
 }
 
@@ -589,6 +599,10 @@ void GRBowing::setOffset(int n_point,const NVPoint & p)
 	// here an array must be used (need lists and arrays)
 }
 
+#ifndef WIN32
+#warning ("TODO: revise GRBowing::tellPosition");
+#endif
+
 // -----------------------------------------------------------------------------
 void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 {
@@ -603,6 +617,10 @@ void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 
 	const GRNotationElement * const startElement = sse->startElement;
 	const GRNotationElement * const endElement = sse->endElement;
+
+//cerr << "GRBowing::tellPosition caller "  << el->getRelativeTimePosition() << " " <<  el << " flags: " << sse->startflag << " " << sse->endflag << endl;
+//cerr << "GRBowing::tellPosition start  "  << startElement << " spos: " << mAssociated->GetAt(sse->startpos) << endl;
+//cerr << "GRBowing::tellPosition end    "  << endElement   << " epos: " << mAssociated->GetAt(sse->endpos) << endl;
 
 	if( el == endElement || ( endElement == 0 && el == startElement)) {
 		const GRNote * start = startElement->isGRNote();
@@ -688,6 +706,10 @@ void GRBowing::OnDraw( VGDevice & hdc) const
 
 	const float x = bowInfos->position.x;
 	const float y = bowInfos->position.y;
+
+//cerr << __LINE__  << " GRBowing::OnDraw " << bowInfos->position << " : " << bowInfos->offsets[0].x << " " << bowInfos->offsets[0].y << " | "
+//		<< bowInfos->offsets[1].x << " " << bowInfos->offsets[1].y << " | "
+//		<< bowInfos->offsets[2].x << " " << bowInfos->offsets[2].y << endl;
 	::drawSlur( hdc,
 				x + bowInfos->offsets[0].x,
 				y + bowInfos->offsets[0].y,

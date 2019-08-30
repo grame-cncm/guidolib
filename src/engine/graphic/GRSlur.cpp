@@ -178,6 +178,16 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing *
 {
 	if (mAssociated == 0 ) return;
 
+//cerr << "GRSlur::automaticControlPoints " << endl;
+//if (1) {
+//	GuidoPos pos = mAssociated->GetHeadPosition();
+//	while( pos) {
+//		GRNotationElement * el = mAssociated->GetNext(pos);
+//cerr << " assoc: " << el << endl;
+//	}
+//}
+
+
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 	const bool upward = (context->curveDir == 1);
 
@@ -349,6 +359,17 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing *
 	// -- Apply the new control point.
 	bowInfos->offsets[1].y = crossY - bowInfos->position.y;
     bowInfos->offsets[1].x = crossX - bowInfos->position.x;
+
+{
+	float limit = 250;
+	float h = bowInfos->offsets[1].y;
+	float y1 = bowInfos->offsets[0].y;
+	float y2 = bowInfos->offsets[2].y;
+	if ((h >= 0) && (h - y1 > limit) && (h - y2 > limit))
+		bowInfos->offsets[1].y = std::max(y1, y2) + limit;
+	else if ((h < 0) && (h - y1 < -limit) && (h - y2 < -limit))
+		bowInfos->offsets[1].y = std::min(y1, y2) - limit;
+}
 }
 
 
