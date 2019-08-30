@@ -613,7 +613,7 @@ void GRBeam::refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPA
 	p[2] = st->p[2];
 	p[3] = st->p[3];
 	const float yFact1 = 0.75f * currentLSPACE * dir;
-	const float yFact2 = 0.4f * currentLSPACE;
+//	const float yFact2 = 0.4f * currentLSPACE;
 	if (st->simpleBeams)
 	{
 		GuidoPos smplpos = st->simpleBeams->GetHeadPosition();
