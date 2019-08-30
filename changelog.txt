@@ -4,6 +4,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.6.8
 - fix svg export issue with '&' character
+- partial fix for incorrect slurs (issue #90)
 
 
 ----------------------------------------------------------------
