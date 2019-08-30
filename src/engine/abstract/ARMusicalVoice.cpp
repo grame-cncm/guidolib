@@ -4023,8 +4023,8 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 			else if (key) {
                 key->setIsInHeader(true);
 				needskey = 0;				// then we don't need a key
-				if (meterpos)
-                    GuidoWarn("Meter set before key !");
+//				if (meterpos)
+//                    GuidoWarn("Meter set before key !");
 				keypos = lastpos;
 			}
 			else if (meter) {
