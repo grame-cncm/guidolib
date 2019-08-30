@@ -236,7 +236,7 @@ extern GRSystem * gCurSystem;
 
 //-------------------------------------------------------------------
 #ifndef WIN32
-#warning ("todo: report getAllAssociatedBoundingBox to GRNotationElement")
+#warning ("TODO: report getAllAssociatedBoundingBox to GRNotationElement")
 #endif
 GRTrill::TDrawRects GRTrill::getAllAssociatedBoundingBox (const NEPointerList * assoc, const GRStaff* staff) const
 {
