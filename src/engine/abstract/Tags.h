@@ -40,6 +40,7 @@ extern const char* kTagBeamsFull;
 extern const char* kTagBeamsOff;
 extern const char* kTagBembel;
 extern const char* kTagBm;
+extern const char* kTagBow;
 extern const char* kTagBreathMark;
 extern const char* kTagChord;
 extern const char* kTagClef;

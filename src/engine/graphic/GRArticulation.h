@@ -22,9 +22,10 @@
 #include "NVPoint.h"
 
 
-class GRStaff;
+class ARBow;
 class ARMusicalTag;
 class GREvent;
+class GRStaff;
 
 
 /** \brief Articulations: staccato, accent, marcato,
@@ -37,7 +38,7 @@ class GRArticulation : public GRTagARNotationElement
 		enum {  kFlagStaccato = 1, kFlagStaccmo = 2, kFlagTenuto = 4,
 				kFlagAccent = 8, kFlagMarcato = 16, kFlagMarcatoUp = 32,
                 kFlagMarcatoDown = 64, kFlagFermataUp = 128, kFlagFermataDown = 256,
-                kFlagBreathMark = 512, kFlagPizz = 1024, kFlagHarmonic = 2048 };
+                kFlagBreathMark = 512, kFlagPizz = 1024, kFlagHarmonic = 2048, kFlagBow = 4096 };
 
 
 				 GRArticulation( const ARMusicalTag * inTag, float curLSPACE, bool ownsar = false );
@@ -53,6 +54,7 @@ class GRArticulation : public GRTagARNotationElement
 		virtual void tellPosition(GObject * caller, const NVPoint & inPos);
 
 		virtual void accept (GRVisitor& visitor);
+		virtual void OnDraw( VGDevice & hdc ) const;
 
 		
 		int	 getArticulationType() const	{ return mArticulationFlag; }
@@ -83,6 +85,7 @@ class GRArticulation : public GRTagARNotationElement
 		void	setupLongFermataDown();
 		void	setupBreathMark();
 		void	setupHarmonic();
+		void	setupBow(const ARBow*);
 		void	setArticulationSymbol( unsigned int inSymbolID );
 
 		void	placeStaccato( const GREvent * inParent, NVPoint & ioPos );
@@ -102,6 +105,9 @@ class GRArticulation : public GRTagARNotationElement
 		void	placeFermataBelow( const GREvent * inParent, NVPoint & ioPos );
 		void	placeHarmonic	 ( const GREvent * inParent, NVPoint & ioPos);
 		void	placeBreathMark	 ( const GREvent * inParent, NVPoint & ioPos );
+		void 	placeBow		 ( const GREvent * inParent, NVPoint & ioPos );
+		void 	placeBowBelow	 ( const GREvent * inParent, NVPoint & ioPos );
+		void 	placeBowAbove	 ( const GREvent * inParent, NVPoint & ioPos );
 
 
 		int		getPlacement( const GREvent * inParent ) const;		// gives an ARArticulation placement

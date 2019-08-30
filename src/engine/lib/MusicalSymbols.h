@@ -201,6 +201,13 @@ ConstMusicalSymbolID kIntensSFZSymbol               = 243;
 ConstMusicalSymbolID kIntensRFZSymbol               = 244;
 ConstMusicalSymbolID kIntensFZSymbol                = 90;
 
+// version 1.68
+ConstMusicalSymbolID kBowDownASymbol                = 245;
+ConstMusicalSymbolID kBowDownBSymbol                = 246;
+ConstMusicalSymbolID kBowUpASymbol                	= 247;
+ConstMusicalSymbolID kBowUpBSymbol                	= 248;
+
+
 #endif
 
 #endif

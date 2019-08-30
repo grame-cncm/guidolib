@@ -103,19 +103,20 @@
 #include <cassert>
 #include <algorithm>
 
-#include "ARArticulation.h"
-#include "ARStaccato.h"
-#include "ARMarcato.h"
 #include "ARAccent.h"
-#include "ARTenuto.h"
-#include "ARFermata.h"
+#include "ARArticulation.h"
+#include "ARBow.h"
 #include "ARBreathMark.h"
-#include "ARPizzicato.h"
+#include "ARFermata.h"
 #include "ARHarmonic.h"
+#include "ARMarcato.h"
+#include "ARPizzicato.h"
+#include "ARStaccato.h"
+#include "ARTenuto.h"
 
 #include "GRArticulation.h"
-#include "GRSingleNote.h"
 #include "GRDefine.h"
+#include "GRSingleNote.h"
 #include "GRStaff.h"
 
 #include "VGDevice.h" // debug only
@@ -186,6 +187,7 @@ GRArticulation::GRArticulation(const ARMusicalTag * inTag, float curLSPACE, bool
 		}
 	}
 	else if (tinfo == typeid(ARBreathMark))	 	setupBreathMark();
+	else if (tinfo == typeid(ARBow))	 		setupBow(static_cast<const ARBow*>(inTag));
 	else if (tinfo == typeid(ARHarmonic))		setupHarmonic();
 	else if (tinfo == typeid(ARPizzicato))			
 	{
@@ -203,6 +205,13 @@ GRArticulation::GRArticulation(const ARMusicalTag * inTag, float curLSPACE, bool
 void GRArticulation::print(ostream& os) const
 {
 	os << "articulation " << mArticulationFlag << endl;
+}
+
+// -----------------------------------------------------------------------------
+void GRArticulation::OnDraw( VGDevice & hdc ) const
+{
+//cerr << "GRArticulation::OnDraw symbol: " << mSymbol << endl;
+	GRTagARNotationElement::OnDraw (hdc);
 }
 
 // -----------------------------------------------------------------------------
@@ -227,15 +236,29 @@ void GRArticulation::initOrder()
 	sOrdering[kFlagMarcatoDown]	= i++;
 	sOrdering[kFlagFermataUp]	= i;
 	sOrdering[kFlagFermataDown]	= i++;
+	sOrdering[kFlagBow]			= i++;
 //  kFlagBreathMark ???
 }
 
 /*----------------Setup fonctions-------------------------------------------------*/
+void GRArticulation::setupBow( const ARBow* bow)
+{
+	if (bow->getBowPosition() == ARBow::BELOW)
+		setArticulationSymbol( bow->up() ? kBowUpBSymbol : kBowDownBSymbol );
+	else
+		setArticulationSymbol( bow->up() ? kBowUpASymbol : kBowDownASymbol );
+
+	const float height = LSPACE * float(0.38);
+	sRefposStacc = NVPoint(-mLeftSpace, 0 );
+	mBoundingBox.Set( -mLeftSpace, -height*0.5f, mRightSpace, 0.5f*height );
+	mArticulationFlag = kFlagBow;
+}
+
 void GRArticulation::setupStaccato()
 {
 	setArticulationSymbol( kStaccatoSymbol );
-	const float height = LSPACE * float(0.38);		
-	sRefposStacc = NVPoint(-mLeftSpace, 0 );		
+	const float height = LSPACE * float(0.38);
+	sRefposStacc = NVPoint(-mLeftSpace, 0 );
 	mBoundingBox.Set( -mLeftSpace, -height*0.5f, mRightSpace, 0.5f*height );
 	mArticulationFlag = kFlagStaccato;
 }
@@ -295,7 +318,6 @@ void GRArticulation::setupMarcato()
 {
 	mArticulationFlag = kFlagMarcato;
 	setArticulationSymbol( kMarcatoUpSymbol );
-
 	setMarcatoDirection( true );
 }
 
@@ -303,7 +325,6 @@ void GRArticulation::setupMarcatoAbove()
 {
     mArticulationFlag = kFlagMarcatoUp;
 	setArticulationSymbol( kMarcatoUpSymbol );
-
 	setMarcatoDirection( true );
 }
 
@@ -311,7 +332,6 @@ void GRArticulation::setupMarcatoBelow()
 {
 	mArticulationFlag = kFlagMarcatoDown;
 	setArticulationSymbol( kMarcatoDownSymbol );
-
 	setMarcatoDirection( false );
 }
 
@@ -373,7 +393,7 @@ void GRArticulation::setupLongFermataDown()
 {
 	setArticulationSymbol(kLongFermataDownSymbol);
 	const float height = LSPACE * float(1.33);
-	sRefposLongFermataDown = NVPoint(-mLeftSpace, float(1)*LSPACE);
+	sRefposLongFermataDown = NVPoint(-mLeftSpace, LSPACE);
 	mBoundingBox.Set(-mLeftSpace, 1*LSPACE-height, mRightSpace, 1*LSPACE);
 	mArticulationFlag = kFlagFermataDown;
 }
@@ -464,6 +484,8 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 		case kFlagBreathMark:	placeBreathMark( ev, newPoint );	break;
 		case kFlagPizz :		placePizz (ev, newPoint);			break;
 		case kFlagHarmonic :	placeHarmonic(ev, newPoint);		break;
+
+		case kFlagBow :			placeBow(ev, newPoint);			break;
 	}
 
 	setPosition( newPoint );
@@ -651,6 +673,47 @@ void GRArticulation::placeMarcato( const GREvent * inParent, NVPoint & ioPos )
 	placeMarcatoAbove (inParent, ioPos);
 }
 
+
+// ----------------------------------------------------------------------------
+void GRArticulation::placeBowAbove( const GREvent * inParent, NVPoint & ioPos )
+{
+	GRStaff * staff = inParent->getGRStaff();
+	const float space = staff->getStaffLSPACE();
+	const float topspace = space;
+	const float minSpace = space * 1.5f;
+
+	// check the minimum y position regarding note position and stems
+	double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - minSpace;
+	// ensure the position is outside the staff
+	if (topMax > -topspace) topMax = -topspace;
+	// avoid collisions with other articulations
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
+}
+
+// ----------------------------------------------------------------------------
+void GRArticulation::placeBowBelow( const GREvent * inParent, NVPoint & ioPos )
+{
+	GRStaff * staff = inParent->getGRStaff();
+	float space = staff->getStaffLSPACE();
+	const float minSpace = space * 1.5f;
+	const double bottom = staffBottom(staff) + space;
+
+	// check the minimum y position regarding note position and stems
+	double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + minSpace;
+	// ensure the position is outside the staff
+	if (bottomMin <= bottom) bottomMin = bottom;
+	ioPos.y = (float)resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagFermataDown | kFlagMarcato | kFlagMarcatoDown);
+}
+
+// ----------------------------------------------------------------------------
+// outside the staff prefered
+void GRArticulation::placeBow( const GREvent * inParent, NVPoint & ioPos )
+{
+	const ARBow* bow = dynamic_cast<const ARBow*>(getAbstractRepresentation());
+	if (bow && (bow->getBowPosition() == ARBow::ABOVE)) placeBowAbove (inParent, ioPos);
+	else if (bow && (bow->getBowPosition() == ARBow::BELOW)) placeBowBelow (inParent, ioPos);
+}
+
 // ----------------------------------------------------------------------------
 void GRArticulation::placeMarcatoAbove( const GREvent * inParent, NVPoint & ioPos )
 {
@@ -818,6 +881,11 @@ const NVPoint & GRArticulation::getReferencePosition() const
 		case kLongFermataDownSymbol :	return sRefposLongFermataDown;  break;
 		case kBreathMarkSymbol:			return sRefposBreathMark;		break;
 		case kHarmonicSymbol:			return sRefposHarmonic;			break;
+
+		case kBowUpASymbol:				return sRefposMarcatoUp;		break;
+		case kBowUpBSymbol:				return sRefposMarcatoDown;		break;
+		case kBowDownASymbol:			return sRefposMarcatoUp;		break;
+		case kBowDownBSymbol:			return sRefposMarcatoDown;		break;
 		default:						return GObject::sRefposNone;
 	}
 }

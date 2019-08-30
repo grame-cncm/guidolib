@@ -26,6 +26,7 @@
 #include "ARBarFormat.h"
 #include "ARBase.h"
 #include "ARBeam.h"
+#include "ARBow.h"
 #include "ARBreathMark.h"
 #include "ARChordComma.h"
 #include "ARChordTag.h"
@@ -950,12 +951,12 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	else if (tinf == typeid(ARFermata))
 	{
 		// This is a singular Fermata...  it should appear inbetween the current events...
-		// Create a fermata that is spaced correctly...		
+		// Create a fermata that is spaced correctly...
 		GRArticulation * grarti = new GRArticulation(mytag, LSPACE);
 		grarti->setNeedsSpring(1);
 		mCurGrStaff->addNotationElement(grarti);
 		fMusic->addVoiceElement(arVoice,grarti);
-		grne = grarti;		
+		grne = grarti;
 	}
 	// Space-Tag
 	else if (tinf == typeid(ARSpace))
@@ -1460,6 +1461,13 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 	else if (tinf == typeid(ARMarcato))
 	{
 		GRRange * range = new GRRange(mCurGrStaff, static_cast<const ARMarcato *>(apt));
+		addGRTag(range);
+		mCurGrStaff->AddTag(range);
+		fMusic->addVoiceElement(arVoice,range);
+	}
+	else if (tinf == typeid(ARBow))
+	{
+		GRRange * range = new GRRange(mCurGrStaff, static_cast<const ARBow *>(apt));
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
 		fMusic->addVoiceElement(arVoice,range);

@@ -29,6 +29,7 @@ typedef struct TagParametersMaps {
 	const TagParameterMap sARBarFormatMap;
 	const TagParameterMap sARBeamMap;
 	const TagParameterMap sARBembelMap;
+	const TagParameterMap sARBowMap;
 	const TagParameterMap sARBowingMap;
 	const TagParameterMap sARClefMap;
 	const TagParameterMap sARClusterMap;
@@ -89,6 +90,7 @@ typedef struct TagParametersMaps {
 			sARBarFormatMap (kARBarFormatParams),
 			sARBeamMap (kARBeamParams),
 			sARBembelMap (kARBembelParams),
+			sARBowMap (kARBowParams),
 			sARBowingMap (kARBowingParams),
 			sARClefMap (kARClefParams),
 			sARClusterMap (kARClusterParams),

@@ -42,6 +42,7 @@ const char* kTagBeamsAuto	= "beamsAuto";
 const char* kTagBeamsFull	= "beamsFull";
 const char* kTagBeamsOff	= "beamsOff";
 const char* kTagBembel		= "bembel";
+const char* kTagBow			= "bow";
 const char* kTagBreathMark	= "breathMark";
 const char* kTagClef		= "clef";
 const char* kTagCluster		= "cluster";
