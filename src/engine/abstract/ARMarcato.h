@@ -15,8 +15,7 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARArticulation.h"
 
 /*@mkdoc
 
@@ -41,26 +40,14 @@ See the [Articulations](@EXAMPLES/articulations/) example.
 
 /** \brief The marcato articulation tag
 */
-class ARMarcato : public ARMTParameter, public ARPositionTag
+class ARMarcato : public ARArticulation
 {		
 	public:			
-		enum     TPosition { ABOVE, BELOW, NOTSET };
-
-				 ARMarcato();
+				 ARMarcato() {}
 		virtual ~ARMarcato() {}
 
-		virtual void setTagParameters (const TagParameterMap& params);
-
-		virtual const char*	getParamsStr() const	{ return kARMarcatoParams; };
 		virtual const char*	getTagName() const		{ return "ARMarcato"; };
 		virtual std::string getGMNName() const		{ return "\\marcato"; };
-		virtual void browse(TimeUnwrap& mapper) const;
-	
-		TPosition getMPosition() const				{ return fPosition;};
-
-	protected:
-
-		TPosition fPosition;
 };
 
 #endif
