@@ -106,7 +106,6 @@
 #include "ARAccent.h"
 #include "ARArticulation.h"
 #include "ARBow.h"
-#include "ARBreathMark.h"
 #include "ARFermata.h"
 #include "ARHarmonic.h"
 #include "ARMarcato.h"
@@ -141,7 +140,6 @@ NVPoint GRArticulation::sRefposShortFermataDown;
 NVPoint GRArticulation::sRefposLongFermataUp;
 NVPoint GRArticulation::sRefposLongFermataDown;
 NVPoint GRArticulation::sRefposHarmonic;
-NVPoint GRArticulation::sRefposBreathMark;
 
 map<int,int> GRArticulation::sOrdering;
 
@@ -159,9 +157,9 @@ GRArticulation::GRArticulation(const ARMusicalTag * inTag, float curLSPACE, bool
 	else if (tinfo == typeid(ARAccent))			setupAccent();
 	else if (tinfo == typeid(ARMarcato))
     {
-        if ( ((ARMarcato *) inTag)->getMPosition() == ARMarcato::BELOW )
+        if ( ((ARMarcato *) inTag)->getArticulationPosition() == ARArticulation::kBelow )
 			setupMarcatoBelow();
-		else if ( ((ARMarcato *) inTag)->getMPosition() == ARMarcato::ABOVE )
+		else if ( ((ARMarcato *) inTag)->getArticulationPosition() == ARArticulation::kAbove )
 			setupMarcatoAbove();
         else
             setupMarcato();
@@ -186,7 +184,6 @@ GRArticulation::GRArticulation(const ARMusicalTag * inTag, float curLSPACE, bool
 			else setupLongFermataUp();
 		}
 	}
-	else if (tinfo == typeid(ARBreathMark))	 	setupBreathMark();
 	else if (tinfo == typeid(ARBow))	 		setupBow(static_cast<const ARBow*>(inTag));
 	else if (tinfo == typeid(ARHarmonic))		setupHarmonic();
 	else if (tinfo == typeid(ARPizzicato))			
@@ -237,13 +234,12 @@ void GRArticulation::initOrder()
 	sOrdering[kFlagFermataUp]	= i;
 	sOrdering[kFlagFermataDown]	= i++;
 	sOrdering[kFlagBow]			= i++;
-//  kFlagBreathMark ???
 }
 
 /*----------------Setup fonctions-------------------------------------------------*/
 void GRArticulation::setupBow( const ARBow* bow)
 {
-	if (bow->getBowPosition() == ARBow::BELOW)
+	if (bow->getArticulationPosition() == ARArticulation::kBelow)
 		setArticulationSymbol( bow->up() ? kBowUpBSymbol : kBowDownBSymbol );
 	else
 		setArticulationSymbol( bow->up() ? kBowUpASymbol : kBowDownASymbol );
@@ -407,15 +403,6 @@ void GRArticulation::setupHarmonic()
 	mArticulationFlag = kFlagHarmonic;
 }
 
-void GRArticulation::setupBreathMark()
-{
-	setArticulationSymbol( kBreathMarkSymbol );
-	const float height = LSPACE * 1.33f;
-	sRefposBreathMark = NVPoint(-mLeftSpace, -height * float(0.75));	
-	mBoundingBox.Set( -mLeftSpace, -height, mRightSpace, 0 );
-	mArticulationFlag = kFlagBreathMark;
-}
-
 void GRArticulation::setArticulationSymbol( unsigned int inSymbolID )
 {
 	mSymbol = inSymbolID;
@@ -481,7 +468,6 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 		case kFlagTenuto:		placeTenuto( ev, newPoint );		break;
 		case kFlagFermataUp:	placeFermataAbove( ev, newPoint );	break;
 		case kFlagFermataDown:	placeFermataBelow(ev, newPoint );	break;
-		case kFlagBreathMark:	placeBreathMark( ev, newPoint );	break;
 		case kFlagPizz :		placePizz (ev, newPoint);			break;
 		case kFlagHarmonic :	placeHarmonic(ev, newPoint);		break;
 
@@ -489,12 +475,8 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 	}
 
 	setPosition( newPoint );
-	// - TEST, Update bounding box, but only if we're not a breath-mark
-	if( mArticulationFlag != kFlagBreathMark )
-	{
-		ev->addToBoundingBox( this );
-		ev->updateBoundingBox();
-	}
+	ev->addToBoundingBox( this );
+	ev->updateBoundingBox();
 }
 
 // ----------------------------------------------------------------------------
@@ -710,8 +692,8 @@ void GRArticulation::placeBowBelow( const GREvent * inParent, NVPoint & ioPos )
 void GRArticulation::placeBow( const GREvent * inParent, NVPoint & ioPos )
 {
 	const ARBow* bow = dynamic_cast<const ARBow*>(getAbstractRepresentation());
-	if (bow && (bow->getBowPosition() == ARBow::ABOVE)) placeBowAbove (inParent, ioPos);
-	else if (bow && (bow->getBowPosition() == ARBow::BELOW)) placeBowBelow (inParent, ioPos);
+	if (bow && (bow->getArticulationPosition() == ARArticulation::kAbove)) placeBowAbove (inParent, ioPos);
+	else if (bow && (bow->getArticulationPosition() == ARArticulation::kBelow)) placeBowBelow (inParent, ioPos);
 }
 
 // ----------------------------------------------------------------------------
@@ -825,19 +807,6 @@ void GRArticulation::placeFermataBelow( const GREvent * inParent, NVPoint & ioPo
 }
 
 // ----------------------------------------------------------------------------
-// - Obsolete, breath-mark is no longer attached to any note.
-void GRArticulation::placeBreathMark( const GREvent * inParent, NVPoint & ioPos )
-{
-	const GRStaff * staff = inParent->getGRStaff();
-	const float currLSpace = staff->getStaffLSPACE();
-	const float halfSpace = float(0.5) * currLSpace;
-
-	// TODO: place just before next element.
-	ioPos.y = - halfSpace;
-	ioPos.x += float(1.5) * LSPACE;
-}
-
-// ----------------------------------------------------------------------------
 // gives the ARArticulation setting
 int GRArticulation::getARPlacement() const {
 	const ARArticulation* art = dynamic_cast<const ARArticulation*>(getAbstractRepresentation());
@@ -879,7 +848,6 @@ const NVPoint & GRArticulation::getReferencePosition() const
 		case kShortFermataDownSymbol:	return sRefposShortFermataDown; break;
 		case kLongFermataUpSymbol:		return sRefposLongFermataUp;	break;
 		case kLongFermataDownSymbol :	return sRefposLongFermataDown;  break;
-		case kBreathMarkSymbol:			return sRefposBreathMark;		break;
 		case kHarmonicSymbol:			return sRefposHarmonic;			break;
 
 		case kBowUpASymbol:				return sRefposMarcatoUp;		break;

@@ -83,7 +83,6 @@ class GRArticulation : public GRTagARNotationElement
 		void	setupShortFermataDown();
 		void	setupLongFermataUp();
 		void	setupLongFermataDown();
-		void	setupBreathMark();
 		void	setupHarmonic();
 		void	setupBow(const ARBow*);
 		void	setArticulationSymbol( unsigned int inSymbolID );
@@ -104,7 +103,6 @@ class GRArticulation : public GRTagARNotationElement
 		void	placeFermataAbove( const GREvent * inParent, NVPoint & ioPos );
 		void	placeFermataBelow( const GREvent * inParent, NVPoint & ioPos );
 		void	placeHarmonic	 ( const GREvent * inParent, NVPoint & ioPos);
-		void	placeBreathMark	 ( const GREvent * inParent, NVPoint & ioPos );
 		void 	placeBow		 ( const GREvent * inParent, NVPoint & ioPos );
 		void 	placeBowBelow	 ( const GREvent * inParent, NVPoint & ioPos );
 		void 	placeBowAbove	 ( const GREvent * inParent, NVPoint & ioPos );
@@ -134,7 +132,6 @@ class GRArticulation : public GRTagARNotationElement
 		static NVPoint sRefposShortFermataDown;
 		static NVPoint sRefposLongFermataUp;
 		static NVPoint sRefposLongFermataDown;
-		static NVPoint sRefposBreathMark;
 		static NVPoint sRefposHarmonic;
 
 		static std::map<int,int> sOrdering;

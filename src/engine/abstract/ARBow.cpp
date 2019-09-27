@@ -26,31 +26,19 @@ using namespace std;
 ARBow::ARBow()
 {
 	setupTagParameters (gMaps->sARBowMap);
-	rangesetting = ONLY; //RANGEDC;
-    fPosition = NOTSET;
+	rangesetting = RANGEDC;
 }
 
 //--------------------------------------------------------------------------
 void ARBow::setTagParameters (const TagParameterMap& params)
 {
+	ARArticulation::setTagParameters (params );
 	const TagParameterString* p = getParameter<TagParameterString>(kTypeStr);
 	if (p) {
 		string type = p->getValue();
 		if (type == kUpStr) 		fUp = true;
 		else if (type == kDownStr) 	fUp = false;
 	}
-	p = getParameter<TagParameterString>(kPositionStr);
-	if (p) {
-		string pos = p->getValue();
-		if (pos == kBelowStr) 		fPosition = BELOW;
-		else if (pos == kAboveStr) 	fPosition = ABOVE;
-	}
-}
-
-// --------------------------------------------------------------------------
-void ARBow::browse(TimeUnwrap& mapper) const
-{
-	mapper.AtPos (this, TimeUnwrap::kMarcato);
 }
 
 

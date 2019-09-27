@@ -15,8 +15,7 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARArticulation.h"
 
 /*@mkdoc
 
@@ -38,13 +37,11 @@
 
 */
 
-/** \brief The marcato articulation tag
+/** \brief String specific: bowing
 */
-class ARBow : public ARMTParameter, public ARPositionTag
+class ARBow : public ARArticulation
 {		
 	public:			
-		enum     TPosition { ABOVE, BELOW, NOTSET };
-
 				 ARBow();
 		virtual ~ARBow() {}
 
@@ -53,12 +50,9 @@ class ARBow : public ARMTParameter, public ARPositionTag
 		virtual const char*	getParamsStr() const	{ return kARBowParams; };
 		virtual const char*	getTagName() const		{ return "ARBow"; };
 		virtual std::string getGMNName() const		{ return "\\bow"; };
-		virtual void browse(TimeUnwrap& mapper) const;
 	
-		TPosition getBowPosition() const			{ return fPosition;};
 		bool	  up() const						{ return fUp; }
 
 	protected:
-		TPosition 	fPosition;
 		bool		fUp = true;
 };
