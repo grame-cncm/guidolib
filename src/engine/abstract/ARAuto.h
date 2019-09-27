@@ -53,7 +53,7 @@ class ARMusicalVoiceState;
 @param:autoIntensPos:boolean:automatic collision avoidance for \intens:off:true
 @param:intensAutoPos:boolean:variant for autoIntensPos:off:true
 
-@param:autoHideTiedAccidentals:boolean:hide all acidentals on tied notes:off:true
+@param:autoHideTiedAccidentals:boolean:hide all acidentals on tied notes:on:true
 
 @param:harmonyPos:boolean:above or below (see [\harmony](../Text/#harmony)):*none*:true
 @param:fingeringPos:boolean:above or below (see [\fingering](../Text/#fingering)):*none*:true
