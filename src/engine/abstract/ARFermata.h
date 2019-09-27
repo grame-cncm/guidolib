@@ -46,7 +46,7 @@ See the [Articulations](@EXAMPLES/articulations/) example.
 class ARFermata : public ARArticulation
 {
 	public:
-		enum			 tTypeFermata {SHORT, REGULAR, LONG};
+		enum tTypeFermata {SHORT, REGULAR, LONG};
 
 						  ARFermata();
 		virtual 		 ~ARFermata() {}
@@ -57,8 +57,7 @@ class ARFermata : public ARArticulation
 		virtual const char*	getTagName() const		{ return "ARFermata"; };
 		virtual std::string getGMNName() const		{ return "\\fermata"; };
 
-		virtual void	 browse(TimeUnwrap& mapper) const;
-		tTypeFermata	 getType() const {return fType;};
+		tTypeFermata	 	getType() const 		{return fType;};
 
 	protected:
 		tTypeFermata fType;

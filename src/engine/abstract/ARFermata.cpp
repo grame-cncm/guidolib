@@ -46,9 +46,3 @@ void ARFermata::setTagParameters(const TagParameterMap & params)
 	if (pos == kBelowStr)		fPosition = ARArticulation::kBelow;
 }
 
-// --------------------------------------------------------------------------
-void ARFermata::browse(TimeUnwrap& mapper) const
-{
-	mapper.AtPos (this, TimeUnwrap::kFermata);
-}
-

@@ -16,7 +16,6 @@
 */
 
 #include "ARArticulation.h"
-#include "TimeUnwrap.h"
 
 /*@mkdoc
 
@@ -50,8 +49,6 @@ class ARTenuto : public ARArticulation
 
 		virtual const char*	getTagName() const		{ return "ARTenuto"; };
 		virtual std::string getGMNName() const		{ return "\\tenuto"; };
-
-		virtual void browse(TimeUnwrap& mapper) const { mapper.AtPos (this, TimeUnwrap::kTenuto); }
 };
 
 #endif

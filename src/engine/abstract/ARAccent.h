@@ -16,7 +16,6 @@
 */
 
 #include "ARArticulation.h"
-#include "TimeUnwrap.h"
 
 /*@mkdoc
 
@@ -49,8 +48,6 @@ class ARAccent : public ARArticulation
 
 		virtual const char*	getTagName () const		{ return "ARAccent"; };
 		virtual std::string getGMNName () const		{ return "\\accent"; };
-
-		virtual void	browse(TimeUnwrap& mapper) const { mapper.AtPos (this, TimeUnwrap::kAccent); }
 };
 
 #endif
