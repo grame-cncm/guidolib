@@ -1,0 +1,20 @@
+(*
+	Issue #95
+	Incorrect rendering for multi-voice Clef Change
+*)
+{
+[
+	\clef<"g2"> { e/1, b }
+	\bar
+	\clef<"f4"> _/4
+	\clef<"g2">  { e/2, g, c2 } { e1/4, g, c2 } 
+]
+ , 
+[
+	\staff<1> 
+	\clef<"g2"> 
+	empty/1 \bar
+	\clef<"f4"> 
+	{ e-2, e-1 } 
+]
+}

@@ -1,0 +1,31 @@
+
+[ 
+	% kBowDownASymbol kBowDownBSymbol
+	\special<"\245", dy=4> empty/16 \special<"\246", dy=4> empty/16 
+	% kBowUpASymbol kBowUpBSymbol
+	\special<"\247", dy=4> empty/16 \special<"\248", dy=4> empty/16 
+	% kStaccmoDownSymbol kStaccmoUpSymbol
+	\special<"\224", dy=2.8> empty/16 \special<"\228", dy=4> empty/16 
+	|
+	% kSnapPizzSymbol kLeftHPizzSymbol
+	\special<"\225", dy=3.2> empty/16 \special<"\43", dy=2.8> empty/16 
+	% kBuzzPizzSymbol kFingernailPizzSymbol
+	\special<"\226", dy=3.3> empty/16 \special<"\227", dy=3.95> empty/16 
+	|
+	% kTenutoSymbol kStaccatoSymbol
+	\special<"\45", dy=3> empty/16 \special<"\46", dy=3.5> empty/16 
+	|
+	% kMarcatoUpSymbol kMarcatoDownSymbol
+	\special<"\94", dy=4> empty/16 \special<"\118", dy=4> empty/16 
+	|
+	% kFermataUpSymbol kFermataDownSymbol
+	\special<"\85", dy=3.9> empty/16 \special<"\117", dy=1.3> empty/16 
+	% kLongFermataUpSymbol kLongFermataDownSymbol
+	\special<"\184", dy=4> empty/16 \special<"\185", dy=4> empty/16 
+	% kShortFermataUpSymbol kShortFermataDownSymbol
+	\special<"\168", dy=4> empty/16 \special<"\179", dy=4> empty/16 
+	|
+	% kAccentSymbol kHarmonicSymbol
+	\special<"\62", dy=4> empty/16 \special<"\111", dy=3.5> empty/16 
+
+]

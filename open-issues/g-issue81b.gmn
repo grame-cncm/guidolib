@@ -1,0 +1,30 @@
+(*
+	Issue #81
+	Non-Cautionary Accidental not rendered in presence of 2nd Staff
+*)
+{
+[ 
+	\barFormat<style= "system", range="1"> 
+   \clef<"g2"> \key<2> \meter<"C">  
+	\slurBegin:1<curve="up"> \beamBegin:1 \accent<position="above">( b2/16)
+ 	a/16 \slurEnd:1 \slurBegin:1<curve="up"> a/16 \stemsDown f#/16 \slurEnd:1 \beamEnd:1 
+	\slurBegin:1<curve="up"> \beamBegin:1 a/8 g/8 \slurEnd:1 \beamEnd:1 
+	\slurBegin:1<curve="up"> \beamBegin:1 a/16 g/16 \slurEnd:1 
+	\slurBegin:1<curve="up"> g/16 e/16 \slurEnd:1 \beamEnd:1 
+	\slurBegin:1<curve="up"> \beamBegin:1 g/8 f#/8 \slurEnd:1 \beamEnd:1 \bar 
+]
+, 
+[ 
+	\accol<id=0, range="2-3"> \barFormat<style= "system", range="2-3"> 
+   \clef<"g2"> \key<2> \meter<"C"> _/8 
+	\beamBegin:1 {b0/8, f#1/8, a/8  } _/8 {b0/8, e1/8, g/8  } \beamEnd:1 _/8 
+	\beamBegin:1 {a0/8, e1/8, g/8  } _/8 {a0/8, d1/8, f#/8  } \beamEnd:1 \bar 
+] , 
+[ 
+   \clef<"f4"> \key<2> \meter<"C"> 
+	{d#-1/4, d#0/4  } 
+	{e-1/4, e0/4  } 
+	{c#-1/4, c#0/4  } 
+	{d-1/4, d0/4  } \bar 
+]  
+}

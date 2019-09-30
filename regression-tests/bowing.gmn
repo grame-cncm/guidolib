@@ -1,0 +1,13 @@
+{
+[
+	\clef<"g"> \meter<"4/4">
+	\bow<"up">(g) 	\bow<"down">(a) \bow<"up">(e) 
+	\bow<"down">(f e) \bow<"up">(a) \bow<"down">(e) \bow<"up">(f)
+	\bow<"up", position="below">(a0 c1 \stemsUp g) \stemsUp d 
+	\bow<"up", position="below">(e b f) f 
+	\bow<"down", position="below">(f b f) f 
+	\bow<"down", position="below">(\accent(f) \stacc(g) \marcato(f)) f 
+	\bow<"down">(\accent(f) \stacc(g) \marcato(f)) f 
+	\bow<"up", position="below">(\accent(f) \stacc(g) \marcato(f)) f  f 
+]
+}
