@@ -53,12 +53,13 @@ class ARStaccato : public ARArticulation
 
 		virtual void setTagParameters (const TagParameterMap& params);
 
-		virtual void browse(TimeUnwrap& mapper) const;
+//		virtual void browse(TimeUnwrap& mapper) const;
 
 		virtual const char*	getParamsStr() const	{ return kARStaccatoParams; };
 		virtual const char*	getTagName() const		{ return "ARStaccato"; };
 		virtual std::string getGMNName() const		{ return "\\staccato"; };
-	
+		virtual unsigned int getSymbol() const;
+
 		tTypeStacc getType() const		{ return fType; };
 
 	private:

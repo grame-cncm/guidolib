@@ -48,6 +48,8 @@ class ARAccent : public ARArticulation
 
 		virtual const char*	getTagName () const		{ return "ARAccent"; };
 		virtual std::string getGMNName () const		{ return "\\accent"; };
+
+		virtual unsigned int getSymbol() const		{ return kAccentSymbol; }
 };
 
 #endif

@@ -53,7 +53,8 @@ class ARPizzicato : public ARArticulation
 		virtual const char*	getParamsStr() const	{ return kARPizzicatoParams; };
 		virtual const char*	getTagName() const		{ return "ARPizzicato"; };
 		virtual std::string getGMNName() const		{ return "\\pizzicato"; };
-	
+		virtual unsigned int getSymbol() const;
+
 		tTypePizz	 getType() const				{ return fType;}
 	
 	private:

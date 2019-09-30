@@ -18,6 +18,7 @@
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
+#include "MusicalSymbols.h"
 
 /** \brief not yet documented
 */
@@ -36,6 +37,8 @@ class ARArticulation : public ARMTParameter,  public ARPositionTag
 		virtual const char*	getParamsStr() const	{ return kARArticulationParams; };
 		virtual const char*	getTagName () const		{ return "ARArticulation"; };
 		virtual std::string getGMNName () const		{ return "\\articulation"; };
+	
+		virtual unsigned int getSymbol() const = 0;
 
 	protected:
 		int fPosition;

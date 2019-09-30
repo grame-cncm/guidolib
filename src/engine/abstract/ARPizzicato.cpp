@@ -24,6 +24,7 @@ extern const char* kBelowStr;
 
 
 
+//--------------------------------------------------------------------------
 ARPizzicato::ARPizzicato()
 {
 	setupTagParameters (gMaps->sARPizzicatoMap);
@@ -31,6 +32,19 @@ ARPizzicato::ARPizzicato()
 	rangesetting = ONLY;
 	fType = LEFTHAND;
 	fPosition = kAbove;
+}
+
+//--------------------------------------------------------------------------
+unsigned int ARPizzicato::getSymbol() const
+{
+	switch (fType) {
+		case SNAP:			return kSnapPizzSymbol;
+		case BUZZ:			return kBuzzPizzSymbol;
+		case FINGERNAIL:	return kFingernailPizzSymbol;
+		case LEFTHAND:
+		default:			return kLeftHPizzSymbol;
+	}
+	return 0;
 }
 
 //--------------------------------------------------------------------------

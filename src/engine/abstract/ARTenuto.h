@@ -49,6 +49,7 @@ class ARTenuto : public ARArticulation
 
 		virtual const char*	getTagName() const		{ return "ARTenuto"; };
 		virtual std::string getGMNName() const		{ return "\\tenuto"; };
+		virtual unsigned int getSymbol() const 		{ return kTenutoSymbol; }
 };
 
 #endif

@@ -49,8 +49,9 @@ class ARBow : public ARArticulation
 
 		virtual const char*	getParamsStr() const	{ return kARBowParams; };
 		virtual const char*	getTagName() const		{ return "ARBow"; };
-		virtual std::string getGMNName() const		{ return "\\bow"; };
-	
+		virtual std::string getGMNName() const		{ return "\\bow"; };	
+		virtual unsigned int getSymbol() const;
+
 		bool	  up() const						{ return fUp; }
 
 	protected:

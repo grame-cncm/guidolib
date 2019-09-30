@@ -33,6 +33,18 @@ ARFermata::ARFermata()
 }
 
 //--------------------------------------------------------------------------------------
+unsigned int ARFermata::getSymbol() const
+{
+	bool below = getArticulationPosition() == kBelow;
+	switch (fType) {
+		case SHORT:		return below ? kShortFermataDownSymbol : kShortFermataUpSymbol;
+		case REGULAR:	return below ? kFermataDownSymbol : kFermataUpSymbol;
+		case LONG:		return below ? kLongFermataDownSymbol : kLongFermataUpSymbol;
+	}
+	return 0;
+}
+
+//--------------------------------------------------------------------------------------
 void ARFermata::setTagParameters(const TagParameterMap & params)
 {
 	ARArticulation::setTagParameters (params);

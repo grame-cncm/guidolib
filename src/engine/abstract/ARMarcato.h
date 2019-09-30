@@ -48,6 +48,8 @@ class ARMarcato : public ARArticulation
 
 		virtual const char*	getTagName() const		{ return "ARMarcato"; };
 		virtual std::string getGMNName() const		{ return "\\marcato"; };
+	
+		virtual unsigned int getSymbol() const		{ return fPosition == kBelow ? kMarcatoDownSymbol : kMarcatoUpSymbol; }
 };
 
 #endif

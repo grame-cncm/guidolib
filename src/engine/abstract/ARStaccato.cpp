@@ -46,10 +46,18 @@ void ARStaccato::setTagParameters (const TagParameterMap& params)
 }
 
 // --------------------------------------------------------------------------
-void ARStaccato::browse(TimeUnwrap& mapper) const
+unsigned int ARStaccato::getSymbol() const
 {
-	mapper.AtPos (this, TimeUnwrap::kStaccato);
+	if (fType == HEAVY)
+		return fPosition == kAbove ? kStaccmoUpSymbol : kStaccmoDownSymbol;
+	return kStaccatoSymbol;
 }
+
+// --------------------------------------------------------------------------
+//void ARStaccato::browse(TimeUnwrap& mapper) const
+//{
+//	mapper.AtPos (this, TimeUnwrap::kStaccato);
+//}
 
 bool ARStaccato::MatchEndTag(const char *s)
 {

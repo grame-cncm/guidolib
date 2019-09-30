@@ -42,6 +42,7 @@ class ARHarmonic : public ARArticulation
 			
 		virtual const char*	getTagName() const		{ return "ARHarmonic"; };
 		virtual std::string getGMNName() const		{ return "\\harmonic"; };
+		virtual unsigned int getSymbol() const		{ return kHarmonicSymbol; }
 };
 
 #endif

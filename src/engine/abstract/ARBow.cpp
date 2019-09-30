@@ -41,4 +41,11 @@ void ARBow::setTagParameters (const TagParameterMap& params)
 	}
 }
 
-
+//--------------------------------------------------------------------------
+unsigned int ARBow::getSymbol() const
+{
+	if (getArticulationPosition() == kBelow)
+		return fUp ? kBowUpBSymbol : kBowDownBSymbol;
+	else
+		return fUp ? kBowUpASymbol : kBowDownASymbol;
+}
