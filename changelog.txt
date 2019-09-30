@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.8
+- new \bow tag
 - Guido font extension - version 3.8 - bow up / down glyphs
 - fix svg export issue with '&' character
 - partial fix for incorrect slurs (issue #90)

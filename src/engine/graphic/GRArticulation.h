@@ -45,8 +45,6 @@ class GRArticulation : public GRTagARNotationElement
 		virtual ~GRArticulation() {}
 
 		virtual const NVPoint & getReferencePosition() const;
-
-		// ignore positions 
 		virtual void setPosition(const NVPoint & point);
 
 		// this will be done by the event to which
@@ -56,37 +54,12 @@ class GRArticulation : public GRTagARNotationElement
 		virtual void accept (GRVisitor& visitor);
 		virtual void OnDraw( VGDevice & hdc ) const;
 
-		
-		int	 getArticulationType() const	{ return mArticulationFlag; }
-		int	 getArticulationOrder() const	{ return sOrdering[mArticulationFlag]; }
-		int	 getARPlacement() const;		// gives the ARArticulation position
-		void print(std::ostream& os) const;
+		int	 	getArticulationType() const		{ return mArticulationFlag; }
+		void 	print(std::ostream& os) const;
 	
 		static bool  compare (GRArticulation* i, GRArticulation* j) 	{ return (i->getArticulationOrder() < j->getArticulationOrder()); }
 
 	protected:
-
-		void	setupStaccato();
-		void	setupStaccmo();
-		void	setupLeftHPizz();
-		void	setupSnapPizz();
-		void	setupBuzzPizz();
-		void	setupFingernailPizz();
-		void	setupAccent();
-		void	setupMarcato();
-        void	setupMarcatoBelow();
-        void	setupMarcatoAbove();
-		void	setupTenuto();
-		void	setupFermataUp();
-		void	setupFermataDown();
-		void	setupShortFermataUp();
-		void	setupShortFermataDown();
-		void	setupLongFermataUp();
-		void	setupLongFermataDown();
-		void	setupHarmonic();
-		void	setupBow(const ARBow*);
-		void	setArticulationSymbol( unsigned int inSymbolID );
-
 		void	placeStaccato( const GREvent * inParent, NVPoint & ioPos );
 		void	placeStaccmo ( const GREvent * inParent, NVPoint & ioPos);
 		void	placePizz	 ( const GREvent * inParent, NVPoint & ioPos);
@@ -107,42 +80,28 @@ class GRArticulation : public GRTagARNotationElement
 		void 	placeBowBelow	 ( const GREvent * inParent, NVPoint & ioPos );
 		void 	placeBowAbove	 ( const GREvent * inParent, NVPoint & ioPos );
 
-
 		int		getPlacement( const GREvent * inParent ) const;		// gives an ARArticulation placement
 
-		void	setMarcatoDirection( bool upward );
-		void	setStaccmoDirection( bool upward);
-
 		int		mArticulationFlag;
-
-		static NVPoint sRefposStacc;
-		static NVPoint sRefposStaccmoUp;
-		static NVPoint sRefposStaccmoDown;
-		static NVPoint sRefposLeftHPizz;
-		static NVPoint sRefposSnapPizz;
-		static NVPoint sRefposBuzzPizz;
-		static NVPoint sRefposFingernailPizz;
-		static NVPoint sRefposAccent;
-		static NVPoint sRefposMarcatoUp;
-		static NVPoint sRefposMarcatoDown;
-		static NVPoint sRefposTenuto;
-		static NVPoint sRefposFermataUp;
-		static NVPoint sRefposFermataDown;
-		static NVPoint sRefposShortFermataUp;
-		static NVPoint sRefposShortFermataDown;
-		static NVPoint sRefposLongFermataUp;
-		static NVPoint sRefposLongFermataDown;
-		static NVPoint sRefposHarmonic;
 
 		static std::map<int,int> sOrdering;
 
 	private:
+		unsigned int 	getSymbol				( const ARMusicalTag * inTag ) const;
+		int 			getArticulationFlag		( const ARMusicalTag * inTag ) const;
+		NVPoint 		getReferencePosition 	( unsigned int symbol) const;
+		float 			getSymbolHeight			( unsigned int symbol) const;
+		void			setArticulationSymbol	( unsigned int symbol );
+		int	 			getArticulationOrder() const	{ return sOrdering[mArticulationFlag]; }
+		int	 			getARPlacement() const;			// gives the ARArticulation position
+
 		double	resolveCollisionAbove ( const GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
 		double	resolveCollisionBelow ( const GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
 		double	staffBottom (const GRStaff * staff) const;
 		bool	onStaffLine (const GRStaff * staff, double pos) const;
-
 		void	initOrder ();
+	
+		NVPoint fRefPos;
 };
 
 #endif
