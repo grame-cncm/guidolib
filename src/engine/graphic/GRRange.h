@@ -34,7 +34,6 @@ class GRRange : public GRARNotationElement,	public GRPositionTag
 
 		virtual void	accept (GRVisitor& visitor);
 		virtual void 	OnDraw( VGDevice & hdc ) const;
-		// const ARTFermata * getARTFermata() const;
 		virtual void 	addAssociation(GRNotationElement * el);
 		virtual void 	removeAssociation(GRNotationElement * el);
 

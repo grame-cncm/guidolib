@@ -276,8 +276,7 @@ void GREvent::setHPosition( float nx )
 	Called by the class GRRange 
 	GREvent maintains an articulation list that holds all articulations.
 */
-void 
-GREvent::addArticulation( const ARMusicalTag * inTag )
+void GREvent::addArticulation( const ARMusicalTag * inTag )
 {
 	const float space = mCurLSPACE; // (JB) was LSPACE
 	GRArticulation * newArticulation = new GRArticulation( inTag, space );

@@ -1398,14 +1398,6 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
 		mCurGrStaff->AddTag(range);
 		fMusic->addVoiceElement(arVoice,range);
 	}
-	/*else if (tinf == typeid(ARShortFermata))
-	{
-		// this is a short fermata position tag, when it is active every event gets a short fermata tag.
-		GRRange * range = new GRRange(mCurGrStaff, static_cast<ARShortFermata *>(apt));
-		addGRTag(range);
-		mCurGrStaff->AddTag(range);
-		fMusic->addVoiceElement(arVoice,range);
-	}*/
 	else if (tinf == typeid(ARTremolo))
 	{
 		GRTremolo * tmp = new GRTremolo(mCurGrStaff, static_cast<const ARTremolo *>(apt));

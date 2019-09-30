@@ -18,7 +18,9 @@
 #include "GRARNotationElement.h"
 #include "GREvent.h"
 
+using namespace std;
 
+// -----------------------------------------------------------------------------
 GRRange::GRRange(GRStaff * pstaff, const ARMusicalTag * mtag)
 		: GRARNotationElement(mtag),
 		GRPositionTag(dynamic_cast<const ARPositionTag *>(mtag)->getEndPosition(), mtag) //, tinfo(typeid(*mtag))
@@ -27,9 +29,7 @@ GRRange::GRRange(GRStaff * pstaff, const ARMusicalTag * mtag)
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	sse->grsystem = pstaff->getGRSystem(); 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-	
 	sse->p = (void *) getNewGRSaveStruct();
-
 	mStartEndList.AddTail(sse);
 }
 
@@ -45,12 +45,8 @@ void GRRange::accept (GRVisitor& visitor)
 void GRRange::addAssociation(GRNotationElement * el)
 {
 	GREvent * grev = GREvent::cast(el);
-	// now add a Real Element...
-	// depending on the type...
 	if (grev)
-	{
 		grev->addArticulation( /*dynamic*/ static_cast<const ARMusicalTag *>(mAbstractRepresentation));
-	}
 }
 
 void GRRange::removeAssociation(GRNotationElement * el)
