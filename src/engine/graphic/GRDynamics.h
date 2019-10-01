@@ -36,6 +36,8 @@ class GRDynamics : public GRPTagARNotationElement
 		virtual void	DrawDynamic		(VGDevice & hdc, bool cresc) const;
 		virtual void	accept			(GRVisitor& visitor);
 
+    	virtual const GRDynamics *	isGRDynamic() const		{ return this; }
+
 	protected:
 		typedef struct TXSegment {
 			float fx1, fx2, fy;

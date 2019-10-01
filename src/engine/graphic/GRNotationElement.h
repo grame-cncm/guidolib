@@ -146,6 +146,7 @@ public:
     virtual const GRTempo *		isGRTempo() const		{ return 0; }
     virtual const GRTrill *		isGRTrill() const		{ return 0; }
     virtual const GRBar *		isGRBar() const			{ return 0; }
+    virtual const GRDynamics *	isGRDynamic() const		{ return 0; }
 
 protected:
 	
