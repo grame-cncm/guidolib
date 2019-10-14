@@ -762,7 +762,7 @@ void MainWindow::docTags()
     const char *bundlePath = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
     CFRelease(appUrlRef);
     CFRelease(macPath);
-    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QString(bundlePath) + "/MyContents/Doc/RefCardsTags.pdf"));
+    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QString(bundlePath) + "/Contents/Doc/RefCardsTags.pdf"));
 #else
     docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QApplication::applicationDirPath() + "/doc/RefCardsTags.pdf"));
 #endif
@@ -782,7 +782,7 @@ void MainWindow::docParams()
     const char *bundlePath = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
     CFRelease(appUrlRef);
     CFRelease(macPath);
-    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QString(bundlePath) + "/MyContents/Doc/RefCardsParams.pdf"));
+    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QString(bundlePath) + "/Contents/Doc/RefCardsParams.pdf"));
 #else
     docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QApplication::applicationDirPath() + "/doc/RefCardsParams.pdf"));
 #endif

@@ -30,11 +30,11 @@ macx|ios {
 
 	FONT.files  = $$ROOT/src/guido2.svg
 	FONT.files += $$ROOT/src/guido2.ttf
-	FONT.path  = MyContents/Fonts
+	FONT.path  = Contents/Fonts
 
 	DOC.files  = $$ROOT/doc/refcard/latex/RefCardsParams.pdf
 	DOC.files += $$ROOT/doc/refcard/latex/RefCardsTags.pdf
-	DOC.path  = MyContents/Doc
+	DOC.path  = Contents/Doc
 
 	QMAKE_BUNDLE_DATA += FONT
 	QMAKE_BUNDLE_DATA += DOC
@@ -44,7 +44,7 @@ ios {
 	ios_icon.files = $$files($$PWD/rsc/iosIcons/guidoIcon*.png)
 	QMAKE_BUNDLE_DATA += ios_icon
 	# In new version of ios, we can't use Contents folder for anything other than code
-	RSRC.path =  MyContents/Resources
+	RSRC.path =  Contents/Resources
 }
 
 win32 { RC_FILE = $$RESOURCES_DIR/GuidoEditor.rc }
