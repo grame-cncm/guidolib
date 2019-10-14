@@ -52,6 +52,7 @@ GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
 	else if (intens == "ffff")	mSymbol = kIntensFFFFSymbol;
 	else if (intens == "mf")	mSymbol = kIntensMFSymbol;
 	else if (intens == "mp")	mSymbol = kIntensMPSymbol;
+	else if (intens == "fp")	mSymbol = kIntensFPSymbol;
 	else if (intens == "sf")	mSymbol = kIntensSFSymbol;
 	else if (intens == "pp")	mSymbol = kIntensPPSymbol;
 	else if (intens == "ppp")	mSymbol = kIntensPPPSymbol;

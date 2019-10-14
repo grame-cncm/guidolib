@@ -206,6 +206,7 @@ ConstMusicalSymbolID kBowDownASymbol                = 245;
 ConstMusicalSymbolID kBowDownBSymbol                = 246;
 ConstMusicalSymbolID kBowUpASymbol                	= 247;
 ConstMusicalSymbolID kBowUpBSymbol                	= 248;
+ConstMusicalSymbolID kIntensFPSymbol                = 249;
 
 
 #endif
