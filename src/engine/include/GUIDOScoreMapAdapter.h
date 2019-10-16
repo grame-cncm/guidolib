@@ -20,6 +20,7 @@
  * \addtogroup APICplusplus C++ interface
  * @{
  * \defgroup ScoreMapAdapter Guido Score Map Adapter
+ * @{
  * \brief A C++ interface to the Guido score map API
  *
  * A C++ class to manipulate score map of GuidoEngine.
@@ -116,4 +117,6 @@ class_export GuidoScoreMapAdapter
 		GuidoErrCode getTimeMap(CARHandler gr, TimeMapCollector& f);
 };
 /*! @} */
+/*! @} */
+
 #endif // GUIDOSCOREMAPADAPTER_H

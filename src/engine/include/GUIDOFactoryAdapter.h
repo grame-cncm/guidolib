@@ -13,17 +13,21 @@
 
 */
 
-#include "GUIDOFactory.h"
 #include <string>
+
+#include "GUIDOFactory.h"
 
 /*!
  * \addtogroup APICplusplus
  * @{
- * \defgroup FactoryAdapter Guido Factory
+ * \addtogroup FactoryAdapterCpp Guido Factory Adapter
+ * @{
+ *
+ * \brief A C++ class over the GUIDO factory C API.
+ *
  * The GUIDO Factory API provides a set of functions to create a GUIDO abstract representation from scratch.
- * \brief The GUIDOFactoryAdapter class is a C++ class to manipulate the GUIDO factory.
  */
-class GUIDOFactoryAdapter
+ class_export GUIDOFactoryAdapter
 {
 	public:
 		/*!
@@ -38,7 +42,8 @@ class GUIDOFactoryAdapter
 		virtual ~GUIDOFactoryAdapter();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Creates and opens a new music score.
+		/*!
+			\brief Creates and opens a new music score.
 
 			The function modifies the factory state: the new score becomes
 			the current factory score.
@@ -49,7 +54,8 @@ class GUIDOFactoryAdapter
 		GuidoErrCode openMusic();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Closes the current music score.
+		/*!
+			\brief Closes the current music score.
 
 			The function modifies the factory state if a music score is currently opened:
 			the current factory score is set to null.
@@ -68,7 +74,7 @@ class GUIDOFactoryAdapter
 		ARHandler closeMusic();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Creates and opens a new voice.
+		/*! \brief Creates and opens a new voice.
 
 			The function modifies the factory state:
 			the new voice becomes the current factory voice.
@@ -81,7 +87,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode openVoice();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Closes the current voice.
+		/*! \brief Closes the current voice.
 
 			The function modifies the factory state if a voice is currently opened:
 			the current factory voice is set to null.
@@ -94,7 +100,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode closeVoice();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Creates and open a new chord.
+		/*! \brief Creates and open a new chord.
 
 			The function modifies the factory state:
 			the new chord becomes the current factory chord.
@@ -106,7 +112,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode openChord();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Closes the current chord.
+		/*! \brief Closes the current chord.
 
 			The function modifies the factory state if a chord is currently opened:
 			the current factory chord is set to null.
@@ -117,7 +123,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode closeChord();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Begins a new chord note commata.
+		/*! \brief Begins a new chord note commata.
 
 			Called to tell the factory that a new chord-voice
 			 is beginning. This is important for the ranges that need to
@@ -128,7 +134,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode insertCommata();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Creates and opens a new event (note or rest).
+		/*! \brief Creates and opens a new event (note or rest).
 
 			The function modifies the factory state:
 			the new event becomes the current factory event.
@@ -139,7 +145,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode openEvent(const std::string &inEventName);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Closes the current event.
+		/*! \brief Closes the current event.
 
 			The function modifies the factory state if an event is currently opened:
 			the current factory event is set to null.
@@ -151,7 +157,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode closeEvent();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Adds a sharp to the current event.
+		/*! \brief Adds a sharp to the current event.
 
 			The current event must be a note.
 			\return an error code
@@ -159,7 +165,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode addSharp();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Add a flat to the current event.
+		/*! \brief Add a flat to the current event.
 
 			The current event must be a note.
 			\return an error code.
@@ -167,14 +173,14 @@ class GUIDOFactoryAdapter
 		GuidoErrCode addFlat();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Sets the number of dots the current event.
+		/*! \brief Sets the number of dots the current event.
 			\param dots the number of dots to be carried by the current event.
 			\return an error code.
 		*/
 		GuidoErrCode setEventDots(int dots);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Sets the accidentals of the current event.
+		/*! \brief Sets the accidentals of the current event.
 
 			\param accident: positive values are used for sharp and negative values for flats
 			\return an error code.
@@ -182,7 +188,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode setEventAccidentals(int accident);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Sets the register (octave) of the current event.
+		/*! \brief Sets the register (octave) of the current event.
 
 			The current  event must be a note.
 			The register becomes the current register ie  next notes will carry this
@@ -195,7 +201,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode setOctave(int octave);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Sets the duration of the current event.
+		/*! \brief Sets the duration of the current event.
 
 			Durations are expressed as fractional value of a whole note: for example,
 			a quarter note duration is 1/4.
@@ -208,7 +214,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode setDuration(int numerator, int denominator);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Add a tag to the current voice.
+		/*! \brief Add a tag to the current voice.
 
 			\param name: the tag name
 			\param tagID: is the number that the parser generates for advanced GUIDO
@@ -217,7 +223,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode openTag(const std::string &name, long tagID);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Add a tag to the current voice.
+		/*! \brief Add a tag to the current voice.
 
 			\param name: the tag name
 			\param tagID: is the number that the parser generates for advanced GUIDO
@@ -227,7 +233,7 @@ class GUIDOFactoryAdapter
 
 
 		// ----------------------------------------------------------------------------
-		/** \brief Indicates the end of a range tag.
+		/*! \brief Indicates the end of a range tag.
 
 			The function is applied to the current tag.
 			It must be called when the end of a tag's range
@@ -237,7 +243,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode endTag();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Closes the current tag.
+		/*! \brief Closes the current tag.
 
 			The function is applied to the current tag.
 			Must be called after parameter and before the range.
@@ -250,7 +256,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode closeTag();
 
 		// ----------------------------------------------------------------------------
-		/** \brief Adds a new string parameter to the current tag.
+		/*! \brief Adds a new string parameter to the current tag.
 
 			\param val: the string parameter value
 			\return an error code.
@@ -258,7 +264,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode addTagParameterString(const std::string &val);
 
 		// ----------------------------------------------------------------------------
-		/** \brief  Adds a new integer parameter to the current tag.
+		/*! \brief  Adds a new integer parameter to the current tag.
 
 			\param val: the parameter value
 			\return an error code.
@@ -266,7 +272,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode addTagParameterInt(int val);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Adds a new floating-point parameter to the current tag.
+		/*! \brief Adds a new floating-point parameter to the current tag.
 
 			\param val: the parameter value
 			\return an error code.
@@ -274,7 +280,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode addTagParameterFloat(double val);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Defines the name (when applicable) of the last added tag-parameter
+		/*! \brief Defines the name (when applicable) of the last added tag-parameter
 
 			\param name: the tag parameter name
 			\return an error code.
@@ -282,7 +288,7 @@ class GUIDOFactoryAdapter
 		GuidoErrCode setParameterName(const std::string &name);
 
 		// ----------------------------------------------------------------------------
-		/** \brief Defines the unit of the last added tag-parameter
+		/*! \brief Defines the unit of the last added tag-parameter
 
 			\param unit: a string defining the unit. The following units are supported:
 		- \p m - meter
@@ -304,4 +310,6 @@ class GUIDOFactoryAdapter
 		ARFactoryHandler factory;
 };
 /*! @} */
+/*! @} */
+
 #endif // GUIDOFACTORYADAPTER_H

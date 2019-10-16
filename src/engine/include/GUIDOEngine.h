@@ -38,7 +38,12 @@ typedef struct NodeGR *  GRHandler;
 typedef const struct NodeAR *  CARHandler;
 typedef const struct NodeGR *  CGRHandler;
 
-/** \brief The GuidoInitDesc data structure contains all information
+/*!
+ * \addtogroup CAPI C Interface
+ * @{
+ */
+
+/** \brief A data structure containing all information
 	required by GuidoInit()
 */
 struct GuidoInitDesc
@@ -69,10 +74,10 @@ struct GPaintStruct
 };
 
 
-/*! @} */
-
 /**
-    A Guido date is expressed as a fractional value where 1/1 represents
+    \brief Representation of a date as a rational value.
+    
+    A Guido date is expressed as a rational value where 1/1 represents
     the whole note.
 */
 typedef struct
@@ -84,7 +89,11 @@ typedef struct
 
 } GuidoDate;
 
+
+#define kMaxGuidoMeterCounts	15
 /**
+ \brief A meter representation.
+
     A Guido meter is expressed as a list of beats counts and a beat unit.
 	It similar to the way a time signature is expressed: the numerator(s) 
 	are stored in the beats count and the denominator in the unit. 
@@ -95,7 +104,6 @@ typedef struct
 	\note for convenience, the \c count field has a fixed and limited size
 	that should however cope with any realistic notation case.
 */
-#define kMaxGuidoMeterCounts	15
 typedef struct
 {
 	//! the beats count
@@ -105,13 +113,19 @@ typedef struct
 } GuidoMeter;
 typedef GuidoMeter* GuidoMeters;
 
+
 /**
+\brief tempo specification types.
+*/
+typedef enum { kTextualTempo, kUnitValueTempo, kUnitUnitTempo } TempoType;
+/**
+    \brief Representation of tempo information at a given date.
+
     Tempo type is between:
  		- kTextualTempo: the tempo tag contains only a textual information
  		- kUnitValueTempo: the tempo tag contains unit=value form
  		- kUnitUnitTempo: the tempo tag contains unit=unit form
 */
-typedef enum { kTextualTempo, kUnitValueTempo, kUnitUnitTempo } TempoType;
 typedef struct
 {
 	//! the voice number
@@ -236,7 +250,7 @@ enum { kAutoDistrib = 1, kAlwaysDistrib = 2, kNeverDistrib = 3 };
 enum GRElement { kGRSlur=1, kGRDynamics, kGRArticulations, kGRText, kGRLyrics };
 
 /**
-    Settings for the graphic score layout.
+    \brief Engine settings for the graphic score layout.
 */
 typedef struct GuidoLayoutSettings
 {
@@ -294,7 +308,7 @@ typedef struct GuidoLayoutSettings
 } GuidoLayoutSettings;
 
 /**
-    The page format parameters
+    \brief The page format parameters
 
 	Page format should be given in internal units. To convert from cm or inches
 	you should use \c GuidoCM2Unit or \c GuidoInches2Unit
@@ -311,7 +325,7 @@ typedef struct
 
 
 /**
-	The Graphic representation parameters.
+	\brief A structure embedding a layout settings and a page format
 
 	This data structure contains a GuidoLayoutSettings and a GuidoPageFormat.
   */
@@ -348,14 +362,14 @@ representations.
 	  	WARNING: the caller must ensure desc maintains a constant reference on a
         valid VGDevice, because Guido keeps it internally (to calculate fonts, etc.)
     */
-    GUIDOAPI(GuidoErrCode)	GuidoInit(GuidoInitDesc * desc);
+    GUIDOAPI GuidoErrCode	GuidoInit(GuidoInitDesc * desc);
 
 	/*!
         Initialises the Guido Engine with an independent SVG device, avoiding
         the need to pass a description. Useful for contexts (like javascript)
         where structures cannot be easily manipulated.
     */
-    GUIDOAPI(GuidoErrCode)      GuidoInitWithIndependentSVG();
+    GUIDOAPI GuidoErrCode      GuidoInitWithIndependentSVG();
 	/*!
         Guido Engine shutdown
 		
@@ -363,7 +377,7 @@ representations.
 		Anyway, the fonts are release when the client application exit but
 		the function provides control over the time of the release.
     */
-    GUIDOAPI(void)	GuidoShutdown();
+    GUIDOAPI void	GuidoShutdown();
 
 	/*!
         Parses a Guido Music Notation (.gmn) file and builds the corresponding
@@ -375,9 +389,9 @@ representations.
     */
 
 #ifdef WIN32
-    __declspec(deprecated("Deprecated function : use GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *parser, const char * file) instead."))
+    __declspec(deprecated("Deprecated function : use ARHandler GuidoFile2AR (GuidoParser *parser, const char * file) instead."))
 #endif
-    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar) GUIDOAPI_deprecated;
+    GUIDOAPI GuidoErrCode	GuidoParseFile(const char * filename, ARHandler* ar) GUIDOAPI_deprecated;
 
 	/*!
         Parses a buffer and builds the corresponding abstract representation.
@@ -388,15 +402,13 @@ representations.
 		\return a Guido error code.
     */
 #ifdef WIN32
-    __declspec(deprecated("Deprecated function : use GUIDOAPI(ARHandler) GuidoString2AR (GuidoParser *parser, const char * str) instead."))
+    __declspec(deprecated("Deprecated function : use ARHandler GuidoString2AR (GuidoParser *parser, const char * str) instead."))
 #endif
-    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar) GUIDOAPI_deprecated;
+    GUIDOAPI GuidoErrCode	GuidoParseString(const char * str, ARHandler* ar) GUIDOAPI_deprecated;
 
 	/*!
         Transforms a Guido abstract representation into a Guido graphic representation.
         The engine applies layout algorithms according to the settings given as argument.
-
-		\note You can safely free the AR after the transformation.
 
 		\param ar the handler to the abstract representation.
 		\param settings a pointer to the settings for the graphic layout. If null, default
@@ -405,7 +417,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeGR.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
+    GUIDOAPI GuidoErrCode	GuidoAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
 
 	/*!
 	 * \brief GuidoAR2GRParameterized. Transforms a Guido abstract representation into a Guido graphic representation.
@@ -415,7 +427,7 @@ representations.
 	 * \param gp a GuidoGrParameters structure. If null default layout settings and page format are used.
 	 * \return a Graphic representation handler or null if an error occurs.
 	 */
-	GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters* gp);
+	GUIDOAPI GRHandler GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters* gp);
 
 	/*!
 		Applies new layout settings to an existing Guido graphic representation.
@@ -424,7 +436,7 @@ representations.
         settings are applied.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings* settings);
+    GUIDOAPI GuidoErrCode	GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings* settings);
 
 	/*!
 		Show or hide notation elements.
@@ -433,7 +445,7 @@ representations.
 		\param status a boolean value to show (true) or hide (false) the target element
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoShowElement( GRHandler gr, GRElement elt, bool status);
+    GUIDOAPI GuidoErrCode	GuidoShowElement( GRHandler gr, GRElement elt, bool status);
 
 	/*!
 		Gives the notes density.
@@ -443,7 +455,7 @@ representations.
 		\param gr the handler to the graphic representation.
 		\return a floating point value that expresses the density as a percentage of the staves space.
     */
-    GUIDOAPI(float)	GuidoGetNotesDensity( GRHandler gr);
+    GUIDOAPI float	GuidoGetNotesDensity( GRHandler gr);
 
 	/*!
 		Applies new layout settings and page format to an existing Guido graphic representation.
@@ -452,19 +464,19 @@ representations.
 		settings are applied.
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrParameters* settings);
+	GUIDOAPI GuidoErrCode	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrParameters* settings);
 
 	/*!
         Releases a Guido abstract representation.
 		\param ar the handler to the abstract representation.
     */
-    GUIDOAPI(void)	GuidoFreeAR (ARHandler ar);
+    GUIDOAPI void	GuidoFreeAR (ARHandler ar);
 
 	/*!
         Releases a Guido graphic representation.
 		\param gr the handler to the graphic representation.
     */
-    GUIDOAPI(void)	GuidoFreeGR (GRHandler gr);
+    GUIDOAPI void	GuidoFreeGR (GRHandler gr);
 
 	/*!
 		Gives a textual description of a Guido error code.
@@ -472,7 +484,7 @@ representations.
 		\param errCode a Guido error code.
 		\return a string describing the error.
 	*/
-	GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode );
+	GUIDOAPI const char* GuidoGetErrorString( GuidoErrCode errCode );
 
 	/*!
         Gives the line of a Guido script where the last parse error has occured.
@@ -480,16 +492,16 @@ representations.
 	*/
 
 #ifdef WIN32
-    __declspec(deprecated("Deprecated function : use GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
+    __declspec(deprecated("Deprecated function : use GUIDOAPI GuidoErrCode GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
 #endif
-    GUIDOAPI(int)   GuidoGetParseErrorLine() GUIDOAPI_deprecated;
+    GUIDOAPI int   GuidoGetParseErrorLine() GUIDOAPI_deprecated;
 
 	/*!
         Gives the default values of the layout settings.
 
 		\param settings on output, a pointer to the settings to be filled with default values.
     */
-    GUIDOAPI(void)	GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings);
+    GUIDOAPI void	GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings);
 /*! @} */
 
 
@@ -507,14 +519,14 @@ as by date. Page numbers start at 1.
 		\param inHandleAR a Guido opaque handle to a AR structure.
 		\return the number of voices or a guido error code.
 	*/
-	GUIDOAPI(int) 	GuidoCountVoices( CARHandler inHandleAR );
+	GUIDOAPI int 	GuidoCountVoices( CARHandler inHandleAR );
 	
 	/** \brief Gives the number of score pages of the graphic representation.
 
 		\param inHandleGR a Guido opaque handle to a GR structure.
 		\return a number of pages or a guido error code.
 	*/
-	GUIDOAPI(int) 	GuidoGetPageCount( CGRHandler inHandleGR );
+	GUIDOAPI int 	GuidoGetPageCount( CGRHandler inHandleGR );
 	
 	/** \brief Gives the number of systems on a given page.
 
@@ -522,7 +534,7 @@ as by date. Page numbers start at 1.
 		\param page a page number (starts at 1).
 		\return the systems count on the given page or a guido error code.
 	*/
-	GUIDOAPI(int) 	GuidoGetSystemCount( CGRHandler inHandleGR, int page );
+	GUIDOAPI int 	GuidoGetSystemCount( CGRHandler inHandleGR, int page );
 
 	/** \brief Returns the music duration of a score.
 
@@ -533,7 +545,7 @@ as by date. Page numbers start at 1.
 		\param date on output: the duration expressed as a fractional value
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date );
+	GUIDOAPI GuidoErrCode	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date );
 
 	/** \brief Finds the page which has an event (note or rest) at a given date.
 
@@ -543,7 +555,7 @@ as by date. Page numbers start at 1.
 		\return a page number if greater than 0,
                 0 if no page found,
 	*/
-	GUIDOAPI(int)	GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate& date );
+	GUIDOAPI int	GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate& date );
 
 	/** \brief Finds the page which contain a given date.
 
@@ -553,7 +565,7 @@ as by date. Page numbers start at 1.
 		\return a page number if greater than 0,
                 0 if no page found,
 	*/
-	GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate& date );
+	GUIDOAPI int GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate& date );
 
 	/** \brief Gives the time location of a Page.
 
@@ -562,7 +574,7 @@ as by date. Page numbers start at 1.
 		\param date on output: the page date if the page number is valid
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate* date);
+	GUIDOAPI GuidoErrCode GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate* date);
 
 
 	/** \brief Gives the current meter on a given date and voice.
@@ -576,7 +588,7 @@ as by date. Page numbers start at 1.
 		\see the GuidoMeter structure for the meter coding conventions
 		\warning since version 1.6.4 and the support of complex meters with different units, GuidoGetMeterAt may returns incorrect results. It is maintained for compatibility but will be deprecated in future releases. You should use GuidoGetMetesrAt instead.
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeter& meter);
+	GUIDOAPI GuidoErrCode GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeter& meter);
 
 
 	/** \brief Gives the current meters on a given date and voice.
@@ -589,7 +601,7 @@ as by date. Page numbers start at 1.
 
 		\see the GuidoMeter structure for the meter coding conventions
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeters& meters);
+	GUIDOAPI GuidoErrCode GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeters& meters);
 
 
 	/** \brief Releases a meters array..
@@ -597,7 +609,7 @@ as by date. Page numbers start at 1.
 		\param meters: a meters array.
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters);
+	GUIDOAPI GuidoErrCode GuidoFreeMeters (GuidoMeters meters);
 
 
 	/** \brief Gives the tempo list.
@@ -610,7 +622,7 @@ as by date. Page numbers start at 1.
 		\note tempo unit and value are taken is priority from the 'bpm' tempo tag attribute
 			  or inferred from the tempo string when not present
 	*/
-	GUIDOAPI(int) GuidoGetTempoList (CARHandler inHandleAR, GuidoTempoList& tempi);
+	GUIDOAPI int GuidoGetTempoList (CARHandler inHandleAR, GuidoTempoList& tempi);
 
 
 	/** \brief Releases a tempo array..
@@ -618,7 +630,7 @@ as by date. Page numbers start at 1.
 		\param tempi: a tempo array.
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoFreeTempoList (GuidoTempoList tempi);
+	GUIDOAPI GuidoErrCode GuidoFreeTempoList (GuidoTempoList tempi);
 
 
 /*! @} */
@@ -638,7 +650,7 @@ units.
 		\param desc informations about what to draw and how to draw.
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoOnDraw( GuidoOnDrawDesc * desc );
+    GUIDOAPI GuidoErrCode 	GuidoOnDraw( GuidoOnDrawDesc * desc );
 
 	/** \brief Exports one page of score to SVG.
 
@@ -650,7 +662,7 @@ units.
 		\param mappingMode the mapping mode \see GuidoMapping.
 		\return a Guido error code
 	 */
-	GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 );
+	GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 );
 
 	/** \brief Exports one page of score to SVG.
 
@@ -662,7 +674,7 @@ units.
 		\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
 		\return a Guido error code
 	 */
-	GUIDOAPI(GuidoErrCode) GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont );
+	GUIDOAPI GuidoErrCode GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont );
 
 	/** \brief Exports one page of score to SVG.
 
@@ -673,22 +685,21 @@ units.
 		\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
 		\return a Guido error code
 	 */
-	GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color, bool embedFont );
+	GUIDOAPI GuidoErrCode GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color, bool embedFont );
 
 	/** \brief Exports one page of score to SVG.
 
 		\param handle a graphic representation.
 		\param page the page number.
 		\param out the output stream.
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
+        \param fontfile path of the guido svg font file.
+		\param mappingMode the mapping mode (see mapping mode enum).
 		\return a Guido error code
 	*/
 	#ifdef WIN32
-		__declspec(deprecated("Deprecated function : use GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
+		__declspec(deprecated("Deprecated function : use GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
 	#endif
-	GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 ) GUIDOAPI_deprecated;
+	GUIDOAPI GuidoErrCode 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 ) GUIDOAPI_deprecated;
 
     /** \brief Exports one page of score to SVG.
 	 *  If fontfile or fontspec are set, the font is added to svg. The fontfile has priority over the fontspec.
@@ -702,9 +713,9 @@ units.
         \return a Guido error code
     */
 	#ifdef WIN32
-		__declspec(deprecated("Deprecated function : use GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
+		__declspec(deprecated("Deprecated function : use GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
 	#endif
-	GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 ) GUIDOAPI_deprecated;
+	GUIDOAPI GuidoErrCode 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 ) GUIDOAPI_deprecated;
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 
@@ -713,7 +724,7 @@ units.
 		\param out the output stream.
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, std::ostream& out);
+    GUIDOAPI GuidoErrCode 	GuidoAbstractExport( const GRHandler handle, int page, std::ostream& out);
 
 	/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
@@ -722,17 +733,17 @@ units.
 		\param out the output stream.
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std::ostream& out);
+    GUIDOAPI GuidoErrCode 	GuidoBinaryExport( const GRHandler handle, int page, std::ostream& out);
 
 	/** \brief Control bounding boxes drawing.
 
 		\param bbMap a bits field indicating the set of bounding boxes to draw (default to none).
 	*/
-	GUIDOAPI(void) 	GuidoDrawBoundingBoxes(int bbMap);
+	GUIDOAPI void 	GuidoDrawBoundingBoxes(int bbMap);
 
 	/** \brief Gives bounding boxes drawing state.
 	*/
-	GUIDOAPI(int) 	GuidoGetDrawBoundingBoxes();
+	GUIDOAPI int 	GuidoGetDrawBoundingBoxes();
 
 	/** \brief Gives a score page format.
 
@@ -740,7 +751,7 @@ units.
 		\param pageNum a page number.
 		\param format on output: the page format
 	*/
-	GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPageFormat* format );
+	GUIDOAPI void 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPageFormat* format );
 
 	/** \brief Sets the default score page format.
 
@@ -755,16 +766,16 @@ units.
 
 		\param format the page format
 	*/
-	GUIDOAPI(void) 	GuidoSetDefaultPageFormat( const GuidoPageFormat* format);
+	GUIDOAPI void 	GuidoSetDefaultPageFormat( const GuidoPageFormat* format);
 
 	/** \brief Gives the default score page format.
 
 		\param format on output: the page format
 	*/
-	GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat* format );
+	GUIDOAPI void 	GuidoGetDefaultPageFormat( GuidoPageFormat* format );
 
     /** \brief Gives the staves size (one staff at a time).
-        Staff will have given size until a \staffFormat tag
+        Staff will have given size until a \\staffFormat tag
         with "size" param is defined.
         Size should be given in internal units. To convert from cm or inches
         you should use \c GuidoCM2Unit or \c GuidoInches2Unit
@@ -773,41 +784,41 @@ units.
         \param staffNum the staff number on which will be applied new size scale
         \param size the staff size in internal units. A negative value resets the staff size.
      */
-    GUIDOAPI(void) 	GuidoSetStaffSize( CGRHandler inHandleGR, int staffNum, float size );
+    GUIDOAPI void 	GuidoSetStaffSize( CGRHandler inHandleGR, int staffNum, float size );
     
     /** \brief Get the staff size of given staff number.
      
         \return the staff size in internal units (-1 if not defined).
      */
-    GUIDOAPI(float) 	GuidoGetStaffSize( CGRHandler inHandleGR, int staffNum );
+    GUIDOAPI float 	GuidoGetStaffSize( CGRHandler inHandleGR, int staffNum );
 
 	/** \brief Converts internal Guido units into centimeters.
 
 		\param val the value to be converted
 		\return the converted value
 	*/
-	GUIDOAPI(float) 	GuidoUnit2CM(float val);
+	GUIDOAPI float 	GuidoUnit2CM(float val);
 
 	/** \brief Converts centimeters into internal Guido units.
 
 		\param val the value to be converted
 		\return the converted value
 	*/
-	GUIDOAPI(float) 	GuidoCM2Unit(float val);
+	GUIDOAPI float 	GuidoCM2Unit(float val);
 
 	/** \brief Converts internal Guido units into inches.
 
 		\param val the value to be converted
 		\return the converted value
 	*/
-	GUIDOAPI(float) 	GuidoUnit2Inches(float val);
+	GUIDOAPI float 	GuidoUnit2Inches(float val);
 
 	/** \brief Converts inches into internal Guido units.
 
 		\param val the value to be converted
 		\return the converted value
 	*/
-	GUIDOAPI(float) 	GuidoInches2Unit(float val);
+	GUIDOAPI float 	GuidoInches2Unit(float val);
 
 
 	/** \brief Resize the page sizes to the music size.
@@ -815,7 +826,7 @@ units.
 		\param inHandleGR a Guido opaque handle to a GR structure.
 		\return a Guido error code.
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoResizePageToMusic( GRHandler inHandleGR );
+    GUIDOAPI GuidoErrCode 	GuidoResizePageToMusic( GRHandler inHandleGR );
 
 
 /*! @} */
@@ -835,12 +846,12 @@ The number of version functions is due to historical reasons.
 		\param sub on ouput: the sub revision number.
 		\return a Guido error code.
 	*/
-	GUIDOAPI(void) GuidoGetVersionNums(int * major, int * minor, int * sub);
+	GUIDOAPI void GuidoGetVersionNums(int * major, int * minor, int * sub);
 
 	/**	\brief Gives the library version number as a string
 		\return the version numebr as a string.
 	*/
-	GUIDOAPI(const char*) GuidoGetVersionStr();
+	GUIDOAPI const char* GuidoGetVersionStr();
 
 
 	/**	\brief Checks a required library version number.
@@ -852,7 +863,7 @@ The number of version functions is due to historical reasons.
 			passed as argument.
 		\return otherwise guidoErrActionFailed.
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoCheckVersionNums(int major, int minor, int sub);
+	GUIDOAPI GuidoErrCode GuidoCheckVersionNums(int major, int minor, int sub);
 
 
 	/** \brief Gives the distance between two staff lines.
@@ -862,7 +873,7 @@ The number of version functions is due to historical reasons.
 
 		\return the distance between two lines of staff, in Guido internal units.
 	*/
-	GUIDOAPI(float) GuidoGetLineSpace();
+	GUIDOAPI float GuidoGetLineSpace();
 
 
 	/** \brief Gives a color to all notes of a voice between a given time interval.
@@ -879,7 +890,7 @@ The number of version functions is due to historical reasons.
 		\param blue blue color component.
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
+	GUIDOAPI GuidoErrCode GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 											const GuidoDate & date, const GuidoDate & duration,
 											unsigned char red, unsigned char green, unsigned char blue );
 
@@ -891,7 +902,7 @@ The number of version functions is due to historical reasons.
 		\return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
-    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths);
+    GUIDOAPI GuidoErrCode GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths);
 
 
     /**	\brief Returns the path corresponding to an AR.
@@ -902,7 +913,7 @@ The number of version functions is due to historical reasons.
         \return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
-    GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
+    GUIDOAPI GuidoErrCode GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
 
     /*! @} */
 
@@ -917,22 +928,23 @@ Includes functions to query the time spent by the main Guido Engine operations.
 		\param ar the ar handler given to extract the parsing time
 		\return the time spent on building the AR representation (in msl) or -1 for invalid handlers
 	*/
-    GUIDOAPI(long)  GuidoGetParsingTime (const ARHandler ar);
+    GUIDOAPI long  GuidoGetParsingTime (const ARHandler ar);
 
     /** \brief Gets AR to GR procedure time
 
 		\param gr the gr handler given to extract the AR2GR time
 		\return the time spent to convert the AR representation to GR (in msl) or -1 for invalid handlers
 	*/
-    GUIDOAPI(long) 	GuidoGetAR2GRTime(const GRHandler gr);
+    GUIDOAPI long 	GuidoGetAR2GRTime(const GRHandler gr);
 
     /** \brief Gets GR drawing procedure time
 
 		\param gr the gr handler given to extract the drawing time
 		\return the time spent on the last OnDraw call (in msl) or -1 if OnDraw has not yet been called or for invalid handlers
 	*/
-    GUIDOAPI(long) 	GuidoGetOnDrawTime(const GRHandler gr);
+    GUIDOAPI long 	GuidoGetOnDrawTime(const GRHandler gr);
 
+/*! @} */
 /*! @} */
 
 #ifdef __cplusplus

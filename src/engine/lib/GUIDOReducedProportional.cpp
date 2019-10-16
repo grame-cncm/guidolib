@@ -32,7 +32,7 @@
 
 
 // ------------------------------------------------------------------------
-GUIDOAPI(RProportional *) GuidoAR2RProportional(ARHandler arh)
+GUIDOAPI RProportional* GuidoAR2RProportional(ARHandler arh)
 {
     if (!arh)
         return NULL;
@@ -45,7 +45,7 @@ GUIDOAPI(RProportional *) GuidoAR2RProportional(ARHandler arh)
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(RProportional *) GuidoMidi2RProportional(const char *midiFileName)
+GUIDOAPI RProportional* GuidoMidi2RProportional(const char *midiFileName)
 {
 #ifdef MIDIEXPORT
     if (!midiFileName)
@@ -62,7 +62,7 @@ GUIDOAPI(RProportional *) GuidoMidi2RProportional(const char *midiFileName)
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoDestroyRProportional(RProportional *pr)
+GUIDOAPI GuidoErrCode GuidoDestroyRProportional(RProportional *pr)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -72,7 +72,7 @@ GUIDOAPI(GuidoErrCode) GuidoDestroyRProportional(RProportional *pr)
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalSetLimits(RProportional *pr, GuidoDate start, GuidoDate end, int minPitch, int maxPitch)
+GUIDOAPI GuidoErrCode GuidoRProportionalSetLimits(RProportional *pr, GuidoDate start, GuidoDate end, int minPitch, int maxPitch)
 {
 	LimitParams p = { start, end, minPitch, maxPitch };
 	return GuidoPianoRollSetLimits (pr, p);
@@ -122,7 +122,7 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalSetLimits(RProportional *pr, GuidoDate 
 
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)      GuidoRProportionalDrawDurationLines(RProportional *pr, bool enabled)
+GUIDOAPI GuidoErrCode      GuidoRProportionalDrawDurationLines(RProportional *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -131,7 +131,7 @@ GUIDOAPI(GuidoErrCode)      GuidoRProportionalDrawDurationLines(RProportional *p
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalEnableAutoVoicesColoration(RProportional *pr, bool enabled)
+GUIDOAPI GuidoErrCode GuidoRProportionalEnableAutoVoicesColoration(RProportional *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -141,7 +141,7 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalEnableAutoVoicesColoration(RProportiona
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalSetRGBColorToVoice(RProportional *pr, int voiceNum, int r, int g, int b, int a)
+GUIDOAPI GuidoErrCode GuidoRProportionalSetRGBColorToVoice(RProportional *pr, int voiceNum, int r, int g, int b, int a)
 {
     if (!pr || voiceNum < 1)
         return guidoErrBadParameter;
@@ -157,7 +157,7 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalSetRGBColorToVoice(RProportional *pr, i
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalRemoveColorToVoice(RProportional *pr, int voiceNum)
+GUIDOAPI GuidoErrCode GuidoRProportionalRemoveColorToVoice(RProportional *pr, int voiceNum)
 {
 	if(pr->removeColorToVoice(voiceNum))
 		return guidoNoErr;
@@ -165,7 +165,7 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalRemoveColorToVoice(RProportional *pr, i
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalSetHtmlColorToVoice(RProportional *pr, int voiceNum, const char* color)
+GUIDOAPI GuidoErrCode GuidoRProportionalSetHtmlColorToVoice(RProportional *pr, int voiceNum, const char* color)
 {
     if (!pr || voiceNum < 1)
         return guidoErrBadParameter;
@@ -178,7 +178,7 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalSetHtmlColorToVoice(RProportional *pr, 
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalEnableMeasureBars(RProportional *pr, bool enabled)
+GUIDOAPI GuidoErrCode GuidoRProportionalEnableMeasureBars(RProportional *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -188,7 +188,7 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalEnableMeasureBars(RProportional *pr, bo
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalGetMap(const RProportional *pr, int width, int height, Time2GraphicMap &outmap)
+GUIDOAPI GuidoErrCode GuidoRProportionalGetMap(const RProportional *pr, int width, int height, Time2GraphicMap &outmap)
 {
     if (!pr || width < -1 || height < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
@@ -201,7 +201,7 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalGetMap(const RProportional *pr, int wid
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalOnDraw(RProportional *pr, int width, int height, VGDevice *dev)
+GUIDOAPI GuidoErrCode GuidoRProportionalOnDraw(RProportional *pr, int width, int height, VGDevice *dev)
 {
     if (!pr || !dev || width < -1 || height < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;

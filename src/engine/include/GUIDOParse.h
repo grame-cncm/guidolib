@@ -25,6 +25,8 @@ extern "C" {
 #endif
 
 /*!
+\addtogroup CAPI
+@{
 \addtogroup Parser Parsing GMN files, strings and guido streams
 @{
 */
@@ -37,27 +39,27 @@ extern "C" {
 		\brief Creates a new parser
 		\return a guido parser.
 	*/
-	GUIDOAPI(GuidoParser *)		GuidoOpenParser ();
+	GUIDOAPI GuidoParser*		GuidoOpenParser ();
 
 	/*!
 		\brief Close a guido parser and releases all the associated ressources
 		\param p a parser previously opened with GuidoOpenParser
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoCloseParser (GuidoParser *p);
+	GUIDOAPI GuidoErrCode		GuidoCloseParser (GuidoParser *p);
 
 	/*!
 		\brief returns the string of the GuidoStream
 		\param gStream a GuidoStream
         \return a pointer to a char * (must be freed by GuidoFreeStreamString
 	*/
-    GUIDOAPI(const char *)      GuidoGetStream (const GuidoStream * gStream);
+    GUIDOAPI const char*      GuidoGetStream (const GuidoStream * gStream);
 
 	/*!
 		\brief free a string previously returned by GuidoGetStream
 		\param str a pointer to the string
  	*/
-    GUIDOAPI(void)				GuidoFreeStreamString(const char * str);
+    GUIDOAPI void				GuidoFreeStreamString(const char * str);
 
 	/*!
 		\brief Parse a file and create the corresponding AR
@@ -65,7 +67,7 @@ extern "C" {
 		\param file the file to parse.
 		\return a ARHandler or 0 in case of error.
 	*/
-	GUIDOAPI(ARHandler)			GuidoFile2AR (GuidoParser *p, const char* file);
+	GUIDOAPI ARHandler			GuidoFile2AR (GuidoParser *p, const char* file);
 
 	/*!
 		\brief Parse a string and create the corresponding AR
@@ -73,7 +75,7 @@ extern "C" {
 		\param str the string to parse.
 		\return a ARHandler or 0 in case of error.
 	*/
-	GUIDOAPI(ARHandler)			GuidoString2AR (GuidoParser *p, const char* str);
+	GUIDOAPI ARHandler			GuidoString2AR (GuidoParser *p, const char* str);
 
 	/*!
 		\brief Parse a GuidoStream and create the corresponding AR
@@ -82,15 +84,15 @@ extern "C" {
 		\param stream the GuidoStream to parse.
 		\return a ARHandler or 0 in case of error.
 	*/
-	GUIDOAPI(ARHandler)			GuidoStream2AR (GuidoParser *p, GuidoStream* stream);
+	GUIDOAPI ARHandler			GuidoStream2AR (GuidoParser *p, GuidoStream* stream);
 
 	/*!
 		\brief Finalize a GuidoStream and create the corresponding clean GuidoString
 
-		\param streal the GuidoStream to clean
+		\param stream the GuidoStream to clean
 		\return the Guido string.
 	*/
-	GUIDOAPI(const char*)		GuidoStream2GuidoString(GuidoStream* stream);
+	GUIDOAPI const char*		GuidoStream2GuidoString(GuidoStream* stream);
 
 	/*!
 		\brief Get the error syntax line/column
@@ -100,7 +102,7 @@ extern "C" {
         \param msg a string that will contain the error message
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoParserGetErrorCode (GuidoParser *p, int& line, int& col, const char ** msg );
+	GUIDOAPI GuidoErrCode		GuidoParserGetErrorCode (GuidoParser *p, int& line, int& col, const char ** msg );
 
 	/*!
 		\brief Open a guido stream
@@ -109,14 +111,14 @@ extern "C" {
 		In particular, streams allow to retrieve an AR in while the stream is still opened.
 		\return a guido stream.
 	*/
-	GUIDOAPI(GuidoStream *)		GuidoOpenStream ();
+	GUIDOAPI GuidoStream*		GuidoOpenStream ();
 
 	/*!
 		\brief Close a guido stream
 		\param s a GuidoStream
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoCloseStream (GuidoStream *s);
+	GUIDOAPI GuidoErrCode		GuidoCloseStream (GuidoStream *s);
 
 	/*!
 		\brief Write data to the stream
@@ -140,7 +142,7 @@ extern "C" {
 		\param str a string containing a portion of gmn code
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoWriteStream (GuidoStream *s, const char* str);
+	GUIDOAPI GuidoErrCode		GuidoWriteStream (GuidoStream *s, const char* str);
 
     /*!
 		\brief Erase all stream content in order to reuse it
@@ -148,8 +150,9 @@ extern "C" {
 		\param s a GuidoStream previoulsy opened with GuidoOpenStream
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoResetStream (GuidoStream *s);
+	GUIDOAPI GuidoErrCode		GuidoResetStream (GuidoStream *s);
 
+/*! @} */
 /*! @} */
 
 

@@ -16,19 +16,9 @@
 */
 
 
-/*!
-\addtogroup factory GUIDO Factory
-@{
-*/
-
-// struct __GuidoPos { int unused; };	// TODO: Replace
-// typedef __GuidoPos * GuidoPos;		//	with (void *) ?
-
 //! \internal
 typedef void *			GuidoPos;
 
-//! used for dots
-// typedef unsigned int	TYPE_POINTS; replaced by int
 //! used for accidentals
 typedef int				TYPE_ACCIDENTALS;
 //! used for pitch
@@ -44,7 +34,6 @@ typedef char * 			TYPE_PARAMETER;
 typedef char * 			TYPE_TAGPARAMETER_STRING;
 typedef int 			TYPE_TAGPARAMETER_INT;
 typedef double 			TYPE_TAGPARAMETER_REAL;
-/*! @} */
 
 #endif
 

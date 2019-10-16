@@ -22,6 +22,9 @@ extern "C" {
 #endif
 
 /*!
+\addtogroup CAPI
+ @{
+
 \addtogroup Factory GUIDO Factory
 	The GUIDO Factory API provides a set of functions to create a GUIDO
     abstract representation from scratch and to convert it into a graphical representation.
@@ -51,14 +54,14 @@ typedef void * ARFactoryHandler;
     Must be called before any other call to the Guido Factory API.
     \return an integer that is an error code if not null.
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryOpen( ARFactoryHandler * outFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryOpen( ARFactoryHandler * outFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Closes the Guido Factory.
 
     Must be called to release the factory associated resources.
 */
-	GUIDOAPI(void)	GuidoFactoryClose( ARFactoryHandler inFactory );
+	GUIDOAPI void	GuidoFactoryClose( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Creates and opens a new music score. 
@@ -69,7 +72,7 @@ typedef void * ARFactoryHandler;
     A music score has to be closed using \p GuidoFactoryCloseMusic()
     \return an integer that is an error code if not null.
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryOpenMusic( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryOpenMusic( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Closes the current music score.
@@ -88,22 +91,8 @@ typedef void * ARFactoryHandler;
     \return a GUIDO handler to the new AR structure, or 0.
 	\sa \p GuidoFactoryMakeGR()
 */
-	GUIDOAPI(ARHandler)	GuidoFactoryCloseMusic( ARFactoryHandler inFactory );
+	GUIDOAPI ARHandler	GuidoFactoryCloseMusic( ARFactoryHandler inFactory );
 
-// ----------------------------------------------------------------------------
-/*
-\brief Converts an abstract music representation to a graphic music representation.
-
-    Performs the graphical score layout: applies the spacing and page breaking
-    algorithms.
-
-    \return a GUIDO handler to the new GR structure, or 0.
-	\sa \p GuidoMakeGRMusic()
-
-	
-	replaced by GuidoAR2GR 
-*/
-//	GUIDOAPI(GRHandler) GuidoFactoryMakeGR_Obsolete( ARHandler inHandleAR );
 
 // ----------------------------------------------------------------------------
 /** \brief Creates and opens a new voice.
@@ -116,7 +105,7 @@ typedef void * ARFactoryHandler;
 
     \return an error code
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryOpenVoice( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryOpenVoice( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Closes the current voice.
@@ -129,7 +118,7 @@ typedef void * ARFactoryHandler;
 
     \return an error code
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryCloseVoice( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryCloseVoice( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Creates and open a new chord.
@@ -141,7 +130,7 @@ typedef void * ARFactoryHandler;
 
     \return an error code
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryOpenChord( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryOpenChord( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Closes the current chord.
@@ -152,7 +141,7 @@ typedef void * ARFactoryHandler;
     The chord is added to the current voice.
     \return an error code
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryCloseChord( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryCloseChord( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Begins a new chord note commata.
@@ -164,7 +153,7 @@ typedef void * ARFactoryHandler;
     \return an error code
 */
 //  todo check semantic and rename
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryInsertCommata( ARFactoryHandler inFactory ); // is it a correct name ?
+	GUIDOAPI GuidoErrCode	GuidoFactoryInsertCommata( ARFactoryHandler inFactory ); // is it a correct name ?
 
 // ----------------------------------------------------------------------------
 /** \brief Creates and opens a new event (note or rest).
@@ -175,7 +164,7 @@ typedef void * ARFactoryHandler;
     An event has to be closed using \p GuidoFactoryCloseEvent()
     \return an error code
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryOpenEvent( ARFactoryHandler inFactory, const char * inEventName );
+	GUIDOAPI GuidoErrCode	GuidoFactoryOpenEvent( ARFactoryHandler inFactory, const char * inEventName );
 
 // ----------------------------------------------------------------------------
 /** \brief Closes the current event.
@@ -187,7 +176,7 @@ typedef void * ARFactoryHandler;
 
     \return an error code
 */	
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryCloseEvent( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryCloseEvent( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Adds a sharp to the current event. 
@@ -195,7 +184,7 @@ typedef void * ARFactoryHandler;
     The current event must be a note.
     \return an error code
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryAddSharp( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryAddSharp( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Add a flat to the current event. 
@@ -203,7 +192,7 @@ typedef void * ARFactoryHandler;
     The current event must be a note.
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactoryAddFlat( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode	GuidoFactoryAddFlat( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Sets the number of dots the current event.
@@ -211,7 +200,7 @@ typedef void * ARFactoryHandler;
     \param dots the number of dots to be carried by the current event.
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactorySetEventDots( ARFactoryHandler inFactory, int dots );
+	GUIDOAPI GuidoErrCode 	GuidoFactorySetEventDots( ARFactoryHandler inFactory, int dots );
 
 // ----------------------------------------------------------------------------
 /** \brief Sets the accidentals of the current event.
@@ -219,7 +208,7 @@ typedef void * ARFactoryHandler;
     \param accident: positive values are used for sharp and negative values for flats 
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactorySetEventAccidentals( ARFactoryHandler inFactory, int accident );
+	GUIDOAPI GuidoErrCode 	GuidoFactorySetEventAccidentals( ARFactoryHandler inFactory, int accident );
 
 // ----------------------------------------------------------------------------
 /** \brief Sets the register (octave) of the current event.
@@ -233,7 +222,7 @@ typedef void * ARFactoryHandler;
     \e a1 is \e A 440Hz. All octaves start with the pitch class \e c.
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode)	GuidoFactorySetOctave( ARFactoryHandler inFactory, int octave );
+	GUIDOAPI GuidoErrCode	GuidoFactorySetOctave( ARFactoryHandler inFactory, int octave );
 
 // ----------------------------------------------------------------------------
 /** \brief Sets the duration of the current event.
@@ -247,7 +236,7 @@ typedef void * ARFactoryHandler;
     \param denominator: the rational duration denominator
 	\return an error code.
 */	
-	GUIDOAPI(GuidoErrCode) 	GuidoFactorySetDuration( ARFactoryHandler inFactory, int numerator, int denominator );
+	GUIDOAPI GuidoErrCode 	GuidoFactorySetDuration( ARFactoryHandler inFactory, int numerator, int denominator );
 
 // ----------------------------------------------------------------------------
 /* \brief Add a tag to the current voice.
@@ -257,7 +246,7 @@ typedef void * ARFactoryHandler;
     \param tagID: is the number that the parser generates for advanced GUIDO
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryOpenTag( ARFactoryHandler inFactory, const char * name, long tagID );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryOpenTag( ARFactoryHandler inFactory, const char * name, long tagID );
 
 // ----------------------------------------------------------------------------
 /* \brief Add a tag to the current voice.
@@ -267,7 +256,7 @@ typedef void * ARFactoryHandler;
     \param tagID: is the number that the parser generates for advanced GUIDO
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryOpenRangeTag( ARFactoryHandler inFactory, const char * name, long tagID );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryOpenRangeTag( ARFactoryHandler inFactory, const char * name, long tagID );
 
 
 // ----------------------------------------------------------------------------
@@ -279,7 +268,7 @@ typedef void * ARFactoryHandler;
     \param inFactory a handler to a Guido Factory (created with GuidoFactoryOpen)
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryEndTag( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryEndTag( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Closes the current tag.
@@ -293,7 +282,7 @@ typedef void * ARFactoryHandler;
     \param inFactory a handler to a Guido Factory (created with GuidoFactoryOpen)
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryCloseTag( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryCloseTag( ARFactoryHandler inFactory );
 
 // ----------------------------------------------------------------------------
 /** \brief Adds a new string parameter to the current tag.
@@ -302,7 +291,7 @@ typedef void * ARFactoryHandler;
     \param val: the string parameter value
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryAddTagParameterString( ARFactoryHandler inFactory, const char * val );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryAddTagParameterString( ARFactoryHandler inFactory, const char * val );
 
 // ----------------------------------------------------------------------------
 /** \brief  Adds a new integer parameter to the current tag.
@@ -311,7 +300,7 @@ typedef void * ARFactoryHandler;
     \param val: the parameter value
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryAddTagParameterInt( ARFactoryHandler inFactory, int val );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryAddTagParameterInt( ARFactoryHandler inFactory, int val );
 
 // ----------------------------------------------------------------------------
 /** \brief Adds a new floating-point parameter to the current tag.
@@ -320,7 +309,7 @@ typedef void * ARFactoryHandler;
     \param val: the parameter value
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryAddTagParameterFloat( ARFactoryHandler inFactory, double val );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryAddTagParameterFloat( ARFactoryHandler inFactory, double val );
 
 // ----------------------------------------------------------------------------
 /** \brief Defines the name (when applicable) of the last added tag-parameter
@@ -329,7 +318,7 @@ typedef void * ARFactoryHandler;
     \param name: the tag parameter name
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactorySetParameterName( ARFactoryHandler inFactory, const char * name );
+	GUIDOAPI GuidoErrCode 	GuidoFactorySetParameterName( ARFactoryHandler inFactory, const char * name );
 
 // ----------------------------------------------------------------------------
 /** \brief Defines the unit of the last added tag-parameter
@@ -346,7 +335,8 @@ typedef void * ARFactoryHandler;
 - \p rl - relative measure in percent  (used for positioning on score page) 
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactorySetParameterUnit( ARFactoryHandler inFactory, const char * unit );
+	GUIDOAPI GuidoErrCode 	GuidoFactorySetParameterUnit( ARFactoryHandler inFactory, const char * unit );
+/*! @} */
 /*! @} */
 
 
@@ -359,14 +349,14 @@ typedef void * ARFactoryHandler;
     \param tagID: is the number that the parser generates for advanced GUIDO ?????
 	\return an error code.
 */
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryCreateTag( ARFactoryHandler inFactory, const char * inTagName, long tagID );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryCreateTag( ARFactoryHandler inFactory, const char * inTagName, long tagID );
 
 // ----------------------------------------------------------------------------
 /** \brief Indicates that the current tag is a range tag.
     \param inFactory a handler to a Guido Factory (created with GuidoFactoryOpen)
 	\return an error code.
 */	
-	GUIDOAPI(GuidoErrCode) 	GuidoFactoryIsRangeTag( ARFactoryHandler inFactory );
+	GUIDOAPI GuidoErrCode 	GuidoFactoryIsRangeTag( ARFactoryHandler inFactory );
 
 #endif
 

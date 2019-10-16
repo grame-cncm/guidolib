@@ -26,11 +26,6 @@
 namespace guido
 {
 
-/*!
-\addtogroup guidomap Guido graphic to time maps
-@{
-*/
-
 //----------------------------------------------------------------------
 /*!
 	\brief a class to collect guido graphic maps
@@ -154,8 +149,6 @@ class GuidoVoiceAndBarCollector: public GuidoMapCollector
     private:
         std::map<int, int> fPrevBarX; // Associates for each staffnum the x position of the previous bar, and 0 if previous element is not a bar
 };
-
-/*!@} */
 
 } // end namespoace
 

@@ -112,7 +112,7 @@ int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing
 //		- Building abstract and graphic representations -
 // --------------------------------------------------------------------------
 
-GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
+GUIDOAPI GuidoErrCode GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
@@ -124,7 +124,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 	return errcode;
 }
 
-GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
+GUIDOAPI GuidoErrCode GuidoInit( GuidoInitDesc * desc )
 {
 	if( desc == 0 ) return guidoErrBadParameter;
 
@@ -156,7 +156,7 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(void) GuidoShutdown()
+GUIDOAPI void GuidoShutdown()
 {
 	if (gInited) {
 		FontManager::ReleaseAllFonts();
@@ -213,7 +213,7 @@ static void uniconv(const char *filename)
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
+GUIDOAPI GuidoErrCode GuidoParseFile(const char * filename, ARHandler * ar)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
 
@@ -240,7 +240,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
+GUIDOAPI GuidoErrCode GuidoParseString (const char * str, ARHandler* ar)
 {
 	if( !str || !ar )	return guidoErrBadParameter;
 
@@ -313,7 +313,7 @@ static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutS
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
+GUIDOAPI GuidoErrCode GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
 	if( gr == 0 ) 	return guidoErrBadParameter;
 	if( ar == 0 )	return guidoErrInvalidHandle;
@@ -336,7 +336,7 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 }
 
 
-GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters* gp)
+GUIDOAPI GRHandler GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters* gp)
 {
 	if( ar == 0 )	return 0;
 	if( !gInited )	return 0;
@@ -371,7 +371,7 @@ GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameter
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoShowElement( GRHandler gr, GRElement elt, bool status)
+GUIDOAPI GuidoErrCode	GuidoShowElement( GRHandler gr, GRElement elt, bool status)
 {
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
@@ -382,7 +382,7 @@ GUIDOAPI(GuidoErrCode)	GuidoShowElement( GRHandler gr, GRElement elt, bool statu
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * settings)
+GUIDOAPI GuidoErrCode GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * settings)
 {
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
@@ -400,14 +400,14 @@ GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * 
 
 
 // --------------------------------------------------------------------------
-GUIDOAPI(float) GuidoGetNotesDensity( GRHandler gr)
+GUIDOAPI float GuidoGetNotesDensity( GRHandler gr)
 {
 	if ( !gr || !gr->grmusic )	return 0;
 	return gr->grmusic->getNotesDensity();
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrParameters* gp)
+GUIDOAPI GuidoErrCode	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrParameters* gp)
 {
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
@@ -431,7 +431,7 @@ GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrPa
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(void)	GuidoFreeAR( ARHandler ar )
+GUIDOAPI void	GuidoFreeAR( ARHandler ar )
 {
 	if ( !ar ) return;
 
@@ -444,7 +444,7 @@ GUIDOAPI(void)	GuidoFreeAR( ARHandler ar )
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(void)	GuidoFreeGR (GRHandler gr)
+GUIDOAPI void	GuidoFreeGR (GRHandler gr)
 {
 	if( gr == 0 ) return;
 
@@ -456,7 +456,7 @@ GUIDOAPI(void)	GuidoFreeGR (GRHandler gr)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoDate *) 	GuidoMakeDate( int num, int denom )
+GUIDOAPI GuidoDate * 	GuidoMakeDate( int num, int denom )
 {
   GuidoDate *date =  new GuidoDate();
   date->num = num;
@@ -466,7 +466,7 @@ GUIDOAPI(GuidoDate *) 	GuidoMakeDate( int num, int denom )
 
 // --------------------------------------------------------------------------
 
-GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode )
+GUIDOAPI const char * GuidoGetErrorString( GuidoErrCode errCode )
 {
 	switch( errCode )
 	{
@@ -488,15 +488,14 @@ GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode )
 // --------------------------------------------------------------------------
 // this function is obsolete with the new reentrant parser
 // syntax error line and columns should be retrieved from the parser
-GUIDOAPI(int) GuidoGetParseErrorLine()
+GUIDOAPI int GuidoGetParseErrorLine()
 {
 	return gParseErrorLine;
 }
 
 
 // --------------------------------------------------------------------------
-GUIDOAPI(void)	
-GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings)
+GUIDOAPI void GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings)
 {
 	settings->systemsDistance       = kSettingDefaultSystemDistance;
  	settings->systemsDistribution   = kSettingDefaultSystemDistrib;
@@ -515,7 +514,7 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings)
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-GUIDOAPI(int) GuidoCountVoices( CARHandler inHandleAR)
+GUIDOAPI int GuidoCountVoices( CARHandler inHandleAR)
 {
 	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
 		return guidoErrInvalidHandle;
@@ -524,7 +523,7 @@ GUIDOAPI(int) GuidoCountVoices( CARHandler inHandleAR)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(int) GuidoGetPageCount( CGRHandler inHandleGR )
+GUIDOAPI int GuidoGetPageCount( CGRHandler inHandleGR )
 {
 	if ( !inHandleGR )
 		return guidoErrInvalidHandle;
@@ -532,7 +531,7 @@ GUIDOAPI(int) GuidoGetPageCount( CGRHandler inHandleGR )
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(int) GuidoGetSystemCount( CGRHandler inHandleGR, int page )
+GUIDOAPI int GuidoGetSystemCount( CGRHandler inHandleGR, int page )
 {
 	if ( !inHandleGR )
 		return guidoErrInvalidHandle;
@@ -540,7 +539,7 @@ GUIDOAPI(int) GuidoGetSystemCount( CGRHandler inHandleGR, int page )
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
+GUIDOAPI GuidoErrCode	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
 {
 	if( date == 0 )			return guidoErrBadParameter;
 	if ( inHandleGR == 0 )	return guidoErrBadParameter;
@@ -564,7 +563,7 @@ GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
 
 // --------------------------------------------------------------------------
 // was GuidoGetPageNum
-GUIDOAPI(int) GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate & date )
+GUIDOAPI int GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate & date )
 {
 	if ( !inHandleGR )
 		return 0;
@@ -573,7 +572,7 @@ GUIDOAPI(int) GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate & date 
 
 // --------------------------------------------------------------------------
 // was GuidoFindPageNumForDate
-GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate & date )
+GUIDOAPI int GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate & date )
 {
 	if ( !inHandleGR )
 		return 0;
@@ -582,7 +581,7 @@ GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate & date )
 
 // --------------------------------------------------------------------------
 // was GuidoGetPageRTP
-GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate * date)
+GUIDOAPI GuidoErrCode GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate * date)
 {
 	date->num = 0;
 	date->denom = 1;
@@ -596,7 +595,7 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 
 // --------------------------------------------------------------------------
 // introduced in guido 1.63 [DF July 1 2016]
-GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeter& meter)
+GUIDOAPI GuidoErrCode GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeter& meter)
 {
 	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
 		return guidoErrInvalidHandle;
@@ -609,7 +608,7 @@ GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, con
 
 // --------------------------------------------------------------------------
 // introduced in guido 1.66 [DF Oct. 18 2017]
-GUIDOAPI(GuidoErrCode) GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeters& meters)
+GUIDOAPI GuidoErrCode GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeters& meters)
 {
 	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
 		return guidoErrInvalidHandle;
@@ -620,7 +619,7 @@ GUIDOAPI(GuidoErrCode) GuidoGetMetersAt (CARHandler inHandleAR, int voicenum, co
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters)
+GUIDOAPI GuidoErrCode GuidoFreeMeters (GuidoMeters meters)
 {
 	if (!meters) return guidoErrBadParameter;
 	delete [] meters;
@@ -629,7 +628,7 @@ GUIDOAPI(GuidoErrCode) GuidoFreeMeters (GuidoMeters meters)
 
 // --------------------------------------------------------------------------
 // introduced in guido 1.67 [DF Jul. 24 2019]
-GUIDOAPI(int) GuidoGetTempoList (CARHandler inHandleAR, GuidoTempoList& tempi)
+GUIDOAPI int GuidoGetTempoList (CARHandler inHandleAR, GuidoTempoList& tempi)
 {
 	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
 		return guidoErrInvalidHandle;
@@ -640,7 +639,7 @@ GUIDOAPI(int) GuidoGetTempoList (CARHandler inHandleAR, GuidoTempoList& tempi)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFreeTempoList (GuidoTempoList tempi)
+GUIDOAPI GuidoErrCode GuidoFreeTempoList (GuidoTempoList tempi)
 {
 	if (!tempi) return guidoErrBadParameter;
 	delete [] tempi;
@@ -651,7 +650,7 @@ GUIDOAPI(GuidoErrCode) GuidoFreeTempoList (GuidoTempoList tempi)
 // --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
+GUIDOAPI GuidoErrCode GuidoOnDraw( GuidoOnDrawDesc * desc )
 {
 	if( desc == 0 ) return guidoErrBadParameter;
   	if( desc->hdc == 0 ) return guidoErrBadParameter;
@@ -714,7 +713,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 // --------------------------------------------------------------------------
 //		- Score export to an abstract graphical representation -
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, std::ostream& out)
+GUIDOAPI GuidoErrCode 	GuidoAbstractExport( const GRHandler handle, int page, std::ostream& out)
 {
  	AbstractSystem sys;
 	AbstractDevice dev (out, &sys);
@@ -741,7 +740,7 @@ GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, s
 // --------------------------------------------------------------------------
 //		- Score export to a Binary representation -
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std::ostream& out)
+GUIDOAPI GuidoErrCode 	GuidoBinaryExport( const GRHandler handle, int page, std::ostream& out)
 {
  	BinarySystem sys;
 	BinaryDevice dev (out, &sys);
@@ -767,7 +766,7 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 // --------------------------------------------------------------------------
 //		- Score export to svg -
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont )
+GUIDOAPI GuidoErrCode GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont )
 {
 	SVGSystem sys(embedFont ? _src_guido2_svg : 0);
 	VGDevice    *dev  = sys.CreateDisplayDevice(out, 0);
@@ -792,7 +791,7 @@ GUIDOAPI(GuidoErrCode) GuidoGR2SVG1( const GRHandler handle, int page, std::ostr
 
 }
 
-GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode )
+GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode )
 {
 	const char * fontUsed = font;
 	if(embedFont) {
@@ -825,7 +824,7 @@ GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostre
 	return error;
 }
 
-GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color, bool embedFont )
+GUIDOAPI GuidoErrCode GuidoGR2SVGColored( const GRHandler handle, int page, std::ostream& out, const VGColor& color, bool embedFont )
 {
 	const char * fontUsed = embedFont ? _src_guido2_svg : 0;
 
@@ -855,12 +854,12 @@ GUIDOAPI(GuidoErrCode) GuidoGR2SVGColored( const GRHandler handle, int page, std
 	return error;
 }
 
-GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode )
+GUIDOAPI GuidoErrCode GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode )
 {
     return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0, mappingMode);
 }
 
-GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
+GUIDOAPI GuidoErrCode GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
 {
 	const char * font = fontspec;
 	size_t size;
@@ -870,11 +869,11 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int pa
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(void) 	GuidoDrawBoundingBoxes(int bbMap)	{ gBoundingBoxesMap = bbMap; }
-GUIDOAPI(int) 	GuidoGetDrawBoundingBoxes()			{ return gBoundingBoxesMap; }
+GUIDOAPI void 	GuidoDrawBoundingBoxes(int bbMap)	{ gBoundingBoxesMap = bbMap; }
+GUIDOAPI int 	GuidoGetDrawBoundingBoxes()			{ return gBoundingBoxesMap; }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(void) 	GuidoSetDefaultPageFormat( const GuidoPageFormat * inFormat)
+GUIDOAPI void 	GuidoSetDefaultPageFormat( const GuidoPageFormat * inFormat)
 {
 	if( inFormat ) {
 		const GuidoPageFormat & pf = *inFormat;
@@ -885,7 +884,7 @@ GUIDOAPI(void) 	GuidoSetDefaultPageFormat( const GuidoPageFormat * inFormat)
 // --------------------------------------------------------------------------
 // was GuidoGetDefaultPageSizeCm
 // Works in Guido internal units.
-GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat * outFormat )
+GUIDOAPI void 	GuidoGetDefaultPageFormat( GuidoPageFormat * outFormat )
 {
 	if( outFormat == 0 ) return;
 
@@ -902,7 +901,7 @@ GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat * outFormat )
 
 // --------------------------------------------------------------------------
 // // in internal units
-GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPageFormat* format )
+GUIDOAPI void 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPageFormat* format )
 {
 	if ( inHandleGR == 0 ) return;
 	if( inHandleGR->grmusic == 0 ) return;
@@ -914,7 +913,7 @@ GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPag
 }
     
 // --------------------------------------------------------------------------
-GUIDOAPI(void) 	GuidoSetStaffSize( CGRHandler inHandleGR, int staffNum, float size )
+GUIDOAPI void 	GuidoSetStaffSize( CGRHandler inHandleGR, int staffNum, float size )
 {
     if ( inHandleGR == 0 ) return;
     if ( inHandleGR->grmusic == 0 ) return;
@@ -924,7 +923,7 @@ GUIDOAPI(void) 	GuidoSetStaffSize( CGRHandler inHandleGR, int staffNum, float si
 }
     
 // --------------------------------------------------------------------------
-GUIDOAPI(float) GuidoGetStaffSize( CGRHandler inHandleGR, int staffNum )
+GUIDOAPI float GuidoGetStaffSize( CGRHandler inHandleGR, int staffNum )
 {
     if ( inHandleGR == 0 ) return -1;
     if ( inHandleGR->grmusic == 0 ) return -1;
@@ -934,31 +933,31 @@ GUIDOAPI(float) GuidoGetStaffSize( CGRHandler inHandleGR, int staffNum )
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(float) GuidoUnit2CM(float val)
+GUIDOAPI float GuidoUnit2CM(float val)
 {
 	return val * kVirtualToCm;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(float) GuidoCM2Unit(float val)
+GUIDOAPI float GuidoCM2Unit(float val)
 {
 	return val * kCmToVirtual;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(float) GuidoUnit2Inches(float val)
+GUIDOAPI float GuidoUnit2Inches(float val)
 {
 	return val * kVirtualToInch;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(float) GuidoInches2Unit(float val)
+GUIDOAPI float GuidoInches2Unit(float val)
 {
 	return val * kInchToVirtual;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) 	GuidoResizePageToMusic( GRHandler inHandleGR )
+GUIDOAPI GuidoErrCode 	GuidoResizePageToMusic( GRHandler inHandleGR )
 {
 	if ( (!inHandleGR) || ( inHandleGR->grmusic == 0 ))
 	{
@@ -972,20 +971,20 @@ GUIDOAPI(GuidoErrCode) 	GuidoResizePageToMusic( GRHandler inHandleGR )
 //		- Miscellaneous -
 // --------------------------------------------------------------------------
 
-GUIDOAPI(void) GuidoGetVersionNums(int * major, int * minor, int * sub)
+GUIDOAPI void GuidoGetVersionNums(int * major, int * minor, int * sub)
 {
 	*major = GUIDOENGINE_MAJOR_VERSION;
 	*minor = GUIDOENGINE_MINOR_VERSION;
 	*sub   = GUIDOENGINE_SUB_VERSION;
 }
 
-GUIDOAPI(const char*) GuidoGetVersionStr()
+GUIDOAPI const char* GuidoGetVersionStr()
 {
 	return GUIDOENGINE_VERSION_STR;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoCheckVersionNums(int major, int minor, int sub)
+GUIDOAPI GuidoErrCode GuidoCheckVersionNums(int major, int minor, int sub)
 {
   if((GUIDOENGINE_MAJOR_VERSION > major) || 
      ((GUIDOENGINE_MAJOR_VERSION == major) && (GUIDOENGINE_MINOR_VERSION > minor)) || 
@@ -998,13 +997,13 @@ GUIDOAPI(GuidoErrCode) GuidoCheckVersionNums(int major, int minor, int sub)
 
 // --------------------------------------------------------------------------
 // was GuidoGetLSPACE
-GUIDOAPI(float) GuidoGetLineSpace()
+GUIDOAPI float GuidoGetLineSpace()
 {
 	return (float)LSPACE;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum, 
+GUIDOAPI GuidoErrCode GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 										const GuidoDate & date, const GuidoDate & duration, 
 										unsigned char red, unsigned char green, unsigned char blue )
 {
@@ -1019,7 +1018,7 @@ GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths)
+GUIDOAPI GuidoErrCode GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths)
 {
     if (!inHandleAR)
         return guidoErrInvalidHandle;
@@ -1033,7 +1032,7 @@ GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vecto
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector)
+GUIDOAPI GuidoErrCode GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector)
 {
     if (!inHandleAR)
         return guidoErrInvalidHandle;
@@ -1047,21 +1046,21 @@ GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vecto
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(long)  GuidoGetParsingTime (const ARHandler ar)
+GUIDOAPI long  GuidoGetParsingTime (const ARHandler ar)
 {
     ARMusic *arMusic = ar ? ar->armusic : 0;
 	return arMusic ? arMusic->getParseTime() : -1;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(long) 	GuidoGetAR2GRTime(const GRHandler gr)
+GUIDOAPI long 	GuidoGetAR2GRTime(const GRHandler gr)
 {
     GRMusic *grMusic = gr ? gr->grmusic : 0;
     return grMusic ? grMusic->getAR2GRTime() : -1;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(long) 	GuidoGetOnDrawTime(const GRHandler gr)
+GUIDOAPI long 	GuidoGetOnDrawTime(const GRHandler gr)
 {
     GRMusic *grMusic = gr ? gr->grmusic : 0;
     return grMusic ? grMusic->getDrawTime() : -1;

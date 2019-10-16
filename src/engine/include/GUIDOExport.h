@@ -1,5 +1,3 @@
-#ifndef __GUIDOExport__
-#define __GUIDOExport__
 
 /*
   GUIDO Library
@@ -15,32 +13,31 @@
 
 */
 
+#pragma once
 
 #if __MINGW32__
 #  define class_export		class
-#  define GUIDOAPI(type)	type
+#  define GUIDOAPI
 
 #elif defined(WIN32) && !defined(GCC)
 
 # ifdef GUIDOExport
 #  define class_export		class _declspec (dllexport)
-#  define GUIDOAPI(type)	_declspec (dllexport) type
+#  define GUIDOAPI			_declspec (dllexport)
 # else
 #  define class_export		class _declspec (dllimport)
-#  define GUIDOAPI(type)	_declspec (dllimport) type
+#  define GUIDOAPI			_declspec (dllimport)
 # endif
 
 #else
 
 # ifdef GUIDOExport
 #  define class_export		class __attribute__ ((visibility("default")))
-#  define GUIDOAPI(type)	__attribute__ ((visibility("default"))) type
+#  define GUIDOAPI			__attribute__ ((visibility("default")))
 # else
 #  define class_export		class
-#  define GUIDOAPI(type)	type
+#  define GUIDOAPI
 # endif
 
 #endif
 
-
-#endif

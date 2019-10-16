@@ -20,6 +20,7 @@
 class GuidoParser;
 class GuidoStream;
 
+
 /*!
  * \brief A structure for parser error.
  */
@@ -47,12 +48,17 @@ typedef struct {
 } GuidoVersion;
 
 /*!
+*/
+
+ 
+ /*!
  * \addtogroup APICplusplus C++ interface
  * @{
- * \defgroup EngineAdapter Guido Engine Adapter
+ * \addtogroup EngineAdapter Guido Engine Adapter
+ * @{
+ *
  * \brief A C++ interface to the Guido Engine API
  *
- * A C++ class to manupilate Guido Engine.
  */
 class_export GuidoEngineAdapter
 {
@@ -67,12 +73,11 @@ class_export GuidoEngineAdapter
 		virtual ~GuidoEngineAdapter();
 
 
-		/*!
-			\addtogroup engine2 Building abstract and graphic representations
-			@{
-			\ingroup EngineAdapter
+			/*!
+				\addtogroup enginecpp Building abstract and graphic representations
+				@{
+			*/
 
-		*/
 			/*!
 				\brief Initialises the Guido Engine. Must be called before any attempt
 				to read a Guido file or to use the Guido Factory
@@ -306,12 +311,11 @@ class_export GuidoEngineAdapter
 
 				\param handle a graphic representation.
 				\param page the page number.
-				\param out the output stream.
-				\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
+				\param embedfont a boolean value. When true, the default svg guido font is embedded to the SVG.
 				\param mappingMode a constant to embed a mapping \see GuidoMapping.
 				\return SVG code
 			 */
-			std::string gr2SVG(const GRHandler handle, int page, bool embedFont = true, const int mappingMode = 0);
+			std::string gr2SVG(const GRHandler handle, int page, bool embedfont = true, const int mappingMode = 0);
 
 			/** \brief Exports one page of score to SVG.
 
@@ -320,6 +324,7 @@ class_export GuidoEngineAdapter
 				\param r the color red component
 				\param g the color green component
 				\param b the color blue component
+				\param embedfont a boolean value. When true, the default svg guido font is embedded to the SVG.
 				\return SVG code
 			 */
 			std::string gr2SVGColored(const GRHandler handle, int page, int r, int g, int b, bool embedfont=true);
@@ -523,9 +528,9 @@ class_export GuidoEngineAdapter
 
 
 		/*!
-		\addtogroup time2 Timing measurements
-		Includes functions to query the time spent by the main Guido Engine operations.
 		\ingroup EngineAdapter
+		\addtogroup timecpp Timing measurements
+		Includes functions to query the time spent by the main Guido Engine operations.
 		@{
 		*/
 			/*!
@@ -552,9 +557,9 @@ class_export GuidoEngineAdapter
 		/*! @} */
 
 		/*!
-		\addtogroup parser Parsing GMN files, strings and guido streams
-		@{
+		\addtogroup parsercpp Parsing GMN files, strings and guido streams
 		\ingroup EngineAdapter
+		@{
 		*/
 			/*!
 				\brief Creates a new parser
@@ -658,6 +663,7 @@ class_export GuidoEngineAdapter
 
 		/*! @} */
 };
+/*! @} */
 /*! @} */
 
 #endif // GUIDOENGINEADAPTER_H

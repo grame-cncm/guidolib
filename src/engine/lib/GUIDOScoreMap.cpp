@@ -131,7 +131,7 @@ static GuidoErrCode checkParams( CGRHandler handle, int page)
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoElementSelector sel, MapCollector& f)
+GUIDOAPI GuidoErrCode	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoElementSelector sel, MapCollector& f)
 {
 	GuidoErrCode err = checkParams (handle, page);
 	if (err != guidoNoErr) return err;
@@ -141,7 +141,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler handle, int page, float w, float 
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
@@ -151,7 +151,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, flo
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
 {
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
@@ -162,7 +162,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, fl
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetStaffMapV1( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetStaffMapV1( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
 {
     GuidoErrCode err = checkParams (gr, pagenum);
     if (err != guidoNoErr) return err;
@@ -183,7 +183,7 @@ static bool sortMap(TMapSegments s1, TMapSegments s2)
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap)
 {
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
@@ -195,7 +195,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, fl
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
     GuidoErrCode err = checkParams (gr, pagenum);
     if (err != guidoNoErr) return err;
@@ -205,7 +205,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, f
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
     GuidoErrCode err = checkParams (gr, pagenum);
     if (err != guidoNoErr) return err;
@@ -215,7 +215,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w,
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
 {
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
@@ -226,7 +226,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w,
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap)
 {
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
@@ -237,7 +237,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w,
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+GUIDOAPI GuidoErrCode	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
 	GuidoErrCode err = checkParams (gr, pagenum);
 	if (err != guidoNoErr) return err;
@@ -247,7 +247,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(bool)	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, TimeSegment& t, FloatRect& r)
+GUIDOAPI bool	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, TimeSegment& t, FloatRect& r)
 {
 	for (Time2GraphicMap::const_iterator i = map.begin(); i != map.end(); i++) {
 		if (i->first.include(date)) {
@@ -260,7 +260,7 @@ GUIDOAPI(bool)	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, T
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSegment& t, FloatRect& r)
+GUIDOAPI bool	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSegment& t, FloatRect& r)
 {
 	for (Time2GraphicMap::const_iterator i = map.begin(); i != map.end(); i++) {
 		if (i->second.Contains(x, y)) {
@@ -273,7 +273,7 @@ GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeS
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler handle, int page, GuidoElementSelector sel, vector<MapElement>& outMap)
+GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler handle, int page, GuidoElementSelector sel, vector<MapElement>& outMap)
 {
 	if( handle == 0 ) 	return guidoErrInvalidHandle;
   	if( handle->grmusic == 0 ) return guidoErrInvalidHandle;
@@ -289,7 +289,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler handle, int page, GuidoElementS
 	return guidoNoErr;
 }
 
-GUIDOAPI(GuidoErrCode)	GuidoGetTimeMap( CARHandler inHandleAR, TimeMapCollector& f)
+GUIDOAPI GuidoErrCode	GuidoGetTimeMap( CARHandler inHandleAR, TimeMapCollector& f)
 {
 	if( inHandleAR == 0 )			return guidoErrInvalidHandle;
 	if ( inHandleAR->armusic == 0 )	return guidoErrInvalidHandle;

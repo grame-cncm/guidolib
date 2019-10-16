@@ -96,7 +96,7 @@ static void CheckTempoMap (MidiSeqPtr tmap, MidiLight* midi, int defaultTempo)
 // ==========================================================================
 // - Guido Midi API
 // ==========================================================================
-GUIDOAPI(GuidoErrCode) GuidoAR2MIDIFile( const ARHandler ar, const char* filename, const Guido2MidiParams* params )
+GUIDOAPI GuidoErrCode GuidoAR2MIDIFile( const ARHandler ar, const char* filename, const Guido2MidiParams* params )
 {
 	if( ar == 0 )		return guidoErrInvalidHandle;
 	if( !filename )		return guidoErrBadParameter;
@@ -137,7 +137,7 @@ GUIDOAPI(GuidoErrCode) GuidoAR2MIDIFile( const ARHandler ar, const char* filenam
 // ==========================================================================
 // - Guido Midi API
 // ==========================================================================
-GUIDOAPI(GuidoErrCode) GuidoAR2MIDIFile( const ARHandler ar, const char* filename, const Guido2MidiParams* params )
+GUIDOAPI GuidoErrCode GuidoAR2MIDIFile( const ARHandler ar, const char* filename, const Guido2MidiParams* params )
 {
 	std::cerr << "The Guido library has been compiled without GuidoAR2MIDIFile support." << std::endl;
 	return guidoErrActionFailed;

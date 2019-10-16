@@ -32,24 +32,24 @@ static ARFactory * getFactory( ARFactoryHandler in )
 
 extern "C" {
 
-GUIDOAPI(GuidoErrCode) GuidoFactoryOpen( ARFactoryHandler * outFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryOpen( ARFactoryHandler * outFactory )
 {
 	*outFactory = new ARFactory;
 	return guidoNoErr;
 }
 
-GUIDOAPI(void) GuidoFactoryClose( ARFactoryHandler inFactory )
+GUIDOAPI void GuidoFactoryClose( ARFactoryHandler inFactory )
 {
 	delete getFactory( inFactory );
 }
 
-GUIDOAPI(GuidoErrCode) GuidoFactoryOpenMusic( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryOpenMusic( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->createMusic();
 	return guidoNoErr;
 }
 
-GUIDOAPI(ARHandler) GuidoFactoryCloseMusic( ARFactoryHandler inFactory )
+GUIDOAPI ARHandler GuidoFactoryCloseMusic( ARFactoryHandler inFactory )
 {
 	// - Extracts our new music abstract representation object.
 	ARMusic * theMusic = getFactory( inFactory )->getMusic();
@@ -63,13 +63,13 @@ GUIDOAPI(ARHandler) GuidoFactoryCloseMusic( ARFactoryHandler inFactory )
 	return outHandleAR;
 }
 
-GUIDOAPI(GuidoErrCode) GuidoFactoryOpenVoice( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryOpenVoice( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->createVoice();
 	return guidoNoErr;
 }
 
-GUIDOAPI(GuidoErrCode) GuidoFactoryCloseVoice( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryCloseVoice( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->addVoice();
 	return guidoNoErr;
@@ -79,21 +79,21 @@ GUIDOAPI(GuidoErrCode) GuidoFactoryCloseVoice( ARFactoryHandler inFactory )
 // 		Chords
 // ============================================================================
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryOpenChord( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryOpenChord( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->createChord();
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryCloseChord( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryCloseChord( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->addChord();
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryInsertCommata( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryInsertCommata( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->initChordNote();
 	return guidoNoErr;
@@ -103,56 +103,56 @@ GUIDOAPI(GuidoErrCode) GuidoFactoryInsertCommata( ARFactoryHandler inFactory )
 // 		Events
 // ============================================================================
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryOpenEvent( ARFactoryHandler inFactory, const char * inEventName )
+GUIDOAPI GuidoErrCode GuidoFactoryOpenEvent( ARFactoryHandler inFactory, const char * inEventName )
 {
 	getFactory( inFactory )->createEvent( inEventName );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryCloseEvent( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryCloseEvent( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->addEvent();
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryAddSharp( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryAddSharp( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->addSharp();
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryAddFlat( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryAddFlat( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->addFlat();
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactorySetEventDots( ARFactoryHandler inFactory, int pointCount )
+GUIDOAPI GuidoErrCode GuidoFactorySetEventDots( ARFactoryHandler inFactory, int pointCount )
 {
 	getFactory( inFactory )->setPoints( pointCount );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactorySetEventAccidentals( ARFactoryHandler inFactory, int inValue )
+GUIDOAPI GuidoErrCode GuidoFactorySetEventAccidentals( ARFactoryHandler inFactory, int inValue )
 {
 	getFactory( inFactory )->setAccidentals( inValue );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactorySetOctave( ARFactoryHandler inFactory, int inValue )
+GUIDOAPI GuidoErrCode GuidoFactorySetOctave( ARFactoryHandler inFactory, int inValue )
 {
 	getFactory( inFactory )->setRegister( inValue );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactorySetDuration( ARFactoryHandler inFactory, int numerator, int denominator )
+GUIDOAPI GuidoErrCode GuidoFactorySetDuration( ARFactoryHandler inFactory, int numerator, int denominator )
 {
 	getFactory( inFactory )->setNumerator( numerator );
 	getFactory( inFactory )->setDenominator( denominator );
@@ -165,56 +165,56 @@ GUIDOAPI(GuidoErrCode) GuidoFactorySetDuration( ARFactoryHandler inFactory, int 
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryCloseTag( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryCloseTag( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->addTag();
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryAddTagParameterString( ARFactoryHandler inFactory, const char * inParam )
+GUIDOAPI GuidoErrCode GuidoFactoryAddTagParameterString( ARFactoryHandler inFactory, const char * inParam )
 {
 	getFactory( inFactory )->addTagParameter( inParam );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryAddTagParameterInt( ARFactoryHandler inFactory, int inParam )
+GUIDOAPI GuidoErrCode GuidoFactoryAddTagParameterInt( ARFactoryHandler inFactory, int inParam )
 {
 	getFactory( inFactory )->addTagParameter( inParam );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryAddTagParameterFloat( ARFactoryHandler inFactory, double inParam )
+GUIDOAPI GuidoErrCode GuidoFactoryAddTagParameterFloat( ARFactoryHandler inFactory, double inParam )
 {
 	getFactory( inFactory )->addTagParameter( inParam );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactorySetParameterName( ARFactoryHandler inFactory, const char * inName )
+GUIDOAPI GuidoErrCode GuidoFactorySetParameterName( ARFactoryHandler inFactory, const char * inName )
 {
 	getFactory( inFactory )->setParameterName( inName );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactorySetParameterUnit( ARFactoryHandler inFactory, const char * inUnit )
+GUIDOAPI GuidoErrCode GuidoFactorySetParameterUnit( ARFactoryHandler inFactory, const char * inUnit )
 {
 	getFactory( inFactory )->setUnit( inUnit );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryOpenTag( ARFactoryHandler inFactory, const char * name, long tagID )
+GUIDOAPI GuidoErrCode GuidoFactoryOpenTag( ARFactoryHandler inFactory, const char * name, long tagID )
 {
 	getFactory( inFactory )->createTag( name, tagID );
 	return guidoNoErr;
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryOpenRangeTag( ARFactoryHandler inFactory, const char * name, long tagID )
+GUIDOAPI GuidoErrCode GuidoFactoryOpenRangeTag( ARFactoryHandler inFactory, const char * name, long tagID )
 {
 	ARFactory * factory = getFactory( inFactory );
 	factory->createTag( name, tagID );
@@ -223,7 +223,7 @@ GUIDOAPI(GuidoErrCode) GuidoFactoryOpenRangeTag( ARFactoryHandler inFactory, con
 }
 
 // ----------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFactoryEndTag( ARFactoryHandler inFactory )
+GUIDOAPI GuidoErrCode GuidoFactoryEndTag( ARFactoryHandler inFactory )
 {
 	getFactory( inFactory )->endTag();
 	return guidoNoErr;
@@ -232,14 +232,14 @@ GUIDOAPI(GuidoErrCode) GuidoFactoryEndTag( ARFactoryHandler inFactory )
 
 	// was GuidoFactoryCreateTag
 	#ifdef __UseOldGUIDOFactory__
-	GUIDOAPI(GuidoErrCode) GuidoFactoryCreateTag( ARFactoryHandler inFactory, const char * inTagName, long inTagID )
+	GUIDOAPI GuidoErrCode GuidoFactoryCreateTag( ARFactoryHandler inFactory, const char * inTagName, long inTagID )
 	{
 		getFactory( inFactory )->createTag( inTagName, inTagID );
 		return guidoNoErr;
 	}
 
 	// ----------------------------------------------------------------------------
-	GUIDOAPI(GuidoErrCode) GuidoFactoryIsRangeTag(ARFactoryHandler inFactory )
+	GUIDOAPI GuidoErrCode GuidoFactoryIsRangeTag(ARFactoryHandler inFactory )
 	{
 		getFactory( inFactory )->tagRange();
 		return guidoNoErr;

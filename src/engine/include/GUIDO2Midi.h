@@ -19,14 +19,15 @@
 #include <map>
 
 /*!
+\addtogroup CAPI
+@{
 \addtogroup midi MIDI support
 @{
 */
 
 
 
-/** \brief The GuidoInitDesc data structure contains all information
-	required by GuidoInit()
+/** \brief A data structure containing the settings for MIDI conversion
 */
 typedef struct Guido2MidiParams
 {
@@ -60,12 +61,13 @@ extern "C" {
 		\param params: conversions parameters.
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode) GuidoAR2MIDIFile(const ARHandler ar, const char* filename, const Guido2MidiParams* params);
+	GUIDOAPI GuidoErrCode GuidoAR2MIDIFile(const ARHandler ar, const char* filename, const Guido2MidiParams* params);
 
 #ifdef __cplusplus
 }
 #endif
 
+/*! @} */
 /*! @} */
 
 #endif

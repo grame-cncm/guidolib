@@ -50,7 +50,7 @@ using namespace std;
 // ==========================================================================
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoParser *) GuidoOpenParser ()
+GUIDOAPI GuidoParser * GuidoOpenParser ()
 {
     GuidoParser *newParser = new GuidoParser();
 
@@ -58,7 +58,7 @@ GUIDOAPI(GuidoParser *) GuidoOpenParser ()
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoCloseParser (GuidoParser *p)
+GUIDOAPI GuidoErrCode GuidoCloseParser (GuidoParser *p)
 {
     if (!p)
         return guidoErrBadParameter;
@@ -69,7 +69,7 @@ GUIDOAPI(GuidoErrCode) GuidoCloseParser (GuidoParser *p)
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
+GUIDOAPI ARHandler GuidoFile2AR (GuidoParser *p, const char *file)
 {
     if (!file || !p)
         return NULL;
@@ -110,7 +110,7 @@ GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
+GUIDOAPI ARHandler	GuidoString2AR (GuidoParser *p, const char *str)
 {
     if( !str || !p )
         return NULL;
@@ -146,7 +146,7 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
+GUIDOAPI ARHandler	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 {
     if (!p || !s)
         return NULL;
@@ -189,7 +189,7 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 
 
 // --------------------------------------------------------------------------
-GUIDOAPI(const char*)	GuidoStream2GuidoString ( GuidoStream* stream)
+GUIDOAPI const char*	GuidoStream2GuidoString ( GuidoStream* stream)
 {
 	const string s (stream->getGuidoCode());
 	char *str = new char[s.size()+1];
@@ -199,7 +199,7 @@ GUIDOAPI(const char*)	GuidoStream2GuidoString ( GuidoStream* stream)
 
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col, const char** msg)
+GUIDOAPI GuidoErrCode GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col, const char** msg)
 {
     if (!p)
         return guidoErrBadParameter;
@@ -213,7 +213,7 @@ GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoStream *) GuidoOpenStream ()
+GUIDOAPI GuidoStream * GuidoOpenStream ()
 {
     GuidoStream *newStream = new GuidoStream();
 
@@ -221,7 +221,7 @@ GUIDOAPI(GuidoStream *) GuidoOpenStream ()
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(const char *) GuidoGetStream (const GuidoStream * guidoStream)
+GUIDOAPI const char * GuidoGetStream (const GuidoStream * guidoStream)
 {
 	const string s (guidoStream->getStreamStr());
 	char *str = new char[s.size()+1];
@@ -231,13 +231,13 @@ GUIDOAPI(const char *) GuidoGetStream (const GuidoStream * guidoStream)
 
 
 // --------------------------------------------------------------------------
-GUIDOAPI(void) GuidoFreeStreamString (const char * str)
+GUIDOAPI void GuidoFreeStreamString (const char * str)
 {
 	delete[] str;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream *s)
+GUIDOAPI GuidoErrCode GuidoCloseStream (GuidoStream *s)
 {
     if (!s)
         return guidoErrBadParameter;
@@ -248,7 +248,7 @@ GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream *s)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoWriteStream (GuidoStream *s, const char *str)
+GUIDOAPI GuidoErrCode GuidoWriteStream (GuidoStream *s, const char *str)
 {
     if (!s || !str)
         return guidoErrBadParameter;
@@ -259,7 +259,7 @@ GUIDOAPI(GuidoErrCode) GuidoWriteStream (GuidoStream *s, const char *str)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoResetStream (GuidoStream *s)
+GUIDOAPI GuidoErrCode GuidoResetStream (GuidoStream *s)
 {
     if (!s)
         return guidoErrBadParameter;

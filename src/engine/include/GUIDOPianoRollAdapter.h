@@ -20,7 +20,8 @@
 /*!
  * \addtogroup APICplusplus C++ interface
  * @{
- * \defgroup PianoRollAdapter Guido Piano Roll Adapter
+ * \addtogroup PianoRollAdapter Guido Piano Roll Adapter
+ * @{
  *	\brief A C++ interface to the GUIDOPianoRoll API
  *
  *	A C++ class to manupilate Piano roll.
@@ -184,4 +185,6 @@ class_export GUIDOPianoRollAdapter
 #endif
 };
 /*! @} */
+/*! @} */
+
 #endif // GUIDOPIANOROLLADAPTER_H

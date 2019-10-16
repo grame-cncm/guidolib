@@ -19,7 +19,9 @@
 /*!
  * \addtogroup APICplusplus C++ interface
  * @{
- * \defgroup ReducedProportionalAdapter Guido Reduced Proportional representation Adapter
+ * \addtogroup ReducedProportionalAdapter Guido Reduced Proportional Representation Adapter
+ * @{
+
  *	\brief A C++ interface to the GUIDOReducedProportional API
  *
  *	A C++ class to manipulate reduced proportional representations.
@@ -53,11 +55,10 @@ class_export GUIDOReducedProportionalAdapter
 		/*!
 			\brief Sets limits to a reduced proportional representation (start/end date, lower/higher pitch)
 			\param pr a reduced proportional representation previously created with GuidoAR2RProportional or GuidoMidi2RProportional
-			\param limitParams the structure containing limits :
-						  start date    (GuidoDate)     (0/0 to adjust automatically start date to the score's start date)
-						  end date      (GuidoDate)     (0/0 to adjust automatically end date to the score's end date)
-						  minimal pitch (midi notation) (-1 to adjust automatically min pitch to the score's minimal pitch)
-						  maximal pitch (midi notation) (-1 to adjust automatically max pitch to the score's maximal pitch)
+			\param start date    (GuidoDate)     (0/0 to adjust automatically start date to the score's start date)
+			\param end date      (GuidoDate)     (0/0 to adjust automatically end date to the score's end date)
+			\param lowpitch minimal pitch (midi notation) (-1 to adjust automatically min pitch to the score's minimal pitch)
+			\param highpitch maximal pitch (midi notation) (-1 to adjust automatically max pitch to the score's maximal pitch)
 					Remark : minimal range pitch accepted is 1 octave.
 			\return a Guido error code
 		*/
@@ -157,4 +158,6 @@ class_export GUIDOReducedProportionalAdapter
 #endif
 };
 /*! @} */
+/*! @} */
+
 #endif

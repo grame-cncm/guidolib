@@ -29,8 +29,10 @@
 
 
 /*!
-\addtogroup Mapping GUIDO Mapping
+\addtogroup CAPI
 @{
+ \addtogroup Mapping GUIDO Mapping
+ @{
  */
 
 //------------------------------------------------------------------------------
@@ -45,7 +47,11 @@ typedef enum {
 	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage, kGraceNote
 } GuidoElementType;
 
-// elements infos struct
+
+/** \brief Information related to elements
+
+	This information if given to the Graph2TimeMap method of a MapCollector.
+*/
 typedef struct {
 	GuidoElementType type;		///< the element type
 	int			     staffNum;	///< the element staff number or 0 when na
@@ -95,6 +101,9 @@ inline std::ostream& operator << (std::ostream& out, const TimeSegment& s) {
 
 //------------------------------------------------------------------------------
 // mapping collector abstract class definition
+/*!
+	\brief an abstract class to be provided by clients to collect mappings
+*/
 class MapCollector
 {
 	public:
@@ -110,6 +119,9 @@ class MapCollector
 };
 
 //------------------------------------------------------------------------------
+/*!
+	\brief information associated to a rectangle in a mapping (MapElement)
+*/
 class RectInfos {
 		TimeSegment			fTime;
 		GuidoElementInfos	fInfos;
@@ -127,6 +139,9 @@ typedef std::pair<FloatRect, RectInfos>	 MapElement;
 
 //------------------------------------------------------------------------------
 // time mapping collector abstract class definition
+/*!
+	\brief an abstract class to be provided by clients to collect time mappings
+*/
 class TimeMapCollector
 {
 	public:
@@ -156,7 +171,7 @@ extern "C" {
 	\param f a MapCollector object that will be called for each selected element.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler gr, int pagenum, float width, float height, 
+GUIDOAPI GuidoErrCode	GuidoGetMap( CGRHandler gr, int pagenum, float width, float height,
 									 GuidoElementSelector sel, MapCollector& f);
 
 /** \brief Retrieves a guido staff graphic to time mapping, without any processing (RAW).
@@ -169,7 +184,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler gr, int pagenum, float width, flo
 	\param outmap contains the mapping on output.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido voice graphic to time mapping, without any processing (RAW).
 
@@ -181,7 +196,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w,
 	\param outmap contains the mapping on output.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido system graphic to time mapping, without any processing (RAW). 
 
@@ -192,7 +207,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w,
 	\param outmap contains the mapping on output.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido page graphic to time mapping. 
 
@@ -203,7 +218,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w
 	\param outmap contains the mapping on output.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido staff graphic to time mapping. New behaviour: if a rest is at
     a bar start, mapping is extended toward left barline. For old behaviour, use GuidoGetStaffMapV1.
@@ -216,7 +231,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, flo
 	\param outmap contains the mapping on output.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
     
 /** \brief Retrieves a guido staff graphic to time mapping. To use the new behaviour, see GuidoGetStaffMap.
      
@@ -228,7 +243,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, fl
     \param outmap contains the mapping on output.
     \return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetStaffMapV1( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetStaffMapV1( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido voice graphic to time mapping. 
 
@@ -240,7 +255,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetStaffMapV1( CGRHandler gr, int pagenum, float w, 
 	\param outmap contains the mapping on output.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido system graphic to time mapping. New behaviour: if all staves have a rest
     at a same bar start, mapping is extended toward left barline. For old behaviour, use GuidoGetSystemMapV1.
@@ -252,7 +267,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, fl
 	\param outmap contains the mapping on output.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido system graphic to time mapping. To use the new behaviour, see GuidoGetSystemMap.
      
@@ -263,7 +278,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, f
     \param outmap contains the mapping on output.
     \return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
+GUIDOAPI GuidoErrCode	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
  
 /** \brief Retrieves a time segment and the associated graphic segment in a mapping.
 
@@ -273,7 +288,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w,
 	\param r on output, the graphic segment associated to the time segment
 	\return false when there is no segment containing the date.
 */
-GUIDOAPI(bool)	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, TimeSegment& t, FloatRect& r);
+GUIDOAPI bool	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, TimeSegment& t, FloatRect& r);
 
 /** \brief Retrieves a time segment and the associated graphic segment in a mapping.
 
@@ -284,7 +299,7 @@ GUIDOAPI(bool)	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, T
 	\param t on output, the time segment associated to the graphic segment
 	\return false when there is no segment containing the point.
 */
-GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSegment& t, FloatRect& r);
+GUIDOAPI bool	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSegment& t, FloatRect& r);
 
 /** \brief Retrieves the graphic to time mapping corresponding to the SVG output
 
@@ -297,7 +312,7 @@ GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeS
 #ifdef WIN32
     __declspec(deprecated("Deprecated function (not maintained code)."))
 #endif
-GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel, std::vector<MapElement>& outMap) GUIDOAPI_deprecated;
+GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel, std::vector<MapElement>& outMap) GUIDOAPI_deprecated;
 
 /** \brief Retrieves the rolled to unrolled time mapping
 
@@ -305,9 +320,10 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSe
 	\param f a TimeMapCollector object that will be called for each time segment.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetTimeMap( CARHandler gr, TimeMapCollector& f);
+GUIDOAPI GuidoErrCode	GuidoGetTimeMap( CARHandler gr, TimeMapCollector& f);
 
 
+/*! @} */
 /*! @} */
 
 #ifdef __cplusplus

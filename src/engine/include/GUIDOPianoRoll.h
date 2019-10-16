@@ -18,6 +18,13 @@
 #include "GUIDOExport.h"
 #include "GUIDOScoreMap.h"
 
+/*!
+\addtogroup CAPI
+@{
+\addtogroup PianoRoll Piano-roll API
+@{
+*/
+
 class PianoRoll;
 
 /** \brief PianoRollType
@@ -44,6 +51,9 @@ const int kBLine      =  1<<11;
 const int kAutoLines  =  0;
 const int kNoLine     = -1;
 
+/*!
+	\brief A struct to set a piano roll boundaries in time and in pitch
+*/
 typedef struct LimitParams {
     GuidoDate startDate;
     GuidoDate endDate;
@@ -55,11 +65,6 @@ typedef struct LimitParams {
 extern "C" {
 #endif
 
-/*!
-\addtogroup PianoRoll Piano API
-@{
-*/
-
 	//---------------------------------------------------------------------------
 	// the new API
 	//---------------------------------------------------------------------------
@@ -68,11 +73,11 @@ extern "C" {
 		\brief Creates a new piano roll from AR, corresponding to type :
                              simplePianoRoll     -> basic piano roll
                              trajectoryPianoRoll -> every event is graphically linked to the previous one
-		\param PianoRollType the piano roll type
+		\param type the piano roll type
         \param arh an AR handler
 		\return a guido piano roll.
 	*/
-	GUIDOAPI(PianoRoll *)  GuidoAR2PianoRoll(PianoRollType type, ARHandler arh);
+	GUIDOAPI PianoRoll*  GuidoAR2PianoRoll(PianoRollType type, ARHandler arh);
     
 	/*!
 		\brief Creates a new piano roll from Midi, corresponding to type :
@@ -82,14 +87,14 @@ extern "C" {
         \param midiFileName a midi file name
 		\return a guido piano roll.
 	*/
-	GUIDOAPI(PianoRoll *)  GuidoMidi2PianoRoll(PianoRollType type, const char *midiFileName);
+	GUIDOAPI PianoRoll*  GuidoMidi2PianoRoll(PianoRollType type, const char *midiFileName);
 
 	/*!
 		\brief Destroys a guido piano roll and releases all the associated ressources
 		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
 		\return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)	    GuidoDestroyPianoRoll(PianoRoll *pr);
+	GUIDOAPI GuidoErrCode	    GuidoDestroyPianoRoll(PianoRoll *pr);
 
 	/*!
 		\brief Sets limits to a piano roll (start/end date, lower/higher pitch)
@@ -102,7 +107,7 @@ extern "C" {
                 Remark : minimal range pitch accepted is 1 octave.
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetLimits(PianoRoll *pr, LimitParams limitParams);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollSetLimits(PianoRoll *pr, LimitParams limitParams);
 
     /*!
 		\brief Enables keyboard or not (not enabled by default)
@@ -110,7 +115,7 @@ extern "C" {
 		\param enabled a boolean corresponding to the keyboard draw state
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableKeyboard(PianoRoll *pr, bool enabled);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollEnableKeyboard(PianoRoll *pr, bool enabled);
     
 	/*!
 		\brief Gets the piano roll keyboard width
@@ -119,17 +124,17 @@ extern "C" {
         \param keyboardWidth the pianoroll keyboard width
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(PianoRoll *pr, int height, float &keyboardWidth);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollGetKeyboardWidth(PianoRoll *pr, int height, float &keyboardWidth);
 
     /*!
-		\brief Enables or not the automatic voices coloration (not enabled by default) (not for a midi rendering) // REM: à voir
+		\brief Enables or not the automatic voices coloration (not enabled by default) (not for a midi rendering) // REM: ï¿½ voir
                If a color is manually set with GuidoPianoRollSetColorToVoice, automatic
                color will not be applied for this voice.
 		\param pr a pianoroll previously created with GuidoAR2PianoRoll
 		\param enabled a boolean corresponding to the color state
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableAutoVoicesColoration(PianoRoll *pr, bool enabled);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollEnableAutoVoicesColoration(PianoRoll *pr, bool enabled);
 
     /*!
 		\brief Sets a RGB color to a voice (first voice is number 1) (black by default)
@@ -141,7 +146,7 @@ extern "C" {
         \param a the alpha param of RGB color
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetRGBColorToVoice(PianoRoll *pr, int voiceNum, int r, int g, int b, int a);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollSetRGBColorToVoice(PianoRoll *pr, int voiceNum, int r, int g, int b, int a);
 
     /*!
 		\brief Sets a html color to a voice (first voice is number 1) (black by default)
@@ -150,7 +155,7 @@ extern "C" {
         \param color the html color (constants are defined in Colors.h)
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetHtmlColorToVoice(PianoRoll *pr, int voiceNum, long color);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollSetHtmlColorToVoice(PianoRoll *pr, int voiceNum, long color);
 
 	/*!
 		\brief remove a color to a voice (first voice is number 1) (black by default)
@@ -158,7 +163,7 @@ extern "C" {
 		\param voiceNum the voice number (first voice is number 1)
 		\return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollRemoveColorToVoice(PianoRoll *pr, int voiceNum);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollRemoveColorToVoice(PianoRoll *pr, int voiceNum);
 
     /*!
 		\brief Enables or not measure bars (false by default)
@@ -166,7 +171,7 @@ extern "C" {
 		\param enabled a boolean corresponding to the measure bars draw state
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableMeasureBars(PianoRoll *pr, bool enabled);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollEnableMeasureBars(PianoRoll *pr, bool enabled);
     
     /*!
 		\brief Sets the pitch lines display mode (automatic by default). Use Pitch lines display mode constants to pick lines
@@ -177,16 +182,17 @@ extern "C" {
 		\param mode an int corresponding to the pitch lines display mode
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLinesDisplayMode(PianoRoll *pr, int mode);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollSetPitchLinesDisplayMode(PianoRoll *pr, int mode);
 
     /*!
 		\brief Gets the piano roll map
 		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
         \param width the width of the piano roll (-1 to set the default width : 1024)
         \param height the height of the canvas (-1 to set the default height : 512)
+		\param outmap  on output: a time to graphic map
         \return a Guido error code (returns guidoErrBadParameter if keyboard width is higher than width param)
 	*/
-    GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetMap(const PianoRoll *pr, int width, int height, Time2GraphicMap &outmap);
+    GUIDOAPI GuidoErrCode      GuidoPianoRollGetMap(const PianoRoll *pr, int width, int height, Time2GraphicMap &outmap);
 
 	/*!
 		\brief Draw the piano roll on a VGDevice
@@ -196,8 +202,9 @@ extern "C" {
         \param dev the device on which piano will be drawn
         \return a Guido error code (returns guidoErrBadParameter if keyboard width is higher than width param)
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollOnDraw(PianoRoll *pr, int width, int height, VGDevice* dev);
+	GUIDOAPI GuidoErrCode      GuidoPianoRollOnDraw(PianoRoll *pr, int width, int height, VGDevice* dev);
 
+/*! @} */
 /*! @} */
 
 
