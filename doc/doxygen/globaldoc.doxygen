@@ -92,12 +92,12 @@ Existing implementations of VGDevices:
     GDeviceWin32GDIPlus:    Windows (gdiplus)
     CairoDevice:            Linux   (cairo)
     GDeviceQt:              platform independent - Qt based device
+    GDeviceGL:              OpenGL implementation
 \endverbatim
 
-VGDevice implementations not maintained:
+Unsupported VGDevice implementations:
 \verbatim
     GDeviceWin2000:         Windows 2000 / XP(gdi+)
-    GDeviceGL:              OpenGL implementation
     GDeviceGTK:             Linux GTK implementation
     GDevicePostScript:      EPS files (encapsulated postscript)
     GDeviceWx:              wxWindows DC implementation.
