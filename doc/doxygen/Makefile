@@ -2,19 +2,10 @@
 VERSION := $(shell cat ../../version.txt)
 DOC = guidolib-$(VERSION)
 
-doc:
-	mv Doxyfile __Doxyfile
-	sed -e 's/--version--/$(VERSION)/' __Doxyfile > Doxyfile
+all:
 	doxygen
-	mv __Doxyfile Doxyfile
-	cp doxygen.css html
-	-make -C latex
-	-mv latex/refman.pdf $(DOC).pdf
-	-[ -d  $(DOC) ] && rm -rf $(DOC)
-	mkdir $(DEST)$(DOC)
-	cp -R html $(DEST)$(DOC)
-	mv $(DOC).pdf $(DEST)$(DOC)
-
+	doxygen Doxyall
+	
 
 clean:
-	rm -rf html latex $(DOC).pdf $(DOC).tgz $(DOC)
+	rm -rf API internal

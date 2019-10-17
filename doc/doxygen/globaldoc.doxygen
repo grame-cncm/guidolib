@@ -19,8 +19,10 @@ score level music in a platform independent plain text and human readable way. I
 on a conceptually simple but powerful formalism: its design concentrates on general musical 
 concepts (as opposed to graphical features). A key feature of the GUIDO design is adequacy 
 which means that simple musical concepts should be represented in a simple way and only 
-complex notions should require complex representations. This design is reflected by 
-three specification levels: the basic, advanced  and extended GUIDO specifications.
+complex notions should require complex representations. 
+
+The GMN language is fully documented on the [guidodoc](http://guidodoc.grame.fr) web site.
+
 
 
 \section engine The GUIDO Engine
