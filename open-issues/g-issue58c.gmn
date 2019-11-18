@@ -1,0 +1,22 @@
+{
+[ 
+	\staff<1> 
+	\clef<"g2"> \key<-1> \meter<"3/8">  
+   (* meas. 1 *)  \beamBegin:1 
+	\tuplet<"3", position="below">( c3/24 \slurBegin:1<curve="up"> 
+	\beamBegin:2  b2/48 a g f) \beamEnd:1 \beamEnd:2 
+	
+	\beamBegin:1 \tuplet<"3", dispNote="/16", position="below">( e/24 
+	d/24 c/24) \slurEnd:1  \beamEnd:1 
+	\slurBegin:1<curve="up"> 
+	\beamBegin:1 \tuplet<"3">( e/24 g b&) \slurEnd:1 \beamEnd:1 \bar 
+   
+	(* meas. 2 *)  \beamBegin:1 \tuplet<"3",position="below">( d3/24 
+	\slurBegin:1<curve="up"> \beamBegin:2 c/48 b&2/48 a/48 g/48)
+ 	\beamEnd:2 \beamEnd:1 
+ 	\beamBegin:1 \tuplet<"3", position="below">( f#/24 e/24 d/24)
+ 	\slurEnd:1 \beamEnd:1 \slurBegin:1<curve="up"> 
+	\beamBegin:1 \tuplet<"3">( f#/24 a/24 c3/24)
+ 	\slurEnd:1 \beamEnd:1 
+]
+}
