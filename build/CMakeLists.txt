@@ -109,11 +109,12 @@ endif()
 
 #######################################
 # set directories, src and headers.
+set (ENVIRONMENTS ${ROOT}/environments)
 set (PLATFORMS ${ROOT}/platforms)
 set (SRC_PATH  ${ROOT}/src/engine)
 set (HEADERS_PATH ${SRC_PATH}/include)
 if (GL)
-	set(VGDEV_PATH ${PLATFORMS}/opengl/device)
+	set(VGDEV_PATH ${ENVIRONMENTS}/opengl/device)
 elseif(WIN32)
 	set(VGDEV_PATH ${PLATFORMS}/win32/src)
 elseif(APPLE)
