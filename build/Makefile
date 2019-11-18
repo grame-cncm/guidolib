@@ -76,6 +76,7 @@ help :
 	@echo "   uninstall    : undo what install did"
 	@echo "   localinstall : install the Guido tools to $$HOME/bin"
 	@echo "   tags         : extract the current tags list"
+	@echo "   guido2       : build the embedded svg font"
 	@echo 
 	@echo "Options:"
 	@echo "   BUILDDIR     : the output folder (currently $(BUILDDIR))"
@@ -87,6 +88,7 @@ help :
 	@echo " 'DESTDIR'    : the destination directory,"
 	@echo " 'PREFIX'     : the destination prefix,"
 	@echo "  Note that when using a relative path, it is relative to BUILDDIR ($(BUILDDIR))"
+
 
 #===============================================================
 # building the javascript engine
@@ -141,10 +143,13 @@ iosdir/guidolib.xcodeproj:
 #===============================================================
 # build the embedded svg font
 #===============================================================
-guido2: ../src/engine/lib/guido2.cpp
+guido2: ../src/engine/lib/guido2.cpp ../src/svg2carray
 
 ../src/engine/lib/guido2.cpp : ../src/guido2.svg
 	cd ../src && makecppfont guido2.svg > engine/lib/guido2.cpp
+
+../src/svg2carray : ../src/svg2carray.cpp
+	g++ ../src/svg2carray.cpp -o ../src/svg2carray
 
 #===============================================================
 # extract the current tags list
