@@ -21,7 +21,7 @@ endif()
 set (GUIDOSRC	${ROOT}/src)
 set (TOOLS_PATH	${GUIDOSRC}/tools)
 set (TESTS_PATH	${ROOT}/validate)
-set (GUIDO		${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+set (GUIDO		${CMAKE_CURRENT_SOURCE_DIR}/../..)
 
 #######################################
 if(UNIX)
