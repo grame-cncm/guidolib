@@ -109,13 +109,11 @@ endif()
 
 #######################################
 # set directories, src and headers.
-set (ENVIRONMENTS ${ROOT}/environments)
 set (PLATFORMS ${ROOT}/platforms)
 set (SRC_PATH  ${ROOT}/src/engine)
 set (HEADERS_PATH ${SRC_PATH}/include)
-if (GL)
-	set(VGDEV_PATH ${ENVIRONMENTS}/opengl/device)
-elseif(WIN32)
+
+if(WIN32)
 	set(VGDEV_PATH ${PLATFORMS}/win32/src)
 elseif(APPLE)
 	set(VGDEV_PATH ${PLATFORMS}/macosx/src)
@@ -242,6 +240,7 @@ endif()
 target_compile_definitions (${target} PRIVATE ${DEFS})
 target_include_directories (${target} PRIVATE ${INCDIRS})
 target_link_libraries (${target} ${LINK})
+
 
 ####################################
 # add sub projects (tools)
