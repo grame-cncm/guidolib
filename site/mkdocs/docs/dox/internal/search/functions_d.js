@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['nepointerlist',['NEPointerList',['../classNEPointerList.html#a6087abaf21adebb8f3c52930e3bd6953',1,'NEPointerList::NEPointerList(const NEPointerList &amp;lst, int ownselements=0)'],['../classNEPointerList.html#a06c1c2b8ea11893a206259676caf90ca',1,'NEPointerList::NEPointerList(int ownselements=0)']]],
+  ['newpage',['NewPage',['../classGRStaffManager.html#aeee7617185fd4ad6091d95626dfa31f7',1,'GRStaffManager']]],
+  ['normalize',['normalize',['../classFraction.html#a5628d01bfa89456806ebfe18866d3b8e',1,'Fraction']]],
+  ['note',['Note',['../classMidiMapper.html#a44e0a0ac742bb5e467aabe79a35cfc3f',1,'MidiMapper::Note()'],['../classTimeMapper.html#a1794483a4ebed9f14579db12a80bc62b',1,'TimeMapper::Note()'],['../classTimeUnwrap.html#a23a4284376592f172eade805cbf6088c',1,'TimeUnwrap::Note()']]],
+  ['noteabsdur',['noteAbsDur',['../classGuidoParser.html#a2749931777a3075f14d2c9c6bf20e9cb',1,'GuidoParser::noteAbsDur()'],['../classNoteAndChordParser.html#a9f63755699d0b8cebda37f53b6043e78',1,'NoteAndChordParser::noteAbsDur()']]],
+  ['noteacc',['noteAcc',['../classGuidoParser.html#a5916ba4f2db7e73efeb4e86426062794',1,'GuidoParser']]],
+  ['noteandchordfactory',['NoteAndChordFactory',['../classNoteAndChordFactory.html#a904380970fd5d8c5a435b990589fbb56',1,'NoteAndChordFactory']]],
+  ['noteandchordparser',['NoteAndChordParser',['../classNoteAndChordParser.html#a6c0aec1fe08ce4c6c2d1aba3b2e4e7f9',1,'NoteAndChordParser']]],
+  ['noteddot',['noteDdot',['../classGuidoParser.html#aeb8248aeca56d223647578a0248484a7',1,'GuidoParser::noteDdot()'],['../classNoteAndChordParser.html#a08367f649f04fe673e1b62fb7341eb48',1,'NoteAndChordParser::noteDdot()']]],
+  ['notedenom',['noteDenom',['../classGuidoParser.html#aa0ad7e473d3f7e141d345cabb0950b7b',1,'GuidoParser::noteDenom()'],['../classNoteAndChordParser.html#a533649794ff8810cea6e15d401efb58d',1,'NoteAndChordParser::noteDenom()']]],
+  ['notedot',['noteDot',['../classGuidoParser.html#a3a855929bbaa81635d1dd981a8fd344f',1,'GuidoParser::noteDot()'],['../classNoteAndChordParser.html#acb261bff78b8427dda597b43be56fa65',1,'NoteAndChordParser::noteDot()']]],
+  ['notedrawer',['NoteDrawer',['../classNoteDrawer.html#ad4c0cc948707a368303d6ced47b012fb',1,'NoteDrawer']]],
+  ['noteenum',['noteEnum',['../classGuidoParser.html#a5606601867b555c201311357e60b0f84',1,'GuidoParser::noteEnum()'],['../classNoteAndChordParser.html#ae47289e111362fba7767eb306bc1ce14',1,'NoteAndChordParser::noteEnum()']]],
+  ['noteinit',['noteInit',['../classGuidoParser.html#ac1d6b6a1ccaafbd12da6289e188fbbc0',1,'GuidoParser']]],
+  ['noteoct',['noteOct',['../classGuidoParser.html#ae05d9cbf79298526e93ac64422f02d17',1,'GuidoParser']]],
+  ['notetdot',['noteTdot',['../classGuidoParser.html#abfbdadd4e16619a452dfcdb624fcd471',1,'GuidoParser::noteTdot()'],['../classNoteAndChordParser.html#ab94b47829a22c9e00f73b2713b452fd6',1,'NoteAndChordParser::noteTdot()']]],
+  ['notifyaccoladetag',['notifyAccoladeTag',['../classGRStaffManager.html#ad5ab037c3a4491726e26e7ed6d84eb2f',1,'GRStaffManager::notifyAccoladeTag()'],['../classGRSystem.html#ad242d6a4c47bf49156d32dee1cf74a14',1,'GRSystem::notifyAccoladeTag()']]],
+  ['notifysize',['NotifySize',['../classVGDevice.html#aff1dbf816548c36fadfeb510c0406c01',1,'VGDevice::NotifySize()'],['../classDecoratorDevice.html#a1a65b957d20071b80460f1c933f2967a',1,'DecoratorDevice::NotifySize()'],['../classNullGDevice.html#a8e20fa283edf0dfad826fd4821e0ce17',1,'NullGDevice::NotifySize()'],['../group__VGSys.html#ga9635721531a34c6d4ff5ff5bac97bbe4',1,'NotifySize():&#160;AbstractDevice.h']]],
+  ['nullgdevice',['NullGDevice',['../classNullGDevice.html#a606111455f3de1af9afab3522a47717a',1,'NullGDevice::NullGDevice(VGSystem *sys)'],['../classNullGDevice.html#a3a3de6308016e1233e39ef6385ea7f0b',1,'NullGDevice::NullGDevice(VGSystem *sys, int inWidth, int inHeight)']]],
+  ['nullgfont',['NullGFont',['../classNullGFont.html#a588d51c9abd61eacb5697bbf539f19e3',1,'NullGFont']]],
+  ['nullgsystem',['NullGSystem',['../classNullGSystem.html#a75c6850d2166280dbb5fc945e4fd50f8',1,'NullGSystem']]],
+  ['nvpoint',['NVPoint',['../classNVPoint.html#a0a78d95645696ba2236d37ff82c7e7c8',1,'NVPoint::NVPoint()'],['../classNVPoint.html#a7cce8c68f7a6505b749f24b1f98cbe71',1,'NVPoint::NVPoint(float p_x, float p_y)'],['../classNVPoint.html#abd6ec94e1921ba6f2441c16866423bfb',1,'NVPoint::NVPoint(const NVPoint &amp;nvp)']]],
+  ['nvrect',['NVRect',['../classNVRect.html#a7fcec3da6b4cba4af243459821b9aea0',1,'NVRect::NVRect()'],['../classNVRect.html#a5423c17e54a7740eddd47e90a752a6e6',1,'NVRect::NVRect(float p_left, float p_top, float p_right, float p_bottom)']]],
+  ['nvstring',['NVstring',['../classNVstring.html#afe66670d26319a52ee5e6bde75322802',1,'NVstring::NVstring()'],['../classNVstring.html#ae0aea0ece0d8c7403eeaee8de948b8bb',1,'NVstring::NVstring(const char *p)'],['../classNVstring.html#a2453e22f94d52e23e1110eacde8b935d',1,'NVstring::NVstring(const std::string &amp;str)'],['../classNVstring.html#a835d6c4c77de6fa7c48cfe2428105d97',1,'NVstring::NVstring(const NVstring &amp;in)']]]
+];
