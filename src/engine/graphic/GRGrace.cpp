@@ -27,7 +27,7 @@ GRGrace::GRGrace( GRStaff * stf, const ARGrace * argrc )
 	sse->grsystem = stf->getGRSystem(); 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->p = (void *) getNewGRSaveStruct();
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 }
 
 //void GRGrace::addAssociation(GRNotationElement *p )

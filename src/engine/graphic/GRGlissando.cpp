@@ -81,7 +81,7 @@ GRSystemStartEndStruct * GRGlissando::initGRGlissando( GRStaff * grstaff )
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->endflag   = GRSystemStartEndStruct::RIGHTMOST;
 
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 		
 	fglissInfos = new GRGlissandoSaveStruct;
 	fglissInfos->numPoints = 4;

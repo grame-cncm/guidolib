@@ -55,7 +55,7 @@ GRTuplet::GRTuplet ( GRStaff * inStaff, const ARTuplet * artuplet )
 	GRTupletSaveStruct * st = new GRTupletSaveStruct;
 	sse->p = (void *) st;
 
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 	mDirection = dirUP;
 	mShowLeftBrace  = artuplet->getLeftBrace();
 	mShowRightBrace = artuplet->getRightBrace();

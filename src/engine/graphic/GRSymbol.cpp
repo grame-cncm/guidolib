@@ -45,7 +45,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, const ARSymbol * ar)
 	sse->p = (void *) st;
 	sse->grsystem = p_staff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
     st->positionString = NVstring();
     st->bitmap = NULL;

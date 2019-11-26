@@ -65,7 +65,7 @@ GRBeam::GRBeam(GRStaff * grstaf,const ARBeam * arbeam) : GRPTagARNotationElement
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->p = (void *) st;
 
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 	fLevel = 0;
 }
 

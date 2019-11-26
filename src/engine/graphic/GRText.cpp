@@ -48,7 +48,7 @@ GRText::GRText(GRStaff * staff, const ARText * ar) : GRPTagARNotationElement(ar)
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 
 	mMustFollowPitch = false;
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	float curLSPACE = staff->getStaffLSPACE();
 	mPosition.y = staff->getDredgeSize();

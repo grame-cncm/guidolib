@@ -49,7 +49,7 @@ GRDynamics::GRDynamics(GRStaff * grstaff, const ARDynamic* ar) : GRPTagARNotatio
 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->endflag = GRSystemStartEndStruct::RIGHTMOST;
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 		
 	fThickness = 1.f;
 //	fMarkingSymbol = 0;

@@ -30,7 +30,7 @@ GRRange::GRRange(GRStaff * pstaff, const ARMusicalTag * mtag)
 	sse->grsystem = pstaff->getGRSystem(); 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->p = (void *) getNewGRSaveStruct();
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 }
 
 // -----------------------------------------------------------------------------

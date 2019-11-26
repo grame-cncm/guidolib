@@ -42,7 +42,7 @@ GRTempoChange::GRTempoChange( GRStaff * inStaff, const TempoChange * ar, const c
 	sse->grsystem = inStaff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->p = (void *) getNewGRSaveStruct();
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	mdx = ar->getDX()->getValue();
 	mdy = ar->getDY()->getValue();

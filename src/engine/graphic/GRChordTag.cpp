@@ -33,7 +33,7 @@ GRChordTag::GRChordTag(GRStaff * grstaff, const ARUserChordTag * pchordtag )
 	sse->endElement = NULL;
 	sse->p = NULL;
 
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 }
 
 void GRChordTag::addAssociation(GRNotationElement * grnot)

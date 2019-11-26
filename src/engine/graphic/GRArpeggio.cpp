@@ -36,7 +36,7 @@ GRArpeggio::GRArpeggio( GRStaff * inStaff, const ARArpeggio * ar )
 	sse->grsystem = inStaff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->p = (void *) getNewGRSaveStruct();
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	const TagParameterFloat * dx = ar->getDX();
 	const TagParameterFloat * dy = ar->getDY();

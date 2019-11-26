@@ -132,7 +132,7 @@ void GRPositionTag::ResumeTag(GRStaff * grstaff,GuidoPos assocpos)
 	GRSaveStruct * st = getNewGRSaveStruct();
 	sse->p = (void *) st;
 
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	if (getError())
 	{
@@ -280,7 +280,7 @@ void GRPositionTag::StaffBegin(GRStaff *grstaff)
 	sse->endElement = lastendElement;
 	sse->endpos = lastendpos;
 	
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	if(getError())
 	{

@@ -51,7 +51,7 @@ GRTrill::GRTrill(GRStaff * inStaff, const ARTrill * ar ) : GRPTagARNotationEleme
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	
 	sse->p = (void *) getNewGRSaveStruct();
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	fType = ar->getOrnament();
 

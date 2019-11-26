@@ -105,7 +105,7 @@ GRSystemStartEndStruct * GRBowing::initGRBowing( GRStaff * grstaff )
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	sse->grsystem = grstaff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	GRBowingSaveStruct * st = new GRBowingSaveStruct;
 	st->numoffsets = 3;

@@ -38,7 +38,7 @@ GRTremolo::GRTremolo( GRStaff * stf, const ARTremolo * artrem )
 	
 	sse->p = (void *) getNewGRSaveStruct();
 
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
     
     fIsTwoNotesTremolo = false;
     fStep = LSPACE/2;

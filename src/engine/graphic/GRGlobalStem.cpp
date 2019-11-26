@@ -51,7 +51,7 @@ GRGlobalStem::GRGlobalStem( GRStaff * staff, const ARShareStem * ar, const ARTSt
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->endElement = NULL;
 	sse->p = NULL;
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	fStemState = stemstate;
     fStaffSize = mTagSize = staff->getSizeRatio();

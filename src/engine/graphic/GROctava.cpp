@@ -40,7 +40,7 @@ GROctava::GROctava( GRStaff * staff, const NVstring & text, const AROctava* ar, 
 	sse->grsystem = staff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	sse->p = (void *) getNewGRSaveStruct();
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	mNeedsSpring = 1;
 	float x = 0;

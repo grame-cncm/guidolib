@@ -48,7 +48,7 @@ GRHarmony::GRHarmony(GRStaff * p_staff, const ARHarmony * ar)
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 
 	mMustFollowPitch = false;
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 
 	float curLSPACE = p_staff ? p_staff->getStaffLSPACE() : LSPACE;
 

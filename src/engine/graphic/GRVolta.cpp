@@ -52,7 +52,7 @@ GRVolta::GRVolta( GRStaff * inStaff, const ARVolta * ar )
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 
 	sse->p = (void *) getNewGRSaveStruct();
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
     mEnd = mBeg = 0;
     mBroken = false;
     mCurrSystem = 0;

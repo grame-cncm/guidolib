@@ -32,7 +32,7 @@ GRGlobalLocation::GRGlobalLocation( GRStaff * grstaff, const ARShareLocation * p
 	sse->endElement = NULL;
 	sse->p = NULL;
 
-	mStartEndList.AddTail(sse);
+	addSystemStartEndStruct (sse);
 	mFirstEl = NULL;
 }
 
