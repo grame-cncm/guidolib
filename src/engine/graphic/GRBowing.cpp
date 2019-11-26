@@ -637,13 +637,13 @@ void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 */
 void GRBowing::addAssociation(GRNotationElement * grnot)
 {
-	if (error) return;
+	if (getError()) return;
 
 	if ( grnot->isGRNote() || grnot->isRest() || grnot->isEmpty() )
 	  	GRARNotationElement::addAssociation(grnot);
 	else setError(1);
 
-	if (!error)
+	if (!getError())
 		GRPositionTag::addAssociation(grnot);
 
 	// maybe we do somethings else here? ->
@@ -687,7 +687,7 @@ GRNotationElement * GRBowing::getEndElement(GRStaff * grstaff) const
 void GRBowing::OnDraw( VGDevice & hdc) const
 {
 	if(!mDraw || !mShow) return;
-	if (error) return;
+	if (getError()) return;
 	assert( gCurSystem );
 
 //	NVRect r = getAssociatedBoundingBox();

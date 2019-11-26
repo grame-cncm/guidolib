@@ -48,8 +48,6 @@ public:
 	virtual bool operator==(const GRTag &tag) const; 
 
             int			getIsAuto() const;
-            TAGTYPE		getTagType() const      { return tagtype; }
-            int			getError() const;
             bool		IsStateTag() const;
 	virtual const NVPoint& getOffset() const    { return mTagOffset; }
 	virtual float       getSize() const         { return mTagSize; }
@@ -62,20 +60,19 @@ public:
 
 	virtual const unsigned char *   getColRef() const       { return mColRef; }
 
-	virtual void        setSConst(float val)                { sconst = val; }
-            void		setTagType(TAGTYPE ntyp)            { tagtype = ntyp; }
-            void		setError(int p_error);
+	virtual void        setSConst(float val)		{ sconst = val; }
+            void		setTagType(TAGTYPE ntyp)	{ fTagType = ntyp; }
+            TAGTYPE		getTagType() const      	{ return fTagType; }
+            void		setError(int p_error)		{ fError = p_error; }
+			int			getError() const			{ return fError; }
 
 	virtual void StaffFinished(GRStaff * grstaff = 0);
 	virtual void StaffBegin(GRStaff * grstaff = 0);
 	virtual void RangeEnd(GRStaff * grstaff = 0);
 
 protected:
-
-	int error;
-	TAGTYPE tagtype;
-	int isautotag;
-	float sconst; // ?
+	int 	isautotag;
+	float 	sconst; // ?
 	
 	unsigned char * mColRef;	// for the color-parameter ... (RGBA) [0, 255]
 
@@ -83,8 +80,12 @@ protected:
 	std::string fFontAttrib;
 	int 		fFontSize;
 
-	float mTagSize;
+	float 	mTagSize;
 	NVPoint mTagOffset;
+
+private:
+	int 	fError		= 0;
+	TAGTYPE fTagType	= VOICETAG;
 };
 
 #endif

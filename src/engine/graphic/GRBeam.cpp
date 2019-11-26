@@ -85,7 +85,7 @@ void GRBeam::accept (GRVisitor& visitor)
 
 void GRBeam::OnDraw( VGDevice & hdc) const
 {
-	if (error) return;
+	if (getError()) return;
 	if(!mDraw || !mShow) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
@@ -154,7 +154,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 void GRBeam::addAssociation(GRNotationElement * grnot)
 {
-	if (error || !grnot) return ;
+	if (getError() || !grnot) return ;
 
 	const GRStaff * staff = grnot->getGRStaff();
 	if (staff == 0) return;
@@ -242,7 +242,7 @@ void GRBeam::RangeEnd(GRStaff * grstaff)
 
 	GRPositionTag::RangeEnd(grstaff);
 
-	if (error) return;
+	if (getError()) return;
 	if (!mAssociated) return;
 	
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grstaff->getGRSystem());
@@ -280,7 +280,7 @@ void GRBeam::RangeEnd(GRStaff * grstaff)
 			{
 				if (el->getStaffNumber() != tststaffnum)
 				{
-					tagtype = GRTag::SYSTEMTAG;
+					setTagType (GRTag::SYSTEMTAG);
 					GRSystemTag * mysystag = new GRSystemTag(this);
 					el->getGRSystemSlice()->addSystemTag(mysystag);
 					break;
@@ -326,7 +326,7 @@ void GRBeam::StaffFinished(GRStaff * grstaff)
 
 	// first, all the BASIC stuff is handled ...
 	GRPositionTag::StaffFinished(grstaff);
-	if (error) return;
+	if (getError()) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grstaff->getGRSystem());
 	assert(sse);
@@ -342,7 +342,7 @@ void GRBeam::StaffFinished(GRStaff * grstaff)
 			GRNotationElement * el = mAssociated->GetNext(syststpos);
 			if (el) {
 				if (el->getGRStaff() != tststaff) {
-					tagtype = GRTag::SYSTEMTAG;
+					setTagType (GRTag::SYSTEMTAG);
 					GRSystemTag * mysystag = new GRSystemTag(this);
 					el->getGRSystemSlice()->addSystemTag(mysystag);
 					break;
@@ -382,7 +382,7 @@ void GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosI
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const ARBeam * arBeam = getARBeam();
 	const GREvent * refEvt = startEl;
-	bool setref = (tagtype == SYSTEMTAG);
+	bool setref = (getTagType() == SYSTEMTAG);
 
 	if (setref && !infos.stemsReverse && infos.stavesStartEnd && !startEl->getStemLengthSet())
 		refEvt = (infos.stemdir == dirUP) ? infos.highNote : infos.lowNote;
@@ -486,7 +486,7 @@ void GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInf
 //cerr << "GRBeam::initp2 " << endEl << " " << st->p[2] << endl;
 //cerr << "GRBeam::initp2 " << endEl->getGlobalStem()->getPosition() << " " << endEl->getGlobalStem()->getStemLength() << endl;
 
-	if (tagtype == SYSTEMTAG) {
+	if (getTagType() == SYSTEMTAG) {
 		st->p[2] += refStaff->getPosition();
 		if (infos.stavesStartEnd && !infos.stemsReverse &&  !endEl->getStemLengthSet()) {
 			st->p[2].y = st->p[0].y;
@@ -661,14 +661,14 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {
 					// the additional beam starts at the startElement (glue), we have more beams to draw
 					p[0] = sse->startElement->getPosition();					
-					if (tagtype == SYSTEMTAG)
+					if (getTagType() == SYSTEMTAG)
 						p[0] += stemNote->getGRStaff()->getPosition();
 					p[1] = p[0];
 				}
 				else {
 					// the additional beam starts at sn. We have more beams to draw
 					p[0] = stemNote->getStemStartPos();
-					if (tagtype == SYSTEMTAG)
+					if (getTagType() == SYSTEMTAG)
 						p[0] += stemNote->getGRStaff()->getPosition();
 					p[0].y += beamCount * yLocalFact1;
 					if (localDir != dir)
@@ -705,7 +705,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 						// then the position is different ...
 						p[2] = sse->endElement->getPosition();
 						p[2].x += xadjust;
-						if (tagtype == SYSTEMTAG)
+						if (getTagType() == SYSTEMTAG)
 							p[2] += sn2->getGRStaff()->getPosition();
 						p[2].y = p[0].y;						
 					}
@@ -713,7 +713,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 						// we have an End-Position ...
 						p[2] = sn2->getStemEndPos();
 						p[2].x += xadjust;
-						if (tagtype == SYSTEMTAG)
+						if (getTagType() == SYSTEMTAG)
 							p[2] += sn2->getGRStaff()->getPosition();
 						p[2].y += beamCount * yLocalFact1;
 					}
@@ -733,13 +733,13 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 						// how do I know that? not now.
 
 						// sn is the only element .... and we are open on the left ...
-						if (tagtype == SYSTEMTAG)
+						if (getTagType() == SYSTEMTAG)
 							p[0] += stemNote->getGRStaff()->getPosition();
 						
 						p[1] = p[0];
 						p[2] = stemNote->getStemEndPos();
 						p[2].x += xadjust;
-						if (tagtype == SYSTEMTAG)
+						if (getTagType() == SYSTEMTAG)
 							p[2] += stemNote->getGRStaff()->getPosition();
 						p[2].y += beamCount * yLocalFact1;
 						if (localDir != dir)
@@ -749,7 +749,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 					}
 					else if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT) {						
 						p[0] = stemNote->getStemEndPos();
-						if (tagtype == SYSTEMTAG)
+						if (getTagType() == SYSTEMTAG)
 							p[0] += stemNote->getGRStaff()->getPosition();
 						p[0].y += beamCount * yLocalFact1;
 						if (localDir != dir)
@@ -759,7 +759,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 
 						p[2] = sse->endElement->getPosition();
 						p[2].x += xadjust;
-						if (tagtype == SYSTEMTAG)
+						if (getTagType() == SYSTEMTAG)
 							p[2] += sn2->getGRStaff()->getPosition();
 						p[2].y = p[0].y;
 						
@@ -778,7 +778,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 						// Partial beams leftward ( using slope)
 						p[2] = stemNote->getStemEndPos();
 						p[2].x += xadjust;
-						if (tagtype == SYSTEMTAG)
+						if (getTagType() == SYSTEMTAG)
 							p[2] += stemNote->getGRStaff()->getPosition();
 						
 						if (localDir != dir)
@@ -806,7 +806,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 				}
 				
 				// now we construct a SimpleBeam, we now have to "undo" the systemTag-stuff
-				if (tagtype == SYSTEMTAG)
+				if (getTagType() == SYSTEMTAG)
 				{
 					const GRStaff * beamstaff = sse->startElement->getGRStaff();
 					const NVPoint & offset = beamstaff->getPosition();
@@ -837,7 +837,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 			else if (localDir != dir) {
 				// check for stems length
 				NVPoint stemloc = stemNote->getStemStartPos();
-				if (tagtype == SYSTEMTAG)
+				if (getTagType() == SYSTEMTAG)
 					stemloc += stemNote->getGRStaff()->getPosition();
 				int beamscount = stemNote->getBeamCount() - 1;
 				if ((beamscount > 0) && (previousBeamsCount > beamscount) && (lastLocalDir != localDir)) {
@@ -868,7 +868,7 @@ float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool
 		if (sn)
 		{
 			float rx = sn->getStemStartPos().x - st->p[0].x;
-			if (tagtype == SYSTEMTAG)
+			if (getTagType() == SYSTEMTAG)
 				rx += sn->getGRStaff()->getPosition().x;
 			
 			float disty = st->p[2].y - st->p[0].y;
@@ -889,7 +889,7 @@ float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool
 			}
 			
 			ly -= diffy;
-			if (tagtype == SYSTEMTAG) ly -= (float)sn->getGRStaff()->getPosition().y;
+			if (getTagType() == SYSTEMTAG) ly -= (float)sn->getGRStaff()->getPosition().y;
 			
 			// if we have a beam between grace notes, we don't want an offbase that whould make the stems too long
 			const GRNote * gnote = startEl ? startEl->isGRNote() : 0;
@@ -1186,8 +1186,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 
 	// a new test is performed: if it is a systemTag and
 	// it is not a systemcall (checkpos), than we can just do nothing.
-	if (error || !mAssociated || ( mAssociated->GetCount() == 0 )
-		|| ( tagtype == GRTag::SYSTEMTAG && !mIsSystemCall )) 
+	if (getError() || !mAssociated || ( mAssociated->GetCount() == 0 )
+		|| ( getTagType() == GRTag::SYSTEMTAG && !mIsSystemCall ))
 		return;
 	
 	GRNotationElement * el = dynamic_cast<GRNotationElement *>(gobj);
@@ -1209,7 +1209,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// this is the staff to which the beam belongs and who draws it.
 	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
 	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), differentStaves, 0, 0 };
-	if (tagtype == SYSTEMTAG) {
+	if (getTagType() == SYSTEMTAG) {
 		infos.startStaff = startEl->getGRStaff()->getPosition();
 		infos.endStaff	 = endEl->getGRStaff()->getPosition();
 		yRange(mAssociated, infos.highNote, infos.lowNote);
@@ -1254,7 +1254,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// of the first and last element has not been set automatically!
 	// and if we are note in the case of a chained feather beam
 	if ( (startEl && startEl->getStemLengthSet() && endEl && endEl->getStemLengthSet())
-		|| tagtype == SYSTEMTAG || (arBeam && isSpecBeam) || (fIsFeathered && startEl && startEl->stemHasBeenChanged()))
+		|| getTagType() == SYSTEMTAG || (arBeam && isSpecBeam) || (fIsFeathered && startEl && startEl->stemHasBeenChanged()))
 	{
 		needsadjust = false;
 	}
@@ -1361,7 +1361,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	}
 
 	// now we have to make sure, that the original positions for the beam are set for the right staff
-	if (tagtype == SYSTEMTAG) {
+	if (getTagType() == SYSTEMTAG) {
 		const NVPoint &offset = beamstaff->getPosition();
 		st->p[0] -= offset;
 		st->p[1] -= offset;
@@ -1375,7 +1375,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 void GRBeam::setError(const GRStaff * grstaff, int p_error)
 {
 	GRTag::setError(p_error);
-	if (error && mAssociated)
+	if (getError() && mAssociated)
 	{
 		GuidoPos pos = mAssociated->GetHeadPosition();
 		while (pos) {
@@ -1440,7 +1440,7 @@ void GRBeam::BreakTag( GRStaff * grstaff, GuidoPos & assocpos)
 	// do the "basic" stuff.
 	GRPositionTag::BreakTag(grstaff,assocpos);
 
-	if (error) return;
+	if (getError()) return;
 
 	GRSystemStartEndStruct *sse = getSystemStartEndStruct(grstaff->getGRSystem());
 	assert(sse);

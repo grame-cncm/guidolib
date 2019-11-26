@@ -19,15 +19,15 @@
 #include "GRTag.h"
 
 GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE )
-	:  error(0), tagtype(VOICETAG), isautotag(0), sconst(SCONST_DEFAULT)
+	: isautotag(0), sconst(SCONST_DEFAULT)
 {
 	if (artag) {
 		if (artag->IsStateTag())
-			tagtype = STAFFTAG;
+			fTagType = STAFFTAG;
 		if (artag->getIsAuto())
 			isautotag = 1;
 		if (artag->getError())
-			error = artag->getError();
+			fError = artag->getError();
 	}
 	mColRef = NULL;
 	fFontSize = (int) (1.5f * LSPACE); // default ...
@@ -58,12 +58,10 @@ GRTag::~GRTag()
 void GRTag::RangeEnd(GRStaff * grstaff)			{}
 void GRTag::StaffFinished(GRStaff * grstaff)	{}
 void GRTag::StaffBegin(GRStaff * grstaff)		{}
-int GRTag::getError() const						{ return error; }
 
 // changed: the abstract representation is no longer notified ....
 // errors are not brought back from graphics ...
-void GRTag::setError(int p_error)		{ error = p_error; }
-bool GRTag::IsStateTag() const			{ return (tagtype == STAFFTAG); }
+bool GRTag::IsStateTag() const			{ return (fTagType == STAFFTAG); }
 int  GRTag::getIsAuto() const			{ return isautotag; }
 bool GRTag::operator==(const GRTag & tag) const	{ return false; }
 

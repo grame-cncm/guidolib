@@ -124,13 +124,13 @@ void GRDynamics::tellPosition(GObject *caller, const NVPoint & newPosition)
 //---------------------------------------------------------------------------------
 void GRDynamics::addAssociation(GRNotationElement * grnot)
 {
-	if (error) return;
+	if (getError()) return;
 
 	if ( GREvent::cast(grnot)  && (grnot->isGRNote() || grnot->isRest() || grnot->isEmpty()))
 	  	GRARNotationElement::addAssociation(grnot);
 	else setError(1);
 
-	if (!error)
+	if (!getError())
 		GRPositionTag::addAssociation(grnot);
 }
 

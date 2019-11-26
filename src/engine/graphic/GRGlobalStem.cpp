@@ -91,7 +91,7 @@ GRGlobalStem::~GRGlobalStem()
 //----------------------------------------------------------------
 void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 {
-	if (error) return;
+	if (getError()) return;
 	
 	GREvent * ev = GREvent::cast(grnot);
 	if( ev ) {
@@ -169,7 +169,7 @@ void GRGlobalStem::ComputeStemDirection( GRStaff * staff, const NEPointerList * 
 	GRNotationElement* el = associated->GetTail();
 	if (el) {
 		middle = el->getPosition().y;
-		if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+		if (getTagType() == GRTag::SYSTEMTAG && el->getGRStaff())
 			middle += (GCoord)el->getGRStaff()->getPosition().y;
 		fHighestY = middle;
 		fLowestY = middle;
@@ -184,7 +184,7 @@ void GRGlobalStem::ComputeStemDirection( GRStaff * staff, const NEPointerList * 
 		GRNotationElement * el = associated->GetNext(pos);
 		if (el && !el->isEmpty()) {
 			GCoord ypos = el->getPosition().y;
-			if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
+			if (el->getGRStaff() && getTagType() == GRTag::SYSTEMTAG)
 				ypos += el->getGRStaff()->getPosition().y;
 			middle += ypos;
 			++count ;
@@ -225,7 +225,7 @@ void GRGlobalStem::GetUserStemDirection (const NEPointerList * associated)
 
 	if (el) {
 		middle = el->getPosition().y;
-		if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+		if (getTagType() == GRTag::SYSTEMTAG && el->getGRStaff())
 			middle += el->getGRStaff()->getPosition().y;
 
 		fHighestY = middle;
@@ -241,7 +241,7 @@ void GRGlobalStem::GetUserStemDirection (const NEPointerList * associated)
 		GRNotationElement * el = associated->GetNext(pos);
 		if (el && !el->isEmpty()) {
 			GCoord ypos = el->getPosition().y;
-			if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
+			if (el->getGRStaff() && getTagType() == GRTag::SYSTEMTAG)
 				ypos += el->getGRStaff()->getPosition().y;
 
 			if (fLowestY > ypos) {
@@ -259,7 +259,7 @@ void GRGlobalStem::GetUserStemDirection (const NEPointerList * associated)
 //----------------------------------------------------------------
 void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 {
-	if (error || fFirstEl == 0) return;
+	if (getError() || fFirstEl == 0) return;
 
 	GRPTagARNotationElement::RangeEnd(inStaff);
 	if (inStaff == 0) return;
@@ -270,7 +270,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	// GRSystemTag that gets added to the system so that an update on all positions can be made ....
 	// (this is taken from GRBeam)
 	GuidoPos syststpos = sse->startpos;
-	if (tagtype != GRTag::SYSTEMTAG && syststpos)
+	if (getTagType() != GRTag::SYSTEMTAG && syststpos)
 	{
 		// this is all done so that I really get a correct first staff to test my stuff ...
 		while (syststpos && !(mAssociated->GetAt(syststpos)))
@@ -281,7 +281,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 			GRNotationElement * el = mAssociated->GetNext(syststpos);
 			if (el) {
 				if (el->getStaffNumber() != tststaffnum) {
-					tagtype = GRTag::SYSTEMTAG;
+					setTagType (GRTag::SYSTEMTAG);
 					GRSystemTag * mysystag = new GRSystemTag(this);
 					el->getGRSystemSlice()->addSystemTag(mysystag);
 					break;
@@ -290,11 +290,11 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 		}
 	}
 
-	if (tagtype != GRTag::SYSTEMTAG) {
+	if (getTagType() != GRTag::SYSTEMTAG) {
 		// check, whether firstel is on the same staff?
 		if (fFirstEl && mAssociated && mAssociated->GetHead()) {
 			if (fFirstEl->getStaffNumber() != mAssociated->GetHead()->getStaffNumber() ) {
-				tagtype = GRTag::SYSTEMTAG;
+				setTagType (GRTag::SYSTEMTAG);
 				GRSystemTag * mysystag = new GRSystemTag(this);
 				fFirstEl->getGRSystemSlice()->addSystemTag(mysystag);
 			}
@@ -345,7 +345,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 		GRNotationElement * el = associated->GetTail();
 		if (el) {
 			fLowestY = el->getPosition().y;
-			if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+			if (getTagType() == GRTag::SYSTEMTAG && el->getGRStaff())
 				fLowestY += el->getGRStaff()->getPosition().y;
 			fHighestY = fLowestY;
 		}
@@ -355,7 +355,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 			GRNotationElement * el = associated->GetNext(pos);
 			if (el && !el->isEmpty()) {
 				NVPoint elpos (el->getPosition());
-				if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+				if (getTagType() == GRTag::SYSTEMTAG && el->getGRStaff())
 					elpos += el->getGRStaff()->getPosition();
 				
 				if (fLowestY > elpos.y) 	fLowestY = elpos.y;
@@ -394,7 +394,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	if (fStemdir == dirUP)			fFlag->setPosition(NVPoint(0, (GCoord)fHighestY));
 	else if (fStemdir == dirDOWN)	fFlag->setPosition(NVPoint(0, (GCoord)fLowestY));
 
-	if (tagtype != GRTag::SYSTEMTAG)
+	if (getTagType() != GRTag::SYSTEMTAG)
 		updateGlobalStem(inStaff);
 
 	const float curLSPACEtmp = (float)(inStaff->getStaffLSPACE());
@@ -485,7 +485,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 				if (prevHeadState != ARTHead::NOTSET)
 				{
 					float cury = (float)note->getPosition().y;
-					if (tagtype == GRTag::SYSTEMTAG)
+					if (getTagType() == GRTag::SYSTEMTAG)
 						cury += (float)note->getGRStaff()->getPosition().y;
 
                     const float tmpCurLSPACE = (curLSPACE - curLSPACE / 50); // To avoid precision problems
@@ -583,7 +583,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 				prevHeadState = retHeadState;
 				prevposy = note->getPosition().y;
-				if (tagtype == GRTag::SYSTEMTAG)
+				if (getTagType() == GRTag::SYSTEMTAG)
 					prevposy += note->getGRStaff()->getPosition().y;
 
 				note->updateBoundingBox();
@@ -646,7 +646,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 				if (prevHeadState != ARTHead::NOTSET)
 				{
 					float cury = (float)note->getPosition().y;
-					if (tagtype == GRTag::SYSTEMTAG)
+					if (getTagType() == GRTag::SYSTEMTAG)
 						cury += note->getGRStaff()->getPosition().y;
 
                     const float tmpCurLSPACE = (curLSPACE - curLSPACE / 50); // To avoid precision problems
@@ -751,7 +751,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 				prevHeadState = retHeadState;
 				prevposy = note->getPosition().y;
-				if (tagtype == GRTag::SYSTEMTAG)
+				if (getTagType() == GRTag::SYSTEMTAG)
 					prevposy += note->getGRStaff()->getPosition().y;
 				
 			 	note->updateBoundingBox();
@@ -803,7 +803,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 //----------------------------------------------------------------
 void GRGlobalStem::setHPosition( float nx )
 {
-	if (error)	return; 
+	if (getError())	return;
 	
 // the lines below prevents correct positioning (x pos null)
 //	if (tagtype == GRTag::SYSTEMTAG && !mIsSystemCall)
@@ -820,7 +820,7 @@ void GRGlobalStem::setHPosition( float nx )
 //----------------------------------------------------------------
 void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
-	if (!mDraw || !mShow || error) return;
+	if (!mDraw || !mShow || getError()) return;
 
 	if (fStem) fStem->OnDraw(hdc);
 	if (fFlag) fFlag->OnDraw(hdc);
@@ -843,7 +843,7 @@ float GRGlobalStem::changeStemLength( float inLen )
 //----------------------------------------------------------------
 void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 {
-	if (error)	 return;
+	if (getError())	 return;
 
 	GRNotationElement* elt = dynamic_cast<GRNotationElement *>(obj);
 //	cerr << (void*)this << " GRGlobalStem::tellPosition elt " << elt << endl;
@@ -919,7 +919,7 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 */
 void GRGlobalStem::checkPosition(const GRSystem * grsys)
 {
-	if (error) return;
+	if (getError()) return;
 
 	mIsSystemCall = true;
 	tellPosition( fFirstEl, fFirstEl->getPosition());

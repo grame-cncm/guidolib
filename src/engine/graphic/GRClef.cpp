@@ -258,7 +258,7 @@ void GRClef::setHPosition( float inX )
 // -----------------------------------------------------------------------------
 void GRClef::OnDraw(VGDevice & hdc) const
 {
-	if (error || !mDraw || !mShow) return;
+	if (getError() || !mDraw || !mShow) return;
 
 	GRTagARNotationElement::OnDraw(hdc);
 	if (mDoubleTreble)

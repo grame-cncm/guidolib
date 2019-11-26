@@ -93,7 +93,7 @@ GRSystemStartEndStruct * GRGlissando::initGRGlissando( GRStaff * grstaff )
 
 void GRGlissando::OnDraw( VGDevice & hdc ) const
 {
-	if (!mDraw || !mShow || error)
+	if (!mDraw || !mShow || getError())
         return;
 
 	assert(gCurSystem);
@@ -494,8 +494,7 @@ void GRGlissando::removeAssociation(GRNotationElement * el )
 
 void GRGlissando::addAssociation(GRNotationElement * grnot)
 {
-	if (error)
-        return;
+	if (getError()) return;
 
 	if (GREvent::cast(grnot) // stop immediately if it's not an event.
         && (dynamic_cast<GRNote *>(grnot) ||
@@ -505,7 +504,7 @@ void GRGlissando::addAssociation(GRNotationElement * grnot)
 	else
 		setError(1);
 
-	if (!error)
+	if (!getError())
 		GRPositionTag::addAssociation(grnot);
 }
 

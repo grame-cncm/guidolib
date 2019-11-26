@@ -272,7 +272,7 @@ void GRKey::updateBoundingBox()
 
 void GRKey::OnDraw( VGDevice & hdc) const
 {
-	if (error) return;
+	if (getError()) return;
 	if(!mDraw || !mShow)
 		return;
 	DrawSubElements( hdc );
