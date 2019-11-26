@@ -32,7 +32,6 @@
 #include "ARBeamState.h"
 #include "ARBow.h"
 #include "ARBreathMark.h"
-#include "ARChordTag.h"
 #include "ARClef.h"
 #include "ARCluster.h"
 #include "ARCoda.h"
