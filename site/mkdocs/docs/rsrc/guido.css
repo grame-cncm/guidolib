@@ -1,9 +1,16 @@
-@font-face {
-    font-family: 'Guido2';
-    src: url('guido2-webfont.woff2') format('woff2'),
-         url('guido2-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
 
+h1 { 
+	background-color: #ff8c66 ; 
+	color: black;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
 }
 
+h2 { 
+	background-color: #ff8c66 ; 
+	color: white;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+}
