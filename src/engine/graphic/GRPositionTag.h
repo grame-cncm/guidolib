@@ -19,7 +19,6 @@
 #include "kf_ilist.h"
 
 class GRSystem;
-// class GRSystemSlice;
 class GRNotationElement;
 
 /** \brief This class is used to determine when a position tag ends. 
@@ -32,37 +31,24 @@ then we know, that the positiontag-range has ended.
 
 class GRSystemStartEndStruct
 {
-public:
+	public:
+		enum setflag { LEFTMOST, RIGHTMOST,	OPENLEFT, OPENRIGHT, NOTKNOWN };
+			
+				 GRSystemStartEndStruct() {}
+		virtual ~GRSystemStartEndStruct();
 
-	enum setflag { LEFTMOST, RIGHTMOST,	OPENLEFT, OPENRIGHT ,NOTKNOWN };
-		
-	GRSystemStartEndStruct()
-	{
-		grsystem = 0;
-		startElement = 0;
-		endElement = 0;
-		startflag = NOTKNOWN;
-		endflag = NOTKNOWN;
-		startpos = 0;
-		endpos = 0;
-		p = 0;
-	}
-	virtual ~GRSystemStartEndStruct();
+		GRSystem * 			grsystem 		= 0;
+		GRNotationElement * startElement 	= 0;
+		GRNotationElement * endElement 		= 0;
 
-	GRSystem * grsystem;
+		setflag startflag	= NOTKNOWN;
+		setflag endflag		= NOTKNOWN;
 
-	GRNotationElement * startElement;
-	GRNotationElement * endElement;
-
-	setflag startflag;
-	setflag endflag;
-
-	// these give the position in the associated lists ...
-	// so that the tag later knows, where it's sub-parts start and end.
-	GuidoPos startpos;
-	GuidoPos endpos;
-
-	void * p;
+		// these give the position in the associated lists ...
+		// so that the tag later knows, where it's sub-parts start and end.
+		GuidoPos startpos	= 0;
+		GuidoPos endpos		= 0;
+		void * p			= 0;
 };
 
 typedef KF_IPointerList<GRSystemStartEndStruct> SSEList;
@@ -105,6 +91,7 @@ class GRPositionTag : public GRTag
 		GuidoPos getEndPos() const { return ep; }
 
 		GRSystemStartEndStruct * getSystemStartEndStruct(const GRSystem * grsystem) const;
+		void 	 				 addSystemStartEndStruct(GRSystemStartEndStruct * sse) { mStartEndList.AddTail(sse); }
 
 	protected:
 
