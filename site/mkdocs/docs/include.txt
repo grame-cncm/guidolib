@@ -1,2 +1,0 @@
-
-<script src='/BNF/railroad-diagrams/railroad-diagrams.js'></script>
