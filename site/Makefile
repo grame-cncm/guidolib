@@ -55,17 +55,16 @@ publish:
 	git checkout CNAME				# never delete !!!
 	@echo "Review the changes, add new files, commit and push manually"
 	
-
 ####################################################################
 overview:
 	-[ -d $(DOCDIR)/overview ] && rm -rf $(DOCDIR)/overview
 	cp -R Guido-project $(DOCDIR)/overview
 
 ####################################################################
+javadoc: PWD=$(shell pwd)
 javadoc:
-	make -C ../lang/java doc 
 	-[ -d $(DOCDIR)/javadoc ] && rm -rf $(DOCDIR)/javadoc
-	cp -R ../lang/java/doc $(DOCDIR)/javadoc
+	make -C ../lang/java doc DOCFOLDER=$(PWD)/$(DOCDIR)/javadoc
 
 ####################################################################
 doxygen:
