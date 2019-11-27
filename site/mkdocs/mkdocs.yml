@@ -4,6 +4,7 @@ copyright: Copyright &copy; 2019 <a href="http://www.grame.fr">Grame-CNCM</a>
 nav:
     - Home: index.md
     - Guido API: 
+      - 'Overview': api/overview.md
       - 'API reference': dox/api/index.html
     - Internals: 
         - 'Global architecture': internals/architecture.md

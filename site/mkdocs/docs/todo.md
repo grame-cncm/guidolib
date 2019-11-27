@@ -8,10 +8,11 @@
 - mark const methods that can be
 - put private the methods and fields that can be private (or that are close to)
 
+## Documentation
 
-## Design
+Improve the current documentation, especially regarding the internal part. The source and the generation process are located in the [site](https://github.com/grame-cncm/guidolib/blob/dev/site) folder of the repository.
 
-- improve chords handling : currently there is no chord object, a chord is actually a series of notes framed by `empty` elements and the musical information is split between notes and empty. A ARChordTag and a GRChordTag exist but they seem to correspond to an obsolete \chord tag and to be never used.
+<!-- - improve chords handling : currently there is no chord object, a chord is actually a series of notes framed by `empty` elements and the musical information is split between notes and empty. A ARChordTag and a GRChordTag exist but they seem to correspond to an obsolete \chord tag and to be never used. -->
 
 
 ## Issues

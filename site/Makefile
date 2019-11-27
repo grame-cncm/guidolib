@@ -41,6 +41,8 @@ serve:
 
 all:
 	$(MAKE) doxygen
+	$(MAKE) overview
+	$(MAKE) javadoc
 
 publish:
 	$(MAKE) all
@@ -53,6 +55,17 @@ publish:
 	git checkout CNAME				# never delete !!!
 	@echo "Review the changes, add new files, commit and push manually"
 	
+
+####################################################################
+overview:
+	-[ -d $(DOCDIR)/overview ] && rm -rf $(DOCDIR)/overview
+	cp -R Guido-project $(DOCDIR)/overview
+
+####################################################################
+javadoc:
+	make -C ../lang/java doc 
+	-[ -d $(DOCDIR)/javadoc ] && rm -rf $(DOCDIR)/javadoc
+	cp -R ../lang/java/doc $(DOCDIR)/javadoc
 
 ####################################################################
 doxygen:
