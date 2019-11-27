@@ -8,9 +8,9 @@ REMOVELIST = guidoengine/guidoscore.class guidoengine/guidopianoroll.class guido
 CLASSANDROID = $(filter-out $(REMOVELIST),$(CLASS))
 CLASSDRAWC = $(patsubst %.java, %.class, $(SRCDRAWC) )
 JNI        = $(addprefix jni/, $(subst /,_,$(patsubst guidoengine/%.java, guidoengine_%.h, $(SRC) )))
+DOCFOLDER ?= doc
 
 .PHONY : doc
-
 
 all :
 	$(MAKE) jar
@@ -63,9 +63,11 @@ factorysample : factorysample.class
 clean :
 	rm -f $(CLASS) *.class guidoengine/*.class drawcommand/*.class drawcommand.jar guidoengine.jar guidoengine-android.jar
 
-doc:
-	[ -d doc ] || mkdir doc
-	javadoc -d doc guidoengine/*.java
+doc: $(DOCFOLDER)
+	javadoc -d $(DOCFOLDER) guidoengine/*.java
+
+$(DOCFOLDER):
+	mkdir $(DOCFOLDER)
 
 
 ##################################################################
