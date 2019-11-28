@@ -22,4 +22,4 @@ Improve the current documentation, especially regarding the internal part. The s
 
 ## SMUFL
 
-- [SMUFL](https://www.smufl.org/) stands for Standard Music Font Layout. SMUFL support is currently in progress but has to be finalized. SMUFL is a cmake option. A `bravura` branch exists also to implement SMUFL support based on the Bravura font.
+- [SMUFL](https://www.smufl.org/) stands for Standard Music Font Layout. SMUFL support is currently in progress but has to be finalized. To switch to SMUFL support, SMUFL is a cmake option.
