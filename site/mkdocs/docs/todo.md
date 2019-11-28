@@ -18,3 +18,8 @@ Improve the current documentation, especially regarding the internal part. The s
 ## Issues
 
 - you can also contribute by taking any [open issues](https://github.com/grame-cncm/guidolib/issues) in charge.
+
+
+## SMUFL
+
+- [SMUFL](https://www.smufl.org/) stands for Standard Music Font Layout. SMUFL support is currently in progress but has to be finalized. SMUFL is a cmake option. A `bravura` branch exists also to implement SMUFL support based on the Bravura font.
