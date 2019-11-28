@@ -49,7 +49,7 @@ all:
 publish:
 	$(MAKE) build
 	git checkout gh-pages
-	cp -Rf .$(MKDIR)/site/* ..
+	cp -Rf $(MKDIR)/site/* ..
 	@echo "Review the changes, add new files, commit and push manually"
 	
 ####################################################################
