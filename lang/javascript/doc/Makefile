@@ -5,13 +5,10 @@
 .PHONY: jsbinding.html
 
 target = jsbinding.html
-doc := ../../../doc/doxygen/api/
 
-$(target): ../src/binding/main.cpp api
+$(target): ../src/binding/main.cpp 
 	awk -f binding.awk ../src/binding/main.cpp > $(target)
 
-api:
-	cp -R $(doc) api
 	
 clean :
-	rm -rf $(target) api
+	rm -rf $(target)
