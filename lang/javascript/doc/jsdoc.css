@@ -5,7 +5,7 @@ body
   color: #222;
   line-height: 1.4em;
   background: #F1F1F1;
-  width: 900px;
+  width: 80%;
   margin: 20px auto 10px auto;}
   
 h1, h2, h3, h4, h5, h6 
@@ -55,7 +55,7 @@ a:hover
 pre {
   background: #fffffe;
   font-family: courier, monaco;
-  padding: 5px 0 5px 20px;
+  padding: 5px 0 5px 10px;
   font-size: 90%;
 }
 

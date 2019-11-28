@@ -10,10 +10,10 @@
 
 <body>
 <div id='logo'><h1>GUIDO Engine Javascript</h1></div>
-<a href="http://www.grame.fr"><img src='grame.png' style="float:right" width=110></a>
+<a href="http://www.grame.fr"><img src='grame.png' style="float:right" width=150></a>
 
 <div id='intro'>
-The GUIDO Engine services are available as a Javascript libray. <br />
+The GUIDO Engine services are available as a Web Assembly Javascript libray. <br />
 The Javascript library API is similar to the C/C++ API:
 <ul>
 <li>data structures like <span class='code'><a href='api/structGuidoLayoutSettings.html'>GuidoLayoutSettings</a></span>, 
@@ -21,10 +21,15 @@ The Javascript library API is similar to the C/C++ API:
 
 <li>constants like <span class='code'>GuidoErrCode</span> or <span class='code'>GuidoElementSelector</span> carry the the same name on Javascript side
 
-<li>C++ classes that provide the interface to the library service are also similar in name and in methods names. These classes are enumerated below, with the corresponding methods.
+<li>C++ classes that proviide the interface to the library service are also similar in name and in methods names. These classes are enumerated below, with the corresponding methods.
 </ul>
+This short Javascript documentation is intended as a quick reference. For more details, you should refer to the <a href=https://guido.grame.fr/dox/api/>C/C++ API</a>.
 
-This short Javascript documentation is intended as a quick reference. For more details, you should refer to the <a href=api/>C/C++ API</a>. Examples of use are provided in the examples folder.
+<div>
+<h5>Data structure used by GUIDOScoreMap module</h5>
+GUIDOScoreMap module use a collection of JSON objects corresponding to the objects of C/C++ API to exchange data.
+You can find the description of all the JSON objects in the <a href="http://guido.grame.fr/webservice/mapping.html">GUIDO mappings page</a> of Guido webservice.
+</div>
 
 </div>
 <br />
@@ -37,6 +42,7 @@ This short Javascript documentation is intended as a quick reference. For more d
 <span class='fname'>ar2grSettings</span><br />
 <span class='fname'>updateGR</span><br />
 <span class='fname'>updateGRSettings</span><br />
+<span class='fname'>showElement</span><br />
 <span class='fname'>freeAR</span><br />
 <span class='fname'>freeGR</span><br />
 <span class='fname'>getErrorString</span><br />
@@ -49,6 +55,7 @@ This short Javascript documentation is intended as a quick reference. For more d
 <span class='fname'>findPageAt</span><br />
 <span class='fname'>getPageDate</span><br />
 <span class='fname'>gr2SVG</span><br />
+<span class='fname'>gr2SVGColored</span><br />
 <span class='fname'>abstractExport</span><br />
 <span class='fname'>binaryExport</span><br />
 <span class='fname'>javascriptExport</span><br />
@@ -63,6 +70,7 @@ This short Javascript documentation is intended as a quick reference. For more d
 <span class='fname'>inches2Unit</span><br />
 <span class='fname'>resizePageToMusic</span><br />
 <span class='fname'>getVersion</span><br />
+<span class='fname'>getVersionStr</span><br />
 <span class='fname'>checkVersionNums</span><br />
 <span class='fname'>getLineSpace</span><br />
 <span class='fname'>markVoice</span><br />
@@ -77,6 +85,9 @@ This short Javascript documentation is intended as a quick reference. For more d
 <span class='fname'>closeStream</span><br />
 <span class='fname'>writeStream</span><br />
 <span class='fname'>resetStream</span><br />
+<span class='fname'>getParsingTime</span><br />
+<span class='fname'>getAR2GRTime</span><br />
+<span class='fname'>getOnDrawTime</span><br />
 </div>
 <br />
 <div id='module'>Module: <a href='api/classGuidoScoreMapAdapter.html'>GUIDOScoreMap</a></div>
@@ -103,8 +114,25 @@ This short Javascript documentation is intended as a quick reference. For more d
 <span class='fname'>enableAutoVoicesColoration</span><br />
 <span class='fname'>setRGBColorToVoice</span><br />
 <span class='fname'>setHtmlColorToVoice</span><br />
+<span class='fname'>removeColorToVoice</span><br />
 <span class='fname'>enableMeasureBars</span><br />
 <span class='fname'>setPitchLinesDisplayMode</span><br />
+<span class='fname'>svgExport</span><br />
+<span class='fname'>javascriptExport</span><br />
+</div>
+<br />
+<div id='module'>Module: <a href='api/classGUIDOReducedProportionalAdapter.html'>GUIDOReducedProportionalAdapter</a></div>
+<div id='functions'>Functions: </div>
+<div id='list'>
+<span class='fname'>ar2RProportional</span><br />
+<span class='fname'>destroyRProportional</span><br />
+<span class='fname'>drawDurationLines</span><br />
+<span class='fname'>enableAutoVoicesColoration</span><br />
+<span class='fname'>setRGBColorToVoice</span><br />
+<span class='fname'>setHtmlColorToVoice</span><br />
+<span class='fname'>removeColorToVoice</span><br />
+<span class='fname'>enableMeasureBars</span><br />
+<span class='fname'>setLimits</span><br />
 <span class='fname'>svgExport</span><br />
 <span class='fname'>javascriptExport</span><br />
 </div>
@@ -153,46 +181,21 @@ This short Javascript documentation is intended as a quick reference. For more d
 <div id='module'>PianoRoll<span class='opaque'> Opaque pointer</span></div>
 </div>
 <br />
-<div id='module'>Sample code</div>
-<div id='functions'>Taken from examples/svgExport and making use of <a href="http://jquery.com/">jQuery</a> </div>
-<pre>
-&lt;script type="text/javascript" src="libGUIDOEngine.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-	var guidoEngine;
-	function processGMN() {
-		var p = guidoEngine.openParser();
-		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
-		guidoEngine.closeParser(p);
-	
-		var gr = guidoEngine.ar2gr(ar);
-		var result = guidoEngine.gr2SVG(gr, 1, true, 0);
-		guidoEngine.freeGR(gr);
-		guidoEngine.freeAR(ar);
-	
-		$("#canvasContainer").html(result);
-	}
-	$( document ).ready(function() {
-		guidoEngine = new Module.GuidoEngineAdapter;
-		guidoEngine.init();
-		$("#gmnSandbox").on('keyup', processGMN);
-	});
-	$(window).unload(function(){
-		guidoEngine.shutdown();
-		delete guidoEngine;
-	});
-&lt;/script&gt;
-</pre>
+<div id='module'>Module: <a href='api/classRProportional.html'>RProportional</a></div>
+</div>
+<br />
+<div id='module'>GuidoEngine class</div>
+<div id='intro'>A <a href="https://github.com/grame-cncm/guidolib/blob/dev/lang/javascript/npm/guidoengine.js">GuidoEngine class</a> is provided as a high level interface to the modules above. It includes also an asynchronous wasm module initialisation method.</div>
 
 <br />
 <hr/>
 <div id="footnote">
-The Guido Engine library is an open source library for the layout and the graphic rendering of music scores developped and maintained by the <A HREF="http://www.grame.fr">Grame</a> 
-<A HREF="http://www.grame.fr/projets-et-themes-de-recherche">Computer Music Research Lab</a>.
+The Guido Engine library is an open source project avaiable from  <A HREF="https://github.com/grame-cncm/guidolib" target=_blank>GIthub</a> and published on <a href="https://www.npmjs.com/package/@grame/guidolib" target=_blank>NPM</a>.
 </div>
 <br>
 
-<center><a href="http://sourceforge.net/projects/guidolib">
-<img src="http://sflogo.sourceforge.net/sflogo.php?group_id=104971&type=16" width="150" height="40" border="0" alt="Get the Guido library at SourceForge.net" /></a></center>
+<center><a href="https://github.com/grame-cncm/guidolib">
+<img src="Octocat.png" width="100" border="0" alt="Get the Guido library at Github" /></a></center>
 
 </body>
 </html>

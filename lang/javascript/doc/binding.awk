@@ -43,7 +43,7 @@ END {
 
 
 ###################################
-/^	emscripten::class_/ { 
+/^	class_</ { 
 	checkclass();
 	print "<br />";
 	if (opaque($2))

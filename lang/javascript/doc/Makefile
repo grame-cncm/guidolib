@@ -5,7 +5,7 @@
 .PHONY: jsbinding.html
 
 target = jsbinding.html
-doc := ../../../doc/doxygen/html/
+doc := ../../../doc/doxygen/api/
 
 $(target): ../src/binding/main.cpp api
 	awk -f binding.awk ../src/binding/main.cpp > $(target)

@@ -1,44 +1,16 @@
 <br />
-<div id='module'>Sample code</div>
-<div id='functions'>Taken from examples/svgExport and making use of <a href="http://jquery.com/">jQuery</a> </div>
-<pre>
-&lt;script type="text/javascript" src="libGUIDOEngine.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-	var guidoEngine;
-	function processGMN() {
-		var p = guidoEngine.openParser();
-		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
-		guidoEngine.closeParser(p);
-	
-		var gr = guidoEngine.ar2gr(ar);
-		var result = guidoEngine.gr2SVG(gr, 1, true, 0);
-		guidoEngine.freeGR(gr);
-		guidoEngine.freeAR(ar);
-	
-		$("#canvasContainer").html(result);
-	}
-	$( document ).ready(function() {
-		guidoEngine = new Module.GuidoEngineAdapter;
-		guidoEngine.init();
-		$("#gmnSandbox").on('keyup', processGMN);
-	});
-	$(window).unload(function(){
-		guidoEngine.shutdown();
-		delete guidoEngine;
-	});
-&lt;/script&gt;
-</pre>
+<div id='module'>GuidoEngine class</div>
+<div id='intro'>A <a href="https://github.com/grame-cncm/guidolib/blob/dev/lang/javascript/npm/guidoengine.js">GuidoEngine class</a> is provided as a high level interface to the modules above. It includes also an asynchronous wasm module initialisation method.</div>
 
 <br />
 <hr/>
 <div id="footnote">
-The Guido Engine library is an open source library for the layout and the graphic rendering of music scores developped and maintained by the <A HREF="http://www.grame.fr">Grame</a> 
-<A HREF="http://www.grame.fr/projets-et-themes-de-recherche">Computer Music Research Lab</a>.
+The Guido Engine library is an open source project avaiable from  <A HREF="https://github.com/grame-cncm/guidolib" target=_blank>GIthub</a> and published on <a href="https://www.npmjs.com/package/@grame/guidolib" target=_blank>NPM</a>.
 </div>
 <br>
 
-<center><a href="http://sourceforge.net/projects/guidolib">
-<img src="http://sflogo.sourceforge.net/sflogo.php?group_id=104971&type=16" width="150" height="40" border="0" alt="Get the Guido library at SourceForge.net" /></a></center>
+<center><a href="https://github.com/grame-cncm/guidolib">
+<img src="Octocat.png" width="100" border="0" alt="Get the Guido library at Github" /></a></center>
 
 </body>
 </html>
