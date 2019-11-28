@@ -47,14 +47,9 @@ all:
 	$(MAKE) webdoc
 
 publish:
-	$(MAKE) all
 	$(MAKE) build
 	git checkout gh-pages
-	mv $(MKDIR) .$(MKDIR)
-	rm -rf *
-	cp -Rf .$(MKDIR)/site/* .
-	mv .$(MKDIR) $(MKDIR)
-	git checkout CNAME				# never delete !!!
+	cp -Rf .$(MKDIR)/site/* ..
 	@echo "Review the changes, add new files, commit and push manually"
 	
 ####################################################################
