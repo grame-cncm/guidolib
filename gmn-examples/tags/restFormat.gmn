@@ -1,8 +1,0 @@
-% a new Tag: \restFormat has been implemented
-% the restFormat tag can be used to explicitly set
-% the positions for a rest.
-% still to do: define reference points for
-% all rests. 
-%
-[ _/1 _/2 _/4 _/8 _/16 
-  _/32  _/64 _/128 ]

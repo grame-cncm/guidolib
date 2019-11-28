@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>GR classes - The Guido Project</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="/rsrc/guido.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Guido Project</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guido API <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../api/overview/">Overview</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/api/">API reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Internals <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../architecture/">Global architecture</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Abstract Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../arclasses/">AR classes</a>
+</li>
+            
+<li >
+    <a href="../tagparams/">Tag Parameters</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Graphic Representation</a>
+    <ul class="dropdown-menu">
+            
+<li class="active">
+    <a href="./">GR classes</a>
+</li>
+            
+<li >
+    <a href="../layout/">Layout steps</a>
+</li>
+    </ul>
+  </li>
+                                    
+<li >
+    <a href="../vgdevice/">The VGDevice layer</a>
+</li>
+                                    
+<li >
+    <a href="../src-code/">Source code organisation</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/internal/">Internals reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contributing <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../todo/">To do list</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/grame-cncm/guidolib/wiki/Contributing">Guidelines</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../tagparams/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../layout/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#graphic-classes">Graphic classes</a></li>
+            <li><a href="#structure-of-the-gr">Structure of the GR</a></li>
+            <li><a href="#main-classes">Main classes</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="graphic-classes">Graphic classes</h1>
+<p>Graphic classes are graphic instances of the <a href="/internals/arclasses">abstract classes</a>, i.e. notation elements with concrete graphic attributes (position, size, etc.). 
+Almost each abstract class has a corresponding graphic classe which is implemented in a file that starts with 'GR' and that carries the name of the class. For example, the <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRMeter.cpp"><code>GRMeter.cpp</code></a> file implements the graphic instance of the <code>ARMeter</code> class, that handles the <code>\meter</code> tag.</p>
+<h2 id="structure-of-the-gr">Structure of the GR</h2>
+<ul>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRMusic.h">GRMusic</a></strong>: one instance of this class is created for every score. GRMusic contains one or more instances of class GRPage, which represent the pages of the score. To create the pages and lines of a score, GRMusic uses the GRStaffManager class.</li>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRPage.h">GRPage</a></strong> contains one or more instances of class GRSystem. An instance of class GRPage knows about its height and width and also about the size of its margins. Some graphical elements of the score, like for instance the visible title and composer of a piece are also controlled by class GRPage.</li>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRSystem.h">GRSystem</a></strong> represents a line of music in the score. It is made up of one or more instances of class GRSystemSlice. When the line breaking algorithm has decided which slices belong to a system, class GRSystem must adjust the spacing of the notation elements, and must also adjust its extent to match the desired line width.</li>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRSystemSlice.h">GRSystemSlice</a></strong> is a part of a single line of music. A set of GRSystemSlices build a GRSystem. It is convenient to think of system slices as measures of a score. Class GRSystemSlice contains one or more instances of class GRStaff. GRSystemSlice is also responsible for graphical elements that belong to several staves; this might be, for example, a beam that begins and ends in different staves.</li>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRStaff.h">GRStaff</a></strong> represents a part of a single staff of a line of music. The time position and duration of the part being represented by an instance of class GRStaff is directly determined by the containing GRSystemSlice. Class GRStaff directly inherits from class GRCompositeNotationElement, which is capable of storing an arbitrary number of instances of class GRNotationElement. Using this storage, class GRStaff stores graphical elements being placed upon it. This might be musical markup, like for example an instance of class GRClef or a musical event like an instance of class GRNote.</li>
+</ul>
+<p>The main classes involved in the transformation of AR to GR are the 
+<a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRStaffManager.cpp"><code>GRStaffManager.cpp</code></a> and the 
+<a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRVoiceManager.cpp"><code>GRVoiceManager.cpp</code></a></p>
+<h2 id="main-classes">Main classes</h2>
+<ul>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRTag.h">GRTag</a></strong>: the base class for all GUIDO-tags. </li>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRPositionTag.h">GRPositionTag</a></strong>: the base class for representing <a href="https://guidodoc.grame.fr/refs/tags/">range tags</a> (i.e. tags applied to a series of notes, e.g. \slur(a b c). The issue of line breaking is crucial when dealing with range tags: if both the begin- and end-event of a range tag are located on one line of music, the graphical object (e.g. a slur) can be created directly. If the begin- and end-event of a range-tag are located on different lines, then the graphical object must be split into several graphical objects. A mechanism within class GRPositionTag has been implemented to deal with this case.</li>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GNotationElement.h">GNotationElement</a></strong>: the base class for all graphical elements. It covers elements that corresponds to an AR object with the derived GARNotationElement class, as well as elements that have no explicit description (like beams, stems, notehead, etc.)</li>
+<li><strong>Class <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRARNotationElement.h">GRARNotationElement</a></strong>: the base class for all graphical objects that have a direct counterpart in the Abstract Representation (which is shown by using “AR” as part of the name). Consider, for example, class GRClef, which inherits indirectly from class GRTag and from class GRARNotationElement. This reflects, that the graphical “clef ” object has a direct counterpart in the AR (which obviously is an instance of the class ARClef).</li>
+</ul>
+<h3 id="note">Note</h3>
+<p>Within the GR representation, all references to an AR object are const. Thus a GR object can't modify the AR representation.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2019 <a href="http://www.grame.fr">Grame-CNCM</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

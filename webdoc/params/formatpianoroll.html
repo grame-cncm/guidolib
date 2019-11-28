@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Formatting options &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Piano roll browsing" href="../pianorollbrowsing.html" />
+    <link rel="prev" title="Pianoroll limits options" href="layoutpianoroll.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../pianorollbrowsing.html" title="Piano roll browsing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="layoutpianoroll.html" title="Pianoroll limits options"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../pianoroll.html" accesskey="U">Pianoroll drawing and formatting</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Formatting options</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="layoutpianoroll.html"
+                        title="previous chapter">Pianoroll limits options</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../pianorollbrowsing.html"
+                        title="next chapter">Piano roll browsing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/params/formatpianoroll.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="formatting-options">
+<span id="formatpianoroll"></span><h1>Formatting options<a class="headerlink" href="#formatting-options" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Score drawing options may be used when a graphic instance of the score is required.</p>
+<p><strong>Options</strong></p>
+<blockquote>
+<div><ul>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">width</span></code>:</dt><dd><p>the drawing area width in pixels.</p>
+<p><em>default value</em>: 1024</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">height</span></code>:</dt><dd><p>the drawing area height in pixels.</p>
+<p><em>default value</em>: 512</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">keyboard</span></code>:</dt><dd><p>Enables the keyboard or not.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: keyboard enabled</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: keyboard not enabled</p></li>
+</ul>
+<p><em>default value</em>: false</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">autoVoicesColoration</span></code>:</dt><dd><p>Enables or not the automatic voices coloration</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: automatic voices coloration enabled</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: automatic voices coloration not enabled</p></li>
+</ul>
+<p><em>default value</em>: false</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">enableMeasureBars</span></code>:</dt><dd><p>Enables or not measure bars</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: measure bars enabled</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: measure bars not enabled</p></li>
+</ul>
+<p><em>default value</em>: false</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">pitchLinesDisplayMode</span></code>:</dt><dd><p>Sets the pitch lines display mode. Use Pitch lines display mode constants to pick lines which will be be displayed.</p>
+<p><em>default value</em>: 0 (automatic mode)</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">format</span></code>:</dt><dd><p>a string to request a specific image format. Accepted values are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">png</span></code>: to produce a png output</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jpg</span></code>: to produce a jpeg output</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">svg</span></code>: to produce a svg output</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">binary</span></code>: to produce a binary output which can be parse with a external device to draw the score.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gif</span></code>: to produce a gif output</p></li>
+</ul>
+<p><em>default value</em>: “png”</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Using jQuery:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.get(&#39;http://guido.server.org/XXX/pianoroll?width=400&amp;height=200&amp;format=svg&#39;);
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../pianorollbrowsing.html" title="Piano roll browsing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="layoutpianoroll.html" title="Pianoroll limits options"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../pianoroll.html" >Pianoroll drawing and formatting</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

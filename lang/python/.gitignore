@@ -1,9 +1,0 @@
-doc/_build/
-examples/simple_gui/altgraph*/
-examples/simple_gui/macholib*/
-examples/simple_gui/modulegraph*/
-examples/simple_gui/py2app*/
-SimpleGUI*.zip
-*.pyc
-build-mac
-build-win

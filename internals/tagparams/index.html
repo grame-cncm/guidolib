@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Tag Parameters - The Guido Project</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="/rsrc/guido.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Guido Project</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guido API <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../api/overview/">Overview</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/api/">API reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Internals <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../architecture/">Global architecture</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Abstract Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../arclasses/">AR classes</a>
+</li>
+            
+<li class="active">
+    <a href="./">Tag Parameters</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Graphic Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../grclasses/">GR classes</a>
+</li>
+            
+<li >
+    <a href="../layout/">Layout steps</a>
+</li>
+    </ul>
+  </li>
+                                    
+<li >
+    <a href="../vgdevice/">The VGDevice layer</a>
+</li>
+                                    
+<li >
+    <a href="../src-code/">Source code organisation</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/internal/">Internals reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contributing <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../todo/">To do list</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/grame-cncm/guidolib/wiki/Contributing">Guidelines</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../arclasses/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../grclasses/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#tag-parameters">Tag Parameters</a></li>
+            <li><a href="#tag-parameters-string">Tag parameters string</a></li>
+            <li><a href="#shared-parameters">Shared Parameters</a></li>
+            <li><a href="#initialisation">Initialisation</a></li>
+            <li><a href="#creating-a-new-parameters-string">Creating a new parameters string</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="tag-parameters">Tag Parameters</h1>
+<p>All the tags parameters are declared in the <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/abstract/TagParameterStrings.cpp"><code>src/engine/abstract/TagParameterStrings.cpp</code></a> file. It consists in a set of constant strings, consistently named according to the AR class that uses the parameters. For example: tag parameters for the <code>ARMeter</code> class is named <code>kARMeterParams</code>.</p>
+<hr />
+<h2 id="tag-parameters-string">Tag parameters string</h2>
+<p>A tag parameters string is a list of semicolon separated parameters.
+Each parameter is a string in the following format:</p>
+<pre><code>&quot;TYPE,NAME,DEFVALUE,REQUIRED&quot;
+</code></pre>
+
+<p>where:</p>
+<ul>
+<li>TYPE is the parameter type and must be in:<ul>
+<li>'U' : a unit parameter i.e. a numeric value with an optional unit ('cm', 'hs',...). When omitted, the default unit is used.</li>
+<li>'S' : a string parameter.</li>
+<li>'I' : an integer parameter.</li>
+<li>'F' : a float parameter.</li>
+</ul>
+</li>
+<li>NAME is the parameter name.</li>
+<li>DEFVALUE is the parameter default value.</li>
+<li>REQUIRED is either 'r' or 'o' for required or optional parameters.</li>
+</ul>
+<h3 id="example">Example:</h3>
+<p>The ARMeter tag parameters are described with:</p>
+<pre><code>&quot;S,type,4/4,r;S,autoBarlines,on,o;S,autoMeasuresNum,off,o;S,group,off,o&quot;
+</code></pre>
+
+<p>see the <a href="https://guidodoc.grame.fr/refs/tags/ClefKeyMeter/#meter">\meter documentation</a> for the parameters description.</p>
+<hr />
+<h2 id="shared-parameters">Shared Parameters</h2>
+<p>The following parameters are shared by all the AR classes: </p>
+<pre><code>const char* kCommonParams       = &quot;S,color,black,o;U,dx,0,o;U,dy,0,o;F,size,1.0,o&quot;;
+</code></pre>
+
+<p>The following parameters are shared by all the ARFontAble derived classes: </p>
+<pre><code>const char* kARFontAbleParams   = &quot;S,textformat,rc,o;S,font,Times,o;U,fsize,9pt,o;S,fattrib,,o&quot;;
+</code></pre>
+
+<hr />
+<h2 id="initialisation">Initialisation</h2>
+<p>All the tag parameters strings are stored in a <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/abstract/TagParametersMaps.h"><code>TagParametersMaps</code></a> structure that is initialised by <code>GuidoInit()</code>and released by <code>GuidoShutdown()</code>. </p>
+<p>Each AR class is responsible to:</p>
+<ul>
+<li>setup its parameters at construction time using <code>setupTagParameters (_a_param_map_)</code></li>
+<li>handle the current parameters by overriding the <code>setTagParameters</code>method</li>
+</ul>
+<p>For example, see the <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/abstract/ARFermata.cpp"><code>ARFermata</code></a> implementation.</p>
+<hr />
+<h2 id="creating-a-new-parameters-string">Creating a new parameters string</h2>
+<p>It requires the following steps:</p>
+<ul>
+<li>implement the new parameter string in <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/abstract/TagParameterStrings.cpp"><code>TagParameterStrings.cpp</code></a></li>
+<li>declare the new string in <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/abstract/TagParameterStrings.h"><code>TagParameterStrings.h</code></a></li>
+<li>add a new parameters map in <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/abstract/TagParametersMaps.h"><code>TagParametersMaps.h</code></a></li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2019 <a href="http://www.grame.fr">Grame-CNCM</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

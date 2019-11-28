@@ -1,7 +1,0 @@
-GuidoQtViewer Change Log
-
-version 1.0.1.0 - sept 2008
- - preferences dialog box added for Guido engine parameters control 
-
-version 1.0.0.0 - june 2008
- - first public version 

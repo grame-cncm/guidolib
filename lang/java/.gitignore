@@ -1,6 +1,0 @@
-*.class
-*.dylib
-*.dll
-drawcommand.jar
-tests
-cmake/Makefile

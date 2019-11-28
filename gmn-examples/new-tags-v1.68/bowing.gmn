@@ -1,7 +1,0 @@
-{
-[
-	\clef<"g"> \meter<"4/4">
-	\bow<"up">(g) 	\bow<"down">(a) \bow<"up">(e) 
-	\bow<"down">(f e) \bow<"up">(a) \bow<"down">(e) \bow<"up">(f)
-]
-}

@@ -1,8 +1,0 @@
-{
-    [
-        \meter<"2/4", size=1> a b c
-    ],
-    [
-        \meter<"2/4", size=3> a b c
-    ]
-}

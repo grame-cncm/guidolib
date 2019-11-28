@@ -1,2 +1,0 @@
-
-- see the non-implemented methods in GDeviceQt (e.g. ReleaseBitMapPixels)

@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<typesystem package="PyGuido">
-	<load-typesystem name="typesystem_pyguido_base_linux.xml" generate="yes" />
-    <load-typesystem name="typesystem_pyguido_common.xml" generate="yes" />
-</typesystem>

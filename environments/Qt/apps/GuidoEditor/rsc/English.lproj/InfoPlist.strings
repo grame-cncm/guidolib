@@ -1,6 +1,0 @@
-/* Localized versions of Info.plist keys */
-
-CFBundleName = "GuidoEditor";
-CFBundleShortVersionString = "2.3";
-CFBundleGetInfoString = "GuidoEditor version 2.3, Copyright 2008-2011 Grame.";
-NSHumanReadableCopyright = "Copyright 2008-2011 Grame.";

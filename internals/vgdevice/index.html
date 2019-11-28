@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>The VGDevice layer - The Guido Project</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="/rsrc/guido.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Guido Project</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guido API <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../api/overview/">Overview</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/api/">API reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Internals <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../architecture/">Global architecture</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Abstract Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../arclasses/">AR classes</a>
+</li>
+            
+<li >
+    <a href="../tagparams/">Tag Parameters</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Graphic Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../grclasses/">GR classes</a>
+</li>
+            
+<li >
+    <a href="../layout/">Layout steps</a>
+</li>
+    </ul>
+  </li>
+                                    
+<li class="active">
+    <a href="./">The VGDevice layer</a>
+</li>
+                                    
+<li >
+    <a href="../src-code/">Source code organisation</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/internal/">Internals reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contributing <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../todo/">To do list</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/grame-cncm/guidolib/wiki/Contributing">Guidelines</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../layout/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../src-code/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#virtual-graphic-devices">Virtual Graphic Devices</a></li>
+            <li><a href="#the-virtual-graphic-classes">The Virtual Graphic classes</a></li>
+            <li><a href="#implementations">Implementations</a></li>
+            <li><a href="#unsupported-implementations">Unsupported implementations</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="virtual-graphic-devices">Virtual Graphic Devices</h1>
+<p>The core of the Guido Engine is platform independent. 
+Only the graphic operations and font related operations depend on the host operating system and graphic layers.
+In order to cope with each specific platform, the Guido library provides a Virtual Graphic Device layer which is actually a set of pure C++ abstract classes that isolates the engine from the platform dependencies. </p>
+<p>The main advantage is that Virtual Graphic Devices can implement any kind of graphic output: on-screen (platform specific, OpenGL), off-screen (raw bitmaps), files (pdf, svg, postscript), network streams, etc.</p>
+<h2 id="the-virtual-graphic-classes">The Virtual Graphic classes</h2>
+<p>The VG classes are located in the <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/include"><code>src/engine/include</code></a> folder and are the following:</p>
+<ul>
+<li><a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/include/VGDevice.h">VGDevice</a>: declares all methods required by the
+Guido Graphic Representation (GGR) to communicate their graphical operations. Implementations of VGDevices are provided by clients applications using derived classes so that neither GGR objects nor any part of the GUIDO Engine depends on a particular 
+graphical implementation. A VGDevice derived classe must provide standard graphic functions (Lines, 
+Arcs, Boxes,Polygons, Text), coordinate transformations (zoom / scaling), and symbolic music symbols handlers (DrawSymbol method). VGDevice design makes a clear distinction between text characters and music symbols (although music symbols are generally glyphs in a music font). Music symbols are identified by font-independent constants defined in <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/lib/MusicalSymbols.h">MusicalSymbols.h</a>.</li>
+<li><a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/include/VGFont.h">VGFont</a>: provides font related information like glyphs metrics,</li>
+<li><a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/include/VGSystem.h">VGSystem</a>: an abstract layer providing VGDevice and VGFont allocation.</li>
+</ul>
+<p>In addition, two utilities are provided: VGColor and VGPen covering respectively colors and pen representations.</p>
+<h2 id="implementations">Implementations</h2>
+<h3 id="platform-specific">Platform specific</h3>
+<p>Platform specific implementations of VGDevice are located in the <code>platforms</code> folder:</p>
+<ul>
+<li>linux/src: implements a Cairo based device,</li>
+<li>macos/src: implements a Quartz based device,</li>
+<li>win32/src: contains several implementations:<ul>
+<li>a GDI based device</li>
+<li>a GDI Plus based device</li>
+<li>a Direct 2D based device</li>
+</ul>
+</li>
+</ul>
+<h3 id="platform-independent">Platform independent</h3>
+<p>Platform independent implementations of VGDevice are located in the <code>src/engine/devices</code> folder:</p>
+<ul>
+<li>SVG device: produces SVG output</li>
+<li>Abstract device: produces VGDevice commands on output. Actually prints the VGDevice methods followed by their parameters. This output can next be parsed by another component implementing the VGDevice interface, to execute the enclosed methods. This splits the graphics rendering into two distinct parts. This is useful, for example, under Android to communicate between the native layer that calculates the partition and the Java layer that draws the result of this calculation.</li>
+<li>Binary device: similar to the Abstract device but in a more compact binary form.</li>
+</ul>
+<h3 id="environment-dependent">Environment dependent</h3>
+<p>A set of VGDevices are implemented over already platform independent layers and provide compatibility with various high level frameworks. They are located in the <code>environments</code> folder:</p>
+<ul>
+<li><a href="https://juce.com/">Juce</a>: implements a device based on the Juce framework,</li>
+<li><a href="https://openframeworks.cc/">OpenFrameworks</a>: implements a device over OpenFramework</li>
+<li><a href="https://www.opengl.org/">OpenGL</a>: implements a device based on OpenGl. Requires also freetype2 and FTGL (OpenGL FreeType fonts) libraries,</li>
+<li><a href="https://www.qt.io/">Qt</a>: implements a device based on the Qt framework.</li>
+</ul>
+<h2 id="unsupported-implementations">Unsupported implementations</h2>
+<ul>
+<li>GDeviceWin2000:         Windows 2000 / XP(gdi+)</li>
+<li>GDeviceGTK:             Linux GTK implementation</li>
+<li>GDevicePostScript:      EPS files (encapsulated postscript)</li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2019 <a href="http://www.grame.fr">Grame-CNCM</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,7 +1,0 @@
-[
-	\pageFormat<w=17cm, h=16cm> \meter<"C", autoMeasuresNum="system">
-	(* System 1 *) a b c d a b c d
-	(* System 2 *) a b c d a b c d
-	(* System 3 *) a b c d a b c d
-	(* System 4 *) \bar<displayMeasNum="false"> a b c d a b c d
-]

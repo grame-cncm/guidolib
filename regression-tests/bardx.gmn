@@ -1,6 +1,0 @@
-{
-[ 
-	\meter<"2/4"> a \bar<dx=-7, dy=4> g \doubleBar<dx=1,dy=-4> f 
-	\repeatBegin<dx=-4,dy=4> e d \repeatEnd<dx=3,dy=-4> c/2
-]
-}

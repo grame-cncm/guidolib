@@ -1,5 +1,0 @@
-{
-    [ \meter<"4/4", autoMeasuresNum="off"> a \bar b c d e f ],
-    [ \meter<"4/4", autoMeasuresNum="off"> a \bar<displayMeasNum="true"> b c d e f ],
-    [ \meter<"4/4", autoMeasuresNum="off"> a \bar<displayMeasNum="false"> b c d e f ]
-}

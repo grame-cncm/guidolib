@@ -1,4 +1,0 @@
-Remember:
-
-ok*treat wrong opened/closed slurs/ties correctly
-*ties: problem: what happens by split operation?

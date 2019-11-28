@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pianoroll limits options &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Formatting options" href="formatpianoroll.html" />
+    <link rel="prev" title="Pianoroll drawing and formatting" href="../pianoroll.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="formatpianoroll.html" title="Formatting options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../pianoroll.html" title="Pianoroll drawing and formatting"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../pianoroll.html" accesskey="U">Pianoroll drawing and formatting</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Pianoroll limits options</a><ul>
+<li><a class="reference internal" href="#example">Example:</a></li>
+<li><a class="reference internal" href="#internals">Internals</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../pianoroll.html"
+                        title="previous chapter">Pianoroll drawing and formatting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="formatpianoroll.html"
+                        title="next chapter">Formatting options</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/params/layoutpianoroll.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pianoroll-limits-options">
+<span id="layoutpianoroll"></span><h1>Pianoroll limits options<a class="headerlink" href="#pianoroll-limits-options" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Limits params can be use to limit a piano roll by setting start date / end date and lower pitch / higher pitch  (see the C/C++ library <a class="reference external" href="http://guidolib.sourceforge.net/doc/guidolib/group__PianoRoll.html">documentation</a>)</p>
+<p><strong>Options</strong></p>
+<blockquote>
+<div><ul>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">startDate</span></code>:</dt><dd><p>date is expressed as a rational value</p>
+<p><em>default value</em>: “0/0” (start date is the score start date)</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">endDate</span></code>:</dt><dd><p>date is expressed as a rational value</p>
+<p><em>default value</em>: “0/0” (end date is the score end date)</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">lowPitch</span></code>:</dt><dd><p>a int value to control the lower pitch expressed in midi notation.</p>
+<p><em>default value</em>: -1 (score minimal pitch)</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">highPitch</span></code>:</dt><dd><p>a int value to control the higher pitch expressed in midi notation.</p>
+<p><em>default value</em>: -1 (score maximal pitch)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="example">
+<h2>Example:<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Using jQuery:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.get(&#39;http://guido.server.org/XXX/pianoroll?startDate=&quot;2/4&quot;&amp;endDate=&quot;12/1&quot;&#39;);
+</pre></div>
+</div>
+</div>
+<div class="section" id="internals">
+<h2>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h2>
+<p>The layout options correspond to the <a class="reference external" href="http://http://guidolib.sourceforge.net/doc/guidolib/structLimitParams.html">LimitParams</a> data structure.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="formatpianoroll.html" title="Formatting options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../pianoroll.html" title="Pianoroll drawing and formatting"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../pianoroll.html" >Pianoroll drawing and formatting</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

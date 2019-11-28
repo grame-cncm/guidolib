@@ -1,6 +1,0 @@
-{
-    [\accol<range="1", id=1, color="red"> a b],
-    [\accol<range="2", id=1, color="red", type="none"> a b],
-    [\accol<range="3", id=1, color="red", type="standard"> a b],
-    [\accol<range="4", id=1, color="red", type="thinBrace"> a b]
-}

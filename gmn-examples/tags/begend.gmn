@@ -1,6 +1,0 @@
-[ 	a/2 \slur( e2/4 
-	\slurBegin:1 g1 \slurBegin:3<curve="up"> e 
-	\slurBegin:2 c  e 
-	\slurEnd:1 f \slurEnd:3  g
-	\slurEnd:2 a/1 )
-]

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Overview - The Guido Project</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="/rsrc/guido.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Guido Project</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guido API <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li class="active">
+    <a href="./">Overview</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/api/">API reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Internals <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../internals/architecture/">Global architecture</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Abstract Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../../internals/arclasses/">AR classes</a>
+</li>
+            
+<li >
+    <a href="../../internals/tagparams/">Tag Parameters</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Graphic Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../../internals/grclasses/">GR classes</a>
+</li>
+            
+<li >
+    <a href="../../internals/layout/">Layout steps</a>
+</li>
+    </ul>
+  </li>
+                                    
+<li >
+    <a href="../../internals/vgdevice/">The VGDevice layer</a>
+</li>
+                                    
+<li >
+    <a href="../../internals/src-code/">Source code organisation</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/internal/">Internals reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contributing <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../todo/">To do list</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/grame-cncm/guidolib/wiki/Contributing">Guidelines</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../..">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../../dox/api/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#overview-of-the-guido-library">Overview of the Guido library</a></li>
+            <li><a href="#main-services">Main services</a></li>
+            <li><a href="#interfaces">Interfaces</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="overview-of-the-guido-library">Overview of the Guido library</h1>
+<p>The Guido Engine operates on a memory representation of the <a href="http://guidodoc.grame.fr">Guido Music Notation</a> format [GMN]
+the Guido Abstract Representation [AR]. This representation is transformed step by step 
+to produce graphical score pages. Two kinds of processing are applied to the AR:</p>
+<ul>
+<li>AR to AR transformations which represents a logical layout transformation: part of the
+layout (such as beaming for example) may be computed from the AR as well as expressed in AR,</li>
+<li>the AR is finally converted into a Guido Graphic Representation (GR) that contains the
+necessary layout information and is directly used to draw the music score. This final step 
+includes notably spacing and page breaking algorithms.</li>
+</ul>
+<p>See the Guido Project <a href="/overview/index.html">overview</a> pages for a quick introduction to the library services. It gives also an overview of the score operations provided by the <a href="https://github.com/grame-cncm/guidoar">GuidAR library</a>.</p>
+<p>See also the <a href="/internals/architecture">system architecture</a>.</p>
+<h2 id="main-services">Main services</h2>
+<p>The main services provided by the library are:</p>
+<ul>
+<li><a href="/dox/api/group__Parser.html">Parsing</a> GMN files, strings or streams to build an AR memory representation. GMN streams are <em>unfinished</em> GMN representations, intended to be written on the fly, that can be handled like regular GMN files,</li>
+<li><a href="/dox/api/group__Factory.html">Building AR</a> memory representations from scratch using the Guido Factory API,</li>
+<li><a href="/dox/api/group__Engine.html">Building GR representations</a> from AR representations and controlling the graphic representation,</li>
+<li><a href="/dox/api/group__Format.html">Score drawing and page formatting</a>,</li>
+<li><a href="/dox/api/group__Pages.html">Browsing and querying</a> music pages,</li>
+<li><a href="/dox/api/group__Mapping.html">Time to graphic mappings</a> that are relations between graphic segments (rectangles) and time segments (intervals),</li>
+<li><a href="/dox/api/group__midi.html">MIDI conversion</a> (provided that the engine has been compiled with MIDI support),</li>
+<li>Miscellaneous functions such as <a href="/dox/api/group__Misc.html">version number</a>, management or <a href="/dox/api/group__time.html">timing</a> measurements,</li>
+<li>Alternate representations:<ul>
+<li><a href="/dox/api/group__PianoRoll.html">Piano Roll</a>,</li>
+<li><a href="/dox/api/group__Rproportional.html">Reduced proportional representation</a>,</li>
+</ul>
+</li>
+</ul>
+<h2 id="interfaces">Interfaces</h2>
+<p>The Guido library API was originally designed as a C API but it's available also for the following languages:</p>
+<ul>
+<li><strong>C++</strong>: a <a href="/dox/api/group__APICplusplus.html">C++ interface</a> has been designed over the C API.</li>
+<li><strong>Java</strong>: the Guido engine is available as a native library for Java. Thus the implementation is object oriented but the C API is globally respected: only the Guido prefix of the function names is not present in the methods names. See the <a href="/javadoc">java documentation</a>.</li>
+<li><strong>Javascript</strong>: the Guido engine is available as a Web Assembly [WASM] library for Javascript and published on <a href="https://www.npmjs.com/package/@grame/guidolib">NPM</a>. The implementation is based on the C++ interface. See the <a href="/jsdoc">javascript documentation</a>.</li>
+<li><strong>Python</strong>: a Python interface has been designed but has not been maintained for years.</li>
+</ul>
+<p>In addition, the Guido engine services are also available as <a href="/webdoc">Web API</a>.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2019 <a href="http://www.grame.fr">Grame-CNCM</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

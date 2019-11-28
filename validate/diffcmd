@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Inverse grep to ignore line with guido version number in svg
-diff <(grep -v "<desc>.*</desc>" $1) <(grep -v "<desc>.*</desc>" $2)
-

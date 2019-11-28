@@ -1,7 +1,0 @@
-[
-    \noteFormat<"x">
-    \tuplet<format="-3-", dy1=5, dispNote="/16">(a b c)
-    \tuplet<format="-3-", dy1=5, dispNote="/8">(a b c)
-    \tuplet<format="-3-", dy1=5, dispNote="/2">(a b c)
-    \tuplet<format="-3-", dy1=5, dispNote="/1">(a b c)
-]

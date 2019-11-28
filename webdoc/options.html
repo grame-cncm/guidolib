@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Server Options &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="overview.html"
+                        title="previous chapter">Overview</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/options.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="server-options">
+<h1>Server Options<a class="headerlink" href="#server-options" title="Permalink to this headline">¶</a></h1>
+<p>The following options can be passed to the server on startup:</p>
+<blockquote>
+<div><ul>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--port</span></code></dt><dd><p>portnum : sets the communication port number</p>
+<p><em>default value</em>: 8000</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--initfile</span></code></dt><dd><p>the location of the (optional) server initiation file. See the sample init file guidohttpdserver.ini in the GUIDO source for inspiration.</p>
+<p><em>default value</em>: A file called guidohttpdserver.ini in the directory of the executable.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--daemon</span></code></dt><dd><p>used with upstart to make this run as a daemon.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--logfile</span></code></dt><dd><p>log file name : use an empty string to write to STDOUT</p>
+<p><em>default value</em>: guidohttpdserver.log in the directory of the current executable</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--logmode</span></code></dt><dd><p>logfile mode. Use 0 for Apache-like or 1 for XML.</p>
+<p><em>default value</em>: 0 (Apache-like)</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--cachedir</span></code></dt><dd><p>name of the cache directory</p>
+<p><em>default value</em>: A directory named <code class="docutils literal notranslate"><span class="pre">cache</span></code> in the directory of the current executable</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--nocache</span></code></dt><dd><p>not use cache directory for writing or reading session.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--svgfontfile</span></code></dt><dd><p>name of the svg font file.</p>
+<p><em>default value</em>: A file called guido2.svg in the directory of the current executable</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--version</span></code></dt><dd><p>version of the server and of guido</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--access-control-allow-origin</span></code></dt><dd><p>set ‘Access-Control-Allow-Origin’ to ‘*’ in http response headers</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">--maxsession</span></code></dt><dd><p>maximum session hold in server.</p>
+<p><em>default value</em>: 100</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--help</span></code></dt><dd><p>display all of these options in a help message</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>Here’s an example of how to make the cachedir in the file <code class="docutils literal notranslate"><span class="pre">/home/guidofriend/mychachedir</span></code></p>
+<blockquote>
+<div><p>./guidohttpserver –cachedir /home/guidofriend/mycachedir</p>
+</div></blockquote>
+<p>Here’s an example of how to run the server in daemon mode</p>
+<blockquote>
+<div><p>sudo nohup ./guidohttpserver –daemon &amp;</p>
+</div></blockquote>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

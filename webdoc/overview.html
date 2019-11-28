@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Overview &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Server Options" href="options.html" />
+    <link rel="prev" title="GUIDOEngine Web API" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="options.html" title="Server Options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="GUIDOEngine Web API"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Overview</a><ul>
+<li><a class="reference internal" href="#guido-music-notation">GUIDO Music Notation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">GUIDOEngine Web API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="options.html"
+                        title="next chapter">Server Options</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/overview.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>The HTTP GUIDO Engine is a web server that provides music score layout services, based on the
+the <a class="reference external" href="http://guidolib.sourceforge.net/">GUIDO Engine library</a> and on the <a class="reference internal" href="#gmn"><span class="std std-ref">GUIDO Music Notation</span></a> format. These services are availble using HTTP requests. The corresponding API is inspired by a RESTful design and is close to the <a class="reference external" href="http://guidolib.sourceforge.net/doc/guidolib/">C/C++ API</a>.</p>
+<p>The semantic of the operations is carried by the HTTP method (POST, GET, HEAD) and their scope is indicated by the URI:</p>
+<ul class="simple">
+<li><p>POST is used to create a new score,</p></li>
+<li><p>GET is used to get a score or score attributes</p></li>
+<li><p>HEAD is used to read the header of a server response</p></li>
+</ul>
+<p>Typical examples of transactions with the server could be as follows:</p>
+<ul>
+<li><p>a client POST GMN code to a server (e.g. located at <code class="docutils literal notranslate"><span class="pre">http://guido.server.org</span></code>). When the code is correct, it gets a unique identifier back from the server (let’s say ‘XXX’), otherwise the server returns an error code.</p></li>
+<li><p>in case of success, the client can access the score and its properties with the ‘GET’ method and simple paths (the part of the URI to the right of the hostname) that start with the identifier previously returned by the server (‘XXX’ in the following examples):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">http://guido.server.org/XXX/</span></code>                      to get an image of the score</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">http://guido.server.org/XXX/pagecount</span></code>     to get the count of pages</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">http://guido.server.org/XXX/gmn</span></code>           to get the gmn code</p></li>
+<li><p>etc.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>options can be used and combined in conjunction to the GET method e.g.:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">http://guido.server.org/XXX?page=2</span></code>        to get an image of the second page of the score</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">http://guido.server.org/XXX?page=2&amp;format=png</span></code> to get a png image of the second page</p></li>
+<li><p>etc.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="guido-music-notation">
+<span id="gmn"></span><h2>GUIDO Music Notation<a class="headerlink" href="#guido-music-notation" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://guidolib.sourceforge.net/doc/GUIDO-Music%20Notation%20Format.html">GUIDO Music Notation format</a> is a formal language for score level music representation. It is a plain-text, i.e. readable and platform independent format capable of representing all information contained in conventional musical scores. The basic GUIDO Format is very flexible and can be easily extended and adapted to capture a wide variety of musical features beyond conventional musical notation (CMN). The GUIDO design is strongly influenced by objective oriented programming to facilitate an adequate representation of musical material, from tiny motives up to complex symphonic scores.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="options.html" title="Server Options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="GUIDOEngine Web API"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

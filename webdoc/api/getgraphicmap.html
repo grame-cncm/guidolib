@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Graphic to time mappings &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Time to time mapping" href="gettimemap.html" />
+    <link rel="prev" title="GUIDO mappings" href="../mapping.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="gettimemap.html" title="Time to time mapping"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../mapping.html" title="GUIDO mappings"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../mapping.html" accesskey="U">GUIDO mappings</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Graphic to time mappings</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../mapping.html"
+                        title="previous chapter">GUIDO mappings</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gettimemap.html"
+                        title="next chapter">Time to time mapping</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/getgraphicmap.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graphic-to-time-mappings">
+<h1>Graphic to time mappings<a class="headerlink" href="#graphic-to-time-mappings" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Gives the mapping between the graphic and the time time. The mapping is given as a set of pairs of graphic rectangles and time intervals.</p>
+<p>Note that the relations between the graphic and time space depends on <a class="reference internal" href="../params/layout.html#layout"><span class="std std-ref">Score layout options</span></a> and <a class="reference internal" href="../params/format.html#format"><span class="std std-ref">Formatting options</span></a>. Thus, and to make sense, layout and formatting parameters could be used with the mapping requests and should be the same than those used to get the graphic score.</p>
+<p><strong>Path</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>ScoreID</em>/<code class="docutils literal notranslate"><span class="pre">getpagemap</span></code>        : gives the time to graphic mapping at page level. The array of mapping is called <em>pagemap</em>.</div>
+<div class="line"><em>ScoreID</em>/<code class="docutils literal notranslate"><span class="pre">getstaffmap</span></code>: gives a staff time to graphic mapping. An optionnal <code class="docutils literal notranslate"><span class="pre">staff</span></code> parameter may be used to indicate the staff number (default vaue is 1). The array of mapping is called <em>staffmap</em>.</div>
+<div class="line"><em>ScoreID</em>/<code class="docutils literal notranslate"><span class="pre">getvoicemap</span></code> : gives a voice time to graphic mapping. An optionnal <code class="docutils literal notranslate"><span class="pre">voice</span></code> parameter may be used to indicate the voice number (default vaue is 1). The array of mapping is called <em>voicemap</em>.</div>
+<div class="line"><em>ScoreID</em>/<code class="docutils literal notranslate"><span class="pre">getsystemmap</span></code> : gives the time to graphic mapping at system level. The array of mapping is called <em>systemmap</em>.</div>
+<div class="line"><em>ScoreID</em>/pianoroll/<code class="docutils literal notranslate"><span class="pre">getmap</span></code> : gives the time to graphic mapping for a piano roll. The array of mapping is called <em>pianorollmap</em>.</div>
+</div>
+</div></blockquote>
+<dl>
+<dt><strong>Response body</strong></dt><dd><ul>
+<li><dl>
+<dt>in case of success:</dt><dd><div class="line-block">
+<div class="line">a set of pairs indicating the relation between the graphic and the time space, formatted as JSON with the path as key.</div>
+</div>
+<p>Example with getstaffmap for the score <em>ScoreID</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;ScoreID&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;staffmap&quot;</span> <span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s2">&quot;graph&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="mi">122</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="mi">451</span> <span class="p">},</span>
+                         <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;0/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">}</span> <span class="p">},</span>
+                        <span class="p">{</span><span class="s2">&quot;graph&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="mi">122</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="mi">243</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="mi">451</span> <span class="p">},</span>
+                         <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;2/1&quot;</span><span class="p">}</span> <span class="p">},</span>
+                        <span class="p">{</span><span class="s2">&quot;graph&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="mi">243</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="mi">312</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="mi">451</span> <span class="p">},</span>
+                         <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;2/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;3/1&quot;</span><span class="p">}</span> <span class="p">}</span>
+                <span class="p">]</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>in case of error:</dt><dd><div class="line-block">
+<div class="line">An error message formatted as JSON with ‘Error’ as key.</div>
+<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;ScoreID&quot;</span> <span class="pre">:</span> <span class="pre">{&quot;Error&quot;</span> <span class="pre">:</span> <span class="pre">&quot;incorrect</span> <span class="pre">score</span> <span class="pre">ID.&quot;}</span> <span class="pre">}</span></code></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Response code</strong></dt><dd><ul class="simple">
+<li><p>200 (“Success”)</p></li>
+<li><p>404 (“Not Found”) in case of incorrect score ID.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Using jQuery:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.get(&#39;http://guido.server.org/XXX/staffmap?staff=1&#39;);
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="gettimemap.html" title="Time to time mapping"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../mapping.html" title="GUIDO mappings"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../mapping.html" >GUIDO mappings</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

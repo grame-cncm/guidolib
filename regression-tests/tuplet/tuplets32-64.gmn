@@ -1,9 +1,0 @@
-{ [ 
-   \clef<"g2"> \key<-3> \meter<"6/8"> \intens<"ff", dy=-1.8hs> 
-	\stemsDown \beam( d&3/16 \slurBegin:1 b&2 g e d& b&1) \stemsUp \beam( g e d& b&0 g e) \slurEnd:1
-   \beam( f g a b& c1 d) 
-	\stemsDown 
-	\tuplet<"13", dispNote="/32", position="below">( \beam( e*3/104 f g a b& c2 d e& f g a b& c3)) 
-	\tuplet<"13", dispNote="/64", position="below">( \beam( e*3/104 f g a b& c d e& f g a b& c3))
-  ]
- }

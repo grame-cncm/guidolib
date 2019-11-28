@@ -1,8 +1,0 @@
-100c100
-< 		typedef struct Params {
----
-> 		struct Params {
-110c110
-< 		} Params;
----
-> 		};

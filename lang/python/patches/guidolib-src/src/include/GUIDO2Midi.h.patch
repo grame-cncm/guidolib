@@ -1,8 +1,0 @@
-38c38
-< typedef struct Guido2MidiParams
----
-> struct Guido2MidiParams
-56c56
-< } Guido2MidiParams;
----
-> } ;

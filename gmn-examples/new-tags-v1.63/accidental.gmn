@@ -1,6 +1,0 @@
-{
-[ \barFormat<style="system"> \meter<"4/4"> c d# e \slur(f# f) g a ],
-[ \meter<"4/4"> c d# e \slur<curve="up">(f# f) g a ],
-[ \meter<"4/4"> c d# e \slur(f# \acc(f)) g a ],
-[ \meter<"4/4"> c d# e \slur(f# \acc<style="cautionary">(f)) g a ]
-}

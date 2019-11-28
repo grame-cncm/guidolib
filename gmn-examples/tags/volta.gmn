@@ -1,7 +1,0 @@
- [
-   \key<-1> \meter<"C"> \clef<"g2">  
-   c2  d c2 d 
-   \volta<"1">( c d { a0, f2, a }  d) 
-   \volta<"2">( d3 c c  d ) \repeatEnd
-   c c c c
- ]

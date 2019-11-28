@@ -1,8 +1,0 @@
-{
-	[ 
-		\key<2> \meter<"4/4"> \i<"p"> c#2 b1 a g f# e d c#
-	],
-	[ 
-		\clef<"f"> \key<2> \meter<"4/4">  \i<"mf"> g0/2 a g f# 
-	]
-}

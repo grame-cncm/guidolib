@@ -1,5 +1,0 @@
-% simple GUIDO example
-% demonstrating the \dim
-{
-	[\dim (a b) \dim<dy=-1>(c d e)]
-}

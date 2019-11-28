@@ -1,6 +1,0 @@
-[
-	\intens<"ff", dy=-8.5hs> 
-	\text<" poco più appassionato",font="Baskerville",fsize=11pt,fattrib="i", dy=-9.5hs> 
-	(\acc( f/4.) e/8) 
-	\stemsDown \beam( \ten<position="above">( g/8  f/8 \acc( c/8) \acc( a&2/8)))  
-]

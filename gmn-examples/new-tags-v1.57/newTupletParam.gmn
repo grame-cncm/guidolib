@@ -1,9 +1,0 @@
-% New \tuplet-tag attribute :
-%
-% dispNote forces note display duration inside a tuplet
-%            Possible values : "/1", "/2" "/4", "/8", "/16"
-%            Default value: automatic
-%
-[
-    \tuplet<format="-3-", dy1=4, dispNote="/16">(a b c)
-]

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">Simple Guido Editor</string>
-    <string name="tab_1">GMN Code</string>
-    <string name="tab_2">SVG</string>
-    <string name="tab_3">Canvas</string>
-	<string name="gmn_code">[\\key&lt;3&gt; \\instr&lt;\"clarinet in A\"&gt; a \\slur (b \\intens&lt;\"p\"&gt; f ) a/8 b c d g/2]</string>
-</resources>

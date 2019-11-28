@@ -1,5 +1,0 @@
-[
-	\meter<"C", autoMeasuresNum="on">
-	(* System 1 *) a b c d a b c d
-	(* System 2 *) \bar<displayMeasNum="skipped"> a | a b c d a b c d
-]

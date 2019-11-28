@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Layout steps - The Guido Project</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <link href="/rsrc/guido.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">The Guido Project</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guido API <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../api/overview/">Overview</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/api/">API reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Internals <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../architecture/">Global architecture</a>
+</li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Abstract Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../arclasses/">AR classes</a>
+</li>
+            
+<li >
+    <a href="../tagparams/">Tag Parameters</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">The Graphic Representation</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../grclasses/">GR classes</a>
+</li>
+            
+<li class="active">
+    <a href="./">Layout steps</a>
+</li>
+    </ul>
+  </li>
+                                    
+<li >
+    <a href="../vgdevice/">The VGDevice layer</a>
+</li>
+                                    
+<li >
+    <a href="../src-code/">Source code organisation</a>
+</li>
+                                    
+<li >
+    <a href="../../dox/internal/">Internals reference</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contributing <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../todo/">To do list</a>
+</li>
+                                    
+<li >
+    <a href="https://github.com/grame-cncm/guidolib/wiki/Contributing">Guidelines</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../grclasses/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../vgdevice/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#global-steps-of-the-layout">Global steps of the layout</a></li>
+            <li><a href="#spacing-and-line-breaking">Spacing and line breaking</a></li>
+            <li><a href="#position-and-bounding-box">Position and bounding box</a></li>
+            <li><a href="#automatic-collision-avoidance">Automatic collision avoidance</a></li>
+            <li><a href="#drawing">Drawing</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="global-steps-of-the-layout">Global steps of the layout</h1>
+<p>Building the graphic representation is a complex task that involves spacing and line breaking, which depends on the elements bounding box and determines their horizontal position. Each element has also to compute its specific graphic properties (e.g. a curve for slurs or ties).</p>
+<h2 id="spacing-and-line-breaking">Spacing and line breaking</h2>
+<p>Spacing algorithm is based on a <a href="https://github.com/grame-cncm/guidolib/blob/dev/doc/papers/renz-spacing.pdf">spring-rod model</a> and line breaking algorithm is derived from <a href="http://www.eprg.org/G53DOC/pdfs/knuth-plass-breaking.pdf">Donald Knuth</a>.
+In practice, the implementation of these algorithms suffers from <em>old-fashioned</em> coding: </p>
+<ul>
+<li>non-structured methods that are 200 to 500 lines long, </li>
+<li>lack of convention to differentiate local variables and class fields, </li>
+<li>non-functional implementation, in the form of a state machine.</li>
+</ul>
+<p>All this makes it almost impossible to modify these algorithms although they are perfectly described in <a href="https://github.com/grame-cncm/guidolib/blob/dev/doc/papers/kai_renz_diss.pdf">Renz's thesis</a>. The core of the spacing and line breaking is in charge of the <a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRStaffManager.cpp">GRStaffManager</a>.</p>
+<h2 id="position-and-bounding-box">Position and bounding box</h2>
+<p>The common properties of all the graphic elements are their bounding box and their position.
+Computing these properties can be complex, in particular due to line breaks that can break an element into several parts, and also because of collisions that can occur with other elements. 
+Only range tags are concerned with the former issue but all elements may have to face the latter.</p>
+<p>Note that originaly, the Guido Engine didn't made any provision to solve collisions but the Guido language was designed to solve them manually with <a href="https://guidodoc.grame.fr/refs/tagsparams/#common-parameters">common tag parameters</a> like <em>dx</em> or <em>dy</em>, used for relative displacement of an element. The various uses of the Guido engine have gradually led to the inclusion of automatic systems for collision avoidance.</p>
+<h3 id="range-tags">Range tags</h3>
+<p>The main method to compute the element graphic properties is <strong>tellPosition</strong> that each object inherits from GObject. The method interface is the following:</p>
+<pre><code>virtual void tellPosition( GObject * caller, const NVPoint &amp; position );
+</code></pre>
+
+<p><strong>tellPosition</strong> is called twice with the first and last object of the tag range and with the corresponding object position.
+In addition and when a tag is split by a line break, the method is called for each segment. In this case, a <strong><a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRPositionTag.h">GRSystemStartEndStruct</a></strong> can be used to collect information about the segments. In particular it contains a <code>startflag</code> and an <code>endflag</code> that indicates the status of the current segment (between LEFTMOST, RIGHTMOST, OPENLEFT, OPENRIGHT, NOTKNOWN).</p>
+<p>The <strong>GRSystemStartEndStruct</strong> must be allocated by the object constructor and added to the object <em>start-end</em> list using <code>addSystemStartEndStruct</code>. It can be retrieved using <code>getSystemStartEndStruct(const GRSystem * grsystem)</code>.</p>
+<h3 id="other-tags">Other tags</h3>
+<p>The horizontal position of non-range tags is automatically set by the engine. The vertical position is to be computed by the object. Computing the bounding box mainly consists in getting glyphs extends.</p>
+<h2 id="automatic-collision-avoidance">Automatic collision avoidance</h2>
+<p>All the elements that inherits <strong><a href="https://github.com/grame-cncm/guidolib/blob/dev/src/engine/graphic/GRNotationElement.h">GRNotationElement</a></strong> have access to the list of associated GRNotationElement using <code>getAssociations()</code>. This list is typically associated to range tags and contains all the elements of the range (e.g. the notes covered by a slur).
+Typically, the bounding box of associated elements is used to detect and solve a collision.</p>
+<p>Non-range tags have no context and thus, they need to build their own contextual information in order to handle potential collisions.</p>
+<h2 id="drawing">Drawing</h2>
+<p>Each element is responsible to re-implement the <code>OnDraw</code> method which interface is the following:</p>
+<pre><code>virtual void OnDraw( VGDevice &amp; hdc ) const;
+</code></pre>
+
+<p>The method is const and thus, all the computation regarding the layout has to be already performed before <code>OnDraw</code> is called.
+The default behaviour is to draw a music symbol for symbol based elements.</p>
+<p>Elements that have been segmented by a line break have access to the current drawing state using their <code>GRSystemStartEndStruct</code>.</p>
+<p>The method takes a <a href="/internals/vgdevice/">Virtual Graphic Device</a> as argument.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>Copyright &copy; 2019 <a href="http://www.grame.fr">Grame-CNCM</a></p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

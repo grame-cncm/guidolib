@@ -1,3 +1,0 @@
-[
-    \meter<"4/4"> a b c \cluster({a/1, b, c})
-]

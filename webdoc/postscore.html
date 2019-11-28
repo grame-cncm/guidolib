@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Posting complete score &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Posting score by stream" href="poststream.html" />
+    <link rel="prev" title="The POST method" href="post.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="poststream.html" title="Posting score by stream"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="post.html" title="The POST method"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="post.html" accesskey="U">The POST method</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Posting complete score</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#posting-files">POSTing files</a></li>
+<li><a class="reference internal" href="#internals">Internals</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="post.html"
+                        title="previous chapter">The POST method</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="poststream.html"
+                        title="next chapter">Posting score by stream</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/postscore.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="posting-complete-score">
+<h1>Posting complete score<a class="headerlink" href="#posting-complete-score" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">This service is used to create a new score. The URL is the root of the webserver. The score is in an request attribute called <code class="docutils literal notranslate"><span class="pre">data</span></code>.</div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<dl>
+<dt><strong>Response body</strong></dt><dd><ul>
+<li><dl>
+<dt>in case of success:</dt><dd><div class="line-block">
+<div class="line">a unique identifier, formatted as JSON with ‘ID’ as key.</div>
+<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;ID&quot;</span> <span class="pre">:</span> <span class="pre">&quot;a_unique_score_id&quot;</span> <span class="pre">}</span></code></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>in case of error:</dt><dd><div class="line-block">
+<div class="line">An error message formatted as JSON with ‘Error’ as key.</div>
+<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Error&quot;</span> <span class="pre">:</span> <span class="pre">&quot;Parse</span> <span class="pre">error</span> <span class="pre">line</span> <span class="pre">9.&quot;</span> <span class="pre">}</span></code></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Response code</strong></dt><dd><ul class="simple">
+<li><p>201 (“Created”) in case of success.</p></li>
+<li><p>400 (“Bad request”) in case of non valid GMN code.</p></li>
+</ul>
+</dd>
+<dt><strong>Valid GMN code</strong></dt><dd><p>is GUIDO Music Notation code that is successfully parsed.</p>
+</dd>
+</dl>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The following HTML script passes in Guido Music Notation code to a server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;http://guido.server.org&quot;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;hidden&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;data&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;[ g e c ]&quot;</span> <span class="o">/&gt;</span>
+      <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Submit&quot;</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
+  <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Here is an equivalent call using ajax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.ajax({
+     url: &#39;http://guido.server.org&#39;,
+     type: &#39;POST&#39;,
+     data: &quot;[ g e c ]&quot;,
+ });
+</pre></div>
+</div>
+<p>or using jQuery:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.post(&#39;http://guido.server.org&#39;, &quot;[ g e c ]&quot;);
+</pre></div>
+</div>
+<p>or using curl:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">d</span> <span class="s2">&quot;data=[ g e c ]&quot;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">guido</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">org</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="posting-files">
+<h2>POSTing files<a class="headerlink" href="#posting-files" title="Permalink to this headline">¶</a></h2>
+<p>Files can be sent to the server via POST.  For example, you can upload the file <code class="docutils literal notranslate"><span class="pre">foo.gmn</span></code> with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">urlencode</span> <span class="s2">&quot;data@foo.gmn&quot;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">guido</span><span class="o">.</span><span class="n">grame</span><span class="o">.</span><span class="n">fr</span><span class="p">:</span><span class="mi">8000</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="internals">
+<h2>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h2>
+<p>You may think of the returned ID as a reference to a <a class="reference external" href="http://guidolib.sourceforge.net/doc/guidolib/group__Engine.html">GUIDO abstract representation</a> [GAR], that is build using <code class="docutils literal notranslate"><span class="pre">GuidoParseFile</span></code> C/C++ API. Further reference to this ID may be viewed as a reference to this GAR.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="poststream.html" title="Posting score by stream"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="post.html" title="The POST method"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="post.html" >The POST method</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

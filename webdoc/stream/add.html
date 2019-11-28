@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Adding data to a score with stream API &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reset score with stream API" href="reset.html" />
+    <link rel="prev" title="Creating score with stream API" href="create.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reset.html" title="Reset score with stream API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="create.html" title="Creating score with stream API"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../post.html" >The POST method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../poststream.html" accesskey="U">Posting score by stream</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Adding data to a score with stream API</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#posting-files">POSTing files</a></li>
+<li><a class="reference internal" href="#internals">Internals</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="create.html"
+                        title="previous chapter">Creating score with stream API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reset.html"
+                        title="next chapter">Reset score with stream API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/stream/add.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="adding-data-to-a-score-with-stream-api">
+<h1>Adding data to a score with stream API<a class="headerlink" href="#adding-data-to-a-score-with-stream-api" title="Permalink to this headline">¶</a></h1>
+<div class="line-block" id="index-0">
+<div class="line">This service is used to add data to an existing score with the stream API. You can only add data to a score created with the stream API.</div>
+</div>
+<dl>
+<dt><strong>url</strong></dt><dd><p>/stream/<em>ScoreID</em></p>
+<p>The score data are in a request attribute called <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+</dd>
+<dt><strong>Response body</strong></dt><dd><ul>
+<li><dl>
+<dt>in case of success:</dt><dd><div class="line-block">
+<div class="line">The score ID, formatted as JSON with ‘ID’ as key. This is the same score ID in the request and in the response.</div>
+<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;ID&quot;</span> <span class="pre">:</span> <span class="pre">&quot;ScoreID&quot;</span> <span class="pre">}</span></code></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>in case of guido code error:</dt><dd><div class="line-block">
+<div class="line">An error message formatted as JSON with ‘Error’ as key.</div>
+<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;Error&quot;</span> <span class="pre">:</span> <span class="pre">&quot;Parse</span> <span class="pre">error</span> <span class="pre">line</span> <span class="pre">9.&quot;</span> <span class="pre">}</span></code></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>in case of session error:</dt><dd><div class="line-block">
+<div class="line">An error message formatted as JSON with ‘Error’ as key.</div>
+<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;ScoreID&quot;</span> <span class="pre">:</span> <span class="pre">{&quot;Error&quot;</span> <span class="pre">:</span> <span class="pre">&quot;incorrect</span> <span class="pre">score</span> <span class="pre">ID.&quot;}</span> <span class="pre">}</span></code></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Response code</strong></dt><dd><ul class="simple">
+<li><p>201 (“Created”) in case of success.</p></li>
+<li><p>400 (“Bad request”) in case of non valid GMN code.</p></li>
+<li><p>404 (“Not Found”) in case of incorrect score ID.</p></li>
+</ul>
+</dd>
+<dt><strong>Valid GMN code</strong></dt><dd><p>is GUIDO Music Notation code that is successfully parsed.</p>
+</dd>
+</dl>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The following HTML script passes in Guido Music Notation code to a server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;http://guido.server.org/stream/*ScoreID*&quot;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;hidden&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;data&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;g e c &quot;</span> <span class="o">/&gt;</span>
+      <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Submit&quot;</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
+  <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Here is an equivalent call using ajax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.ajax({
+     url: &#39;http://guido.server.org/stream/*ScoreID*&#39;,
+     type: &#39;POST&#39;,
+     data: &quot;g e c&quot;,
+ });
+</pre></div>
+</div>
+<p>or using jQuery:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.post(&#39;http://guido.server.org/stream/*ScoreID*&#39;, &quot;g e c&quot;);
+</pre></div>
+</div>
+<p>or using curl:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">d</span> <span class="s2">&quot;data=g e c&quot;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">guido</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">stream</span><span class="o">/*</span><span class="n">ScoreID</span><span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="posting-files">
+<h2>POSTing files<a class="headerlink" href="#posting-files" title="Permalink to this headline">¶</a></h2>
+<p>Files can be sent to the server via POST.  For example, you can upload the file <code class="docutils literal notranslate"><span class="pre">foo.gmn</span></code> with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">urlencode</span> <span class="s2">&quot;data@foo.gmn&quot;</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">guido</span><span class="o">.</span><span class="n">grame</span><span class="o">.</span><span class="n">fr</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">stream</span><span class="o">/*</span><span class="n">ScoreID</span><span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="internals">
+<h2>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h2>
+<p>The new data are added to the referenced stream with <a class="reference external" href="http://guidolib.sourceforge.net/doc/guidolib/group__Parser.html">GuidoWriteStream</a>  C/C++ API. After that, the Guido Abstract representation is created.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reset.html" title="Reset score with stream API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="create.html" title="Creating score with stream API"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../post.html" >The POST method</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../poststream.html" >Posting score by stream</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

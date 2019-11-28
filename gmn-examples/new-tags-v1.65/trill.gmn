@@ -1,9 +1,0 @@
-% Syntax change with release 1.6.5
-% 
-{
-% The regular trill ; the accidental can be moved with adx et ady
-[\trill(g) \trill<"a&">(g) \trill<"a&",ady=0.5, adx=-2>(g) ],
-
-% The cautionary accidentals can be shown with "cautionary"
-[\key<3> \trill<"d", accidental="cautionary">(c) \trill<"f#", accidental="cautionary">(e) _ ]
-}

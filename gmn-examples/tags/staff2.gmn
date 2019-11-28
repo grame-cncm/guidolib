@@ -1,9 +1,0 @@
-% the \staff-Tag now supports the dy-parameter
-% using this, you can specify the distance between two
-% staff-lines
-
-{ [  % next staff begins 0.85cm below last line of first staff
-      \staff<1,dy=1.8cm> 
-   \text<"Distance between staves is 1.8cm",dy=-0.65cm> 
-   ( c d e f g a h c2 )  ],
-   [ c d e f g a h c2 ] }
