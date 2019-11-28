@@ -18,7 +18,7 @@ See also the [system architecture](/internals/architecture).
 
 The main services provided by the library are:
 
-- [Parsing](dox/api/group__Parser.html) GMN files, strings or streams to build an AR memory representation. GMN streams are _unfinished_ GMN representations, intended to be written on the fly, that can be handled like regular GMN files,
+- [Parsing](/dox/api/group__Parser.html) GMN files, strings or streams to build an AR memory representation. GMN streams are _unfinished_ GMN representations, intended to be written on the fly, that can be handled like regular GMN files,
 - [Building AR](/dox/api/group__Factory.html) memory representations from scratch using the Guido Factory API,
 - [Building GR representations](/dox/api/group__Engine.html) from AR representations and controlling the graphic representation,
 - [Score drawing and page formatting](/dox/api/group__Format.html),
