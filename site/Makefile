@@ -43,6 +43,8 @@ all:
 	$(MAKE) doxygen
 	$(MAKE) overview
 	$(MAKE) javadoc
+	$(MAKE) jsdoc
+	$(MAKE) webdoc
 
 publish:
 	$(MAKE) all
@@ -65,6 +67,24 @@ javadoc: PWD=$(shell pwd)
 javadoc:
 	-[ -d $(DOCDIR)/javadoc ] && rm -rf $(DOCDIR)/javadoc
 	make -C ../lang/java doc DOCFOLDER=$(PWD)/$(DOCDIR)/javadoc
+
+####################################################################
+jsdoc: JSDOC=../lang/javascript/doc
+jsdoc: $(DOCDIR)/jsdoc
+	make -C $(JSDOC) 
+	cp $(JSDOC)/*.png $(DOCDIR)/jsdoc
+	cp $(JSDOC)/jsbinding.html $(DOCDIR)/jsdoc/index.html
+	cp $(JSDOC)/jsdoc.css $(DOCDIR)/jsdoc/
+
+####################################################################
+webdoc: WDOC=../doc/server
+webdoc: $(DOCDIR)/webdoc
+	make -C $(WDOC) html
+	-[ -d $(DOCDIR)/webdoc ] && rm -rf $(DOCDIR)/webdoc
+	cp -r $(WDOC)/build/html $(DOCDIR)/webdoc
+
+$(DOCDIR)/webdoc:
+	mkdir $(DOCDIR)/webdoc
 
 ####################################################################
 doxygen:

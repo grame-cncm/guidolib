@@ -33,18 +33,12 @@ The main services provided by the library are:
 
 ## Interfaces
 
-The Guido library API was originally designed as a C API. 
-Since then, a [C++ interface](/dox/api/group__APICplusplus.html) has been designed over the C API.
+The Guido library API was originally designed as a C API but it's available also for the following languages:
 
+- **C++**: a [C++ interface](/dox/api/group__APICplusplus.html) has been designed over the C API.
+- **Java**: the Guido engine is available as a native library for Java. Thus the implementation is object oriented but the C API is globally respected: only the Guido prefix of the function names is not present in the methods names. See the [java documentation](/javadoc).
+- **Javascript**: the Guido engine is available as a Web Assembly [WASM] library for Javascript and published on [NPM](https://www.npmjs.com/package/@grame/guidolib). The implementation is based on the C++ interface. See the [javascript documentation](/jsdoc).
+- **Python**: a Python interface has been designed but has not been maintained for years.
 
-- Score layout: the library provides functions to parse a GMN file and to create the 
-corresponding AR and GR. 
-- Score pages access: result of the score layout is a set of pages. The library provides 
-the necessary to change the page size, to query a score (pages count, current page 
-number or the page number corresponding to a given music date.
-- The GUIDO Factory: the GUIDO Engine may be feeded with computer generated music using the 
-GUIDO Factory. The GUIDO Factory API provides a set of functions to create a GAR from scratch and to convert 
-it into a GGR.
-- Mapping: along with the GGR, the GUIDO Engine maintains a tree of graphical music elements. 
-Each element has a bounding box and a date. The library includes the necessary to browse this tree
-and to retrieve elements by date or position.
+In addition, the Guido engine services are also available as [Web API](/webdoc).
+
