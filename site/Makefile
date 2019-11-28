@@ -71,6 +71,9 @@ jsdoc: $(DOCDIR)/jsdoc
 	cp $(JSDOC)/jsbinding.html $(DOCDIR)/jsdoc/index.html
 	cp $(JSDOC)/jsdoc.css $(DOCDIR)/jsdoc/
 
+$(DOCDIR)/jsdoc:
+	mkdir $(DOCDIR)/jsdoc
+
 ####################################################################
 webdoc: WDOC=../doc/server
 webdoc: $(DOCDIR)/webdoc
