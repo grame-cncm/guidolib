@@ -8,4 +8,4 @@ To do so, the engine proceeds globally in 4 steps (see also the figure below):
 - 3) it transforms to the _Abstract Representation_ into a [_Graphic Representation_](/internals/grclasses/) [GR]: the abstract objects are instanciated in the graphic space with concrete positions and dimensions.
 - 4) the _Graphic Representation_ is drawn using the [_Virtual Graphic Device_](/internals/vgdevice/) layer.
 
-![architecture](/rsrc/transforms.png)
+![architecture](../rsrc/transforms.png)
