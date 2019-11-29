@@ -18,9 +18,11 @@
 #include <cmath> // for abs
 #include <algorithm>
 
+#include "GRGlobalStem.h"
 #include "GRSingleNote.h"
 #include "GRSlur.h"
 #include "GRStaff.h"
+#include "GRStem.h"
 #include "GRStdNoteHead.h"
 
 using namespace std;
@@ -87,7 +89,43 @@ float GRSlur::getEltOffset (const GRNotationElement* el ) const
 }
 
 // -----------------------------------------------------------------------------
-void GRSlur::automaticAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+NVRect	GRSlur::getElementBox 	(const GRBowingContext * context, const GRNotationElement* el ) const
+{
+	NVRect r = el->getBoundingBox() + el->getPosition();
+
+	float leftlength = 0;
+	float leftoffset = 0;
+	float lefty = 0;
+	if (context->leftChordStem) {
+		leftlength = context->leftChordStem->getStemLength();
+		lefty = context->leftChordStem->getGRStem()->getPosition().y;
+		leftoffset = lefty - el->getPosition().y;
+	}
+	float rightlength = 0;
+	float rightoffset = 0;
+	float righty = 0;
+	if (context->rightChordStem) {
+		rightlength = context->rightChordStem->getStemLength();
+		righty = context->rightChordStem->getGRStem()->getPosition().y;
+		rightoffset = righty - el->getPosition().y;
+	}
+	if (context->stemDirLeft == 1) {
+		if (el == context->topLeftHead)
+			r.top -= leftlength - leftoffset;
+		else if (el == context->topRightHead)
+			r.top -= rightlength - rightoffset;
+	}
+	else {
+		if (el == context->bottomLeftHead)
+			r.bottom += leftlength + leftoffset;
+		else if (el == context->bottomRightHead)
+			r.bottom += rightlength + rightoffset;
+	}
+	return r;
+}
+
+// -----------------------------------------------------------------------------
+void GRSlur::automaticAnchorPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	const bool upward = (context->curveDir == 1);
 
@@ -112,9 +150,11 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, const ARBowing * 
 		endElement = upward ? context->topRightHead : context->bottomRightHead;
 
 	// -- Get the bounding box of the left and right elements.
-	const NVRect leftBox ( startElement->getBoundingBox() + startElement->getPosition());
-	const NVRect rightBox ( endElement->getBoundingBox()  + endElement->getPosition());
-	
+//	const NVRect leftBox ( startElement->getBoundingBox() + startElement->getPosition());
+//	const NVRect rightBox ( endElement->getBoundingBox()  + endElement->getPosition());
+	const NVRect leftBox  = getElementBox ( context, startElement );
+	const NVRect rightBox = getElementBox ( context, endElement );
+
 	const float yMargin = float(0.75) * LSPACE;
 	// -- Calculates the start and end coordinates of the slur.
 	if( upward ) {
@@ -174,7 +214,7 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, const ARBowing * 
 	  notation rules) 
 	  
 */
-void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	if (mAssociated == 0 ) return;
 

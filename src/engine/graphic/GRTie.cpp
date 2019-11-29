@@ -58,7 +58,7 @@ void GRTie::addAssociation(GRNotationElement * el)
 // -----------------------------------------------------------------------------
 /**
 */
-void GRTie::automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRTie::automaticAnchorPoints( const GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// Careful, we have to deal with chords! what about getStemStartPosition()?
 	NVPoint posLeft;
@@ -150,7 +150,7 @@ void GRTie::automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing 
 // -----------------------------------------------------------------------------
 /** \brief Try to minimize collisions.
 */
-void GRTie::automaticControlPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRTie::automaticControlPoints( const GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// Do not cross staff lines, of clearly cross staff lines if the 
 	// distance between the two tied note is large.

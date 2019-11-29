@@ -9,6 +9,7 @@ GUIDO Engine history
 - fix svg export issue with '&' character
 - partial fix for incorrect slurs (issue #90)
 - autoHideTiedAccidentals global setting is now 'on' by default
+- fix incorrect slur position for beamed chords
 
 ----------------------------------------------------------------
   version 1.6.7

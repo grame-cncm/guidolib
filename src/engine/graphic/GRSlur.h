@@ -30,12 +30,13 @@ class GRSlur : public GRBowing
 
 	protected:
 		virtual void automaticCurveDirection( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
-		virtual void automaticAnchorPoints	( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
-		virtual void automaticControlPoints	( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticAnchorPoints	( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticControlPoints	( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void accept (GRVisitor& visitor);
 
 	private:
-		float	getEltOffset (const GRNotationElement* el ) const;
+		float	getEltOffset 	(const GRNotationElement* el ) const;
+		NVRect	getElementBox 	(const GRBowingContext * context, const GRNotationElement* el ) const;
 };
 
 #endif

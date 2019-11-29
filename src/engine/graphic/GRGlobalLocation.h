@@ -33,32 +33,21 @@ class GRGlobalLocation : public GRPTagARNotationElement
 					GRGlobalLocation(GRStaff *gstaff, const ARShareLocation *pshare);
 		virtual 	~GRGlobalLocation();
 
-
-		int getHighestAndLowestNoteHead(GRStdNoteHead **highest,
-					GRStdNoteHead **lowest) const;
+		int getHighestAndLowestNoteHead(GRStdNoteHead **highest, GRStdNoteHead **lowest) const;
 		virtual void removeAssociation(GRNotationElement * el);
 	    virtual void addAssociation(GRNotationElement *grnot);
 		virtual void setHPosition( GCoord nx );
 		virtual void OnDraw(VGDevice & hdc ) const;
 
+		virtual void RangeEnd(GRStaff *grstaff);
 
-	virtual void RangeEnd(GRStaff *grstaff);
-
-	virtual GRNotationElement *  getFirstEl()
-	{
-		return mFirstEl;
-	}
-	virtual void tellPosition(GObject *, const NVPoint &);
-
+		virtual GRNotationElement *  getFirstEl() 					{ return mFirstEl; }
+		virtual void tellPosition(GObject *, const NVPoint &);
 
 	protected:
-
-		// firstEl is the first element in 
-		// the \shareStem-Range. Only the
-		// first event in the range gets a spring
-		// on its own ....
+		// firstEl is the first element in the \shareStem-Range. Only the
+		// first event in the range gets a spring on its own ....
 		GRNotationElement * mFirstEl;
-
 };
 
 #endif

@@ -166,7 +166,7 @@ void GRBowing::getBowBeginingContext( GRBowingContext * ioContext, GRSystemStart
 		ioContext->stemDirLeft = note->getThroatDirection();
 	}
 	else {
-		GRGlobalStem * stem = findGlobalStem( sse, startElement );
+		GRGlobalStem * stem = findGlobalStem( startElement );
 		if( stem ) {
 			stem->getHighestAndLowestNoteHead( &ioContext->topLeftHead, &ioContext->bottomLeftHead );
 			ioContext->stemDirLeft = stem->getStemDir();
@@ -189,7 +189,7 @@ void GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEn
 		ioContext->stemDirRight = note->getThroatDirection();
 	}
 	else {
-		GRGlobalStem * stem = findGlobalStem( sse, endElement );
+		GRGlobalStem * stem = findGlobalStem( endElement );
 		if( stem ) {
 			stem->getHighestAndLowestNoteHead( &ioContext->topRightHead, &ioContext->bottomRightHead );
 			ioContext->stemDirRight = stem->getStemDir();
@@ -202,6 +202,7 @@ void GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEn
 				GRGlobalLocation * gloc = dynamic_cast<GRGlobalLocation *>(ptlist2->GetNext(pos));
 				if (gloc) {
 					ioContext->stemDirRight = (GDirection)gloc->getHighestAndLowestNoteHead(&ioContext->topRightHead, &ioContext->bottomRightHead );
+					stem = findGlobalStem( gloc->getFirstEl() );
 					break;
 				}
 			}
@@ -211,7 +212,7 @@ void GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEn
 }
 
 // -----------------------------------------------------------------------------
-GRGlobalStem * GRBowing::findGlobalStem( const GRSystemStartEndStruct * sse, const GRNotationElement * stemOwner ) const
+GRGlobalStem * GRBowing::findGlobalStem( const GRNotationElement * stemOwner ) const
 {
 	const NEPointerList * ptlist1 = stemOwner->getAssociations();
 	if (ptlist1) {
@@ -378,7 +379,7 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 			bowInfos->offsets[1].y = bowInfos->offsets[2].y - ((context.curveDir > 0) ? LSPACE : -LSPACE);
 			bowInfos->offsets[0].y = bowInfos->offsets[1].y;
 		}
-cerr << "GRBowing::updateBow position 3: " << bowInfos->position << endl;
+//cerr << "GRBowing::updateBow position 3: " << bowInfos->position << endl;
 		return;
 #else
 		automaticControlPoints( &context, arBow, sse );
@@ -397,7 +398,7 @@ cerr << "GRBowing::updateBow position 3: " << bowInfos->position << endl;
 }
 
 // -----------------------------------------------------------------------------
-void GRBowing::automaticAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::automaticAnchorPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	manualAnchorPoints( context, arBow, sse );
 }
@@ -405,7 +406,7 @@ void GRBowing::automaticAnchorPoints( GRBowingContext * context, const ARBowing 
 // -----------------------------------------------------------------------------
 /** \brief Anchor points positionning whith grace notes
 */
-void GRBowing::graceAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse, GRStaff * staff )
+void GRBowing::graceAnchorPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse, GRStaff * staff )
 {
 	NVPoint posLeft;
 	NVPoint posRight;
@@ -442,7 +443,7 @@ void GRBowing::graceAnchorPoints( GRBowingContext * context, const ARBowing * ar
 	Following the guido specification of tie ans slur tags, those reference
 	points are the center of the noteheads.
 */
-void GRBowing::manualAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::manualAnchorPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// Careful, we have to deal with chords! what about getStemStartPosition()?
 	NVPoint posLeft;
@@ -489,7 +490,7 @@ void GRBowing::manualAnchorPoints( GRBowingContext * context, const ARBowing * a
 }
 
 // -----------------------------------------------------------------------------
-void GRBowing::applyAnchorPointsOffsets( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::applyAnchorPointsOffsets( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 	GRStaff * staff = context->staff;
@@ -505,7 +506,7 @@ void GRBowing::applyAnchorPointsOffsets( GRBowingContext * context, const ARBowi
 // -----------------------------------------------------------------------------
 /** \brief Use tag parameters to calculate the control points position.
 */
-void GRBowing::manualControlPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::manualControlPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 	GRStaff * staff = context->staff;
@@ -587,7 +588,7 @@ void GRBowing::automaticCurveDirection( GRBowingContext * context, const ARBowin
 
 	Called after anchor points positionning and after curve direction has been decided.
 */
-void GRBowing::automaticControlPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::automaticControlPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	manualControlPoints( context, arBow, sse );
 }

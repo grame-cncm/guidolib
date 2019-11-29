@@ -32,8 +32,8 @@ class GRTie : public GRBowing
 		virtual void addAssociation(GRNotationElement *el);
 
 	protected:
-		virtual void automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
-		virtual void automaticControlPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticAnchorPoints ( const GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticControlPoints( const GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 
 	private:
 		bool	fHideAccidentals;		// used to hide accidentals after a bar
