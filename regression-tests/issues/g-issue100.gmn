@@ -1,3 +1,7 @@
+(*
+   Issue #100
+   Slur does not begin or end on stem with beamed chords
+*)
 {
 [
    (* meas. 1 *)  \clef<"g2">  \meter<"C"> 
