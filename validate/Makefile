@@ -30,7 +30,7 @@ else
 endif  
 
 ifeq ($(system), Darwin)
-  lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
+  lib =  -F../build/lib/ -framework GUIDOEngine
 else
 ifeq ($(system), MINGW)
   libbin   := ../build/win$(PLATFORM)/Release
