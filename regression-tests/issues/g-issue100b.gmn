@@ -1,0 +1,34 @@
+{[ \staff<1> \accol<id=0, range="1-2"> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<-1> \meter<"2/4", autoBarlines="off", autoMeasuresNum="system">  
+\tuplet<"", dispNote="/16">( \restFormat<dy=19>( _/24)
+ \staff<2> \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 e0/24 \stemsUp d1/24)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 \tuplet<"", dispNote="/16">( \acc( b0/24)
+ \staff<1> \stemsUp e1/24 d/24)
+ \beamEnd:2 \beamEnd:1 \acc( b/8)
+ \slurEnd:1 _/8 \bar 
+   (* meas. 2 *)  \tuplet<"", dispNote="/16">( \restFormat<dy=16>( _/24)
+ \staff<2> \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 e0/24 \stemsUp c1/24)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 \tuplet<"", dispNote="/16">( a0/24 \staff<1> \stemsUp e1/24  c/24)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamsOff a/8 \slurEnd:1 _/8 \bar 
+   (* meas. 3 *)  \tuplet<"", dispNote="/16">( \restFormat<dy=17>( _/24)
+ \staff<2> \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \acc( e&0/24)
+ \stemsUp c1/24)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 \tuplet<"", dispNote="/16">( a0/24 \staff<1> \stemsUp \acc( e&1/24) c/24)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamsOff a/8 \slurEnd:1 _/8 \bar 
+   (* meas. 4 *)  \tuplet<"", dispNote="/16">( \restFormat<dy=15>( _/24)
+ \staff<2> \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \acc( e0/24)
+ \stemsUp c1/24)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 \tuplet<"", dispNote="/16">( g0/24 \staff<1> \stemsUp \acc( e1/24) c/24)
+ \beamEnd:2 \beamEnd:1 g/8 \slurEnd:1 _/8 ]
+ , 
+[ \staff<2>
+   (* meas. 1 *)  \clef<"f4"> \key<-1> \meter<"2/4", autoBarlines="off", autoMeasuresNum="system"> 
+   \stemsDown \beamsOff {\acc( g#-2/2)
+, \acc( g#-1/2)
+  } \bar 
+   (* meas. 2 *)  \stemsDown {a-2/2, a-1/2  } \bar 
+   (* meas. 3 *)  \stemsDown {\acc( f#-2/2)
+, \acc( f#-1/2)
+  } \bar 
+   (* meas. 4 *)  \stemsDown {g-2/2, g-1/2  } ]
+  }
