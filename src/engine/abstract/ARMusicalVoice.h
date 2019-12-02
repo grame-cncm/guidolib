@@ -204,8 +204,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void doMicroTonal();
 
 		void CloseBase			( ARBase * curbase, ARTuplet * autotuplet, GuidoPos lastevpos, GuidoPos FLA);
-		void ReplacePositionTag	(ARPositionTag * ptold, ARPositionTag * ptnew, ARMusicalVoiceState & vst, 
-										const char * endtagname = 0 );
+		void ReplacePositionTag	( const ARPositionTag * ptold, ARPositionTag * ptnew, ARMusicalVoiceState & vst, const char * endtagname = 0 );
 		void InsertDisplayDurationTag (const TYPE_DURATION & dispdur, int b_punkt, const TYPE_TIMEPOSITION & tp,
 										GuidoPos pos, ARMusicalVoiceState & vst, int setptagpos = 1);
 
