@@ -3073,11 +3073,7 @@ continue with the next event.
 */
 void ARMusicalVoice::doAutoDisplayCheck()
 {
-	// an id for the introduced ties ...
-	// needs to be elaborated so that collisions with local ids are vermieden
-	// int autotie = 100;
-	// counts the tie-tags needs to be remembered,
-	// if we break events...
+	// counts the tie-tags needs to be remembered, if we break events...
 	int tiecount = 0;
 
 	// this remebers, if we are in a merge-lookahead-situation.
@@ -3087,42 +3083,29 @@ void ARMusicalVoice::doAutoDisplayCheck()
 	ARMerge * curmerge = NULL;
 	int mergesavetiecount=0;
 
-	// holds the current base.
-	// initially this is just 1
+	// holds the current base. initially this is just 1
 	TYPE_DURATION base(1,1);
 	// the base-tag that encapsulates real tuplets.
 	ARBase * curbase = NULL;
 
-	// this is an automatic tuplet (it is included if a base-change is done
-	// and no other tuplet-tag is active ...)
+	// this is an automatic tuplet (it is included if a base-change is done and no other tuplet-tag is active ...)
 	ARTuplet * autotuplet = NULL;
-	// the lasteventposition
-	GuidoPos lastevpos = NULL;
-	// the position for inserting the EndPosition
-	// of the base-tag
-	GuidoPos FLA = NULL;
+	GuidoPos lastevpos = NULL;		// the lasteventposition
+	GuidoPos FLA = NULL;			// the position for inserting the EndPosition of the base-tag
+	int tupletcount = 0;			// the count of for tuplet-tags
 
-	// the count of for tuplet-tags
-	int tupletcount = 0;
-
-	// holds the current meter information for a voice.
-	// if curmeter is NULL, no meter has been set.
+	// holds the current meter information for a voice.  if curmeter is NULL, no meter has been set.
 	// this is important for whole-measure-rests which can be displayed just as a whole-note-rest.
 	// ATTENTION can a meter be turned off?
 	ARMeter * curmeter = NULL;
 	TYPE_DURATION curmetertime;
 	ARMusicalVoiceState vst;
 
-	// this operation eats all but the first non-state
-	// events or tags.
+	// this operation eats all but the first non-state  events or tags.
 	GuidoPos pos = GetHeadPosition(vst);
-
-	TYPE_DURATION dur;
-
 	while (pos)
 	{
-		dur = DURATION_0;
-
+		TYPE_DURATION dur = DURATION_0;
 		// track tie- and merge-tags
 
 		// check, whether positiontags have been removed ...
@@ -3136,9 +3119,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				ARMerge * armerge;
 				ARTuplet * artuplet;
 				if (artie)
-				{
 					-- tiecount;
-				}
 				else if((armerge = dynamic_cast<ARMerge *>(arpt)) != 0 )
 				{
 					// handle this ...
@@ -3148,8 +3129,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				else if((artuplet = dynamic_cast<ARTuplet *>(arpt)) != 0 )
 				{
 					-- tupletcount;
-					// if there is an active base,
-					// it is closed ...
+					// if there is an active base, t is closed ...
 					if (curbase != NULL)
 					{
 						assert(autotuplet == NULL);
@@ -3184,9 +3164,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						CloseBase(curbase,autotuplet,lastevpos,FLA);
 						curbase->finish();
 						if (autotuplet)
-						{
 							autotuplet->setupTuplet( curbase );
-						}
 						vst.RemovePositionTag(curbase,0);
 						if (autotuplet)
 							vst.RemovePositionTag(autotuplet,0);
@@ -3203,17 +3181,12 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					// now we are in a merge-situation
 					armergestate = vst;
 					curmerge = armerge;
-
 					mergelookahead = 1;
-
 					dur = DURATION_0;
 
-					// now we collect the events and sum up the
-					// durations ...
-
+					// now we collect the events and sum up the durations ...
 					GuidoPos tmppos = pos;
 					ARMusicalEvent * baseev = NULL;
-
 					for( ; ; )
 					{
 						ARMusicalEvent * ev = ARMusicalEvent::cast(GetAt(tmppos));
@@ -3235,10 +3208,8 @@ void ARMusicalVoice::doAutoDisplayCheck()
 
 						if (curmerge->getError() || tmppos == curmerge->getEndPosition())
 							break;
-
 						// check, whether tie or merge-tags start and end ...
 						// WARNING for overlapping merge and overlapping Ties ....
-                        
 						GetNext(tmppos,armergestate);
 					}
 
@@ -3259,10 +3230,8 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						vst.RemovePositionTag(curmerge,0);
 						mPosTagList->RemoveElement(curmerge);
 						mPosTagList->RemoveElement(artgend);
-
 						curmerge = NULL;
 						mergelookahead = 0;
-
 						continue;
 					}
 				}
@@ -3409,12 +3378,6 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				if (base.getNumerator() != 1)
 					DispdurToTupletdur(dur,base);
 
-					/* old, FLA is not needed here ...
-					// this is the position within the positiontags where a tie/merge-tag can be inserted.
-					// it lies just after the current event or is NULL (no mPosTagList, end of mPosTagList)
-					GuidoPos FLA = vst.ptagpos;
-				*/
-
 				// now calculate the durations ...
 				const TYPE_DURATION olddur (ev->getDuration());
 				TYPE_DURATION newdur = dur;
@@ -3422,19 +3385,15 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				if (vst.curchordtag)
 				{
 					// then we are inside a chord ....
-					// then, we have to set the duration also of
-					// the dispDur tag that must be present
-					// somewhere ....
+					// then, we have to set the duration also of the dispDur tag that must be present somewhere ....
 					if (vst.fCurdispdur)
 					{
-						// how can we make sure, that the
-						// new duration is displayable?
+						// how can we make sure, that the new duration is displayable?
 						// must be checked in doAutoDisplayCheck!
 						vst.fCurdispdur->setDisplayDuration(newdur);
 
 					}
-					// we have to set the timepositions of the other
-					// events and tags within the chord-range ....
+					// we have to set the timepositions of the other events and tags within the chord-range ....
 					TYPE_TIMEPOSITION mytp = ev->getRelativeTimePosition() + newdur;
 					GuidoPos startpos = vst.curchordtag->getPosition();
 					while (startpos)
@@ -3443,63 +3402,44 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						ARMusicalObject *obj = ObjectList::GetNext(startpos);
 
 						if (obj && obj->getDuration() == DURATION_0)
-						{
 							obj->setRelativeTimePosition(mytp);
-						}
 						if (tmppos == vst.curchordtag->getEndPosition())
 							break;
 					}
 				}
 
-				// this sets the duration to the shorter
-				// length ...
+				// this sets the duration to the shorter length ...
 				ev->setDuration(newdur);
-
-
 				// that is the new duration of the event.
 				TYPE_TIMEPOSITION ntp = ev->getRelativeTimePosition() + newdur;
 
 				GuidoPos newpos = pos;
-
 				if (vst.curchordtag)
 				{
-					// if we have a chord(tag), we need to copy the whole chord
-					// (including tags ....)
+					// if we have a chord(tag), we need to copy the whole chord (including tags ....)
 					// how do we do that?
-					// copychord returns the position of the first event in the new
-					// (copied) chord.
+					// copychord returns the position of the first event in the new (copied) chord.
 					newpos = CopyChord(vst, ntp, olddur - newdur);
-
-					// in chordmode ... this should
-					// get me to the first event
-					// after the chord ....
+					// in chordmode ... this should get me to the first event after the chord ....
 					GetNext(vst.vpos,vst);
-
 					pos = vst.vpos;
 				}
 				else
 				{
-
-					// now we create a new event, that
-					// is a copy of ev and has a  new duration ...
+					// now we create a new event, that is a copy of ev and has a  new duration ...
 					ARMusicalEvent * ev2 = /*dynamic*/static_cast<ARMusicalEvent *>(ev->Copy());
-
 					if (ev2)
 					{
 						ev2->setRelativeTimePosition(ntp);
 						ev2->setDuration( olddur - newdur);
-
 						newpos = AddElementAfter(pos, ev2);
 					}
 					else
 						assert(false);
 
-
 					// this position remembers the location of the MergeEnd or
-					// tieEnd that could be introduced. this is important, so that
-					// tie repositioning works ...
+					// tieEnd that could be introduced. this is important, so that tie repositioning works ...
 					GuidoPos newptagpos = NULL;
-
                     ARNote * n2 = static_cast<ARNote *>(ev2->isARNote());
 					// now look, if there are any ties and merge-tags ..
 					if (tiecount == 0 && n2 && !(n2->getName() == ARNoteName::empty) )
@@ -3542,13 +3482,11 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						vst.AddPositionTag(artie,0);
 
 						// we set this explicitly, because the tag is not added to the addedtaglist.
-						// Otherwise, multiple extensions of the same note would lead to multiple tie or
-						// mergtag-increments.
+						// Otherwise, multiple extensions of the same note would lead to multiple tie or mergtag-increments.
 						++ tiecount;
 					}
 
-					// now we need to "repointer" the position tags that formerly
-					// were attached to ev -> they now need to be attached to ev2
+					// now we need to "repointer" the position tags that formerly were attached to ev -> they now need to be attached to ev2
 					// (which is at newpos)
 					GuidoPos tmppos = vst.ptagpos;
 					while (tmppos)
@@ -3574,8 +3512,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					if (base.getNumerator() != 1)
 						InsertDisplayDurationTag(dispdur,b_punkt, ev->getRelativeTimePosition(), pos, vst,0);
 
-					// the added and removedpositiontags have to be removed ... otherwise
-					// the removedpositiontags can make problems ...
+					// the added and removedpositiontags have to be removed ... otherwise the removedpositiontags can make problems ...
 					vst.DeleteAddedAndRemovedPTags();
 					pos = newpos;
 				}
@@ -3589,8 +3526,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 		} // if dur>DURATION_0
 
 		if (curbase && ev) {
-			// adds the "real" duration of the
-			// event, not the displayDuration ...
+			// adds the "real" duration of the event, not the displayDuration ...
 			curbase->addEvent(ev);
 		}
 
@@ -3603,8 +3539,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 
 			if (IsPowerOfTwoDenom(tmp/*,6*/))
 			{
-				// OK, we are finished ...
-				// close the base ...
+				// OK, we are finished ... close the base ...
 				CloseBase(curbase,autotuplet,pos,vst.ptagpos);
 
 				// set the parameter of the curbase?
@@ -3684,13 +3619,9 @@ void ARMusicalVoice::DispdurToTupletdur( TYPE_DURATION & dur, const TYPE_DURATIO
 }
 
 //____________________________________________________________________________________
-void ARMusicalVoice::InsertDisplayDurationTag(const TYPE_DURATION &dispdur,
-											  int b_punkt,
-											  const TYPE_TIMEPOSITION &tp,
-											  GuidoPos pos,
-											  ARMusicalVoiceState &vst,
-											  int setptagpos)
-
+void ARMusicalVoice::InsertDisplayDurationTag(const TYPE_DURATION &dispdur, int b_punkt,
+											  const TYPE_TIMEPOSITION &tp, GuidoPos pos,
+											  ARMusicalVoiceState &vst, int setptagpos)
 {
 	ARDisplayDuration * ardisp = new ARDisplayDuration();
 	ardisp->setIsAuto(true);
@@ -3724,7 +3655,6 @@ void ARMusicalVoice::InsertDisplayDurationTag(const TYPE_DURATION &dispdur,
 	}
 
 	vst.AddPositionTag(ardisp,0);
-
 	if (setptagpos)
 		vst.ptagpos = newptagpos;
 }
@@ -3732,12 +3662,9 @@ void ARMusicalVoice::InsertDisplayDurationTag(const TYPE_DURATION &dispdur,
 //____________________________________________________________________________________
 /** \brief Replaces positiontags. The correspondence is set accordingly.
 */
-void ARMusicalVoice::ReplacePositionTag(ARPositionTag * ptold,
-										ARPositionTag * ptnew,
-										ARMusicalVoiceState &vst,
-										const char * endtagname)
+void ARMusicalVoice::ReplacePositionTag( const ARPositionTag * ptold, ARPositionTag * ptnew, ARMusicalVoiceState &vst, const char * endtagname)
 {
-	ARMusicalObject * mold = dynamic_cast<ARMusicalObject *>(ptold);
+	const ARMusicalObject * mold = dynamic_cast<const ARMusicalObject *>(ptold);
 	ARMusicalObject * mnew = dynamic_cast<ARMusicalObject *>(ptnew);
 
 	assert(mold);
@@ -3753,9 +3680,7 @@ void ARMusicalVoice::ReplacePositionTag(ARPositionTag * ptold,
 		if (ardre)
 		{
 			if (endtagname)
-			{
 				ardre->endstr = endtagname;
-			}
 			else
 				ardre->endstr = ")";
 
