@@ -150,8 +150,6 @@ void GRSlur::automaticAnchorPoints( const GRBowingContext * context, const ARBow
 		endElement = upward ? context->topRightHead : context->bottomRightHead;
 
 	// -- Get the bounding box of the left and right elements.
-//	const NVRect leftBox ( startElement->getBoundingBox() + startElement->getPosition());
-//	const NVRect rightBox ( endElement->getBoundingBox()  + endElement->getPosition());
 	const NVRect leftBox  = getElementBox ( context, startElement );
 	const NVRect rightBox = getElementBox ( context, endElement );
 
