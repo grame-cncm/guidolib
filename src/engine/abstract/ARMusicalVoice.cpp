@@ -3117,7 +3117,6 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				ARPositionTag * arpt = vst.removedpositiontags->GetNext(tmppos);
 				ARTie * artie = dynamic_cast<ARTie *>(arpt);
 				ARMerge * armerge;
-				ARTuplet * artuplet;
 				if (artie)
 					-- tiecount;
 				else if((armerge = dynamic_cast<ARMerge *>(arpt)) != 0 )
@@ -3126,7 +3125,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					mergelookahead = 0;
 					curmerge = NULL;
 				}
-				else if((artuplet = dynamic_cast<ARTuplet *>(arpt)) != 0 )
+				else if(dynamic_cast<ARTuplet *>(arpt) != 0 )
 				{
 					-- tupletcount;
 					// if there is an active base, t is closed ...
@@ -3153,9 +3152,8 @@ void ARMusicalVoice::doAutoDisplayCheck()
 
 				ARTie * artie = dynamic_cast<ARTie *>(arpt);
 				ARMerge * armerge;
-				ARTuplet * artuplet;
 				if (artie) ++ tiecount;
-				else if ((artuplet = dynamic_cast<ARTuplet *>(arpt)) != 0 )
+				else if (dynamic_cast<ARTuplet *>(arpt) != 0 )
 				{
 					++ tupletcount;
 					// close the old base (if one exists)
@@ -3249,7 +3247,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
-		bool dontsplit = false;
+		bool dontsplit = (tupletcount > 0); //false;
 		if (ev && !ev->getAppearance().empty()) dontsplit = true;
 
 		if (!mergelookahead && ev)
@@ -3264,7 +3262,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				if (curbase != NULL) {
 					if (tupletcount > 0) {
 						assert(autotuplet == NULL);
-						GuidoWarn("Tuplettag does not coincide with durations");
+//						GuidoWarn("Tuplettag does not coincide with durations");   useless (?)
 					}
 					// close the base ...
 					CloseBase(curbase,autotuplet,lastevpos,FLA);
