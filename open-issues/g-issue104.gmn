@@ -1,0 +1,10 @@
+{
+[  
+	\clef<"f4"> \key<-1> \meter<"12/8"> \stemsUp 
+	\tieBegin a-1/2. 
+	\beamBegin:1 a/8. \tieEnd 
+	\beamBegin:2 
+	\beamBegin:3 b&/32 a/32 \beamEnd:3 g/16 a/16 \beamEnd:2 \beamEnd:1  
+   \beamBegin:1 c0/8. \beamBegin:2 b&-1/16 a/16 g/16 \beamEnd:2 \beamEnd:1 
+]
+}
