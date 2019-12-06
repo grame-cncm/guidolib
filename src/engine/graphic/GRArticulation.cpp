@@ -132,7 +132,11 @@ GRArticulation::GRArticulation(const ARMusicalTag * inTag, float curLSPACE, bool
 	fRefPos = getReferencePosition (mSymbol);
 	mArticulationFlag = getArticulationFlag (inTag);
 	float height = getSymbolHeight(mSymbol);
-	mBoundingBox.Set( -mLeftSpace, height * -0.5f, mRightSpace, height * 0.5f);
+	const std::type_info & tinfo = typeid(*inTag);
+	if ((tinfo == typeid(ARFermata)) || (tinfo == typeid(ARHarmonic)))
+		mBoundingBox.Set( -mLeftSpace, height * -1, mRightSpace, 0);
+	else
+		mBoundingBox.Set( -mLeftSpace, height * -0.5f, mRightSpace, height * 0.5f);
 }
 
 void GRArticulation::print(ostream& os) const
@@ -331,7 +335,7 @@ void GRArticulation::placePizz( const GREvent * inParent, NVPoint & ioPos)
 		double topMax = min(-space, inParent->getStemEndPos().y - space);
 		topMax = min(topMax, double(inParent->getPosition().y - minSpace));
 		if (topMax > -space) topMax = -space;
-		topMax = resolveCollisionAbove(inParent, topMax, space*1.2f, kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp);
+		topMax = resolveCollisionAbove(inParent, topMax, space*1.2f, kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp | kFlagBow);
 		ioPos.y = (float)topMax;
 	}
 	else {
@@ -356,7 +360,7 @@ double GRArticulation::resolveCollisionAbove ( const GREvent * inParent, double 
 		int type = grart ? grart->getArticulationType() : 0;
 		if (type & skiptypes) continue;
 
-		double y = (*i)->getPosition().y;
+		double y = (*i)->getPosition().y + (*i)->getBoundingBox().top;
 		if (y <= (currentpos + minSpace)) currentpos = y - minSpace;
 	}
 	return currentpos;
@@ -426,7 +430,7 @@ void GRArticulation::placeAccentAbove( const GREvent * inParent, NVPoint & ioPos
 	// ensure the position is outside the staff
 	if (topMax > -topspace) topMax = -topspace;
 	// avoid collisions with other articulations
-	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp | kFlagBow);
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, space, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp | kFlagBow);
 }
 
 // ----------------------------------------------------------------------------
@@ -464,7 +468,7 @@ void GRArticulation::placeBowAbove( const GREvent * inParent, NVPoint & ioPos )
 	// check the minimum y position regarding note position and stems
 	double topMax = min(-space, inParent->getStemEndPos().y - space);
 	topMax = min(topMax, double(inParent->getPosition().y - minSpace));
-	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, minSpace, 0); //kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, space, 0); //kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
 }
 
 // ----------------------------------------------------------------------------
@@ -502,7 +506,7 @@ void GRArticulation::placeMarcatoAbove( const GREvent * inParent, NVPoint & ioPo
 	double topMax = min(-space, inParent->getStemEndPos().y - space);
 	topMax = min(topMax, double(inParent->getPosition().y - minSpace));
 
-	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp | kFlagBow);
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, space, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp | kFlagBow);
 }
 
 // ----------------------------------------------------------------------------
@@ -580,7 +584,7 @@ void GRArticulation::placeFermataAbove( const GREvent * inParent, NVPoint & ioPo
 	double topMax = min(0.f, inParent->getStemEndPos().y);
 	topMax = min(topMax, double(inParent->getPosition().y - hspace));
 	// avoid collisions with other articulations
-	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, space, kFlagFermataUp | kFlagBow);
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, hspace, kFlagFermataUp | kFlagBow);
 }
 
 void GRArticulation::placeFermataBelow( const GREvent * inParent, NVPoint & ioPos)

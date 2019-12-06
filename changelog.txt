@@ -8,6 +8,7 @@ GUIDO Engine history
 - Guido font extension - version 3.8 - bow up / down glyphs
 - fix svg export issue with '&' character
 - partial fix for incorrect slurs (issue #90)
+- improve articulations placement
 - autoHideTiedAccidentals global setting is now 'on' by default
 - fix incorrect slur position for beamed chords (issue #100)
 - fix incorrect tuplets on chords (issue #103)
