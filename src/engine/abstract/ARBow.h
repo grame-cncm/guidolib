@@ -26,6 +26,7 @@
 @tagtype:RP
 @tagnotation:bowing indication
 @tagdesc
+Strings specific tag.
 @tagend
 
 @params:
