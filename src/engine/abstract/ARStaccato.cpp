@@ -49,7 +49,7 @@ void ARStaccato::setTagParameters (const TagParameterMap& params)
 unsigned int ARStaccato::getSymbol() const
 {
 	if (fType == HEAVY)
-		return fPosition == kAbove ? kStaccmoUpSymbol : kStaccmoDownSymbol;
+		return ((fPosition == kAbove) || (fPosition == kDefaultPosition))  ? kStaccmoUpSymbol : kStaccmoDownSymbol;
 	return kStaccatoSymbol;
 }
 

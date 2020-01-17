@@ -288,8 +288,9 @@ void GRArticulation::placeStaccato( const GREvent * inParent, NVPoint & ioPos )
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
 	float hspace = space * 0.5f;
+	int placement = getPlacement( inParent );
 
-	if (getPlacement( inParent ) == ARArticulation::kAbove) {
+	if ((placement == ARArticulation::kAbove) || (placement == ARArticulation::kDefaultPosition)) {
 		float topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - space;
 		ioPos.y = onStaffLine (staff, topMax) ? topMax - hspace : topMax;
 	}
@@ -308,14 +309,16 @@ void GRArticulation::placeStaccmo( const GREvent * inParent, NVPoint & ioPos )
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
 	const float hspace = space * 0.5f;
+	int placement = getPlacement( inParent );
 
-	if (getPlacement( inParent ) == ARArticulation::kAbove) {
+	if ((placement == ARArticulation::kAbove) || (placement == ARArticulation::kDefaultPosition)) {
 		float topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - hspace;
 		// ensure the position is outside the staff
 		if (topMax > -space) topMax = -space;
 		ioPos.y = onStaffLine (staff, topMax) ? topMax - hspace : topMax;
 	}
 	else {
+		setArticulationSymbol (kStaccmoDownSymbol);
 		const float bottom = (float)staffBottom(staff) + space*0.65f;
 		float bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
 		// ensure the position is outside the staff
