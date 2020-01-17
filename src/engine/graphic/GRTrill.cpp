@@ -58,6 +58,7 @@ GRTrill::GRTrill(GRStaff * inStaff, const ARTrill * ar ) : GRPTagARNotationEleme
 	ARTrill::TYPE type = ar->getType();
 	fBegin = ar->getStatus();
 	fShowTR = ar->getShowTR();
+	fShowWavy = ar->getShowWavyLine();
 	fPosition = ar->getTrillPos();
 	fTildeWidth = GObject::GetSymbolExtent(kTilde)*mTagSize;
 	
@@ -204,7 +205,7 @@ void GRTrill::OnDraw( VGDevice & hdc) const
 		}
 		if (drawAcc) fAccidental->OnDraw(hdc);
 
-		if (fTildeWidth != 0) {		// width of tilde may be 0 if font is not installed for example
+		if (fShowWavy && (fTildeWidth != 0)) {		// width of tilde may be 0 if font is not installed for example
 			float nextPoint = x + fTildeWidth + getPosition().x;
 			while (nextPoint <= endTrill) {
 				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, 0, mTagSize);

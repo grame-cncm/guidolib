@@ -69,6 +69,7 @@ See the [Sonata](@EXAMPLES/cpebach/) example.
 @param:ady:unit:accidental displacement (if any):0hs:true
 @param:begin:boolean:for trill continuations:on:true
 @param:tr:boolean:show/hide the leading "tr" string:true:true
+@param:wavy:boolean:show/hide the wavy line:true:true
 @param:position:string:above, below:above:true
 @paramdesc
 - **begin** is intended for trill continutation. When false, the trill continues the preceding one (if any). It allows to write new trills with changing accidentals without breaking it.
@@ -129,14 +130,9 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		virtual const char*	getTagName() const		{ return "ARTrill"; };
 		virtual std::string getGMNName() const;
 
-//				void 	setType(ORNAMENT typ)		{ fTrillType = typ; }
 				void 	setTrillPos(POS pos) 		{ fTrillPosition = pos; }
-//				void	setChordType(ARMusicalVoice::CHORD_TYPE param_type) { fChordType = param_type;}
-//				void	setChordAccidental(ARMusicalVoice::CHORD_ACCIDENTAL param_accidental)	{ fChordAccidental = param_accidental;}
 				void	setCautionary(bool showAcc)			{ fCautionaryAccidental = showAcc;}
 
-//				ARMusicalVoice::CHORD_TYPE	getChordType() const				{ return fChordType;}
-//				ARMusicalVoice::CHORD_ACCIDENTAL	getChordAccidental() const	{ return fChordAccidental; }
 				ORNAMENT 	getOrnament() const		{ return fTrillType; }
 				TYPE 	getType() const				{ return fType; }
 				float 	getAccidental() const		{ return fAccidental; }
@@ -145,9 +141,8 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 				float	getady() const				{ return fAdy;}
 				bool	getStatus() const			{ return fBegin; }
 				bool	getShowTR() const			{ return fShowTR;}
-//				bool	getAnchor()	const			{ return fDrawOnNoteHead;}
+				bool	getShowWavyLine() const		{ return fShowWavyLine;}
 				POS		getTrillPos()const			{ return fTrillPosition; }
-//				int		getRepeat()	const			{ return fRepeat;}
 				const std::string&	getTrilledNote()	const	{ return fTrilledNote;}
 
 				void	setContinue()				{ fBegin = false; }
@@ -155,7 +150,6 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 	protected:
 		float getAccidental (const std::string& note, const ARKey* key) const;
 		ARMusicalVoice::CHORD_TYPE		 fChordType;
-//		ARMusicalVoice::CHORD_ACCIDENTAL fChordAccidental;
 		float	fAccidental = 0.f;		// the accidental value to be displayed expressed as a float to cope with microtones
 										// 1 is a half tone
 		const ARKey* fCurrentKey;
@@ -165,9 +159,8 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		bool	fCautionaryAccidental;
 		bool	fForceAccidental;
 		bool	fShowTR;
+		bool 	fShowWavyLine;
 		POS		fTrillPosition;
-//		bool	fDrawOnNoteHead;
-//		int		fRepeat;
 		float	fAdx;
 		float	fAdy;
 		bool	fBegin;	

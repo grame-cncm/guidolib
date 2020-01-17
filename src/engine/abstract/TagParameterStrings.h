@@ -182,6 +182,7 @@ extern const char* kTrStr;
 extern const char* kTypeStr;
 extern const char* kUpStr;
 extern const char* kWStr;
+extern const char* kWavyStr;
 extern const char* kYposStr;
 
 // auto tag parameters

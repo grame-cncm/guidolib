@@ -36,6 +36,7 @@ ARTrill::ARTrill(ORNAMENT typ, const ARKey* currentKey) : ARMTParameter(), fCurr
 	fCautionaryAccidental	= false;
 	fForceAccidental		= false;
 	fShowTR                 = true;
+	fShowWavyLine			= true;
 	fTrillPosition			= AUTO;
 	fAdx = fAdy				= 0;
 //	fRepeat					= kUndefined;
@@ -56,6 +57,7 @@ ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy)
 	fCautionaryAccidental= copy->getCautionary();
 	fForceAccidental	= copy->fForceAccidental;
 	fShowTR				= copy->fShowTR;
+	fShowWavyLine		= copy->fShowWavyLine;
 	fTrillPosition		= copy->fTrillPosition;
 //	fRepeat				= copy->fRepeat;
 	fAdx				= copy->getadx();
@@ -162,17 +164,15 @@ void ARTrill::setTagParameters (const TagParameterMap& params)
 	fAdx	= getParameter<TagParameterFloat>(kAdxStr, true)->getValue();
 	fAdy	= getParameter<TagParameterFloat>(kAdyStr, true)->getValue();
 	fShowTR = getParameter<TagParameterString>(kTrStr, true)->getBool();
-	
+	fShowWavyLine = getParameter<TagParameterString>(kWavyStr, true)->getBool();
+
 	p = getParameter<TagParameterString>(kPositionStr);
 	if (p) {
 		string val = p->getValue();
 		if (val == "below") fTrillPosition = BELOW;
 		else if (val == "above") fTrillPosition = ABOVE;
 	}
-//	p = getParameter<TagParameterString>(kAnchorStr);
-//	if (p) fDrawOnNoteHead = string(p->getValue()) == "note";
 	p = getParameter<TagParameterString>(kRepeatStr);
-//	if (p) fRepeat = p->getBool() ? kOn : kOff;
 	
 	fBegin = getParameter<TagParameterString>(kBeginStr, true)->getBool();
 	fAccidental = fTrilledNote.size() ? getAccidental (fTrilledNote, fCurrentKey) : kNoAccidental;

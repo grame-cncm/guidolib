@@ -83,6 +83,7 @@ class GRTrill : public GRPTagARNotationElement
 		NVPoint			sRefPos;
 		bool			fBegin;
 		bool			fShowTR;
+		bool			fShowWavy;
         float			fTildeWidth;
 		float			fStartOffset = 0;
 		ARTrill::POS	fPosition;
