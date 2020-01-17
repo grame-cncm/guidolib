@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.8
+- new "wavy" parameter tag for trills
 - new \bow tag
 - Guido font extension - version 3.9 - fp glyph
 - Guido font extension - version 3.8 - bow up / down glyphs
