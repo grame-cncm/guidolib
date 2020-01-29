@@ -2,10 +2,8 @@
 # a makefile to build the guido engine android library
 #
 
-ABI ?= armeabi-v7a
-ifneq ($(ABI),)
-	APP_ABI = APP_ABI=$(ABI)
-endif
+J        ?= 6    # parallel jobs
+PLATFORM ?= 22
 
 ROOT := ../..
 
@@ -21,8 +19,16 @@ help:
 # building the library for Android
 #===============================================================
 android :
-	ndk-build -C guido-engine-android -j 4 $(APP_ABI)
-	-[ $(ABI) ] && cp guido-engine-android/libs/$(ABI)/libGUIDOEngine.so libGUIDOEngine.$(ABI).so && cp libGUIDOEngine.$(ABI).so $(ROOT)/build/lib
+	@echo "### Android platform is android-$(PLATFORM)"
+	@echo "### Use PLATFORM=xx to change"
+	ndk-build -C guido-engine-android -j $(J) APP_PLATFORM=android-$(PLATFORM)
+	cp guido-engine-android/libs/armeabi-v7a/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine.armeabi-v7a.so
+	cp guido-engine-android/libs/x86/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine.x86.so
+
+clean:
+	cd guido-engine-android && rm -rf obj libs
 
 test :
-	-[ $(ABI) != all ] && echo libGUIDOEngine.$(ABI).so || true
+	$(foreach abi, $(ABI), echo $(abi))
+#	-[ $(ABI) != all ] && echo libGUIDOEngine.$(ABI).so || true
+
