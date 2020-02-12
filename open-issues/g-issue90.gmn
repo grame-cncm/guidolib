@@ -1,3 +1,7 @@
+(*
+	issue #90
+	Slope explosion on long Slurs
+*)
 {
 [ 
 	\key<-3> 

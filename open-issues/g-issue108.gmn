@@ -1,0 +1,20 @@
+(*
+	issue #108
+	Wrong tremolo rendered duration in prior presence of Grace
+*)
+{
+[ 
+	\clef<"g2"> \key<2> \meter<"2/4"> \stemsUp 
+	\grace( c#3/8) \stemsDown
+	b2/8 a/8 a/4
+	\trem<style="//">( {f#/2, d3/2  })
+	\trem<style="//">( {f#2/2, d3/2  })
+],
+[ 
+	\clef<"g2"> \key<2> \meter<"2/4"> 
+	b2/8 a/8 a/4
+	\trem<style="//">( {f#/2, d3/2  })
+	\trem<style="//">( {f#2/2, d3/2  })
+ ]
+
+ }

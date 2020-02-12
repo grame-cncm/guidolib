@@ -1,3 +1,7 @@
+(*
+  issue #105
+  Fingering position does not adapt to stems with beaming
+*)
 {
 [  
 	\clef<"g2"> \key<0> \meter<"C"> \stemsUp \beamBegin:1 \beamBegin:2 
