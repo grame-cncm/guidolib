@@ -1202,6 +1202,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	const GREvent * startEl = sse->startElement->isGREvent();
 	GREvent * endEl   = sse->endElement->isGREvent();
 
+//cerr << "GRBeam::tellPosition " << endl;
 	if (startEl && startEl->getGlobalStem()) startEl->getGlobalStem()->setBeam (this);
 	if (endEl   && endEl->getGlobalStem()) endEl->getGlobalStem()->setBeam (this);
 	bool differentStaves = (startEl && endEl) ? (endEl->getGRStaff()!=startEl->getGRStaff()) : false;
