@@ -23,6 +23,7 @@
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
 #include "TagParameterFloat.h"
 #include "VGDevice.h"
+#include "VGFont.h"
 
 using namespace std;
 
@@ -47,6 +48,30 @@ const ARFingering * GRFingering::getARFingering() const
 }
 
 // -----------------------------------------------------------------------------
+void GRFingering::OnDraw( VGDevice & hdc ) const
+{
+	if(!mDraw || !mShow) return;
+	const ARFingering * fing = getARFingering();
+	if( fing == 0 ) return;
+
+	const VGColor textColor = startDraw(hdc);
+//	hdc.SetFontAlign( VGDevice::kAlignCenter + VGDevice::kAlignTop );
+	const VGFont* font = hdc.GetTextFont();
+	float offset = LSPACE * (font->GetSize() / 52.f);
+
+	size_t flen = fing->countFingerings();
+	const vector<string> & list = fing->fingerings();
+	float ypos = mPosition.y;
+	if (fing->getFingeringPosition() != ARFingering::kAbove)
+		ypos += offset * (fing->countFingerings() - 1);
+	for (size_t i = 0; i<flen; i++) {
+	    hdc.DrawString( mPosition.x, ypos, list[i].c_str(), (int)list[i].size());
+	    ypos -= offset;
+	}
+	endDraw (hdc, textColor);
+}
+
+// -----------------------------------------------------------------------------
 void GRFingering::tellPosition(GObject * caller, const NVPoint & inPosition)
 {
 	GRSingleNote * note =  dynamic_cast<GRSingleNote *>(caller);
@@ -55,7 +80,7 @@ void GRFingering::tellPosition(GObject * caller, const NVPoint & inPosition)
 		return;
 	}
 
-//cerr << "GRFingering::tellPosition caller 1: " << note << " " << inPosition << endl;
+//cerr << "GRFingering::tellPosition " << endl;
 
 	const GRStaff * staff = note->getGRStaff();
 	if( staff == 0 ) return;
@@ -78,7 +103,8 @@ void GRFingering::tellPosition(GObject * caller, const NVPoint & inPosition)
 		st->position = newPos;
 
 		const char* text = fing->getText();
-		if (text) st->text = text;
+		if (fing->countFingerings() > 1) st->text = text = fing->fingerings()[0].c_str();
+		else if (text) st->text = text;
 		int placement = fing->getFingeringPosition ();
 		float dy = fing->getDY()->getValue( staff->getStaffLSPACE() );
 		float dx = fing->getDX()->getValue( staff->getStaffLSPACE() );
@@ -94,10 +120,10 @@ void GRFingering::tellPosition(GObject * caller, const NVPoint & inPosition)
 				setPosition (NVPoint(xpos, min(ebb.top, 0.f) - hspace - r.Height() - dy));
 				break;
 			case ARFingering::kBelow:
-				setPosition (NVPoint(xpos, max(ebb.bottom, staff->getDredgeSize()) - dy));
+				setPosition (NVPoint(xpos, max(ebb.bottom, staff->getDredgeSize()) - dy ));
 				break;
 			default:
-				setPosition (NVPoint(xpos, r.top ));
+				setPosition (NVPoint(xpos, r.top) );
 		}
 		
 		NVRect bb (0, 0, r.Width(), r.Height());

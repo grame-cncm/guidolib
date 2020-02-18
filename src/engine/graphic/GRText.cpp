@@ -154,19 +154,32 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 
+	const VGColor prevTextColor = startDraw (hdc);
+
+	// - Print text
+    if (!st->text.empty())
+	    hdc.DrawString( mPosition.x, mPosition.y, st->text.c_str(), (int)st->text.size());
+
+	endDraw (hdc, prevTextColor);
+}
+
+const VGColor GRText::startDraw( VGDevice & hdc ) const
+{
+
 	hdc.SetTextFont( fFont );
 
 	const VGColor prevTextColor = hdc.GetFontColor();
 	if( mColRef )
 		hdc.SetFontColor( VGColor( mColRef ));
 	hdc.SetFontAlign( mTextAlign );
+	return prevTextColor;
+}
 
-	// - Print text
-    if (!st->text.empty())
-	    hdc.DrawString( mPosition.x, mPosition.y, st->text.c_str(), (int)st->text.size());
-
+void GRText::endDraw( VGDevice & hdc, const VGColor textcolor) const
+{
+	
 	if( mColRef )
-		hdc.SetFontColor( prevTextColor );
+		hdc.SetFontColor( textcolor );
 
 	if (gBoundingBoxesMap & kStavesBB)
 		DrawBoundingBox(hdc, kStaffBBColor);

@@ -26,6 +26,21 @@ ARFingering::ARFingering(int pos) : fPosition(pos)
 	rangesetting = ONLY;
 }
 
+void ARFingering::scanText(const string& text)
+{
+	size_t i = 0;
+	size_t len = text.length();
+	string part;
+	while (i < len) {
+		if (text[i] == ',') {
+			fFingerings.push_back (part);
+			part.clear();
+		}
+		else part += text[i];
+		i++;
+	}
+	if (part.size()) fFingerings.push_back (part);
+}
 
 void ARFingering::setTagParameters (const TagParameterMap& params)
 {
@@ -38,6 +53,7 @@ void ARFingering::setTagParameters (const TagParameterMap& params)
 		else cerr << "Guido Warning: '" << posStr << "': incorrect fingering position value: " << posStr << endl;
 	}
 	if (fSize && !getParameter<TagParameterFloat>(kFSizeStr)) fFontSize = fSize;
+	scanText (getText());
 }
 
 

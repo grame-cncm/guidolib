@@ -29,6 +29,7 @@
 @tagend
 
 @params:
+@param:text:string:the fingering string:*none*:true
 @param:position:string:above or below:*none*:true
 @fontparams:
 @paramdesc
@@ -36,15 +37,24 @@ The default position for fingering is close to the note head. When **position** 
 
 The position can be set at global voice level using the [\auto](../Miscellaneous/) tag.
 
+**Note about the fingering string:** a comma can be used as a text separator. In this case, comma separated strings are stacked verticaly.
+
 See the [Beethoven](@EXAMPLES/beethoven/) example.
 @paramend
 
 */
 
+#include <vector>
+#include <string>
+
+#include "ARText.h"
+
 /** \brief not yet documented
 */
 class ARFingering : public ARText
 {
+	void scanText(const std::string&);
+
 	public:
 		enum { kDefaultPosition, kAbove, kBelow };
 
@@ -57,10 +67,14 @@ class ARFingering : public ARText
 
 		virtual const char*	getTagName() const		{ return "ARFingering"; };
 		virtual std::string getGMNName() const		{ return "\\fingering"; };
+		
+		const std::vector<std::string>& fingerings() const	{ return fFingerings; }
+		size_t 				countFingerings() const			{ return fFingerings.size(); }
 
 	protected:
 		int  	fPosition;
 		float	fSize = 0;
+		std::vector<std::string> fFingerings;
 };
 
 #endif
