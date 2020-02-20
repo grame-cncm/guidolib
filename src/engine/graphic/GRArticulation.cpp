@@ -204,7 +204,7 @@ float GRArticulation::getSymbolHeight(unsigned int symbol) const
 		case kBowDownASymbol :
 		case kBowDownBSymbol :		return hspace * 1.3f;
 		case kBowUpASymbol :
-		case kBowUpBSymbol :		return hspace * 2.0f;
+		case kBowUpBSymbol :		return hspace * 2.1f;
 		
 		case kStaccmoDownSymbol:
 		case kStaccmoUpSymbol:		return hspace * 0.55f;
@@ -465,7 +465,7 @@ void GRArticulation::placeMarcato( const GREvent * inParent, NVPoint & ioPos )
 void GRArticulation::placeBowAbove( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
-	const float space = staff->getStaffLSPACE();
+	const float space = staff->getStaffLSPACE() * 1.4f;
 	const float minSpace = space * 1.5f;
 
 	// check the minimum y position regarding note position and stems
@@ -645,7 +645,7 @@ NVPoint GRArticulation::getReferencePosition (unsigned int symbol) const
 		case kStaccmoDownSymbol :		return NVPoint(-mLeftSpace, height * -0.25f);
 
 		case kBowUpASymbol:
-		case kBowDownASymbol:
+		case kBowDownASymbol:			return NVPoint(-mLeftSpace, height * 1.0f);
 		case kMarcatoUpSymbol:			return NVPoint(-mLeftSpace, height * 0.5478f);
 
 		case kBowUpBSymbol:
