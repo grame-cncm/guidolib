@@ -1,0 +1,33 @@
+(*
+	collided fingerings on top of the staff
+*)
+{
+[
+	\stemsDown  
+	{ 	\fingering<text="1", position="above">( e/8),
+		\fingering<text="2", position="above">(g#), 
+		\fingering<text="5", position="above">(c#2)  
+	} 
+
+	{ 	\fingering<text="1", position="above">( e1/8),
+		\fingering<text="2", position="above", dy=2>(g#), 
+		\fingering<text="5", position="above", dy=5>(c#2)  
+	} 
+
+	\fingering<text="1, 2, 5"> ( { e1/8, g#, c#2 } ) 
+	{ 
+		\fingering<text="1,2,5",position="above", fsize=7pt> (e1/8), g#, c#2 
+	}
+	\stemsUp
+	{ 
+		\fingering<text="1,2,5",position="above"> (e1/8), g#, c#2 
+	}
+	{ 
+		\fingering<"1,2,5",position="below", fsize=7pt, dy=-2> (e1/8), g#, c#2 
+	}
+	\stemsUp
+	{ 
+		\fingering<"1,2,5",fsize=7pt> (c1/8), g#, c#2 
+	}
+]
+}
