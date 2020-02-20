@@ -1,23 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <title>Time to time mapping &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Time to time mapping &mdash; GUIDO Engine Web API 0.61 documentation</title>
+    
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.61',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="GUIDO Engine Web API 0.61 documentation" href="../index.html" />
+    <link rel="up" title="GUIDO mappings" href="../mapping.html" />
     <link rel="next" title="Miscellaneous" href="../misc.html" />
     <link rel="prev" title="Graphic to time mappings" href="getgraphicmap.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+  </head>
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -29,15 +41,15 @@
         <li class="right" >
           <a href="getgraphicmap.html" title="Graphic to time mappings"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../mapping.html" accesskey="U">GUIDO mappings</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../mapping.html" accesskey="U">GUIDO mappings</a> &raquo;</li> 
       </ul>
     </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Time to time mapping</a><ul>
 <li><a class="reference internal" href="#example">Example</a></li>
@@ -52,21 +64,22 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="../misc.html"
                         title="next chapter">Miscellaneous</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/api/gettimemap.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/gettimemap.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
-    </div>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -75,30 +88,32 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="time-to-time-mapping">
 <h1>Time to time mapping<a class="headerlink" href="#time-to-time-mapping" title="Permalink to this headline">¶</a></h1>
 <p id="index-0">Gives the mapping between the score and the performance time (i.e. rolled to unrolled time) according to repeat bars and jumps (to coda, da capo, etc.).</p>
-<dl>
-<dt><strong>Path</strong></dt><dd><p><em>ScoreID</em>/<code class="docutils literal notranslate"><span class="pre">gettimemap</span></code></p>
-</dd>
-<dt><strong>Response body</strong></dt><dd><ul>
-<li><dl>
-<dt>in case of success:</dt><dd><div class="line-block">
-<div class="line">a set of pairs indicating the relation between the score and the performance time, formatted as JSON with <code class="docutils literal notranslate"><span class="pre">timemap</span></code> as key.</div>
+<dl class="docutils">
+<dt><strong>Path</strong></dt>
+<dd><em>ScoreID</em>/<tt class="docutils literal"><span class="pre">gettimemap</span></tt></dd>
+<dt><strong>Response body</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>in case of success:</dt>
+<dd><div class="first line-block">
+<div class="line">a set of pairs indicating the relation between the score and the performance time, formatted as JSON with <tt class="docutils literal"><span class="pre">timemap</span></tt> as key.</div>
 </div>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;ScoreID&quot;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;timemap&quot;</span> <span class="p">:</span> <span class="p">[</span>
-                        <span class="p">{</span><span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;0/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">},</span>
-                         <span class="s2">&quot;perf&quot;</span><span class="p">:</span>  <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;0/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">}</span> <span class="p">},</span>
-                        <span class="p">{</span><span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;2/1&quot;</span><span class="p">},</span>
-                          <span class="s2">&quot;perf&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;2/1&quot;</span><span class="p">}</span> <span class="p">},</span>
-                        <span class="p">{</span><span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;2/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;3/1&quot;</span><span class="p">},</span>
-                         <span class="s2">&quot;perf&quot;</span><span class="p">:</span>  <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;0/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">}</span> <span class="p">},</span>
-                        <span class="p">{</span><span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;3/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;4/1&quot;</span><span class="p">},</span>
-                          <span class="s2">&quot;perf&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;1/1&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;2/1&quot;</span><span class="p">}</span> <span class="p">}</span>
+<div class="last highlight-python"><div class="highlight"><pre><span class="p">{</span> <span class="s">&quot;ScoreID&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;timemap&quot;</span> <span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;0/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;1/1&quot;</span><span class="p">},</span>
+                         <span class="s">&quot;perf&quot;</span><span class="p">:</span>  <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;0/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;1/1&quot;</span><span class="p">}</span> <span class="p">},</span>
+                        <span class="p">{</span><span class="s">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;1/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;2/1&quot;</span><span class="p">},</span>
+                          <span class="s">&quot;perf&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;1/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;2/1&quot;</span><span class="p">}</span> <span class="p">},</span>
+                        <span class="p">{</span><span class="s">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;2/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;3/1&quot;</span><span class="p">},</span>
+                         <span class="s">&quot;perf&quot;</span><span class="p">:</span>  <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;0/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;1/1&quot;</span><span class="p">}</span> <span class="p">},</span>
+                        <span class="p">{</span><span class="s">&quot;score&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;3/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;4/1&quot;</span><span class="p">},</span>
+                          <span class="s">&quot;perf&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;start&quot;</span><span class="p">:</span> <span class="s">&quot;1/1&quot;</span><span class="p">,</span> <span class="s">&quot;end&quot;</span><span class="p">:</span> <span class="s">&quot;2/1&quot;</span><span class="p">}</span> <span class="p">}</span>
                 <span class="p">]</span>
         <span class="p">}</span>
 <span class="p">}</span>
@@ -107,32 +122,33 @@
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt>in case of error:</dt><dd><div class="line-block">
-<div class="line">An error message formatted as JSON with ‘Error’ as key.</div>
-<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">&quot;ScoreID&quot;</span> <span class="pre">:</span> <span class="pre">{&quot;Error&quot;</span> <span class="pre">:</span> <span class="pre">&quot;incorrect</span> <span class="pre">score</span> <span class="pre">ID.&quot;}</span> <span class="pre">}</span></code></div>
+<li><dl class="first docutils">
+<dt>in case of error:</dt>
+<dd><div class="first last line-block">
+<div class="line">An error message formatted as JSON with &#8216;Error&#8217; as key.</div>
+<div class="line">Example: <tt class="docutils literal"><span class="pre">{</span> <span class="pre">&quot;ScoreID&quot;</span> <span class="pre">:</span> <span class="pre">{&quot;Error&quot;</span> <span class="pre">:</span> <span class="pre">&quot;incorrect</span> <span class="pre">score</span> <span class="pre">ID.&quot;}</span> <span class="pre">}</span></tt></div>
 </div>
 </dd>
 </dl>
 </li>
 </ul>
 </dd>
-<dt><strong>Response code</strong></dt><dd><ul class="simple">
-<li><p>200 (“Success”)</p></li>
-<li><p>404 (“Not Found”) in case of incorrect score ID.</p></li>
+<dt><strong>Response code</strong></dt>
+<dd><ul class="first last simple">
+<li>200 (&#8220;Success&#8221;)</li>
+<li>404 (&#8220;Not Found&#8221;) in case of incorrect score ID.</li>
 </ul>
 </dd>
 </dl>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Using jQuery:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.get(&#39;http://guido.server.org/XXX/gettimemap&#39;);
-</pre></div>
+<div class="highlight-python"><pre>$.get('http://guido.server.org/XXX/gettimemap');</pre>
 </div>
 </div>
 <div class="section" id="internals">
 <h2>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">gettimemap</span></code> request corresponds to the <code class="docutils literal notranslate"><span class="pre">GuidoGetTimeMap</span></code> C/C++ API.</p>
+<p>The <tt class="docutils literal"><span class="pre">gettimemap</span></tt> request corresponds to the <tt class="docutils literal"><span class="pre">GuidoGetTimeMap</span></tt> C/C++ API.</p>
 </div>
 </div>
 
@@ -142,7 +158,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -154,15 +170,15 @@
         <li class="right" >
           <a href="getgraphicmap.html" title="Graphic to time mappings"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../mapping.html" >GUIDO mappings</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../mapping.html" >GUIDO mappings</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012, Grame.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    <div class="footer">
+        &copy; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
     </div>
   </body>
 </html>

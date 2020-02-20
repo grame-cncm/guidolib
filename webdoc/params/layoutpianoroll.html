@@ -1,23 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <title>Pianoroll limits options &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pianoroll limits options &mdash; GUIDO Engine Web API 0.61 documentation</title>
+    
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.61',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="GUIDO Engine Web API 0.61 documentation" href="../index.html" />
+    <link rel="up" title="Pianoroll drawing and formatting" href="../pianoroll.html" />
     <link rel="next" title="Formatting options" href="formatpianoroll.html" />
     <link rel="prev" title="Pianoroll drawing and formatting" href="../pianoroll.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+  </head>
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -29,15 +41,15 @@
         <li class="right" >
           <a href="../pianoroll.html" title="Pianoroll drawing and formatting"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../pianoroll.html" accesskey="U">Pianoroll drawing and formatting</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../pianoroll.html" accesskey="U">Pianoroll drawing and formatting</a> &raquo;</li> 
       </ul>
     </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Pianoroll limits options</a><ul>
 <li><a class="reference internal" href="#example">Example:</a></li>
@@ -52,21 +64,22 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="formatpianoroll.html"
                         title="next chapter">Formatting options</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/params/layoutpianoroll.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/params/layoutpianoroll.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
-    </div>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -75,7 +88,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="pianoroll-limits-options">
 <span id="layoutpianoroll"></span><h1>Pianoroll limits options<a class="headerlink" href="#pianoroll-limits-options" title="Permalink to this headline">¶</a></h1>
@@ -83,27 +96,31 @@
 <p><strong>Options</strong></p>
 <blockquote>
 <div><ul>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">startDate</span></code>:</dt><dd><p>date is expressed as a rational value</p>
-<p><em>default value</em>: “0/0” (start date is the score start date)</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">startDate</span></tt>:</dt>
+<dd><p class="first">date is expressed as a rational value</p>
+<p class="last"><em>default value</em>: &#8220;0/0&#8221; (start date is the score start date)</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">endDate</span></code>:</dt><dd><p>date is expressed as a rational value</p>
-<p><em>default value</em>: “0/0” (end date is the score end date)</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">endDate</span></tt>:</dt>
+<dd><p class="first">date is expressed as a rational value</p>
+<p class="last"><em>default value</em>: &#8220;0/0&#8221; (end date is the score end date)</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">lowPitch</span></code>:</dt><dd><p>a int value to control the lower pitch expressed in midi notation.</p>
-<p><em>default value</em>: -1 (score minimal pitch)</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">lowPitch</span></tt>:</dt>
+<dd><p class="first">a int value to control the lower pitch expressed in midi notation.</p>
+<p class="last"><em>default value</em>: -1 (score minimal pitch)</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">highPitch</span></code>:</dt><dd><p>a int value to control the higher pitch expressed in midi notation.</p>
-<p><em>default value</em>: -1 (score maximal pitch)</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">highPitch</span></tt>:</dt>
+<dd><p class="first">a int value to control the higher pitch expressed in midi notation.</p>
+<p class="last"><em>default value</em>: -1 (score maximal pitch)</p>
 </dd>
 </dl>
 </li>
@@ -112,8 +129,7 @@
 <div class="section" id="example">
 <h2>Example:<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Using jQuery:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.get(&#39;http://guido.server.org/XXX/pianoroll?startDate=&quot;2/4&quot;&amp;endDate=&quot;12/1&quot;&#39;);
-</pre></div>
+<div class="highlight-python"><pre>$.get('http://guido.server.org/XXX/pianoroll?startDate="2/4"&amp;endDate="12/1"');</pre>
 </div>
 </div>
 <div class="section" id="internals">
@@ -128,7 +144,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -140,15 +156,15 @@
         <li class="right" >
           <a href="../pianoroll.html" title="Pianoroll drawing and formatting"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../pianoroll.html" >Pianoroll drawing and formatting</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../pianoroll.html" >Pianoroll drawing and formatting</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012, Grame.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    <div class="footer">
+        &copy; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
     </div>
   </body>
 </html>

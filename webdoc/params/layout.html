@@ -1,23 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <title>Score layout options &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Score layout options &mdash; GUIDO Engine Web API 0.61 documentation</title>
+    
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.61',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="GUIDO Engine Web API 0.61 documentation" href="../index.html" />
+    <link rel="up" title="Score drawing and page formatting" href="../drawing.html" />
     <link rel="next" title="Formatting options" href="format.html" />
     <link rel="prev" title="Score drawing and page formatting" href="../drawing.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+  </head>
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -29,15 +41,15 @@
         <li class="right" >
           <a href="../drawing.html" title="Score drawing and page formatting"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../drawing.html" accesskey="U">Score drawing and page formatting</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../drawing.html" accesskey="U">Score drawing and page formatting</a> &raquo;</li> 
       </ul>
     </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Score layout options</a><ul>
 <li><a class="reference internal" href="#example">Example:</a></li>
@@ -52,21 +64,22 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="format.html"
                         title="next chapter">Formatting options</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/params/layout.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/params/layout.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
-    </div>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -75,7 +88,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="score-layout-options">
 <span id="layout"></span><h1>Score layout options<a class="headerlink" href="#score-layout-options" title="Permalink to this headline">¶</a></h1>
@@ -83,50 +96,57 @@
 <p><strong>Options</strong></p>
 <blockquote>
 <div><ul>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">sysDistance</span></code>:</dt><dd><p>a float value to control the distance between systems, expressed in internal units</p>
-<p><em>default value</em>: 75</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">sysDistance</span></tt>:</dt>
+<dd><p class="first">a float value to control the distance between systems, expressed in internal units</p>
+<p class="last"><em>default value</em>: 75</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">sysDistribution</span></code>:</dt><dd><p>a string value to control the systems distribution. Accepted values are:</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">sysDistribution</span></tt>:</dt>
+<dd><p class="first">a string value to control the systems distribution. Accepted values are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">auto</span></code>: automatic systems distribution</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">always</span></code>: force systems distribution</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">never</span></code>: prevent systems distribution</p></li>
+<li><tt class="docutils literal"><span class="pre">auto</span></tt>: automatic systems distribution</li>
+<li><tt class="docutils literal"><span class="pre">always</span></tt>: force systems distribution</li>
+<li><tt class="docutils literal"><span class="pre">never</span></tt>: prevent systems distribution</li>
 </ul>
-<p><em>default value</em>: “auto”</p>
+<p class="last"><em>default value</em>: &#8220;auto&#8221;</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">sysDistribLimit</span></code>:</dt><dd><p>a float value to control the maximum distance allowed between two systems for automatic distribution mode. Distance is relative to the height of the inner page.</p>
-<p><em>default value</em>: 0.25 (that is: 1/4 of the page height)</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">sysDistribLimit</span></tt>:</dt>
+<dd><p class="first">a float value to control the maximum distance allowed between two systems for automatic distribution mode. Distance is relative to the height of the inner page.</p>
+<p class="last"><em>default value</em>: 0.25 (that is: 1/4 of the page height)</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">force</span></code>:</dt><dd><p>a float value to indicate the force value of the Space-Force function. Typical values range from 400 to 1500.</p>
-<p><em>default value</em>: 750</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">force</span></tt>:</dt>
+<dd><p class="first">a float value to indicate the force value of the Space-Force function. Typical values range from 400 to 1500.</p>
+<p class="last"><em>default value</em>: 750</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">spring</span></code>:</dt><dd><p>a float value for the spring parameter. Typical values range from 1 to 5.</p>
-<p><em>default value</em>: 1.1</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">spring</span></tt>:</dt>
+<dd><p class="first">a float value for the spring parameter. Typical values range from 1 to 5.</p>
+<p class="last"><em>default value</em>: 1.1</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">neighborhoodSpacing</span></code>:</dt><dd><p>a boolean string (“yes”|”no”) to tell the engine to use the neighborhood spacing algorithm or not.</p>
-<p><em>default value</em>: “no”</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">neighborhoodSpacing</span></tt>:</dt>
+<dd><p class="first">a boolean string (&#8220;yes&#8221;|&#8221;no&#8221;) to tell the engine to use the neighborhood spacing algorithm or not.</p>
+<p class="last"><em>default value</em>: &#8220;no&#8221;</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">optimalPageFill</span></code>:</dt><dd><p>a boolean string (“yes”|”no”) to tell the engine to use the optimal page fill algorithm or not.</p>
-<p><em>default value</em>: “yes”</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">optimalPageFill</span></tt>:</dt>
+<dd><p class="first">a boolean string (&#8220;yes&#8221;|&#8221;no&#8221;) to tell the engine to use the optimal page fill algorithm or not.</p>
+<p class="last"><em>default value</em>: &#8220;yes&#8221;</p>
 </dd>
 </dl>
 </li>
@@ -135,8 +155,7 @@
 <div class="section" id="example">
 <h2>Example:<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Using jQuery:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.get(&#39;http://guido.server.org/XXX?optimalPageFill=&quot;no&quot;&amp;sysDistance=100&#39;);
-</pre></div>
+<div class="highlight-python"><pre>$.get('http://guido.server.org/XXX?optimalPageFill="no"&amp;sysDistance=100');</pre>
 </div>
 </div>
 <div class="section" id="internals">
@@ -151,7 +170,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -163,15 +182,15 @@
         <li class="right" >
           <a href="../drawing.html" title="Score drawing and page formatting"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../drawing.html" >Score drawing and page formatting</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../drawing.html" >Score drawing and page formatting</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012, Grame.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    <div class="footer">
+        &copy; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
     </div>
   </body>
 </html>

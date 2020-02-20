@@ -1,23 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <title>Formatting options &#8212; GUIDO Engine Web API 0.61 documentation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Formatting options &mdash; GUIDO Engine Web API 0.61 documentation</title>
+    
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.61',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="GUIDO Engine Web API 0.61 documentation" href="../index.html" />
+    <link rel="up" title="Score drawing and page formatting" href="../drawing.html" />
     <link rel="next" title="Pianoroll drawing and formatting" href="../pianoroll.html" />
     <link rel="prev" title="Score layout options" href="layout.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+  </head>
+  <body>
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -29,15 +41,15 @@
         <li class="right" >
           <a href="layout.html" title="Score layout options"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../drawing.html" accesskey="U">Score drawing and page formatting</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../drawing.html" accesskey="U">Score drawing and page formatting</a> &raquo;</li> 
       </ul>
     </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Formatting options</a><ul>
 <li><a class="reference internal" href="#example">Example</a></li>
@@ -51,21 +63,22 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="../pianoroll.html"
                         title="next chapter">Pianoroll drawing and formatting</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/params/format.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/params/format.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
-    </div>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -74,7 +87,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body" role="main">
+          <div class="body">
             
   <div class="section" id="formatting-options">
 <span id="format"></span><h1>Formatting options<a class="headerlink" href="#formatting-options" title="Permalink to this headline">¶</a></h1>
@@ -82,64 +95,73 @@
 <p><strong>Options</strong></p>
 <blockquote>
 <div><ul>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">page</span></code>:</dt><dd><p>a page number</p>
-<p><em>default value</em>: 1</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">page</span></tt>:</dt>
+<dd><p class="first">a page number</p>
+<p class="last"><em>default value</em>: 1</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">width</span></code>:</dt><dd><p>the drawing area width in centimeters.</p>
-<p><em>default value</em>: 15</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">width</span></tt>:</dt>
+<dd><p class="first">the drawing area width in centimeters.</p>
+<p class="last"><em>default value</em>: 15</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">height</span></code>:</dt><dd><p>the drawing area height in centimeters.</p>
-<p><em>default value</em>: 5</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">height</span></tt>:</dt>
+<dd><p class="first">the drawing area height in centimeters.</p>
+<p class="last"><em>default value</em>: 5</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">marginleft</span></code>:</dt><dd><p>the left margin in centimeters.</p>
-<p><em>default value</em>: 1</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">marginleft</span></tt>:</dt>
+<dd><p class="first">the left margin in centimeters.</p>
+<p class="last"><em>default value</em>: 1</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">marginright</span></code>:</dt><dd><p>the right margin in centimeters.</p>
-<p><em>default value</em>: 1</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">marginright</span></tt>:</dt>
+<dd><p class="first">the right margin in centimeters.</p>
+<p class="last"><em>default value</em>: 1</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">margintop</span></code>:</dt><dd><p>the top margin in centimeters.</p>
-<p><em>default value</em>: 0.5</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">margintop</span></tt>:</dt>
+<dd><p class="first">the top margin in centimeters.</p>
+<p class="last"><em>default value</em>: 0.5</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">marginbottom</span></code>:</dt><dd><p>the bottom margin in centimeters.</p>
-<p><em>default value</em>: 0.5</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">marginbottom</span></tt>:</dt>
+<dd><p class="first">the bottom margin in centimeters.</p>
+<p class="last"><em>default value</em>: 0.5</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">format</span></code>:</dt><dd><p>a string to request a specific image format. Accepted values are:</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">format</span></tt>:</dt>
+<dd><p class="first">a string to request a specific image format. Accepted values are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">png</span></code>: to produce a png output</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">jpg</span></code>: to produce a jpeg output</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">svg</span></code>: to produce a svg output</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">binary</span></code>: to produce a binary output which can be parse with a external device to draw the score.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">gif</span></code>: to produce a gif output</p></li>
+<li><tt class="docutils literal"><span class="pre">png</span></tt>: to produce a png output</li>
+<li><tt class="docutils literal"><span class="pre">jpg</span></tt>: to produce a jpeg output</li>
+<li><tt class="docutils literal"><span class="pre">svg</span></tt>: to produce a svg output</li>
+<li><tt class="docutils literal"><span class="pre">binary</span></tt>: to produce a binary output which can be parse with a external device to draw the score.</li>
+<li><tt class="docutils literal"><span class="pre">gif</span></tt>: to produce a gif output</li>
 </ul>
-<p><em>default value</em>: “png”</p>
+<p class="last"><em>default value</em>: &#8220;png&#8221;</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><code class="docutils literal notranslate"><span class="pre">resize</span></code>:</dt><dd><p>a boolean string (“yes”|”no”) to resize the page size to the music size.</p>
-<p><em>default value</em>: “yes”</p>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal"><span class="pre">resize</span></tt>:</dt>
+<dd><p class="first">a boolean string (&#8220;yes&#8221;|&#8221;no&#8221;) to resize the page size to the music size.</p>
+<p class="last"><em>default value</em>: &#8220;yes&#8221;</p>
 </dd>
 </dl>
 </li>
@@ -148,8 +170,7 @@
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Using jQuery:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$.get(&#39;http://guido.server.org/XXX?width=20&amp;height=10&amp;format=svg&#39;);
-</pre></div>
+<div class="highlight-python"><pre>$.get('http://guido.server.org/XXX?width=20&amp;height=10&amp;format=svg');</pre>
 </div>
 </div>
 </div>
@@ -160,7 +181,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -172,15 +193,15 @@
         <li class="right" >
           <a href="layout.html" title="Score layout options"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../get.html" >The GET method</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="../drawing.html" >Score drawing and page formatting</a> &#187;</li> 
+        <li><a href="../index.html">GUIDO Engine Web API 0.61 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../drawing.html" >Score drawing and page formatting</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2012, Grame.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    <div class="footer">
+        &copy; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
     </div>
   </body>
 </html>
