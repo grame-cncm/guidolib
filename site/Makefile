@@ -8,6 +8,7 @@ DOXDEST  := $(DOCDIR)/dox
 
 EDITOR   := https://guidoeditor.grame.fr/
 GMNDOC   := https://guidodoc.grame.fr/
+RM       := $(shell ls .. | grep -v $(MKDIR))
 
 .PHONY: tagslist.txt
 
@@ -30,7 +31,7 @@ help:
 	@echo "             commit and push are still manual operations"
 
 test: 
-	@echo EXAMPLESMENU: $(EXAMPLESMENU)
+	@echo RM: $(RM)
 
 ####################################################################
 build:
@@ -49,7 +50,9 @@ all:
 publish:
 	$(MAKE) build
 	git checkout gh-pages
+	cd .. && rm -rf $(RM) 
 	cp -Rf $(MKDIR)/site/* ..
+	rm -rf $(MKDIR)
 	@echo "Review the changes, add new files, commit and push manually"
 	
 ####################################################################
