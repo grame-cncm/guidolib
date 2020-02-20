@@ -181,6 +181,9 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	if (mColRef) 						hdc.SetFontColor(oldcolor);
 	if (gBoundingBoxesMap & kEventsBB) 	DrawBoundingBox(hdc, kEventBBColor);
 	if (fClusterHaveToBeDrawn) 			fCluster->OnDraw(hdc);
+	
+//	NVRect r = getEnclosingBox (false, false, true);
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
 }
 
 //____________________________________________________________________________________
