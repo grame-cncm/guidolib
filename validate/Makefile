@@ -161,7 +161,7 @@ pdfvalidate: $(validpdf)
 # rules
 %.outsvg: %.svg
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
-	@[ -f  $(tmp) ] || echo $< "# new file"
+	@[ -f  $(tmp) ] || echo "open $<  # new file"
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
 ifeq ($(system), MINGW)
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "\"$(browser)\" $(tmp) $<"; true)
