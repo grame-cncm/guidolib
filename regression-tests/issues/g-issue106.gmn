@@ -1,5 +1,8 @@
 (*
+	issue #106
 	collided fingerings on top of the staff
+
+	solved using comma separated fingering sequence
 *)
 {
 [
