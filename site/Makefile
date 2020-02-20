@@ -8,7 +8,7 @@ DOXDEST  := $(DOCDIR)/dox
 
 EDITOR   := https://guidoeditor.grame.fr/
 GMNDOC   := https://guidodoc.grame.fr/
-RM       := $(shell ls .. | grep -v $(MKDIR))
+RM       := $(shell ls .. | grep -v site)
 
 .PHONY: tagslist.txt
 
