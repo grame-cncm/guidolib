@@ -153,6 +153,7 @@ private:
 	void	DrawAccolade( VGDevice & hdc, const GRSystemSlice * slice, const GRStaff * staff) const;
 	void	HandleStaffOnOff (GuidoPos pos, const GRSystemSlice * slice) const;
 	void	patchTempoIssue ();
+	void	fixFingeringIssue ();
 
 	GRPage*			mPage;
 	StaffVector*	mStaffs;

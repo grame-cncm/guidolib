@@ -30,7 +30,8 @@ class GRFingering : public GRText
 		virtual void	accept (GRVisitor& visitor);
 		virtual void 	tellPosition( GObject * caller, const NVPoint & inPosition );
 		virtual void 	OnDraw( VGDevice & hdc ) const;
-
+		virtual GRFingering *	isGRFingering()	{ return this; }
+	
 		const ARFingering * getARFingering() const;
 };
 

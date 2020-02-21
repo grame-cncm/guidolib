@@ -23,21 +23,21 @@
 #include "GRVisitable.h"
 #include "GRVisitor.h"
 
-class NEPointerList;
-class GRStaff;
-class GRSystemSlice;
 class ARMusicalObject;
 class GRAccidental;
-class GRSingleNote;
+class GRBar;
+class GREvent;
+class GRFingering;
+class GRGlue;
 class GRNote;
 class GRRest;
-class GREvent;
-class GRText;
-class GRGlue;
+class GRSingleNote;
+class GRStaff;
+class GRSystemSlice;
 class GRTempo;
+class GRText;
 class GRTrill;
-class GRBar;
-
+class NEPointerList;
 
 const float kMinNoteSize = 0.001f;	// minimum size of an element, the element is not drawn when the size is smaller
 
@@ -147,6 +147,7 @@ public:
     virtual const GRTrill *		isGRTrill() const		{ return 0; }
     virtual const GRBar *		isGRBar() const			{ return 0; }
     virtual const GRDynamics *	isGRDynamic() const		{ return 0; }
+    virtual 	  GRFingering *	isGRFingering() 		{ return 0; }
 
 protected:
 	

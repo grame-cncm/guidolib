@@ -58,6 +58,7 @@
 #include "GRPossibleBreakState.h"
 #include "GRRepeatBegin.h"
 #include "GRRepeatEnd.h"
+#include "GRSingleNote.h"
 #include "GRSliceHeight.h"
 #include "GRSpecial.h"
 #include "GRStaffManager.h"
@@ -79,6 +80,33 @@ using namespace std;
 GRStaff * gCurStaff;
 
 int GRSystem::sSystemID = 0;
+
+
+class GRFingFixVisitor : public GRVisitor
+{
+	public:
+				 GRFingFixVisitor() {}
+		virtual ~GRFingFixVisitor() {}
+
+		virtual bool voiceMode () 						{ return true; }
+		virtual void visitStart (GRSingleNote* note);
+};
+
+
+//--------------------------------------------------------------------------------------------------------
+void GRFingFixVisitor::visitStart (GRSingleNote* note)
+{
+	NEPointerList* assoc = note->getAssociations();
+	if (assoc) {
+		GuidoPos pos = assoc->GetHeadPosition();
+		while(pos) {
+			GRNotationElement * el = assoc->GetNext(pos);
+			if (el->isGRFingering())
+				el->tellPosition (note, note->getPosition());
+		}
+	}
+}
+
 
 //--------------------------------------------------------------------------------------------------------
 /*
@@ -433,6 +461,16 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 		else if ((systag = dynamic_cast<GRSystemTag *>(el)) != 0 )
 			systag->checkPosition(this);
 	}
+}
+
+//----------------------------------------------------------------------------------------------------
+// this method is intended to fix fingering issue:
+// due to the elements order, tellposition is called before the beaming is set
+// thus the fingering position is incorrect with beaming
+void GRSystem::fixFingeringIssue ()
+{
+	GRFingFixVisitor ffix;
+	this->accept( ffix );
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -1016,6 +1054,7 @@ void GRSystem::FinishSystem()
 	mMapping = mBoundingBox;				// set the mapping box
 	mMapping += mPosition + getOffset()	;	// and adjust position
 	patchTempoIssue ();
+	fixFingeringIssue();
 }
 
 // ----------------------------------------------------------------------------
