@@ -43,13 +43,6 @@ void ARTremolo::init()
 	setAssociation(ARMusicalTag::RA);
 }
 
-const TagParameterString *	ARTremolo::getStyle() const { return getParameter<TagParameterString>(kStyleStr, true); }
-
-const TagParameterInt *		ARTremolo::getSpeed() const { return getParameter<TagParameterInt>(kSpeedStr, true); }
-const TagParameterString *	ARTremolo::getPitch() const { return getParameter<TagParameterString>(kPitchStr, true); }
-const TagParameterFloat *	ARTremolo::getThickness() const { return getParameter<TagParameterFloat>(kThicknesStr, true); }
-const TagParameterString *	ARTremolo::getText() const { return getParameter<TagParameterString>(kTextStr, true); }
-
 // -----------------------------------------------------------------------------
 bool ARTremolo::MatchEndTag(const char * s)
 {
@@ -61,37 +54,45 @@ bool ARTremolo::MatchEndTag(const char * s)
 }
 
 // -----------------------------------------------------------------------------
+void ARTremolo::setTagParameters(const TagParameterMap& map)
+{
+	fPitch 		= getParameter<TagParameterString>(kPitchStr, true)->getValue();
+	fText		= getParameter<TagParameterString>(kTextStr, true)->getValue();
+	fStyle		= getParameter<TagParameterString>(kStyleStr, true)->getValue();
+	fSpeed		= getParameter<TagParameterInt>(kSpeedStr, true)->getValue();
+	fThickness	= getParameter<TagParameterFloat>(kThicknesStr, true)->getValue();
+}
+
+// -----------------------------------------------------------------------------
 bool ARTremolo::isSecondPitchCorrect() const 
 {
     bool isReadable = false;
 
-	const TagParameterString * p = getPitch();
-    if(p && p->TagIsSet())
+    if (!fPitch.empty())
     {
-        std::string pitch = p->getValue();
         unsigned int it = 0;
-        char c = pitch[it];
+        char c = fPitch[it];
         
         if(c == '{')
         {
-            if(pitch[pitch.size()-1] != '}')
+            if(fPitch[fPitch.size()-1] != '}')
                 return isReadable;
             std::string possibleLastChars = "1234567890abcdefghoils#&";
-            char l = pitch[pitch.size()-2];
+            char l = fPitch[fPitch.size()-2];
             if(possibleLastChars.find(l) == std::string::npos)
                 return isReadable;
             it++;
         }
-        if(it < pitch.size())
+        if(it < fPitch.size())
         {
-            c = pitch[it];
+            c = fPitch[it];
             std::string possibleChars = "abcdefgh";
             if(possibleChars.find(c) != std::string::npos)
                 isReadable = true;
             else
             {
-                char c2 = pitch[it+1];
-                if((c == 'r' && c2 == 'e') || ((c == 'm' || c == 't') && c2 == 'i') || (c == 'l' && c2 == 'a') || (c == 's' && (c2 == 'i' || (c2 == 'o' && pitch[it+2] == 'l'))))
+                char c2 = fPitch[it+1];
+                if((c == 'r' && c2 == 'e') || ((c == 'm' || c == 't') && c2 == 'i') || (c == 'l' && c2 == 'a') || (c == 's' && (c2 == 'i' || (c2 == 'o' && fPitch[it+2] == 'l'))))
                     isReadable = true;
             }
         }
@@ -104,16 +105,14 @@ int ARTremolo::getNumberOfStrokes() const
 {
     int n = 3;
 
-	const TagParameterString * style = getStyle();
-    if (style) {
-        std::string type = style->getValue();
-        if( type == "/" )
+	if (!fStyle.empty()) {
+        if( fStyle == "/" )
             n = 1;
-        else if( type == "//" )
+        else if( fStyle == "//" )
             n = 2;
-        else if (type == "///")
+        else if (fStyle == "///")
             n = 3;
-        else if( type == "////")
+        else if( fStyle == "////")
             n = 4;
     }
     return n;

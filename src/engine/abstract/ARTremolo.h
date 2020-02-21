@@ -56,15 +56,18 @@ class ARTremolo : public ARMTParameter, public ARPositionTag
 		virtual ~ARTremolo() {}
 
 		virtual bool 	MatchEndTag(const char * s);
+		virtual void 	setTagParameters(const TagParameterMap& map);
+
 		bool	isSecondPitchCorrect() const;
+		bool	isPitched() const				{ return !fPitch.empty(); }
 		int		getNumberOfStrokes() const;
 
-		const TagParameterString *	getStyle() const;
-		const TagParameterInt *		getSpeed() const;
-		const TagParameterString *	getPitch() const;
-		const TagParameterFloat *	getThickness() const;
-		const TagParameterString *	getText() const;
-		
+		const std::string&	getStyle() const		{ return fStyle; }
+		int					getSpeed() const		{ return fSpeed; }
+		const std::string&	getPitch() const		{ return fPitch; }
+		float				getThickness() const	{ return fThickness; }
+		const std::string&	getText() const			{ return fText; }
+
 	 
 		virtual const char*	getParamsStr() const	{ return kARTremoloParams; };
 		virtual const char*	getTagName() const		{ return "ARTremolo"; };
@@ -72,6 +75,12 @@ class ARTremolo : public ARMTParameter, public ARPositionTag
 
 	private:
 		void init();
+		
+		std::string fPitch;
+		std::string fText;
+		std::string fStyle;
+		int 		fSpeed;
+		float		fThickness;
 };
 
 #endif

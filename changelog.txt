@@ -14,6 +14,7 @@ GUIDO Engine history
 - autoHideTiedAccidentals global setting is now 'on' by default
 - fix incorrect slur position for beamed chords (issue #100)
 - fix incorrect tuplets on chords (issue #103)
+- fix incorrect tremolo on chords preceded by a grace note (issue #108)
 
 ----------------------------------------------------------------
   version 1.6.7
