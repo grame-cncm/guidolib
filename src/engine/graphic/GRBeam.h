@@ -95,7 +95,12 @@ private:
 		const GREvent* highNote;	// the highest note (y position)
 		const GREvent* lowNote;		// the lowest note
 		NVPoint		startStaff;		// the start staff position
+		float		highStaff;		// the higher staff y position
+		float		lowStaff;		// the lower staff y position
 		NVPoint		endStaff;		// the end staff position
+
+		bool	fixCrossStaffUp () const { return (stemdir == dirUP) && (!stemsReverse) && (highStaff < startStaff.y) && (highStaff != endStaff.y); }
+
 	} PosInfos;
 
 	void 	initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosInfos& infos);
@@ -108,6 +113,7 @@ private:
 	void	setBeams 		(GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
 	bool	reverseStems  			(const NEPointerList* assoc) const;
 	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
+	void	scanStaves  			(const NEPointerList* assoc, float& highStaff, float& lowStaff) const;
 	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const;
 
 	bool	fIsFeathered;
