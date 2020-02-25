@@ -148,6 +148,7 @@ public:
     virtual const GRBar *		isGRBar() const			{ return 0; }
     virtual const GRDynamics *	isGRDynamic() const		{ return 0; }
     virtual 	  GRFingering *	isGRFingering() 		{ return 0; }
+    virtual 	  GRSlur *		isGRSlur() 				{ return 0; }
 
 protected:
 	
