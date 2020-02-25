@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-class NVPoint;
+#include "NVPoint.h"
 
 class NVRect
 {
@@ -44,8 +44,12 @@ class NVRect
 		void	Set( float inL, float inT, float inR, float inB );
 		void	Merge( const NVRect & in );
 
-		float	Height() const { return bottom - top; }
-		float	Width() const { return right - left; }
+		float	Height() const 		{ return bottom - top; }
+		float	Width() const 		{ return right - left; }
+
+		NVPoint	TopLeft() const 	{ return NVPoint (left, top); }
+		NVPoint	BottomRight() const { return NVPoint (right, bottom); }
+
 
 		float left;
 		float top;
