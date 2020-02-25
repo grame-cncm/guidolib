@@ -51,6 +51,7 @@
 #include "GRAccolade.h"
 #include "GRBar.h"
 #include "GRBeam.h"
+#include "GRBowing.h"
 #include "GRGlue.h"
 #include "GRKey.h"
 #include "GRMusic.h"
@@ -60,10 +61,10 @@
 #include "GRRepeatEnd.h"
 #include "GRSingleNote.h"
 #include "GRSliceHeight.h"
+#include "GRSlur.h"
 #include "GRSpecial.h"
 #include "GRStaffManager.h"
 #include "GRSystem.h"
-#include "GRSystemTag.h"
 #include "GRSystemTag.h"
 
 using namespace std;
@@ -82,19 +83,20 @@ GRStaff * gCurStaff;
 int GRSystem::sSystemID = 0;
 
 
-class GRFingFixVisitor : public GRVisitor
+class GRFixVisitor : public GRVisitor
 {
 	public:
-				 GRFingFixVisitor() {}
-		virtual ~GRFingFixVisitor() {}
+				 GRFixVisitor() {}
+		virtual ~GRFixVisitor() {}
 
 		virtual bool voiceMode () 						{ return true; }
 		virtual void visitStart (GRSingleNote* note);
+		virtual void visitStart (GRSlur* slur);
 };
 
 
 //--------------------------------------------------------------------------------------------------------
-void GRFingFixVisitor::visitStart (GRSingleNote* note)
+void GRFixVisitor::visitStart (GRSingleNote* note)
 {
 	NEPointerList* assoc = note->getAssociations();
 	if (assoc) {
@@ -104,6 +106,15 @@ void GRFingFixVisitor::visitStart (GRSingleNote* note)
 			if (el->isGRFingering())
 				el->tellPosition (note, note->getPosition());
 		}
+	}
+}
+
+//--------------------------------------------------------------------------------------------------------
+void GRFixVisitor::visitStart (GRSlur* slur)
+{
+	size_t n = slur->countDeferred();
+	while (n--) {
+		slur->tellPositionEnd (slur->nextDeferred());
 	}
 }
 
@@ -467,9 +478,9 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 // this method is intended to fix fingering issue:
 // due to the elements order, tellposition is called before the beaming is set
 // thus the fingering position is incorrect with beaming
-void GRSystem::fixFingeringIssue ()
+void GRSystem::fixTellPositionOrder ()
 {
-	GRFingFixVisitor ffix;
+	GRFixVisitor ffix;
 	this->accept( ffix );
 }
 
@@ -1054,7 +1065,7 @@ void GRSystem::FinishSystem()
 	mMapping = mBoundingBox;				// set the mapping box
 	mMapping += mPosition + getOffset()	;	// and adjust position
 	patchTempoIssue ();
-	fixFingeringIssue();
+	fixTellPositionOrder();
 }
 
 // ----------------------------------------------------------------------------

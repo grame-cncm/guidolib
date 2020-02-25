@@ -28,11 +28,16 @@ class GRSlur : public GRBowing
 	 		  GRSlur (GRStaff * grstaff, const ARSlur * inAR )	: GRBowing(grstaff, inAR ) {}
 	 virtual ~GRSlur() {}
 
+		GRNotationElement*	nextDeferred()		{ GRNotationElement* elt= fDeferredTellPostion.front(); fDeferredTellPostion.pop(); return elt; }
+		size_t				countDeferred()		{ return fDeferredTellPostion.size(); }
+
 	protected:
 		virtual void automaticCurveDirection( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticAnchorPoints	( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticControlPoints	( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void accept (GRVisitor& visitor);
+
+		virtual GRSlur *	isGRSlur() 			{ return this; }
 
 	private:
 		float	getEltOffset 	(const GRNotationElement* el ) const;

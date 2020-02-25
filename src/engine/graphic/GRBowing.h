@@ -15,6 +15,8 @@
 
 */
 
+#include <queue>
+
 #include "GRPTagARNotationElement.h"
 
 class ARBowing;
@@ -33,8 +35,9 @@ void drawSlur( VGDevice & hdc, float x1, float y1, float x2, float y2, float x3,
 */
 class GRBowing : public GRPTagARNotationElement
 {
-	public:
-	
+	protected:
+		std::queue<GRNotationElement*>	fDeferredTellPostion;
+
 	/** \brief Save informations needed to draw the bow 
 			when different staves are needed, see GRPositionTag for comment.
 	*/
@@ -90,6 +93,7 @@ class GRBowing : public GRPTagARNotationElement
 		virtual void removeAssociation(GRNotationElement * el );
 		virtual void addAssociation(GRNotationElement * );
 
+		virtual void					tellPositionEnd(GRNotationElement * caller);
 		virtual void					tellPosition(GObject * caller, const NVPoint & newPosition);
 		virtual GRNotationElement *		getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement *		getEndElement(GRStaff * grstaff) const;

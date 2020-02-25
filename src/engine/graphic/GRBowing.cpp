@@ -56,7 +56,7 @@ GRBowing::GRBowing(GRStaff * grstaff, GRNotationElement * startEl, GRNotationEle
 		setStartElement(grstaff, startEl);
 	else // no start element: we're left-opened
 	{
-		setStartElement(grstaff, /*dynamic cast<GRNotationElement *>*/(grstaff->getSecondGlue()));
+		setStartElement(grstaff, grstaff->getSecondGlue());
 		sse->startflag = GRSystemStartEndStruct::OPENLEFT;
 	}
 
@@ -66,7 +66,7 @@ GRBowing::GRBowing(GRStaff * grstaff, GRNotationElement * startEl, GRNotationEle
 	}
 	else  // no end element: we're righ-opened
 	{
-		setEndElement(grstaff, /*dynamic cast<GRNotationElement *>*/(grstaff->getEndGlue()));
+		setEndElement(grstaff, grstaff->getEndGlue());
 		sse->endflag = GRSystemStartEndStruct::OPENRIGHT;
 	}
 
@@ -600,14 +600,22 @@ void GRBowing::setOffset(int n_point,const NVPoint & p)
 	// here an array must be used (need lists and arrays)
 }
 
-#ifndef WIN32
-#warning ("TODO: revise GRBowing::tellPosition");
-#endif
-
 // -----------------------------------------------------------------------------
 void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 {
 	GRNotationElement * el = dynamic_cast<GRNotationElement *>(caller);
+	if (el == 0 ) return;
+
+	if (isGRSlur()) {
+		fDeferredTellPostion.push(el);
+		return;   // slurs are handled at the end
+	}
+	tellPositionEnd (el);
+}
+
+// -----------------------------------------------------------------------------
+void GRBowing::tellPositionEnd (GRNotationElement * el)
+{
 	if (el == 0 ) return;
 
 	GRStaff * staff = el->getGRStaff();
@@ -618,15 +626,10 @@ void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 
 	const GRNotationElement * const startElement = sse->startElement;
 	const GRNotationElement * const endElement = sse->endElement;
-
-//cerr << "GRBowing::tellPosition caller "  << el->getRelativeTimePosition() << " " <<  el << " flags: " << sse->startflag << " " << sse->endflag << endl;
-//cerr << "GRBowing::tellPosition start  "  << startElement << " spos: " << mAssociated->GetAt(sse->startpos) << endl;
-//cerr << "GRBowing::tellPosition end    "  << endElement   << " epos: " << mAssociated->GetAt(sse->endpos) << endl;
-
 	if( el == endElement || ( endElement == 0 && el == startElement)) {
-		const GRNote * start = startElement->isGRNote();
-		const GRNote * end = endElement ? endElement->isGRNote() : 0;
 		NEPointerList* al = getAssociations();
+		const GRSingleNote * start = startElement->isSingleNote();
+		const GRSingleNote * end = endElement ? endElement->isSingleNote() : 0;
 		int n = al ? al->size() : 0;
 		bool grace = ((n == 2) && start && end && start->isGraceNote() && !end->isGraceNote());
 		updateBow( staff, grace );
@@ -722,6 +725,11 @@ void GRBowing::OnDraw( VGDevice & hdc) const
 
 	// restore old pen and brush
 	if (mColRef) hdc.PopFillColor();
+	
+//	hdc.Frame(fStartBox.left, fStartBox.top, fStartBox.right, fStartBox.bottom);
+//	hdc.Frame(fEndBox.left, fEndBox.top, fEndBox.right, fEndBox.bottom);
+//	hdc.Frame(fMidBox.left, fMidBox.top, fMidBox.right, fMidBox.bottom);
+//cerr << "GRBowing::OnDraw high : " << fMidBox.TopLeft() << " low: " << fMidBox.BottomRight() << endl;
 }
 
 // -----------------------------------------------------------------------------
