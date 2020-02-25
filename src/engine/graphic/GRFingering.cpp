@@ -74,13 +74,16 @@ void GRFingering::OnDraw( VGDevice & hdc ) const
 // -----------------------------------------------------------------------------
 void GRFingering::tellPosition(GObject * caller, const NVPoint & inPosition)
 {
-	GRSingleNote * note =  dynamic_cast<GRSingleNote *>(caller);
+}
+
+// -----------------------------------------------------------------------------
+void GRFingering::tellPositionEnd(GRSingleNote * note, const NVPoint & inPosition)
+{
+//	GRSingleNote * note =  dynamic_cast<GRSingleNote *>(caller);
 	if( note == 0 ) {
 		mDraw = false;
 		return;
 	}
-
-//cerr << "GRFingering::tellPosition " << endl;
 
 	const GRStaff * staff = note->getGRStaff();
 	if( staff == 0 ) return;
