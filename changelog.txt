@@ -15,6 +15,7 @@ GUIDO Engine history
 - fix incorrect slur position for beamed chords (issue #100)
 - fix incorrect tuplets on chords (issue #103)
 - fix incorrect tremolo on chords preceded by a grace note (issue #108)
+- fix incorrect incorrect slur position (issue #94)
 
 ----------------------------------------------------------------
   version 1.6.7
