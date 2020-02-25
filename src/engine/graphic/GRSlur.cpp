@@ -274,6 +274,8 @@ void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBo
 	if( upward )	extremeY = (startY < endY ) ? startY : endY;
 	else			extremeY = (startY > endY ) ? startY : endY;
 
+	float refyStaff = context->staff->getPosition().y;
+
 	// - Find the best slopes for the left and right segments of the triangle, such
 	// that no object is above them (or below, if the bow goes downward).
 	GuidoPos pos = mAssociated->GetHeadPosition();
@@ -293,6 +295,10 @@ void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBo
 			x1 = elBox.left;
 			x2 = elBox.right;
 			y = upward ? elBox.top : elBox.bottom;
+			
+			const GRStaff* staff = el->getGRStaff();
+			float offset = staff ? staff->getPosition().y : refyStaff;
+			y += offset - refyStaff;
 
 			// - Ignore it, if it's outside the start/end range.
 			//		this also avoid divisions by zero.
