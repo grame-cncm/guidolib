@@ -253,7 +253,7 @@ void GRPositionTag::StaffFinished(GRStaff * grstaff)
 	// there is no old lastendelement in this case
 	assert(lastendElement == NULL);
 
-	setEndElement(grstaff, /*ynamic_cast<GRNotationElement *>*/(grstaff->getEndGlue()));
+	setEndElement(grstaff, grstaff->getEndGlue());
 	sse->endflag = GRSystemStartEndStruct::OPENRIGHT;
 	sse->endpos = associated->GetTailPosition();
 

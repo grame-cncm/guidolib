@@ -117,11 +117,7 @@ void GRTie::automaticAnchorPoints( const GRBowingContext * bowContext, const ARB
 	}
 
 	// - Avoid staff line collisions.
-//	const float distx = posRight.x - posLeft.x;
-//	const float longDistance = kGuidoLongTieDistance * LSPACE; 
-//	const bool isLong = (distx >= longDistance);
-//  const bool crossing = (isLong || ( ))
-	GRStaff * staff = bowContext->staff;
+	const GRStaff * staff = bowContext->staff;
 	const float staffLSpace = staff->getStaffLSPACE();
 	
 	float yMargin = 0;
@@ -142,9 +138,6 @@ void GRTie::automaticAnchorPoints( const GRBowingContext * bowContext, const ARB
 	// - Store
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
-
-	//	if( manualSettings == false )
-//	arBow->setCurve( bowContext->curveDir, posLeft, posRight ); // (JB) useless ?
 }
 
 // -----------------------------------------------------------------------------
