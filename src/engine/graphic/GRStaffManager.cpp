@@ -32,7 +32,6 @@
 #include "ARMusic.h"
 #include "ARMusicalTag.h"
 #include "ARMusicalVoice.h"
-#include "ARStaff.h"
 #include "ARPageFormat.h"
 #include "ARSystemFormat.h"
 #include "ARAuto.h"
