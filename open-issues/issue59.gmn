@@ -24,7 +24,7 @@
 \staff<6> \clef<""> \meter<"4/4", autoMeasuresNum="on"> _/1 _]
 ,
 [
-\beamsOff 
+%\beamsOff 
 {\staff<6> d2/16, \staff<5> d2, \staff<4> a1,\staff<3> c1, \staff<3> a1}
 ]
 }
