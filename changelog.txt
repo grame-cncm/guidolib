@@ -16,6 +16,7 @@ GUIDO Engine history
 - fix incorrect tuplets on chords (issue #103)
 - fix incorrect tremolo on chords preceded by a grace note (issue #108)
 - fix incorrect incorrect slur position (issue #94)
+- fix missing clef and signatures due to staff tag (part of issue #96)
 
 ----------------------------------------------------------------
   version 1.6.7
