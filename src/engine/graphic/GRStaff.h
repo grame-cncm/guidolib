@@ -115,7 +115,7 @@ class GRStaffState
 		int				getInstrKeyNumber() const				{ return instrNumKeys; }
 		void			reset2key();
 
-        float getYOffset() const                                { return yOffset; }
+        float getYOffset() const                                { return fYOffset; }
         const TagParameterFloat* getStaffDistance() const       { return staffDistance; }
     
         void setStaffLSPACE(float value)                        { staffLSPACE = value * 2; } // Factor 2 to be consistent with GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
@@ -155,7 +155,7 @@ class GRStaffState
 		float	staffLSPACE;	// distance between two lines
 		int		numlines;		// Zahl der Notenlinien.
         float   lineThickness;
-        float   yOffset;
+        float   fYOffset;
         const TagParameterFloat* staffDistance;
         unsigned char *colRef;
 		float	distance;
