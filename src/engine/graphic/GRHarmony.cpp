@@ -34,6 +34,11 @@
 
 using namespace std;
 
+#ifndef WIN32
+#warning ("TODO: set bounding box (currently ignored)");
+#endif
+
+
 extern GRStaff * gCurStaff;
 
 GRHarmony::GRHarmony(GRStaff * p_staff, const ARHarmony * ar)
@@ -57,8 +62,6 @@ GRHarmony::GRHarmony(GRStaff * p_staff, const ARHarmony * ar)
 	mTextAlign = VGDevice::kAlignLeft + VGDevice::kAlignTop;
 	fFont = FontManager::GetTextFont(ar, curLSPACE, mTextAlign);
 
-	st->boundingBox.left = 0;
-	st->boundingBox.top  = 0;
 
 	float sizex = 0;
 	float sizey = 0;
@@ -68,6 +71,11 @@ GRHarmony::GRHarmony(GRStaff * p_staff, const ARHarmony * ar)
     st->boundingBox.right = 0; //sizex;
 	st->boundingBox.top = sizey;
 	st->boundingBox.bottom = 4 * LSPACE;
+
+//	float dy = ar->getDY()->getValue() + LSPACE/2;
+//	mBoundingBox.left = mBoundingBox.right = 0;
+//	mBoundingBox.top = -sizey - dy;
+//	mBoundingBox.bottom = -dy;
 }
 
 
@@ -83,11 +91,6 @@ GRHarmony::~GRHarmony()
 	mAssociated = 0;
 }
 
-/**
-	Here, we must handle two different cases:
-		(1) The text position must be relative to the last staff-line. (i.e: Lyrics)
-		(2) The text position must follow the y-position of the note. (i.e: Fingering)
-*/
 void GRHarmony::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow)
@@ -129,6 +132,7 @@ void GRHarmony::OnDraw( VGDevice & hdc ) const
 	DrawHarmonyString (hdc, fFont, st->text, drawPos.x + st->boundingBox.left + dx, drawPos.y + dy);
 
 	if( mColRef ) hdc.SetFontColor( prevTextColor );
+//	DrawBoundingBox(hdc,VGColor(0,0,0));
 }
 
 float GRHarmony::CharExtend (const char* c, const VGFont* font, VGDevice* hdc) const
@@ -229,6 +233,7 @@ void GRHarmony::setHPosition( GCoord nx )
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	assert(st);
 	st->position.x = nx;
+	mPosition.x = nx;
 }
 
 void GRHarmony::tellPosition(GObject * caller, const NVPoint & inPosition)
@@ -267,9 +272,10 @@ void GRHarmony::tellPosition(GObject * caller, const NVPoint & inPosition)
 		newPos.y = grel->getPosition().y;
 		st->position = newPos;
 
-		const ARHarmony* arText = getARHarmony();
-		const char* text = arText ? arText->getText() : 0;
-		if (text) st->text = text;
+//		const ARHarmony* arText = getARHarmony();
+//		const char* text = arText ? arText->getText() : 0;
+//		if (text) st->text = text;
+
 	}
 }
 
