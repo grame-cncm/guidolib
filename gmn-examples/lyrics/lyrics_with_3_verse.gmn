@@ -5,18 +5,18 @@ c d/8 e f g a/4 h c2)
 ],
 [\staff<1>% display the lyrics and notes in staff 1
 
-\text<text="verse 2:",dy=-8hs,dx=-1> 
-\lyrics<text="c d e f g a h c ", dy=-8hs>(
+\text<text="verse 2:",dy=-6.5hs,dx=-1> 
+\lyrics<text="c d e f g a h c ", dy=-6.5hs>(
 % the better approach is to replace any notenames with empty
 empty empty/8 empty empty empty empty/4 empty empty)
 ],
 [\staff<1> % display the lyrics and notes in staff 1
-\text<text="verse 3:",dy=-13hs,dx=-1> 
-\lyrics<"this is a ma-jor sca-le !", dy=-13hs>(
+\text<text="verse 3:",dy=-10.5hs,dx=-1> 
+\lyrics<"this is a ma-jor sca-le !", dy=-10.5hs>(
 % it's sometimes ok to copy just the notes from verse 1
 c d/8 e f g a/4 h c2)
 ],
-[\meter<"2/4"> \staffFormat<dy=-4>
+[\meter<"2/4"> \staffFormat<dy=-6.5>
 c d/8 e f g a/4 h c2
 ]
 }
