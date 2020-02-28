@@ -16,7 +16,7 @@ empty empty/8 empty empty empty empty/4 empty empty)
 % it's sometimes ok to copy just the notes from verse 1
 c d/8 e f g a/4 h c2)
 ],
-[\meter<"2/4"> \staffFormat<dy=-12>
+[\meter<"2/4"> \staffFormat<dy=-4>
 c d/8 e f g a/4 h c2
 ]
 }
