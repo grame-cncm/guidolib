@@ -161,6 +161,8 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	    hdc.DrawString( mPosition.x, mPosition.y, st->text.c_str(), (int)st->text.size());
 
 	endDraw (hdc, prevTextColor);
+
+//	DrawBoundingBox(hdc, VGColor(0,0,255));
 }
 
 const VGColor GRText::startDraw( VGDevice & hdc ) const
@@ -180,9 +182,6 @@ void GRText::endDraw( VGDevice & hdc, const VGColor textcolor) const
 	
 	if( mColRef )
 		hdc.SetFontColor( textcolor );
-
-	if (gBoundingBoxesMap & kStavesBB)
-		DrawBoundingBox(hdc, kStaffBBColor);
 }
 
 // -----------------------------------------------------------------------------
