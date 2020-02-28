@@ -29,6 +29,7 @@ class GRBar;
 class GREvent;
 class GRFingering;
 class GRGlue;
+class GRHarmony;
 class GRNote;
 class GRRest;
 class GRSingleNote;
@@ -149,6 +150,7 @@ public:
     virtual const GRDynamics *	isGRDynamic() const		{ return 0; }
     virtual 	  GRFingering *	isGRFingering() 		{ return 0; }
     virtual 	  GRSlur *		isGRSlur() 				{ return 0; }
+    virtual const GRHarmony *	isGRHarmony() const 	{ return 0; }
 
 protected:
 	

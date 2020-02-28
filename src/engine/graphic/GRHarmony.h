@@ -62,6 +62,7 @@ public:
     virtual void 	setPosition(const NVPoint & inPosition );
     virtual void 	setHPosition( float nx );
 			void	mustFollowPitch( bool flag ) { mMustFollowPitch = flag; }
+    virtual const GRHarmony *		isGRHarmony() const			{ return this; }
 
 protected:
 
