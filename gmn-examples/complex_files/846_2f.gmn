@@ -5,9 +5,10 @@
 %**************************************************
 [ \pageFormat<w=21.5cm,h=32cm,tm=2.0cm,bm=1.0cm,lm=1cm,rm=1cm> 
   \title<"FUGA I"> \composer<"J.S.Bach BWV 846",dy=7hs,fsize=10pt> 
+	\footer<"(c) Kai Renz, musical data taken from MuseData database and automatically converted to GUIDO", fsize=10pt,font="Arial">
   \barFormat<style="system"> 
 \systemFormat<dx=1.0cm> 
-(* meas. 1 *) \staff<1> \staffFormat<size=0.93mm> \beamsOff \staff<2> \staffFormat<size=0.93mm> \staff<1> \staff<2> \staff<1> \staff<2> \staff<1> \clef<"g2"> \key<0> \meter<"C">  \text<"(c) Kai Renz, musical data taken from MuseData database and automatically converted to GUIDO",dx=-3cm,dy=-29.2cm,fsize=10pt,font="Arial">( empty*0/1)   _*32/32 |
+(* meas. 1 *) \staff<1> \staffFormat<size=0.93mm> \beamsOff \staff<2> \staffFormat<size=0.93mm> \staff<1> \staff<2> \staff<1> \staff<2> \staff<1> \clef<"g2"> \key<0> \meter<"C"> _*32/32 |
 (* meas. 2 *) _*1/2 _*1/8 \beamBegin \stemsUp g1 a b \beamEnd |
 (* meas. 3 *) \beamBegin c2*1/8. d*1/32 c \beamEnd \beamBegin b1*1/8 e2 \beamEnd \beamBegin \noteFormat<dx=-1hs>(a1) \tieBegin:1<curve="up"> d2 \beamEnd \beamBegin d*1/16 \tieEnd:1 e d c \beamEnd |
 (* meas. 4 *) \staffFormat<size=0.93mm> \beamBegin b1 g a b \beamEnd \beamBegin c2 b1 c2 d \beamEnd \beamBegin e d e f# \beamEnd \beamBegin g*1/8 b1 \beamEnd |
