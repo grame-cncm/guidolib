@@ -16,8 +16,7 @@
 		\fingering<text="2", position="above", dy=2>(g#), 
 		\fingering<text="5", position="above", dy=5>(c#2)  
 	} 
-
-	\fingering<text="1, 2, 5"> ( { e1/8, g#, c#2 } ) 
+	_ 
 	{ 
 		\fingering<text="1,2,5",position="above", fsize=7pt> (e1/8), g#, c#2 
 	}
