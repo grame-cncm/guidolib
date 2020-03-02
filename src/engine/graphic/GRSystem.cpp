@@ -52,6 +52,7 @@
 #include "GRBeam.h"
 #include "GRBowing.h"
 #include "GRFingering.h"
+#include "GRFixVisitor.h"
 #include "GRGlue.h"
 #include "GRKey.h"
 #include "GRMusic.h"
@@ -81,42 +82,6 @@ using namespace std;
 GRStaff * gCurStaff;
 
 int GRSystem::sSystemID = 0;
-
-
-class GRFixVisitor : public GRVisitor
-{
-	public:
-				 GRFixVisitor() {}
-		virtual ~GRFixVisitor() {}
-
-		virtual bool voiceMode () 						{ return true; }
-		virtual void visitStart (GRSingleNote* note);
-		virtual void visitStart (GRSlur* slur);
-};
-
-
-//--------------------------------------------------------------------------------------------------------
-void GRFixVisitor::visitStart (GRSingleNote* note)
-{
-	NEPointerList* assoc = note->getAssociations();
-	if (assoc) {
-		GuidoPos pos = assoc->GetHeadPosition();
-		while(pos) {
-			GRFingering * el = assoc->GetNext(pos)->isGRFingering();
-			if (el)
-				el->tellPositionEnd (note, note->getPosition());
-		}
-	}
-}
-
-//--------------------------------------------------------------------------------------------------------
-void GRFixVisitor::visitStart (GRSlur* slur)
-{
-	size_t n = slur->countDeferred();
-	while (n--) {
-		slur->tellPositionEnd (slur->nextDeferred());
-	}
-}
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -690,8 +655,10 @@ void GRSystem::accept (GRVisitor& visitor)
 	visitor.visitStart (this);
 	const StaffVector * staves = getStaves();
 	int n = staves->size();
+cerr << "GRSystem::accept for " << n << " staves" << endl;
 	for (int i= 1; i <= n; i++) {
 		GRStaff* staff = staves->Get (i);
+cerr << "GRSystem::accept visit staff " << i << " " << (void*)staff << endl;
 		while (staff) {
 			staff->accept (visitor);
 			staff = staff->getNextStaff();
@@ -1047,7 +1014,7 @@ void GRSystem::FinishSystem()
 	mMapping = mBoundingBox;				// set the mapping box
 	mMapping += mPosition + getOffset()	;	// and adjust position
 	patchTempoIssue ();
-	fixTellPositionOrder();
+//	fixTellPositionOrder();
 }
 
 // ----------------------------------------------------------------------------

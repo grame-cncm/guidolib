@@ -19,34 +19,28 @@
 #include <algorithm>
 #include "secureio.h"
 
-// - Guido AR
-#include "ARMusic.h"
-#include "ARNote.h"
 #include "ARMeter.h"
-#include "ARPageFormat.h"
+#include "ARMusic.h"
 #include "ARMusicalVoice.h"
+#include "ARNote.h"
+#include "ARPageFormat.h"
 #include "ARSpace.h"
-
-// - Guido GR
-#include "GRMusic.h"
-#include "GRStaffManager.h"
-#include "GRSingleNote.h"
-#include "GRPage.h"
+#include "GObject.h"
 #include "GRBar.h"
 #include "GRDefine.h"
-
-#include "VGDevice.h"
-
-// - Guido debug
-#include "GObject.h"
+#include "GRFixVisitor.h"
+#include "GRMusic.h"
+#include "GRPage.h"
+#include "GRPrintVisitor.h"
+#include "GRSingleNote.h"
+#include "GRStaff.h"
+#include "GRStaffManager.h"
 #include "GRSystem.h"
 #include "GRSystemSlice.h"
-#include "GRStaff.h"
-#include "kf_ivect.h"
-
-#include "GRPrintVisitor.h"
 #include "GRTrillsLinker.h"
+#include "kf_ivect.h"
 #include "TCollisions.h"
+#include "VGDevice.h"
 
 using namespace std;
 
@@ -628,6 +622,9 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	grsm.createStaves();
 	fLyricsChecked = false;
 
+	// intended to fix tellPosition order issues
+	GRFixVisitor ffix;
+	this->accept( ffix );
 
 //cerr << "GRMusic: ---------- visit ---------" << endl;
 	GRTrillLinker v;
