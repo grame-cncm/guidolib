@@ -37,7 +37,7 @@ The default position for fingering is close to the note head. When **position** 
 
 The position can be set at global voice level using the [\auto](../Miscellaneous/) tag.
 
-**Note about the fingering string:** a comma can be used as a text separator. In this case, comma separated strings are stacked verticaly.
+**Note about the fingering string:** a comma can be used as a text separator. In this case, comma separated strings are stacked verticaly. This form can be used to express chords fingering. In this case, you should place the fingering on the highest note when the fingering positon is above, or on the lowest note on the contrary.
 
 See the [Beethoven](@EXAMPLES/beethoven/) example.
 @paramend
