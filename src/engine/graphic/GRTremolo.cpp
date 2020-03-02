@@ -28,6 +28,8 @@
 #include "GRBeam.h"
 #include "FontManager.h"
 
+using namespace std;
+
 GRTremolo::GRTremolo( GRStaff * stf, const ARTremolo * artrem )
 					 	: GRPTagARNotationElement(artrem)				
 {
@@ -49,8 +51,8 @@ GRTremolo::GRTremolo( GRStaff * stf, const ARTremolo * artrem )
     if(artrem->isSecondPitchCorrect())
         fIsTwoNotesTremolo = true;
     
-    fText = artrem->getText() ? artrem->getText()->getValue() : "";
-    fThickness = artrem->getThickness() ? artrem->getThickness()->getValue() : LSPACE/2;
+    fText = artrem->getText();
+    fThickness = artrem->getThickness() ? artrem->getThickness() : LSPACE/2;
     dx = artrem->getDX() ? artrem->getDX()->getValue() : 0;
     dy = artrem->getDY() ? (-1) * artrem->getDY()->getValue() : 0;
     
@@ -107,15 +109,14 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem());
 	if (sse == 0) return;
     
-//    GRSingleNote * sng = dynamic_cast<GRSingleNote *>(grel);
     const GRSingleNote * sng = grel->isSingleNote();
     NVPoint pos;
     NVPoint textPos;
-    
+
     GRNotationElement * startElement = sse->startElement;
     if(grel == startElement)
         fBeamCount = grel->getNumFaehnchen();
-    
+
     if (sng) {
         GDirection direction = sng->getStemDirection();
         pos = textPos = sng->getStemStartPos();

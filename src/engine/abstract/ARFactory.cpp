@@ -1758,7 +1758,7 @@ void ARFactory::endTremolo (ARMusicalTag * tag)
 			
 			NoteAndChordParser * newParser = new NoteAndChordParser();
 			newParser->setFactory(newFactory);
-			std::string pitch = mCurrentTremolo->getPitch() ? mCurrentTremolo->getPitch()->getValue() : 0;
+			std::string pitch = mCurrentTremolo->getPitch();
 			pitch.insert(pitch.begin(), 1, '[');
 			std::stringstream pitchStr(pitch);
 			newParser->setStream(&pitchStr);

@@ -84,13 +84,9 @@ bool GObject::positionIsOnStaffLine( float inPositionY, float inLSpace )
 void GObject::DrawBoundingBox( VGDevice & hdc, const VGColor & inBrushColor ) const
 {
 	hdc.PushPen( inBrushColor, 4);
-	NVRect r(mBoundingBox);
-	r += mPosition;
-	r += getOffset();
-    hdc.Line (r.left, r.top, r.right, r.top);
-    hdc.Line (r.right, r.top, r.right, r.bottom);
-    hdc.Line (r.right, r.bottom, r.left, r.bottom);
-    hdc.Line (r.left, r.bottom, r.left, r.top);
+	NVRect r(mBoundingBox + mPosition);
+//	r += getOffset();
+	hdc.Frame(r.left, r.top, r.right, r.bottom);
 	hdc.PopPen();
 }
 

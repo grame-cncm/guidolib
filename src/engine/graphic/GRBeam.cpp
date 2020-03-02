@@ -392,7 +392,7 @@ void GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosI
 	infos.currentSize = refEvt ? refEvt->getSize() : 1;
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
 	st->p[0] = refEvt ? refEvt->getStemStartPos() : refStaff->getPosition();
-//cerr << "GRBeam::initp0 " << refEvt << " " << st->p[0] << " " << refEvt->getStemLength() << endl;
+
 	if (arBeam && arBeam->isGuidoSpecBeam() && refEvt)
 		st->p[0].y = refEvt->getPosition().y;
 
@@ -483,9 +483,6 @@ void GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInf
 	GRStaff * refStaff = endEl ? endEl->getGRStaff() : getGRStaff();
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
 
-//cerr << "GRBeam::initp2 " << endEl << " " << st->p[2] << endl;
-//cerr << "GRBeam::initp2 " << endEl->getGlobalStem()->getPosition() << " " << endEl->getGlobalStem()->getStemLength() << endl;
-
 	if (getTagType() == SYSTEMTAG) {
 		st->p[2] += refStaff->getPosition();
 		if (infos.stavesStartEnd && !infos.stemsReverse &&  !endEl->getStemLengthSet()) {
@@ -548,11 +545,26 @@ void GRBeam::initp3 (GRSystemStartEndStruct * sse, PosInfos& infos)
 void GRBeam::slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl, float slope, PosInfos& infos)
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	if (startEl && endEl && infos.stemdir != endEl->getStemDirection())
+
+	if (endEl == 0)
+	{
+		// then we have an empty-event make the slope even ....
+		// or make it dependant on generell direction of beam (how ...)
+		st->p[2].y = st->p[0].y;
+		st->p[3].y = st->p[1].y;
+	}
+	else if (startEl == 0)
+	{
+		st->p[0].y = st->p[2].y;
+		st->p[1].y = st->p[3].y;
+	}
+
+//	if (startEl && endEl && infos.stemdir != endEl->getStemDirection())
+	else if (infos.stemdir != endEl->getStemDirection())
 	{
 		// then we should try an optimizing strategy which is not implemented now ....
 	}
-	else if (startEl && endEl && slope > 0.1f )
+	else if (slope > 0.1f )
 	{
 		// adjust the length of the stem for second st->p ...			
 		if( infos.stemdir == dirDOWN) {
@@ -570,7 +582,7 @@ void GRBeam::slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl,
 			st->p[3].y += (GCoord) diff;				
 		}
 	}
-	else if (startEl && endEl && slope < -0.1f)
+	else if (slope < -0.1f)
 	{
 		if (infos.stemdir == dirDOWN)
 		{
@@ -588,18 +600,6 @@ void GRBeam::slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl,
 			st->p[0].y = (GCoord) newy;
 			st->p[1].y += (GCoord) diff;
 		}
-	}
-	else if (endEl == 0)
-	{
-		// then we have an empty-event make the slope even .... 
-		// or make it dependant on generell direction of beam (how ...)
-		st->p[2].y = st->p[0].y;
-		st->p[3].y = st->p[1].y;
-	}		
-	else if (startEl == 0)
-	{
-		st->p[0].y = st->p[2].y;
-		st->p[1].y = st->p[3].y;
 	}
 }
 
@@ -1103,6 +1103,25 @@ bool GRBeam::reverseStems 	(const NEPointerList* assoc) const
 }
 
 //--------------------------------------------------------------------
+void GRBeam::scanStaves (const NEPointerList* assoc, float& highStaff, float& lowStaff) const
+{
+	float high = 10000.f;
+	float low = 0.f;
+	GuidoPos pos = assoc->GetHeadPosition();
+	while (pos) {
+		const GREvent* ev = assoc->GetNext(pos)->isGREvent();
+		if (ev) {
+			const GRStaff* currentStaff = ev->getGRStaff();
+			float ypos = currentStaff->getPosition().y ;
+			if (ypos > low) low = ypos;
+			if (ypos < high) high = ypos;
+		}
+	}
+	highStaff = high;
+	lowStaff = low;
+}
+
+//--------------------------------------------------------------------
 void GRBeam::yRange (const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const
 {
 	const GREvent* ymin  = 0;
@@ -1202,6 +1221,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	const GREvent * startEl = sse->startElement->isGREvent();
 	GREvent * endEl   = sse->endElement->isGREvent();
 
+//cerr << "GRBeam::tellPosition " << endl;
 	if (startEl && startEl->getGlobalStem()) startEl->getGlobalStem()->setBeam (this);
 	if (endEl   && endEl->getGlobalStem()) endEl->getGlobalStem()->setBeam (this);
 	bool differentStaves = (startEl && endEl) ? (endEl->getGRStaff()!=startEl->getGRStaff()) : false;
@@ -1212,6 +1232,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	if (getTagType() == SYSTEMTAG) {
 		infos.startStaff = startEl->getGRStaff()->getPosition();
 		infos.endStaff	 = endEl->getGRStaff()->getPosition();
+		scanStaves(mAssociated, infos.highStaff, infos.lowStaff);
 		yRange(mAssociated, infos.highNote, infos.lowNote);
 	}
 
@@ -1255,10 +1276,9 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// and if we are note in the case of a chained feather beam
 	if ( (startEl && startEl->getStemLengthSet() && endEl && endEl->getStemLengthSet())
 		|| getTagType() == SYSTEMTAG || (arBeam && isSpecBeam) || (fIsFeathered && startEl && startEl->stemHasBeenChanged()))
-	{
 		needsadjust = false;
-	}
-	else slopeAdjust (sse, startEl, endEl, slope, infos);
+	if (infos.fixCrossStaffUp()) needsadjust = true;
+	if (needsadjust) slopeAdjust (sse, startEl, endEl, slope, infos);
 
 	if (arBeam && isSpecBeam)
 	{

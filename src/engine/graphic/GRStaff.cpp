@@ -109,6 +109,8 @@ int gd_noteName2pc(const char *name);
 #endif
 #define trace1Method(method)		cout << (void*)this << " GRStaff::" << method << endl
 
+//#define EXTENDEDBB
+
 // ===========================================================================
 //		MeasureAccidentals
 // ===========================================================================
@@ -177,7 +179,7 @@ GRStaffState::GRStaffState()
 	staffLSPACE   = LSPACE;
 	numlines      = 5;              // Standard
     lineThickness = LSPACE * 0.08f;
-    yOffset       = 0;
+    fYOffset       = 0;
     colRef        = 0;
 
 	curkey = NULL;
@@ -1705,7 +1707,7 @@ void GRStaff::setStaffFormat( const ARStaffFormat * staffrmt)
         mStaffState.lineThickness = staffrmt->getLineThickness();
         mStaffState.staffDistance = staffrmt->getStaffDistance();
         if (staffrmt->getDY())
-            mStaffState.yOffset = - (staffrmt->getDY()->getValue());
+            mStaffState.fYOffset = - (staffrmt->getDY()->getValue());
         if (staffrmt->getColor()) {
             if (!mStaffState.colRef)
                 mStaffState.colRef = new unsigned char[4];
@@ -1898,6 +1900,10 @@ void GRStaff::FinishStaff()
 void GRStaff::boundingBoxPreview()
 {
     traceMethod("boundingBoxPreview");
+#ifdef EXTENDEDBB
+	updateBoundingBox();
+	return;
+#endif
     mBoundingBox.Set (0,0,0,0);
 	GuidoPos pos = mCompElements.GetHeadPosition();
 	while (pos)
@@ -1906,7 +1912,7 @@ void GRStaff::boundingBoxPreview()
 		NVRect eltBox (e->getBoundingBox());
 		eltBox += e->getPosition();
 		mBoundingBox.Merge( eltBox );
-	 }	
+	 }
 }
 
 // ----------------------------------------------------------------------------
@@ -1918,7 +1924,6 @@ void GRStaff::boundingBoxPreview()
 void GRStaff::updateBoundingBox()
 {
     traceMethod("updateBoundingBox");
-	
 	NVRect r; NVRect tmp; NVPoint p;
     mBoundingBox.Set (0,0,0,0);
 	
@@ -1926,32 +1931,44 @@ void GRStaff::updateBoundingBox()
     while (pos) {
         GRNotationElement * e = mCompElements.GetNext(pos);
         if (e) {
-			GRPositionTag * ptag = dynamic_cast<GRPositionTag *>(e);
-           if (ptag) continue;
+#ifdef EXTENDEDBB
+			if (e->isGRSlur()) {
+				tmp = e->getBoundingBox() + e->getPosition();
+				if (tmp.Height() < 300) {
+					if (r.top > tmp.top) 		r.top = tmp.top;
+					if (r.bottom < tmp.bottom)	r.bottom = tmp.bottom;
+				}
+			}
 
+			GRPositionTag * ptag = dynamic_cast<GRPositionTag *>(e);
+			if (ptag) {
+				if (e->isText()) { // || e->isGRHarmony()) {
+					tmp = e->getBoundingBox() + e->getPosition();
+					if (r.top > tmp.top) 		r.top = tmp.top;
+					if (r.bottom < tmp.bottom)	r.bottom = tmp.bottom;
+				}
+				continue;
+			}
+
+			const GRSingleNote * note = e->isSingleNote();
+			if (note) {
+				NVRect b = note->getEnclosingBox();
+				if (b.Height() < 500) {
+					if (r.top > b.top) 			r.top = b.top;
+					if (r.bottom < b.bottom)	r.bottom = b.bottom;
+				}
+			}
+#else
+			GRPositionTag * ptag = dynamic_cast<GRPositionTag *>(e);
+			if (ptag) {
+				continue;
+			}
+#endif
             tmp = e->getBoundingBox();
             p = getPosition();
             p.y = 0;
             tmp += e->getPosition() - p;
             r.Merge (tmp);
-/*
-	useless: stem bounding boxes are included in events bounding boxes - DF sept 18 2009
-	in addition, stems bb may be incorrect
-            
-            GREvent * ev = dynamic_cast<GREvent *>(e);
-            if (!ev) continue;
-
-            GRGlobalStem * gstem = ev->getGlobalStem();
-            if (!gstem) continue;
-            GRStem * stem = gstem->getGRStem();
-            if (stem) {
-                tmp = stem->getBoundingBox();
-				p = getPosition();
-                p.y = 0;
-                tmp += e->getPosition() - p;
-                r.Merge (tmp);
-           }
-*/
         }
     }
 	mBoundingBox.Merge (r);
@@ -2090,6 +2107,7 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 
 	if (gBoundingBoxesMap & kStavesBB)
 		DrawBoundingBox(hdc, kStaffBBColor);
+//cerr << "GRStaff::OnDraw bb: " << mBoundingBox << endl;
 }
 
 // ----------------------------------------------------------------------------
@@ -2192,34 +2210,21 @@ float GRStaff::currentLineThikness() const
 void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 {
     float sizeRatio = getSizeRatio();
-
     if (sizeRatio < kMinNoteSize) // Too small, don't draw
         return;
     if (currentLineThikness() < 0.5)
         return;
-
-	const float lspace = getStaffLSPACE(); // Space between two lines
-//	const NVPoint & staffPos = getPosition();
-//	
-//	float yPos = staffPos.y;
-	
-	/* - Debug ->
-	hdc.PushPen( GColor( 255, 0, 0, 128 ), 10 );
-	hdc.Line( xStart - 100, yPos, xStart + 100, yPos );
-	hdc.Line( xStart, yPos - 100, xStart, yPos + 100 );
-	hdc.PopPen();
-	*/
     
     if (mStaffState.colRef)
         hdc.PushPenColor(VGColor(mStaffState.colRef));
-
     hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
-
+	
+	const float lspace = getStaffLSPACE(); // Space between two lines
     std::map<float,float>::const_iterator it = fPositions.begin();
     while (it != fPositions.end()) {
         float x1 = it->first;
         float x2 = it->second;
-        float yPos = getPosition().y;
+		float yPos = getPosition().y;
         for (int i = 0; i < mStaffState.numlines; i++) {
             hdc.Line(x1, yPos, x2, yPos);
             yPos += lspace;

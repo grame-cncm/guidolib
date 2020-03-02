@@ -58,7 +58,7 @@ class ARStaff : public ARMTParameter
 		virtual ARMusicalObject * Copy() const		{ return new ARStaff(this); }
 	    virtual bool IsStateTag() const				{ return true; }
 
-		virtual int			getOrder() const		{ return kStaffOrder; }
+		virtual int			getOrder() const		{ return kDontMove; }
 		virtual const char*	getParamsStr() const	{ return kARStaffParams; };
 		virtual const char*	getTagName() const		{ return "ARStaff"; };
 		virtual std::string getGMNName() const		{ return "\\staff"; };

@@ -42,7 +42,6 @@
 #include "ARSystemFormat.h"
 #include "ARMusicalVoice.h"	// for template instanciation
 #include "ARMusic.h"
-#include "ARStaff.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
@@ -51,6 +50,8 @@
 #include "GRAccolade.h"
 #include "GRBar.h"
 #include "GRBeam.h"
+#include "GRBowing.h"
+#include "GRFingering.h"
 #include "GRGlue.h"
 #include "GRKey.h"
 #include "GRMusic.h"
@@ -58,11 +59,12 @@
 #include "GRPossibleBreakState.h"
 #include "GRRepeatBegin.h"
 #include "GRRepeatEnd.h"
+#include "GRSingleNote.h"
 #include "GRSliceHeight.h"
+#include "GRSlur.h"
 #include "GRSpecial.h"
 #include "GRStaffManager.h"
 #include "GRSystem.h"
-#include "GRSystemTag.h"
 #include "GRSystemTag.h"
 
 using namespace std;
@@ -79,6 +81,43 @@ using namespace std;
 GRStaff * gCurStaff;
 
 int GRSystem::sSystemID = 0;
+
+
+class GRFixVisitor : public GRVisitor
+{
+	public:
+				 GRFixVisitor() {}
+		virtual ~GRFixVisitor() {}
+
+		virtual bool voiceMode () 						{ return true; }
+		virtual void visitStart (GRSingleNote* note);
+		virtual void visitStart (GRSlur* slur);
+};
+
+
+//--------------------------------------------------------------------------------------------------------
+void GRFixVisitor::visitStart (GRSingleNote* note)
+{
+	NEPointerList* assoc = note->getAssociations();
+	if (assoc) {
+		GuidoPos pos = assoc->GetHeadPosition();
+		while(pos) {
+			GRFingering * el = assoc->GetNext(pos)->isGRFingering();
+			if (el)
+				el->tellPositionEnd (note, note->getPosition());
+		}
+	}
+}
+
+//--------------------------------------------------------------------------------------------------------
+void GRFixVisitor::visitStart (GRSlur* slur)
+{
+	size_t n = slur->countDeferred();
+	while (n--) {
+		slur->tellPositionEnd (slur->nextDeferred());
+	}
+}
+
 
 //--------------------------------------------------------------------------------------------------------
 /*
@@ -436,6 +475,16 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 }
 
 //----------------------------------------------------------------------------------------------------
+// this method is intended to fix tellPosition order issues:
+// due to the elements order, tellposition is called before the beaming is set
+// thus the fingering position is incorrect with beaming and slurs as well
+void GRSystem::fixTellPositionOrder ()
+{
+	GRFixVisitor ffix;
+	this->accept( ffix );
+}
+
+//----------------------------------------------------------------------------------------------------
 // this is the only solution found up to now to solve a tempo tag issue:
 // a tempo tag position is incorrrect when the tag is after a pbreak
 // this is likely due to wrong new slice creation that don't know about the tempo tag
@@ -541,8 +590,7 @@ void GRSystem::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& info
 
 	int staffCount = 0;
 	if (mStaffs) {
-		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ )
-		{
+		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ ) {
 			GRStaff * staff = mStaffs->Get(i);
 			if (staff) {
 				staff->GetMap (sel, f, infos);
@@ -550,22 +598,17 @@ void GRSystem::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& info
 			}
 		}
 	}
-	else if (mSystemSlices.size() > 0 )
-	{
+	else if (mSystemSlices.size() > 0 ) {
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		while (pos) {
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
 			slice->GetMap (sel, f, infos);
 		}
 	}
-	if (( staffCount > 1 ) && ! mAccolade.empty())
-	{
+	if (( staffCount > 1 ) && ! mAccolade.empty()) {
 		for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
-		{
 			(*it)->GetMap (sel, f, infos);
-		}
 	}
-
     GetSubElementsMap( sel, f, infos );
 	infos.fPos.x -= mPosition.x;
 	infos.fPos.y -= mPosition.y;
@@ -857,8 +900,7 @@ void GRSystem::DrawSystemSprings( VGDevice & hdc ) const
 // --------------------------------------------------------------------------
 /** \brief Draws the force used for the spacing.
 */
-void
-GRSystem::DrawSystemForce( VGDevice & hdc ) const
+void GRSystem::DrawSystemForce( VGDevice & hdc ) const
 {
 	char tmpbuf[32];
 	snprintf( tmpbuf,32,"%.2f", mSystemforce );
@@ -926,15 +968,13 @@ void GRSystem::dospacing()
 	{
 		// we can call Haken-Blostein now ...
 
-		// now we need to tell new positions to
-		// the graphical elements ...
+		// now we need to tell new positions to the graphical elements ...
 		float posx = 0;
 		int i;
 		int pos1 = mSpringVector->GetMinimum();
 		int pos2 = mSpringVector->GetMaximum();
 
-		for ( i = pos1; i <= pos2; ++i )
-		{
+		for ( i = pos1; i <= pos2; ++i ) {
 			GRSpring * spr = mSpringVector->Get(i);
 			spr->setGRPositionX( posx );
 			posx += spr->fX;
@@ -949,15 +989,9 @@ void GRSystem::dospacing()
 		// its position (for each staff ...)
 
 		GRStaff * grstaff;
-
-		for ( i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ )
-		{
+		for ( i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ ) {
 			grstaff = mStaffs->Get(i);
 			if (grstaff == 0) continue;
-
-			// old:
-			// grstaff->setLastElementPositionX(posx);
-			// new:
 			grstaff->updateBoundingBox();
 		}
 	}
@@ -970,13 +1004,10 @@ void GRSystem::dospacing()
 void GRSystem::addToSpring( GRNotationElement * el, int id)
 {
 	traceMethod("addToSpring");
-	if (mSpringVector)
-	{
+	if (mSpringVector) {
 		GRSpring * spr = mSpringVector->Get(id);
 		if (spr)
-		{
 			spr->addElement(el,NULL);
-		}
 	}
 }
 
@@ -1016,6 +1047,7 @@ void GRSystem::FinishSystem()
 	mMapping = mBoundingBox;				// set the mapping box
 	mMapping += mPosition + getOffset()	;	// and adjust position
 	patchTempoIssue ();
+	fixTellPositionOrder();
 }
 
 // ----------------------------------------------------------------------------
@@ -1035,23 +1067,18 @@ void GRSystem::FinishSystem( ISpringVector * pvect, IRodList * prods1,  IRodList
 */
 int GRSystem::getStaffNumber( const GRStaff * staff ) const
 {
-	if (mStaffs)
-	{
-		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i)
-		{
+	if (mStaffs) {
+		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i) {
 			if (mStaffs->Get(i) == staff)
 				return i;
 		}
 	}
-	else
-	{
+	else {
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		int ret = -1;
-		while (pos)
-		{
+		while (pos) {
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
-			if (slice)
-			{
+			if (slice) {
 				ret = slice->getStaffNumber(staff);
 				if (ret != -1)
 					return ret;

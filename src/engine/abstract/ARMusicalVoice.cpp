@@ -5202,7 +5202,7 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur)
     while (tagpos && !trem)
         trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
 
-    if (mCurVoiceState->fCurdispdur && trem)
+    if (mCurVoiceState->fCurdispdur && trem && trem->isPitched())
         dispdur->setDisplayDuration(mCurVoiceState->fCurdispdur->getDisplayDuration());
     else
         dispdur->setDisplayDuration(group->dur);

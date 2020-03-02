@@ -274,26 +274,31 @@ void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBo
 	if( upward )	extremeY = (startY < endY ) ? startY : endY;
 	else			extremeY = (startY > endY ) ? startY : endY;
 
+	float refyStaff = context->staff->getPosition().y;
+
 	// - Find the best slopes for the left and right segments of the triangle, such
 	// that no object is above them (or below, if the bow goes downward).
-	
 	GuidoPos pos = mAssociated->GetHeadPosition();
 	int size = mAssociated->size() - 2;
 	mAssociated->GetNext(pos);		// skip the first element
 	while( pos && size--)			// and the last element
 	{
-		GRNotationElement * el = mAssociated->GetNext(pos);
+		GREvent * el = mAssociated->GetNext(pos)->isGREvent();
 		if( el && !el->isEmpty()) {
 			// - Get this element box
 			NVRect elBox ( el->getBoundingBox());
 			if( elBox.Width() == 0 && elBox.Height() == 0 ) continue; // useless ?
 			NVPoint elPos = el->getPosition();
 			elBox += elPos;
-			
+
 			// - Get the two corners we must deal with (depends of curve direction up/down)
 			x1 = elBox.left;
 			x2 = elBox.right;
 			y = upward ? elBox.top : elBox.bottom;
+			
+			const GRStaff* staff = el->getGRStaff();
+			float offset = staff ? staff->getPosition().y : refyStaff;
+			y += offset - refyStaff;
 
 			// - Ignore it, if it's outside the start/end range.
 			//		this also avoid divisions by zero.
@@ -314,7 +319,6 @@ void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBo
 				endA = a;
 		}
 	}
-
     // -- Tune the slopes so the triangle is isocele
     float startAngle = atan(startA) - baseAngle;
     float endAngle   = atan(endA)   - baseAngle;

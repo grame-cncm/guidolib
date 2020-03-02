@@ -1,0 +1,25 @@
+(*
+	Issue #96
+	Cross Staff Beaming Part 3
+	upper staff notes are not included in the beaming
+	in addition, clef, meter and time signature are not displayed
+	when the rest is commented (likely because the first note is not on the staff)
+*)
+
+{
+[ 
+	\staff<1>  
+   \clef<"g2"> \key<-5> \meter<"C"> 
+   \staff<2> \stemsUp 
+	\slurBegin:1<curve="down"> 
+	\beam (a&0/16 \staff<1> e&1/16 g&/16 \staff<2> g&0/16 \slurEnd:1)
+	\slurBegin:1<curve="down"> 
+	\beam(a&/16 \staff<1> d&1/16 f/16 \staff<2> f0/16 \slurEnd:1)
+   \slurBegin:1<curve="down"> 
+	\beam(a&/16 \staff<1> d&1/16 f/16 \staff<2> f0/16 \slurEnd:1 ) 
+   \slurBegin:1<curve="down"> 
+	\beam(a&/16 \staff<1> d&1/16 f/16 \staff<2> f0/16 \slurEnd:1 ) 
+	\staff<1> \bar  
+], 
+[ \staff<2> \clef<"f4"> \key<-5> {a&-2/1, a&-1/1} \bar ]
+}

@@ -18,11 +18,12 @@ nav:
         - 'Source code organisation': internals/src-code.md
         - 'Internals reference': dox/internal/index.html
     - References: 
-        - 'API reference': dox/api/index.html
-        - 'Internals reference': dox/internal/index.html
-        - 'Javascript reference': jsdoc/index.html
-        - 'Java reference': javadoc/index.html
-        - 'Web API reference': webdoc/index.html
+        - 'API reference':          dox/api/index.html
+        - 'Internals reference':    dox/internal/index.html
+        - 'Javascript reference':   jsdoc/index.html
+        - 'Java reference':         javadoc/index.html
+        - 'Web API reference':      webdoc/index.html
+        - 'Articles':           papers/index.md
     - Contributing: 
         - 'To do list': todo.md
         - 'Guidelines': https://github.com/grame-cncm/guidolib/wiki/Contributing

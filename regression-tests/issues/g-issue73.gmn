@@ -10,7 +10,6 @@
 ,
 [ 
 	\staff<2> 
-	\staffFormat<dy=-13>
 	\clef<"f4"> \key<2> \meter<"6/8"> 
 
 	\beamBegin:1 

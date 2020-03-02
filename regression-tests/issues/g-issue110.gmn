@@ -1,0 +1,77 @@
+{[ 
+   (* meas. 1 *)   \stacc<position="below">( {\fingering<position="above", text="1">( a2/8), a/8 })
+ \accent<position="below">( \fingering<position="above", text="2">( b1/8))
+\stacc<position="below">( c#2/8)
+\stacc<position="above">( \ten<position="above">( d/8))
+ \bow<"up">( \fingering<position="above", text="0">( e/8))
+ \trill( \bow<"down">( \fingering<position="above", text="5">( f#/8)))
+ \stemsUp \beamsOff \ten<position="below">( \bow<"up">( \fingering<position="above", text="4">( g#/8)))
+ \stacc<position="below">( a/8)
+ \bar 
+   (* meas. 2 *)  \trill( \accent<position="above">( a/8))
+  \ten<position="below">( \fingering<position="above", text="1">( g#/8))
+  \bow<"up">( \fingering<position="above", text="1">( f#/8))
+ \fingering<position="above", text="0">( e/8)
+ \mord( \bow<"down">( d/8))
+ \stacc<position="below">( c#/8)
+ \trill( \ten<position="below">( b1/8))
+ \fermata<dy=8.8hs>( \fingering<position="above", text="0">( a/8))
+ \bar 
+   (* meas. 3 *)  \stemsDown \stacc<position="above">( \fingering<position="above", text="0">( f#2/8))
+ \bow<"up">( \fingering<position="above", text="2">( e/8))
+ \ten<position="above">( \fingering<position="above", text="1">( d/8))
+ \stacc<position="above">( \fingering<position="above", text="0">( c#/8))
+ \stacc<position="above">( \fingering<position="above", text="2">( b1/8))
+ \ten<position="above">( \fingering<position="above", text="1">( a/8))
+ \mord( \fingering<position="above", text="4">( g#/8))
+ \fermata<dy=5hs>( \accent<position="above">( \ten<position="above">( f#/8)))
+ \bar 
+   (* meas. 4 *)  \stemsUp \beamBegin:1 \accent<position="below">( \mord<"-", "inverted">( a/8)
+)
+ \ten<position="below">( \fingering<position="above", text="1">( g#/8))
+ \bow<"up">( \fingering<position="above", text="1">( f#/8))
+ \stacc<position="below">( \fingering<position="above", text="0">( e/8))
+ \mord( \bow<"down">( d/8))
+ \stacc<position="below">( \fingering<position="above", text="3">( c#/8))
+ \trill( \ten<position="below">( \fingering<position="above", text="5">( b0/8)))
+ \stacc<position="below">( \fingering<position="above", text="0">( a/16))
+ \fermata<dy=3.6hs>( a/16)
+ \beamEnd:1 \bar 
+   (* meas. 5 *)  \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( a2/8))
+ \bow<"up">( \fingering<position="above", text="4">( g#/8))
+ \ten<position="above">( \fingering<position="above", text="2">( f#/8))
+ \beamEnd:1 \beamBegin:1 \stacc<position="below">(\fingering<position="above", text="0">( e/8))
+ \stacc<position="above">( \fingering<position="above", text="2">( d/8))
+ \ten<position="above">( \fingering<position="above", text="1">( c#/8))
+ \mord( \fingering<position="above", text="0">( b1/8))
+ \fermata<dy=5hs>( \accent<position="above">( \ten<position="above">( a/8)))
+ \beamEnd:1 \bar 
+   (* meas. 6 *)  \beamBegin:1 
+   { e/8, g#/8, \fingering<position="above", text="1,2,5">( c#2/8)  } 
+   { f#1/8, a/8, \fingering<position="above", text="2,4,1">(d2/8)  }  
+   { a1/8, c#2/8, \fingering<position="above", text="3,5,1">(f#/8)  } 
+   \marcato<position="above">( \ten<position="above">( {b1/8, d2/8, g#/8  })
+)
+ \beamEnd:1 \beamBegin:1 \stacc<position="above">( 
+ { d/8, f#/8, \fingering<position="above", text="5">(b/8)  })
+ \stemsDown \accent<position="above">( 
+ { e/8, g#/8, \fingering<position="above", text="1">(c#3/8)  })
+ \ten<position="above">( \bow<"up">( {f#2/8, b/8, f#3/8  }))
+ \ten<position="above">( {a2/8, e3/8, c#4/8  })
+ \beamEnd:1 \bar 
+   (* meas. 7 *) \beamBegin:1 \stacc<position="above">( \mord( {g#2/8, d3/8, b/8  }))
+ \stacc<position="above">( {\fingering<position="above", text="3">( f#2/8)
+, b/8, f#3/8  })
+ \accent<position="above">( \ten<position="above">( 
+ { e2/8, g#/8, \fingering<position="above", text="0">(c#3/8)  }))
+ \fermata<dy=5hs>( \ten<position="above">( {d2/8, e/8, g#/8  }))
+ \beamEnd:1 \beamBegin:1 \arpeggio( \bow<"down">( 
+ { d/8, e/8, \fingering<position="above", text="2,3,5">(b/8)  }))
+ \bow<"up">( 
+ { a1/8, e2/8, \fingering<position="above", text="4">(d3/8)  })
+ \stemsDown \accent<position="above">( \stacc<position="above">( 
+ { f#1/8, b/8, \fingering<position="above", text="5,2">(g#2/8)  }))
+ \fermata<dy=11.4hs>( \ten<position="above">( 
+ { d1/8, f#/8, \fingering<position="above", text="1,3,4">(c#2/8) }))
+ \beamEnd:1 ]
+  }

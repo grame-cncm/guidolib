@@ -71,7 +71,7 @@
 		      \fingering<"4 5">(c#) 
  %measure 5 (voice 1)
           \bm( \stemsUp<8hs> c#/16 \stemsUp 
-		     \tieEnd \fingering<"5",dy=1>(e) d 
+		     \tieEnd \fingering<"5",dy=2>(e) d 
 			 \stemsUp<7.5hs> c# \stemsUp ) 
           \bm( \fingering<"2",dy=1>( 
 		  \stemsUp<8hs> h1/8 ) \acc( \stemsUp<5hs> g#2 \stemsUp)) 
@@ -81,9 +81,9 @@
           \staff<1> % ,dy=1.08cm> 
 			\bm( \stemsUp<5.5hs> a/16 \stemsUp 
 			\slurEnd 
-			\fingering<"2", dy=2>( c# ) 
+			\fingering<"2", dy=0.5>( c# ) 
 			\fingering<"1", dy=0.3>(d) 
-			\stemsUp<6hs> \fingering<"3">(e)  
+			\stemsUp<6hs> \fingering<"3", dy=0.2>(e)  
 			\stemsUp)
           \bm( \stemsUp<7hs> f# \stemsUp g f# \stemsUp<7.5hs>
 		    \fingering<"5">(e) \stemsUp )

@@ -343,10 +343,8 @@ int GRSystemSlice::getStaffNumber(const GRStaff * staff) const
 void GRSystemSlice::Finish()
 {
 	traceMethod("Finish");
-	// float dist = -1.0;
 	bool first = true;
 	GRStaff * prev = 0;
-	//float saveLastLSPACE;
 	NVPoint nextposition;
 
 	GRStaff * theStaff = 0;
@@ -383,7 +381,6 @@ void GRSystemSlice::Finish()
 
             float staffYOffset = theStaff->getStaffState()->getYOffset(); // Y offset doesn't work for first staff
             nextposition.y += staffYOffset;
-
 			theStaff->setPosition(nextposition);
 
 			if (first) {

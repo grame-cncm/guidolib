@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.8
+- fingering text supports comma separated strings, which are rendered verticaly stacked
 - new "wavy" parameter tag for trills
 - new \bow tag
 - Guido font extension - version 3.9 - fp glyph
@@ -13,6 +14,9 @@ GUIDO Engine history
 - autoHideTiedAccidentals global setting is now 'on' by default
 - fix incorrect slur position for beamed chords (issue #100)
 - fix incorrect tuplets on chords (issue #103)
+- fix incorrect tremolo on chords preceded by a grace note (issue #108)
+- fix incorrect incorrect slur position (issue #94)
+- fix missing clef and signatures due to staff tag (part of issue #96)
 
 ----------------------------------------------------------------
   version 1.6.7

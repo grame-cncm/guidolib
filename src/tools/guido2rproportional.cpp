@@ -24,8 +24,6 @@ const int  kDefaultWidth           = -1;
 const int  kDefaultHeight          = -1;
 const int  kDefaultMinPitch        = -1;
 const int  kDefaultMaxPitch        = -1;
-const bool kDefaultVoicesAutoColor = false;
-const bool kDefaultMeasureBars     = false;
 
 const char* kOptions[] = { "-help", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-voicesautocolor", "-measurebars", "-lines", "-voicecolor" };
 enum { kHelp, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kVoicesAutoColor, kMeasureBars, kLines, kVoiceColor, kMaxOpt };

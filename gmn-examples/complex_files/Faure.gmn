@@ -44,6 +44,6 @@
 	_*3/4 _ { f-1/2., f-2 } { g-1, g-2 } { e&-1/2., e&-2 }
 	 { a&-1/2, a&-2 } { d&-1/4, d&-2 } 
 	{ \tieBegin:1<"up"> g-1*3/4, \tieBegin:2 g-2 } {g-1*3/4 \tieEnd:1, g-2 \tieEnd:2} | 
-	\text<"...", fattrib="b", fsize=24pt, dy=38>
+	\text<"...", fattrib="b", fsize=24pt, dy=1>
 ]
 }
