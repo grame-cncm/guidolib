@@ -57,4 +57,3 @@ src/tools/*.svg
 tmpSrc
 validate/*.exe
 validate/GUIDOEngine.dll
-gmn-examples/examples/

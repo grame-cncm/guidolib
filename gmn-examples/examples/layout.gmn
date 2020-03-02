@@ -1,0 +1,27 @@
+(*
+# Layout 
+
+This example illustrates the use of \staffFormat and \pageFormat tags.
+*)
+{ 
+    [ 
+    	\pageFormat< w=50cm, h=12cm, tm=1cm, rm=1cm, bm=1cm, lm=1cm>
+    	\accol< type="none">
+		\barFormat<"system"> c d e f 
+		\staffOff empty/2 \staffOn g/4 a h c2 
+    ],
+    [
+		\clef<"c2", dx=-2hs> \staffFormat< size=5pt, lineThickness=0.13>  c d e f 
+		\staffOff empty/2 \staffOn g/4 a h c2
+	],
+    [
+		\clef<"perc"> \staffFormat< style="1-line"> 
+		\stemsUp b/16 b b b b c2 a1 b c2 a1 b c2 a1 b c2 a1 
+		\noteFormat< size=0.6, color="gray">(\stemsOff b a g a b c2 d c ) 
+		\stemsUp b1/16 c2 a1 b c2 a1 b b b b b b b/4
+	],
+    [
+		\clef<"none">  \staffFormat< style="10-lines",size=3pt> c2 d e f 
+		\staffOff empty/2 \staffOn g/4 a h c3
+	]
+}

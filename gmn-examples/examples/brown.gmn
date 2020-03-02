@@ -1,0 +1,99 @@
+(*
+# Chris Brown
+
+Chris Brown - A Tango Triffle
+
+Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BrownCJ/bagatelle2/bagatelle2-a4.pdf)
+*)
+{
+	[
+		\pageFormat<"A3", tm=6cm>
+		\title<"A Tango Triffle", dy=-3>
+		\title<"for Silas", fsize=14pt, dy=5>
+		\composer<"Chris Brown", dy=9>
+		\systemFormat< dx=1.5cm>
+		\instr<"Flute", autopos="on">
+
+		\clef<"g"> \key<-1> \meter<"4/4", autoMeasuresNum="system"> 
+
+		\tempo<"Slowish and smoochy!", dy=3> 
+		\text<"sonore", fattrib="bi", dy=-3.5, dx=-1>(
+		\sl<"up", dy2=-6>(c/4. b&/8 c/4 a))
+		\sl<"up", dy2=-6>(c/4. b&/8 c/4 a)
+		\slurBegin<"up", dy=-2> f/4. c/8 \beam(d e f g) 
+		a/4. c2/8 g1/4 \slurEnd c2
+		\slurBegin<"up", dy=-2> f1/4. c/8 \beam(d e f g) 
+		f/4. c/8 b&/4 c \slurEnd
+		\slurBegin<"up", dy=-2> f/4. c/8 b&/4 e \slurEnd
+		g/2 \fermata(f)  \fine \doubleBar
+
+		% measure 9
+		\tempo<"a tempo", dy=2>
+		\slurBegin<"up"> c2/4. a1/8 \cresc<dy=-1, deltaY=2>(\beam(b&1 c2 d e&) )
+		c/4. a1/8 f2/4 a1 \slurEnd
+		\slurBegin<"up"> \accent(a.) f/8 \beam(g a b& a)
+		\slurBegin<"up"> c2/4. a1/8 \beam(b&1 \crescBegin<dy=-1, deltaY=2, dx2=3> c2 d e&)
+		d/4. g1/8 \crescEnd d2/4 \slurEnd a \breathMark
+
+		% measure 14
+		\sl(\accent(a/4.) f/8) \stacc(\beam( g a b& g)) 
+		\accent(a/4.) f/8 \accent(a/4.) f/8
+		\sl(\accent(a/4.) f/8) \dim(\stacc(\beam( g a b& d)))
+
+		% measure 17
+		\slurBegin<"up"> c2/4. a1/8 c2/4. a1/8
+		 c2/4. a1/8 \beam(b& c2 d e) \slurEnd
+		\slurBegin<h=5, dy1=4, dy2=12> c2/4. a1/8 c2/4. a1/8
+
+		% measure 20
+		 a/4. f/8 \beam(g a g d) \slurEnd
+		\text<"sonore", fattrib="bi", dy=-3.5, dx=-1>(
+		\slurBegin<"up", dy=3, dy2=-6> c/4. b&/8 c/4 a)
+		c/4. b&/8 c/4 g \slurEnd
+		
+		% measure 23
+		\slurBegin<"up", dy=-1> f2/4. e&/8 \beam(d c b&1 c2)
+		d/4. f1/8 d2/4 \slurEnd \slur(g/8 f)
+		\slurBegin<"up"> d/4. f1/8 d2/4 \slurEnd \slur<dy=2>(e&/8 d)
+		\slurBegin<"up"> c/4. f1/8 c2/4 \slurEnd \slur<dy=2>(d/8 c)
+	
+		% measure 27
+		\cresc<deltay=2, dy=-1>(\slurBegin<"up"> c/4. f1/8 c2/4 \slurEnd \slur<dy=2>(e&/8 c))
+		\slurBegin<"up"> c/4. \cresc<deltay=2, dy=-1>(f1/8 c2/4 \slurEnd \slur<dy=2>(f/8 c))
+	
+		% measure 29
+		\slur<dy=2>(f/8 d) \slur<dy=2>(f/8 \crescBegin<deltaY=2, dy=-1> c) \slur<dy=2>(f/8 d) 
+			\slur<dy=3>(g/16 f \crescEnd \i<"f", dy=-2, dx=-1> c/8)
+		| \meter<"5/4", autoMeasuresNum="system"> \crescBegin<deltaY=2, dy=-1>\slur<dy=2>(a&2/8 b&1) \rit<dy=17>(b&2/4) \crescEnd d&3 b&2 e&3
+		| \meter<"4/4", autoMeasuresNum="system"> \slur(\acc<"cautionary">(d3) \dim<deltaY=2, dx2=3>(d&/2 b&2/4))
+		\tempo<"a tempo", dy=4> \i<"mf"> \slur<dy=3>(a&/4. c2/8 a&/4 e&3)
+		\slur<"up">(a&2/4. c2/8 a&/4) \slur(b&/8 a)
+	
+		% measure 34
+		\slur<"up">(a&2/4. c2/8 a&/4) \slur(b&/8 a)
+		\slur<dy=3>(a&/4. g/8 d/4 e&)
+		\slur<dy=3>(e&/4. f/16 e b1/4 d2)
+		\slur<dy=1>(c2/4. g1/8 c2/4 a
+		g/4. e/8 g/4 d3)
+		\slur<"up">(e/4. g2/8 e3/4) \slur(a/8 g)
+	
+		% measure 40
+		\slur<"up">(e/4. g2/8 e3/4) \slur(f/8 e)
+		\slur<"up">(e/4. \dimBegin<deltay=2> g2/8 e3/4) \slur(f/8 e) \dimEnd
+		\slur<"up">(c/4. g2/8 c3/4) \slur(d/8 c)
+		\slur<"up">(c/4. g2/8 c3/4) \slur(c/8 b2)
+		\slur<"up">(b/4. e/8 b/4) \slur(b/8 a)
+		\slur<"up">(g/4. c/8 g/4) \slur(a/8 g)
+	
+		% measure 46
+		\slur<"up">(g/4. \text<"poco a poco dim", fattrib="bi", dx=-2, dy=-3>(c/8 g/4)) \slur(f/8 e)
+		\slur<"up">(e/4. a1/8 e2/4) \slur(f/8 e)
+		\slur<"up">(e/4. a1/8 e2/4) \slur(f/8 a)
+		\stemsDown \beam(\slur(d g) \slur(c f)) \beam(\slur(b1 e2) \slur(a1 d2))
+		\stemsUp \beam(\slur<"up", dy1=2>(g1 c2) \slur<"up", dy1=1>(f1 d2))
+			\beam(\slur<"up", dy1=2>(g1 c2) \slur<"up", dy1=1>(f1 d2)) \daCapoAlFine<dy=7> \repeatEnd
+		
+		
+	]
+}
+

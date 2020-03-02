@@ -1,0 +1,24 @@
+(*
+# Beaming 
+
+This example shows automatic and manual beaming. It also illustrates feathered beaming.
+*)
+{
+	[
+		\pageFormat<lm=1cm, tm=1cm, bm=1cm, rm=1cm>
+		\barFormat<"system"> 	
+		\meter<"3/4"> 	
+		\fBeam< durations =  "1/8,1/32", drawDuration = "true">(e/16 d a g/32 f)
+		\fBeam(a/64 g e/32 e f g/16 f e/8 d)
+		\doubleBar \meter<"3+3+2/8"> c2/8 d b1 c2 a1 g f a
+		\doubleBar \meter<"C"> c2/4 b1 a g
+		\doubleBar \meter<"3/16"> \bm(e2/16 e e e) _ e
+	],
+	[
+		\meter<"3/4">	 
+		a/8 a a a a a
+		\doubleBar \meter<"4/4"> c2/8 d b1 c2 a1 g f a
+		\doubleBar \meter<"3+2+3/8"> c2/8 d b1 c2 a1 g f a
+		\doubleBar \meter<"3/16"> \bm(c2/16 c/8.)	 g/8
+	]
+}

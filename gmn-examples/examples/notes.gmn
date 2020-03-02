@@ -1,0 +1,31 @@
+(*
+# Notes attributes
+
+This examples show clusters, grace notes, tuplets.
+
+It illustrates also how to change the notes appearance: heads shape, position, displayed duration.
+
+Note that the absence of meter prevents the layout engine to insert barlines and system breaks. 
+That's why a manual system break is inserted (in between two barlines).
+*)
+[ 
+	\pageFormat<lm=1cm, tm=1cm, bm=1cm, rm=1cm>
+
+	\accent (\cluster({e, b}))
+	\cresc<deltaY=2, dy=1>( \fBeam<durations="1/8,1/32">(g/16 g g/32 g g/64 ))
+	\stemsUp \slur<"down">( \beam(\grace(f2/16 a g f))) \stemsAuto 
+	\text<"note the heads position", dx=-4, dy=-3, fsize=16pt, fattrib="i">
+	(\beam (e/8 \headsLeft(e) \headsCenter(e) \headsRight(e)))
+	\cluster({ \tieBegin:1<"down"> c/4, \tieBegin:2 g}) | \cluster({c/4 \tieEnd:1, g \tieEnd:2})
+	\noteFormat<size=1.5> (a1/1)
+	\tuplet<"-5:4-", "below">( \bm(f/16 a c2 e g)) |
+	\beam(\noteFormat<style="square"> (a1/8 b e f)) 
+
+	\newSystem
+	\text<"... and the heads shape", dx=-4, dy=14, fsize=16pt, fattrib="i">
+	(\beam(\noteFormat<style="[diamond]", color="0x666666"> (\stemsOff a1/8 b e f g a))) 
+	\text<"a no range text", dx=-4, dy=6.4, fsize=9pt>
+	\glissando(\cluster({e/4, c2}) \cluster({c1, f2}) \cluster({b1, e2})) \stemsAuto  |
+	\fermata<"long", "below">(\harmonic( \displayDuration<2, 1, 0>(b1/2))) 
+	\i<"sfz", autopos="on"> \marcato(b/4)  	
+]
