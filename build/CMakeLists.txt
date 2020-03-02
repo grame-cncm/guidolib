@@ -133,7 +133,7 @@ endif()
 #######################################
 # midi export support
 set (MSLIGHT_PATH	${ROOT}/midisharelight/src)
-set (DEFS ${DEFS} MIDIEXPORT )
+set (DEFS ${DEFS} MIDIEXPORT MSLIGHT)
 
 #######################################
 # vgdev

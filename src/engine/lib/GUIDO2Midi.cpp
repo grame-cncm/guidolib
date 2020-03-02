@@ -136,36 +136,8 @@ GUIDOAPI GuidoErrCode GuidoAR2MIDIFile( const ARHandler ar, const char* filename
 GUIDOAPI GuidoErrCode GuidoAR2MIDI( const ARHandler ar, ostream& out, const Guido2MidiParams* params )
 {
 	if( ar == 0 )		return guidoErrInvalidHandle;
-	if( !filename )		return guidoErrBadParameter;
 
-	ARMusic * arMusic = ar->armusic;
-	if( arMusic == 0 ) return guidoErrInvalidHandle;
-
-	Guido2MidiParams defaultParams;
-	setDefault (defaultParams);
-
-	const Guido2MidiParams* p = params ? params : &defaultParams;
-	MIDIFile file;
-	if (file.Create (filename, midifile1, TicksPerQuarterNote, p->fTicks))
-	{
-		int index = 1;
-		GuidoPos pos = arMusic->GetHeadPosition();
-		ARMusicalVoice * voice = arMusic->GetNext(pos);
-		vector<MidiSeqPtr> seqs;
-		MidiSeqPtr tempoMap = file.midi()->NewSeq();
-		seqs.push_back (tempoMap);
-		while (voice) {
-			MidiSeqPtr seq = getVoice (voice, index, tempoMap, file.midi(), p);
-			if (seq) seqs.push_back (seq);
-			index++;
-			if (pos) voice = arMusic->GetNext(pos);
-			else break;
-		}
-		CheckTempoMap (tempoMap, file.midi(), p->fTempo);
-		WriteSeqs (seqs, file);
-		file.Close();
-		return guidoNoErr;
-	}
+	std::cerr << "GuidoAR2MIDI: stream support not yet implemented." << std::endl;
 	return guidoErrActionFailed;
 }
 
