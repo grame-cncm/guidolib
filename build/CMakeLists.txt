@@ -12,7 +12,7 @@ get_filename_component(ROOT ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
 #######################################
 # versions management
-set (VERSION 1.6.8.0)
+set (VERSION 1.6.8)
 macro (get_major_minor_patch version)
 	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\1"  VERSION_MAJOR ${version} )
 	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\2"  VERSION_MINOR ${version} )
@@ -20,7 +20,7 @@ macro (get_major_minor_patch version)
 endmacro()
 get_major_minor_patch( ${VERSION} )
 set (SOVERS ${VERSION_MAJOR})
-set (STRVERS "v.1.6.7")
+set (STRVERS "v.1.6.8")
 set (GUIDOFWKVERS C)
 message (STATUS "Configuring version ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
@@ -29,7 +29,6 @@ message (STATUS "Configuring version ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION
 # Options 
 option ( IOS 		"Generates project for iOS" off )
 option ( DIST 		"Compiles universal binaries (x86_64 i386) on MacOSX" off )
-option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
 option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
@@ -122,29 +121,6 @@ elseif(UNIX)
 endif()
 
 #######################################
-# midi export support
-if (MIDIEXPORT)
-	message (STATUS "MIDI export will be generated (requires MidiShareLight) - Use -DMIDIEXPORT=no to change.")
-	set (MSLIGHT_PATH	${ROOT}/src/midisharelight)
-	set (DEFS ${DEFS} MIDIEXPORT )
-	
-	set(INCL ${INCL} ${MSLIGHT_PATH})			# add include folders
-	if (WIN32)
-		if (${CMAKE_CL_64})
-			set(LINK ${LINK} "${MSLIGHT_PATH}/win64/midisharelight64.lib")
-		else()
-			set(LINK ${LINK} "${MSLIGHT_PATH}/win32/midisharelight.lib")
-		endif()
-	elseif(APPLE)
-		set(LINK ${LINK} "-L${MSLIGHT_PATH}/macos -lmidisharelight")
-	elseif(UNIX)
-		set(LINK ${LINK} "-L/usr/local/lib -lmidisharelight")
-	endif (WIN32)
-else()
-	message (STATUS "MIDI export will not be generated - Use -DMIDIEXPORT=yes to change (requires MidiShareLight).")
-endif()
-
-#######################################
 # independent svg support
 if (INDEPENDENTSVG STREQUAL "yes")
 	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
@@ -155,14 +131,19 @@ endif()
 
 
 #######################################
+# midi export support
+set (MSLIGHT_PATH	${ROOT}/midisharelight/src)
+set (DEFS ${DEFS} MIDIEXPORT )
+
+#######################################
 # vgdev
 include (cmake/vgdev.cmake)
 
 
 #######################################
 # set sources and headers files
-file (GLOB SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRC_PATH}/*/*.cpp" ${VGDEV_SRC})
-file (GLOB HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRC_PATH}/*/*.h" ${VGDEV_H})
+file (GLOB SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRC_PATH}/*/*.cpp" ${MSLIGHT_PATH}/*.cpp ${VGDEV_SRC})
+file (GLOB HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRC_PATH}/*/*.h" ${MSLIGHT_PATH}/*.h ${VGDEV_H})
 file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*.h" "${VGDEV_H}" "${SRC_PATH}/devices/*H")
 
 
@@ -170,6 +151,7 @@ file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*
 # set includes
 set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
 set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
+set(INCL ${INCL} "${MSLIGHT_PATH}")			# add include folders
 file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${INCL})
 include_directories( ${INCDIRS})
 set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
