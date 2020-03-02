@@ -18,6 +18,8 @@ GUIDO Engine history
 - fix incorrect incorrect slur position (issue #94)
 - fix missing clef and signatures due to staff tag (part of issue #96)
 
++ known issue: incorrect system map for examples/beethoven.gmn
+
 ----------------------------------------------------------------
   version 1.6.7
 - \accel and \rit tags revised: support now format strings (as \tempo do)
