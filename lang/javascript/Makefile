@@ -33,7 +33,7 @@ ifeq ($(SMUFL), yes)
 endif
 
 OPT ?= -O3
-CXXFLAGS += $(addprefix -I, $(subprojects)) $(SMUFLDEF) -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM $(OPT) -std=c++11
+CXXFLAGS += $(addprefix -I, $(subprojects)) $(SMUFLDEF) -DMSLIGHT -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM $(OPT) -std=c++11
 
 
 library = libGUIDOEngine
