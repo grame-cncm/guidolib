@@ -6,6 +6,7 @@
 //----------------------------------------------------------------------------
 class GuidoEngine {
     constructor() {
+        this.fModule = 0;
         this.fEngine = 0;
         this.fScoreMap = 0;
         this.fPRoll = 0;
@@ -55,6 +56,7 @@ class GuidoEngine {
     //------------------------------------------------------------------------
     // async initialization
     moduleInit ( module ) {
+        this.fModule   = module;
         this.fEngine   = new module.GuidoEngineAdapter();
         this.fEngine.init();
         this.fPRoll    = new module.GUIDOPianoRollAdapter();
@@ -69,6 +71,8 @@ class GuidoEngine {
     
     ar2gr (ar)                      { return this.fEngine.ar2gr (ar); }
     ar2grSettings (ar, settings)    { return this.fEngine.ar2gr (ar, settings); }
+    ar2midi (ar, file)              { return this.fModule.ar2MIDIFile (ar); }
+    ar2midiSettings (ar, settings)  { return this.fEngine.ar2MIDIFile (ar, settings); }
     updateGR (gr)                   { return this.fEngine.updateGR (gr); }
     updateGRSettings (gr, settings) { return this.fEngine.updateGRSettings (gr, settings); }
     freeAR (ar)                     { this.fEngine.freeAR (ar); }

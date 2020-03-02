@@ -13,9 +13,12 @@
 #
 
 srcdir := ../../src/engine
-subprojects :=  $(wildcard $(srcdir)/* src/*)
+msldir := ../../midisharelight/src
+subprojects :=  $(wildcard $(srcdir)/* src/* $(msldir))
 sources = $(wildcard $(srcdir)/*/*.cpp src/*/*.cpp)
+midi    = $(wildcard $(msldir)/*.cpp)
 objects = $(patsubst src%, obj/src%, $(patsubst ../../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
+midiobj = $(patsubst $(msldir)/%.cpp, obj/midisharelight/%.o, $(midi)) 
 
 npmdir  := npm
 webfont := $(npmdir)/guido2-webfont/guido2-webfont.woff
@@ -41,7 +44,6 @@ OPTIONS :=  -s ALLOW_MEMORY_GROWTH=0 -s TOTAL_MEMORY=134217728 -s DISABLE_EXCEPT
 
 OPT1    := -O3 --bind --memory-init-file 0
 
-
 all: $(library).js
 
 help :
@@ -60,8 +62,8 @@ help :
 ##############################################################
 # building the library as wasm library
 ##############################################################
-$(library).js : $(objects) 
-	emcc $(OPT1) $(objects) -o $(library).js $(OPTIONS) -s WASM=1
+$(library).js : $(objects) $(midiobj)
+	emcc $(OPT1) $(objects) $(midiobj) -o $(library).js $(OPTIONS) -s WASM=1
 
 clean:
 	rm -f $(objects) $(target) $(library).wasm.*
@@ -118,6 +120,10 @@ obj/src/binding/%.o: src/binding/%.cpp
 	$(GCC) -c $(CXXFLAGS) --bind -std=c++11 $< -o $@
 	
 obj/src/device/%.o: src/device/%.cpp
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	$(GCC) -c $(CXXFLAGS) $< -o $@	
+	
+obj/midisharelight/%.o: $(msldir)/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@	
 

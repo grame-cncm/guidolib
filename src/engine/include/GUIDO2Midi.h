@@ -14,9 +14,10 @@
 
 */
 
-#include "GUIDOEngine.h"
-
 #include <map>
+#include <ostream>
+
+#include "GUIDOEngine.h"
 
 /*!
 \addtogroup CAPI
@@ -62,6 +63,7 @@ extern "C" {
 		\return a Guido error code.
 	*/
 	GUIDOAPI GuidoErrCode GuidoAR2MIDIFile(const ARHandler ar, const char* filename, const Guido2MidiParams* params);
+	GUIDOAPI GuidoErrCode GuidoAR2MIDI(const ARHandler ar, std::ostream& out, const Guido2MidiParams* params);
 
 #ifdef __cplusplus
 }

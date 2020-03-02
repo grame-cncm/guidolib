@@ -15,17 +15,18 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
+#include "GUIDO2Midi.h"
 #include "GUIDOEngine.h"
 #include "GUIDOEngineAdapter.h"
-#include "GUIDOScoreMap.h"
+#include "GUIDOFactoryAdapter.h"
 #include "GUIDOInternal.h"
 #include "GuidoParser.h"
 #include "GUIDOPianoRollAdapter.h"
 #include "GUIDOReducedProportionalAdapter.h"
+#include "GUIDOScoreMap.h"
+#include "map2json.h"
 #include "PianoRoll.h"
 #include "RProportional.h"
-#include "GUIDOFactoryAdapter.h"
-#include "map2json.h"
 
 using namespace emscripten;
 
@@ -34,7 +35,20 @@ using namespace emscripten;
  * This structures can be created and manipulated in javascript side like json object and passed to C++ method.
  */
 EMSCRIPTEN_BINDINGS(CStruct) {
-
+	
+	value_object<Guido2MidiParams>("Guido2MidiParams")
+			.field("fTempo", &Guido2MidiParams::fTempo)
+			.field("fTicks", &Guido2MidiParams::fTicks)
+			.field("fChan", &Guido2MidiParams::fChan)
+			.field("fIntensity", &Guido2MidiParams::fIntensity)
+			.field("fAccentFactor", &Guido2MidiParams::fAccentFactor)
+			.field("fMarcatoFactor", &Guido2MidiParams::fMarcatoFactor)
+			.field("fDFactor", &Guido2MidiParams::fDFactor)
+			.field("fStaccatoFactor", &Guido2MidiParams::fStaccatoFactor)
+			.field("fSlurFactor", &Guido2MidiParams::fSlurFactor)
+			.field("fTenutoFactor", &Guido2MidiParams::fTenutoFactor)
+			.field("fFermataFactor", &Guido2MidiParams::fFermataFactor);
+	
 	value_object<GuidoLayoutSettings>("GuidoLayoutSettings")
 			.field("systemsDistance", &GuidoLayoutSettings::systemsDistance)
 			.field("systemsDistribution", &GuidoLayoutSettings::systemsDistribution)
@@ -124,6 +138,8 @@ EMSCRIPTEN_BINDINGS(CStruct) {
  * This classes can be used in javascript side.
  */
 EMSCRIPTEN_BINDINGS(EngineAdapter) {
+    function("ar2MIDIFile", &GuidoAR2MIDIFile, allow_raw_pointers());
+
 	// Binding C++ class adapter for guidoEngine
 	class_<GuidoEngineAdapter>("GuidoEngineAdapter")
 			//.smart_ptr_constructor("GuidoEngineAdapter",&std::make_shared<GuidoEngineAdapter>)
