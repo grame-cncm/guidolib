@@ -1,0 +1,6 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\staffFormat<"14-lines">
+	\text<"Shipping", dx=6.5, dy=40,font="Times New Roman",fsize=21pt>(
+	empty/1 \stemsUp \dispDur<1,2,0>(e3/32 e e) ) empty/8
+]

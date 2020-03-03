@@ -1,0 +1,9 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\text<"You", dx=10, dy=22,font="Times New Roman",fsize=21pt>(
+	empty \dispDur<1,1,0>(
+	\text<"y", dx=-1, font="Times New Roman",fsize=16pt>(a/8 )
+	\text<"o", dx=-1.3, font="Times New Roman",fsize=16pt>(a )
+	\text<"u", dx=-1.3, font="Times New Roman",fsize=16pt>(a)) 
+	empty/4 )
+]

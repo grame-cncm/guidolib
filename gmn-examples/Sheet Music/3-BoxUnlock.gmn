@@ -1,0 +1,5 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> \staffFormat<"17-lines"> 
+	\text<"Box Unlock", dx=5, dy=48,font="Times New Roman",fsize=21pt>(empty/2
+	\stemsOff \alter<detune=1, dy=1hs, dx=10hs> \cluster(\noteFormat<dx=6>( {a3/4,c4}) \noteFormat<dx=-2>{a3/4,c4}) empty/2)
+]

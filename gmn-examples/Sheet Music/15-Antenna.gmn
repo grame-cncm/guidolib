@@ -1,0 +1,9 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\staffFormat<color="0x00000000", size=1.4>
+	\text<"Antenna", dx=12.5, dy=22,font="Times New Roman",fsize=21pt>(
+	\i<"p",dx=-4, dy=-5, size=1.7> 
+	\stemsUp
+	c2 b1 a g f e d c 
+	)
+]

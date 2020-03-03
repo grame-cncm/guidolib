@@ -1,0 +1,6 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\staffFormat<"8-lines">
+	\text<"Sun", dx=28, dy=40,font="Times New Roman",fsize=21pt>(
+	empty*5/4 {c2/1, c5 }) empty/2
+]

@@ -1,0 +1,21 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\staffFormat<color="0x00000000">
+	\text<"Chord Stripe", dx=45, dy=28,font="Times New Roman",fsize=21pt>(
+	\stemsUp
+	{ g/4, a, c2, d, f, g } 
+	{ e1, g, a, c2, d, e, g }
+	{ f1, g, a, b, e2 } 
+	{ e1, f, g, b, c2, d, f }
+	{ g1, a, b, c2, g }
+	{ f1, g, a, b, e2, f, g }
+	{ g1, a, b, d2, e, a }
+	{ e1, g, b, d2, e, g, a }
+	{ f1, a, c2, e, g }
+	{ e1, f, b , e2, f, g }
+	{ e1, g, b, c2, f, a }
+	{ f1, b, e2, f, g, a }
+	{ e1, f, g, b, c2, f, g }
+	{ a1, b, c2, d, e, f, g }
+	)
+]

@@ -1,0 +1,7 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\text<"Side Effect", dx=1, dy=25,font="Times New Roman",fsize=21pt>(
+	\stemsOff \cluster({f1, e2} \noteFormat<dx=-8> ({f1, e2}))  
+	\alter<detune=-1, dy=3.3hs, dx=13.5hs>
+	\noteFormat<dx=3> \dispDur<1,1,0>(g/64 g g g) empty)
+]

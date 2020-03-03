@@ -1,0 +1,14 @@
+{
+	[
+		\clef<"none"> \set<autoEndBar="off"> 
+		\text<"Climb", dx=16, dy=24,font="Times New Roman",fsize=21pt>(
+	 	 \noteFormat<dx=-3> \dispDur<1,1,0> (b0/16 b b b b b b b b b b b b )
+	)
+	],
+	[ \staff<1> \set<autoEndBar="off"> \noteFormat<dx=-3> \dispDur<1,1,0> (d/16 d d d d d d d d d d d d ) ],
+	[ \staff<1> \set<autoEndBar="off"> \noteFormat<dx=-3> \dispDur<1,1,0> (f/16 f f f f f f f f f f f f ) ],
+	[ \staff<1> \set<autoEndBar="off"> \noteFormat<dx=-3> \dispDur<1,1,0> (a/16 a a a a a a a a a a a a ) ],
+	[ \staff<1> \set<autoEndBar="off"> \noteFormat<dx=-3> \dispDur<1,1,0> (\sl<dy=1.5, h=0.9>
+				(c#2/16 c# c# c# c# c# c# c# c# c# c# c# c# )) ],
+	[ \staff<1> \set<autoEndBar="off"> \noteFormat<dx=-3> empty*6/16 \dispDur<1,1,0> ( g2 ) ]
+}

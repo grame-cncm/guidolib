@@ -1,0 +1,6 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\staffFormat<"15-lines">
+	\text<"Woman", dx=12.5, dy=42,font="Times New Roman",fsize=21pt>(
+	empty/2 \noteFormat<dx=7> (\dispDur<1,1,0>(b3/4)) {f3/1, c4, e } empty/8)
+]

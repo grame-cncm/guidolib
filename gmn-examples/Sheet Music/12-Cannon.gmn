@@ -1,0 +1,6 @@
+[
+	\clef<"f"> \set<autoEndBar="off"> \staffFormat<size=1.1>
+	\text<"Cannon", dx=-5, dy=22,font="Times New Roman",fsize=21pt>(
+	\stemsOff \noteFormat<dx=-10.7> e0/128 e e e e e e e
+	)
+]

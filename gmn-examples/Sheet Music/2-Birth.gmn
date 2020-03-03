@@ -1,0 +1,5 @@
+[
+	\clef<"g"> \set<autoEndBar="off"> 
+	\text<"Birth", dx=-2, dy=24,font="Times New Roman",fsize=21pt>(
+	\dispDur<1,2,0>(b2/16 a g f \fermata(e)) )
+]

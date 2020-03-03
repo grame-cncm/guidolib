@@ -1,0 +1,6 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\staffFormat<"8-lines">
+	\text<"Water", dx=21, dy=27,font="Times New Roman",fsize=21pt>(
+	\stemsUp \dispDur<1,2,0>(g/4 a b c2 d e f) )
+]

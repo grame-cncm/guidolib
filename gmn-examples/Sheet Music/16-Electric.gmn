@@ -1,0 +1,15 @@
+[
+	\clef<"g"> \set<autoEndBar="off"> 
+	%\staffFormat<color="0x00000000", size=1.4>
+	\text<"Electric", dx=4, dy=28,font="Times New Roman",fsize=21pt>(
+	%\tie(
+	\sl<dy=1.7, h=0.9, dx1=1, dx2=0>(	
+	\sl<dy=-4, h=0.9, dx1=2.5, dx2=-2>(	
+	\sl<dy=-7.4, h=0.9, dx1=2.5, dx2=-2>(	
+	\sl<dy=3.4, h=-0.9, dx1=2.5, dx2=-2>(	
+	\sl<dy=-1.5, h=-0.9, dx1=0.2, dx2=-2>(	
+	{ d1/1, a, e2, b, f#3 }
+	\noteFormat<dx=-15>
+	{ d1/4, a, e2, \alter<detune=1, dx=14.5, dy=4>(b), f#3 }
+	))))))
+]

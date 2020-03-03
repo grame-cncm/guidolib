@@ -1,0 +1,6 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> 
+	\staffFormat<"1-lines">
+	\text<"Intelligence", dx=-1, dy=17,font="Times New Roman",fsize=21pt>(
+	\dispDur<1,1,0>(\sl<dy=1.5, h=2.5>( \noteFormat<dx=-6>g/2.  \noteFormat<dx=17>g)))
+]

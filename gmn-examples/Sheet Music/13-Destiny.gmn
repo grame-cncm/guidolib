@@ -1,0 +1,6 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> \staffFormat<size=0.8>
+	\text<"Destiny", dx=-4, dy=26,font="Times New Roman",fsize=28pt>(
+	 \stemsDown \bm(a/8 e2 \alter<1, dx=7> c) empty/16
+	)
+]

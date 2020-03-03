@@ -1,0 +1,5 @@
+[
+	\clef<"none"> \set<autoEndBar="off"> empty/1 \stemsOff 
+	\text<"Necessary", dx=-24, dy=21,font="Times New Roman",fsize=21pt>(
+	\noteFormat<dx=4hs> {f/4, a})
+]
