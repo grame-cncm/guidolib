@@ -12,7 +12,7 @@ get_filename_component(ROOT ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
 #######################################
 # versions management
-set (VERSION 1.6.8)
+set (VERSION 1.6.9)
 macro (get_major_minor_patch version)
 	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\1"  VERSION_MAJOR ${version} )
 	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\2"  VERSION_MINOR ${version} )
@@ -20,7 +20,7 @@ macro (get_major_minor_patch version)
 endmacro()
 get_major_minor_patch( ${VERSION} )
 set (SOVERS ${VERSION_MAJOR})
-set (STRVERS "v.1.6.8")
+set (STRVERS "v.1.6.9")
 set (GUIDOFWKVERS C)
 message (STATUS "Configuring version ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
