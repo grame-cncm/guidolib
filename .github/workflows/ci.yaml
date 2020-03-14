@@ -1,0 +1,24 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    # Display name for the GHA page
+    name: Linux docker
+
+    runs-on: ubuntu-18.04
+
+    # Is 10 mins enough?
+    timeout-minutes: 10
+
+    steps:
+    - name: Repo checkout
+      uses: actions/checkout@v2
+
+    - name: build
+      run: |
+        cd build/docker/
+        make all
+        make run 

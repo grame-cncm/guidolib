@@ -57,3 +57,6 @@ src/tools/*.svg
 tmpSrc
 validate/*.exe
 validate/GUIDOEngine.dll
+
+# IntelliJ project files
+.idea/

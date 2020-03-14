@@ -1,4 +1,6 @@
 Welcome to the Guido project
+![CI](https://github.com/olafure/guidolib/workflows/CI/badge.svg)
+
 ======================================================================
 
 [Grame](http://www.grame.fr) - Centre National de Création Musicale
@@ -16,6 +18,7 @@ See [Guido wiki](https://github.com/grame-cncm/guidolib/wiki) for building instr
 ---
 
 Travis build status:  <a href="https://travis-ci.org/grame-cncm/guidolib"><img src="https://travis-ci.org/grame-cncm/guidolib.svg?branch=dev"></a>
+GitHub Actions docker build: ![CI](https://github.com/olafure/guidolib/workflows/CI/badge.svg?branch=ci-with-gh-actions)
 
 ----------------------------------------------------------------------
 
