@@ -1,4 +1,4 @@
-name: CI
+name: Docker
 
 on: [push]
 
@@ -10,8 +10,7 @@ jobs:
 
     runs-on: ubuntu-18.04
 
-    # Is 10 mins enough?
-    timeout-minutes: 10
+    timeout-minutes: 20
 
     steps:
     - name: Repo checkout
@@ -19,4 +18,5 @@ jobs:
 
     - name: build
       run: |
-        make -C build/docker/
+        cd build/docker
+        make all
