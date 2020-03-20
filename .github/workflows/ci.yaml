@@ -19,6 +19,4 @@ jobs:
 
     - name: build
       run: |
-        cd build/docker/
-        make all
-        make run 
+        make -C build/docker/
