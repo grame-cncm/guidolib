@@ -11,13 +11,13 @@ RUN mkdir grame
 WORKDIR /grame
 RUN git clone --single-branch -b dev --depth 1 https://github.com/grame-cncm/guidoar.git
 WORKDIR /grame/guidoar/build
-RUN make -j 4
+RUN make 
 RUN make install
 
 WORKDIR /grame
 RUN git clone --single-branch -b dev --depth 1  --recurse-submodules https://github.com/grame-cncm/guidolib.git
 WORKDIR /grame/guidolib/build
-RUN make basic -j 4
-RUN make Qt -j 4 && make install
+RUN make basic 
+RUN make Qt  && make install
 
 WORKDIR /grame
