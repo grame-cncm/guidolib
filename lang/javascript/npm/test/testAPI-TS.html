@@ -1,0 +1,40 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+	<title>Guido API Test</title>
+	<script src="../libGUIDOEngine.js"></script>
+	<script src="testAPI-ts.js"></script>
+	<style>
+	body { margin: 50; }
+	pre { margin: 20; }
+	</style>
+</head>
+
+<body>
+
+<h1>Guido JS TypeScript API Test</h1>
+<hr>
+<pre id=log>
+</pre>
+<hr>
+
+<script>
+var div = document.getElementById("log");
+function log (str) 			{ div.innerHTML += str + '\n'; }
+function svg (str, name) 	{ log (str); }
+
+function doit (engine) {
+	log ("Guido Engine version " + engine.getVersion().str);
+	run (engine, log, svg);
+	log ("\nEnd of tests");
+}
+
+
+var engine = new GuidoEngine();
+engine.initialise ().then (doit);
+
+
+</script>
+
+</body>
+</html>
