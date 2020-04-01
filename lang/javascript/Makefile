@@ -78,7 +78,6 @@ test: $(npmdir)/$(library).js $(npmdir)/$(library).wasm
 # publishing to npm
 ##############################################################
 npm: $(npmdir)/$(library).js $(npmdir)/$(library).wasm $(webfont)
-	cd $(npmdir) && npm run test 
 	npm publish $(npmdir) --access public
 	@echo "Guido Engine version " $(shell grep version $(npmdir)/package.json | cut -d: -f 2) "published"
 	
