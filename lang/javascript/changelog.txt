@@ -2,6 +2,8 @@ GUIDO Engine
 Javascript lib history
 
 ----------------------------------------------------------------
+2020-03-02  version 1.68 - update to guido engine 1.68
+
 2019-02-20  version 1.66 - update to guido engine 1.66
 
 2015-12-19  version 1.60 - update to guido engine 1.60

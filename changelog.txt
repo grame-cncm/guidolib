@@ -3,7 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.9
-  
+- new interface to change piano roll voices color, based on html names
 
 ----------------------------------------------------------------
   version 1.6.8
