@@ -157,6 +157,7 @@ class GuidoEngine {
     enableAutoVoicesColoration (proll, status) { return this.fPRoll.enableAutoVoicesColoration ( proll, status ); }
     setRGBColorToVoice  ( proll, voice, r, g, b, a) { return this.fPRoll.setRGBColorToVoice ( proll, voice, r, g, b, a ); }
     setHtmlColorToVoice ( proll, voice, c)     { return this.fPRoll.setHtmlColorToVoice ( proll, voice, c ); }
+    setColorToVoice 	( proll, voice, c)     { return this.fPRoll.setColorToVoice ( proll, voice, c ); }
     removeColorToVoice  ( proll, voice )       { return this.fPRoll.removeColorToVoice ( proll, voice ); }
     enableMeasureBars   ( proll, status )      { return this.fPRoll.enableMeasureBars ( proll, status ); }
     setPitchLinesDisplayMode (proll, mode)     { return this.fPRoll.setPitchLinesDisplayMode ( proll, mode ); }

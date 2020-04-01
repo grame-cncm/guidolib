@@ -31,9 +31,7 @@ bool HtmlColor::get (const char* name, unsigned char* c)
 	map<string, long>::const_iterator i = fColorsMap.find(color);
 	if (i == fColorsMap.end()) return false;
 	long val = i->second;
-
     get(val, c);
-
     return true;
 }
 
@@ -43,7 +41,6 @@ bool HtmlColor::get (long color, unsigned char* c)
 	c[1] = (unsigned char)((color & 0xff00) >> 8);
 	c[0] = (unsigned char)((color & 0xff0000) >> 16);
 	c[3] = 255;
-
 	return true;
 }
 

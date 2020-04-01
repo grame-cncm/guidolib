@@ -221,6 +221,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("enableAutoVoicesColoration", &GUIDOPianoRollAdapter::enableAutoVoicesColoration, allow_raw_pointers())
 			.function("setRGBColorToVoice", &GUIDOPianoRollAdapter::setRGBColorToVoice, allow_raw_pointers())
 			.function("setHtmlColorToVoice", &GUIDOPianoRollAdapter::setHtmlColorToVoice, allow_raw_pointers())
+			.function("setColorToVoice", &GUIDOPianoRollAdapter::setColorToVoice, allow_raw_pointers())
 			.function("removeColorToVoice", &GUIDOPianoRollAdapter::removeColorToVoice, allow_raw_pointers())
 			.function("enableMeasureBars", &GUIDOPianoRollAdapter::enableMeasureBars, allow_raw_pointers())
 			.function("setPitchLinesDisplayMode", &GUIDOPianoRollAdapter::setPitchLinesDisplayMode, allow_raw_pointers())

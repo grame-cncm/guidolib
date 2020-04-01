@@ -203,11 +203,20 @@ GUIDOAPI GuidoErrCode GuidoPianoRollSetHtmlColorToVoice(PianoRoll *pr, int voice
         return guidoErrBadParameter;
 
     unsigned char colref[4] = {0, 0, 0, 255};
-
 	HtmlColor::get(color, colref);
-
     pr->setColorToVoice(voiceNum, colref[0], colref[1], colref[2], colref[3]);
+	return guidoNoErr;
+}
 
+// ------------------------------------------------------------------------
+GUIDOAPI GuidoErrCode GuidoPianoRollSetColorToVoice(PianoRoll *pr, int voiceNum, const std::string& color)
+{
+    if (!pr || voiceNum < 1)
+        return guidoErrBadParameter;
+
+    unsigned char colref[4] = {0, 0, 0, 255};
+	HtmlColor::get(color.c_str(), colref);
+    pr->setColorToVoice(voiceNum, colref[0], colref[1], colref[2], colref[3]);
 	return guidoNoErr;
 }
 

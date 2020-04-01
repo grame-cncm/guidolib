@@ -117,6 +117,14 @@ class_export GUIDOPianoRollAdapter
 			\return a Guido error code
 		*/
 		GuidoErrCode setHtmlColorToVoice(PianoRoll *pr, int voiceNum, long color);
+	/*!
+		\brief Sets a html color to a voice (first voice is number 1) (black by default)
+		\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
+		\param voiceNum the voice number (first voice is number 1)
+		\param color the html color name
+		\return a Guido error code
+	*/
+		GuidoErrCode setColorToVoice(PianoRoll *pr, int voiceNum, const std::string& color);
 
 		/*!
 			\brief remove a color to a voice (first voice is number 1) (black by default)
