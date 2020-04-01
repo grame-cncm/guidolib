@@ -1,6 +1,6 @@
 {
   "name": "@grame/guidolib",
-  "version": "1.6.8",
+  "version": "1.6.8-a",
   "description": "A library for music score rendering based on the Guido Music Notation format.",
   "main": "libGUIDOEngine.js",
   "directories": {
