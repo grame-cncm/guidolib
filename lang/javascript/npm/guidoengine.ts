@@ -80,6 +80,7 @@ class GuidoEngine {
     getLineSpace(): number              { return this.fEngine.getLineSpace(); }
 
     getVersion () : GuidoVersion        { return this.fEngine.getVersion(); }
+    getFloatVersion () : number         { let v = this.fEngine.getVersion(); return parseFloat(v.major + "." + v.minor + v.sub); }
     getVersionStr () : string           { return this.fEngine.getVersionStr(); }
     checkVersionNums(major: number, minor: number, sub: number): GuidoErrCode  { return this.fEngine.checkVersionNums ( major, minor, sub ); }
 
@@ -97,7 +98,7 @@ class GuidoEngine {
     closeStream  (s: GuidoStream): GuidoErrCode      { return this.fEngine.closeStream ( s ); }
     getStream    (s: GuidoStream): string            { return this.fEngine.getStream ( s ); }
     stream2AR    (p: GuidoParser,stream: GuidoStream): ARHandler    { return this.fEngine.stream2AR ( p, stream ); }
-    writeStream  (s: GuidoStream, str: string): GuidoErrCode        { return this.fEngine.writeStream ( s, gmn ); }
+    writeStream  (s: GuidoStream, str: string): GuidoErrCode        { return this.fEngine.writeStream ( s, str ); }
 	resetStream  (s: GuidoStream): GuidoErrCode      { return this.fEngine.resetStream ( s ); }
                        
     getParsingTime  (): number              { return this.fEngine.getParsingTime(); }
