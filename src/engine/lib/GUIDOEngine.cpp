@@ -816,7 +816,7 @@ GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostrea
 	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
 	dev->NotifySize(desc.sizex, desc.sizey);
 	dev->SelectPenColor(VGColor(0,0,0));
-	dev->SelectFillColor(VGColor(0,0,0));
+//	dev->SelectFillColor(VGColor(0,0,0));
 
 	GuidoErrCode error = GuidoOnDraw (&desc);
 
