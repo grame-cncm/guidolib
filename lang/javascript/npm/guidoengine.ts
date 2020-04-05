@@ -131,11 +131,11 @@ class GuidoEngine {
     prEnableMeasureBars   ( pr: PianoRoll, status: boolean ) : GuidoErrCode       { return this.fPianoRoll.enableMeasureBars ( pr, status ); }
     prSetPitchLinesDisplayMode (pr: PianoRoll, mode: number): GuidoErrCode        { return this.fPianoRoll.setPitchLinesDisplayMode ( pr, mode ); }
     
-    proll2svg ( pr: PianoRoll, w, h )                                   { return this.fPianoRoll.svgExport ( pr, w, h  ); }
-    prGetMap  (pr: PianoRoll, width: number, height: number): string    { return this.fPianoRoll.getMap ( pr, width, height  ); }
+    proll2svg ( pr: PianoRoll, w: number, h: number )                           { return this.fPianoRoll.svgExport ( pr, w, h  ); }
+    prGetMap  (pr: PianoRoll, width: number, height: number): string            { return this.fPianoRoll.getMap ( pr, width, height  ); }
 
-	prSvgExport       (pr: PianoRoll, width: number, height: number): string   { return this.fPianoRoll.svgExport ( pr, width, height  ); }
-    prJsExport(pr: PianoRoll, width: number, height: number): GuidoErrCode     { return this.fPianoRoll.javascriptExport ( pr, width, height  ); }
+	prSvgExport(pr: PianoRoll, width: number, height: number): string           { return this.fPianoRoll.svgExport ( pr, width, height  ); }
+    prJsExport (pr: PianoRoll, width: number, height: number): GuidoErrCode     { return this.fPianoRoll.javascriptExport ( pr, width, height  ); }
 
 
     //------------------------------------------------------------------------
