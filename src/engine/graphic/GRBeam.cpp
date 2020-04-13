@@ -1258,9 +1258,16 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	if (stemWidth > 0) {
 		slope = (st->p[2].y - st->p[0].y) / stemWidth;
 		// another hack to control the slope when events are on different staves - DF sept 15 2009
+		float shift = LSPACE/4;
 		if (startEl && endEl && (startEl->getGRStaff() != endEl->getGRStaff())) {
-			while ((slope < -0.20) || (slope > 0.20)) {
-				float shift = (slope < 0) ? -LSPACE/4 : LSPACE/4;
+			while (slope < -0.20) {
+				st->p[0].y -= shift;
+				st->p[1].y -= shift;
+				st->p[2].y += shift;
+				st->p[3].y += shift;
+				slope = (st->p[2].y - st->p[0].y) / stemWidth;
+			}
+			while (slope > 0.20) {
 				st->p[0].y += shift;
 				st->p[1].y += shift;
 				st->p[2].y -= shift;
