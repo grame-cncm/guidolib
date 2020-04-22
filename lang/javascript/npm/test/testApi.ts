@@ -131,6 +131,31 @@ function maps( engine: GuidoEngine, log: TLog )
 //----------------------------------------------------------------------------
 // Piano roll tests
 //----------------------------------------------------------------------------
+function reducedPropTest (engine: GuidoEngine, log: TLog, svg: TSvg)
+{
+	log( "\Reduced Proportional tests :");
+	let p = engine.openParser();
+	let ar = engine.string2AR (p, gmn);
+	engine.closeParser(p);
+
+	let rpe = engine.reducedProp();
+	let rp = rpe.ar2RProportional (ar);	
+	let result = rpe.svgExport(rp, 512, 256);
+	svg (result, "Reduced Proportional SVG1");
+	
+	let startDate = {num : 1, denom : 4};
+	let endDate = {num : 3, denom : 4};
+	rpe.setLimits(rp, startDate, endDate, 40, 80);
+	rpe.enableAutoVoicesColoration(rp, true);
+	result = rpe.svgExport(rp, 512, 256);
+	svg (result, "Reduced Proportional SVG2");
+	engine.freeAR(ar);
+	rpe.destroyRProportional(rp);
+}
+
+//----------------------------------------------------------------------------
+// Reduced Proportional tests
+//----------------------------------------------------------------------------
 function pianoRollTest (engine: GuidoEngine, log: TLog, svg: TSvg)
 {
 	log( "\nPiano roll tests :");
@@ -187,6 +212,7 @@ function run (engine: GuidoEngine, log: TLog, svg: TSvg) {
 	misc 	(engine, log);
 	maps 	(engine, log);
 	pianoRollTest (engine, log, svg);
+	reducedPropTest (engine, log, svg);
 }
 
 var process: any;

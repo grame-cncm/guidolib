@@ -10,6 +10,7 @@ class GuidoEngine {
     private	fPianoRoll :   GUIDOPianoRollAdapter;
     private	fScoreMap  :   GUIDOScoreMap;
     private	fFactory   :   GUIDOFactoryAdapter;
+    private	fSPR       :   GUIDOReducedProportionalAdapter;
 
     async initialise():Promise<any> { 
         var module = GuidoModule();
@@ -28,6 +29,7 @@ class GuidoEngine {
         this.fScoreMap      = new module.GUIDOScoreMap();
         this.fPianoRoll		= new module.GUIDOPianoRollAdapter();
         this.fFactory		= new module.GUIDOFactoryAdapter();
+        this.fSPR           = new module.GUIDOReducedProportionalAdapter();
         this.fEngine.init();
     }
         
@@ -118,6 +120,8 @@ class GuidoEngine {
 
     //------------------------------------------------------------------------
     // Guido piano roll interface
+    pianoRoll() : GUIDOPianoRollAdapter { return this.fPianoRoll; }
+
     ar2PianoRoll        ( type: PianoRollType, ar: ARHandler): PianoRoll        { return this.fPianoRoll.ar2PianoRoll ( type, ar ); }
     destroyPianoRoll    ( pr: PianoRoll ): GuidoErrCode                         { return this.fPianoRoll.destroyPianoRoll ( pr ); }
     prSetLimits           ( pr: PianoRoll, limits: LimitParams ): GuidoErrCode    { return this.fPianoRoll.setLimits ( pr, limits ); }
@@ -136,6 +140,11 @@ class GuidoEngine {
 
 	prSvgExport(pr: PianoRoll, width: number, height: number): string           { return this.fPianoRoll.svgExport ( pr, width, height  ); }
     prJsExport (pr: PianoRoll, width: number, height: number): GuidoErrCode     { return this.fPianoRoll.javascriptExport ( pr, width, height  ); }
+
+    //------------------------------------------------------------------------
+    // Reduced Proportional representation
+    // no relay for the interface
+    reducedProp() : GUIDOReducedProportionalAdapter { return this.fSPR; }
 
 
     //------------------------------------------------------------------------

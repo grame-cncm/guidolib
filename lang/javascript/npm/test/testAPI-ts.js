@@ -30,6 +30,7 @@ class GuidoEngine {
         this.fScoreMap = new module.GUIDOScoreMap();
         this.fPianoRoll = new module.GUIDOPianoRollAdapter();
         this.fFactory = new module.GUIDOFactoryAdapter();
+        this.fSPR = new module.GUIDOReducedProportionalAdapter();
         this.fEngine.init();
     }
     //------------------------------------------------------------------------
@@ -69,6 +70,7 @@ class GuidoEngine {
     inches2Unit(val) { return this.fEngine.inches2Unit(val); }
     getLineSpace() { return this.fEngine.getLineSpace(); }
     getVersion() { return this.fEngine.getVersion(); }
+    getFloatVersion() { let v = this.fEngine.getVersion(); return parseFloat(v.major + "." + v.minor + v.sub); }
     getVersionStr() { return this.fEngine.getVersionStr(); }
     checkVersionNums(major, minor, sub) { return this.fEngine.checkVersionNums(major, minor, sub); }
     markVoice(ar, voicenum, date, duration, r, g, b) { return this.fEngine.markVoice(ar, voicenum, date, duration, r, g, b); }
@@ -81,7 +83,7 @@ class GuidoEngine {
     closeStream(s) { return this.fEngine.closeStream(s); }
     getStream(s) { return this.fEngine.getStream(s); }
     stream2AR(p, stream) { return this.fEngine.stream2AR(p, stream); }
-    writeStream(s, str) { return this.fEngine.writeStream(s, gmn); }
+    writeStream(s, str) { return this.fEngine.writeStream(s, str); }
     resetStream(s) { return this.fEngine.resetStream(s); }
     getParsingTime() { return this.fEngine.getParsingTime(); }
     getAR2GRTime() { return this.fEngine.getAR2GRTime(); }
@@ -98,6 +100,7 @@ class GuidoEngine {
     getPianoRollMap(pr, width, height) { return this.fScoreMap.getPianoRollMap(pr, width, height); }
     //------------------------------------------------------------------------
     // Guido piano roll interface
+    pianoRoll() { return this.fPianoRoll; }
     ar2PianoRoll(type, ar) { return this.fPianoRoll.ar2PianoRoll(type, ar); }
     destroyPianoRoll(pr) { return this.fPianoRoll.destroyPianoRoll(pr); }
     prSetLimits(pr, limits) { return this.fPianoRoll.setLimits(pr, limits); }
@@ -105,7 +108,7 @@ class GuidoEngine {
     prGetKeyboardWidth(pr, height) { return this.fPianoRoll.getKeyboardWidth(pr, height); }
     prEnableAutoVoicesColoration(pr, status) { return this.fPianoRoll.enableAutoVoicesColoration(pr, status); }
     prSetVoiceColor(pr, voice, r, g, b, a) { return this.fPianoRoll.setRGBColorToVoice(pr, voice, r, g, b, a); }
-    prSetHtmlVoiceColor(pr, voice, c) { return this.fPianoRoll.setHtmlColorToVoice(pr, voice, c); }
+    prSetVoiceNamedColor(pr, voice, c) { return this.fPianoRoll.setColorToVoice(pr, voice, c); }
     prRemoveVoiceColor(pr, voice) { return this.fPianoRoll.removeColorToVoice(pr, voice); }
     prEnableMeasureBars(pr, status) { return this.fPianoRoll.enableMeasureBars(pr, status); }
     prSetPitchLinesDisplayMode(pr, mode) { return this.fPianoRoll.setPitchLinesDisplayMode(pr, mode); }
@@ -113,6 +116,10 @@ class GuidoEngine {
     prGetMap(pr, width, height) { return this.fPianoRoll.getMap(pr, width, height); }
     prSvgExport(pr, width, height) { return this.fPianoRoll.svgExport(pr, width, height); }
     prJsExport(pr, width, height) { return this.fPianoRoll.javascriptExport(pr, width, height); }
+    //------------------------------------------------------------------------
+    // Reduced Proportional representation
+    // no relay for the interface
+    reducedProp() { return this.fSPR; }
     //------------------------------------------------------------------------
     // Guido factory interface
     openMusic() { return this.fFactory.openMusic(); }
@@ -325,6 +332,27 @@ function maps(engine, log) {
 //----------------------------------------------------------------------------
 // Piano roll tests
 //----------------------------------------------------------------------------
+function reducedPropTest(engine, log, svg) {
+    log("\Reduced Proportional tests :");
+    let p = engine.openParser();
+    let ar = engine.string2AR(p, gmn);
+    engine.closeParser(p);
+    let rpe = engine.reducedProp();
+    let rp = rpe.ar2RProportional(ar);
+    let result = rpe.svgExport(rp, 512, 256);
+    svg(result, "Reduced Proportional SVG1");
+    let startDate = { num: 1, denom: 4 };
+    let endDate = { num: 3, denom: 4 };
+    rpe.setLimits(rp, startDate, endDate, 40, 80);
+    rpe.enableAutoVoicesColoration(rp, true);
+    result = rpe.svgExport(rp, 512, 256);
+    svg(result, "Reduced Proportional SVG2");
+    engine.freeAR(ar);
+    rpe.destroyRProportional(rp);
+}
+//----------------------------------------------------------------------------
+// Reduced Proportional tests
+//----------------------------------------------------------------------------
 function pianoRollTest(engine, log, svg) {
     log("\nPiano roll tests :");
     let p = engine.openParser();
@@ -372,6 +400,7 @@ function run(engine, log, svg) {
     misc(engine, log);
     maps(engine, log);
     pianoRollTest(engine, log, svg);
+    reducedPropTest(engine, log, svg);
 }
 var process;
 var module;

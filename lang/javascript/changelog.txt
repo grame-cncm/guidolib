@@ -2,9 +2,10 @@ GUIDO Engine
 Javascript lib history
 
 ----------------------------------------------------------------
-2020-04-??  version 1.68-b
+2020-04-22  version 1.68-b
 	fix incorrect param name in guidoengine.ts
 	add getFloatVersion method
+	add reduced proportional representation to ts interface
 
 2020-04-01  version 1.68-a
 	add typescript support
