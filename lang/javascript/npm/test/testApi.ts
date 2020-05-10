@@ -92,7 +92,7 @@ function streams ( engine: GuidoEngine, log: TLog, svg: TSvg ) {
 //----------------------------------------------------------------------------
 // test guido streams
 //----------------------------------------------------------------------------
-function scanMap( map ) 
+function scanMap( map: string ) 
 {
 	var m = eval(map);
 	return m.length;

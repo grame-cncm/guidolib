@@ -85,9 +85,9 @@ class GuidoEngine {
     stream2AR(p, stream) { return this.fEngine.stream2AR(p, stream); }
     writeStream(s, str) { return this.fEngine.writeStream(s, str); }
     resetStream(s) { return this.fEngine.resetStream(s); }
-    getParsingTime() { return this.fEngine.getParsingTime(); }
-    getAR2GRTime() { return this.fEngine.getAR2GRTime(); }
-    getOnDrawTime() { return this.fEngine.getOnDrawTime(); }
+    getParsingTime(ar) { return this.fEngine.getParsingTime(ar); }
+    getAR2GRTime(gr) { return this.fEngine.getAR2GRTime(gr); }
+    getOnDrawTime(gr) { return this.fEngine.getOnDrawTime(gr); }
     //------------------------------------------------------------------------
     // Guido mappings interface
     getPageMap(gr, page, w, h) { return this.fScoreMap.getPageMap(gr, page, w, h); }
