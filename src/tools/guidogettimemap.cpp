@@ -21,6 +21,7 @@ CairoSystem gSys(0);
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
+#include "GUIDOScoreMapAdapter.h"
 #include "VGDevice.h"
 
 using namespace std;
@@ -32,6 +33,13 @@ static void error (GuidoErrCode err)
 	cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
 }
 
+static void print (TimeSegment from, TimeSegment to)
+{
+	cout << "[" << from.first << ", " << from.second << "]";
+	cout << " ";
+	cout << "[" << to.first << ", " << to.second << "]";
+	cout << endl;
+}
 
 //------------------------------------------------------------------------------
 // time mapping collector abstract class definition
@@ -39,15 +47,12 @@ class TimeMapPrinter : public TimeMapCollector
 {
 	public:
 		virtual ~TimeMapPrinter() {}
-		virtual void Time2TimeMap( const TimeSegment& from, const TimeSegment& to ) {
-			//cout << from << " " << to << endl;
-                        // ugh - bug
-                        cout << "[" << from.first << ", " << from.second << "]";
-                        cout << " ";
-                        cout << "[" << to.first << ", " << to.second << "]";
-                        cout << endl;
-
-		}
+		virtual void Time2TimeMap( const TimeSegment& from, const TimeSegment& to ) { print (from, to); }
+//                        cout << "[" << from.first << ", " << from.second << "]";
+//                        cout << " ";
+//                        cout << "[" << to.first << ", " << to.second << "]";
+//                        cout << endl;
+//		}
 };
 
 
@@ -58,7 +63,6 @@ int main(int argc, char **argv)
     GuidoInit (&gd);
 
 	for (int i=1; i < argc; i++) {
-//		cerr << "# get time map for " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
         GuidoParser *parser = GuidoOpenParser();
@@ -72,12 +76,18 @@ int main(int argc, char **argv)
         ifs.close();
 
         arh = GuidoString2AR(parser, streamBuffer.str().c_str());
-
-		if (arh)
-        {
+		if (arh) {
+#if 0
 			TimeMapPrinter mp;
 			err = GuidoGetTimeMap(arh, mp);
 			if (err != guidoNoErr) error (err);
+#else
+			GuidoScoreMapAdapter guido;
+			TTime2TimeMap map = guido.getTime2TimeMap(arh);
+			for (auto elt: map)
+				print (elt.first, elt.second);
+
+#endif
 			GuidoFreeAR (arh);
 		}
 		else {

@@ -289,7 +289,8 @@ GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler handle, int page, GuidoElementSe
 	return guidoNoErr;
 }
 
-GUIDOAPI GuidoErrCode	GuidoGetTimeMap( CARHandler inHandleAR, TimeMapCollector& f)
+//----------------------------------------------------------------------
+GUIDOAPI GuidoErrCode GuidoGetTimeMap( CARHandler inHandleAR, TimeMapCollector& f)
 {
 	if( inHandleAR == 0 )			return guidoErrInvalidHandle;
 	if ( inHandleAR->armusic == 0 )	return guidoErrInvalidHandle;

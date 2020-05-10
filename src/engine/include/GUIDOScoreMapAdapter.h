@@ -16,6 +16,20 @@
 #include "GUIDOScoreMap.h"
 
 
+//----------------------------------------------------------------------
+class RolledUnrolledCollector: public TimeMapCollector
+{
+	private:
+		TTime2TimeMap	fMap;
+	
+	public:
+				 RolledUnrolledCollector() {}
+		virtual ~RolledUnrolledCollector() {}
+
+		TTime2TimeMap process( CARHandler ar );
+		virtual void Time2TimeMap( const TimeSegment& from, const TimeSegment& to );
+};
+
 /*!
  * \addtogroup APICplusplus C++ interface
  * @{
@@ -115,6 +129,9 @@ class_export GuidoScoreMapAdapter
 
 		*/
 		GuidoErrCode getTimeMap(CARHandler gr, TimeMapCollector& f);
+
+		TTime2TimeMap getTime2TimeMap( CARHandler ar );
+
 };
 /*! @} */
 /*! @} */

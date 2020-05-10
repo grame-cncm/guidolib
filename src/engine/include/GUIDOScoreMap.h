@@ -85,7 +85,9 @@ class_export TimeSegment: public std::pair<GuidoDate, GuidoDate>
 };
 
 typedef std::pair<TimeSegment, FloatRect>	TMapSegments;
+typedef std::pair<TimeSegment, TimeSegment>	TTimeMapSegments;
 typedef std::vector<TMapSegments>			Time2GraphicMap;
+typedef std::vector<TTimeMapSegments>		TTime2TimeMap;
 typedef Time2GraphicMap::const_iterator		Time2GraphicMapIterator;
 
 inline std::ostream& operator << (std::ostream& out, const GuidoDate& d) {
@@ -320,8 +322,7 @@ GUIDOAPI GuidoErrCode	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSel
 	\param f a TimeMapCollector object that will be called for each time segment.
 	\return an error code.
 */
-GUIDOAPI GuidoErrCode	GuidoGetTimeMap( CARHandler gr, TimeMapCollector& f);
-
+GUIDOAPI GuidoErrCode	GuidoGetTimeMap( CARHandler ar, TimeMapCollector& f);
 
 /*! @} */
 /*! @} */

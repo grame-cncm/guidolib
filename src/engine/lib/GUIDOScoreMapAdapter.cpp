@@ -1,3 +1,5 @@
+
+
 #include "GUIDOScoreMapAdapter.h"
 #include "GuidoMapCollector.h"
 
@@ -53,7 +55,27 @@ bool GuidoScoreMapAdapter::getPoint(float x, float y, const Time2GraphicMap map,
 	return ::GuidoGetPoint(x, y, map, t, r);
 }
 
-GuidoErrCode GuidoScoreMapAdapter::getTimeMap(CARHandler gr, TimeMapCollector& outMap)
+GuidoErrCode GuidoScoreMapAdapter::getTimeMap(CARHandler ar, TimeMapCollector& outMap)
 {
-	return ::GuidoGetTimeMap(gr, outMap);
+	return ::GuidoGetTimeMap(ar, outMap);
+}
+
+//----------------------------------------------------------------------
+// a time to time map collector
+//----------------------------------------------------------------------
+TTime2TimeMap RolledUnrolledCollector::process( CARHandler ar )
+{
+	::GuidoGetTimeMap(ar, *this);
+	return fMap;
+}
+
+void RolledUnrolledCollector::Time2TimeMap( const TimeSegment& from, const TimeSegment& to )
+{
+	fMap.push_back (std::make_pair (from, to));
+}
+
+TTime2TimeMap GuidoScoreMapAdapter::getTime2TimeMap( CARHandler ar )
+{
+	RolledUnrolledCollector collect;
+	return collect.process (ar);
 }
