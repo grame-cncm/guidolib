@@ -95,9 +95,9 @@ interface GuidoEngineAdapter {
 	freeAR      (ar: ARHandler): void;
 	freeGR      (gr: GRHandler): void;
     
-    getParsingTime  (): number;
-    getAR2GRTime    (): number;
-    getOnDrawTime   (): number;
+    getParsingTime  (ar: ARHandler): number;
+    getAR2GRTime    (gr: GRHandler): number;
+    getOnDrawTime   (gr: GRHandler): number;
 
     getErrorString              (errCode: GuidoErrCode): string;	
 	getDefaultLayoutSettings    (): GuidoLayoutSettings; 
