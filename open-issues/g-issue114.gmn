@@ -1,0 +1,276 @@
+{[ \staff<1> \set<autoHideTiedAccidentals="on"> \staffFormat<distance=16> \title<"25 Easy Studies"> \composer<"Friedrich Burgmüller", dy=4hs> \auto<autoInstrPos="on"> \instr<"Piano"> \accol<id=0, range="1-2"> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<-1> \meter<"3/4", autoBarlines="off", autoMeasuresNum="system"> \intens<"p", after=" grazioso",font="Times New Roman",fsize=9pt,fattrib="i", dy=-4hs> \tempo<"Moderato",fsize=12pt,fattrib="b", dy=9hs> \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="4">( a2/16)
+ \stemsDown g/16 \stemsDown f/16 \stemsDown \fingering<position="above", text="1">( e/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( f/16)
+ \stemsDown e/16 \stemsDown d/16 \stemsDown \fingering<position="above", text="1">( c/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( d/16)
+ \stemsDown c/16 \stemsDown b&1/16 \stemsDown \fingering<position="above", text="1">( a/16)
+ \beamEnd:1 \bar 
+   (* meas. 2 *)  \dimBegin<dy=-3.4hs> \stemsDown \beamBegin:1 \fingering<position="above", text="4">( c2/8)
+ \stemsDown \fingering<position="above", text="3">( b&1/8)
+ \beamEnd:1 \dimEnd<dy=13hs> \stemsDown \beamsOff \fingering<position="above", text="2">( b&/4)
+ \slurEnd:1 _/4 \bar 
+   (* meas. 3 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="5">( g2/16)
+ \stemsDown f/16 \stemsDown e/16 \stemsDown d/16 \beamEnd:1 \crescBegin<dy=-3.4hs> \stemsDown \beamBegin:1 c/16 \stemsDown d/16 \stemsDown e/16 \stemsDown \fingering<position="above", text="1">( f/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 g/16 \stemsDown a/16 \stemsDown b&/16 \stemsDown c3/16 \beamEnd:1 \crescEnd<dy=13hs> \bar 
+   (* meas. 4 *)  \stemsDown \beamBegin:1 \fingering<position="above", text="4">( b&2/8)
+ \dimBegin<dy=-3.2hs> \stemsDown \fingering<position="above", text="3">( a/8)
+ \beamEnd:1 \dimEnd<dy=13hs> \stemsDown \beamsOff \fingering<position="above", text="2">( a/4)
+ \slurEnd:1 _/4 \bar 
+   (* meas. 5 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="5">( a/16)
+ \text<"cresc.",fattrib="i", dx=0hs, dy=-6hs>( \stemsDown g/16)
+ \stemsDown f/16 \stemsDown e/16 \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="3">( f/16)
+ \stemsDown e/16 \stemsDown \fingering<position="above", text="1">( d/16)
+ \stemsDown \fingering<position="above", text="2">( \acc( c#/16)
+)
+ \beamEnd:1 \stemsDown \beamsOff \fingering<position="above", text="1">( d/4)
+ \slurEnd:1 \bar 
+   (* meas. 6 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="4">( g/16)
+ \stemsDown f/16 \stemsDown e/16 \stemsDown \fingering<position="above", text="1">( d/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( e/16)
+ \stemsDown d/16 \stemsDown \acc( c/16)
+ \stemsDown \fingering<position="above", text="1">( \acc( b1/16)
+)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( c2/16)
+ \stemsDown b1/16 \stemsDown a/16 \stemsDown g/16 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 7 *)  \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \accent<position="below">( \fingering<position="above", text="2">( \acc( a&/8)
+)
+)
+ \stemsUp g/8 \slurEnd:1 \beamEnd:1 \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \accent<position="below">( \fingering<position="above", text="2">( \acc( a/8)
+)
+)
+ \stemsUp g/8 \slurEnd:1 \beamEnd:1 \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \accent<position="above">( \fingering<position="above", text="5">( e2/8)
+)
+ \stemsDown d/8 \beamEnd:1 \bar 
+   (* meas. 8 *)  \stemsDown \beamsOff c/4 \slurEnd:1 _/4 _/4 \bar 
+   (* meas. 9 *)  \intens<"p", after=" grazioso",font="Times New Roman",fsize=9pt,fattrib="i", dy=-4.4hs> \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="4">( a/16)
+ \stemsDown g/16 \stemsDown f/16 \stemsDown \fingering<position="above", text="1">( e/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( f/16)
+ \stemsDown e/16 \stemsDown d/16 \stemsDown \fingering<position="above", text="1">( c/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( d/16)
+ \stemsDown c/16 \stemsDown b&1/16 \stemsDown \fingering<position="above", text="1">( a/16)
+ \beamEnd:1 \bar 
+   (* meas. 10 *)  \dimBegin<dy=-3.4hs> \stemsDown \beamBegin:1 \fingering<position="above", text="4">( c2/8)
+ \stemsDown \fingering<position="above", text="3">( b&1/8)
+ \beamEnd:1 \dimEnd<dy=13hs> \stemsDown \beamsOff \fingering<position="above", text="2">( b&/4)
+ \slurEnd:1 _/4 \bar 
+   (* meas. 11 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="5">( g2/16)
+ \stemsDown f/16 \stemsDown e/16 \stemsDown d/16 \beamEnd:1 \crescBegin<dy=-3.4hs> \stemsDown \beamBegin:1 c/16 \stemsDown d/16 \stemsDown e/16 \stemsDown \fingering<position="above", text="1">( f/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 g/16 \stemsDown a/16 \stemsDown b&/16 \stemsDown c3/16 \beamEnd:1 \crescEnd<dy=13hs> \bar 
+   (* meas. 12 *)  \stemsDown \beamBegin:1 \fingering<position="above", text="4">( b&2/8)
+ \dimBegin<dy=-3.4hs> \stemsDown \fingering<position="above", text="3">( a/8)
+ \beamEnd:1 \dimEnd<dy=13hs> \stemsDown \beamsOff \fingering<position="above", text="2">( a/4)
+ \slurEnd:1 _/4 \bar 
+   (* meas. 13 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="5">( a/16)
+ \text<"cresc.",fattrib="i", dx=0hs, dy=-6.6hs>( \stemsDown g/16)
+ \stemsDown f/16 \stemsDown e/16 \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="3">( f/16)
+ \stemsDown e/16 \stemsDown \fingering<position="above", text="1">( d/16)
+ \stemsDown \fingering<position="above", text="2">( \acc( c#/16)
+)
+ \beamEnd:1 \stemsDown \beamsOff \fingering<position="above", text="1">( d/4)
+ \slurEnd:1 \bar 
+   (* meas. 14 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="4">( g/16)
+ \stemsDown f/16 \stemsDown e/16 \stemsDown \fingering<position="above", text="1">( d/16)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( e/16)
+ \stemsDown d/16 \stemsDown \acc( c/16)
+ \stemsDown \fingering<position="above", text="1">( \acc( b1/16)
+)
+ \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( c2/16)
+ \stemsDown b1/16 \stemsDown a/16 \stemsDown g/16 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 15 *)  \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \accent<position="below">( \fingering<position="above", text="2">( \acc( a&/8)
+)
+)
+ \stemsUp g/8 \slurEnd:1 \beamEnd:1 \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \accent<position="below">( \fingering<position="above", text="2">( \acc( a/8)
+)
+)
+ \stemsUp g/8 \slurEnd:1 \beamEnd:1 \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \accent<position="above">( \fingering<position="above", text="5">( e2/8)
+)
+ \stemsDown d/8 \beamEnd:1 \bar 
+   (* meas. 16 *)  \stemsDown \beamsOff \fingering<position="above", text="3">( c/8)
+ \slurEnd:1 \text<"dim.",fattrib="i", dx=0hs, dy=-6.4hs>( \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 c/8)
+ \stemsDown \acc( b1/8)
+ \stemsDown c2/8 \stemsDown d/8 \stemsDown c/8 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 17 *)  \intens<"p", after="  leggiero",font="Times New Roman",fsize=9pt,fattrib="i", dy=-4.4hs> \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( c/8)
+)
+ \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( c/16)
+ \stemsDown d/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( e/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( e/16)
+ \stemsDown f/16 \beamEnd:1 \stemsDown \beamsOff g/4 \bar 
+   (* meas. 18 *)  \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( f/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( f/16)
+ \stemsDown g/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( a/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( a/16)
+ \stemsDown b&/16 \beamEnd:1 \stemsDown \beamsOff \fingering<position="above", text="3">( c3/4)
+ \slurEnd:1 \bar 
+   (* meas. 19 *) \oct<1>  \text<"cresc.",fattrib="i", dx=0hs, dy=-6.6hs>( \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( c/8)
+)
+)
+ \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( c/16)
+ \stemsDown d/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( e/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( e/16)
+ \stemsDown f/16 \beamEnd:1 \stemsDown \beamsOff g/4 \bar 
+   (* meas. 20 *)  \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( f/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( f/16)
+ \stemsDown g/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( a/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( a/16)
+ \stemsDown b&/16 \beamEnd:1 \stemsDown \beamsOff \fingering<position="above", text="3">( c4/4)
+ \slurEnd:1 \bar 
+   (* meas. 21 *)  \intens<"f", dy=-1.4hs> \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="5">( c/16)
+ \stemsDown b&3/16 \stemsDown a/16 \stemsDown g/16 \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="1">( f/16)
+ \stemsDown \fingering<position="above", text="3">( e/16)
+ \stemsDown d/16 \stemsDown \fingering<position="above", text="1">( c/16)
+ \beamEnd:1 \oct<0> \stemsDown \beamBegin:1 \fingering<position="above", text="4">( b&2/16)
+ \stemsDown a/16 \stemsDown g/16 \stemsDown f/16 \beamEnd:1 \bar 
+   (* meas. 22 *)  \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="5">( d3/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="4">( d/16)
+ \stemsDown c/16 \beamEnd:1 \text<"dim.",fattrib="i", dx=0hs, dy=-7.8hs>( \stemsDown \beamBegin:1 \stacc<position="above">( b&2/8)
+ \slurEnd:1)
+ \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="4">( b&/16)
+ \stemsDown a/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( g/8)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="5">( g/16)
+ \stemsDown f/16 \beamEnd:1 \bar 
+   (* meas. 23 *)  \text<"cresc.",fattrib="i", dx=0hs, dy=-7.8hs>( \stemsDown \beamBegin:1 \fingering<position="above", text="3">( e/16)
+)
+ \stemsDown d/16 \stemsDown c/16 \stemsDown d/16 \beamEnd:1 \stemsDown \beamBegin:1 e/16 \stemsDown \fingering<position="above", text="1">( f/16)
+ \stemsDown g/16 \stemsDown a/16 \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( b&/16)
+ \stemsDown \fingering<position="above", text="1">( c3/16)
+ \stemsDown d/16 \stemsDown e/16 \beamEnd:1 \bar 
+   (* meas. 24 *)  \stemsDown \beamsOff \stacc<position="above">( f/8)
+ \slurEnd:1 _/8 \intens<"f", dy=-4.4hs> \stemsUp \beamsOff {a0/4, f1/4  } _/4 \bar 
+   (* meas. 25 *)  \intens<"p", after="  leggiero",font="Times New Roman",fsize=9pt,fattrib="i", dy=-4.8hs> \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( c2/8)
+)
+ \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( c/16)
+ \stemsDown d/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( e/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( e/16)
+ \stemsDown f/16 \beamEnd:1 \stemsDown \beamsOff g/4 \bar 
+   (* meas. 26 *)  \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( f/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( f/16)
+ \stemsDown g/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( a/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( a/16)
+ \stemsDown b&/16 \beamEnd:1 \stemsDown \beamsOff \fingering<position="above", text="3">( c3/4)
+ \slurEnd:1 \bar 
+   (* meas. 27 *)  \text<"cresc.",fattrib="i", dx=0hs, dy=-6.8hs>( \oct<1> \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( c/8)
+)
+)
+ \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( c/16)
+ \stemsDown d/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( e/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( e/16)
+ \stemsDown f/16 \beamEnd:1 \stemsDown \beamsOff g/4 \bar 
+   (* meas. 28 *)  \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="2">( f/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( f/16)
+ \stemsDown g/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="3">( a/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="1">( a/16)
+ \stemsDown b&/16 \beamEnd:1 \stemsDown \beamsOff \fingering<position="above", text="3">( c4/4)
+ \slurEnd:1 \bar 
+   (* meas. 29 *)  \intens<"f", dy=-2hs> \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="5">( c/16)
+ \stemsDown b&3/16 \stemsDown a/16 \stemsDown g/16 \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="1">( f/16)
+ \stemsDown \fingering<position="above", text="3">( e/16)
+ \stemsDown d/16 \stemsDown \fingering<position="above", text="1">( c/16)
+ \beamEnd:1 \oct<0> \stemsDown \beamBegin:1 \fingering<position="above", text="4">( b&2/16)
+ \stemsDown a/16 \stemsDown g/16 \stemsDown f/16 \beamEnd:1 \bar 
+   (* meas. 30 *)  \stemsDown \beamBegin:1 \stacc<position="above">( \fingering<position="above", text="5">( d3/8)
+)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="4">( d/16)
+ \stemsDown c/16 \beamEnd:1 \text<"dim.",fattrib="i", dx=0hs, dy=-7.4hs>( \stemsDown \beamBegin:1 \stacc<position="above">( b&2/8)
+ \slurEnd:1)
+ \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="4">( b&/16)
+ \stemsDown a/16 \beamEnd:1 \stemsDown \beamBegin:1 \stacc<position="above">( g/8)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \fingering<position="above", text="5">( g/16)
+ \stemsDown f/16 \beamEnd:1 \bar 
+   (* meas. 31 *)  \text<"cresc.",fattrib="i", dx=0hs, dy=-7.4hs>( \stemsDown \beamBegin:1 \fingering<position="above", text="3">( e/16)
+)
+ \stemsDown d/16 \stemsDown c/16 \stemsDown d/16 \beamEnd:1 \stemsDown \beamBegin:1 e/16 \stemsDown \fingering<position="above", text="1">( f/16)
+ \stemsDown g/16 \stemsDown a/16 \beamEnd:1 \stemsDown \beamBegin:1 \fingering<position="above", text="4">( b&/16)
+ \stemsDown \fingering<position="above", text="1">( c3/16)
+ \stemsDown d/16 \stemsDown e/16 \beamEnd:1 \bar 
+   (* meas. 32 *)  \stemsDown \beamsOff \stacc<position="above">( f/8)
+ \slurEnd:1 _/8 \intens<"f", dy=-3.6hs> \stemsUp \beamsOff {a0/4, f1/4  } _/4 ]
+ , 
+[ \staff<2> \set<autoHideTiedAccidentals="on"> \staffFormat<distance=16> \barFormat<style= "system", range="2"> 
+   (* meas. 1 *)  \staffFormat<distance=18.4> \clef<"f4"> \key<-1> \meter<"3/4", autoBarlines="off", autoMeasuresNum="system"> \stemsDown \beamsOff {f0/2., a/2., c1/2.  } \bar 
+   (* meas. 2 *)  \stemsDown \beamsOff {f0/4, g/4, d1/4  } \stemsDown \beamsOff {f0/4, g/4, d1/4  } \stemsDown \beamsOff {f0/4, g/4, d1/4  } \bar 
+   (* meas. 3 *)  \stemsDown \beamsOff {e0/2., b&/2., c1/2.  } \bar 
+   (* meas. 4 *)  \stemsDown \beamsOff {f0/4, a/4, \fingering<position="above", text="5,3,1">( c1/4)
+  } \stemsDown \beamsOff {f0/4, a/4, c1/4  } \stemsDown \beamsOff {f0/4, a/4, \fingering<position="above", text="1,3,5">( \acc( c#1/4)
+)
+  } \bar 
+   (* meas. 5 *)  \staffFormat<distance=18.4> \stemsDown \beamsOff {f0/2, a/2, \fingering<position="above", text="5,3,1">( d1/2)
+  } \stemsDown \beamsOff {f0/4, a/4, d1/4  } \bar 
+   (* meas. 6 *)  \stemsDown \beamsOff {g0/2, c1/2, \fingering<position="above", text="5,2,1">( e/2)
+  } \stemsDown \beamsOff {g0/4, c1/4, e/4  } \bar 
+   (* meas. 7 *)  \stemsDown \beamsOff {g0/4, \acc( b/4)
+, f1/4  } \stemsDown \beamsOff {g0/4, b/4, f1/4  } \stemsDown \slurBegin:1<curve="up"> \beamsOff {g0/4, b/4, f1/4  } \bar 
+   (* meas. 8 *)  \stemsDown \beamsOff {c/8, \fingering<position="above", text="2,1">( e/8)
+  } \slurEnd:1 \text<"dim.",fattrib="i", dx=0hs, dy=20hs>( \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="1">( c/8)
+)
+ \stemsDown \acc( b0/8)
+ \stemsDown c1/8 \stemsDown \fingering<position="above", text="2">( \acc( b&0/8)
+)
+ \stemsDown g/8 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 9 *)  \staffFormat<distance=18.4> \stemsDown \beamsOff {f/2., a/2., c1/2.  } \bar 
+   (* meas. 10 *)  \stemsDown \beamsOff {f0/4, g/4, d1/4  } \stemsDown \beamsOff {f0/4, g/4, d1/4  } \stemsDown \beamsOff {f0/4, g/4, d1/4  } \bar 
+   (* meas. 11 *)  \stemsDown \beamsOff {e0/2., b&/2., c1/2.  } \bar 
+   (* meas. 12 *)  \stemsDown \beamsOff {f0/4, a/4, \fingering<position="above", text="5,3,1">( c1/4)
+  } \stemsDown \beamsOff {f0/4, a/4, c1/4  } \stemsDown \beamsOff {f0/4, a/4, \fingering<position="above", text="1,3,5">( \acc( c#1/4)
+)
+  } \bar 
+   (* meas. 13 *)  \staffFormat<distance=18.4> \stemsDown \beamsOff {f0/2, a/2, \fingering<position="above", text="5,3,1">( d1/2)
+  } \stemsDown \beamsOff {f0/4, a/4, d1/4  } \bar 
+   (* meas. 14 *)  \stemsDown \beamsOff {g0/2, c1/2, \fingering<position="above", text="5,2,1">( e/2)
+  } \stemsDown \beamsOff {g0/4, c1/4, e/4  } \bar 
+   (* meas. 15 *)  \stemsDown \beamsOff {g0/4, \acc( b/4)
+, f1/4  } \stemsDown \beamsOff {g0/4, b/4, f1/4  } \stemsDown \slurBegin:1<curve="up"> \beamsOff {g0/4, b/4, f1/4  } \bar 
+   (* meas. 16 *)  \stemsDown \beamsOff {c/8, \fingering<position="above", text="1,2">( e/8)
+  } \slurEnd:1 _/8 _/4 _/4 \bar 
+   (* meas. 17 *)  \staffFormat<distance=19.4> \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="2">( \acc( b&0/8)
+)
+ \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \beamEnd:1 \bar 
+   (* meas. 18 *)  \stemsDown \beamBegin:1 \fingering<position="above", text="3">( a0/8)
+ \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 19 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="2">( b&0/8)
+ \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \beamEnd:1 \bar 
+   (* meas. 20 *)  \stemsDown \beamBegin:1 \fingering<position="above", text="3">( a0/8)
+ \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 21 *)  \staffFormat<distance=19.4> \stemsDown \slurBegin:1<curve="up"> \beamsOff {f0/2., \fingering<position="above", text="5,3">( a/2.)
+  } \bar 
+   (* meas. 22 *)  \stemsDown \beamsOff \stacc<position="above">( {b&/8, \fingering<position="above", text="2,1">( d1/8)
+  })
+ \slurEnd:1 _/8 _/4 _/4 \bar 
+   (* meas. 23 *)  \stemsDown \slurBegin:1<curve="up"> \beamsOff {c0/2., b&/2.  } \bar 
+   (* meas. 24 *)  \stemsDown \beamsOff \stacc<position="above">( {f/8, \fingering<position="above", text="2,1">( a/8)
+  })
+ \slurEnd:1 _/8 \stemsUp \beamsOff {f-1/4, \fingering<position="above", text="2,5">( c0/4)
+  } _/4 \bar 
+   (* meas. 25 *)  \staffFormat<distance=19.4> \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="2">( \acc( b&/8)
+)
+ \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \beamEnd:1 \bar 
+   (* meas. 26 *)  \stemsDown \beamBegin:1 \fingering<position="above", text="3">( a0/8)
+ \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 27 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \fingering<position="above", text="2">( b&0/8)
+ \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \stemsDown b&0/8 \stemsDown c1/8 \beamEnd:1 \bar 
+   (* meas. 28 *)  \stemsDown \beamBegin:1 \fingering<position="above", text="3">( a0/8)
+ \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \stemsDown a0/8 \stemsDown c1/8 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 29 *)  \staffFormat<distance=19.4> \stemsDown \slurBegin:1<curve="up"> \beamsOff {f0/2., \fingering<position="above", text="5,3">( a/2.)
+  } \bar 
+   (* meas. 30 *)  \stemsDown \beamsOff \stacc<position="above">( {b&/8, \fingering<position="above", text="2,1">( d1/8)
+  })
+ \slurEnd:1 _/8 _/4 _/4 \bar 
+   (* meas. 31 *)  \stemsDown \slurBegin:1<curve="up"> \beamsOff {c0/2., b&/2.  } \bar 
+   (* meas. 32 *)  \stemsDown \beamsOff \stacc<position="above">( {f/8, \fingering<position="above", text="2,1">( a/8)
+  })
+ \slurEnd:1 _/8 \stemsUp \beamsOff {f-1/4, \fingering<position="above", text="2,5">( c0/4)
+  } _/4 ]
+  }
