@@ -103,9 +103,9 @@ class GuidoEngine {
     writeStream  (s: GuidoStream, str: string): GuidoErrCode        { return this.fEngine.writeStream ( s, str ); }
 	resetStream  (s: GuidoStream): GuidoErrCode      { return this.fEngine.resetStream ( s ); }
                        
-    getParsingTime  (): number              { return this.fEngine.getParsingTime(); }
-    getAR2GRTime    (): number              { return this.fEngine.getAR2GRTime(); }
-    getOnDrawTime   (): number              { return this.fEngine.getOnDrawTime(); }
+    getParsingTime  (ar: ARHandler): number              { return this.fEngine.getParsingTime(ar); }
+    getAR2GRTime    (gr: GRHandler): number              { return this.fEngine.getAR2GRTime(gr); }
+    getOnDrawTime   (gr: GRHandler): number              { return this.fEngine.getOnDrawTime(gr); }
 
     //------------------------------------------------------------------------
     // Guido mappings interface
