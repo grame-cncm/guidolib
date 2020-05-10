@@ -37,6 +37,7 @@ basic : $(PROJ)
 	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
 
 all : $(PROJ)
+	git submodule update --init
 	$(MAKE) basic
 	$(MAKE) Qt
 	$(MAKE) wasm
