@@ -31,6 +31,7 @@ class GRMark : public GRText
 	FloatRect	toSquare (const FloatRect& r) const;
 	void		toDiamond (const FloatRect& r, VGDevice & hdc) const;
 	void		toTriangle (const FloatRect& r, VGDevice & hdc) const;
+	void		toCircle (const FloatRect& r, VGDevice & hdc) const;
 	void		toEllipse (const FloatRect& r, VGDevice & hdc) const;
 	void		toBracket (const FloatRect& r, VGDevice & hdc) const;
 

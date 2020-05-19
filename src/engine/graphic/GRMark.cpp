@@ -84,6 +84,14 @@ void GRMark::toBracket (const FloatRect& r, VGDevice & hdc) const
 }
 
 //----------------------------------------------------------------
+void GRMark::toCircle (const FloatRect& r, VGDevice & hdc) const
+{
+	float w = std::min(r.Width(), r.Height());
+	float inset = 15;
+	hdc.FrameEllipse(r.left + w/2, r.top + w/2, w-inset, w-inset);
+}
+
+//----------------------------------------------------------------
 FloatRect GRMark::toSquare (const FloatRect& r) const
 {
 	FloatRect out (r);
@@ -130,7 +138,8 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 				hdc.Frame(r.left, r.top, r.right, r.bottom);
 				break;
 			case ARMark::kCircle:
-				r = toSquare(r);
+				toCircle(r, hdc);
+				break;
 			case ARMark::kOval:
 				toEllipse(r, hdc);
 				break;
