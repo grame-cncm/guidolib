@@ -237,6 +237,30 @@ void GDeviceOSX::Arc( float left, float top, float right, float bottom, float st
 }
 
 // --------------------------------------------------------------
+void GDeviceOSX::FrameEllipse( float x, float y, float width, float height)
+{
+	CGRect rect;
+	rect.origin.x = x - (width/2);
+	rect.origin.y = y + (height/2);
+	rect.size.width = width;
+	rect.size.height = height;
+	::CGContextAddEllipseInRect(mContext, rect);
+}
+
+// --------------------------------------------------------------
+void GDeviceOSX::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+	CGRect rect;
+	rect.origin.x = x - (width/2);
+	rect.origin.y = y + (height/2);
+	rect.size.width = width;
+	rect.size.height = height;
+	PushFillColor(color);
+	::CGContextAddEllipseInRect(mContext, rect);
+	PopFillColor();
+}
+
+// --------------------------------------------------------------
 void GDeviceOSX::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
 	const float xCoords [] = { x1, x2, x3 };

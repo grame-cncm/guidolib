@@ -134,6 +134,27 @@ void BinaryDevice::Arc( float left, float top, float right, float bottom, float 
   fStream.write((char *)&endY, sizeof(float));
 }
 
+void BinaryDevice::FrameEllipse( float x, float y, float width, float height)
+{
+  unsigned char id = 55;
+  fStream.write((char *)&id, sizeof(unsigned char));
+  fStream.write((char *)&x, sizeof(float));
+  fStream.write((char *)&y, sizeof(float));
+  fStream.write((char *)&width, sizeof(float));
+  fStream.write((char *)&height, sizeof(float));
+}
+
+void BinaryDevice::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+  unsigned char id = 56;
+  fStream.write((char *)&id, sizeof(unsigned char));
+  fStream.write((char *)&x, sizeof(float));
+  fStream.write((char *)&y, sizeof(float));
+  fStream.write((char *)&width, sizeof(float));
+  fStream.write((char *)&height, sizeof(float));
+  writeColor (color);
+}
+
 //______________________________________________________________________________
 // - Filled surfaces
 //______________________________________________________________________________

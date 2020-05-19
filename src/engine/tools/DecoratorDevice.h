@@ -33,29 +33,26 @@ class DecoratorDevice : public VGDevice
 		// - Drawing services ------------------------------------------------
 		virtual bool			BeginDraw();
 		virtual void			EndDraw();
-		virtual void			InvalidateRect( float left, float top, 
-									   float right, float bottom );
+		virtual void			InvalidateRect( float left, float top, float right, float bottom );
 
 					// - Standard graphic primitives -------------------------
 		virtual void			MoveTo( float x, float y );
 		virtual void			LineTo( float x, float y );
-		virtual void			Line( float x1, float y1, 
-									  float x2, float y2 );
-		virtual void			Frame( float left, float top, 
-									   float right, float bottom );	
+		virtual void			Line( float x1, float y1, float x2, float y2 );
+		virtual void			Frame( float left, float top, float right, float bottom );
 		virtual void			Arc( float left,   float top, 
 									 float right,  float bottom, 
 									 float startX, float startY, 
 									 float endX,   float endY );
+		virtual void			FrameEllipse( float x, float y, float width, float height);
 
 					// - Filled surfaces --------------------------------------
-		virtual	void			Triangle( float x1, float y1, 
+		virtual void			Ellipse( float x, float y, float width, float height, const VGColor& color);
+		virtual	void			Triangle( float x1, float y1,
 										  float x2, float y2, 
 										  float x3, float y3 );	
-		virtual	void			Polygon( const float * xCoords, 
-										 const float * yCoords, int count );	
-		virtual void			Rectangle( float left,  float top, 
-										   float right, float bottom );
+		virtual	void			Polygon( const float * xCoords, const float * yCoords, int count );	
+		virtual void			Rectangle( float left,  float top, float right, float bottom );
 
 		// - Font services ---------------------------------------------------
 		virtual	void			SetMusicFont( const VGFont * font );

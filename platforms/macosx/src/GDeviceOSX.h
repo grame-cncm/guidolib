@@ -54,8 +54,10 @@ class_export GDeviceOSX : public VGDevice
 		virtual void			Line( float x1, float y1, float x2, float y2 );
 		virtual void			Frame( float left, float top, float right, float bottom );
 		virtual void			Arc( float left, float top, float right, float bottom, float startX, float startY, float endX, float endY );
+		virtual void			FrameEllipse( float x, float y, float width, float height);
 
 					// - Filled surfaces --------------------------------------
+		virtual void			Ellipse( float x, float y, float width, float height, const VGColor& color);
 		virtual	void			Triangle( float x1, float y1, float x2, float y2, float x3, float y3 );
 		virtual	void			Polygon( const float * xCoords, const float * yCoords, int count );	
 		virtual void			Rectangle( float left,  float top, float right, float bottom );

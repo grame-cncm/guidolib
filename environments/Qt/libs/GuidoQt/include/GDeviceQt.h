@@ -52,13 +52,11 @@ class GDeviceQt: public VGDevice
 		void Frame( float left, float top, float right, float bottom );
 		void Arc( float left,   float top, 	float right,  float bottom, 
 					float startX, float startY,	float endX,   float endY );
-		
-		void Triangle( float x1, float y1, 
-				float x2, float y2, 
-				float x3, float y3 );
+		void FrameEllipse( float x, float y, float width, float height);
+		void Ellipse( float x, float y, float width, float height, const VGColor& color);
+		void Triangle( float x1, float y1, float x2, float y2, float x3, float y3 );
 		void Polygon( const float * xCoords, const float * yCoords, int count);
-		void Rectangle( float left,  float top, 
-				float right, float bottom );
+		void Rectangle( float left,  float top, float right, float bottom );
 		
 		void			SetMusicFont( const VGFont * font );
 		const VGFont *	GetMusicFont() const;

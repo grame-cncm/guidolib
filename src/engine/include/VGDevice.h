@@ -146,9 +146,15 @@ class VGDevice
 									 float startX, float startY,
 									 float endX,   float endY ) = 0;
 
+		/// Draws an ellipse
+		virtual void			FrameEllipse( float x, float y, float width, float height) = 0;
+
 					// - Filled surfaces --------------------------------------
 					// The raster op mode for color filling should be specified
 					// with SetRasterOpMode() before using one of these.
+
+		/// Draws a filled ellipse
+		virtual void			Ellipse( float x, float y, float width, float height, const VGColor& color) = 0;
 
 		/// Draws a triangle consisting of three points connected by
 		/// straight lines. The triangle is NOT outlined but simply

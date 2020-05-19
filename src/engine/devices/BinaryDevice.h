@@ -221,6 +221,12 @@ class_export BinaryDevice : public VGDevice
 		virtual	void			PushPenWidth( float width);
 		// 54
 		virtual	void			PopPenWidth();
+
+		// - VGDevice extension --------------------------------------------
+		// 55
+		virtual void			FrameEllipse( float x, float y, float width, float height);
+		// 56
+		virtual void			Ellipse( float x, float y, float width, float height, const VGColor& color);
 };
 
 /*! @} */

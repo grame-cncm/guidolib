@@ -215,6 +215,25 @@ void GDeviceQt::Arc( float left,   float top,
 }
 
 //-----------------------------------------------------------------------
+void GDeviceQt::FrameEllipse( float x, float y, float width, float height)
+{
+	QPointF pos(x, y);
+	const QBrush &	b = mQPainter->brush();
+	mQPainter->setBrush (Qt::NoBrush);
+	mQPainter->drawEllipse (pos, width, height);
+	mQPainter->setBrush (b);
+}
+
+//-----------------------------------------------------------------------
+void GDeviceQt::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+	QPointF pos(x, y);
+	PushFillColor (color);
+	mQPainter->drawEllipse (pos, width, height);
+	PopFillColor ();
+}
+
+//-----------------------------------------------------------------------
 void GDeviceQt::Triangle( float x1, float y1, 
 		float x2, float y2, 
 		float x3, float y3 )

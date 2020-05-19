@@ -207,9 +207,23 @@ void SVGDevice::Arc( float left, float top, float right, float bottom, float sta
 {
 }
 
+
+void SVGDevice::FrameEllipse( float x, float y, float width, float height)
+{
+	fStream << fEndl << "<ellipse cx=\"" << x << "\" cy=\"" << y << "\" rx=\"" << width << "\" ry=\"" << height << "\" fill=\"none\"></ellipse>";
+}
+
+
 //______________________________________________________________________________
 // - Filled surfaces
 //______________________________________________________________________________
+void SVGDevice::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+	PushPenColor (color);
+	fStream << fEndl << "<ellipse cx=\"" << x << "\" cy=\"" << y << "\" rx=\"" << width << "\" ry=\"" << height << "\" fill=\"none\"></ellipse>";
+	PopPenColor ();
+}
+
 void SVGDevice::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
 	float x[3], y[3];

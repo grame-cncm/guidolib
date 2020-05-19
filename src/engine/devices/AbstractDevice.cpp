@@ -97,12 +97,24 @@ void AbstractDevice::Arc( float left, float top, float right, float bottom, floa
 	fStream << "Arc" << fSpace << left << fSpace << top << fSpace << right << fSpace << bottom << fSpace << startX << fSpace << startY << fSpace << endX << fSpace << endY << endl;
 }
 
+void AbstractDevice::FrameEllipse( float x, float y, float w, float h)
+{
+	fStream << "Ellipse" << fSpace << x << fSpace << y << fSpace << w << fSpace << h << endl;
+}
+
 //______________________________________________________________________________
 // - Filled surfaces
 //______________________________________________________________________________
+void AbstractDevice::Ellipse( float x, float y, float w, float h, const VGColor& color)
+{
+	fStream << "Ellipse" << fSpace << x << fSpace << y << fSpace << w << fSpace << h << fSpace;
+	writeColor (color);
+	fStream << endl;
+}
+
 void AbstractDevice::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
-	fStream << "Triangle" << fSpace << x1 << y1 << x2 << y2 << x3 << y3 << endl;
+	fStream << "Triangle" << fSpace << x1 << fSpace << y1 << fSpace << x2 << fSpace << y2 << fSpace << x3 << fSpace << y3 << endl;
 }
 
 void AbstractDevice::Polygon( const float * xCoords, const float * yCoords, int count )
