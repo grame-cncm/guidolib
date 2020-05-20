@@ -55,6 +55,8 @@ void ARBar::setTagParameters (const TagParameterMap& params)
 		fMeasureNumberDisplayed = (p->getBool() ? kNumAll : kNoNum);
 		fMeasureNumberDisplayedIsSet = true;
 	}
+    p = getParameter<TagParameterString>(kHiddenStr);
+	if (p) fHidden = p->getBool();
 
     const TagParameterFloat* num = getParameter<TagParameterFloat>(kNumDxStr);
 	numDx = num ? num->getValue() : 0;

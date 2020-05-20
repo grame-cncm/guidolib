@@ -142,6 +142,7 @@ extern const char* kGroupStr;
 extern const char* kHdxStr;
 extern const char* kHdyStr;
 extern const char* kHideNaturalsStr;
+extern const char* kHiddenStr;
 extern const char* kHStr;
 extern const char* kHStr;
 extern const char* kIDStr;

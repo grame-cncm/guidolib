@@ -51,8 +51,8 @@ GRPage*     GRBar::fCurrentPage = 0;
 GRSystem*   GRBar::fCurrentSystem = 0;
 
 // --------------------------------------------------------------------------
-GRBar::GRBar(const ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
-	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
+GRBar::GRBar(const ARBar * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
+	: GRTagARNotationElement(ar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
 {
 	mGrStaff = inStaff;
 	mSymbol = kBarSymbol;
@@ -62,12 +62,13 @@ GRBar::GRBar(const ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION &
     mStaffRatio = 1.0f;
     fLinesCount = inStaff->getNumlines();
 	InitGRBar( inTimePos, inStaff );
+	if (ar->hidden()) mShow = false;
 }
 
 // --------------------------------------------------------------------------
 // this constructor uses a GRSystem (it is a system (or accolade)-bar)
-GRBar::GRBar(const ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender  )
-	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
+GRBar::GRBar(const ARBar * ar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender  )
+	: GRTagARNotationElement(ar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
 {
 	mGrStaff = inStaff;
 	// does not need a spring on its own (it is attached to another
