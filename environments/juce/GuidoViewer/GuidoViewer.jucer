@@ -12,14 +12,14 @@
               pluginFormats="buildVST,buildAU" headerPath="../../../../../src/engine/include&#10;../../../Device">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-               objCExtraSuffix="WzPHFY" extraLinkerFlags="-F../../../../../build  -framework GUIDOEngine&#10;"
+               objCExtraSuffix="WzPHFY" extraLinkerFlags="-F../../../../../build/lib  -framework GUIDOEngine&#10;"
                bigIcon="IAUjPh">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
-                       osxCompatibility="10.6 SDK"/>
+                       osxCompatibility="10.6 SDK" libraryPath="/Users/fober/src/guido/guidolib/build/lib"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
                        osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
-                       binaryPath=""/>
+                       binaryPath="" libraryPath="/Users/fober/src/guido/guidolib/build/lib"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_basics" path="../../../../../../juce/modules"/>
@@ -103,11 +103,11 @@
   </MAINGROUP>
   <JUCEOPTIONS JUCE_USE_CDBURNER="disabled"/>
   <MODULES>
-    <MODULE id="juce_core" showAllCode="1" useGlobalPath="1"/>
-    <MODULE id="juce_data_structures" showAllCode="1" useGlobalPath="1"/>
-    <MODULE id="juce_events" showAllCode="1" useGlobalPath="1"/>
-    <MODULE id="juce_graphics" showAllCode="1" useGlobalPath="1"/>
-    <MODULE id="juce_gui_basics" showAllCode="1" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useGlobalPath="1" useLocalCopy="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useGlobalPath="1" useLocalCopy="1"/>
+    <MODULE id="juce_events" showAllCode="1" useGlobalPath="1" useLocalCopy="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useGlobalPath="1" useLocalCopy="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useGlobalPath="1" useLocalCopy="1"/>
   </MODULES>
   <LIVE_SETTINGS>
     <OSX/>

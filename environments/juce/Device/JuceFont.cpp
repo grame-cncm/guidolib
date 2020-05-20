@@ -45,7 +45,7 @@ int JuceFont::GetProperties() const
 	int properties = kFontNone;
 	if (fNativeFont) {
 		if (fNativeFont->isBold()) properties += kFontBold;
-		if (fNativeFont->isItalic()) properties += kFontItalic;
+		if (fNativeFont->isItalic()) properties += kFontItalic; 
 		if (fNativeFont->isUnderlined()) properties += kFontUnderline;
 	}
 	return properties;
@@ -59,7 +59,7 @@ void JuceFont::GetExtent( const char * s, int count, float * width, float * heig
 	*height = fNativeFont->getAscent() + fNativeFont->getDescent();
 }
 
-void JuceFont::GetExtent( unsigned char c, float * width, float * height,  VGDevice *) const
+void JuceFont::GetExtent( int c, float * width, float * height,  VGDevice *) const
 {
 	String text;
 	text += wchar_t(c);

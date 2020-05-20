@@ -104,6 +104,19 @@ void JuceDevice::Arc( float left, float top, float right,  float bottom,
 	fGraphics->strokePath (path, st);
 }
 
+void JuceDevice::FrameEllipse( float x, float y, float width, float height)
+{
+	float expand = 50.f;
+	fGraphics->drawEllipse (x- (width + expand)/2, y-height*1.5 - expand/2, width+expand, height+expand, fLineThick);
+}
+
+void JuceDevice::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+	PushFillColor (color);
+	fGraphics->fillEllipse (x-width/2, y-height/2, width, height);
+	PopFillColor();
+}
+
 // - Filled surfaces --------------------------------------
 void JuceDevice::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 ) 
 {

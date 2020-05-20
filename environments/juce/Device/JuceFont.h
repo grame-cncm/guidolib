@@ -39,7 +39,7 @@ class JuceFont : public VGFont
 
 		// - Symbol services ---------------------------------------------
 		virtual	void			GetExtent( const char * s, int count, float * width, float * height, VGDevice *) const;
-		virtual	void			GetExtent( unsigned char c, float * width, float * height,  VGDevice *) const;
+		virtual	void			GetExtent( int c, float * width, float * height,  VGDevice *) const;
 
 		const juce::Font&	NativeFont() const	{ return *fNativeFont; };
 
