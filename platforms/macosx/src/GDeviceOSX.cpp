@@ -240,23 +240,25 @@ void GDeviceOSX::Arc( float left, float top, float right, float bottom, float st
 void GDeviceOSX::FrameEllipse( float x, float y, float width, float height)
 {
 	CGRect rect;
-	rect.origin.x = x - (width/2);
-	rect.origin.y = y + (height/2);
-	rect.size.width = width;
-	rect.size.height = height;
+    rect.origin.x = x - width;
+    rect.origin.y = y - height;
+	rect.size.width = 2*width;
+	rect.size.height = 2*height;
 	::CGContextAddEllipseInRect(mContext, rect);
+    ::CGContextStrokePath(mContext);
 }
 
 // --------------------------------------------------------------
 void GDeviceOSX::Ellipse( float x, float y, float width, float height, const VGColor& color)
 {
 	CGRect rect;
-	rect.origin.x = x - (width/2);
-	rect.origin.y = y + (height/2);
-	rect.size.width = width;
-	rect.size.height = height;
+    rect.origin.x = x - width;
+    rect.origin.y = y - height;
+	rect.size.width = 2*width;
+	rect.size.height = 2*height;
 	PushFillColor(color);
 	::CGContextAddEllipseInRect(mContext, rect);
+    ::CGContextStrokePath(mContext);
 	PopFillColor();
 }
 
