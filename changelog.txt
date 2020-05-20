@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.9
+- VGDevice extension to support ellipses
 - implement circle with marks
 - new interface to change piano roll voices color, based on html names
 - fix infinite loop issue in the context of small page width
