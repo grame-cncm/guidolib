@@ -217,7 +217,11 @@ void GDeviceQt::Arc( float left,   float top,
 //-----------------------------------------------------------------------
 void GDeviceQt::FrameEllipse( float x, float y, float width, float height)
 {
+#ifdef WIN32
+	QPointF pos(x, y+height/2);
+#else
 	QPointF pos(x, y);
+#endif
 	const QBrush &	b = mQPainter->brush();
 	mQPainter->setBrush (Qt::NoBrush);
 	mQPainter->drawEllipse (pos, width, height);
@@ -227,7 +231,11 @@ void GDeviceQt::FrameEllipse( float x, float y, float width, float height)
 //-----------------------------------------------------------------------
 void GDeviceQt::Ellipse( float x, float y, float width, float height, const VGColor& color)
 {
+#ifdef WIN32
+	QPointF pos(x, y+height/2);
+#else
 	QPointF pos(x, y);
+#endif
 	PushFillColor (color);
 	mQPainter->drawEllipse (pos, width, height);
 	PopFillColor ();

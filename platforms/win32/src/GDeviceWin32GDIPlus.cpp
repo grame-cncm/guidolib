@@ -232,24 +232,38 @@ GDeviceWin32GDIPlus::LineTo( float x, float y )
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceWin32GDIPlus::Line( float x1, float y1, float x2, float y2 )
+void GDeviceWin32GDIPlus::Line( float x1, float y1, float x2, float y2 )
 {
 	mGraphics->DrawLine(mPen1, x1, y1, x2, y2);
 	MoveTo( x2, y2 ); 
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceWin32GDIPlus::Frame( float left, float top, float right, float bottom )
+void GDeviceWin32GDIPlus::Frame( float left, float top, float right, float bottom )
 {
 	mGraphics->DrawRectangle(mPen1, left, top, right - left, bottom - top);
 	MoveTo( left, top ); 
 }
 
 // --------------------------------------------------------------
-void		
-GDeviceWin32GDIPlus::Arc( float left, float top, float right, float bottom, 
+void GDeviceWin32GDIPlus::FrameEllipse( float x, float y, float width, float height)
+{
+	float w2 = width / 2;
+	float h2 = height / 2;
+	mGraphics->DrawEllipse(mPen1, x - w2, y - h2, width, height);
+}
+// --------------------------------------------------------------
+void GDeviceWin32GDIPlus::Ellipse(float x, float y, float width, float height, const VGColor& color)
+{
+	float w2 = width / 2;
+	float h2 = height / 2;
+	PushFillColor(color);
+	mGraphics->DrawEllipse(mPen1, x - w2, y - h2, width, height);
+	PopFillColor();
+}
+
+// --------------------------------------------------------------
+void GDeviceWin32GDIPlus::Arc( float left, float top, float right, float bottom, 
 						  float startX, float startY, float endX, float endY )
 { 
   // Set up the arc.
@@ -261,16 +275,14 @@ GDeviceWin32GDIPlus::Arc( float left, float top, float right, float bottom,
 }
 
 // --------------------------------------------------------------
-void			
-GDeviceWin32GDIPlus::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
+void GDeviceWin32GDIPlus::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
 	const float xCoords [] = { x1, x2, x3 };
 	const float yCoords [] = { y1, y2, y3 };
 	Polygon( xCoords, yCoords, 3 );	
 }
 // --------------------------------------------------------------
-void
-GDeviceWin32GDIPlus::Polygon( const float * xCoords, const float * yCoords, int count ) 
+void GDeviceWin32GDIPlus::Polygon( const float * xCoords, const float * yCoords, int count ) 
 { 
 	if( count > mPtCount )
 	{

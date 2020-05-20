@@ -167,6 +167,12 @@ inline void DecoratorDevice::Line( float x1, float y1, float x2, float y2 ) {
 inline void DecoratorDevice::Frame( float left, float top, float right, float bottom ) {
 	fDevice->Frame (left, top, right, bottom);
 }
+inline void DecoratorDevice::FrameEllipse(float x, float y, float width, float height) {
+	fDevice->FrameEllipse (x, y, width, height);
+}
+inline void DecoratorDevice::Ellipse(float x, float y, float width, float height, const VGColor& color) {
+	fDevice->Ellipse (x, y, width, height, color);
+}
 inline void DecoratorDevice::Arc( float left, float top, float right, float bottom, float startX, float startY, float endX, float endY ) {
 	fDevice->Arc (left, top, right, bottom, startX, startY, endX, endY);
 }

@@ -269,16 +269,31 @@ GDeviceWin32::LineTo( float x, float y )
 
 
 // --------------------------------------------------------------
-void
-GDeviceWin32::Line( float x1, float y1, float x2, float y2 )
+void GDeviceWin32::Line( float x1, float y1, float x2, float y2 )
 {
 	MoveTo( x1, y1 );
 	LineTo( x2, y2 );
 }
 
 // --------------------------------------------------------------
-void
-GDeviceWin32::Frame( float left, float top, float right, float bottom )
+void GDeviceWin32::FrameEllipse( float x, float y, float width, float height)
+{
+	float w2 = width / 2;
+	float h2 = height / 2;
+	::Ellipse(mHDC, x - w2, y - h2, x + w2, y + h2);
+}
+// --------------------------------------------------------------
+void GDeviceWin32::Ellipse(float x, float y, float width, float height, const VGColor& color)
+{
+	float w2 = width / 2;
+	float h2 = height / 2;
+	PushFillColor(color);
+	::Ellipse(mHDC, x - w2, y - h2, x + w2, y + h2);
+	PopFillColor();
+}
+
+// --------------------------------------------------------------
+void GDeviceWin32::Frame( float left, float top, float right, float bottom )
 {
     MoveTo (left, top);
     LineTo (right, top);
@@ -288,8 +303,7 @@ GDeviceWin32::Frame( float left, float top, float right, float bottom )
 }
 
 // --------------------------------------------------------------
-void
-GDeviceWin32::Arc( float left, float top, float right, float bottom,
+void GDeviceWin32::Arc( float left, float top, float right, float bottom,
 				   float startX, float startY, float endX, float endY )
 {
 	::Arc( mHDC, RInt(left), RInt(top), RInt(right), RInt(bottom),
@@ -297,8 +311,7 @@ GDeviceWin32::Arc( float left, float top, float right, float bottom,
 }
 
 // --------------------------------------------------------------
-void
-GDeviceWin32::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
+void GDeviceWin32::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
 	const float xCoords [] = { x1, x2, x3 };
 	const float yCoords [] = { y1, y2, y3 };
