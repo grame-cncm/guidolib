@@ -93,6 +93,26 @@ void CairoDevice::Frame( float left, float top, float right, float bottom )
 	cairo_stroke (fNativeDevice); 
 }
 
+void CairoDevice::FrameEllipse( float x, float y, float width, float height)
+{
+	cairo_save(fNativeDevice);
+	cairo_translate(fNativeDevice, x, y);
+	cairo_scale(fNativeDevice, width, height);
+	cairo_arc(fNativeDevice, 0.0, 0.0, 1.0, 0.0, 2 * M_PI);
+	cairo_restore(fNativeDevice);
+}
+
+void CairoDevice::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+	cairo_save(fNativeDevice);
+	PushFillColor (color);
+	cairo_translate(fNativeDevice, x, y);
+	cairo_scale(fNativeDevice, width, height);
+	cairo_arc(fNativeDevice, 0.0, 0.0, 1.0, 0.0, 2 * M_PI);
+	PopFillColor ();
+	cairo_restore(fNativeDevice);
+}
+
 // --------------------------------------------------------------
 // Return an angle from 0 to 360
 float CairoDevice::CoordToRadian( float x, float y )
