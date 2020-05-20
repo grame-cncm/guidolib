@@ -53,8 +53,7 @@ typedef GLvoid (*CallBackFunc)();
 /////////////////////////////////////////////////////////////////
 // ----------------------------------------------------------------------------
 //static void tessCombine(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX ** dataout)
-static void 
-tessCombine(GLdouble coords[3], void *d[4], GLfloat w[4], void ** dataout)
+static void tessCombine(GLdouble coords[3], void *d[4], GLfloat w[4], void ** dataout)
 {
 //	cout << "tessCombine  w [" << w[0] << ", " << w[1] << ", " << w[2] << ", " << w[3] << "]" << endl;
 //	GLdouble *c = new GLdouble[7];
@@ -66,8 +65,7 @@ tessCombine(GLdouble coords[3], void *d[4], GLfloat w[4], void ** dataout)
 	*dataout = c;
 }
 // ----------------------------------------------------------------------------
-static void 
-tessError(GLenum errno) 
+static void tessError(GLenum errno)
 { 
 	cout << "tessError " << gluErrorString(errno) << endl; 
 }
@@ -122,8 +120,7 @@ GDeviceGL::IsValid() const
 // - Drawing services -------------------------------------------
 /////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------
-bool
-GDeviceGL::BeginDraw()
+bool GDeviceGL::BeginDraw()
 {
 	
 	// general device's state save - was SaveDC()
@@ -161,8 +158,7 @@ GDeviceGL::BeginDraw()
 }
 
 // --------------------------------------------------------------
-void
-GDeviceGL::EndDraw()
+void GDeviceGL::EndDraw()
 {
 /*	if( -- mBeginDrawCount == 0 )
 	{}
@@ -191,22 +187,19 @@ GDeviceGL::EndDraw()
 	mDrawing = false;
 }
 // ----------------------------------------------------------------------------
-void			
-GDeviceGL::InvalidateRect( float left, float top, float right, float bottom )
+void GDeviceGL::InvalidateRect( float left, float top, float right, float bottom )
 {
 }
 
 // ----------------------------------------------------------------------------
-void 
-GDeviceGL::MoveTo( float x, float y )
+void GDeviceGL::MoveTo( float x, float y )
 {
 	mCurrPenPosX = getX(x);
 	mCurrPenPosY = getY(y);
 }
 
 // ----------------------------------------------------------------------------
-void 
-GDeviceGL::LineTo( float x, float y )
+void GDeviceGL::LineTo( float x, float y )
 {
 	x=getX(x);
 	y=getY(y);
@@ -224,16 +217,14 @@ GDeviceGL::LineTo( float x, float y )
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceGL::Line( float x1, float y1, float x2, float y2 )
+void GDeviceGL::Line( float x1, float y1, float x2, float y2 )
 {
 	MoveTo( x1, y1 );
 	LineTo( x2, y2 );
 }
 
 // --------------------------------------------------------------
-void			
-GDeviceGL::Frame( float left, float top, float right, float bottom )
+void GDeviceGL::Frame( float left, float top, float right, float bottom )
 {
     MoveTo (left, top);
     LineTo (right, top);
@@ -243,15 +234,26 @@ GDeviceGL::Frame( float left, float top, float right, float bottom )
 }
 
 // --------------------------------------------------------------
-void		
-GDeviceGL::Arc( float left, float top, float right, float bottom, 
+void GDeviceGL::Arc( float left, float top, float right, float bottom,
 				float startX, float startY, float endX, float endY )
 {
+	cerr << "GDeviceGL::Arc is not yet implemented" << endl;
 }
 
 // --------------------------------------------------------------
-void			
-GDeviceGL::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
+void GDeviceGL::FrameEllipse( float x, float y, float width, float height)
+{
+	cerr << "GDeviceGL::FrameEllipse is not yet implemented" << endl;
+}
+
+// --------------------------------------------------------------
+void GDeviceGL::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+	cerr << "GDeviceGL::Ellipse is not yet implemented" << endl;
+}
+
+// --------------------------------------------------------------
+void GDeviceGL::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
 	const float xCoords [] = { x1, x2, x3 };
 	const float yCoords [] = { y1, y2, y3 };
@@ -325,8 +327,7 @@ void GDeviceGL::SetMusicFont( const VGFont * inObj )
 	mCurrMusicFont = inObj;
 }
 // --------------------------------------------------------------
-const VGFont *	
-GDeviceGL::GetMusicFont() const				  
+const VGFont *	GDeviceGL::GetMusicFont() const
 { 
 	return mCurrMusicFont; 
 }
@@ -338,8 +339,7 @@ void GDeviceGL::SetTextFont( const VGFont * inObj )
 	mCurrTextFont = inObj;
 }
 // --------------------------------------------------------------
-const VGFont *	
-GDeviceGL::GetTextFont() const
+const VGFont * GDeviceGL::GetTextFont() const
 {
 	return mCurrTextFont; 
 }
@@ -374,8 +374,7 @@ void GDeviceGL::SelectFillColor( const VGColor & c )
 }
 // --------------------------------------------------------------
 // Save the current pen, select the new one
-void
-GDeviceGL::PushPen( const VGColor & inColor, float inWidth )
+void GDeviceGL::PushPen( const VGColor & inColor, float inWidth )
 {
 	mPenStack.push_back( mPen );
 	SelectPen( inColor, inWidth );
@@ -383,8 +382,7 @@ GDeviceGL::PushPen( const VGColor & inColor, float inWidth )
 
 // --------------------------------------------------------------
 // Restore the previous pen from the stack
-void
-GDeviceGL::PopPen()
+void GDeviceGL::PopPen()
 {
 	VGPen & pen = mPenStack.back();
 	SelectPen( pen.mColor, pen.mWidth );
@@ -393,8 +391,7 @@ GDeviceGL::PopPen()
 
 // --------------------------------------------------------------
 // Save the current brush, select the new one
-void
-GDeviceGL::PushFillColor( const VGColor & inColor )
+void GDeviceGL::PushFillColor( const VGColor & inColor )
 {
 	mBrushStack.push_back( mFillColor );
 	if( inColor != mFillColor )
@@ -403,8 +400,7 @@ GDeviceGL::PushFillColor( const VGColor & inColor )
 
 // --------------------------------------------------------------
 // Restore the previous brush from the stack
-void
-GDeviceGL::PopFillColor()
+void GDeviceGL::PopFillColor()
 {
 	VGColor & brush = mBrushStack.back();
 	SelectFillColor( brush );
@@ -412,8 +408,7 @@ GDeviceGL::PopFillColor()
 }
 
 // --------------------------------------------------------------
-void			
-GDeviceGL::SetRasterOpMode( VRasterOpMode ROpMode )
+void GDeviceGL::SetRasterOpMode( VRasterOpMode ROpMode )
 {
 	mRasterMode = ROpMode; 
 } 
@@ -422,8 +417,7 @@ GDeviceGL::SetRasterOpMode( VRasterOpMode ROpMode )
 // - Bitmap services (bit-block copy methods) -------------------
 /////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------
-bool			
-GDeviceGL::CopyPixels( VGDevice* pSrcDC, float alpha ) 
+bool GDeviceGL::CopyPixels( VGDevice* pSrcDC, float alpha )
 {
 	return false; 
 	// TODO : replace this code by correct 
@@ -431,8 +425,7 @@ GDeviceGL::CopyPixels( VGDevice* pSrcDC, float alpha )
 }
 
 // --------------------------------------------------------------
-bool			
-GDeviceGL::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, 
+bool GDeviceGL::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC,
 					   int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha )	
 { 
 	return false; 
@@ -441,8 +434,7 @@ GDeviceGL::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC,
 }
 
 // --------------------------------------------------------------
-bool			
-GDeviceGL::CopyPixels( int xDest, int yDest, 
+bool GDeviceGL::CopyPixels( int xDest, int yDest,
 					   int dstWidth, int dstHeight, VGDevice* pSrcDC, float alpha ) 
 { 
 	return false; 
@@ -451,8 +443,7 @@ GDeviceGL::CopyPixels( int xDest, int yDest,
 }
 
 // --------------------------------------------------------------
-bool			
-GDeviceGL::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha ) 
+bool GDeviceGL::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha )
 { 
 	return false; 
 	// TODO : replace this code by correct 
@@ -463,8 +454,7 @@ GDeviceGL::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevi
 // - Coordinate services ----------------------------------------
 /////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------
-void			
-GDeviceGL::SetScale( float x, float y )
+void GDeviceGL::SetScale( float x, float y )
 {
 	const float prevX = mScaleX;
 	const float prevY = mScaleY;
@@ -481,8 +471,7 @@ GDeviceGL::SetScale( float x, float y )
 
 // --------------------------------------------------------------
 // Called only by GRPage
-void				
-GDeviceGL::SetOrigin( float x, float y )
+void GDeviceGL::SetOrigin( float x, float y )
 {
 	const float prevX = mOriginX;
 	const float prevY = mOriginY;
@@ -499,8 +488,7 @@ GDeviceGL::SetOrigin( float x, float y )
 
 // --------------------------------------------------------------
 // Called by: GRPage, GRStaff, GRSystem
-void				
-GDeviceGL::OffsetOrigin( float x, float y )
+void GDeviceGL::OffsetOrigin( float x, float y )
 {
 	const float prevX = mOriginX;
 	const float prevY = mOriginY;
@@ -517,8 +505,7 @@ GDeviceGL::OffsetOrigin( float x, float y )
 // Called by:
 // GRMusic::OnDraw
 // GRPage::getPixelSize
-void			
-GDeviceGL::LogicalToDevice( float * x, float * y ) const
+void GDeviceGL::LogicalToDevice( float * x, float * y ) const
 {
 	*x = (*x * mScaleX - mOriginX);
 	*y = (*y * mScaleY - mOriginY);
@@ -528,55 +515,47 @@ GDeviceGL::LogicalToDevice( float * x, float * y ) const
 // Called by:
 // GRPage::DPtoLPRect
 // GRPage::getVirtualSize
-void			
-GDeviceGL::DeviceToLogical( float * x, float * y ) const	
+void GDeviceGL::DeviceToLogical( float * x, float * y ) const
 {
 	*x = ( *x + mOriginX ) / mScaleX;
 	*y = ( *y + mOriginY ) / mScaleY;
 }
 
 // --------------------------------------------------------------
-float			
-GDeviceGL::GetXScale() const
+float GDeviceGL::GetXScale() const
 { 
 	return mScaleX; 
 }
 // --------------------------------------------------------------
-float			
-GDeviceGL::GetYScale() const
+float GDeviceGL::GetYScale() const
 { 
 	return mScaleY; 
 }
 // --------------------------------------------------------------
-float			
-GDeviceGL::GetXOrigin() const
+float GDeviceGL::GetXOrigin() const
 { 
 	return mOriginX; 
 }
 // --------------------------------------------------------------
-float		
-GDeviceGL::GetYOrigin() const
+float GDeviceGL::GetYOrigin() const
 { 
 	return mOriginY; 
 }
 
 // --------------------------------------------------------------
-void			
-GDeviceGL::NotifySize( int inWidth, int inHeight )
+void GDeviceGL::NotifySize( int inWidth, int inHeight )
 { 
 	mPhysicalWidth = inWidth; mPhysicalHeight = inHeight; 
 }
 
 // --------------------------------------------------------------
-int			
-GDeviceGL::GetWidth() const
+int	GDeviceGL::GetWidth() const
 { 
 	return mPhysicalWidth; 
 }
 
 // --------------------------------------------------------------
-int	
-GDeviceGL::GetHeight() const
+int	GDeviceGL::GetHeight() const
 { 
 	return mPhysicalHeight; 
 }
@@ -681,30 +660,25 @@ GDeviceGL::GetFontColor() const
 	return mTextColor; 
 }
 // --------------------------------------------------------------
-void			
-GDeviceGL::SetFontBackgroundColor( const VGColor & inColor ) 
+void GDeviceGL::SetFontBackgroundColor( const VGColor & inColor )
 { 
-	mTextBackColor = inColor; 
-
+	mTextBackColor = inColor;
 }
 
 // --------------------------------------------------------------
-VGColor			
-GDeviceGL::GetFontBackgroundColor() const
+VGColor	GDeviceGL::GetFontBackgroundColor() const
 { 
 	return mTextBackColor; 
 }
 
 // --------------------------------------------------------------
-void			
-GDeviceGL::SetFontAlign( unsigned int inAlign ) 
+void GDeviceGL::SetFontAlign( unsigned int inAlign )
 { 
 	mTextAlign = inAlign; 
 }
 
 // --------------------------------------------------------------
-unsigned int	
-GDeviceGL::GetFontAlign() const
+unsigned int GDeviceGL::GetFontAlign() const
 { 
 	return mTextAlign; 
 }
@@ -713,22 +687,19 @@ GDeviceGL::GetFontAlign() const
 // - Printer informations services ------------------------------
 /////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------
-void			
-GDeviceGL::SetDPITag( float inDPI ) 
+void GDeviceGL::SetDPITag( float inDPI )
 { 
 	mDPITag = inDPI; 
 }
 
 // --------------------------------------------------------------
-float			
-GDeviceGL::GetDPITag() const 
+float GDeviceGL::GetDPITag() const
 { 
 	return mDPITag; 
 }
 
 // --------------------------------------------------------------
-VGSystem *		
-GDeviceGL::getVGSystem() const 
+VGSystem * GDeviceGL::getVGSystem() const
 { 
 	return mSys; 
 
@@ -737,22 +708,19 @@ GDeviceGL::getVGSystem() const
 }
 
 // --------------------------------------------------------------
-void*		
-GDeviceGL::GetBitMapPixels()
+void* GDeviceGL::GetBitMapPixels()
 {	
 	return NULL;	
 }
 
 // --------------------------------------------------------------
-void		
-GDeviceGL::ReleaseBitMapPixels()
+void GDeviceGL::ReleaseBitMapPixels()
 {
 }
 
 
 // --------------------------------------------------------------
-void *			
-GDeviceGL::GetNativeContext() const
+void * GDeviceGL::GetNativeContext() const
 {
 	return NULL; 
 }
