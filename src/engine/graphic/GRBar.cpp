@@ -79,6 +79,7 @@ GRBar::GRBar(const ARBar * ar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPO
 	setTagType(GRTag::SYSTEMTAG);
     fLinesCount = inStaff->getNumlines();
 	InitGRBar( inTimePos, inStaff );
+	if (ar->hidden()) mShow = false;
 }
 
 // -----------------------------------------------------------------------------
