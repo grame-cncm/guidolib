@@ -468,3 +468,11 @@ void CanvasDevice::PopPenWidth()
 		}
 	);
 }
+// 54
+void CanvasDevice::FrameEllipse( float x, float y, float width, float height)
+{
+}
+// 56
+void CanvasDevice::Ellipse( float x, float y, float width, float height, const VGColor& color)
+{
+}

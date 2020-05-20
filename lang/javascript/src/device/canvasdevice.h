@@ -199,6 +199,13 @@ class CanvasDevice : public VGDevice
 		// 54
 		void			PopPenWidth();
 
+
+		// - VGDevice extension --------------------------------------------
+		// 55
+		void			FrameEllipse( float x, float y, float width, float height);
+		// 56
+		void			Ellipse( float x, float y, float width, float height, const VGColor& color);
+
 	private:
 		CanvasSystem * fSystem;
 
