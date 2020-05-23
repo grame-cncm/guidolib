@@ -153,6 +153,7 @@ extern const char* kLengthStr;
 extern const char* kLineThicknesStr;
 extern const char* kLmStr;
 extern const char* kMarkStr;
+extern const char* kMeasNumStr;
 extern const char* kModeStr;
 extern const char* kMStr;
 extern const char* kNameStr;

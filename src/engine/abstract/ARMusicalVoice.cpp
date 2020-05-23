@@ -2361,7 +2361,9 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 		{
             if (bar->isMeasureNumSkipped())
                 measureNumber--;
-			bar->setMeasureNumber(measureNumber);
+			if (bar->getMeasureNumber())	// measure num is already set at tag level
+				measureNumber = bar->getMeasureNumber();
+			else bar->setMeasureNumber(measureNumber);
 			bar->setPreviousBar (previous);
 
 			if (!bar->isMeasureNumberDisplayedSet()) {

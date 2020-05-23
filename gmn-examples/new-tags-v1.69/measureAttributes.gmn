@@ -1,0 +1,5 @@
+[
+	\meter<"2/4", autoMeasuresNum="on">
+	\bar<measNum=50, hidden="yes"> a b c d a b c d
+	a a \bar<hidden="yes"> b c d a b c d c
+]

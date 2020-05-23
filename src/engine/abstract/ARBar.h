@@ -33,6 +33,7 @@
 @params:
 @param:displayMeasNum:boolean:displays measure number:false:true
 @param:hidden:boolean:hide bar and prevent measure num increment:false:true
+@param:measNum:integer:set measure number:*none*:true
 @param:numDx:unit:measure number displacement:0:true
 @param:numDy:unit:measure number displacement:0:true
 @paramdesc

@@ -19,6 +19,7 @@
 #include "TagParameterStrings.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
+#include "TagParameterInt.h"
 
 
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
@@ -57,10 +58,12 @@ void ARBar::setTagParameters (const TagParameterMap& params)
 	}
     p = getParameter<TagParameterString>(kHiddenStr);
 	if (p) fHidden = p->getBool();
+    const TagParameterInt* num = getParameter<TagParameterInt>(kMeasNumStr);
+    fMeasureNumber = num ? num->getValue() : 0;
 
-    const TagParameterFloat* num = getParameter<TagParameterFloat>(kNumDxStr);
-	numDx = num ? num->getValue() : 0;
-    num = getParameter<TagParameterFloat>(kNumDyStr);
-	numDy = num ? num->getValue() : 0;
+    const TagParameterFloat* dx = getParameter<TagParameterFloat>(kNumDxStr);
+	numDx = dx ? dx->getValue() : 0;
+    const TagParameterFloat* dy = getParameter<TagParameterFloat>(kNumDyStr);
+	numDy = dy ? dy->getValue() : 0;
 }
 
