@@ -5,10 +5,11 @@
     <link rel="stylesheet" href="../guidostylesheet.css" type="text/css" charset="UTF-8" />
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="../../libGUIDOEngine.js"></script>
+    <link rel="stylesheet" href="../../npm/guido2-webfont/stylesheet.css" type="text/css" />
     <script>
-		var guidoEngine;
+	var guidoEngine;
 	function processGMN() {
-//		console.log("processGMN");
+		// console.log("processGMN");
 		var p = guidoEngine.openParser();
 		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
 		guidoEngine.closeParser(p);
@@ -27,21 +28,16 @@
 		guidoEngine.freeGR(gr);
 		guidoEngine.freeAR(ar);
 		
-//		console.log(result.slice(0, 250));
-
 		$("#canvasContainer").html(result);
-		// Remove comment to have svg result in text
-		//$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
 	}
 
-	$( document ).ready(function() {
-		var module = GuidoModule();
-		guidoEngine = new module.GuidoEngineAdapter;
+	GuidoModule().then( (instance) => { 
+		guidoEngine = new instance.GuidoEngineAdapter;
 		guidoEngine.init();	
 		$("#version").html(guidoEngine.getVersionStr());
 		$("#gmnSandbox").on('keyup', processGMN);
-		processGMN();
-	});
+		processGMN(); }
+	);
 
 	$(window).unload(function(){
 		guidoEngine.shutdown();

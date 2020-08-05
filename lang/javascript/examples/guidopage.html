@@ -2,7 +2,9 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type="text/javascript" src="libs/libGUIDOEngine.js"></script>
+    <script type="text/javascript" src="../libGUIDOEngine.js"></script>
+    <script type="application/wasm" src="../libGUIDOEngine.wasm"></script>
+    <link rel="stylesheet" href="../npm/guido2-webfont/stylesheet.css" type="text/css" />
     <script>
 		var guidoEngine;
 
@@ -21,14 +23,13 @@
 			scorediv.innerHTML = result;
 		}
 
-		var module = GuidoModule();
-		module['onRuntimeInitialized'] = function() {
+		GuidoModule().then ( (module) => {
 			guidoEngine = new module.GuidoEngineAdapter();
 			var version = guidoEngine.getVersion();
 			console.log( "Guido Engine version " + version.str);
 			guidoEngine.init();
 			processGMN();
-		}
+		});
 
     </script>
   </head>

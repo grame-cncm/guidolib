@@ -18,11 +18,10 @@ function processGMNCode() {
 	guidoEngine.closeParser(p);
 }
 
-var module = GuidoModule();
-module['onRuntimeInitialized'] = function() {
+GuidoModule().then ( (module) => {
 	guidoEngine = new module.GuidoEngineAdapter();
 	var version = guidoEngine.getVersion();
 	console.log( "Guido Engine version " + version.str);
 	guidoEngine.init();
 	processGMNCode();
-}
+});
