@@ -66,7 +66,7 @@ $(library).js : $(objects) $(midiobj)
 	emcc $(OPT1) $(objects) $(midiobj) -o $(library).js $(OPTIONS) -s WASM=1
 
 clean:
-	rm -f $(objects) $(target) $(library).wasm.*
+	rm -f $(objects) $(midiobj) $(target) $(library).wasm.*
 
 ##############################################################
 # testing
