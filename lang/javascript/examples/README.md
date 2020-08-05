@@ -1,7 +1,14 @@
-You have 4 samples. Before open an example in your browser, be sure you have the library (libGUIDOEngine.js) in parent directory of html file. You have to copy it in package distribution.
+# Guido Engine
 
-- binaryExport use binary export of GUIDOEngine, parse the binary and draw in html canvas. It use jsCanvasDeviceFromBinary.js to initialize html canvas and jsBinaryDeviceParser.js to execute draw commands.
-- svgExport use the SVG export and add the SVG xml code in html page.
-- canvasDevice use internal javascript device. This device draw on html canvas. To intialize canvas, use jsCanvasDevice.js like in sample (all variables initialized in jsCanvasDevice.js are use in build-in javascript).
-- webComponent is a sample on how to use html5 component to create a new html tag to have a easy integration of guido in html page. A tag guido-viewer is created and integrated in the html page. The draw method used in export svg.
+## Javascript Engine Examples
 
+This folder contains examples that illustrate the use of the Javascript Guido Engine.
+Note that these examples assume to find the compiled WASM library (libGUIDOEngine.js and libGUIDOEngine.wasm) at the root of the `javascript` folder.
+
+Compiling the WASM library requires to have the emsdk tools [installed](https://search.lilo.org/results.php?q=emsdk+install).   
+Note that you can also get the library from [npm](https://www.npmjs.com/package/@grame/guidolib) (requires to have node.js and npm installed)
+
+### Unsupported
+
+The `unsupported` folder contains alternate uses of the engine. They rely on different graphic devices (canvas, binary).
+These examples are likely not working any more. Note that they have been designed to be placed at the root of the `example` folder.
