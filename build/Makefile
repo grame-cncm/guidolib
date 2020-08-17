@@ -136,6 +136,7 @@ android :
 # building the library for iOS
 #===============================================================
 ios : iosdir/guidolib.xcodeproj
+	git submodule update --init
 	cd iosdir && cmake --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
 
 iosdir/guidolib.xcodeproj:
