@@ -21,8 +21,10 @@
 
 #ifdef SMUFL
 #define kMusicFontStr	"Bravura"
+#define TIMESIGSPACE	6
 #else
 #define kMusicFontStr	"Guido2"
+#define TIMESIGSPACE	0
 #endif
 
 class VGFont;
@@ -62,6 +64,8 @@ class FontManager
 	static const VGFont * FindOrCreateFont( int size, const char * name = 0, const char * attributes = 0 );
 	static const VGFont * GetTextFont( const ARFontAble* ar, float lspace, unsigned int& textalign);
 	static void	 ReleaseAllFonts();
+
+	static float ComputeSymbolsStrWidth (VGDevice* hdc, const std::string& str, float spacing=TIMESIGSPACE);
 
 	static const VGFont * gFontScriab;
 	static const VGFont * gFontText;

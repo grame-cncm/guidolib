@@ -163,3 +163,30 @@ void FontManager::ReleaseAllFonts()
 	sFontList.clear();
 	gFontScriab = gFontText = 0;
 }
+
+// --------------------------------------------------------------------------
+/** \brief computes the width of a symbols strings
+ 
+	Input string is expected to contain only numbers or '+' signs
+	Used by GRMeter and GRSingleRest (for multimeasures rest)
+*/
+float FontManager::ComputeSymbolsStrWidth (VGDevice* hdc, const string& str, float spacing)
+{
+	float width = 0;
+	if (!hdc)	return 0;
+
+#ifdef SMUFL
+	const char* ptr = str.c_str();
+	while (*ptr) {
+		int symbol = (*ptr == '+') ? kMeterPlusSymbol : *ptr + kMeter0Symbol - '0';
+		float w, h;
+		FontManager::gFontScriab->GetExtent(symbol, &w, &h, hdc);
+		width += w + spacing;
+		ptr++;
+	}
+#else
+	float h;
+	FontManager::gFontScriab->GetExtent (str.c_str(),  int(str.size()), &width, &h, hdc);
+#endif
+	return width;
+}
