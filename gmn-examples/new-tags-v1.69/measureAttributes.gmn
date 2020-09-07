@@ -1,5 +1,15 @@
+(*
+	new bar tag parameters: 
+	- measNum: set measure number sequence 
+	- hidden: a boolean to hide the bar and prevent measure num to move
+
+*)
 [
 	\meter<"2/4", autoMeasuresNum="on">
-	\bar<measNum=50, hidden="yes"> a b c d a b c d
-	a a \bar<hidden="yes"> b c d a b c d c
+	\bar<measNum=50, hidden="yes"> 
+	a b 
+	c d a b c d
+	a a a a a a
+	\bar<hidden="yes"> 
+	b c d a b c d c
 ]
