@@ -37,6 +37,7 @@
 
 #include "secureio.h"
 #include "FontManager.h"
+#include "VGFont.h"
 
 using namespace std;
 
@@ -207,6 +208,23 @@ void GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol, flo
 	// - Restore context
 	if (colref)
 		hdc.SetFontColor( prevFontColor );  //(TODO: in a parent method)
+}
+
+// -------------------------------------------------------------------------
+void GRNotationElement::DrawNumericSymbols( VGDevice & hdc, const char* str, float x, float y, float size, float spacing) const
+{
+	while (*str) {
+#ifdef SMUFL
+		int symbol = (*str == '+') ? kMeterPlusSymbol : *str + kMeter0Symbol - '0';
+#else
+		int symbol = *str;
+#endif
+		DrawSymbol(hdc, symbol, x, y, size);
+		float w, h;
+		FontManager::gFontScriab->GetExtent(symbol, &w, &h, &hdc);
+		x += w * size + spacing;
+		str++;
+	}
 }
 
 // -------------------------------------------------------------------------
