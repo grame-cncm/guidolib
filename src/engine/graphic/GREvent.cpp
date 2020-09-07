@@ -19,6 +19,7 @@
 using namespace std;
 
 #include "ARMusicalEvent.h"
+#include "ARMMRest.h"
 #include "ARDotFormat.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
@@ -278,6 +279,15 @@ void GREvent::setHPosition( float nx )
 */
 void GREvent::addArticulation( const ARMusicalTag * inTag )
 {
+	const ARMMRest * mrest = dynamic_cast<const ARMMRest*>(inTag);
+	if (mrest) {			// in case of multi-measures rest
+		if (isRest()) {		// check if applied to a rest
+			GRRest * rest = dynamic_cast<GRRest*>(this);
+			rest->setMeasuresCount(mrest->getMeasuresCount());
+		}
+		return;
+	}
+	
 	const float space = mCurLSPACE; // (JB) was LSPACE
 	GRArticulation * newArticulation = new GRArticulation( inTag, space );
 	mArtilist.push_back( newArticulation );

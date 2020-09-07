@@ -108,6 +108,7 @@ const char* kTagMerge		= "merge";
 const char* kTagMeter		= "meter";
 const char* kTagMordent		= "mordent";
 const char* kTagMord		= "mord";
+const char* kTagMRest		= "mrest";			// multiple measures rest (introduced by D.F. on Sept. 4 2020)
 const char* kTagNewLine		= "newLine";
 const char* kTagNewSystem	= "newSystem";
 const char* kTagNewPage		= "newPage";

@@ -24,32 +24,32 @@
 #include "ARMusicalVoice.h"
 #include "ARAuto.h"
 
+class ARAlter;
+class ARChordTag;
+class ARCluster;
+class ARCrescendo;
+class ARCue;
+class ARDiminuendo;
+class ARDotFormat;
+class ARGlissando;
+class ARGrace;
+class ARKey;
+class ARMeter;
 class ARMusic;
+class ARMusicalEvent;
+class ARMusicalObject;
 class ARMusicalVoice;
 class ARNote;
-
-class ARMusicalEvent;
-class ARRepeatBegin;
-class ARMusicalObject;
-class AROctava;
-class ARTStem;
 class ARNoteFormat;
+class AROctava;
+class ARRepeatBegin;
 class ARRestFormat;
-class ARDotFormat;
-class ARAlter;
-class ARGrace;
-class ARCue;
-class ARTrill;
 class ARStaff;
 class ARTHead;
-class ARCluster;
-class ARGlissando;
-class ARCrescendo;
-class ARDiminuendo;
 class ARTremolo;
-class ARChordTag;
+class ARTrill;
+class ARTStem;
 class ARTuplet;
-class ARKey;
 
 typedef KF_IPointerList<ARMusicalTag> TagPointerList; // todo: replace by stl container (easy)
 
@@ -162,6 +162,7 @@ protected:
     const ARChordTag *  mCurrentChordTag = NULL;
     const ARTuplet *	mCurrentTuplet = NULL;
     const ARKey *		mCurrentKey = NULL;
+    const ARMeter *		mCurrentMeter = NULL;
 	int					mVoiceNum;
 	int					mCurrentTags;
 	bool				mTagRanged;

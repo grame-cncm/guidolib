@@ -55,6 +55,7 @@ typedef struct TagParametersMaps {
 	const TagParameterMap sARLyricsMap;
 	const TagParameterMap sARMarkMap;
 	const TagParameterMap sARMeterMap;
+	const TagParameterMap sARMMRestMap;
 	const TagParameterMap sARMusicalTagMap;
 	const TagParameterMap sARNoteFormatMap;
 	const TagParameterMap sAROctavaMap;
@@ -116,6 +117,7 @@ typedef struct TagParametersMaps {
 //			sARMarcatoMap (kARMarcatoParams),
 			sARMarkMap (kARMarkParams),
 			sARMeterMap (kARMeterParams),
+			sARMMRestMap (kARMMRestParams),
 			sARMusicalTagMap (kCommonParams),
 			sARNoteFormatMap (kARNoteFormatParams),
 			sAROctavaMap (kAROctavaParams),

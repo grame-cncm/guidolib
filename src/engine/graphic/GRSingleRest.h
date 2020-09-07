@@ -79,13 +79,15 @@ class GRSingleRest : public GRRest
 	TYPE_DURATION durtemplate;
 	static NVPoint sRefpos;
 
-	GRNotationElement  * firstbar;
-	GRNotationElement  * secondbar;
+	GRNotationElement  * fFirstbar = 0;
+	GRNotationElement  * fSecondbar = 0;
 
 	private:
 	NVstring mRestAppearance;
 	
 	private:
+		void 	DrawMultiMeasuresRest( VGDevice & hdc ) const;
+		void 	DrawMultiMeasuresCount( VGDevice & hdc, int count, float x, float y, float ratio ) const;
 		TYPES 	duration2Type (const TYPE_DURATION& duration) const;
 		float 	type2YPosition (TYPES type) const;
 		void 	setTypeAndPos (TYPE_DURATION dur);

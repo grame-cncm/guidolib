@@ -40,6 +40,7 @@
 #include "ARNewSystem.h"
 #include "ARNote.h"
 #include "ARMeter.h"
+#include "ARMMRest.h"
 #include "ARMusicalEvent.h"
 #include "ARBar.h"
 #include "ARAutoBeamEnd.h"
@@ -2342,6 +2343,8 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 	ARMusicalVoiceState vst;
 	GuidoPos pos = GetHeadPosition(vst);
 	ARBar * previous = 0;
+	const ARMMRest* mrest = 0;
+	
 	while (pos)
 	{
 		if (curmeter != vst.curmeter)
@@ -2356,9 +2359,21 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 
 		ARMusicalObject * o = GetAt(pos);
         ARBar * bar = dynamic_cast<ARBar *>(o);
-
+		const PositionTagList * ptags = vst.getCurPositionTags();
+		if (ptags) {
+			GuidoPos ppos = ptags->GetHeadPosition();
+			while (ppos) {
+				const ARMMRest* tmp = dynamic_cast<const ARMMRest *>(ptags->GetNext(ppos));
+				if (tmp) mrest = tmp;
+			}
+		}
+		
 		if (bar)
 		{
+			if (mrest) {
+				measureNumber += mrest->getMeasuresCount()-1;
+				mrest = 0;
+			}
             if (bar->isMeasureNumSkipped())
                 measureNumber--;
 			if (bar->getMeasureNumber())	// measure num is already set at tag level

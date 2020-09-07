@@ -107,6 +107,7 @@ extern const char* kTagMerge;
 extern const char* kTagMeter;
 extern const char* kTagMord;
 extern const char* kTagMordent;
+extern const char* kTagMRest;
 extern const char* kTagNewLine;
 extern const char* kTagNewPage;
 extern const char* kTagNewSystem;

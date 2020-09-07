@@ -34,7 +34,9 @@ class GRRest : public GREvent
 
 		virtual void	setRestFormat( const  ARRestFormat *restfrmt)	{}
 		virtual int		getWholeMeasure() const					{ return mWholeMeasure; }
+		virtual int		getMeasuresCount() const				{ return fMeasuresCount; }
 	  	virtual void	setWholeMeasure(int p)					{ mWholeMeasure = p; }
+	  	virtual void	setMeasuresCount(int count)				{ fMeasuresCount = count; }
 		virtual void	OnDraw( VGDevice & hdc ) const = 0;
 
 		virtual const GRRest *	isRest() const					{ return this; }
@@ -43,6 +45,7 @@ class GRRest : public GREvent
 	
 	private:
 		int		 mWholeMeasure;
+		int		 fMeasuresCount = 0;
 };
 
 #endif

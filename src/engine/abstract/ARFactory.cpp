@@ -68,6 +68,7 @@
 #include "ARMark.h"
 #include "ARMerge.h"
 #include "ARMeter.h"
+#include "ARMMRest.h"
 #include "ARMusic.h"
 #include "ARMusicalVoice.h"
 #include "ARNewPage.h"
@@ -1153,7 +1154,13 @@ void ARFactory::createTag( const char * name, int no )
 				ARMeter * tmp = new ARMeter;
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);
-				
+				mCurrentMeter = tmp;
+			}
+			else if (!strcmp(name, kTagMRest ))
+			{
+				ARMMRest * tmp = new ARMMRest;
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
 			}
 			else if (!strcmp(name, kTagMark ))
 			{

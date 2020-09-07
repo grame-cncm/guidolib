@@ -22,6 +22,7 @@
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
 
+#include "FontManager.h"
 #include "GRSingleRest.h"
 #include "GRStaff.h"
 #include "GRSystem.h"
@@ -30,6 +31,7 @@
 #include "GRNoteDot.h"
 #include "GRArticulation.h"
 #include "VGDevice.h"
+#include "VGFont.h"
 
 //#define TRACE
 #ifdef TRACE
@@ -45,7 +47,6 @@ NVPoint GRSingleRest::sRefpos;
 GRSingleRest::GRSingleRest(GRStaff * grstf,const TYPE_DURATION & theDuration )
 							: GRRest(grstf,new ARRest(theDuration), true) // ownsAR
 {
-	firstbar = secondbar = 0;
 	createRest(theDuration);
 	mCurLSPACE = grstf->getStaffLSPACE();
 }
@@ -53,7 +54,6 @@ GRSingleRest::GRSingleRest(GRStaff * grstf,const TYPE_DURATION & theDuration )
 GRSingleRest::GRSingleRest(GRStaff *grstf, const ARRest* arrest) : GRRest(grstf,arrest)
 {
 	assert(arrest);
-	firstbar = secondbar = 0;
 	createRest(DURATION_1);
 }
 
@@ -62,7 +62,6 @@ GRSingleRest::GRSingleRest(GRStaff * grstf, const ARRest * arrest, const TYPE_TI
 			: GRRest(grstf, arrest, date, duration), mRestAppearance(arrest->getAppearance())
 {
 	assert(arrest);
-	firstbar = secondbar = NULL;
 
 	TYPE_DURATION d = p_durtemplate ? p_durtemplate : duration;
 	if (mRestAppearance.size()) {
@@ -167,12 +166,53 @@ void GRSingleRest::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 	}
 }
 
+void GRSingleRest::DrawMultiMeasuresCount( VGDevice & hdc, int count, float x, float y, float ratio) const
+{
+	if (count <= 0) return;
+
+	string str = std::to_string(count);
+	float w = FontManager::ComputeSymbolsStrWidth(&hdc, str);
+	DrawNumericSymbols (hdc, str.c_str(), x-w/4, y-2*LSPACE * ratio, ratio, 5);
+}
+
+void GRSingleRest::DrawMultiMeasuresRest( VGDevice & hdc ) const
+{
+	GRStaff* staff = getGRStaff();
+	float lspace = staff ? staff->getStaffLSPACE() : LSPACE;
+	if (mType == P1) {
+		if (fSecondbar) {
+			float bx = fSecondbar->getPosition().x;
+			float x = getPosition().x;
+			float offset = bx - x - lspace*1.5;
+			float x1 = x-offset;
+			float x2 = x + offset;
+			float h = lspace/2.3;
+			float y = getPosition().y + lspace;
+			hdc.Rectangle(x1, y-h, x2, y+h);
+
+			const float lineThickness = staff->currentLineThikness();
+			hdc.PushPenWidth(lineThickness);
+			hdc.Line(x1, y - lspace, x1, y + lspace);
+			hdc.Line(x2, y - lspace, x2, y + lspace);
+			hdc.PopPenWidth();
+		}
+		else cerr << "Warning: no bar for multi-measure rest" << endl;
+	}
+	else GRRest::OnDrawSymbol( hdc, mType );
+	DrawMultiMeasuresCount (hdc, getMeasuresCount(), 0, staff->getPosition().y - LSPACE/2, lspace/LSPACE);
+}
+
 void GRSingleRest::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow)
 		return;
 	traceMethod("OnDraw");
 	if (mType == P0) return;		// don't know how to draw it !
+	
+	if (getMeasuresCount() && getWholeMeasure() && (mType == P1)) {
+		DrawMultiMeasuresRest (hdc);
+		return;
+	}
 
 	GRRest::OnDrawSymbol( hdc, mType );
 	DrawSubElements( hdc );		// - Draw elements (dots...)
@@ -355,8 +395,8 @@ void GRSingleRest::setFillsBar(bool value, GRNotationElement * bar1, GRNotationE
 	mFillsBar = value;
 	if (mFillsBar)
 	{
-		firstbar = bar1;
-		secondbar = bar2;
+		fFirstbar = bar1;
+		fSecondbar = bar2;
 		if (filled) {
 			setTypeAndPos(DURATION_1);
 			RemoveAllSubElements();
@@ -366,7 +406,8 @@ void GRSingleRest::setFillsBar(bool value, GRNotationElement * bar1, GRNotationE
 
 void GRSingleRest::tellPosition( GObject * caller, const NVPoint & newPosition )
 {
-	if (mFillsBar && caller == secondbar)
+	const GRNotationElement* elt = dynamic_cast<const GRNotationElement*>(caller);
+	if (mFillsBar && caller == fSecondbar)
 	{
 		// then we have a bar filler ....
 
@@ -374,16 +415,16 @@ void GRSingleRest::tellPosition( GObject * caller, const NVPoint & newPosition )
 		// if not, we need the horizontal position of the firstglue
 		// of the first systemslice .... 
 		float posx = -1;
-		if (firstbar)
+		if (fFirstbar)
 		{	
 			// we need to check, if the systems of the firstbar
 			// and secondbar are identical ....
-			GRSystem * sys1 = firstbar->getGRStaff()->getGRSystem();
-			GRSystem * sys2 = secondbar->getGRStaff()->getGRSystem();
+			GRSystem * sys1 = fFirstbar->getGRStaff()->getGRSystem();
+			GRSystem * sys2 = fSecondbar->getGRStaff()->getGRSystem();
 			if (sys1 == sys2)
-				posx = firstbar->getPosition().x;
+				posx = fFirstbar->getPosition().x;
 		}
-		if ((posx < 0 || !firstbar) && mGrStaff)
+		if ((posx < 0 || !fFirstbar) && mGrStaff)
 		{
 			// this will only work, if we are at
 			// the very beginning, and there was no
@@ -407,7 +448,8 @@ void GRSingleRest::tellPosition( GObject * caller, const NVPoint & newPosition )
 				}
 			}
 		}
-		setHPosition((float)((secondbar->getPosition().x - posx) * 0.5f + posx));
+		setHPosition((float)((fSecondbar->getPosition().x - posx) * 0.5f + posx));
+		setWholeMeasure(1);
 		return;		
 	}
 

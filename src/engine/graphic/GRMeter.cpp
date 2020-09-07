@@ -32,11 +32,11 @@
 using namespace std;
 
 #define GROUPSEVERAL	1		// control several time sign grouping
-#ifdef SMUFL
-#define TIMESIGSPACE	6
-#else
-#define TIMESIGSPACE	0
-#endif
+//#ifdef SMUFL
+//#define TIMESIGSPACE	6
+//#else
+//#define TIMESIGSPACE	0
+//#endif
 
 //-------------------------------------------------------------------------------------
 GRMeter::GRMeter( const ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
@@ -181,32 +181,11 @@ NVRect GRMeter::computeBoundingBox (VGDevice* hdc, const string& str) const
 	NVRect bb;
 	if (!hdc)	return bb;
 
-#ifdef SMUFL
-	const char* ptr = str.c_str();
-	float width = 0;
-	while (*ptr) {
-		int symbol = (*ptr == '+') ? kMeterPlusSymbol : *ptr + kMeter0Symbol - '0';
-		float w, h;
-		FontManager::gFontScriab->GetExtent(symbol, &w, &h, hdc);
-		width += w + TIMESIGSPACE;
-		ptr++;
-	}
-	bb.left  = (GCoord)(- width * 0.5f * mTagSize);
+	float w = FontManager::ComputeSymbolsStrWidth(hdc, str);
+	bb.left = - w * 0.5f * mTagSize;
 	bb.right = -bb.left;
-	// default top position (staff first line) is adjusted to the glyph size
 	bb.top = -(mTagSize-1) * fNumericHeight * 2;
-	// default bottom position (staff last line) is adjusted to the glyph size
 	bb.bottom = 4 * fCurLSPACE + (mTagSize-1) * fNumericHeight * 2;
-#else
-	float w, h;
-	FontManager::gFontScriab->GetExtent (str.c_str(),  int(str.size()), &w, &h, hdc);
-	bb.left  = (GCoord)(- w * 0.5f * mTagSize);
-	bb.right = -bb.left;
-	// default top position (staff first line) is adjusted to the glyph size
-	bb.top = -(mTagSize-1) * fNumericHeight * 2;
-	// default bottom position (staff last line) is adjusted to the glyph size
-	bb.bottom = 4 * fCurLSPACE + (mTagSize-1) * fNumericHeight * 2;
-#endif
 	return bb;
 }
 
@@ -255,24 +234,6 @@ std::pair<float,float> GRMeter::GetXOffsets(VGDevice & hdc, const std::string& n
 }
 
 //-------------------------------------------------------------------------------------
-// draw a complex meter part (numerator or denominator
-void GRMeter::DrawSymbolStr(const char* str, float x, float y, VGDevice & hdc ) const
-{
-	while (*str) {
-#ifdef SMUFL
-		int symbol = (*str == '+') ? kMeterPlusSymbol : *str + kMeter0Symbol - '0';
-#else
-		int symbol = *str;
-#endif
-		DrawSymbol(hdc, symbol, x, y, mTagSize);
-		float w, h;
-		FontManager::gFontScriab->GetExtent(symbol, &w, &h, &hdc);
-		x += w * mTagSize + TIMESIGSPACE;
-		str++;
-	}
-}
-
-//-------------------------------------------------------------------------------------
 // draw a meter with a single denominator
 float GRMeter::DrawNumericSingle(VGDevice & hdc, const string& num, const string& dnum, float x ) const
 {
@@ -282,11 +243,11 @@ float GRMeter::DrawNumericSingle(VGDevice & hdc, const string& num, const string
 	float xpos = x + offsets.first;
 	// meter ref pos is on staff first line, numeric glyph refpos is on vertical center
 	float y = fCurLSPACE - (mTagSize - 1) * fNumericHeight;
-	DrawSymbolStr (num.c_str(), xpos, y, hdc);
+	DrawNumericSymbols (hdc, num.c_str(), xpos, y, mTagSize);
 
 	xpos = x + offsets.second;
     y += (2 * fCurLSPACE + 1.7f * fCurLSPACE * (mTagSize - 1) );
-	DrawSymbolStr (dnum.c_str(), xpos, y, hdc);
+	DrawNumericSymbols (hdc, dnum.c_str(), xpos, y, mTagSize);
 	return bb.Width();
 }
 

@@ -62,6 +62,7 @@
 #include "ARMarcato.h"
 #include "ARMark.h"
 #include "ARMeter.h"
+#include "ARMMRest.h"
 #include "ARMusicalVoice.h"
 #include "ARMusicalVoiceState.h"
 #include "ARNaturalKey.h"
@@ -1591,6 +1592,14 @@ void GRVoiceManager::parsePositionTag (ARPositionTag *apt)
         fMusic->addVoiceElement(arVoice,grSymb);
 	}
     else if (tinf == typeid(ARLyrics)) {}		// do nothing
+	else if (tinf == typeid(ARMMRest))
+	{
+		GRRange * range = new GRRange(mCurGrStaff, static_cast<const ARMMRest *>(apt));
+		addGRTag(range);
+		mCurGrStaff->AddTag(range);
+		fMusic->addVoiceElement(arVoice,range);
+	}
+
 	else cerr << "Warning: " << apt->getGMNName() << " not handled" << endl;
 }
 

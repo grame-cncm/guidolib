@@ -38,7 +38,6 @@ class GRMeter : public GRTagARNotationElement
 		virtual bool	checkCollisionWith() const	{ return true; }
 		virtual void	accept (GRVisitor& visitor);
 	
-//		ARMeter*		getARMeter();
 		const ARMeter*	getARMeter() const;
 
 
@@ -55,7 +54,6 @@ class GRMeter : public GRTagARNotationElement
 		std::pair<float,float>			GetXOffsets(VGDevice & hdc, const std::string& num, const std::string& dnum) const;
 		std::vector<TSingleMeter>		meters2metersStr(const std::vector<Fraction>& meters) const;
 
-		void		DrawSymbolStr(const char* str, float x, float y, VGDevice & hdc ) const;
 		float		DrawNumericSingle(VGDevice & hdc, const std::string& num, const std::string& dnum, float x ) const;
 		void		DrawNumericSeveral(VGDevice & hdc ) const;
 		std::string	makeNumeratorString (const std::vector<Fraction>& meters) const;
