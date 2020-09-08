@@ -283,7 +283,7 @@ void GREvent::addArticulation( const ARMusicalTag * inTag )
 	if (mrest) {			// in case of multi-measures rest
 		if (isRest()) {		// check if applied to a rest
 			GRRest * rest = dynamic_cast<GRRest*>(this);
-			rest->setMeasuresCount(mrest->getMeasuresCount());
+			rest->setMMRest(mrest);
 		}
 		return;
 	}
