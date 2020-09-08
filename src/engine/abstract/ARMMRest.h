@@ -31,8 +31,10 @@
 @tagend
 
 @params:
-@param:i:integer:a measures count:*none*:false
+@param:count:integer:a measures count:*none*:false
 @paramdesc
+The common tag parameters are applied to the measures count only.
+You can use the \restFormat tag to control the rest appearance.
 @paramend
 
 */
@@ -50,5 +52,5 @@ class ARMMRest : public ARMTParameter,  public ARPositionTag
 		virtual const char*	getTagName () const		{ return "ARMMRest"; };
 		virtual std::string getGMNName () const		{ return "\\mrest"; };
 	
-		int getMeasuresCount() const;
+		int 	getMeasuresCount() const;
 };
