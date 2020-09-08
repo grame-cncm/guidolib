@@ -3,7 +3,8 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.9
-- new bar tag parameter: measNum: set mesaure number sequence 
+- new \mrest tag intended to multi measures rests
+- new bar tag parameter: measNum: set measure number sequence 
 - new bar tag parameter: hidden: a boolean to hide the bar and prevent measure num to move
 - VGDevice extension to support ellipses
 - implement circle with marks

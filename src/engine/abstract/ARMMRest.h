@@ -26,15 +26,18 @@
 
 @tagname:\mrest
 @tagtype:R
-@tagnotation:applied to a whole measure rest, indicates the measures count.
+@tagnotation:when applied to a whole measure rest, indicates the measures count.
 @tagdesc
 @tagend
 
 @params:
 @param:count:integer:a measures count:*none*:false
 @paramdesc
-The common tag parameters are applied to the measures count only.
-You can use the \restFormat tag to control the rest appearance.
+[Common parameters](../../tagsparams#common-parameters) are applied to the measures count only.
+You can use the [\restFormat](#restformat) tag to control the rest appearance.
+
+The tag is ignored when not applied to a rest.
+When the rest is not a full measure rest, the rest appearance is preserved and the count is still displayed.
 @paramend
 
 */
