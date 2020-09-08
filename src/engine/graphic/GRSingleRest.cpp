@@ -19,6 +19,7 @@
 
 #include "ARRest.h"
 #include "ARRestFormat.h"
+#include "ARMMRest.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
 
@@ -166,40 +167,64 @@ void GRSingleRest::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 	}
 }
 
-void GRSingleRest::DrawMultiMeasuresCount( VGDevice & hdc, int count, float x, float y, float ratio) const
+void GRSingleRest::DrawMultiMeasuresCount( VGDevice & hdc, int count, float x, float y, float ratio, const ARMMRest* mrest) const
 {
-	if (count <= 0) return;
+	if (count < 0) return;
+
+	float dx = mrest->getDX()->getValue();
+	float dy = mrest->getDY()->getValue();
+	const TagParameterFloat* psize = mrest->getSize();
+	float size = psize ? psize->getValue() : 1.0;
+	const TagParameterString* pcolor = mrest->getColor();
+	VGColor savedColor = hdc.GetFontColor();
+	if (pcolor) {
+		unsigned char colorstr[4];
+		pcolor->getRGB(colorstr);
+		hdc.SetFontColor(VGColor(colorstr));
+	}
 
 	string str = std::to_string(count);
 	float w = FontManager::ComputeSymbolsStrWidth(&hdc, str);
-	DrawNumericSymbols (hdc, str.c_str(), x-w/4, y-2*LSPACE * ratio, ratio, 5);
+	DrawNumericSymbols (hdc, str.c_str(), x-w/4 + dx, y-2*LSPACE * ratio - dy, ratio * size, 5);
+	if (pcolor)  hdc.SetFontColor(savedColor);
 }
 
-void GRSingleRest::DrawMultiMeasuresRest( VGDevice & hdc ) const
+void GRSingleRest::DrawMultiMeasuresRest( VGDevice & hdc, const ARMMRest* mrest ) const
 {
 	GRStaff* staff = getGRStaff();
 	float lspace = staff ? staff->getStaffLSPACE() : LSPACE;
 	if (mType == P1) {
 		if (fSecondbar) {
+
+			const unsigned char * colref = getColRef();
+			VGColor color = (colref) ? VGColor( colref ) : VGColor(0,0,0);
+			if (colref)
+				hdc.PushFillColor( color);
+
 			float bx = fSecondbar->getPosition().x;
 			float x = getPosition().x;
 			float offset = bx - x - lspace*1.5;
-			float x1 = x-offset;
-			float x2 = x + offset;
-			float h = lspace/2.3;
-			float y = getPosition().y + lspace;
+			float x1 = x-offset + mOffset.x;
+			float x2 = x + offset + mOffset.x;
+			float h = mSize * LSPACE/2.3;
+			float y = getPosition().y + lspace + mOffset.y;
 			hdc.Rectangle(x1, y-h, x2, y+h);
 
 			const float lineThickness = staff->currentLineThikness();
-			hdc.PushPenWidth(lineThickness);
+			hdc.PushPen(color, lineThickness);
 			hdc.Line(x1, y - lspace, x1, y + lspace);
 			hdc.Line(x2, y - lspace, x2, y + lspace);
-			hdc.PopPenWidth();
+			hdc.PopPen();
+			if (colref)
+				hdc.PopFillColor();
 		}
 		else cerr << "Warning: no bar for multi-measure rest" << endl;
 	}
-	else GRRest::OnDrawSymbol( hdc, mType );
-	DrawMultiMeasuresCount (hdc, getMeasuresCount(), 0, staff->getPosition().y - LSPACE/2, lspace/LSPACE);
+	else {
+		GRRest::OnDrawSymbol( hdc, mType );
+		DrawSubElements( hdc );		// - Draw elements (dots...)
+	}
+	DrawMultiMeasuresCount (hdc, mrest->getMeasuresCount(), 0, staff->getPosition().y - LSPACE/2, lspace/LSPACE, mrest);
 }
 
 void GRSingleRest::OnDraw( VGDevice & hdc ) const
@@ -209,8 +234,9 @@ void GRSingleRest::OnDraw( VGDevice & hdc ) const
 	traceMethod("OnDraw");
 	if (mType == P0) return;		// don't know how to draw it !
 	
-	if (getMeasuresCount() && getWholeMeasure() && (mType == P1)) {
-		DrawMultiMeasuresRest (hdc);
+	const ARMMRest* mrest = getARMMRest();
+	if (mrest && getWholeMeasure()) {
+		DrawMultiMeasuresRest (hdc, mrest);
 		return;
 	}
 
