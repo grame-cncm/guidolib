@@ -10,6 +10,7 @@ GUIDO Engine history
 - implement circle with marks
 - new interface to change piano roll voices color, based on html names
 - fix infinite loop issue in the context of small page width
+- fix issue with meter position and staff size
 
 ----------------------------------------------------------------
   version 1.6.8
