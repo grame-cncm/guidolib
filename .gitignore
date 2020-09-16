@@ -37,6 +37,8 @@ GuidoQt.lib
 GuidoQt.opensdf
 GuidoQt.sdf
 GuidoQt.suo
+gmn-examples/SheetMusic/ChordStripe.graffle/
+gmn-examples/SheetMusic/ChordStripe.pdf
 java/jni/guidoengine_*
 javascript/obj
 lang/java/svgSalamander.jar
@@ -54,6 +56,7 @@ src/Guido2.sfd
 src/tools/*.gmn
 src/tools/*.mid
 src/tools/*.svg
+src/engine/parser/tests/parsefile
 tmpSrc
 validate/*.exe
 validate/GUIDOEngine.dll
