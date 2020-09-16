@@ -4,6 +4,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.7.0
 - introduce variables
+- support single quote strings
 
 ----------------------------------------------------------------
   version 1.6.9

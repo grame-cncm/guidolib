@@ -144,6 +144,7 @@ EOL		[\x0a\x0d]
 "_"					return RESTT;
 
 \"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
+\'(\\\\|\\.|[^\\\'])*\'   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
 
 {SPACE}+			/* eat up space */
 

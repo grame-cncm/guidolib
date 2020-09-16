@@ -239,6 +239,7 @@ bool GuidoParser::variableSymbols (const char* name)
 	v.fName = name;
 	v.fValue = var.fValue;
 	fVStreams.push (v);
+//cerr << "GuidoParser::variableSymbols push '" << v.fName << "' : '" << v.fValue << "'" << endl;
 	vareval& tmp = fVStreams.top();
 	tmp.fPtr = tmp.fValue.c_str();
 	return true;
