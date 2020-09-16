@@ -3,24 +3,25 @@
 #include <iostream>
 #include <fstream>
 
-#include "../GuidoParser.h"
+#include "GuidoParserTest.h"
 
 using namespace std;
 
 int main (int argc, char* argv[])
 {
-	cout << "Guido Parser kit test" << endl;
+	int retcode = 0;
 	for (int i=1; i<argc; i++) {
-		cout << "parsing file " << argv[i] << endl;
 		fstream file (argv[i], fstream::in);
         if (file.is_open()) {
-            guido::GuidoParser p(&file);
-            ARHandler music = p.parse();
-            if (music) cout << "success" << endl;
-            else cerr << "failed" << endl;
+            GuidoParser p(&file);
+            retcode = p.parse();
+            if (retcode) break;
         }
-        else cerr << "can't open file " << argv[i] << endl;
+        else {
+			cerr << "can't open file " << argv[i] << endl;
+			retcode =-1;
+		}
         
 	}
-	return 0;
+	return retcode;
 }
