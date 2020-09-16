@@ -6,6 +6,10 @@ GUIDO Engine history
 - introduce variables
 - support single quote strings
 
+known issues: 
+- variables at the end of a range must be followed by a space (preceding the closing ')')
+- variables used as note name followed by note attributes must be followed by a space
+
 ----------------------------------------------------------------
   version 1.6.9
 - new \mrest tag intended to multi measures rests
