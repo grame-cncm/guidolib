@@ -17,7 +17,11 @@
 #include <iostream>
 #include <stdlib.h>
 
+#ifdef TEST
+#include "tests/GuidoParserTest.h"
+#else
 #include "GuidoParser.h"
+#endif
 #include "guidoparse.hpp"
 
 using namespace std;
@@ -25,12 +29,11 @@ using namespace std;
 #define YY_EXTRA_TYPE GuidoParser*
 #define YY_USER_ACTION yylloc->last_line = yylineno; yylloc->first_column += strlen(yytext);
 
-#define YY_INPUT(buf,result,max_size)   \
-   {                                       \
-	  char c;                              \
-      yyextra->fStream->get( c );                 \
-	  if (yyextra->fStream->eof())               \
-         result = YY_NULL;                 \
+#define YY_INPUT(buf,result,max_size)  \
+   {                                   \
+	char c;                            \
+	if (!yyextra->get(c) )             \
+		result =  YY_NULL;             \
       else {                               \
          buf[0] = c;                       \
          result = 1;                       \
@@ -71,9 +74,11 @@ static  char* unquote (char * str) {
 %x CMNTLN
 %x COMMENT
 %S PARAM
+%S VAR
 
 DIGIT	[0-9]
-ID		[$a-z_A-Z][a-z_A-Z0-9]*
+ID		[a-z_A-Z][a-z_A-Z0-9]*
+VARCHAR	[a-z_A-Z0-9]
 LETTER	[a-zA-Z]
 NOTE	[abcdefgh]
 SPACE	[ \t]
@@ -115,16 +120,22 @@ EOL		[\x0a\x0d]
 "*"					return MULT;
 "/"					return DIV;
 "="					return EQUAL;
+";"					return ENDVAR;			/* end of variable declaration */
+
 
 "ms"				return MLS;
 "s"					return SEC;
 "m"|"cm"|"mm"|"in"|"pt"|"pc"|"hs"|"rl"		yyextra->fText = yytext; return UNIT;
+
 
 "<"					BEGIN PARAM; return STARTPARAM;
 <PARAM>{ID}			yyextra->fText = yytext; return IDT;
 <PARAM>">"			BEGIN INITIAL; return ENDPARAM;
 
 "\\"{ID}			yyextra->fText = yytext; return TAGNAME;
+
+"$"{ID}				yyextra->fText = yytext; return VARNAME;
+
 
 "do"|"re"|"mi"|"fa"|"sol"|"la"|"si"|"ti"	yyextra->fText = yytext; return SOLFEGE;
 "cis"|"dis"|"fis"|"gis"|"ais"				yyextra->fText = yytext; return CHROMATIC;

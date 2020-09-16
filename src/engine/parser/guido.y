@@ -5,13 +5,18 @@
 #include <string>
 #include <vector>
 
+#ifdef TEST
+#include "tests/GuidoParserTest.h"
+#else
 #include "GuidoParser.h"
+#endif
 #include "gddefs.h"
 
 #include "guidoparse.hpp"
 
 #define YYERROR_VERBOSE
 int guidoerror (YYLTYPE* locp, GuidoParser* context, const char*s);
+int varerror (int line, int column, GuidoParser* p, const char* varname);
 int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
 #define scanner context->fScanner
@@ -30,7 +35,7 @@ using namespace std;
 %parse-param { GuidoParser* context }
 %lex-param { void* scanner  }
 
-%start score
+%start gmn
 
 %union {         
 	long int		num;
@@ -87,6 +92,9 @@ using namespace std;
 %token EQUAL
 %token STRING
 %token EXTRA
+%token ENDVAR
+%token VARNAME
+
 
 /*------------------------------   types  ------------------------------*/
 %type <num> 	NUMBER PNUMBER NNUMBER
@@ -96,7 +104,7 @@ using namespace std;
 %type <c>		STARTCHORD ENDCHORD STARTSEQ ENDSEQ STARTPARAM ENDPARAM STARTRANGE ENDRANGE SEP IDSEP BAR 
 %type <c>		SHARPT FLATT MULT DIV EQUAL
 
-%type <str>		notename noteid tagname id 
+%type <str>		notename noteid tagname id varname
 %type <num>		number pnumber nnumber signednumber
 %type<param>	tagarg tagparam
 // %type<plist>	tagparams
@@ -104,6 +112,10 @@ using namespace std;
 %%
 
 //_______________________________________________
+gmn			: score
+			| variables score
+			;
+
 score		: STARTCHORD { context->segmInit (); } ENDCHORD				{ context->segmExit (); }
 			| STARTCHORD { context->segmInit (); } voicelist ENDCHORD	{ context->segmExit (); }
 			| { context->segmInit (); } voice							{ context->segmExit (); }
@@ -120,6 +132,25 @@ symbols		:
 			| symbols music									{ context->appendNote (); }
 			| symbols tag
 			| symbols chord									{ context->seqAppendChord (); }
+			| symbols varname								{ bool ret = context->variableSymbols ($2->c_str()); 
+															  if (!ret) varerror (@2.last_line, @2.first_column, context, $2->c_str());
+															  delete $2;
+															  if (!ret)  YYABORT;
+															}
+			;
+
+//_______________________________________________
+// variables - introduced on sept. 15 2020 by DF
+variables 	: vardecl
+			| variables vardecl
+			;
+
+vardecl 	: varname EQUAL STRING ENDVAR					{ context->variableDecl ($1->c_str(), context->fText.c_str(), GuidoParser::kString); delete $1; }
+			| varname EQUAL signednumber ENDVAR				{ context->variableDecl ($1->c_str(), context->fText.c_str(), GuidoParser::kInt); delete $1; }
+			| varname EQUAL floatn ENDVAR					{ context->variableDecl ($1->c_str(), context->fText.c_str(), GuidoParser::kFloat); delete $1; }
+			;
+
+varname		: VARNAME										{ $$ = new string(context->fText); }
 			;
 
 //_______________________________________________
@@ -149,31 +180,20 @@ tagarg		: signednumber									{ $$ = context->intParam   ($1) }
 			| floatn UNIT									{ $$ = context->floatParam ($1, context->fText.c_str() ) }
 			| STRING										{ $$ = context->strParam   (context->fText.c_str() ) }
 			| id											{ /* unused */ $$ = 0; delete $1; }
+			| varname										{ $$ = context->varParam ($1->c_str() ); 
+															  if (!$$) varerror (@1.last_line, @1.first_column, context, $1->c_str());
+															  delete $1;
+															  if (!$$) YYABORT; 
+															}
 			;
 
 tagparam	: tagarg										{ $$ = $1; }
-			| id EQUAL tagarg								{ if($3) $3->setName($1->c_str()); $$ = $3; delete $1; }
+			| id EQUAL tagarg								{ if($3) context->setParamName ($3, $1->c_str()); $$ = $3; delete $1; }
 			;
 
 tagparams	: tagparam										{ context->tagParameter ($1); }
 			| tagparams SEP tagparam						{ context->tagParameter ($3) ; } 
 			;
-
-// tagarg		: signednumber									{ context->tagIntArg   ($1) }
-//			| floatn										{ context->tagFloatArg ($1) }
-//			| signednumber UNIT								{ context->tagIntArg   ($1); context->tagArgUnit (context->fText.c_str() ) }
-//			| floatn UNIT									{ context->tagFloatArg ($1); context->tagArgUnit (context->fText.c_str() ) }
-//			| STRING										{ context->tagStrArg   (context->fText.c_str() ) }
-//			| id											{ /* unused */ delete $1; }
-//			;
-
-//tagparam	: tagarg										{ context->tagAddArg ( ""); }
-//			| id EQUAL tagarg								{ context->tagAddArg ( $1->c_str()); delete $1; }
-//			;
-
-//tagparams	: tagparam
-//			| tagparams SEP tagparam
-//			;
 
 //_______________________________________________
 // chord description
@@ -270,13 +290,30 @@ signednumber: number								{ $$ = $1; }
 			| nnumber								{ $$ = $1; }
 			;
 %%
-
+#ifdef TEST
+int	gParseErrorLine = 0;
+#else
 extern int	gParseErrorLine;
-int guidoerror(YYLTYPE* loc, GuidoParser* p, const char*s) {
-	gParseErrorLine = loc->last_line;		// for backward compatibility only
-	p->setError (loc->last_line, loc->first_column, s);
-	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
+#endif
+
+static int _error(int line, int column, GuidoParser* p, const char* msg) {
+	p->parseError (line, column, msg);
+/*
+	gParseErrorLine = line;		// for backward compatibility only
+	p->setError (line, column, msg);
+	cerr << "error line: " << line << " col: " << column << ": " << msg << endl;
+*/
 	return 0;
+}
+
+int varerror(int line, int column, GuidoParser* p, const char* varname) {
+	string msg = "unknown variable ";
+	msg += varname;
+	return _error (line, column, p, msg.c_str());
+}
+
+int guidoerror(YYLTYPE* loc, GuidoParser* p, const char*s) {
+	return _error (loc->last_line, loc->first_column, p, s);
 }
 
 int GuidoParser::_yyparse()		{ return yyparse (this); }

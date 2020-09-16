@@ -17,6 +17,8 @@
 #include <istream>
 #include <string>
 #include <sstream>
+#include <map>
+#include <stack>
 #include <locale.h>
 
 #include "GuidoStream.h"
@@ -24,6 +26,8 @@
 
 class ARFactory;
 class TagParameter;
+
+
 
 /* \brief a class for reading gmn streams
 */
@@ -49,10 +53,25 @@ class GuidoParser {
 	virtual int	_yyparse();
 
 	public:
+		enum vartype { kString, kInt, kFloat };
+		
+		struct variable {
+			std::string fValue;
+			vartype		fType;
+		};
+		struct vareval {
+			std::string fName;
+			std::string fValue;
+			const char* fPtr;
+		};
+		
+		std::map<std::string, variable> fEnv;
+		std::stack<vareval> 			fVStreams; // local streams intended to parse variables
+	
         void              *fScanner;   // the flex scanner
 		std::istream      *fStream;    // input stream
 		ARFactory         *fFactory;
-		std::string	       fText;      // the current text
+		std::string	       fText;		// the current text
 	
 		typedef std::vector<TagParameter*> ParamsList;
 
@@ -63,6 +82,7 @@ class GuidoParser {
         virtual const ARFactory    *getFactory() const  { return fFactory; }
 
         virtual void                setStream(std::istream *stream);
+		virtual bool                get(char& c);  // return the next char in stream or in expanded variable 
 
 		virtual void noteInit		(const char *id);
 		virtual void noteAcc		(int n);
@@ -102,6 +122,11 @@ class GuidoParser {
 		virtual TagParameter* intParam (int val);
 		virtual TagParameter* intParam (int val, const char* unit);
 		virtual TagParameter* strParam (const char*);
+		virtual TagParameter* varParam (const char* name);
+		virtual void setParamName (TagParameter* p, const char* name);
+
+		virtual bool variableSymbols (const char* name);
+		virtual void variableDecl (const char* name, const char* value, vartype type);
 
 		virtual void setError(int line, int column, const char *msg)
 					{ fErrorLine = line; fErrorColumn = column; fErrorMsg = msg; }
@@ -109,6 +134,9 @@ class GuidoParser {
 		virtual int getErrorLine() const		{ return fErrorLine; }
 		virtual int getErrorColumn() const		{ return fErrorColumn; }
 		virtual const char* getErrorMsg() const { return fErrorMsg.c_str(); }
+				void parseError(int line, int column, const char* msg);
+	private:
+		bool getVariable (const char* name, variable& var);
 };
 
 #endif

@@ -11,16 +11,13 @@
  
  */
 
-#include <locale.h>
-#include <istream>
-
-#include "GuidoStream.h"
-
 #include "GuidoParser.h"
 #include "ARFactory.h"
 #include "TagParameterFloat.h"
 #include "TagParameterInt.h"
 #include "TagParameterString.h"
+
+using namespace std;
 
 //--------------------------------------------------------------------------
 GuidoParser::GuidoParser()
@@ -192,6 +189,94 @@ TagParameter* GuidoParser::intParam	(int val, const char* unit)
 	p->setUnit (unit);
 	return p;
 }
+void GuidoParser::setParamName (TagParameter* p, const char* name) { p->setName (name); }
+
+//--------------------------------------------------------------------------
+TagParameter* GuidoParser::varParam (const char* name)
+{
+	variable var;
+	if (!getVariable (name, var)) {
+		cerr << "unknown variable " << name << " used as tag parameter" << endl;
+		return 0;
+	}
+	
+	switch (var.fType) {
+		case GuidoParser::kString:	return strParam (var.fValue.c_str());
+		case GuidoParser::kInt:		return intParam (std::stoi (var.fValue));
+		case GuidoParser::kFloat:	return floatParam (std::stof (var.fValue));
+	}
+	return 0;
+}
+
+//--------------------------------------------------------------------------
+// return the next char in stream or in expanded variable
+bool GuidoParser::get(char& c)
+{
+	if (!fVStreams.empty()) {
+		vareval& v = fVStreams.top();
+		c = *v.fPtr++;
+		if (c) return true;
+
+		fVStreams.pop();
+		c = ' ';
+		return true;
+	}
+
+	fStream->get(c);
+	return !fStream->eof();
+}
+
+//--------------------------------------------------------------------------
+bool GuidoParser::variableSymbols (const char* name)
+{
+	variable var;
+	if (!getVariable (name, var)) {
+		cerr << "unknown variable " << name << endl;
+		return false;
+	}
+
+	vareval v;
+	v.fName = name;
+	v.fValue = var.fValue;
+	fVStreams.push (v);
+	vareval& tmp = fVStreams.top();
+	tmp.fPtr = tmp.fValue.c_str();
+	return true;
+}
+
+//--------------------------------------------------------------------------
+bool GuidoParser::getVariable (const char* name, variable& var)
+{
+	map<string, variable>::const_iterator i = fEnv.find (name);
+	if (i == fEnv.end()) return false;
+	var = i->second;
+	return true;
+}
+
+//--------------------------------------------------------------------------
+void GuidoParser::variableDecl (const char* name, const char* value, vartype type)
+{
+	GuidoParser::variable var;
+	var.fValue = value;
+	var.fType = type;
+	fEnv[name] = var;
+}
+
+//--------------------------------------------------------------------------
+void GuidoParser::parseError(int line, int column, const char* msg)
+{
+	extern int	gParseErrorLine;
+	gParseErrorLine = line;		// for backward compatibility only
+	setError (line, column, msg);
+	if (fVStreams.size()) {
+		vareval& v = fVStreams.top();
+		cerr << "while parsing variable " << v.fName << endl;
+		do {
+			fVStreams.pop();
+		} while (fVStreams.size());
+	}
+	std::cerr << "error line: " << line << " col: " << column << ": " << msg << std::endl;
+}
 
 //--------------------------------------------------------------------------
 ARHandler GuidoParser::parse()
@@ -212,7 +297,7 @@ ARHandler GuidoParser::parse()
 
     delete fFactory;
     fFactory = new ARFactory();
-    /***************************/
+    fEnv.clear();
 
 	_yyparse ();
     

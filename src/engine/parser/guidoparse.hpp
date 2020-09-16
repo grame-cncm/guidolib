@@ -73,7 +73,9 @@
      DIV = 289,
      EQUAL = 290,
      STRING = 291,
-     EXTRA = 292
+     EXTRA = 292,
+     ENDVAR = 293,
+     VARNAME = 294
    };
 #endif
 /* Tokens.  */
@@ -112,13 +114,15 @@
 #define EQUAL 290
 #define STRING 291
 #define EXTRA 292
+#define ENDVAR 293
+#define VARNAME 294
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 35 "guido.y"
+#line 40 "guido.y"
 {         
 	long int		num;
 	float			real;
@@ -130,7 +134,7 @@ typedef union YYSTYPE
 //	GuidoParser::ParamsList*	plist;
 }
 /* Line 1529 of yacc.c.  */
-#line 134 "guidoparse.hpp"
+#line 138 "guidoparse.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

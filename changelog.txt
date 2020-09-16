@@ -2,6 +2,10 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+  version 1.7.0
+- introduce variables
+
+----------------------------------------------------------------
   version 1.6.9
 - new \mrest tag intended to multi measures rests
 - new bar tag parameter: measNum: set measure number sequence 
