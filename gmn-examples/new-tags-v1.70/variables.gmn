@@ -1,0 +1,31 @@
+(*
+	Introduced in version 1.7.0
+
+	The engine supports variables that must be declared in a section that precedes the score start.
+	These variables may be next used in place of tag parameters or in place of any arbitrary gmn code.
+	They may be viewed as macros and are expanded inline by the parser.
+
+	known issues: 
+	- variables at the end of a range must be followed by a space (preceding the closing ')')
+	- variables used as note name followed by note attributes must be followed by a space
+*)
+
+% start of variables declaration section
+$dx = -2;
+$text1="foo 1";
+
+$a = "a";
+$b = "f/16 g f a";
+$c = "b/8 a g f g e";
+$seq = "a/4 \slur(b c2/2) a1/4 $b $b $b";
+% end of variables section
+% and start of the score
+[ 
+	\meter<"4/4">
+	\text<$text1, dx=$dx>($a ) 
+	\text<$text1, dx=$dx>($a ) 
+	$a /2
+	\text<'foo 2', dy=12>($c ) 
+	b c 
+	$seq $seq c/1
+]
