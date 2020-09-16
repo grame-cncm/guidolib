@@ -76,9 +76,9 @@ using namespace std;
 // - Guido Global variables
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
-const int GUIDOENGINE_MINOR_VERSION = 6;
-const int GUIDOENGINE_SUB_VERSION   = 9;
-const char* GUIDOENGINE_VERSION_STR = "1.6.9";
+const int GUIDOENGINE_MINOR_VERSION = 7;
+const int GUIDOENGINE_SUB_VERSION   = 0;
+const char* GUIDOENGINE_VERSION_STR = "1.6.7.0";
 
 ARPageFormat* gARPageFormat;
 const TagParametersMaps* gMaps = 0;
