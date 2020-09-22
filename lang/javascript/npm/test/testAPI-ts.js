@@ -1,31 +1,9 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 ///<reference path="libGUIDOEngine.d.ts"/>
 //----------------------------------------------------------------------------
 // GUIDOEngine interface
 //----------------------------------------------------------------------------
 class GuidoEngine {
-    initialise() {
-        return __awaiter(this, void 0, void 0, function* () {
-            var module = GuidoModule();
-            return new Promise((success, failure) => {
-                module['onRuntimeInitialized'] = () => {
-                    this.moduleInit(module);
-                    success(this);
-                };
-            });
-        });
-    }
-    //------------------------------------------------------------------------
-    // async initialization
-    moduleInit(module) {
+    constructor(module) {
         this.fEngine = new module.GuidoEngineAdapter();
         this.fScoreMap = new module.GUIDOScoreMap();
         this.fPianoRoll = new module.GUIDOPianoRollAdapter();
@@ -33,6 +11,25 @@ class GuidoEngine {
         this.fSPR = new module.GUIDOReducedProportionalAdapter();
         this.fEngine.init();
     }
+    // async initialise():Promise<any> { 
+    //     var module = GuidoModule();
+    //     return new Promise( (success: any, failure: any) => {
+    //         module['onRuntimeInitialized'] = () => {
+    //             this.moduleInit (module);
+    //             success ( this ); 
+    //             }
+    //     });
+    // }
+    //------------------------------------------------------------------------
+    // async initialization
+    // moduleInit ( module : any ) : void {
+    //     this.fEngine 		= new module.GuidoEngineAdapter();
+    //     this.fScoreMap      = new module.GUIDOScoreMap();
+    //     this.fPianoRoll		= new module.GUIDOPianoRollAdapter();
+    //     this.fFactory		= new module.GUIDOFactoryAdapter();
+    //     this.fSPR           = new module.GUIDOReducedProportionalAdapter();
+    //     this.fEngine.init();
+    // }
     //------------------------------------------------------------------------
     // Guido Engine interface
     start() { this.fEngine.init(); }
@@ -330,7 +327,7 @@ function maps(engine, log) {
     log("  getTimeMap:\t" + scanMap(timemap) + " elements");
 }
 //----------------------------------------------------------------------------
-// Piano roll tests
+// Reduced Proportional tests
 //----------------------------------------------------------------------------
 function reducedPropTest(engine, log, svg) {
     log("\Reduced Proportional tests :");
@@ -351,7 +348,7 @@ function reducedPropTest(engine, log, svg) {
     rpe.destroyRProportional(rp);
 }
 //----------------------------------------------------------------------------
-// Reduced Proportional tests
+// Piano roll tests
 //----------------------------------------------------------------------------
 function pianoRollTest(engine, log, svg) {
     log("\nPiano roll tests :");
@@ -401,6 +398,7 @@ function run(engine, log, svg) {
     maps(engine, log);
     pianoRollTest(engine, log, svg);
     reducedPropTest(engine, log, svg);
+    log("\nEnd of tests");
 }
 var process;
 var module;

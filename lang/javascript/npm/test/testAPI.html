@@ -29,9 +29,7 @@ function doit (engine) {
 	run (engine, log, svg);
 }
 
-
-var engine = new GuidoEngine;
-engine.initialize ().then (doit);
+GuidoModule().then ( (module) => { doit (new GuidoEngine (module)); } );
 
 
 </script>

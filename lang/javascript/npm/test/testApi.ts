@@ -129,7 +129,7 @@ function maps( engine: GuidoEngine, log: TLog )
 }
 
 //----------------------------------------------------------------------------
-// Piano roll tests
+// Reduced Proportional tests
 //----------------------------------------------------------------------------
 function reducedPropTest (engine: GuidoEngine, log: TLog, svg: TSvg)
 {
@@ -154,7 +154,7 @@ function reducedPropTest (engine: GuidoEngine, log: TLog, svg: TSvg)
 }
 
 //----------------------------------------------------------------------------
-// Reduced Proportional tests
+// Piano roll tests
 //----------------------------------------------------------------------------
 function pianoRollTest (engine: GuidoEngine, log: TLog, svg: TSvg)
 {
@@ -213,6 +213,7 @@ function run (engine: GuidoEngine, log: TLog, svg: TSvg) {
 	maps 	(engine, log);
 	pianoRollTest (engine, log, svg);
 	reducedPropTest (engine, log, svg);
+	log ("\nEnd of tests");
 }
 
 var process: any;

@@ -4,8 +4,9 @@
 const fs = require ("fs");
 const GuidoEngine = require ("../guidoengine");
 const run = require ("./testAPI");
+const GuidoModule = require ("../libGUIDOEngine");
 
-var engine = new GuidoEngine().initialize ("../libGUIDOEngine").then (doit);
+GuidoModule().then ( (module) => { doit (new GuidoEngine (module)); } );
 
 function log(str) 		{ console.log (str); }
 function svg(str, name) { 
