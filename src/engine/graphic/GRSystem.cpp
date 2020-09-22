@@ -655,10 +655,10 @@ void GRSystem::accept (GRVisitor& visitor)
 	visitor.visitStart (this);
 	const StaffVector * staves = getStaves();
 	int n = staves->size();
-cerr << "GRSystem::accept for " << n << " staves" << endl;
+//cerr << "GRSystem::accept for " << n << " staves" << endl;
 	for (int i= 1; i <= n; i++) {
 		GRStaff* staff = staves->Get (i);
-cerr << "GRSystem::accept visit staff " << i << " " << (void*)staff << endl;
+//cerr << "GRSystem::accept visit staff " << i << " " << (void*)staff << endl;
 		while (staff) {
 			staff->accept (visitor);
 			staff = staff->getNextStaff();
