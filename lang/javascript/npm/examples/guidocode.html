@@ -5,7 +5,7 @@
     <script type="text/javascript" src="../libGUIDOEngine.js"></script>
     <script type="application/wasm" src="../libGUIDOEngine.wasm"></script>
     <script type="text/javascript" src="guidocode.js"></script>
-    <link rel="stylesheet" href="../npm/guido2-webfont/stylesheet.css" type="text/css" />
+    <link rel="stylesheet" href="./guido2-webfont/stylesheet.css" type="text/css" />
   </head>
   <style>
 	 body { 
@@ -15,26 +15,21 @@
 	 hr { width: 50%;}
 	.guido-code {
 		display: block;
+		margin: auto;
+		background-color: lightgrey;
 		height: 20%;
-		width: 60%;
-	}
-	.gmn {
-		text-align: right;
 		width: 40%;
 	}
   </style>
 
   <body>
-  	<h1>Some inline GMN code in a table</h1>
-	<table style="width:100%">
-		<tr>
-			<td class="gmn"> [ a b c c b a ] </td>
-			<td class="guido-code"> [ a b c c b a ] </td>
-		</tr>
-		<tr>
-			<td class="gmn"> [ \clef&lt;"g"&gt; \meter&lt;"4/4"&gt; c/2 g \slur(f/4 e d c) ] </td>
-			<td class="guido-code"> [ \clef<"g"> \meter<"4/4"> c/2 g \slur(f/4 e d c) ] </td>
-		</tr>
-	</table>
+  	<h1>Some inline GMN code</h1>
+    <div class="guido-code">
+	    [ a b c c b a ]
+    </div>
+    <hr/>
+    <div class="guido-code">
+	    [ \clef<"g"> \meter<"4/4"> c/2 g \slur(f/4 e d c) ]
+    </div>
   </body>
 </html>
