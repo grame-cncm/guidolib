@@ -1,6 +1,6 @@
 {
   "name": "@grame/guidolib",
-  "version": "1.6.8-c",
+  "version": "1.7.0",
   "description": "A library for music score rendering based on the Guido Music Notation format.",
   "main": "libGUIDOEngine.js",
   "directories": {
@@ -29,6 +29,7 @@
 	"Yannick Chapuis", 
 	"Michael Chourdakis",
 	"Thomas Coffy", 
+	"Arshia Cont", 
 	"Christophe Daudin", 
 	"Colas Decron", 
 	"Guillaume Gouilloux", 
