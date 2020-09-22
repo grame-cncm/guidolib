@@ -12,25 +12,13 @@ class GuidoEngine {
     private	fFactory   :   GUIDOFactoryAdapter;
     private	fSPR       :   GUIDOReducedProportionalAdapter;
 
-    async initialise():Promise<any> { 
-        var module = GuidoModule();
-        return new Promise( (success: any, failure: any) => {
-            module['onRuntimeInitialized'] = () => {
-                this.moduleInit (module);
-                success ( this ); 
-                }
-        });
-    }
-            
-    //------------------------------------------------------------------------
-    // async initialization
-    moduleInit ( module : any ) : void {
+    constructor (module: any) {
         this.fEngine 		= new module.GuidoEngineAdapter();
         this.fScoreMap      = new module.GUIDOScoreMap();
         this.fPianoRoll		= new module.GUIDOPianoRollAdapter();
         this.fFactory		= new module.GUIDOFactoryAdapter();
         this.fSPR           = new module.GUIDOReducedProportionalAdapter();
-        this.fEngine.init();
+        this.fEngine.init();   
     }
         
     //------------------------------------------------------------------------

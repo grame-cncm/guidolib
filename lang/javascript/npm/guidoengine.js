@@ -5,13 +5,15 @@
 // the guido engine interface
 //----------------------------------------------------------------------------
 class GuidoEngine {
-    constructor() {
-        this.fModule = 0;
-        this.fEngine = 0;
-        this.fScoreMap = 0;
-        this.fPRoll = 0;
-        this.fSPR = 0;
-        this.fFactory = 0;
+
+    constructor(module) {
+        this.fModule   = module;
+        this.fEngine   = new module.GuidoEngineAdapter();
+        this.fEngine.init();
+        this.fPRoll    = new module.GUIDOPianoRollAdapter();
+        this.fSPR      = new module.GUIDOReducedProportionalAdapter();
+        this.fScoreMap = new module.GUIDOScoreMap();    
+        this.fFactory  = new module.GUIDOFactoryAdapter();    
 
         // pîano roll: pitch line display modes
         this.kPRCLine      =  1;
@@ -29,42 +31,7 @@ class GuidoEngine {
         this.kPRAutoLines  =  0;
         this.kPRNoLine     = -1;
     }
-    
-    //------------------------------------------------------------------------
-    // async initialization
-    initialize (lib) {
-        if ((typeof process !== 'undefined') && (process.release.name === 'node')) {
-            var guidomodule = require (lib);
-            return new Promise ( (success) => {
-                    guidomodule().then ( (instance) => {
-                    this.moduleInit (instance);
-                    success ( this ); 
-                });
-            });
-        }
-        else {
-            var module = GuidoModule();
-            return new Promise ( (success, failure) => {
-                module['onRuntimeInitialized'] = () => {
-                this.moduleInit (module);
-                success ( this ); 
-                }
-            });
-        }
-    }
-    
-    //------------------------------------------------------------------------
-    // async initialization
-    moduleInit ( module ) {
-        this.fModule   = module;
-        this.fEngine   = new module.GuidoEngineAdapter();
-        this.fEngine.init();
-        this.fPRoll    = new module.GUIDOPianoRollAdapter();
-        this.fSPR      = new module.GUIDOReducedProportionalAdapter();
-        this.fScoreMap = new module.GUIDOScoreMap();    
-        this.fFactory  = new module.GUIDOFactoryAdapter();    
-    }
-        
+            
     //------------------------------------------------------------------------
     // Guido Engine interface
     shutdown ()                     { this.fEngine.shutdown(); }
@@ -162,6 +129,11 @@ class GuidoEngine {
     enableMeasureBars   ( proll, status )      { return this.fPRoll.enableMeasureBars ( proll, status ); }
     setPitchLinesDisplayMode (proll, mode)     { return this.fPRoll.setPitchLinesDisplayMode ( proll, mode ); }
     proll2svg           ( proll, w, h )        { return this.fPRoll.svgExport ( proll, w, h  ); }
+
+    //------------------------------------------------------------------------
+    // Reduced Proportional representation
+    // no relay for the interface
+    reducedProp()               { return this.fSPR; }
 
 
     //------------------------------------------------------------------------
