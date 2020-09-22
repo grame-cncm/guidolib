@@ -40,7 +40,7 @@ library = libGUIDOEngine
 target = $(library).js
 
 
-OPTIONS :=  -s ALLOW_MEMORY_GROWTH=0 -s TOTAL_MEMORY=134217728 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0 -s MODULARIZE=1 -s EXPORT_NAME="'GuidoModule'"
+OPTIONS :=  -s ALLOW_MEMORY_GROWTH=1 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0 -s MODULARIZE=1 -s EXPORT_NAME="'GuidoModule'"
 
 OPT1    := -O3 --bind --memory-init-file 0
 
@@ -64,6 +64,7 @@ help :
 ##############################################################
 $(library).js : $(objects) $(midiobj)
 	emcc $(OPT1) $(objects) $(midiobj) -o $(library).js $(OPTIONS) -s WASM=1
+	cp $(library).js $(library).wasm $(npmdir)
 
 clean:
 	rm -f $(objects) $(midiobj) $(target) $(library).wasm.*
