@@ -2,8 +2,9 @@ GUIDO Engine
 Javascript lib history
 
 ----------------------------------------------------------------
-? 	version 1.69
+2020-09-22 	version 1.70
 	fix guido font name in css
+	Engine update to v.1.7.0 (supports variables)
 
 2020-04-22  version 1.68-b
 	fix incorrect param name in guidoengine.ts
