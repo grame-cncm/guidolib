@@ -15,6 +15,7 @@
 */
 
 #include <map>
+#include <vector>
 #include "GRPTagARNotationElement.h"
 
 class ARVolta;
@@ -25,6 +26,20 @@ class GRStaff;
 */
 class GRVolta : public GRPTagARNotationElement
 {
+	private:
+	std::vector<NVRect> fSegments; 	// segments of the volta
+	NVRect				fCurrentSegment;
+	bool 				fStartTell = true;
+	
+	void drawText   (VGDevice & hdc, float x, float y) const;
+	void drawEndings (VGDevice & hdc, size_t index, float dx, float dy) const;
+
+	const ARVolta * 	getARVolta() const 	{ return (const ARVolta*)getAbstractRepresentation(); }
+	void  				adjustLeft (const GRNotationElement * startElt);	// adjust first segment to the previous bar (if any)
+	void  				adjustRight(const GRNotationElement * endElt);		// adjust last segment to the next bar (if any)
+	void  				adjustToNext (GRVolta * next);						// vertical adjustment for adjacent voltas
+	GRVolta * 			getNextVolta(GRStaff * staff) const;
+
 	public:
         enum { kDefault, kRightOpened, kLeftOpened, kOpened };
 
@@ -36,29 +51,22 @@ class GRVolta : public GRPTagARNotationElement
 		virtual void    tellPosition(GObject * caller, const NVPoint & newPosition);
         virtual void    FinishPTag (GRStaff * grstaff);
 
-		void            adjustPrevious(const GRStaff * staff);
         GRNotationElement * getEndPos() const   { return mEnd; }
         GRNotationElement * getBegPos() const   { return mBeg; }
+        NVRect 			getFirstSegment() const	{ return fSegments[0]; }
+        size_t 			getSegmentsSize() const	{ return fSegments.size(); }
+        void 			setFirstSegment(NVRect r) { fSegments[0] = r; }
 
 	protected:
 		GRNotationElement * getEndElt(GRNotationElement *after);
 		GRNotationElement * getBegElt(GRNotationElement *before);
-		void                adjustRight(const GRNotationElement *endElt);
 
 		static NVPoint refpos;
-
-        NVRect      mFirstPart;
-        NVPoint     mFirstPosition;
-        GRSystem *  mCurrSystem;        // used to detect broken volta
-		bool        mBroken;            // indicates that the volta is split on two systems
         GRNotationElement * mEnd, *mBeg;// these are for graphic adjustments
         
-
         int         mShape;             // the volta shape  (from ARVolta)
         const char* mString;            // the volta string (from ARVolta)
         int         mStringSize;
-        
-    static std::map<int, GRVolta *> mPrevious;       // link adjacents voltas
 };
 
 #endif

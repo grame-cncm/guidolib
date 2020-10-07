@@ -2,6 +2,10 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+  version 1.7.1
+- fix incorrect volta placement 
+
+----------------------------------------------------------------
   version 1.7.0
 - introduce variables
 - support single quote strings

@@ -24,14 +24,17 @@ ofstream vdebug("voltadebug.txt");
 #include "GRDefine.h"
 #include "GREvent.h"
 #include "GRGlobalStem.h"
+#include "GRGlue.h"
 #include "GRNote.h"
 #include "GRRest.h"
 #include "GRStem.h"
 #include "GRFlag.h"
+#include "GRSingleNote.h"
 #include "GRStaff.h"
 #include "GRSystem.h"
 #include "GRSystemSlice.h"
 #include "GRVolta.h"
+#include "TagParameterFloat.h"
 
 #include "kf_ivect.h"
 #include "VGDevice.h"
@@ -39,14 +42,12 @@ ofstream vdebug("voltadebug.txt");
 
 using namespace std;
 
-std::map<int, GRVolta *> GRVolta::mPrevious;
 
 NVPoint GRVolta::refpos;
 
 GRVolta::GRVolta( GRStaff * inStaff, const ARVolta * ar )
 		: GRPTagARNotationElement( ar )
 {
-	mPrevious.clear();
 	GRSystemStartEndStruct * sse= new GRSystemStartEndStruct;
 	sse->grsystem = inStaff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
@@ -54,8 +55,6 @@ GRVolta::GRVolta( GRStaff * inStaff, const ARVolta * ar )
 	sse->p = (void *) getNewGRSaveStruct();
 	addSystemStartEndStruct (sse);
     mEnd = mBeg = 0;
-    mBroken = false;
-    mCurrSystem = 0;
     mShape = kDefault;
 
     if (ar->getFormat()) {
@@ -66,7 +65,6 @@ GRVolta::GRVolta( GRStaff * inStaff, const ARVolta * ar )
         else if (!strcmp(ar->getFormat(), "-"))
             mShape = kOpened;
     }
-
     mString = ar->getMark();
     mStringSize = (int)strlen(mString);
 }
@@ -79,101 +77,56 @@ GRVolta::~GRVolta()
 // -----------------------------------------------------------------------------
 /*!
     This method makes final adjustments to the volta bounding boxes.
-    The following strategy is applied:
-    - when all the elements of a measure are enclosed in the volta, it is
-      left extended to the measure beginning and right extended to the measure end
-    - when only some elements are enclosed (non standard use), the volta is
-      right extended to the left of the nexr element.
-
-    The same rules are applied to each part of a broken volta (ie a volta that
-    covers measures over several systems).
-
-    \note broken volta is supported only over 2 systems. Writting a volta that may
-    cover more than 2 systems (non standard use) may result in incorrect graphic
-    rendering.
+	This final adjustement occurs here because start and end elements
+	do not carry graphic properties when tellPosition is called
 */
 void GRVolta::FinishPTag (GRStaff * staff)
 {
     if (!staff) return;
 
-    NEPointerList * assoc = getAssociations();
-    if (!assoc) return;
-    GRNotationElement * first = assoc->front();
-    if (!first) return;
-
-
-    NVRect r;
-    if (mBroken) {
-        if( first->getGRStaff() == staff) {
-            if (mBeg) {
-                GRSystem * system = staff->getGRSystem();
-                r = mBeg->getBoundingBox();
-                mFirstPosition.x = mBeg->getPosition().x + r.right - r.left;
-                r = system->getBoundingBox();
-                r += system->getPosition();
-                mFirstPart.right = r.right - mFirstPosition.x;
-                adjustPrevious (staff);
-            }
-        }
-        else if (mEnd) adjustRight (mEnd);
-    }
-    else {
-        if (mEnd) adjustRight (mEnd);
-        if (mBeg) {
-            r = mBeg->getBoundingBox();
-			r += mBeg->getPosition();
-            mBoundingBox.right += mPosition.x - r.right;
-            mPosition.x = r.right;
-            adjustPrevious (staff);
-        }
-    }
-   mPrevious[staff->getStaffNumber()] = this;
+	if (mBeg) adjustLeft (mBeg);
+	if (mEnd) {
+		adjustRight(mEnd);
+		GRVolta* next = getNextVolta(mEnd->getGRStaff());
+		if (next) adjustToNext (next);
+	}
+	float sy = staff->getPosition().y;
 }
 
 // -----------------------------------------------------------------------------
-/*!
-    This method makes contextual adjustments to adjacent voltas.
-    When two \p volta are applied to adjacent measures on the same system,
-    the voltas are constrained to the same highest y position.
-    This rule is not applied if any of the two voltas is manually positionned
-    using a dy parameter.
-
-    \note adjacent voltas are detected using a static map which is not suitable
-    for parallel concurrent scores evaluation.
-
-*/
-void GRVolta::adjustPrevious(const GRStaff * staff)
+void GRVolta::adjustToNext (GRVolta * next)
 {
-    GRVolta * volta = mPrevious[staff->getStaffNumber()];
-    if (!volta) return;
-
-    GRStaff * previous = staff->getPreviousStaff();
-    if (!previous) return;
-    NEPointerList * staffEvs = previous->getElements();
-    if (!staffEvs) return;
-
-    // don't adjust position if the previous volta right position is not the measure end
-    if (volta->getEndPos() != staffEvs->back()) return;
-    // don't adjust position if the previous volta position is manually specified
-    if (volta->getOffset().y) return;
-    // don't adjust position if my position is manually specified
-    if (getOffset().y) return;
-
-    if (mPosition.y < volta->getPosition().y) {
-        // adjust previous volta position
-        NVPoint p(volta->getPosition().x, mPosition.y);
-        volta->setPosition(p);
-        volta->adjustPrevious(previous);
-    }
-    else if (volta->getPosition().y < mPosition.y) {
-        // adjust myself
-        mPosition.y = volta->getPosition().y;
-        if (mBroken) mFirstPosition.y = mPosition.y;
-    }
+	size_t n = fSegments.size();
+	if (n && next->getSegmentsSize()) {
+		NVRect first = next->getFirstSegment();
+		NVRect last = fSegments[n-1];
+		last.right -= LSPACE*0.7;
+		if (last.top > first.top) {
+			last.top = first.top;
+			last.bottom = first.bottom;
+		}
+		else if (last.top < first.top) {
+			first.top = last.top;
+			first.bottom = last.bottom;
+			next->setFirstSegment (first);
+		}
+		fSegments[n-1] = last;
+	}
 }
 
 // -----------------------------------------------------------------------------
-void GRVolta::adjustRight(const GRNotationElement *endElt)
+void GRVolta::adjustLeft (const GRNotationElement * startElt)
+{
+	NVRect r = startElt->getBoundingBox() + startElt->getPosition();
+	NVRect seg = fSegments[0];
+	float offset = startElt->isSingleNote()	? 0 : LSPACE/3;
+	seg.left = r.left; // + offset; // + dx;
+	fSegments[0] = seg;
+	mBoundingBox = seg;
+}
+
+// -----------------------------------------------------------------------------
+void GRVolta::adjustRight(const GRNotationElement * endElt)
 {
     NVRect r = endElt->getBoundingBox();
     r += endElt->getPosition();
@@ -183,6 +136,13 @@ void GRVolta::adjustRight(const GRNotationElement *endElt)
 
     mBoundingBox.right += r.left - tmp.right;
     mBoundingBox.right -= LSPACE / 4;
+
+	size_t n = fSegments.size();
+	if (n) {
+		NVRect seg = fSegments[n-1];
+		seg.right = r.left; // - LSPACE / 3;
+		fSegments[n-1] = seg;
+	}
 }
 
 // -----------------------------------------------------------------------------
@@ -194,80 +154,73 @@ void GRVolta::tellPosition(GObject * caller, const NVPoint & newPosition)
 	if (assoc == 0 ) return;
 	GRStaff * staff = grne->getGRStaff();
 	if (staff == 0 ) return;
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
+	if (sse == 0 ) return;
 
-	bool newSystem = mCurrSystem && (mCurrSystem != staff->getGRSystem());
-    if (newSystem) {
-        mFirstPart = mBoundingBox;
-        mFirstPosition = mPosition;
-        mBroken = true;
+	float lspace = staff->getStaffLSPACE();
+	if (fStartTell) {
+		fCurrentSegment.left = grne->getBoundingBox().left + grne->getPosition().x;
+		fCurrentSegment.top = lspace * -3;
+		fCurrentSegment.bottom = fCurrentSegment.top + lspace * 1.5f;
+		if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) mBeg = getBegElt(sse->startElement);
+	}
+	else {
+		const GRNotationElement* start = mAssociated->GetAt(sse->startpos);
+		const GRNotationElement* end = mAssociated->GetAt(sse->endpos);
+		GuidoPos pos = sse->startpos;
+		while (pos) {			// adjust the y position according to the enclosed notes
+			GRNotationElement * elt = assoc->GetNext(pos);
+			const GRSingleNote* note = elt->isSingleNote();
+			NVRect r = note ? note->getEnclosingBox() : (elt->getBoundingBox() + elt->getPosition());
+			if (r.top <= fCurrentSegment.top)
+				fCurrentSegment.top = r.top - lspace;
+			if (pos == sse->endpos) break;
+		}
+		fCurrentSegment.right = grne->getPosition().x + grne->getBoundingBox().Width();
+		fCurrentSegment.bottom = fCurrentSegment.top + lspace * 1.5f;
+		fSegments.push_back (fCurrentSegment);
+		
+		if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST) mEnd = getEndElt(sse->endElement);
+	}
+	fStartTell = !fStartTell;
+}
+
+// -----------------------------------------------------------------------------
+GRVolta * GRVolta::getNextVolta(GRStaff * staff) const
+{
+    if (!staff) return 0;
+    NEPointerList * staffEvs = staff->getElements();
+    if (!staffEvs) return 0;
+
+    GuidoPos pos = staffEvs->GetElementPos(mEnd);
+    while (pos) {
+        GRNotationElement * elt = staffEvs->GetNext(pos);
+        if (elt == this) continue;
+        if (dynamic_cast<GRVolta *>(elt)) return dynamic_cast<GRVolta *>(elt);
+        if (dynamic_cast<GRNote *>(elt) || dynamic_cast<GRRest *>(elt))
+            return 0;   // range beg is not at the beginning of the measure: do nothing
     }
 
-    if( (!mBeg && (grne == assoc->front())) || newSystem) {
-        // this is the first element on a system, we collect the current system,
-        // initialize the bounding box and set the position
-        mCurrSystem = staff->getGRSystem();
-        mBoundingBox.Set (0, -2*LSPACE, 0, 0);
-        mPosition.x = grne->getBoundingBox().left + grne->getPosition().x;
-        mPosition.y = getOffset().y;
-        if (mBroken) {
-            // this is to ensure the same y position for broken parts
-            if (mPosition.y < mFirstPosition.y) mFirstPosition.y = mPosition.y;
-            else if (mFirstPosition.y < mPosition.y) mPosition.y = mFirstPosition.y;
-        }
-        // here we get the element where the drawing should start
-        if (!mBeg) mBeg = getBegElt(grne);
+    // did not find anything on first staff, try on the next one
+    staff = staff->getNextStaff();
+    if (!staff) return 0;
+    staffEvs = staff->getElements();
+    if (!staffEvs) return 0;
+
+    pos = staffEvs->GetHeadPosition();
+    while (pos) {
+        GRNotationElement * elt = staffEvs->GetNext(pos);
+        if (dynamic_cast<GRVolta *>(elt)) return dynamic_cast<GRVolta *>(elt);
+        if (dynamic_cast<GRNote *>(elt) || dynamic_cast<GRRest *>(elt))
+            return 0;   // range beg is not at the beginning of the measure: do nothing
     }
-
-    else if (grne == assoc->back()) {
-        // this is the last element call, we go thru the associated elements
-        GuidoPos pos = assoc->GetHeadPosition();
-        while (pos) {
-            GRNotationElement * e = assoc->GetNext(pos);
-            if (!e) break;      // this shouldn't happend
-
-            // ignore elements not on the current system
-            GRStaff * estaff = e->getGRStaff();
-			if (!estaff) continue;
-			if (estaff->getGRSystem() != mCurrSystem) continue;
-
-            // we get the element positionned bouding box
-            NVRect r = e->getBoundingBox();
-            r += e->getPosition();
-            // and we move the volta bounding box to the element right position
-			mBoundingBox.right = r.right - estaff->getPosition().x;
-
-            // the next part computes the y position, it is ignored when an y offset has been specified
-            if (getOffset().y) continue;
-
-            if (r.top < mPosition.y) mPosition.y = r.top;
-
-            if (mBroken) {
-                // this is to ensure the same y position for broken parts
-                if (mPosition.y < mFirstPosition.y) mFirstPosition.y = mPosition.y;
-                else if (mFirstPosition.y < mPosition.y) mPosition.y = mFirstPosition.y;
-            }
-
-            // special computation for chords that share a stem
-            GREvent * ev = dynamic_cast<GREvent *>(e);
-            if (!ev) continue;
-            GRGlobalStem * gstem = ev->getGlobalStem();
-            if (!gstem) continue;
-
-            GRStem * stem = gstem->getGRStem();
-            if (stem) {
-                r = stem->getBoundingBox();
-                r += stem->getPosition();
-                if (r.top < mPosition.y) mPosition.y = r.top;
-            }
-        }
-        // special computation for chords that share a stem
-        mEnd = getEndElt(assoc->back());
-   }
+	return 0;
 }
 
 // -----------------------------------------------------------------------------
 GRNotationElement * GRVolta::getBegElt(GRNotationElement *before) {
     if (!before) return 0;
+
     GRStaff * staff = before->getGRStaff();
     if (!staff) return 0;
     NEPointerList * staffEvs = staff->getElements();
@@ -278,6 +231,7 @@ GRNotationElement * GRVolta::getBegElt(GRNotationElement *before) {
     while (pos) {
         GRNotationElement * elt = staffEvs->GetPrev(pos);
         if (elt == before) continue;
+        if (dynamic_cast<GRBar *>(elt)) return elt;
         if (dynamic_cast<GRNote *>(elt) || dynamic_cast<GRRest *>(elt))
             return 0;   // range beg is not at the beginning of the measure: do nothing
     }
@@ -290,6 +244,7 @@ GRNotationElement * GRVolta::getBegElt(GRNotationElement *before) {
 // -----------------------------------------------------------------------------
 GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
     if (!after) return 0;
+
     GRStaff * staff = after->getGRStaff();
     if (!staff) return 0;
     NEPointerList * staffEvs = staff->getElements();
@@ -301,7 +256,7 @@ GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
     while (pos) {
         GRNotationElement * elt = staffEvs->GetNext(pos);
         if (elt == after) continue;
-        if (elt->getRelativeTimePosition() <= date) continue;
+        if (elt->getRelativeTimePosition() < date) continue;
         if (dynamic_cast<GRBar *>(elt) || dynamic_cast<GRNote *>(elt) || dynamic_cast<GRRest *>(elt)) {
             return elt;
         }
@@ -312,74 +267,66 @@ GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
 // -----------------------------------------------------------------------------
 void GRVolta::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw || !mShow)
+	if(!mDraw || !mShow || fSegments.empty())
 		return;
 
-    static bool start = true;
-
-    if (mColRef)
-        hdc.PushPenColor(VGColor(mColRef));
+	static size_t index = 0;
+	const ARVolta * ar = getARVolta();
+	float dx = (index == 0) ? ar->getDX()->getValue() : 0;
+	float dy = ar->getDY()->getValue();
+	NVRect seg = fSegments[index++];
 
     hdc.PushPenWidth(4.0f);
-    int shape = mShape;
-    NVRect r = getBoundingBox();
-    r += getPosition ();
+	if (mColRef) hdc.PushPenColor(VGColor(mColRef));
+	hdc.Line (seg.left+dx, seg.top+dy, seg.right, seg.top+dy);
+	drawEndings (hdc, index-1, dx, dy);
 
-    bool drawText= true;
+	if (index == 1)		// first (and maybe last) segment
+		drawText (hdc, seg.left+dx + LSPACE/2, seg.bottom+dy);
+	if (index == fSegments.size())
+		index = 0;
 
-    if (mBroken) {
-        if (start) {
-            r = mFirstPart;
-            r += mFirstPosition;
-            switch (mShape) {
-                case kDefault:      shape = kRightOpened;   break;
-                case kLeftOpened:   shape = kOpened;        break;
-            }
-            start = false;
-        }
-        else {
-            switch (mShape) {
-                case kDefault:      shape = kLeftOpened; break;
-                case kRightOpened:  shape = kOpened;     break;
-            }
-            drawText= false;
-            start = true;
-        }
-    }
+	if (mColRef) hdc.PopPenColor();
+    hdc.PopPenWidth();
+//    DrawBoundingBox(hdc, VGColor(0,0,0));
+}
 
-    float bottom = r.bottom - (LSPACE/2);
-    hdc.Line (r.left, r.top, r.right, r.top);
-
-    switch (shape) {
+// -----------------------------------------------------------------------------
+void GRVolta::drawEndings (VGDevice & hdc, size_t index, float dx, float dy) const
+{
+	size_t n = fSegments.size()-1;
+	NVRect r = fSegments[index];
+	r.left	+= dx;
+	r.top 	+= dy;
+	r.bottom+= dy;
+    switch (mShape) {
         case kDefault:
-            hdc.Line (r.left, r.top, r.left, bottom);
-            hdc.Line (r.right, r.top, r.right, bottom);
+            if (!index) hdc.Line (r.left, r.top, r.left, r.bottom);
+            if (index==n) hdc.Line (r.right, r.top, r.right, r.bottom);
             break;
         case kLeftOpened:
-            hdc.Line (r.right, r.top, r.right, bottom);
+            if (index==n) hdc.Line (r.right, r.top, r.right, r.bottom);
             break;
         case kRightOpened:
-            hdc.Line (r.left, r.top, r.left, bottom);
+            if (!index) hdc.Line (r.left, r.top, r.left, r.bottom);
             break;
     }
+}
 
-    if (mColRef)
-        hdc.PopPenColor();
+// -----------------------------------------------------------------------------
+void GRVolta::drawText ( VGDevice & hdc, float x, float y ) const
+{
+	const VGColor prevTextColor = hdc.GetFontColor();
+	hdc.SetTextFont(FontManager::gFontText);
 
-    hdc.PopPenWidth();
+	if (mColRef)
+		hdc.SetFontColor(VGColor(mColRef));
 
-    if (drawText) {
-        const VGColor prevTextColor = hdc.GetFontColor();
-        hdc.SetTextFont(FontManager::gFontText);
+	hdc.SetFontAlign (VGDevice::kAlignBaseLeft);
+	hdc.DrawString(x, y, mString, mStringSize);
 
-        if (mColRef)
-            hdc.SetFontColor(VGColor(mColRef));
-
-        hdc.SetFontAlign (VGDevice::kAlignBaseLeft);
-        hdc.DrawString(r.left + LSPACE / 2, bottom, mString, mStringSize);
-
-        if (mColRef)
-            hdc.SetFontColor(prevTextColor);
-    }
+	if (mColRef)
+		hdc.SetFontColor(prevTextColor);
+	
 }
 
