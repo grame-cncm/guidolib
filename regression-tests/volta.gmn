@@ -1,0 +1,40 @@
+(*
+	incorrect volta in presence of chords and of a second voice
+*)
+{
+[
+	\meter<"3/4">
+	a b f 
+	a b f 
+	a b f 
+	\volta<"1", "|-">(
+	g a#2 f1 
+\newLine
+	g b f 
+	g b e3 
+	g1 b f 
+%	g b f 
+%	g b f 
+	g b f 
+	g b2 { f1, a }
+)
+	\volta<"2">(
+	a b f 
+	a b f 
+	a b f )
+	g g g
+	\volta<"1">(
+	g b f 
+	g b f 
+	g b {f,d}
+	g b d )
+	\volta<"2", "|-">(
+	a b f 
+	a c3 f1 
+	a b f )
+	a b f 
+]
+, [
+
+]
+}
