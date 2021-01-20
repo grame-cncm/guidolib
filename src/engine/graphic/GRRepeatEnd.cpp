@@ -33,6 +33,7 @@ NVPoint GRRepeatEnd::refpos;
 GRRepeatEnd::GRRepeatEnd( const ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float proportionnalRender )
 					: GRBar(ar, inStaff, inTimePos, proportionnalRender)
 {
+	setGRStaff (inStaff);
 	InitRepeatEnd();
 }
 
@@ -61,7 +62,6 @@ void GRRepeatEnd::InitRepeatEnd()
         fBaseThickness = LSPACE * 0.6f * fSize;
         fLSpace = staff->getStaffLSPACE();
     }
-	updateBoundingBox();
 }
 
 // --------------------------------------------------------------------------
