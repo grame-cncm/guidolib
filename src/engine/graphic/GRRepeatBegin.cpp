@@ -15,9 +15,11 @@
 #include <iostream>
 #include <math.h>
 
+#include <kf_ivect.h>
 #include "ARRepeatBegin.h"
 
 #include "GRRepeatBegin.h"
+#include "GRSystem.h"
 #include "GRSystemSlice.h"
 #include "GRStaff.h"
 #include "TagParameterFloat.h"
@@ -28,9 +30,10 @@ using namespace std;
 NVPoint GRRepeatBegin::refpos;
 
 // --------------------------------------------------------------------------
-GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *ar, bool p_ownsar)
+GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *ar, GRStaff * inStaff, bool p_ownsar)
 					: GRTagARNotationElement(ar, LSPACE, p_ownsar)
 {
+	setGRStaff(inStaff);
 	mNeedsSpring = 1;
 	sconst = SCONST_BAR - 2;
 	mSymbol = kRepeatBeginSymbol;
@@ -60,28 +63,26 @@ const ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() const {
 // --------------------------------------------------------------------------
 void GRRepeatBegin::updateBoundingBox()
 {
-	const float halfExtent = GetSymbolExtent(mSymbol) * 0.5f;
+	const float halfExtent = GetSymbolExtent( mSymbol ) * 0.5f;
 	float curLSPACE = LSPACE;
-	float staffh = 4 * curLSPACE;
+	GRStaff *staff = getGRStaff();
+	if (staff) {
+		curLSPACE   = staff->getStaffLSPACE();
+		fLinesCount = staff->getNumlines();
+		GRSystemSlice * slice = staff->getGRSystemSlice();
+		if (slice && slice->hasSystemBars())
+		fStaffThickness = staff->getLineThickness();
+		fSize = staff->getSizeRatio();
+		fBaseThickness = LSPACE * 0.6f * fSize;
+		mTagSize *= fSize;
+}
 
-    GRStaff *staff = getGRStaff();
-    if (staff) {
-  		curLSPACE 	= staff->getStaffLSPACE();
-  		staffh 		= staff->getDredgeSize();
-		
-      	fLinesCount = staff->getNumlines();
-        fStaffThickness = staff->getLineThickness();
-        fSize = staff->getSizeRatio();
-        fBaseThickness = LSPACE * 0.6f * fSize;
-
-        mTagSize *= fSize;
-    }
-
-	mPosition.y = 0;
 	float topoffset = 0;
 	float botoffset = 4 * curLSPACE;
-	if (fLinesCount > 1) botoffset = staffh;
-	else topoffset = botoffset = 2 * curLSPACE;
+	if ((fLinesCount > 1) && staff) botoffset = staff->getDredgeSize();
+	else {
+		topoffset = botoffset = 2 * curLSPACE;
+	}
 
 	mBoundingBox.top = -topoffset;
 	mBoundingBox.left = -halfExtent;
@@ -181,9 +182,25 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 		const float x1 = mPosition.x  + getXOffset() + fDx;
 		const float x2 = x1 + spacing;
 
+		float y = 0;
+		GRStaff *staff = getGRStaff();
+// -----------------------------------------------
+// this is an ugly hack to fix incorrect bar length (didn't found another solution yet)
+		GRSystemSlice * slice = staff->getGRSystemSlice();
+		if (slice && slice->hasSystemBars()) {
+			const StaffVector* staves = slice->getGRSystem()->getStaves();
+			int n = staves->size();
+			for( int i = staves->GetMinimum(); i <= staves->GetMaximum(); ++i) {
+				const GRStaff* tmp = staves->Get(i);
+				float bottom = tmp->getPosition().y + tmp->getDredgeSize();
+				if (bottom > y) y = bottom;
+			}
+		}
+// -----------------------------------------------
+
 		if (fRanges.empty()) {
 			const float y1 = mPosition.y + mBoundingBox.top - fDy; // * fSize;
-			const float y2 = mPosition.y + mBoundingBox.bottom  - fDy; // * fSize;
+			const float y2 = y ? y : mPosition.y + mBoundingBox.bottom  - fDy; // * fSize;
 			hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
 			hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
 		}

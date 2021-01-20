@@ -1068,14 +1068,11 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 {
     assert(arrb);
 	if (mStaffState.curbarfrmt) arrb->setRanges (mStaffState.curbarfrmt->getRanges());
-//	GRRepeatBegin * tmp = new GRRepeatBegin(arrb, this, arrb->getRelativeTimePosition());
-	GRRepeatBegin * tmp = new GRRepeatBegin(arrb);
+	GRRepeatBegin * tmp = new GRRepeatBegin(arrb, this);
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
 		mGrSystemSlice->addRepeatBegin(tmp, mStaffState.curbarfrmt->getRanges(), this);
 
 	addNotationElement(tmp);
-	tmp->setGRStaff(this);
-	tmp->updateBoundingBox();
     // repeatBegin must reset the keyState, jfk, 9/2015
     mStaffState.reset2key ();
 	return tmp;
@@ -1086,19 +1083,16 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 */
 GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 {
-//	if (arre->getNumRepeat() == 0 || !arre->getRange())
-	{
-        assert (arre);
-		if (mStaffState.curbarfrmt) arre->setRanges(mStaffState.curbarfrmt->getRanges());
-		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), fProportionnalRendering);
-		if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
-			mGrSystemSlice->addRepeatEnd(tmp, mStaffState.curbarfrmt->getRanges(), this);
-		addNotationElement(tmp);
-         // repeatBegin must reset the keyState, jfk, 9/2015
-        mStaffState.reset2key ();
-		return tmp;
-	}
-	return NULL;
+	assert (arre);
+	if (mStaffState.curbarfrmt) arre->setRanges(mStaffState.curbarfrmt->getRanges());
+	GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), fProportionnalRendering);
+	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
+		mGrSystemSlice->addRepeatEnd(tmp, mStaffState.curbarfrmt->getRanges(), this);
+	addNotationElement(tmp);
+	tmp->updateBoundingBox();
+	 // repeatBegin must reset the keyState, jfk, 9/2015
+	mStaffState.reset2key ();
+	return tmp;
 }
 
 // ----------------------------------------------------------------------------

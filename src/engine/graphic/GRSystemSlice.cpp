@@ -154,7 +154,7 @@ void GRSystemSlice::addRepeatBegin( GRRepeatBegin * mybar,const ARBar::TRanges& 
 	const ARRepeatBegin * ar = mybar->getARRepeatBegin();
 	assert(ar);
 //	ar->setRanges(ranges);
-	GRRepeatBegin * newrepeat = new GRRepeatBegin(ar);
+	GRRepeatBegin * newrepeat = new GRRepeatBegin(ar, grstaff);
 	newrepeat->setTagType(GRTag::SYSTEMTAG);
 	mHasSystemBars = true;
 	mybar->addAssociation(newrepeat);

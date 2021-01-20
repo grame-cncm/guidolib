@@ -29,7 +29,7 @@ class GRRepeatBegin : public GRTagARNotationElement
 {
 public:
               // GRRepeatBegin( ARRepeatBegin * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
-                 GRRepeatBegin ( const ARRepeatBegin * arrb, bool p_ownsar = false);
+                 GRRepeatBegin ( const ARRepeatBegin * arrb, GRStaff * inStaff, bool p_ownsar = false);
     virtual 	~GRRepeatBegin () {}
 
 	void setPosFrom( float posy );

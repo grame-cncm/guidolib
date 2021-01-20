@@ -4,6 +4,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.7.1
 - fix incorrect volta placement 
+- fix incorrect repeatEnd length with non 5 lines staves
 
 ----------------------------------------------------------------
   version 1.7.0
