@@ -29,6 +29,7 @@ ofstream vdebug("voltadebug.txt");
 #include "GRRest.h"
 #include "GRStem.h"
 #include "GRFlag.h"
+#include "GRRepeatBegin.h"
 #include "GRSingleNote.h"
 #include "GRStaff.h"
 #include "GRSystem.h"
@@ -257,7 +258,7 @@ GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
         GRNotationElement * elt = staffEvs->GetNext(pos);
         if (elt == after) continue;
         if (elt->getRelativeTimePosition() < date) continue;
-        if (dynamic_cast<GRBar *>(elt) || dynamic_cast<GRNote *>(elt) || dynamic_cast<GRRest *>(elt)) {
+        if (dynamic_cast<GRBar *>(elt) || dynamic_cast<GRRepeatBegin *>(elt) || dynamic_cast<GRNote *>(elt) || dynamic_cast<GRRest *>(elt)) {
             return elt;
         }
     }
