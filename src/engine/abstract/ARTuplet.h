@@ -31,7 +31,7 @@ class TagParameterString;
 @tagname:\tuplet
 @tagalias:
 @tagtype:R
-@tagnotation:displays an octava sign and transposes the notes accordingly
+@tagnotation:control tuplets format
 @tagdesc
 @tagend
 
