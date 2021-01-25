@@ -41,7 +41,7 @@
 
 #include "Guido2Image.h"
 #include "QGuidoPainter.h"
-
+#include "GUIDOParse.h"
 #include "GUIDOPianoRoll.h"
 
 #ifdef USE_UNISTD
@@ -280,7 +280,7 @@ static string toLower (const char* str)
 //------------------------------------------------------------------------------------------
 static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 {
-	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1, 0 };
+	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1, 0, false };
 	if (opts.hasLayout) {
 		if (opts.systemsDistance > 0)
             layout.systemsDistance = opts.systemsDistance;
