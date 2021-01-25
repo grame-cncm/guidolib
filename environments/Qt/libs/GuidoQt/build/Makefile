@@ -47,7 +47,7 @@ $(BUILDDIR)/GuidoQt.xcodeproj:
 ios: 
 	$(MAKE) macos BUILDDIR=$(IOSDIR) CMAKEOPT="-DIOS=on"
 
-unix: $(BUILDDIR) $(BUILDDIR)/Makefile
+linux: $(BUILDDIR) $(BUILDDIR)/Makefile
 	cd $(BUILDDIR) && cmake --build . --config Release
 	
 $(BUILDDIR)/Makefile:
