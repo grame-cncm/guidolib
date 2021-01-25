@@ -47,7 +47,7 @@ ios:
 	@echo "WARNING! ios target is temporarely disabled due to project generation failure with Qt 5.15 and Xcode 12.3"
 #	$(MAKE) macos QMAKE=qmake-ios BUILDDIR=$(IOSDIR)
 
-unix: $(BUILDDIR) $(BUILDDIR)/Makefile
+linux: $(BUILDDIR) $(BUILDDIR)/Makefile
 	$(MAKE) -C $(BUILDDIR)
 	
 $(BUILDDIR)/Makefile:
