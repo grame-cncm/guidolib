@@ -1,10 +1,13 @@
 os: linux
-dist: trusty
+dist: focal
 language: cpp
 compiler: clang
 
 before_install:
+  - sudo add-apt-repository -y ppa:beineri/opt-qt-5.14.2-focal
   - sudo apt-get -qq update
+  - sudo apt-get install qt514-meta-minimal libglu1-mesa-dev  -y
+  - source /opt/qt514/bin/qt514-env.sh
 
 branches:
   only:
