@@ -51,7 +51,7 @@ linux: $(BUILDDIR) $(BUILDDIR)/Makefile
 	$(MAKE) -C $(BUILDDIR)
 	
 $(BUILDDIR)/Makefile:
-	cd $(BUILDDIR) && $(QMAKE) ..
+	cd $(BUILDDIR) && $(QMAKE) ../..
 
 
 clean:

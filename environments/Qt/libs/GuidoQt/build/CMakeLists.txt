@@ -56,6 +56,10 @@ else()
 	set ( TARGET GuidoQt )
 endif()
 
+if (UNIX AND NOT APPLE)
+	set(CMAKE_CXX_FLAGS -fPIC)
+endif()
+
 add_library(${TARGET} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
 target_compile_definitions (${TARGET} PRIVATE ${DEFS})
 target_include_directories (${TARGET} PRIVATE ${INCDIRS})
