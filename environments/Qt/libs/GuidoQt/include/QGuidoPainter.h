@@ -14,18 +14,19 @@
 #ifndef GUIDO_PAINTER_H
 #define GUIDO_PAINTER_H
 
-#include "GUIDOEngine.h"
-#include "GUIDOParse.h"
-#include "GUIDOPianoRoll.h"
-
 #include <QString>
 #include <QPainter>
 #include <QSizeF>
 #include <QRect>
 #include <QColor>
- 
+
+#include "GUIDOEngine.h"
+
 class GSystemQt;
 class VGDevice;
+class GuidoParser;
+class GuidoStream;
+class PianoRoll;
 
 /**
 *	\brief The QGuidoPainter object is a Qt encapsulation of the Guido Engine, 
@@ -89,7 +90,11 @@ class QGuidoPainter
 		*
 		*/
 		static bool				isGuidoEngineStarted();
-		
+
+		/** \brief Neck to convert AR to GR and get conversion time
+		*/
+		GuidoErrCode convertAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
+
 		static GSystemQt * mSys;
 		static VGDevice * mDev;
 	
@@ -105,7 +110,7 @@ class QGuidoPainter
 		
 		/**	\brief Returns the last file loaded with setFile.
 		*/
-		const QString& fileName() const;
+		const QString& fileName() const		{ return mFileName; }
 		
 		/**	\brief Sets the current Guido code to draw.
 		*	\param gmnCode The Guido Music Notation code
@@ -118,10 +123,6 @@ class QGuidoPainter
 		/**	\brief Returns the current Guido code.
 		*/
 		QString gmnCode() const;
-		
-        /** \brief Neck to convert AR to GR and get conversion time
-		*/
-		GuidoErrCode convertAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
 
 		/** \brief Returns the validity of the last GMN code loaded with setGMNCode or setGMNFile
 		*/
@@ -197,7 +198,11 @@ class QGuidoPainter
 		void setScoreColor(const QColor& color);
 		/// \brief returns the color used to draw the score
 		const QColor& getScoreColor() const;
-		
+		/// \brief sets the color used to draw the lines
+		void setPenColor(const QColor& color);
+		/// \brief returns the color used to draw the lines
+		const QColor& getPenColor() const;
+	
 		/// \brief sets the minimum systems distance to its default value
 		void  resetSystemsDistance()	{ setSystemsDistance(kDefaultSystemDistance); }
 		/// \brief sets the minimum systems distance
@@ -232,6 +237,9 @@ class QGuidoPainter
 		void		setARHandler(ARHandler ar);
         GuidoParser* getParser() {return fParser;}
 
+		// the rendering factore control the size of the graphic output
+		virtual float getRenderingFactor () const 	{ return 10.0; }
+
 	protected:
 	
 		QGuidoPainter();
@@ -244,7 +252,7 @@ class QGuidoPainter
 		bool hasValidGR() const			{ return mDesc.handle != 0; }
 
         void setPathsToARHandler (ARHandler inARHandler, const char* data);
-		
+	
 		GuidoOnDrawDesc mDesc;
 		ARHandler mARHandler;
 		QString mFileName;
@@ -256,7 +264,8 @@ class QGuidoPainter
 		GuidoPageFormat mPageFormat;
 
 		QColor fCurrentColor;		// the color for drawing the score
-        
+		QColor fCurrentPenColor;	// the color for drawing lines
+	
         GuidoParser *fParser;
 };
 

@@ -55,8 +55,7 @@ void QGuidoPainter::startGuidoEngine()
 		QGuidoPainter::mSys = new GSystemQt(0);
 		QGuidoPainter::mDev = mSys->CreateDisplayDevice();
 		
-//		GuidoInitDesc gd = { QGuidoPainter::mDev , 0, "Guido2", "Times New Roman" };
-		GuidoInitDesc gd = { QGuidoPainter::mDev , 0, 0, "Times New Roman" };
+		GuidoInitDesc gd = { QGuidoPainter::mDev , 0, "Guido2", "Times New Roman" };
 		GuidoInit (&gd);             // Initialise the Guido Engine first
 	}
 }
@@ -203,9 +202,10 @@ bool QGuidoPainter::setGMNDataStream (GuidoStream * guidoStream)
 
     arh = GuidoStream2AR(fParser, guidoStream);
 
-    if (!arh)
-        return false;
-    
+	if (!arh) {
+		mLastErr = guidoErrParse;
+		return false;
+	}
 	// Build a new score Graphic Representation according the score's Abstract Representation.
 	GuidoPageFormat currentFormat;
 	GuidoGetDefaultPageFormat ( &currentFormat );
@@ -238,9 +238,10 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 
     arh = GuidoString2AR(fParser, gmncode.toUtf8().data());
 
-    if (!arh)
-        return false;
-
+	if (!arh) {
+		mLastErr = guidoErrParse;
+		return false;
+	}
 	setPathsToARHandler(arh, dataPath);
 
 	// Build a new score Graphic Representation according the score's Abstract Representation.
@@ -391,7 +392,8 @@ GuidoErrCode QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRe
 
 	//Actual draw of the Guido Score.
 	VGColor color(fCurrentColor.red(), fCurrentColor.green(), fCurrentColor.blue(), fCurrentColor.alpha());
-	dev->SelectPenColor (color);
+	VGColor pcolor(fCurrentPenColor.red(), fCurrentPenColor.green(), fCurrentPenColor.blue(), fCurrentPenColor.alpha());
+	dev->SelectPenColor (pcolor);
 	dev->SelectFillColor(color);
 	dev->SetFontColor	(color);
     GuidoErrCode result = GuidoPianoRollOnDraw(pianoRoll, drawRectangle.width(), drawRectangle.height(), dev);
@@ -402,6 +404,12 @@ GuidoErrCode QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRe
 	painter->restore();
 
     return result;
+}
+
+//-------------------------------------------------------------------------
+void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
+{
+    GuidoParserGetErrorCode(fParser, line, col, 0);
 }
 
 //-------------------------------------------------------------------------
@@ -425,8 +433,9 @@ QSizeF QGuidoPainter::pageSizeMM(int page) const
 
 	GuidoPageFormat format;
 	GuidoGetPageFormat( mDesc.handle , page , &format );
-	float widthMM = GuidoUnit2CM( format.width ) * 10.0f;	
-	float heightMM = GuidoUnit2CM( format.height ) * 10.0f;	
+	float factor = getRenderingFactor();
+	float widthMM = GuidoUnit2CM( format.width ) * factor;
+	float heightMM = GuidoUnit2CM( format.height ) * factor;
 	
 	return QSizeF( widthMM , heightMM );
 }
@@ -440,27 +449,15 @@ QString QGuidoPainter::gmnCode() const
 //-------------------------------------------------------------------------
 QString QGuidoPainter::getLastErrorMessage() const
 {
-	QString result = QString( GuidoGetErrorString(mLastErr) );
 	if ( mLastErr == guidoErrParse )
 	{
 		int line;
         int col;
-        GuidoParserGetErrorCode(fParser, line, col, 0);
-		result += " (line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ")";
+		const char *msg;
+        GuidoParserGetErrorCode(fParser, line, col, &msg);
+		return " line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ": " + msg;
 	}
-	return result;
-}
-
-//-------------------------------------------------------------------------
-void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
-{
-    GuidoParserGetErrorCode(fParser, line, col, 0);
-}
-		
-//-------------------------------------------------------------------------
-const QString& QGuidoPainter::fileName() const
-{
-	return mFileName;
+	return QString( GuidoGetErrorString(mLastErr) );
 }
 
 //-------------------------------------------------------------------------
@@ -546,4 +543,6 @@ void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const char* path)
 //-------------------------------------------------------------------------
 void QGuidoPainter::setScoreColor(const QColor& color)	{ fCurrentColor = color; }
 const QColor& QGuidoPainter::getScoreColor() const		{ return fCurrentColor; }
+void QGuidoPainter::setPenColor(const QColor& color)	{ fCurrentPenColor = color; }
+const QColor& QGuidoPainter::getPenColor() const		{ return fCurrentPenColor; }
 
