@@ -2,5 +2,5 @@
 	path = midisharelight
 	url = https://github.com/grame-cncm/midisharelight.git
 	master = master
-	branch = master
 	update = merge
+	branch = master
