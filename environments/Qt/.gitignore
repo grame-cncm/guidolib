@@ -1,6 +1,7 @@
 *.app
 *.a
-ios
+builddir
+iosdir
 macos
 win32
 guido2image

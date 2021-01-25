@@ -14,6 +14,7 @@ build/guidodir
 build/GUIDOEngine.*
 build/GuidoLib*
 build/iosdir
+build/unix
 build/lib
 cmake_*
 CMakeCache.txt
