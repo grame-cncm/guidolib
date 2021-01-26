@@ -99,7 +99,7 @@ wasm: emcc
 	$(MAKE) -C ../lang/javascript
 
 emcc:
-	which emcc || echo emcc compiler must be available crom the command line
+	which emcc || echo emcc compiler must be available from the command line; false
 
 #===============================================================
 # clean the project
@@ -111,13 +111,13 @@ clean :
 #===============================================================
 # building the Guido library
 #===============================================================
-lib :
+lib : $(BUILDDIR) $(PROJ)
 	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
 
 #===============================================================
 # building the jni and java library
 #===============================================================
-java :
+java : $(BUILDDIR) $(PROJ)
 	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) --target jniGUIDOEngine -- $(JOBS)
 
 #===============================================================
