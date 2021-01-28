@@ -1,4 +1,7 @@
 [submodule "midisharelight"]
 	path = midisharelight
-	url = git@github.com:grame-cncm/midisharelight.git
+	url = https://github.com/grame-cncm/midisharelight.git
+	master = master
+	update = merge
 	branch = master
+
