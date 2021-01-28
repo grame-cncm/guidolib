@@ -39,6 +39,16 @@ QGuidoGraphicsItem::QGuidoGraphicsItem(QGraphicsItem * parent)
 }
 
 //-------------------------------------------------------------------------
+QGuidoGraphicsItem::QGuidoGraphicsItem(QGuidoPainter* painter, QGraphicsItem * parent)
+	: QGraphicsObject(parent), mGuidoPainter(painter)
+{
+	mPageManager = new QPageManager();
+    setResizePageToMusic(true);
+    fPianoRoll = NULL;
+    fIsPianoRoll = false;
+}
+
+//-------------------------------------------------------------------------
 QGuidoGraphicsItem::~QGuidoGraphicsItem()
 {
 	delete mPageManager;

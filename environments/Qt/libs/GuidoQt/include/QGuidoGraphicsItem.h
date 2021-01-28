@@ -56,6 +56,7 @@ class QGuidoGraphicsItem : public QGraphicsObject
 		/**	\brief Default constructor
 		*/
 		QGuidoGraphicsItem(QGraphicsItem * parent = 0);
+		QGuidoGraphicsItem(QGuidoPainter* painter, QGraphicsItem * parent = 0);
 		
 		/** \brief Destructor
 		*/
