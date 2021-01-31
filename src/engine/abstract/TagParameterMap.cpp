@@ -110,7 +110,7 @@ bool TagParameterMap::checkRequired (const TagParameterMap& list, const char* ta
 bool TagParameterMap::checkExist (const TagParameterMap& list) const
 {
 	for (TPMap::const_iterator i = begin(); i != end(); i++) {
-		if (list.find(i->first) == end()) {
+		if (list.find(i->first) == list.end()) {
 			cerr << "unsupported tag parameter '" << i->first << "'" << endl;
 			return false;
 		}
