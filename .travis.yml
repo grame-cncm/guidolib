@@ -9,6 +9,9 @@ before_install:
   - sudo apt-get install qt514-meta-minimal libglu1-mesa-dev  -y
   - source /opt/qt514/bin/qt514-env.sh
 
+env:
+  - CMAKE=$(which cmake)
+
 branches:
   only:
   - dev
@@ -16,4 +19,4 @@ branches:
 
 script: 
   - make -C build travis 
-  - sudo make -C build install
+  - sudo make -C build CMAKE=$CMAKE install
