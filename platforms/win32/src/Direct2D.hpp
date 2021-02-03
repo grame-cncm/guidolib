@@ -237,12 +237,7 @@ public:
 
 	// - Symbol services ---------------------------------------------
 	virtual void			GetExtent(const char* s, int inCharCount, float* outWidth, float* outHeight, VGDevice* context = 0) const;
-	virtual void			GetExtent(unsigned char c, float* outWidth, float* outHeight, VGDevice* context = 0) const;
-	virtual void			Direct2DFont::GetExtent(int c,
-		float* outWidth,
-		float* outHeight,
-		VGDevice* context) const;
-
+	virtual void			GetExtent(int c, float* outWidth, float* outHeight, VGDevice* context) const;
 };
 
 
@@ -266,29 +261,18 @@ public:
 
 
 
-inline void			Direct2DFont::GetExtent(int c,
-	float* outWidth,
-	float* outHeight,
-	VGDevice* context) const
+inline void	Direct2DFont::GetExtent(int c, float* outWidth, float* outHeight, VGDevice* context) const
 {
 	char a1 = (char)c;
 	return GetExtent(&a1, 1, outWidth, outHeight, context);
 }
+
 inline void		Direct2DFont::GetExtent(const char* s, int inCharCount, float* outWidth, float* outHeight, VGDevice* context) const
 {
 	yystring y = s;
 	auto strs = MeasureString(sys->WriteFactory, Text, y.c_str(), inCharCount);
 
 	*outWidth =  std::get<0>(strs);
-	*outHeight = std::get<1>(strs);
-}
-
-inline void	Direct2DFont::GetExtent(unsigned char c, float* outWidth, float* outHeight, VGDevice* context) const
-{
-	yystring y;
-	y.Format(L"%c", c);
-	auto strs = MeasureString(sys->WriteFactory, Text, y.c_str(), -1);
-	*outWidth = std::get<0>(strs);
 	*outHeight = std::get<1>(strs);
 }
 
