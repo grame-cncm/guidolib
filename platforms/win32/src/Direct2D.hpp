@@ -238,6 +238,11 @@ public:
 	// - Symbol services ---------------------------------------------
 	virtual void			GetExtent(const char* s, int inCharCount, float* outWidth, float* outHeight, VGDevice* context = 0) const;
 	virtual void			GetExtent(unsigned char c, float* outWidth, float* outHeight, VGDevice* context = 0) const;
+	virtual void			Direct2DFont::GetExtent(int c,
+		float* outWidth,
+		float* outHeight,
+		VGDevice* context) const;
+
 };
 
 
@@ -260,6 +265,15 @@ public:
 };
 
 
+
+inline void			Direct2DFont::GetExtent(int c,
+	float* outWidth,
+	float* outHeight,
+	VGDevice* context) const
+{
+	char a1 = (char)c;
+	return GetExtent(&a1, 1, outWidth, outHeight, context);
+}
 inline void		Direct2DFont::GetExtent(const char* s, int inCharCount, float* outWidth, float* outHeight, VGDevice* context) const
 {
 	yystring y = s;
@@ -722,6 +736,35 @@ public:
 	{
 		PenW = PenWidthPushing.top();
 		PenWidthPushing.pop();
+	}
+
+
+	/// Draws an ellipse
+	virtual void			FrameEllipse(float x, float y, float width, float height)
+	{
+		D2D1_ELLIPSE r = { 0 };
+		r.point.x = x;
+		r.point.y = y;
+		r.radiusX = width;
+		r.radiusY = height;
+		EnsureBrush();
+		mSys->rt->DrawEllipse(r, NextColorPen);
+	}
+
+	// - Filled surfaces --------------------------------------
+	// The raster op mode for color filling should be specified
+	// with SetRasterOpMode() before using one of these.
+
+/// Draws a filled ellipse
+	virtual void			Ellipse(float x, float y, float width, float height, const VGColor& color)
+	{
+		D2D1_ELLIPSE r = { 0 };
+		r.point.x = x;
+		r.point.y = y;
+		r.radiusX = width;
+		r.radiusY = height;
+		EnsureBrush();
+		mSys->rt->FillEllipse(r, NextColorFill);
 	}
 
 };
