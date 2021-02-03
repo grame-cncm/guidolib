@@ -14,4 +14,6 @@ branches:
   - dev
   - master
 
-script: make -C build travis 
+script: 
+  - make -C build travis 
+  - sudo make -C build install
