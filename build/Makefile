@@ -51,8 +51,10 @@ cmake : $(BUILDDIR)
 $(BUILDDIR) :
 	mkdir $(BUILDDIR)
 
-travis : CMAKEOPT := -DMIDIEXPORT=no -Wno-dev
+#travis : CMAKEOPT := -DMIDIEXPORT=no -Wno-dev
+travis : CMAKEOPT := -Wno-dev
 travis : $(PROJ)
+	git submodule update --init
 	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
 	$(MAKE) Qt
 
