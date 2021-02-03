@@ -26,6 +26,8 @@ else
 endif
 endif
 
+MAKE     ?= make
+CMAKE    ?= cmake
 BUILDDIR ?= guidodir
 CMAKEOPT ?= -DMIDIEXPORT=yes -Wno-dev
 BUILDOPT ?= --config Release
@@ -34,7 +36,7 @@ BUILDOPT ?= --config Release
 
 #===============================================================
 basic : $(PROJ)
-	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) -- $(JOBS)
 
 all : $(PROJ)
 	git submodule update --init
@@ -43,10 +45,10 @@ all : $(PROJ)
 	$(MAKE) wasm
 	
 $(PROJ) : $(BUILDDIR)
-	cd $(BUILDDIR) && cmake $(CMAKEOPT) .. -G $(GENERATOR)
+	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. -G $(GENERATOR)
 
 cmake : $(BUILDDIR)
-	cd $(BUILDDIR) && cmake $(CMAKEOPT) .. 
+	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. 
 
 $(BUILDDIR) :
 	mkdir $(BUILDDIR)
@@ -55,7 +57,7 @@ $(BUILDDIR) :
 travis : CMAKEOPT := -Wno-dev
 travis : $(PROJ)
 	git submodule update --init
-	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) -- $(JOBS)
 	$(MAKE) Qt
 
 
@@ -114,13 +116,13 @@ clean :
 # building the Guido library
 #===============================================================
 lib : $(BUILDDIR) $(PROJ)
-	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
 
 #===============================================================
 # building the jni and java library
 #===============================================================
 java : $(BUILDDIR) $(PROJ)
-	cd $(BUILDDIR) && cmake --build .  $(BUILDOPT) --target jniGUIDOEngine -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) --target jniGUIDOEngine -- $(JOBS)
 
 #===============================================================
 # building the Qt resources
@@ -139,11 +141,11 @@ android :
 #===============================================================
 ios : iosdir/guidolib.xcodeproj
 	git submodule update --init
-	cd iosdir && cmake --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
+	cd iosdir && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
 
 iosdir/guidolib.xcodeproj:
 	@[ -d iosdir ] || mkdir iosdir
-	cd iosdir && cmake -DIOS=yes -DMIDIEXPORT=no .. -G Xcode
+	cd iosdir && $(CMAKE) -DIOS=yes -DMIDIEXPORT=no .. -G Xcode
 
 #===============================================================
 # build the embedded svg font
@@ -167,8 +169,8 @@ tags:
 #===============================================================
 DESTDIR ?=
 install: 
-	cd $(BUILDDIR) && cmake .. -DCMAKE_INSTALL_PREFIX=$(PREFIX) 
-	cmake --build $(BUILDDIR)  $(BUILDOPT) --target install -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=$(PREFIX) 
+	$(CMAKE) --build $(BUILDDIR)  $(BUILDOPT) --target install -- $(JOBS)
 
 installLog := $(BUILDDIR)/install_manifest.txt
 uninstall: installedfiles = $(shell cat $(installLog))
