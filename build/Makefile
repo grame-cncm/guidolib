@@ -80,9 +80,13 @@ help :
 	@echo "   install      : install the Guido library and public headers"
 	@echo "   uninstall    : undo what install did"
 	@echo "   localinstall : install the Guido tools to $$HOME/bin"
-	@echo "   tags         : extract the current tags list"
+	@echo "   tags         : extract the current guido tags list"
 	@echo "   guido2       : build the embedded svg font"
 	@echo "   package      : build a package for distribution"
+	@echo 
+	@echo "Utilities:"
+	@echo "   minimal      : generates a minimal project (the library only)"
+	@echo "   cmakeall     : switch the MIN flag off (revert the minimal target)"
 	@echo 
 	@echo "Options:"
 	@echo "   BUILDDIR     : the output folder (currently $(BUILDDIR))"
@@ -117,6 +121,17 @@ clean :
 #===============================================================
 lib : $(BUILDDIR) $(PROJ)
 	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
+
+#===============================================================
+# generating a minimal project (the library only)
+#===============================================================
+minimal : 
+	$(MAKE) cmake CMAKEOPT="-DMIN=on"
+#	$(MAKE) lib
+
+cmakeall : 
+	$(MAKE) cmake CMAKEOPT="-DMIN=off"
+#	$(MAKE)
 
 #===============================================================
 # building the jni and java library

@@ -28,11 +28,11 @@ message (STATUS "Configuring version ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION
 #######################################
 # Options 
 option ( IOS 		"Generates project for iOS" off )
-option ( DIST 		"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
 option ( GL         "Links to opengl device" off)
+option ( MIN        "Includes only the library in the project" off)
 
 #######################################
 # Output folders 
@@ -62,18 +62,11 @@ if(APPLE)
 		set(IOS_DEPLOYMENT_TARGET 8.0) 
 	else ()
 		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
-	 	#######################################
-		if (DIST)
-			message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
-			set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
-		else ()
-			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
-		endif ()
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.10)
+		set (CMAKE_C++_FLAGS -mmacosx-version-min=10.10)
 #	set (CMAKE_MACOSX_RPATH 1)
-	set (CMAKE_LDFLAGS -mmacosx-version-min=10.10)
-	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
-	set (MACOSX_DEPLOYMENT_TARGET 10.10)
+		set (CMAKE_LDFLAGS -mmacosx-version-min=10.10)
+		set (CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
+		set (MACOSX_DEPLOYMENT_TARGET 10.10)
 	endif ()
 endif()
 
@@ -198,19 +191,20 @@ else()
 			SOVERSION ${SOVERS}
 			MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
 			MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION} )
+
+	if (STATICLIB)
+		message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
+		add_library( ${statictarget} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
+		target_compile_definitions (${statictarget} PRIVATE ${DEFS})
+		target_include_directories (${statictarget} PRIVATE ${INCDIRS})
+		set_target_properties(${statictarget} PROPERTIES 
+			ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR}
+			LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
+	else ()
+		message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
+	endif ()
 endif()
 
-if (STATICLIB AND NOT IOS)
-	message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
-	add_library( ${statictarget} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
-	target_compile_definitions (${statictarget} PRIVATE ${DEFS})
-	target_include_directories (${statictarget} PRIVATE ${INCDIRS})
-	set_target_properties(${statictarget} PROPERTIES 
-		ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR}
-		LIBRARY_OUTPUT_DIRECTORY ${LIBDIR})
-else ()
-	message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
-endif ()
 
 
 if(WIN32)
@@ -227,10 +221,15 @@ target_link_libraries (${target} ${LINK})
 ####################################
 # add sub projects (tools)
 ####################################
-if (NOT IOS)
-add_subdirectory (tools)
-add_subdirectory (java)
-add_subdirectory (postprocess)
+if (IOS OR MIN)
+	message (STATUS "Generates a minimal project (includes only the library)")
+else()
+	message (STATUS "Includes tools")
+	add_subdirectory (tools)
+	message (STATUS "Includes java jni")
+	add_subdirectory (java)
+	message (STATUS "Includes qt deployement process")
+	add_subdirectory (postprocess)
 endif()
 
 if (NOT IOS)
@@ -241,7 +240,7 @@ if (PACK)
 set (CMAKE_INSTALL_PREFIX .)
 endif()
 
-message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX} - Use -DCMAKE_INSTALL_PREFIX=path to change.")
+message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX}")
 install ( TARGETS ${target}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin CONFIGURATIONS Release
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
@@ -250,106 +249,106 @@ install ( TARGETS ${target}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include/guido
 )
 
+if (NOT MIN)
+	####################################
+	# install gmn files
+	set (GMN ${ROOT}/gmn-examples)
+	install (
+		DIRECTORY ${GMN} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib
+		FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+		DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+		FILES_MATCHING PATTERN "*.gmn"
+	)
 
-####################################
-# install gmn files
-set (GMN ${ROOT}/gmn-examples)
-install (
-    DIRECTORY ${GMN} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib
-    FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-    DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    FILES_MATCHING PATTERN "*.gmn"
-)
+	####################################
+	# install documentation
+	set (DOC ${ROOT}/doc)
+	install (
+		DIRECTORY ${DOC}/html DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
+		FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+		DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+		PATTERN ".DS_Store" EXCLUDE
+		PATTERN "Makefile" EXCLUDE
+	)
+	file (GLOB PDF RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${DOC}/*.pdf  ${DOC}/refard/*.pdf ${DOC}/refard/latex/*.pdf )
+	install (
+		FILES     ${PDF} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
+		PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+	)
+	install (
+		FILES     ${DOC}/readme.md DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
+		PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+	)
 
-####################################
-# install documentation
-set (DOC ${ROOT}/doc)
-install (
-    DIRECTORY ${DOC}/html DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
-    FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-    DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    PATTERN ".DS_Store" EXCLUDE
-    PATTERN "Makefile" EXCLUDE
-)
-file (GLOB PDF RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${DOC}/*.pdf  ${DOC}/refard/*.pdf ${DOC}/refard/latex/*.pdf )
-install (
-    FILES     ${PDF} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
-    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-)
-install (
-    FILES     ${DOC}/readme.md DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib/doc
-    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-)
+	####################################
+	# install guido font
+	file (GLOB PDF RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${DOC}/*.pdf  ${DOC}/refard/*.pdf ${DOC}/refard/latex/*.pdf )
+	install (
+		FILES     ${ROOT}/src/guido2.ttf  ${ROOT}/src/guido2.svg  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/fonts/guido/guido2.ttf
+		PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+	)
 
-####################################
-# install guido font
-file (GLOB PDF RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${DOC}/*.pdf  ${DOC}/refard/*.pdf ${DOC}/refard/latex/*.pdf )
-install (
-    FILES     ${ROOT}/src/guido2.ttf  ${ROOT}/src/guido2.svg  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/fonts/guido/guido2.ttf
-    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-)
+	####################################
+	# install python interface
+	set (PYTHON ${ROOT}/lang/python)
+	install (
+		DIRECTORY ${PYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib
+		FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+		DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+	)
 
-####################################
-# install python interface
-set (PYTHON ${ROOT}/lang/python)
-install (
-    DIRECTORY ${PYTHON} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/guidolib
-    FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-    DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-)
+	####################################
+	# install readme
+	if (WIN32 OR APPLE)
+	install (
+		FILES     ${ROOT}/misc/README.html ${ROOT}/changelog.txt DESTINATION ${CMAKE_INSTALL_PREFIX}
+		PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+	)
+	endif()
 
-####################################
-# install readme
-if (WIN32 OR APPLE)
-install (
-    FILES     ${ROOT}/misc/README.html ${ROOT}/changelog.txt DESTINATION ${CMAKE_INSTALL_PREFIX}
-    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-)
-endif()
+	####################################
+	# install VS redistributables
+	if (WIN32)
+	set (VS "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT")
+	#set (VS "${ROOT}/misc")
+	install (
+		FILES  "${VS}/msvcp140.dll" "${VS}/vcruntime140.dll" DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+		PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+	)
+	endif()
 
-####################################
-# install VS redistributables
-if (WIN32)
-set (VS "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT")
-#set (VS "${ROOT}/misc")
-install (
-    FILES  "${VS}/msvcp140.dll" "${VS}/vcruntime140.dll" DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-    PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-)
-endif()
-
-####################################
-# install Qt applications
-set ( QT ${ROOT}/environments/Qt/apps)
-if (APPLE)
-	set ( GUIDO2IMAGE guido2image)
-	set ( GUIDOEDITOR GuidoEditor.app)
-	set ( GUIDOSCENECOMPOSER GuidoSceneComposer.app)
-	set ( QTAPPS ${QT}/guido2image/guido2image)
-	set ( QTAPPS ${QT}/guido2image/${GUIDO2IMAGE})
-elseif(WIN32)
-	set ( GUIDO2IMAGE guido2image.exe)
-	set ( GUIDOEDITOR GuidoEditor.exe)
-	set ( GUIDOSCENECOMPOSER GuidoSceneComposer.exe)
-	set ( QTAPPS ${QT}/${GUIDO2IMAGE} ${QT}/${GUIDOEDITOR} ${QT}/${GUIDOSCENECOMPOSER} )
-elseif(UNIX)
-	set ( QTAPPS ${QT}/guido2image/guido2image ${QT}/GuidoEditor/GuidoEditor ${QT}/GuidoSceneComposer/GuidoSceneComposer )
-endif()
-install (
-    PROGRAMS ${QTAPPS}  DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    OPTIONAL
-)
-if (APPLE)
-set ( QTBUNDLES ${QT}/GuidoEditor/${GUIDOEDITOR} ${QT}/GuidoSceneComposer/${GUIDOSCENECOMPOSER})
-install (
-    DIRECTORY ${QTBUNDLES} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-    USE_SOURCE_PERMISSIONS
-    OPTIONAL
-)
-endif()
-endif()
-
+	####################################
+	# install Qt applications
+	set ( QT ${ROOT}/environments/Qt/apps)
+	if (APPLE)
+		set ( GUIDO2IMAGE guido2image)
+		set ( GUIDOEDITOR GuidoEditor.app)
+		set ( GUIDOSCENECOMPOSER GuidoSceneComposer.app)
+		set ( QTAPPS ${QT}/guido2image/guido2image)
+		set ( QTAPPS ${QT}/guido2image/${GUIDO2IMAGE})
+	elseif(WIN32)
+		set ( GUIDO2IMAGE guido2image.exe)
+		set ( GUIDOEDITOR GuidoEditor.exe)
+		set ( GUIDOSCENECOMPOSER GuidoSceneComposer.exe)
+		set ( QTAPPS ${QT}/${GUIDO2IMAGE} ${QT}/${GUIDOEDITOR} ${QT}/${GUIDOSCENECOMPOSER} )
+	elseif(UNIX)
+		set ( QTAPPS ${QT}/guido2image/guido2image ${QT}/GuidoEditor/GuidoEditor ${QT}/GuidoSceneComposer/GuidoSceneComposer )
+	endif()
+	install (
+		PROGRAMS ${QTAPPS}  DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+		PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+		OPTIONAL
+	)
+	if (APPLE)
+	set ( QTBUNDLES ${QT}/GuidoEditor/${GUIDOEDITOR} ${QT}/GuidoSceneComposer/${GUIDOSCENECOMPOSER})
+	install (
+		DIRECTORY ${QTBUNDLES} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+		USE_SOURCE_PERMISSIONS
+		OPTIONAL
+	)
+	endif()
+	endif()
+endif(NOT MIN)
 
 
 ####################################
