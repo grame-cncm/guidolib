@@ -35,7 +35,7 @@ void GFontQt::GetExtent( const char * s, int , float * outWidth, float * outHeig
 		return;
 	}
 	QFontMetrics fontMetrics(*mNativeFont);	
-	*outWidth  = fontMetrics.width( QString(s) );
+	*outWidth  = fontMetrics.horizontalAdvance( QString(s) );
 	*outHeight = fontMetrics.height();
 }
 
@@ -43,7 +43,7 @@ void GFontQt::GetExtent( const char * s, int , float * outWidth, float * outHeig
 void GFontQt::GetExtent( int c, float * outWidth, float * outHeight, VGDevice * ) const
 {
 	QFontMetrics fontMetrics(*mNativeFont);	
-	*outWidth  = fontMetrics.width( QString(Symbol(c)) ); 
+	*outWidth  = fontMetrics.horizontalAdvance( QString(Symbol(c)) ); 
 	*outHeight = fontMetrics.height();
 	
 };

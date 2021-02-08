@@ -417,4 +417,5 @@ bool Guido2Image::save(QPaintDevice * paintDevice, const Params& p)
 	}
 	else if (p.device)
 		return pic->save( p.device, imageFormatToStr(p.format) );
+	return false;
 }

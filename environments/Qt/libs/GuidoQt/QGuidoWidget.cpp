@@ -53,16 +53,17 @@ void QGuidoWidget::paintEvent(QPaintEvent * event)
 {
 	event->accept();
 
-	QPixmap pixmap;
-    
-	if (!QPixmapCache::find(key(), pixmap)) 
+	QPixmap * pixmap;
+	QPixmap generated;
+	if (!QPixmapCache::find(key(), pixmap))
 	{
-		pixmap = generatePixmap();
-		QPixmapCache::insert(key(), pixmap);
+		generated = generatePixmap();
+		QPixmapCache::insert(key(), generated);
+		pixmap = &generated;
 	}
     
 	QPainter painter(this);
-	painter.drawPixmap( event->rect() , pixmap , event->rect() );
+	painter.drawPixmap( event->rect() , *pixmap , event->rect() );
 }
 
 //-------------------------------------------------------------------------
@@ -103,7 +104,7 @@ QPixmap QGuidoWidget::generatePixmap()
 QString QGuidoWidget::key() const
 {
 	QString result;
-	result.sprintf("%p", static_cast<const void *>(this));
+	result.asprintf("%p", static_cast<const void *>(this));
 	return result;
 }
 
