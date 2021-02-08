@@ -127,11 +127,11 @@ lib : $(BUILDDIR) $(PROJ)
 #===============================================================
 minimal : 
 	$(MAKE) cmake CMAKEOPT="-DMIN=on"
-#	$(MAKE) lib
+	$(MAKE) 
 
 cmakeall : 
 	$(MAKE) cmake CMAKEOPT="-DMIN=off"
-#	$(MAKE)
+	$(MAKE)
 
 #===============================================================
 # building the jni and java library
