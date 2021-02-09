@@ -739,8 +739,11 @@ void setXY( float * x , float * y , int alignMode , const QFontMetrics& metrics 
 {
 	if ( alignMode == VGDevice::kAlignBaseLeft )
 		return;
-
+#if QTFONTMETRICS_511
 	float w = metrics.horizontalAdvance( str );
+#else
+	float w = metrics.width( str );
+#endif
 	float descent = metrics.descent();
 	float ascent = metrics.ascent();
 	

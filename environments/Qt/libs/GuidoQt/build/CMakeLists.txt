@@ -14,26 +14,25 @@ set (CMAKE_CXX_STANDARD 11)
 
 find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
 set (QTINCDIRS 	${Qt5Widget_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+message (STATUS "Qt version ${Qt5Widgets_VERSION}")
+
+if (${Qt5Widgets_VERSION} VERSION_GREATER_EQUAL "5.11")
+	set ( DEFS ${DEFS} -DQTFONTMETRICS_511)
+endif()
 
 #######################################
 if(IOS)
 	message (STATUS "Generate GuidoQt library for iOS")
 	set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "iphoneos")
 	set (CMAKE_OSX_SYSROOT "iphoneos")
-	set (DEFS -DIOS)
+	set (DEFS  ${DEFS} -DIOS)
 endif()
-
-set ( DEFS ${DEFS} )
 
 #######################################
 # set sources and headers files
-file (GLOB SRC           RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
-	"${SRCDIR}/*.cpp" 
-)
-file (GLOB HEADERS       RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
-	"${SRCDIR}/include/*.h" 
-)
-file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRCDIR}/include/*.h")
+file (GLOB SRC           RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRCDIR}/*.cpp" )
+file (GLOB HEADERS       RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRCDIR}/include/*.h" )
+file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${SRCDIR}/include/*.h" )
 
 #######################################
 # set includes
