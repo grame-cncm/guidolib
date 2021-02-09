@@ -13,7 +13,7 @@ ifeq ($(system), Darwin)
 	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
 else
 ifeq ($(system), MINGW)
-	PROJ ?= $(BUILDDIR)/guidolib.sln
+	PROJ ?= $(BUILDDIR)/Makefile
 else
 	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/Makefile
@@ -27,24 +27,27 @@ CMAKEOPT ?= # -Wno-dev
 BUILDOPT ?= --config Release
 GENERATOR ?= 
 
+MSLIGHT := ../midisharelight/src
+
 .PHONY: lib
 
 #===============================================================
 basic : $(PROJ)
-	git submodule update --init
 	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT)
 
 all : $(PROJ)
-	git submodule update --init
 	$(MAKE) basic
 	$(MAKE) Qt
 	$(MAKE) wasm
 	
-$(PROJ) : $(BUILDDIR) CMakeLists.txt
-	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. $(GENERATOR)
+$(PROJ) : CMakeLists.txt
+	$(MAKE) cmake
 
-cmake : $(BUILDDIR)
+cmake : $(BUILDDIR) $(MSLIGHT)/MidiShareLight.h
 	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT)
+
+$(MSLIGHT)/MidiShareLight.h:
+	git submodule update --init
 
 $(BUILDDIR) :
 	mkdir $(BUILDDIR)
