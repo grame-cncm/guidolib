@@ -16,6 +16,9 @@ build/GuidoLib*
 build/iosdir
 build/unix
 build/lib
+build/postprocess/Makefile
+build/java/Makefile
+build/tools/Makefile
 cmake_*
 CMakeCache.txt
 CMakeFiles
