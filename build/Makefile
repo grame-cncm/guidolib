@@ -11,15 +11,12 @@ system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MIN
 ifeq ($(system), Darwin)
 	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
-	JOBS ?= -jobs 4
 else
 ifeq ($(system), MINGW)
 	PROJ ?= $(BUILDDIR)/guidolib.sln
-	JOBS ?= /maxcpucount:4
 else
 	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/Makefile
-	JOBS ?= -j 4
 endif
 endif
 
@@ -35,7 +32,7 @@ GENERATOR ?=
 #===============================================================
 basic : $(PROJ)
 	git submodule update --init
-	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT)
 
 all : $(PROJ)
 	git submodule update --init
@@ -56,7 +53,7 @@ $(BUILDDIR) :
 travis : CMAKEOPT := -Wno-dev
 travis : $(PROJ)
 	git submodule update --init
-	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT)
 	$(MAKE) Qt
 
 
@@ -119,7 +116,7 @@ clean :
 # building the Guido library
 #===============================================================
 lib : $(BUILDDIR) $(PROJ)
-	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine 
 
 #===============================================================
 # generating a minimal project (the library only)
@@ -136,7 +133,7 @@ cmakeall : $(BUILDDIR)
 # building the jni and java library
 #===============================================================
 java : $(BUILDDIR) $(PROJ)
-	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) --target jniGUIDOEngine -- $(JOBS)
+	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) --target jniGUIDOEngine 
 
 #===============================================================
 # building the Qt resources
@@ -155,7 +152,7 @@ android :
 #===============================================================
 ios : iosdir/guidolib.xcodeproj
 	git submodule update --init
-	cd iosdir && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine -- $(JOBS)
+	cd iosdir && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine 
 
 iosdir/guidolib.xcodeproj:
 	@[ -d iosdir ] || mkdir iosdir
@@ -184,7 +181,7 @@ tags:
 DESTDIR ?=
 install: 
 	cd $(BUILDDIR) && $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=$(PREFIX) 
-	$(CMAKE) --build $(BUILDDIR)  $(BUILDOPT) --target install -- $(JOBS)
+	$(CMAKE) --build $(BUILDDIR)  $(BUILDOPT) --target install 
 
 installLog := $(BUILDDIR)/install_manifest.txt
 uninstall: installedfiles = $(shell cat $(installLog))
