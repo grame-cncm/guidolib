@@ -35,7 +35,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Build Guidolib
-        run: make -C build basic
+        run: make -C build basic GENERATOR=""
 
       - name: Build Guidolib Qt
         run: make -C build Qt
