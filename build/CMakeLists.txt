@@ -141,13 +141,15 @@ file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*
 
 
 #######################################
-# set includes
-set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
-set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
-set(INCL ${INCL} "${MSLIGHT_PATH}")			# add include folders
-file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${INCL})
-include_directories( ${INCDIRS})
-set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
+# set includes folders
+#set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
+#set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
+#set(INCL ${INCL} "${MSLIGHT_PATH}")			# add include folders
+file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
+	${SRC_PATH}/*
+	${VGDEV_PATH}
+	${MSLIGHT_PATH}
+)
 
 #######################################
 # set library target
@@ -169,6 +171,7 @@ endif()
 # describe targets
 if (IOS)
 	add_library(${target} STATIC ${SRC} ${HEADERS} ${PUBLICHEADERS})
+	target_include_directories (${target} PRIVATE ${INCDIRS})
 	set_target_properties ( ${target} PROPERTIES 
 			ARCHIVE_OUTPUT_DIRECTORY  ${LIBDIR}
 			ARCHIVE_OUTPUT_DIRECTORY_RELEASE  ${LIBDIR}
@@ -177,6 +180,7 @@ if (IOS)
 else()
 
 	add_library(${target} SHARED ${SRC} ${HEADERS} ${PUBLICHEADERS})
+	target_include_directories (${target} PRIVATE ${INCDIRS})
 	set_target_properties (${target} PROPERTIES
 			RUNTIME_OUTPUT_DIRECTORY  ${LIBDIR}
 			RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${LIBDIR}
