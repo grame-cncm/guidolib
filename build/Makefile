@@ -29,7 +29,7 @@ endif
 MAKE     ?= make
 CMAKE    ?= cmake
 BUILDDIR ?= guidodir
-CMAKEOPT ?= -DMIDIEXPORT=yes -Wno-dev
+CMAKEOPT ?= # -Wno-dev
 BUILDOPT ?= --config Release
 
 .PHONY: lib
@@ -45,7 +45,7 @@ all : $(PROJ)
 	$(MAKE) Qt
 	$(MAKE) wasm
 	
-$(PROJ) : $(BUILDDIR)
+$(PROJ) : $(BUILDDIR) CMakeLists.txt
 	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. $(GENERATOR)
 
 cmake : $(BUILDDIR)
