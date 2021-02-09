@@ -85,7 +85,7 @@ protected:
 
 
 private:
-	typedef struct {
+	typedef struct PosInfos {
 		GDirection	stemdir;
 		float		currentSize;
 		float		currentLSPACE;
