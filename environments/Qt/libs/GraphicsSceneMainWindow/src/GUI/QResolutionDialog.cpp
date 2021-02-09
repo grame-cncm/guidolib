@@ -11,11 +11,11 @@
  * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
  * research@grame.fr
  */
-#include "QResolutionDialog.h"
-
-#include "ui_ResolutionDialog.h"
 
 #include <QTextStream>
+ 
+#include "QResolutionDialog.h"
+#include "ui_ResolutionDialog.h"
 
 //-------------------------------------------------------------------------
 QResolutionDialog::QResolutionDialog(const QRectF& baseRect , int min , int max , int def , float convertor ) 
