@@ -280,7 +280,7 @@ void GDeviceWin32::FrameEllipse( float x, float y, float width, float height)
 {
 	float w2 = width / 2;
 	float h2 = height / 2;
-	::Ellipse(mHDC, x - w2, y - h2, x + w2, y + h2);
+	::Ellipse(mHDC, int(x - w2), int(y - h2), int(x + w2), int(y + h2));
 }
 // --------------------------------------------------------------
 void GDeviceWin32::Ellipse(float x, float y, float width, float height, const VGColor& color)
@@ -288,7 +288,7 @@ void GDeviceWin32::Ellipse(float x, float y, float width, float height, const VG
 	float w2 = width / 2;
 	float h2 = height / 2;
 	PushFillColor(color);
-	::Ellipse(mHDC, x - w2, y - h2, x + w2, y + h2);
+	::Ellipse(mHDC, int(x - w2), int(y - h2), int(x + w2), int(y + h2));
 	PopFillColor();
 }
 

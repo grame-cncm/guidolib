@@ -771,7 +771,7 @@ void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2, float x3, 
 
     const bool upward = (y1 + x2*ratio)>y2;
 
-    const float arcHalfWidth = sqrt(pow(x1-x3,2)+pow(y1-y3,2))/2;
+    const float arcHalfWidth = (float)sqrt(pow(x1-x3,2)+pow(y1-y3,2))/2;
     const float arcHeight = (y2-y1)*cosPhi - (x2-x1)*sinPhi;
     const float inflexionCurveControl = 4; // Arbitrary, control the minimum inflexion under which the curve flattens
     const float inflexionH = arcHalfWidth * exp(-inflexion/8 ) * 4/5;
