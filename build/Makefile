@@ -36,6 +36,7 @@ BUILDOPT ?= --config Release
 
 #===============================================================
 basic : $(PROJ)
+	git submodule update --init
 	cd $(BUILDDIR) && $(CMAKE) --build .  $(BUILDOPT) -- $(JOBS)
 
 all : $(PROJ)
