@@ -479,9 +479,9 @@ void GRArticulation::placeBowBelow( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float minSpace = space *  (mSymbol == kBowUpBSymbol ?  1.5 : 1.0f);;
+	const float minSpace = space *  (mSymbol == kBowUpBSymbol ?  1.5f : 1.0f);;
 
-	const double bottom = staffBottom(staff) + space * (mSymbol == kBowUpBSymbol ?  1.5 : 0.6f);
+	const double bottom = staffBottom(staff) + space * (mSymbol == kBowUpBSymbol ?  1.5f : 0.6f);
 	double bottomMin = max((float)bottom, inParent->getStemEndPos().y + space);
 	bottomMin = max(bottomMin, double(inParent->getPosition().y + minSpace));
 	// + space * (mSymbol == kBowUpBSymbol ?  1.5 : 0.6f);
@@ -649,14 +649,14 @@ NVPoint GRArticulation::getReferencePosition (unsigned int symbol) const
 		case kMarcatoUpSymbol:			return NVPoint(-mLeftSpace, height * 0.5478f);
 
 		case kBowUpBSymbol:
-		case kBowDownBSymbol:			return NVPoint(-mLeftSpace, height * 1.2);
+		case kBowDownBSymbol:			return NVPoint(-mLeftSpace, height * 1.2f);
 		case kMarcatoDownSymbol:		return NVPoint(-mLeftSpace, height * 1.162f);
 
 		case kFermataUpSymbol:			return NVPoint(-mLeftSpace, height * -0.3f);
 		case kFermataDownSymbol:		return NVPoint(-mLeftSpace, height * -0.2f);
 
 		case kShortFermataUpSymbol:		return NVPoint(-mLeftSpace, height * -0.34f);
-		case kShortFermataDownSymbol:	return NVPoint(-mLeftSpace, height * 1.5);
+		case kShortFermataDownSymbol:	return NVPoint(-mLeftSpace, height * 1.5f);
 
 		case kLongFermataUpSymbol:		return NVPoint(-mLeftSpace, height * -0.2f);
 		case kLongFermataDownSymbol :	return NVPoint(-mLeftSpace, height);
