@@ -103,7 +103,7 @@ $(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.share
 	cd $(DEST) && $(QMAKE) $(SPEC) $(ROOT)/..
 
 $(PROJECT).exe: $(DEST)/$(PROJECT).vcxproj  
-	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
+	msbuild $(DEST)/$(PROJECT).vcxproj  -property:Configuration=Release # /p:Platform=$(PLATFORM)
 	cp -R $(DEST)/Release/$(PROJECT).exe ../..
 
 ###################
