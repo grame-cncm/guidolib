@@ -9,17 +9,14 @@ system	:= $(shell uname -s)
 # normalizes MINGW versions
 system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
-	GENERATOR ?= "-G Xcode"
 	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
 	JOBS ?= -jobs 4
 else
 ifeq ($(system), MINGW)
-	GENERATOR ?= "-G Visual Studio 15 2017 Win64"
 	PROJ ?= $(BUILDDIR)/guidolib.sln
 	JOBS ?= /maxcpucount:4
 else
-	GENERATOR ?= "-G Unix Makefiles"
 	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/Makefile
 	JOBS ?= -j 4
@@ -31,6 +28,7 @@ CMAKE    ?= cmake
 BUILDDIR ?= guidodir
 CMAKEOPT ?= # -Wno-dev
 BUILDOPT ?= --config Release
+GENERATOR ?= 
 
 .PHONY: lib
 
