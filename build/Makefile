@@ -9,17 +9,17 @@ system	:= $(shell uname -s)
 # normalizes MINGW versions
 system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
-	GENERATOR ?= Xcode
+	GENERATOR ?= "-G Xcode"
 	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
 	JOBS ?= -jobs 4
 else
 ifeq ($(system), MINGW)
-	GENERATOR ?= "Visual Studio 14 2015 Win64"
+	GENERATOR ?= "-G Visual Studio 15 2017 Win64"
 	PROJ ?= $(BUILDDIR)/guidolib.sln
 	JOBS ?= /maxcpucount:4
 else
-	GENERATOR ?= "Unix Makefiles"
+	GENERATOR ?= "-G Unix Makefiles"
 	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/Makefile
 	JOBS ?= -j 4
@@ -45,7 +45,7 @@ all : $(PROJ)
 	$(MAKE) wasm
 	
 $(PROJ) : $(BUILDDIR)
-	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. -G $(GENERATOR)
+	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. $(GENERATOR)
 
 cmake : $(BUILDDIR)
 	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. 
@@ -90,7 +90,7 @@ help :
 	@echo 
 	@echo "Options:"
 	@echo "   BUILDDIR     : the output folder (currently $(BUILDDIR))"
-	@echo "   GENERATOR    : a cmake generator (currently $(GENERATOR))"
+	@echo "   GENERATOR    : a cmake generator option (currently $(GENERATOR))"
 	@echo "   CMAKEOPT     : options passed to cmake for project generation (currently $(CMAKEOPT))"
 	@echo "   BUILDOPT     : options passed to cmake for building (currently $(BUILDOPT))"
 	@echo 
