@@ -51,7 +51,7 @@ windows: $(BUILDDIR) $(BUILDDIR)/GraphicsSceneMainWindow.vcxproj
 	msbuild $(BUILDDIR)/GraphicsSceneMainWindow.vcxproj -property:Configuration=Release
 
 $(BUILDDIR)/GraphicsSceneMainWindow.vcxproj:
-	cd $(BUILDIDIR) && qmake ..
+	cd $(BUILDDIR) && qmake ..
 
 linux: $(BUILDDIR) $(BUILDDIR)/Makefile
 	$(MAKE) -C $(BUILDDIR)
