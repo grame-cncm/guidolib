@@ -142,14 +142,8 @@ file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*
 
 #######################################
 # set includes folders
-#set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
-#set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
-#set(INCL ${INCL} "${MSLIGHT_PATH}")			# add include folders
-file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
-	${SRC_PATH}/*
-	${VGDEV_PATH}
-	${MSLIGHT_PATH}
-)
+file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}  ${SRC_PATH}/* )
+set (INCDIRS ${INCDIRS} ${VGDEV_PATH} ${MSLIGHT_PATH})
 
 #######################################
 # set library target
