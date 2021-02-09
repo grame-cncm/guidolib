@@ -1,8 +1,8 @@
 #######################################
 # CMAKE guidolib
 #######################################
-project(guidolib)
 cmake_minimum_required(VERSION 3.4)
+project(guidolib)
 
 set (CMAKE_BUILD_TYPE Release)
 set (target GUIDOEngine)
@@ -12,7 +12,7 @@ get_filename_component(ROOT ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
 #######################################
 # versions management
-set (VERSION 1.7.0)
+file (STRINGS "${ROOT}/version.txt" VERSION)
 macro (get_major_minor_patch version)
 	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\1"  VERSION_MAJOR ${version} )
 	string( REGEX REPLACE "([0-9]*)\\.([0-9]*)\\.([0-9]*)" "\\2"  VERSION_MINOR ${version} )
