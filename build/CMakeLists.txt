@@ -347,8 +347,8 @@ if (NOT MIN)
 		OPTIONAL
 	)
 	endif()
-	endif()
 endif(NOT MIN)
+endif(NOT IOS)
 
 
 ####################################
