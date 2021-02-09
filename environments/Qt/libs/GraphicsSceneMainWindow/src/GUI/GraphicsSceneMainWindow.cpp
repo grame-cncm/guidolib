@@ -370,7 +370,7 @@ void GraphicsSceneMainWindow::cleanHistory()
 QString getZoomLabel(float zoom)
 {
 	QString label;
-	label.sprintf("Zoom: x%0.2f" , zoom );
+	label.asprintf("Zoom: x%0.2f" , zoom );
 	return label;
 }
 
@@ -2420,7 +2420,7 @@ void putInFile( const QString& msg , const QString& fileName )
 	if (data.open(QFile::WriteOnly | QFile::Append | QFile::Text )) 
 	{
 		QTextStream out(&data);
-		out << msg << endl;
+		out << msg << Qt::endl;
 	}
 }
 
