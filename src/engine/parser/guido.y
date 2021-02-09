@@ -12,6 +12,10 @@
 #endif
 #include "gddefs.h"
 
+#ifdef WIN32
+# pragma warning (disable : 4267 4005)
+#endif
+
 #include "guidoparse.hpp"
 
 #define YYERROR_VERBOSE

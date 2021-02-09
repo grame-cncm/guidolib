@@ -171,6 +171,10 @@
 #endif
 #include "gddefs.h"
 
+#ifdef WIN32
+# pragma warning (disable : 4267 4005)
+#endif
+
 #include "guidoparse.hpp"
 
 #define YYERROR_VERBOSE
@@ -207,7 +211,7 @@ using namespace std;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 40 "guido.y"
+#line 44 "guido.y"
 {         
 	long int		num;
 	float			real;
@@ -219,7 +223,7 @@ typedef union YYSTYPE
 //	GuidoParser::ParamsList*	plist;
 }
 /* Line 193 of yacc.c.  */
-#line 223 "guidoparse.cpp"
+#line 227 "guidoparse.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -244,7 +248,7 @@ typedef struct YYLTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 248 "guidoparse.cpp"
+#line 252 "guidoparse.cpp"
 
 #ifdef short
 # undef short
@@ -566,16 +570,16 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   115,   115,   116,   119,   119,   120,   120,   121,   121,
-     124,   125,   128,   128,   131,   132,   133,   134,   135,   144,
-     145,   148,   149,   150,   153,   158,   159,   162,   163,   166,
-     166,   169,   172,   173,   174,   177,   178,   179,   180,   181,
-     182,   183,   190,   191,   194,   195,   201,   201,   204,   204,
-     205,   205,   208,   209,   210,   211,   214,   215,   218,   218,
-     221,   222,   228,   229,   232,   232,   233,   233,   236,   237,
-     240,   241,   244,   245,   246,   247,   250,   251,   254,   255,
-     258,   259,   262,   263,   264,   265,   266,   269,   270,   271,
-     272,   277,   279,   281,   283,   285,   288,   289,   290
+       0,   119,   119,   120,   123,   123,   124,   124,   125,   125,
+     128,   129,   132,   132,   135,   136,   137,   138,   139,   148,
+     149,   152,   153,   154,   157,   162,   163,   166,   167,   170,
+     170,   173,   176,   177,   178,   181,   182,   183,   184,   185,
+     186,   187,   194,   195,   198,   199,   205,   205,   208,   208,
+     209,   209,   212,   213,   214,   215,   218,   219,   222,   222,
+     225,   226,   232,   233,   236,   236,   237,   237,   240,   241,
+     244,   245,   248,   249,   250,   251,   254,   255,   258,   259,
+     262,   263,   266,   267,   268,   269,   270,   273,   274,   275,
+     276,   281,   283,   285,   287,   289,   292,   293,   294
 };
 #endif
 
@@ -1603,67 +1607,67 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 119 "guido.y"
+#line 123 "guido.y"
     { context->segmInit (); ;}
     break;
 
   case 5:
-#line 119 "guido.y"
+#line 123 "guido.y"
     { context->segmExit (); ;}
     break;
 
   case 6:
-#line 120 "guido.y"
+#line 124 "guido.y"
     { context->segmInit (); ;}
     break;
 
   case 7:
-#line 120 "guido.y"
+#line 124 "guido.y"
     { context->segmExit (); ;}
     break;
 
   case 8:
-#line 121 "guido.y"
+#line 125 "guido.y"
     { context->segmInit (); ;}
     break;
 
   case 9:
-#line 121 "guido.y"
+#line 125 "guido.y"
     { context->segmExit (); ;}
     break;
 
   case 10:
-#line 124 "guido.y"
+#line 128 "guido.y"
     { context->segmAppendSeq (); ;}
     break;
 
   case 11:
-#line 125 "guido.y"
+#line 129 "guido.y"
     { context->segmAppendSeq (); ;}
     break;
 
   case 12:
-#line 128 "guido.y"
+#line 132 "guido.y"
     { context->seqInit (); ;}
     break;
 
   case 13:
-#line 128 "guido.y"
+#line 132 "guido.y"
     { context->seqExit( ); ;}
     break;
 
   case 15:
-#line 132 "guido.y"
+#line 136 "guido.y"
     { context->appendNote (); ;}
     break;
 
   case 17:
-#line 134 "guido.y"
+#line 138 "guido.y"
     { context->seqAppendChord (); ;}
     break;
 
   case 18:
-#line 135 "guido.y"
+#line 139 "guido.y"
     { bool ret = context->variableSymbols ((yyvsp[(2) - (2)].str)->c_str()); 
 															  if (!ret) varerror ((yylsp[(2) - (2)]).last_line, (yylsp[(2) - (2)]).first_column, context, (yyvsp[(2) - (2)].str)->c_str());
 															  delete (yyvsp[(2) - (2)].str);
@@ -1672,102 +1676,102 @@ yyreduce:
     break;
 
   case 21:
-#line 148 "guido.y"
+#line 152 "guido.y"
     { context->variableDecl ((yyvsp[(1) - (4)].str)->c_str(), context->fText.c_str(), GuidoParser::kString); delete (yyvsp[(1) - (4)].str); ;}
     break;
 
   case 22:
-#line 149 "guido.y"
+#line 153 "guido.y"
     { context->variableDecl ((yyvsp[(1) - (4)].str)->c_str(), context->fText.c_str(), GuidoParser::kInt); delete (yyvsp[(1) - (4)].str); ;}
     break;
 
   case 23:
-#line 150 "guido.y"
+#line 154 "guido.y"
     { context->variableDecl ((yyvsp[(1) - (4)].str)->c_str(), context->fText.c_str(), GuidoParser::kFloat); delete (yyvsp[(1) - (4)].str); ;}
     break;
 
   case 24:
-#line 153 "guido.y"
+#line 157 "guido.y"
     { (yyval.str) = new string(context->fText); ;}
     break;
 
   case 25:
-#line 158 "guido.y"
+#line 162 "guido.y"
     { context->tagEnd (); ;}
     break;
 
   case 26:
-#line 159 "guido.y"
+#line 163 "guido.y"
     { context->tagEnd (); ;}
     break;
 
   case 27:
-#line 162 "guido.y"
+#line 166 "guido.y"
     { context->tagAdd (); ;}
     break;
 
   case 28:
-#line 163 "guido.y"
+#line 167 "guido.y"
     { context->tagAdd (); ;}
     break;
 
   case 29:
-#line 166 "guido.y"
+#line 170 "guido.y"
     { context->tagRange (); ;}
     break;
 
   case 31:
-#line 169 "guido.y"
+#line 173 "guido.y"
     { (yyval.str) = new string(context->fText); ;}
     break;
 
   case 32:
-#line 172 "guido.y"
+#line 176 "guido.y"
     { context->tagStart ( (yyvsp[(1) - (1)].str)->c_str(), 0); delete (yyvsp[(1) - (1)].str); ;}
     break;
 
   case 33:
-#line 173 "guido.y"
+#line 177 "guido.y"
     { context->tagStart ( (yyvsp[(1) - (3)].str)->c_str(),(yyvsp[(3) - (3)].num)); delete (yyvsp[(1) - (3)].str); ;}
     break;
 
   case 34:
-#line 174 "guido.y"
+#line 178 "guido.y"
     { context->tagStart ( "\\bar", 0); ;}
     break;
 
   case 35:
-#line 177 "guido.y"
+#line 181 "guido.y"
     { (yyval.param) = context->intParam   ((yyvsp[(1) - (1)].num)) ;}
     break;
 
   case 36:
-#line 178 "guido.y"
+#line 182 "guido.y"
     { (yyval.param) = context->floatParam ((yyvsp[(1) - (1)].real)) ;}
     break;
 
   case 37:
-#line 179 "guido.y"
+#line 183 "guido.y"
     { (yyval.param) = context->intParam   ((yyvsp[(1) - (2)].num), context->fText.c_str() ) ;}
     break;
 
   case 38:
-#line 180 "guido.y"
+#line 184 "guido.y"
     { (yyval.param) = context->floatParam ((yyvsp[(1) - (2)].real), context->fText.c_str() ) ;}
     break;
 
   case 39:
-#line 181 "guido.y"
+#line 185 "guido.y"
     { (yyval.param) = context->strParam   (context->fText.c_str() ) ;}
     break;
 
   case 40:
-#line 182 "guido.y"
+#line 186 "guido.y"
     { /* unused */ (yyval.param) = 0; delete (yyvsp[(1) - (1)].str); ;}
     break;
 
   case 41:
-#line 183 "guido.y"
+#line 187 "guido.y"
     { (yyval.param) = context->varParam ((yyvsp[(1) - (1)].str)->c_str() ); 
 															  if (!(yyval.param)) varerror ((yylsp[(1) - (1)]).last_line, (yylsp[(1) - (1)]).first_column, context, (yyvsp[(1) - (1)].str)->c_str());
 															  delete (yyvsp[(1) - (1)].str);
@@ -1776,188 +1780,188 @@ yyreduce:
     break;
 
   case 42:
-#line 190 "guido.y"
+#line 194 "guido.y"
     { (yyval.param) = (yyvsp[(1) - (1)].param); ;}
     break;
 
   case 43:
-#line 191 "guido.y"
+#line 195 "guido.y"
     { if((yyvsp[(3) - (3)].param)) context->setParamName ((yyvsp[(3) - (3)].param), (yyvsp[(1) - (3)].str)->c_str()); (yyval.param) = (yyvsp[(3) - (3)].param); delete (yyvsp[(1) - (3)].str); ;}
     break;
 
   case 44:
-#line 194 "guido.y"
+#line 198 "guido.y"
     { context->tagParameter ((yyvsp[(1) - (1)].param)); ;}
     break;
 
   case 45:
-#line 195 "guido.y"
+#line 199 "guido.y"
     { context->tagParameter ((yyvsp[(3) - (3)].param)) ; ;}
     break;
 
   case 46:
-#line 201 "guido.y"
+#line 205 "guido.y"
     { context->chordInit (); ;}
     break;
 
   case 48:
-#line 204 "guido.y"
+#line 208 "guido.y"
     { context->chordInitNote (); ;}
     break;
 
   case 50:
-#line 205 "guido.y"
+#line 209 "guido.y"
     { context->chordInitNote ();;}
     break;
 
   case 56:
-#line 214 "guido.y"
+#line 218 "guido.y"
     { context->appendNote ();  ;}
     break;
 
   case 58:
-#line 218 "guido.y"
+#line 222 "guido.y"
     { context->tagRange (); ;}
     break;
 
   case 59:
-#line 218 "guido.y"
-    { context->tagEnd (); ;}
-    break;
-
-  case 60:
-#line 221 "guido.y"
-    { context->tagEnd (); ;}
-    break;
-
-  case 61:
 #line 222 "guido.y"
     { context->tagEnd (); ;}
     break;
 
+  case 60:
+#line 225 "guido.y"
+    { context->tagEnd (); ;}
+    break;
+
+  case 61:
+#line 226 "guido.y"
+    { context->tagEnd (); ;}
+    break;
+
   case 64:
-#line 232 "guido.y"
+#line 236 "guido.y"
     { context->noteInit ( "_" ); ;}
     break;
 
   case 66:
-#line 233 "guido.y"
+#line 237 "guido.y"
     { context->noteInit ( "_" ); ;}
     break;
 
   case 72:
-#line 244 "guido.y"
+#line 248 "guido.y"
     { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 73:
-#line 245 "guido.y"
+#line 249 "guido.y"
     { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 74:
-#line 246 "guido.y"
+#line 250 "guido.y"
     { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 75:
-#line 247 "guido.y"
+#line 251 "guido.y"
     { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 78:
-#line 254 "guido.y"
+#line 258 "guido.y"
     {  context->noteAcc (SHARP); ;}
     break;
 
   case 79:
-#line 255 "guido.y"
+#line 259 "guido.y"
     {  context->noteAcc (FLAT); ;}
     break;
 
   case 81:
-#line 259 "guido.y"
+#line 263 "guido.y"
     { context->noteOct ((yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 83:
-#line 263 "guido.y"
+#line 267 "guido.y"
     {  context->noteEnum ((yyvsp[(2) - (4)].num)); context->noteDenom ((yyvsp[(4) - (4)].num)); ;}
     break;
 
   case 84:
-#line 264 "guido.y"
+#line 268 "guido.y"
     {  context->noteEnum ((yyvsp[(2) - (2)].num));  ;}
     break;
 
   case 85:
-#line 265 "guido.y"
+#line 269 "guido.y"
     {  context->noteAbsDur((yyvsp[(2) - (3)].num));  ;}
     break;
 
   case 86:
-#line 266 "guido.y"
+#line 270 "guido.y"
     {  context->noteDenom ((yyvsp[(2) - (2)].num)); ;}
     break;
 
   case 88:
-#line 270 "guido.y"
+#line 274 "guido.y"
     {  context->noteDot  ();  ;}
     break;
 
   case 89:
-#line 271 "guido.y"
+#line 275 "guido.y"
     {  context->noteDdot (); ;}
     break;
 
   case 90:
-#line 272 "guido.y"
+#line 276 "guido.y"
     {  context->noteTdot (); ;}
     break;
 
   case 91:
-#line 277 "guido.y"
+#line 281 "guido.y"
     { (yyval.str) = new string(context->fText); ;}
     break;
 
   case 92:
-#line 279 "guido.y"
-    { (yyval.num) = atol(context->fText.c_str() ); ;}
-    break;
-
-  case 93:
-#line 281 "guido.y"
-    { (yyval.num) = atol(context->fText.c_str() ); ;}
-    break;
-
-  case 94:
 #line 283 "guido.y"
     { (yyval.num) = atol(context->fText.c_str() ); ;}
     break;
 
-  case 95:
+  case 93:
 #line 285 "guido.y"
+    { (yyval.num) = atol(context->fText.c_str() ); ;}
+    break;
+
+  case 94:
+#line 287 "guido.y"
+    { (yyval.num) = atol(context->fText.c_str() ); ;}
+    break;
+
+  case 95:
+#line 289 "guido.y"
     { (yyval.real) = atof(context->fText.c_str() ); ;}
     break;
 
   case 96:
-#line 288 "guido.y"
+#line 292 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 97:
-#line 289 "guido.y"
+#line 293 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 98:
-#line 290 "guido.y"
+#line 294 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1961 "guidoparse.cpp"
+#line 1965 "guidoparse.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2177,7 +2181,7 @@ yyreturn:
 }
 
 
-#line 292 "guido.y"
+#line 296 "guido.y"
 
 #ifdef TEST
 int	gParseErrorLine = 0;

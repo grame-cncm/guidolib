@@ -563,7 +563,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[51] =
 
 
 #ifdef WIN32
-# pragma warning (disable : 4267)
+# pragma warning (disable : 4267 4005)
 #endif
 
 

@@ -10,7 +10,7 @@
 
 
 #ifdef WIN32
-# pragma warning (disable : 4267)
+# pragma warning (disable : 4267 4005)
 #endif
 
 
