@@ -49,7 +49,7 @@ $(PROJ) : $(BUILDDIR)
 	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. $(GENERATOR)
 
 cmake : $(BUILDDIR)
-	cd $(BUILDDIR) && $(CMAKE) $(CMAKEOPT) .. 
+	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT)
 
 $(BUILDDIR) :
 	mkdir $(BUILDDIR)
@@ -126,11 +126,11 @@ lib : $(BUILDDIR) $(PROJ)
 #===============================================================
 # generating a minimal project (the library only)
 #===============================================================
-minimal : 
+minimal : $(BUILDDIR)
 	$(MAKE) cmake CMAKEOPT="-DMIN=on"
 	$(MAKE) 
 
-cmakeall : 
+cmakeall : $(BUILDDIR)
 	$(MAKE) cmake CMAKEOPT="-DMIN=off"
 	$(MAKE)
 
