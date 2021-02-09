@@ -1,6 +1,6 @@
 
-TARGET 	:= undefined
 MAKE 	?= make
+CMAKE 	?= cmake
 BUILDDIR  ?= builddir
 IOSDIR    ?= iosdir
 CMAKEOPT  ?= 
@@ -9,53 +9,35 @@ system	:= $(shell uname -s)
 # normalizes MINGW versions
 system := $(shell echo $(system) | grep -e MINGW  -e MSYS > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
-	TARGET = macos
+	MAKEFILE?= GuidoQt.xcodeproj
+endif
+ifeq ($(system), MINGW)
+	MAKEFILE ?= Makefile
 else
- ifeq ($(system), MINGW)
-	TARGET = windows
- else
-  ifeq ($(system), Linux)
-	TARGET = linux
-  endif
- endif
+	MAKEFILE ?= Makefile
 endif
 
-.PHONY: macos ios
-
-all:
-	$(MAKE) $(TARGET)
+all: $(BUILDDIR)/$(MAKEFILE)
+	$(CMAKE) --build $(BUILDDIR) --config Release
 
 help: 
 	@echo "GuidoQt library makefile"
 	@echo "Available targets are:"
 	@echo "  all (default): compile for the current system"
-	@echo "  macos        : compile for macos using an xcode project"
 	@echo "  ios          : compile for iOS using an xcode project"
-	@echo "  linux        : compile for linux using a Makefile"
-	@echo "  windows      : compile for windows"
+	@echo "Options:"
+	@echo "  CMAKEOPT     : options passed to cmake"
+	@echo "  GENERATOR    : a cmake generator"
 
 
 $(BUILDDIR):
 	mkdir $(BUILDDIR)
-
-macos: $(BUILDDIR) $(BUILDDIR)/GuidoQt.xcodeproj
-	cd $(BUILDDIR) && cmake --build . --config Release
 	
-$(BUILDDIR)/GuidoQt.xcodeproj:
-	cd $(BUILDDIR) && cmake .. $(CMAKEOPT) -G Xcode
+$(BUILDDIR)/$(MAKEFILE): $(BUILDDIR) CMakeLists.txt
+	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT) $(GENERATOR)
 
-ios: 
-	$(MAKE) macos BUILDDIR=$(IOSDIR) CMAKEOPT="-DIOS=on"
-
-linux: $(BUILDDIR) $(BUILDDIR)/Makefile
-	cd $(BUILDDIR) && cmake --build . --config Release
+ios: $(BUILDDIR)/$(MAKEFILE)
+	$(MAKE) BUILDDIR=$(IOSDIR) CMAKEOPT="-DIOS=on" GENERATOR="-G Xcode"
 	
-$(BUILDDIR)/Makefile:
-	cd $(BUILDDIR) && cmake ..
-
-
 clean:
 	rm -rf $(BUILDDIR)
-
-undefined:
-	$(error System is undefined, not target available)
