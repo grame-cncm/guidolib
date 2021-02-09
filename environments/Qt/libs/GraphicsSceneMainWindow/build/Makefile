@@ -47,6 +47,12 @@ ios:
 	@echo "WARNING! ios target is temporarely disabled due to project generation failure with Qt 5.15 and Xcode 12.3"
 #	$(MAKE) macos QMAKE=qmake-ios BUILDDIR=$(IOSDIR)
 
+windows: $(BUILDDIR) $(BUILDDIR)/GraphicsSceneMainWindow.vcxproj
+	msbuild $(BUILDDIR)/GraphicsSceneMainWindow.vcxproj -property:Configuration=Release
+
+$(BUILDDIR)/GraphicsSceneMainWindow.vcxproj:
+	cd $(BUILDIDIR) && qmake ..
+
 linux: $(BUILDDIR) $(BUILDDIR)/Makefile
 	$(MAKE) -C $(BUILDDIR)
 	
