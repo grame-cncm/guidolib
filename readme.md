@@ -13,6 +13,7 @@ See [Guido wiki](https://github.com/grame-cncm/guidolib/wiki) for building instr
 
 -------------
 Build status : ![Ubuntu](https://github.com/grame-cncm/guidolib/workflows/Ubuntu/badge.svg)
+![MacOS](https://github.com/grame-cncm/guidolib/workflows/MacOS/badge.svg)
 ![Windows](https://github.com/grame-cncm/guidolib/workflows/Windows/badge.svg)
 ![Docker](https://github.com/grame-cncm/guidolib/workflows/Docker/badge.svg?branch=dev)
 -------------
