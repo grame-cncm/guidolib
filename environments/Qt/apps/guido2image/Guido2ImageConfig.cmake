@@ -7,8 +7,6 @@ set (SRCDIR  		${CMAKE_CURRENT_LIST_DIR})
 set (GUIDOQTLIBDIR 	${CMAKE_CURRENT_LIST_DIR}/../../libs)
 set (GUIDOQTDIR 	${GUIDOQTLIBDIR}/GuidoQt)
 
-message ("GUIDOQTLIBDIR ${GUIDOQTLIBDIR}")
-
 find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
 set (QTINCDIRS 	${Qt5Widget_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
 set (QTLIBS 	Qt5::Widgets Qt5::PrintSupport)
