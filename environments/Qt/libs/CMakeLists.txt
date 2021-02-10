@@ -25,9 +25,6 @@ if(IOS)
 	set (CMAKE_OSX_SYSROOT "iphoneos")
 endif()
 
-set (BINDIR ${ROOT})
-set (LIBDIR ${ROOT})
-
 #######################################
 # set targets
 if (IOS)
@@ -41,6 +38,8 @@ endif()
 if (UNIX AND NOT APPLE)
 	set(CMAKE_CXX_FLAGS -fPIC)
 endif()
+
+set (LIBDIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 #######################################
 # add GuidoQt

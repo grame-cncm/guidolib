@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 
 #######################################
-set (ROOT 		${CMAKE_CURRENT_LIST_DIR})
-set (SRCDIR  	${ROOT}/src)
-set (GUIDODIR  	${ROOT}/../../..)
+set (GSROOT 		${CMAKE_CURRENT_LIST_DIR})
+set (SRCDIR  	${GSROOT}/src)
+set (GUIDODIR  	${GSROOT}/../../..)
 
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTOUIC ON)
@@ -21,24 +21,21 @@ endif()
 # set sources and headers files
 file (GLOB SRC  RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRCDIR}/*/*.cpp )
 file (GLOB GRAPHICSCENE_HEADERS  RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
-	${ROOT}/include/*.h 
+	${GSROOT}/include/*.h 
 	${SRCDIR}/*/*.h
 )
 
 #######################################
 # set includes
 set (INCDIRS 
-	${ROOT}
-	${ROOT}/include 
+	${GSROOT}
+	${GSROOT}/include 
 	${SRCDIR}/LanguageCommandPalette
 )
 set (GRAPHICSCENE_INCLUDE_DIRS ${INCDIRS} ${QTINCDIRS})
 
-#qt5_wrap_ui(UI ${SRCDIR}/GUI/ResolutionDialog.ui)
-#qt5_add_resources (RSRC ${ROOT}/rsc/application.qrc)
-
 set (UI ${SRCDIR}/GUI/ResolutionDialog.ui)
-set (RSRC ${ROOT}/rsc/application.qrc)
+set (RSRC ${GSROOT}/rsc/application.qrc)
 
 set (GRAPHICSCENE_SRC ${SRC} ${UI} ${RSRC})
 

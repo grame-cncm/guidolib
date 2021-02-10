@@ -37,7 +37,7 @@ find_package(GuidoEditor REQUIRED )
 # GuidoSceneComposer settings
 find_package(GuidoSceneComposer REQUIRED )
 
-set (BINDIR ${ROOT}/bin)
+set (BINDIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 #######################################
 # add guido2image
