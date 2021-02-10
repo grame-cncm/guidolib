@@ -63,6 +63,9 @@ set_target_properties (${guidoqt} PROPERTIES
 # add GraphicsSceneMainWindow
 add_library(${graphicscene} STATIC ${GRAPHICSCENE_SRC} ${GRAPHICSCENE_HEADERS})
 target_include_directories (${graphicscene} PRIVATE ${GRAPHICSCENE_INCLUDE_DIRS})
+if (DEFINED GRAPHICSCENE_DEFINITIONS)
+	target_compile_definitions (${graphicscene} PRIVATE ${GRAPHICSCENE_DEFINITIONS})
+endif()
 set_target_properties (${graphicscene} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY  ${LIBDIR}
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${LIBDIR}

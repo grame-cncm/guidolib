@@ -2420,7 +2420,11 @@ void putInFile( const QString& msg , const QString& fileName )
 	if (data.open(QFile::WriteOnly | QFile::Append | QFile::Text )) 
 	{
 		QTextStream out(&data);
+#ifdef USEQTENDL
 		out << msg << Qt::endl;
+#else
+		out << msg << endl;
+#endif
 	}
 }
 

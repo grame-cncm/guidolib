@@ -27,7 +27,7 @@ public:
     ~QLanguageCommandPaletteLayout();
 
     void addItem(QLayoutItem *item);
-    Qt::Orientations expandingDirections() const;
+//    Qt::Orientations expandingDirections() const;
 
     int				count() const;
     QLayoutItem *	itemAt(int index) const;

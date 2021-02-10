@@ -65,10 +65,10 @@ QLayoutItem *QLanguageCommandPaletteLayout::takeAt(int index)
 }
 
 //----------------------------------------------------------------------
-Qt::Orientations QLanguageCommandPaletteLayout::expandingDirections() const
-{
-    return 0;
-}
+//Qt::Orientations QLanguageCommandPaletteLayout::expandingDirections() const
+//{
+//    return 0;
+//}
 
 //----------------------------------------------------------------------
 void QLanguageCommandPaletteLayout::setGeometry(const QRect &rect)

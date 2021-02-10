@@ -13,6 +13,10 @@ set (CMAKE_CXX_STANDARD 11)
 find_package(Qt5 COMPONENTS Xml Widgets PrintSupport REQUIRED)
 set (QTINCDIRS 	${Qt5Xml_INCLUDE_DIRS} ${Qt5Widget_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
 
+if (${Qt5Widgets_VERSION} VERSION_GREATER_EQUAL "5.14")
+	set ( GRAPHICSCENE_DEFINITIONS -DUSEQTENDL)
+endif()
+
 #######################################
 # set sources and headers files
 file (GLOB SRC  RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRCDIR}/*/*.cpp )
