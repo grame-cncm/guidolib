@@ -1,20 +1,33 @@
 
-system	:= $(shell uname -s)
+MAKE 	?= make
+CMAKE 	?= cmake
+BUILDDIR  ?= builddir
+IOSDIR    ?= iosdir
+CMAKEOPT  ?= 
 
-DESTDIR ?= /usr
+all: 
+	$(MAKE) cmake
+	$(CMAKE) --build $(BUILDDIR) --config Release
 
-all:
-	$(MAKE) -C GuidoQt/build
-	$(MAKE) -C GraphicsSceneMainWindow/build
+help: 
+	@echo "Guido Qt libraries makefile"
+	@echo "Available targets are:"
+	@echo "  all (default): compile for the current system"
+	@echo "  ios          : compile for iOS using an xcode project"
+	@echo "Options:"
+	@echo "  CMAKEOPT     : options passed to cmake"
+	@echo "  GENERATOR    : a cmake generator"
 
-install:
-	[ $(system) = "Linux" ] && $(MAKE) linuxinstall
 
-linuxinstall:
-	mkdir -p $(DESTDIR)$(PREFIX)/lib $(DESTDIR)$(PREFIX)/include/guido
-	install -m 755 libGuidoQt.* $(DESTDIR)$(PREFIX)/lib
-	install -m 644 GuidoQt/include/*.h $(DESTDIR)$(PREFIX)/include/guido
+$(BUILDDIR):
+	mkdir $(BUILDDIR)
+	$(MAKE) cmake
+	
+cmake: $(BUILDDIR)
+	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT) $(GENERATOR)
 
+ios: $(BUILDDIR)
+	$(MAKE) BUILDDIR=$(IOSDIR) CMAKEOPT="-DIOS=on" GENERATOR="-G Xcode"
+	
 clean:
-	$(MAKE) -C GuidoQt/build clean
-	$(MAKE) -C GraphicsSceneMainWindow/build clean
+	rm -rf $(BUILDDIR)

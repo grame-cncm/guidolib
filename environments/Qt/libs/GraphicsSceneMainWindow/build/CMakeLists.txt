@@ -61,9 +61,10 @@ if (UNIX AND NOT APPLE)
 	set(CMAKE_CXX_FLAGS -fPIC)
 endif()
 
-set (SRC ${SRC} ${ROOT}/rsc/application.qrc ${SRCDIR}/GUI/ResolutionDialog.ui)
+qt5_wrap_ui(UI ${SRCDIR}/GUI/ResolutionDialog.ui)
+qt5_add_resources (RSRC ${ROOT}/rsc/application.qrc)
 
-add_library(${TARGET} STATIC ${SRC} ${HEADERS})
+add_library(${TARGET} STATIC ${SRC} ${HEADERS} ${UI} ${RSRC})
 target_include_directories (${TARGET} PRIVATE ${INCDIRS})
 set_target_properties (${TARGET} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY  ${LIBDIR}
