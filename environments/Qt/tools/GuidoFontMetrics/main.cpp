@@ -23,11 +23,17 @@ using namespace std;
 #define GUIDO_FONT		"Guido2"
 #define MAXGLYPH		256
 
+#ifdef QTFONTMETRICS_511
+#define WIDTH(m, arg) m.horizontalAdvance(arg)
+#else
+#define WIDTH(m, arg) m.width(arg)
+#endif
+
 static void fontwidth(QFontMetrics& m, int max)
 {
 //    cout << "static const int kGuidoFontWidth[] = {" << endl;
     for (int i=0; i <= max; i++) {
-        cout << "	fExtends[" << i << "] = " << m.width(QString(QChar(i))) << ";" << endl;
+        cout << "	fExtends[" << i << "] = " << WIDTH(m, QString(QChar(i))) << ";" << endl;
         }
 //	cout << "};" << endl;
 }
