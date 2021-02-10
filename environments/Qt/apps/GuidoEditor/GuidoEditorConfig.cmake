@@ -14,8 +14,16 @@ set (GUIDOQTDIR 	${GUIDOQTLIBDIR}/GuidoQt)
 set (RSRCDIR		${SRCDIR}/rsc)
 
 find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
-set (QTINCDIRS 	${Qt5Widget_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+set (QTINCDIRS 	${Qt5Widgets_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
 set (QTLIBS 	Qt5::Widgets Qt5::PrintSupport)
+
+if (${Qt5Widgets_VERSION} VERSION_GREATER_EQUAL "5.10")
+	set ( GUIDOEDITOR_DEFINITIONS -DQTTABSTOPDISTANCE)
+endif()
+
+if (${Qt5Widgets_VERSION} VERSION_GREATER_EQUAL "5.11")
+	set ( GUIDOEDITOR_DEFINITIONS ${GUIDOEDITOR_DEFINITIONS} -DQTFONTMETRICS_511)
+endif()
 
 #######################################
 # set sources and headers files

@@ -23,8 +23,18 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
 
     updateLineNumberAreaWidth(0);
+#ifdef QTTABSTOPDISTANCE
+	setTabStopDistance (20);
+#else
 	setTabStopWidth (20);
+#endif
 }
+
+#ifdef QTFONTMETRICS_511
+#define WIDTH(m, s) m.horizontalAdvance(s)
+#else
+#define WIDTH(m, s) m.width(s)
+#endif
 
 //-------------------------------------------------------------------------
 int CodeEditor::lineNumberAreaWidth()
@@ -35,9 +45,8 @@ int CodeEditor::lineNumberAreaWidth()
         max /= 10;
         ++digits;
     }
-
-    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
-
+//    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+    int space = 3 + WIDTH(fontMetrics(), QLatin1Char('9')) * digits;
     return space;
 }
 

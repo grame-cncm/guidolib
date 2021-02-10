@@ -55,9 +55,13 @@ set_target_properties (${g2i} PROPERTIES
 
 #######################################
 # add GuidoEditor
+message ("GUIDOEDITOR_DEFINITIONS ${GUIDOEDITOR_DEFINITIONS}")
 set (guidoeditor GuidoEditor)
 add_executable(${guidoeditor} ${GUIDOEDITOR_EXE} ${GUIDOEDITOR_SRC} ${GUIDOEDITOR_HEADERS})
 target_include_directories (${guidoeditor} PRIVATE ${GUIDOEDITOR_INCLUDE_DIRS} ${GUIDO_INCLUDE_DIRS})
+if (DEFINED GUIDOEDITOR_DEFINITIONS)
+	target_compile_definitions (${guidoeditor} PRIVATE ${GUIDOEDITOR_DEFINITIONS})
+endif()
 target_link_libraries (${guidoeditor} PRIVATE ${GUIDOEDITOR_LIBRARIES} ${GUIDO_LIBRARY})
 set_target_properties (${guidoeditor} PROPERTIES
 	BUNDLE true
