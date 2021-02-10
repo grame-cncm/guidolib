@@ -6,7 +6,7 @@ project(GuidoQTApplications)
 set (ROOT 		${CMAKE_CURRENT_SOURCE_DIR})
 set (GUIDODIR  	${CMAKE_CURRENT_SOURCE_DIR}/../../..)
 
-set (CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} guido2image)
+set (CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} guido2image GuidoEditor GuidoSceneComposer)
 
 #######################################
 # shared guidoengine settings
@@ -27,7 +27,15 @@ endif()
 
 #######################################
 # guido2image settings
-find_package(Guido2Image REQUIRED PATH ${CMAKE_CURRENT_SOURCE_DIR}/GuidoQt)
+find_package(Guido2Image REQUIRED )
+
+#######################################
+# GuidoEditor settings
+find_package(GuidoEditor REQUIRED )
+
+#######################################
+# GuidoSceneComposer settings
+find_package(GuidoSceneComposer REQUIRED )
 
 set (BINDIR ${ROOT}/bin)
 
@@ -44,4 +52,40 @@ set_target_properties (${g2i} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY  ${BINDIR}
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${BINDIR}
 )
+
+#######################################
+# add GuidoEditor
+set (guidoeditor GuidoEditor)
+add_executable(${guidoeditor} ${GUIDOEDITOR_EXE} ${GUIDOEDITOR_SRC} ${GUIDOEDITOR_HEADERS})
+target_include_directories (${guidoeditor} PRIVATE ${GUIDOEDITOR_INCLUDE_DIRS} ${GUIDO_INCLUDE_DIRS})
+target_link_libraries (${guidoeditor} PRIVATE ${GUIDOEDITOR_LIBRARIES} ${GUIDO_LIBRARY})
+set_target_properties (${guidoeditor} PROPERTIES
+	BUNDLE true
+	MACOSX_BUNDLE_BUNDLE_NAME ${guidoeditor}
+	MACOSX_BUNDLE_ICON_FILE ${GUIDOEDITOR_ICON_FILE}
+	MACOSX_BUNDLE_BUNDLE_VERSION "v.${VERSION}"
+	MACOSX_BUNDLE_SHORT_VERSION_STRING "${VERSION}"
+	MACOSX_BUNDLE_INFO_PLIST ${GUIDOEDITOR_INFO_PLIST}
+	RUNTIME_OUTPUT_DIRECTORY  ${BINDIR}
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${BINDIR}
+)
+
+#######################################
+# add GuidoSceneComposer
+set (guidosc GuidoSceneComposer)
+add_executable(${guidosc} ${GUIDOSCENECOMPOSER_EXE} ${GUIDOSCENECOMPOSER_SRC} ${GUIDOSCENECOMPOSER_HEADERS})
+target_include_directories (${guidosc} PRIVATE ${GUIDOSCENECOMPOSER_INCLUDE_DIRS} ${GUIDO_INCLUDE_DIRS})
+target_compile_definitions (${g2i} PRIVATE ${GUIDOSCENECOMPOSER_DEFINITIONS})
+target_link_libraries (${guidosc} PRIVATE ${GUIDOSCENECOMPOSER_LIBRARIES} ${GUIDO_LIBRARY})
+set_target_properties (${guidosc} PROPERTIES
+	BUNDLE true
+	MACOSX_BUNDLE_BUNDLE_NAME ${guidosc}
+	MACOSX_BUNDLE_ICON_FILE ${GUIDOSCENECOMPOSER_ICON_FILE}
+	MACOSX_BUNDLE_BUNDLE_VERSION "v.${VERSION}"
+	MACOSX_BUNDLE_SHORT_VERSION_STRING "${VERSION}"
+	MACOSX_BUNDLE_INFO_PLIST ${GUIDOSCENECOMPOSER_INFO_PLIST}
+	RUNTIME_OUTPUT_DIRECTORY  ${BINDIR}
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${BINDIR}
+)
+
 
