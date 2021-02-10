@@ -4,7 +4,8 @@ builddir
 iosdir
 macos
 win32
-guido2image
+bin
+guido2image/guido2image
 guidofontmetrics
 bravurafontmetrics
 fontmetrics
