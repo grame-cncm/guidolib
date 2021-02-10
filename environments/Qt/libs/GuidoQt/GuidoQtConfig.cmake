@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 
 
 #######################################
-set (SRCDIR  	${CMAKE_CURRENT_SOURCE_DIR}/GuidoQt)
-set (GUIDODIR  	${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+set (SRCDIR  	${CMAKE_CURRENT_LIST_DIR})
+set (GUIDODIR  	${CMAKE_CURRENT_LIST_DIR}/../../../..)
 
 find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
 set (QTINCDIRS 	${Qt5Widget_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})

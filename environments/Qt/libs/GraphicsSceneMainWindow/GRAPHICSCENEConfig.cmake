@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 
 #######################################
-set (ROOT 		${CMAKE_CURRENT_SOURCE_DIR}/GraphicsSceneMainWindow)
+set (ROOT 		${CMAKE_CURRENT_LIST_DIR})
 set (SRCDIR  	${ROOT}/src)
 set (GUIDODIR  	${ROOT}/../../..)
 

@@ -4,7 +4,7 @@
 all:
 	$(MAKE) libs
 	$(MAKE) apps
-	$(MAKE) tools
+#	$(MAKE) tools
 	
 help:
 	@ echo " 'all'   :  build all the Qt resources (default)"

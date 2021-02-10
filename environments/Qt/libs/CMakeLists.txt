@@ -46,6 +46,9 @@ endif()
 # add GuidoQt
 add_library(${guidoqt} STATIC ${GUIDOQT_SRC} ${GUIDOQT_HEADERS})
 target_include_directories (${guidoqt} PRIVATE ${GUIDOQT_INCLUDE_DIRS})
+if (DEFINED GUIDQOQT_DEFINITIONS)
+	target_compile_definitions (${guidoqt} PRIVATE ${GUIDQOQT_DEFINITIONS})
+endif()
 set_target_properties (${guidoqt} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY  ${LIBDIR}
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${LIBDIR}
