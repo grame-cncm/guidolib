@@ -286,7 +286,7 @@ void QFindWidget::wholeWordsChanged(int state)
 //-------------------------------------------------------------------------
 QTextDocument::FindFlags QFindWidget::flags() const
 {
-	QTextDocument::FindFlags result = 0;
+	QTextDocument::FindFlags result;
 	if (  fBackward )
 		result |= QTextDocument::FindBackward;
 	if ( fCaseSensitive )
