@@ -11,8 +11,9 @@ Documentation of the new features and syntax change or extensions since release 
 - [Version 1.6.5](#165)
 
 ----------------------------------------------------------------
-<html><a name=154></a></html>
-#### Changes with version 1.5.5
+<a name=154></a>
+### Changes with version 1.5.5
+
 - color param added for tags: `\tremolo, \dotFormat, \accidental, \accolade, \bar, \doubleBar, \endBar, \repeatBegin, \repeatEnd, \daCapo, \daCapoAlFine, \dalSegno, \dalSegnoAlFine, \fine, \breathMark, \key, \octava, \staffFormat, \tempo, \tie, \tuplet, \volta`
 - size param added for tags: `\accolade, \bar`
 - \volta-tag:
@@ -20,8 +21,9 @@ Documentation of the new features and syntax change or extensions since release 
 
 
 ----------------------------------------------------------------
-<html><a name=156></a></html>
-#### Changes with version 1.5.6
+<a name=156></a>
+### Changes with version 1.5.6
+
 - `\special` tag:
     - "space" param removed (useless)
     - "scale" param changed for "size"
@@ -32,22 +34,25 @@ Documentation of the new features and syntax change or extensions since release 
 
 
 ----------------------------------------------------------------
-<html><a name=161></a></html>
+<a name=161></a>
 #### Changes with version 1.6.1
+
 - new `\beamsFull` tag: allows rests in auto beaming
 
 
 ----------------------------------------------------------------
-<html><a name=163></a></html>
+<a name=163></a>
 #### Changes with version 1.6.3
+
 - new style "none" for `\acc` tag, intended to avoid the second accidental in case of tied notes  
 - articulations support a position parameter with "above" or "below" values
 - autoMeasuresNum attribute of the `\meter` tag supports "page" value
 - new 'enclosure' parameter for `\mark` tag (see sample gmn files)
 
 -----------------------------
-<html><a name=164></a></html>
+<a name=164></a>
 #### Changes with version 1.6.4
+
 - new `\staffFormat` "distance" parameter for fixed stave spacing feature
 - `\instr` tag supports font attributes (font, size, format...) and auto position
   using the "autopos" attribute or using the `\auto` or `\set` tag
@@ -59,8 +64,9 @@ Documentation of the new features and syntax change or extensions since release 
 - new "autoLyricsPos" attribute for the `\set` tag
 
 -----------------------------
-<html><a name=165></a></html>
+<a name=165></a>
 #### Changes with version 1.6.5
+
 - ornaments syntax change (affects `\trill`, `\mordent`, `\turn`): they don't use a chord for specification any more, but can be applied to (real) chord. Tag parameters have been redesigned. Example: <br/>
 <pre>[\trill(g) \trill<"a&">(g) \trill<"a&", ady=0.5, adx=-2>(g) ]</pre>
 ![](./imgsmd/trills.png)
