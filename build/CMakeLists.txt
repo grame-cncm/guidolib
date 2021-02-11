@@ -33,6 +33,7 @@ option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
 option ( GL         "Links to opengl device" off)
 option ( MIN        "Includes only the library in the project" off)
+option ( MAKEFRAMEWORK  "Generates a MacOS framework" on)
 
 #######################################
 # Output folders 
@@ -182,13 +183,18 @@ else()
 			ARCHIVE_OUTPUT_DIRECTORY_RELEASE  ${LIBDIR}
 			LIBRARY_OUTPUT_DIRECTORY ${LIBDIR}
 			LIBRARY_OUTPUT_DIRECTORY_RELEASE ${LIBDIR}
-			FRAMEWORK TRUE
-			FRAMEWORK_VERSION ${GUIDOFWKVERS}
 			PUBLIC_HEADER "${PUBLICHEADERS}"
 			VERSION ${VERSION}
 			SOVERSION ${SOVERS}
+	)
+if (MAKEFRAMEWORK)
+	set_target_properties (${target} PROPERTIES
+			FRAMEWORK TRUE
+			FRAMEWORK_VERSION ${GUIDOFWKVERS}
 			MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
-			MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION} )
+			MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
+	)
+endif()
 
 	if (STATICLIB)
 		message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
