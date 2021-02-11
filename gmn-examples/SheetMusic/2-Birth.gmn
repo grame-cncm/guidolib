@@ -1,4 +1,7 @@
 [
+	\pageFormat<w=12cm, h=10cm, tm=4.5cm, lm=4cm>
+	\footer<"Excerpt from Sheet Music - Johannes Kreidler", dy=-6, fsize=6pt, color="grey">
+
 	\clef<"g"> \set<autoEndBar="off"> 
 	\text<"Birth", dx=-2, dy=24,font="Times New Roman",fsize=21pt>(
 	\dispDur<1,2,0>(b2/16 a g f \fermata(e)) )

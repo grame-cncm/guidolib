@@ -1,4 +1,6 @@
 [
+	\pageFormat<w=12cm, h=10cm, tm=4.7cm, lm=3.7cm, rm=2>
+	\footer<"Excerpt from Sheet Music - Johannes Kreidler", dy=-6, fsize=6pt, color="grey">
 	\clef<"none"> \set<autoEndBar="off"> 
 	\text<"You", dx=10, dy=22,font="Times New Roman",fsize=21pt>(
 	empty \dispDur<1,1,0>(

@@ -1,5 +1,6 @@
 {
 [
+	\pageFormat<w=12cm, h=10cm, tm=0.4cm, lm=1.7cm>
 	\clef<"g">  \barFormat<"system">
 	empty/2
 	{ 

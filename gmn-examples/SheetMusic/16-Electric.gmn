@@ -1,7 +1,9 @@
 [
+	\pageFormat<w=12cm, h=10cm, tm=4.2cm, lm=3.5cm, rm=2>
+	\footer<"Excerpt from Sheet Music - Johannes Kreidler", dy=-6, fsize=6pt, color="grey">
 	\clef<"g"> \set<autoEndBar="off"> 
 	%\staffFormat<color="0x00000000", size=1.4>
-	\text<"Electric", dx=4, dy=28,font="Times New Roman",fsize=21pt>(
+	\text<"Electric", dx=0, dy=28,font="Times New Roman",fsize=21pt>(
 	%\tie(
 	\sl<dy=1.7, h=0.9, dx1=1, dx2=0>(	
 	\sl<dy=-4, h=0.9, dx1=2.5, dx2=-2>(	

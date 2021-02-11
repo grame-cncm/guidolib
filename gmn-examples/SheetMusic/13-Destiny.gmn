@@ -1,4 +1,6 @@
 [
+	\pageFormat<w=12cm, h=10cm, tm=4.9cm, lm=4.4cm, rm=2>
+	\footer<"Excerpt from Sheet Music - Johannes Kreidler", dy=-6, fsize=6pt, color="grey">
 	\clef<"none"> \set<autoEndBar="off"> \staffFormat<size=0.8>
 	\text<"Destiny", dx=-4, dy=26,font="Times New Roman",fsize=28pt>(
 	 \stemsDown \bm(a/8 e2 \alter<1, dx=7> c) empty/16

@@ -1,5 +1,7 @@
 {
 	[
+	\pageFormat<w=12cm, h=10cm, tm=4.4cm, lm=1.9cm, rm=1>
+	\footer<"Excerpt from Sheet Music - Johannes Kreidler", dy=-6, fsize=6pt, color="grey">
 		\clef<"none"> \set<autoEndBar="off"> 
 		\text<"Climb", dx=16, dy=24,font="Times New Roman",fsize=21pt>(
 	 	 \noteFormat<dx=-3> \dispDur<1,1,0> (b0/16 b b b b b b b b b b b b )

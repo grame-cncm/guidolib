@@ -1,6 +1,8 @@
 [
 	\clef<"g"> 
 	\text<"Aura", dx=20.3, dy=28,font="Times New Roman",fsize=21pt>( 
+	\pageFormat<w=12cm, h=10cm, tm=4.5cm>
+	\footer<"Excerpt from Sheet Music - Johannes Kreidler", dy=-6, fsize=6pt, color="grey">
 	empty/2
 	\sl<dy=5.3,dx2=-1, h=11>(
 	\sl<dy=5.2,dx2=-1, h=9>(

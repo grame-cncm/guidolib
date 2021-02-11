@@ -1,4 +1,6 @@
 [
+	\pageFormat<w=12cm, h=10cm, tm=5.2cm, lm=3.5cm, rm=2>
+	\footer<"Excerpt from Sheet Music - Johannes Kreidler", dy=-6, fsize=6pt, color="grey">
 	\clef<"none"> \set<autoEndBar="off"> 
 	\staffFormat<"1-lines">
 	\text<"Intelligence", dx=-1, dy=17,font="Times New Roman",fsize=21pt>(
