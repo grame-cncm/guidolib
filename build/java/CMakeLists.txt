@@ -22,6 +22,9 @@ if(NOT APPLE)
 	endif()
 endif()
 
+set(JAVA_AWT_LIBRARY NotNeeded)
+set(JAVA_JVM_LIBRARY NotNeeded)
+set(JAVA_AWT_INCLUDE_PATH NotNeeded)
 FIND_PACKAGE(JNI)
 if (NOT JNI_FOUND)
 	message (WARNING "JNI package not found - skip jniGUIDOEngine target")
@@ -104,19 +107,15 @@ target_link_libraries (${java} ${LINK})
 #######################################
 # install settings
 #######################################
-if (PACK)
-	set (CMAKE_INSTALL_PREFIX .)
-endif()
-
 install ( TARGETS ${java}	
-    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib CONFIGURATIONS Release
+    LIBRARY DESTINATION ${INSTALL_LIB} CONFIGURATIONS Release
+    ARCHIVE DESTINATION ${INSTALL_LIB} CONFIGURATIONS Release
 )
 
 ####################################
 # install java classes
 set (JAVA ${ROOT}/lang/java)
-set (JAVADEST ${CMAKE_INSTALL_PREFIX}/share/guidolib/java)
+set (JAVADEST ${INSTALL_INTERFACES}/java)
 install (
     DIRECTORY ${JAVA}/guidoengine DESTINATION ${JAVADEST}
     FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
