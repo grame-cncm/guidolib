@@ -18,12 +18,13 @@ if (WIN32)
 		set (GUIDO_LIBRARY ${GUIDODIR}/build/lib/GUIDOEngine.lib)
 	endif()
 elseif (APPLE)
-	set (GUIDO_LIBRARY "-F${GUIDODIR}/build/lib -framework GUIDOEngine")
+	set (GUIDO_LIBRARY "-L${GUIDODIR}/build/lib -lGUIDOEngine")
 else()
 	set (GUIDO_LIBRARY "-L${GUIDODIR}/build/lib -lGUIDOEngine")
 endif()
 
-#message ("GUIDO_LIBRARY ${GUIDO_LIBRARY}")
+set (CMAKE_BUILD_RPATH "${GUIDODIR}/build/lib")
+set (CMAKE_SKIP_BUILD_RPATH FALSE)
 
 #######################################
 # guido2image settings
@@ -49,13 +50,13 @@ if (DEFINED GUIDO2IMAGE_DEFINITIONS)
 endif()
 target_link_libraries (${g2i} PRIVATE ${GUIDO2IMAGE_LIBRARIES} ${GUIDO_LIBRARY})
 set_target_properties (${g2i} PROPERTIES
+	INSTALL_RPATH ${GUIDODIR}/build/lib
 	RUNTIME_OUTPUT_DIRECTORY  ${BINDIR}
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${BINDIR}
 )
 
 #######################################
 # add GuidoEditor
-message ("GUIDOEDITOR_DEFINITIONS ${GUIDOEDITOR_DEFINITIONS}")
 set (guidoeditor GuidoEditor)
 add_executable(${guidoeditor} ${GUIDOEDITOR_EXE} ${GUIDOEDITOR_SRC} ${GUIDOEDITOR_HEADERS})
 target_include_directories (${guidoeditor} PRIVATE ${GUIDOEDITOR_INCLUDE_DIRS} ${GUIDO_INCLUDE_DIRS})
@@ -82,6 +83,7 @@ target_include_directories (${guidosc} PRIVATE ${GUIDOSCENECOMPOSER_INCLUDE_DIRS
 target_compile_definitions (${g2i} PRIVATE ${GUIDOSCENECOMPOSER_DEFINITIONS})
 target_link_libraries (${guidosc} PRIVATE ${GUIDOSCENECOMPOSER_LIBRARIES} ${GUIDO_LIBRARY})
 set_target_properties (${guidosc} PROPERTIES
+	INSTALL_RPATH ${GUIDODIR}/build/lib
 	BUNDLE true
 	MACOSX_BUNDLE_BUNDLE_NAME ${guidosc}
 	MACOSX_BUNDLE_ICON_FILE ${GUIDOSCENECOMPOSER_ICON_FILE}
