@@ -14,6 +14,7 @@ help:
 	@echo "Available targets are:"
 	@echo "  all (default): compile for the current system"
 	@echo "Options:"
+	@echo "  BUILDDIR     : the build folder (currently $(BUILDDIR))"
 	@echo "  CMAKEOPT     : options passed to cmake"
 	@echo "  GENERATOR    : a cmake generator"
 
