@@ -52,7 +52,6 @@ $(MSLIGHT)/MidiShareLight.h:
 $(BUILDDIR) :
 	mkdir $(BUILDDIR)
 
-#travis : CMAKEOPT := -DMIDIEXPORT=no -Wno-dev
 travis : CMAKEOPT := -Wno-dev
 travis : $(PROJ)
 	git submodule update --init
@@ -68,7 +67,7 @@ help :
 	@echo "                        the guido Java library (when JDK is present),"
 	@echo "   all          : build the basic target,"	
 	@echo "                        the Guido Qt library and applications,"	
-	@echo "                        the guido Javascript library."
+	@echo "                        the guido WASM library."
 	@echo "   lib          : build the GUIDOEngine library"	
 	@echo "   tools        : build guido tools"	
 	@echo "   Qt           : build the Guido Qt library, applications and tools"	
