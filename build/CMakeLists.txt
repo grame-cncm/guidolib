@@ -34,6 +34,7 @@ option ( SMUFL  	"Use SMUFL compliant Bravura font" off)
 option ( GL         "Links to opengl device" off)
 option ( MIN        "Includes only the library in the project" off)
 option ( MAKEFRAMEWORK  "Generates a MacOS framework" off)
+option ( BUILDJNI   "Includes JNI library build" off)
 
 #######################################
 # Output folders 
@@ -225,27 +226,10 @@ target_include_directories (${target} PRIVATE ${INCDIRS})
 target_link_libraries (${target} ${LINK})
 
 
-####################################
-# add sub projects (tools)
-####################################
-if (IOS OR MIN)
-	message (STATUS "Generates a minimal project (includes only the library)")
-else()
-	message (STATUS "Includes tools")
-	add_subdirectory (tools)
-	message (STATUS "Includes java jni")
-	add_subdirectory (java)
-endif()
-
-
 #######################################
-# install setup
-#######################################
-if (QTVIEW OR MIN)
-	RETURN()
-endif()
-
-if (APPLE)
+# install paths 
+# defined before loading subprojects
+if (APPLE OR WIN32)
 	set (CMAKE_INSTALL_PREFIX $ENV{HOME}/Guido-${VERSION})
 endif()
 if (DEFINED PREFIX)
@@ -256,7 +240,6 @@ if (PACK)
 set (CMAKE_INSTALL_PREFIX .)
 endif()
 
-message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX}")
 if (APPLE OR WIN32)
 	set (INSTALL_BIN 		${CMAKE_INSTALL_PREFIX}/bin)
 	set (INSTALL_LIB 		${CMAKE_INSTALL_PREFIX}/lib)
@@ -276,6 +259,31 @@ else()
 	set (INSTALL_INTERFACES ${CMAKE_INSTALL_PREFIX}/share/guidolib)
 	set (INSTALL_FONTS ${CMAKE_INSTALL_PREFIX}/share/fonts/guidolib)
 endif()
+
+
+####################################
+# add sub projects (tools)
+####################################
+if (IOS OR MIN)
+	message (STATUS "Generates a minimal project (includes only the library)")
+else()
+	message (STATUS "Includes tools")
+	add_subdirectory (tools)
+	if (BUILDJNI)
+		message (STATUS "Includes java jni")
+		add_subdirectory (java)
+	endif()
+endif()
+
+
+#######################################
+# install setup
+#######################################
+if (IOS OR MIN)
+	RETURN()
+endif()
+
+message (STATUS "Library install prefix set to ${CMAKE_INSTALL_PREFIX}")
 
 install ( TARGETS ${target}
 	RUNTIME DESTINATION ${INSTALL_BIN} CONFIGURATIONS Release

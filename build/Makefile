@@ -9,13 +9,11 @@ system	:= $(shell uname -s)
 # normalizes MINGW versions
 system := $(shell echo $(system) | grep -e MINGW -e MSYS > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
-	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/guidolib.xcodeproj
 else
 ifeq ($(system), MINGW)
 	PROJ ?= $(BUILDDIR)/Makefile
 else
-	PREFIX ?= /usr/local
 	PROJ ?= $(BUILDDIR)/Makefile
 endif
 endif
@@ -105,7 +103,7 @@ wasm: emcc
 	$(MAKE) -C ../lang/javascript
 
 emcc:
-	which emcc || echo emcc compiler must be available from the command line; false
+	@which emcc || (echo emcc compiler must be available from the command line; false)
 
 #===============================================================
 # clean the project
@@ -182,7 +180,6 @@ tags:
 #===============================================================
 DESTDIR ?=
 install: 
-	cd $(BUILDDIR) && $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=$(PREFIX) 
 	$(CMAKE) --build $(BUILDDIR)  $(BUILDOPT) --target install 
 
 installLog := $(BUILDDIR)/install_manifest.txt
@@ -197,10 +194,9 @@ localinstall:
 # packaging
 #===============================================================
 package: PACK:=GuidoLib-$(VERSION)
-package: ../gmn-examples/examples
-	make install PREFIX=../$(PACK)
+package:
+	$(MAKE) -C ../environments/Qt
+	$(MAKE) cmake CMAKEOPT="-DPREFIX=../$(PACK)"
+	$(MAKE) install
 	hdiutil create $(PACK).dmg -fs HFS+ -srcfolder $(PACK) -format UDBZ -ov
-	rm -rf
-
-../gmn-examples/examples:
-	cd ../gmn-examples && svn checkout https://github.com/grame-cncm/guidodoc/trunk/examples/mkdocs/examples
+	@echo "Warning: package target has changed the install PREFIX"
