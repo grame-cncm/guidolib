@@ -395,7 +395,7 @@ void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBo
 	// -- Here we change the sharpness of the curve inflexion. 
     const float maxInflexion = 7;  // Max inflexion (for small arc)
     const float power = 600;        // Arbitrary, scale the arc size
-    const float arcWidth = sqrt(pow(startX-endX,2)+ pow(startY-endY,2));
+    const float arcWidth = (float)sqrt(pow(startX-endX,2)+ pow(startY-endY,2));
     bowInfos->inflexion = (maxInflexion-2) * exp( - arcWidth/power) + 2;
 
 	// -- Apply the new control point.

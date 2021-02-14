@@ -37,7 +37,7 @@ GRPageText::GRPageText ( const ARText * ar, GRPage * page, const char* txt, cons
 
 	fFontName   = ar->getFont();
 	fFontAttrib = ar->getTextAttributes();
-	fFontSize   = ar->getFSize();
+	fFontSize   = int(ar->getFSize());
 
 	fTextalign = VGDevice::kAlignLeft + VGDevice::kAlignTop;
 	const VGFont* myfont = FontManager::GetTextFont(ar, LSPACE, fTextalign);
