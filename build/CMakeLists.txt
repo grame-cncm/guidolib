@@ -229,15 +229,18 @@ target_link_libraries (${target} ${LINK})
 #######################################
 # install paths 
 # defined before loading subprojects
-if (APPLE OR WIN32)
+if (APPLE)
+set (CMAKE_INSTALL_PREFIX $ENV{HOME}/Guido-${VERSION})
 	set (CMAKE_INSTALL_PREFIX $ENV{HOME}/Guido-${VERSION})
+elseif(WIN32)
+	set (HOME $ENV{USERPROFILE})
+	string (REPLACE "\\" "/" UXHOME "${HOME}")
+	set (CMAKE_INSTALL_PREFIX ${UXHOME}/Guido-${VERSION})
 endif()
-if (DEFINED PREFIX)
-	set (CMAKE_INSTALL_PREFIX ${PREFIX})
-endif()
-
 if (PACK)
-set (CMAKE_INSTALL_PREFIX .)
+	set (CMAKE_INSTALL_PREFIX .)
+elseif (DEFINED PREFIX)
+	set (CMAKE_INSTALL_PREFIX ${PREFIX})
 endif()
 
 if (APPLE OR WIN32)
@@ -290,6 +293,11 @@ install ( TARGETS ${target}
     LIBRARY DESTINATION ${INSTALL_LIB} CONFIGURATIONS Release
     ARCHIVE DESTINATION ${INSTALL_LIB} CONFIGURATIONS Release
     FRAMEWORK DESTINATION ${INSTALL_LIB} CONFIGURATIONS Release
+    PUBLIC_HEADER DESTINATION ${INSTALL_INC}
+)
+
+install ( TARGETS ${target}
+	RUNTIME DESTINATION ${INSTALL_APPS} CONFIGURATIONS Release
     PUBLIC_HEADER DESTINATION ${INSTALL_INC}
 )
 
@@ -377,6 +385,7 @@ if (APPLE)
 elseif(WIN32)
 	file (GLOB QTAPPS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${QTBIN}/Guido*.exe")
 	file (GLOB QTTOOLS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${QTBIN}/guido2image.exe")
+	install ( PROGRAMS ${QTAPPS}  DESTINATION ${INSTALL_APPS})
 elseif(UNIX)
 	file (GLOB QTAPPS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${QTBIN}/Guido*")
 	file (GLOB QTTOOLS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${QTBIN}/guido2image")
@@ -394,11 +403,15 @@ install ( CODE "message (STATUS \"Call macdeployqt\")"
 )
 endif()
 
+set (PACKNAME GuidoLib-${VERSION})
 if(WIN32)
-install ( CODE "message (STATUS \"Call windeployqt\")"
-		  CODE "execute_process ( COMMAND macdeployqt ${INSTALL_APPS}/GuidoEditor.exe )"
-		  CODE "execute_process ( COMMAND macdeployqt ${INSTALL_APPS}/GuidoSceneComposer.exe )"
-)
+	if (PACK)
+		set  (INSTALL_APPS ${CMAKE_CURRENT_SOURCE_DIR}/guidodir/_CPack_Packages/win64/NSIS64/${PACKNAME}-win64)
+	endif()
+	install ( CODE "message (STATUS \"Call windeployqt\")"
+			  CODE "execute_process ( COMMAND windeployqt ${INSTALL_APPS}/GuidoEditor.exe )"
+			  CODE "execute_process ( COMMAND windeployqt ${INSTALL_APPS}/GuidoSceneComposer.exe )"
+	)
 endif()
 
 
@@ -415,13 +428,14 @@ set (CPACK_PACKAGE_VERSION_PATCH   ${VERSION_PATCH})
 
 set (CPACK_MONOLITHIC_INSTALL true)
 set (CPACK_RESOURCE_FILE_LICENSE  ${ROOT}/src/license.txt)
-set (CPACK_PACKAGE_INSTALL_DIRECTORY  GuidoLib)
+set (CPACK_PACKAGE_INSTALL_DIRECTORY  ${PACKNAME})
+set (CPACK_GENERATOR NSIS64)
+
 
 ####################################
 # NSIS specific section
 set (CPACK_NSIS_INSTALL_ROOT "C:\\\\Program Files")
 set (CPACK_NSIS_MODIFY_PATH on)
 set (CPACK_NSIS_MUI_ICON "${ROOT}/misc/logo.ico")
-#set (CPACK_NSIS_EXTRA_INSTALL_COMMANDS  " ExecWait ./bin/vcredist_x64.exe")
 
 include (CPack)
