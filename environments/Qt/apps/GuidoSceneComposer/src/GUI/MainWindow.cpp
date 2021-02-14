@@ -728,40 +728,29 @@ void MainWindow::exportRect(const QRectF& exportRectangle , const QString& fileN
 			image.fill( QColor(Qt::white).rgb() );
 			
 			painter.begin( &image );
-
 			//Paint in the QImage
 			paintSceneRect( exportRectangle , &painter );
-
 			painter.end();
-
 			image.save( fileName , "PNG" );
 		}
 	}
-	else if ( ( fileType == PDF_FILE_FILTER ) ) // || ( fileType == PS_FILE_FILTER ) )
+	else if (fileType == PDF_FILE_FILTER)
 	{
 		QPrinter printer;
 		printer.setFullPage(true);
 		printer.setOutputFileName( fileName );
-//		if ( fileType == PS_FILE_FILTER )
-//		{
-//			printer.setOutputFormat( QPrinter::PostScriptFormat );
-//		}
-//		else 
-		if ( fileType == PDF_FILE_FILTER )
-		{
-			printer.setOutputFormat( QPrinter::PdfFormat );
-		}
+		printer.setOutputFormat( QPrinter::PdfFormat );
 
+#ifdef QTSETPAGESIZE
+		printer.setPageSize( QPageSize(QSizeF(exportRectangle.width(), exportRectangle.height()), QPageSize::Millimeter ));
+#else
 		printer.setPaperSize( QSizeF( exportRectangle.width() , exportRectangle.height() ) , QPrinter::Millimeter );
+#endif
 		painter.setWindow( exportRectangle.toRect() );
-		
 		painter.begin( &printer );
-
 		paintSceneRect( exportRectangle , &painter );
-		
 		painter.end();
 	}
-
 	for ( int i = 0 ; i < selectedItems.size() ; i++ )
 		selectedItems[i]->setSelected(true);
 }

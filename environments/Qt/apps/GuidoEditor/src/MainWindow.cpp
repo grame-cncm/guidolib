@@ -15,7 +15,22 @@
 #include <fstream>
 #include <sstream>
 #include <iostream> 
-using namespace std;
+
+#include <QtGui>
+#include <QPrintDialog>
+#include <QPrinter>
+#include <QDockWidget>
+#include <QVariant>
+#include <QImage>
+#include <QProgressBar>
+#include <QDir>
+#include <QTextDocument>
+#include <QMessageBox>
+#include <QToolBar>
+
+#ifdef WIN32
+#pragma warning(disable:4996)
+#endif
 
 #include "MainWindow.h"
 #if dynamic_midi
@@ -33,18 +48,7 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #include "CodeEditor.h"
 
 
-#include <QtGui>
-#include <QPrintDialog>
-#include <QPrinter>
-#include <QDockWidget>
-#include <QVariant>
-#include <QImage>
-#include <QProgressBar>
-#include <QDir>
-#include <QTextDocument>
-#include <QMessageBox>
-#include <QToolBar>
-
+using namespace std;
 
 #ifdef Q_OS_MAC
 #include "CoreFoundation/CFBundle.h"
@@ -697,7 +701,11 @@ void MainWindow::exportToPdf(QGuidoPainter * guidoPainter, const QString& filena
 //	printer.setFullPage(true);
 	printer.setOutputFormat( QPrinter::PdfFormat );
 	printer.setOutputFileName( QString(filename) );
+#ifdef QTSETPAGESIZE
+	printer.setPageSize( QPageSize(QPageSize::A4) );
+#else
 	printer.setPaperSize( QPrinter::A4 );
+#endif
 	print (guidoPainter, printer);
 #endif
 }
@@ -832,7 +840,11 @@ void MainWindow::print()
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
 	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
 	{
+#ifdef QTSETPAGESIZE
+		printer.setPageSize( QPageSize(QPageSize::A4) );
+#else
 		printer.setPaperSize( QPrinter::A4 );
+#endif
 		QPrintDialog * dialog = new QPrintDialog( &printer , this);
 		dialog->setMinMax( 1 , guidoPainter->pageCount() );
 		dialog->setWindowTitle(tr("Print Score"));
