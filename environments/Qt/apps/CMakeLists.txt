@@ -80,7 +80,7 @@ set_target_properties (${guidoeditor} PROPERTIES
 set (guidosc GuidoSceneComposer)
 add_executable(${guidosc} ${GUIDOSCENECOMPOSER_EXE} ${GUIDOSCENECOMPOSER_SRC} ${GUIDOSCENECOMPOSER_HEADERS})
 target_include_directories (${guidosc} PRIVATE ${GUIDOSCENECOMPOSER_INCLUDE_DIRS} ${GUIDO_INCLUDE_DIRS})
-target_compile_definitions (${g2i} PRIVATE ${GUIDOSCENECOMPOSER_DEFINITIONS})
+target_compile_definitions (${guidosc} PRIVATE ${GUIDOSCENECOMPOSER_DEFINITIONS})
 target_link_libraries (${guidosc} PRIVATE ${GUIDOSCENECOMPOSER_LIBRARIES} ${GUIDO_LIBRARY})
 set_target_properties (${guidosc} PROPERTIES
 	INSTALL_RPATH ${GUIDODIR}/build/lib
