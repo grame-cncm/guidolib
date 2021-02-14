@@ -242,7 +242,7 @@ float GRMeter::DrawNumericSingle(VGDevice & hdc, const string& num, const string
 	float lspace = LSPACE;
 	float my = 2 * fCurLSPACE;			// the staff middle line
 	float hr = LSPACE / fCurLSPACE;		// a ratio to compensate the staff size and mTagSize
-	float space = 0.15 * fCurLSPACE;	// the space above and below the middle line
+	float space = 0.15f * fCurLSPACE;	// the space above and below the middle line
 	float y = my - space - fNumericHeight * mTagSize * hr;
 	DrawNumericSymbols (hdc, num.c_str(), xpos, y, mTagSize);
 	xpos = x + offsets.second;

@@ -174,7 +174,7 @@ void GRSingleRest::DrawMultiMeasuresCount( VGDevice & hdc, int count, float x, f
 	float dx = mrest->getDX()->getValue();
 	float dy = mrest->getDY()->getValue();
 	const TagParameterFloat* psize = mrest->getSize();
-	float size = psize ? psize->getValue() : 1.0;
+	float size = psize ? psize->getValue() : 1.0f;
 	const TagParameterString* pcolor = mrest->getColor();
 	VGColor savedColor = hdc.GetFontColor();
 	if (pcolor) {
@@ -203,10 +203,10 @@ void GRSingleRest::DrawMultiMeasuresRest( VGDevice & hdc, const ARMMRest* mrest 
 
 			float bx = fSecondbar->getPosition().x;
 			float x = getPosition().x;
-			float offset = bx - x - lspace*1.5;
+			float offset = bx - x - lspace*1.5f;
 			float x1 = x-offset + mOffset.x;
 			float x2 = x + offset + mOffset.x;
-			float h = mSize * LSPACE/2.3;
+			float h = mSize * LSPACE/2.3f;
 			float y = getPosition().y + lspace + mOffset.y;
 			hdc.Rectangle(x1, y-h, x2, y+h);
 
