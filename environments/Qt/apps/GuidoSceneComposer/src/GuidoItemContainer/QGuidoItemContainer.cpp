@@ -635,8 +635,11 @@ void QGuidoItemContainer::exportToPdf( QPrinter * printer )
 			
 	mGuidoItem->setPage(1);
 	QRectF firstPageRect = guidoItem()->boundingRect();
+#ifdef QTSETPAGESIZE
+	printer->setPageSize( QPageSize(QSizeF(firstPageRect.width(), firstPageRect.height()), QPageSize::Millimeter ));
+#else
 	printer->setPaperSize( QSizeF( firstPageRect.width() , firstPageRect.height() ) , QPrinter::Millimeter );
-
+#endif
 	QPainter painter;
 	painter.begin( printer );
 	
