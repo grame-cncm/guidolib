@@ -4,6 +4,7 @@
 #include <unistd.h>
 #else
 #include <io.h>
+#pragma warning(disable:4996)
 #endif
 
 #include <iostream>

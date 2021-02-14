@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#else
+#pragma warning(disable:4996)
 #endif
 
 #include <string.h>

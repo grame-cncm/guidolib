@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#else
+#pragma warning(disable:4996)
 #endif
 
 #include <string.h>
@@ -179,7 +181,7 @@ static bool decodehexa (const char* ptr, int& v)
 //---------------------------------------------------------------------------------------------
 static bool decodecolor (const char* ptr, int& r, int& g, int& b, int& a)
 {
-	int n = strlen(ptr);
+	size_t n = strlen(ptr);
 	if ((n != 6) && (n != 8)) return false;
 	if (n >= 6) {
 		if (!decodehexa (ptr++, r)) return false;
