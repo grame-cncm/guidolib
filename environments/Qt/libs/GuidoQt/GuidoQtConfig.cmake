@@ -8,9 +8,6 @@ set (GUIDODIR  	${CMAKE_CURRENT_LIST_DIR}/../../../..)
 find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
 set (QTINCDIRS 	${Qt5Widget_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
 
-if (${Qt5Widgets_VERSION} VERSION_GREATER_EQUAL "5.11")
-	set ( GUIDQOQT_DEFINITIONS -DQTFONTMETRICS_511)
-endif()
 
 #######################################
 # set sources and headers files

@@ -28,6 +28,7 @@
 
 #include <QVariant>
 #include <QtDebug>
+#include <QtGlobal>
 
 #include <assert.h>
 #include <iostream>
@@ -739,7 +740,7 @@ void setXY( float * x , float * y , int alignMode , const QFontMetrics& metrics 
 {
 	if ( alignMode == VGDevice::kAlignBaseLeft )
 		return;
-#if QTFONTMETRICS_511
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 	float w = metrics.horizontalAdvance( str );
 #else
 	float w = metrics.width( str );

@@ -11,36 +11,35 @@
  * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
  * research@grame.fr
  */
-#include "GraphicsSceneMainWindow.h"
 
-#include "QLanguageItem.h"
-#include "QLanguageItemFactory.h"
-
-#include "QItemResizer.h"
-
-#include "MainWindowObjects.h"
-#include "QLanguageCommandPalette.h"
-#include "QResolutionDialog.h"
-
-#include <math.h>
 #include <assert.h>
+#include <math.h>
 
-#include <QtGui>
-#include <QVBoxLayout>
-#include <QMessageBox>
+#include <QAbstractButton>
+#include <QApplication>
+#include <QDockWidget>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomText>
-#include <QGraphicsRectItem>
 #include <QFileDialog>
+#include <QGraphicsRectItem>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QPushButton>
 #include <QScrollBar>
 #include <QStatusBar>
-#include <QApplication>
-#include <QDockWidget>
-#include <QPushButton>
-#include <QAbstractButton>
-#include <QMenuBar>
 #include <QToolBar>
+#include <QVBoxLayout>
+#include <QtGlobal>
+#include <QtGui>
+
+#include "GraphicsSceneMainWindow.h"
+#include "MainWindowObjects.h"
+#include "QItemResizer.h"
+#include "QLanguageCommandPalette.h"
+#include "QLanguageItem.h"
+#include "QLanguageItemFactory.h"
+#include "QResolutionDialog.h"
 
 
 #define LANGUAGE_NAME_SHORT		GraphicsSceneMainWindow::applicationSettings().mLanguageNameShort
@@ -2420,7 +2419,7 @@ void putInFile( const QString& msg , const QString& fileName )
 	if (data.open(QFile::WriteOnly | QFile::Append | QFile::Text )) 
 	{
 		QTextStream out(&data);
-#ifdef USEQTENDL
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 		out << msg << Qt::endl;
 #else
 		out << msg << endl;

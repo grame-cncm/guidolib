@@ -15,14 +15,15 @@
 
 #include <QFontMetrics>
 #include <iostream>
+#include <QtGlobal>
 
-using namespace std;
-
-#if QTFONTMETRICS_511
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
  #define width(metrics, str) metrics.horizontalAdvance( str )
 #else
  #define width(metrics, str) metrics.width( str )
 #endif
+
+using namespace std;
 
 //------------------------------------------------------------------------
 GFontQt::GFontQt( QFont * nativeFont, const char* name, int size, int properties)
