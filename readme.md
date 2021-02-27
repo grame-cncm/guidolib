@@ -6,9 +6,10 @@ The Guido project is an open source project that encompasses a music notation fo
 
 The Guido engine runs on the main operating systems: Linux, MacOS, iOS, Windows, Android.
 
-See [Guido page](http://guidolib.sourceforge.net/) for more information.
-
-See [Guido wiki](https://github.com/grame-cncm/guidolib/wiki) for building instructions.
+See the [Guido page](http://guido.grame.fr/) for more information.  
+See the [Guido documentation](http://guidodoc.grame.fr/) for the Guido language documentation.  
+See the [Guido online editor](http://guidoeditor.grame.fr/) to test the system.  
+See the [Guido wiki](https://github.com/grame-cncm/guidolib/wiki) for building instructions.
 
 
 -------------
