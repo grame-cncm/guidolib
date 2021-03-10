@@ -45,7 +45,7 @@ class ARMusicalVoiceState;
 @param:clefKeyMeterOrder:boolean:variant for autoClefKeyMeterOrder:on:true
 
 @param:autoLyricsPos:boolean:automatic collision avoidance for \lyrics:off:true
-@param:lyricsAutoPos:boolean:ariant for autoLyricsPos:off:true
+@param:lyricsAutoPos:boolean:variant for autoLyricsPos:off:true
 
 @param:autoInstrPos:boolean:automatic positionning for \instr:off:true
 @param:instrAutoPos:boolean:variant for autoInstrPos:off:true
