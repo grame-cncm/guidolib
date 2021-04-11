@@ -1,7 +1,7 @@
 (*
-# Bela Bartock
+# Béla Bartók
 
-Bela Bartock - Romanian Folk Dance No2
+Béla Bartók - Romanian Folk Dance No2
 
 \newSystem is used to enforced the source layout.
 
@@ -12,7 +12,7 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BartokB/rom_folk_da
 		\pageFormat<"A4", tm=5cm, bm=2cm>
 		\title<"Romanian Folk Dance No2">
 		\title<"Peasant Costume", dy=-8, fsize=18pt>
-		\composer<"Bela Bartock (1881-1945)", dy=9>
+		\composer<"Béla Bartók (1881-1945)", dy=9>
 		\systemFormat< dx=2cm> \barFormat<"system">
 
 		\clef<"g"> \meter<"2/4", autoMeasuresNum="system"> 
