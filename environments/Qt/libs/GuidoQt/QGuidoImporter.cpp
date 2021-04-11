@@ -15,7 +15,8 @@
 #include "QGuidoImporter.h"
 
 #if __APPLE__
-# define musicxmllib	"libmusicxml2.framework/libmusicxml2"
+//# define musicxmllib	"libmusicxml2.framework/libmusicxml2"
+# define musicxmllib	"libmusicxml2"
 #elif defined(WIN32)
 # define musicxmllib	"libmusicxml2"
 #else
