@@ -18,7 +18,7 @@
 //# define musicxmllib	"libmusicxml2.framework/libmusicxml2"
 # define musicxmllib	"libmusicxml2"
 #elif defined(WIN32)
-# define musicxmllib	"libmusicxml2"
+# define musicxmllib	"musicxml2"
 #else
 # define musicxmllib	"libmusicxml2"
 #endif
