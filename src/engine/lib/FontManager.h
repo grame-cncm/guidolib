@@ -20,12 +20,12 @@
 #include "VGSystem.h"
 
 #ifdef SMUFL
-#define kMusicFontStr	"Bravura"
 #define TIMESIGSPACE	6
 #else
-#define kMusicFontStr	"Guido2"
 #define TIMESIGSPACE	0
 #endif
+
+extern const char* kMusicFontStr;
 
 class VGFont;
 class ARFontAble;

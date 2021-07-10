@@ -29,6 +29,12 @@ const VGFont *	FontManager::gFontText   = 0;
 string	FontManager::kDefaultMusicFont = kMusicFontStr;
 string	FontManager::kDefaultTextFont  = "Times";
 
+#ifdef SMUFL
+const char* kMusicFontStr = "Bravura";
+#else
+const char* kMusicFontStr = "Guido2";
+#endif
+
 // ===========================================================================
 // 		FontInfo
 // ===========================================================================
@@ -143,6 +149,7 @@ const VGFont* FontManager::FindOrCreateFont( int size, const char* name, const c
 		sys = gGlobalSettings.gDevice->getVGSystem();
 	const VGFont* font = FindOrCreateFont (sys, size, name, attributes);
 	if (!font) {											// font not found
+		
 		if (kMusicFontStr != name) 							// if not the music font
 			font = FindOrCreateFont (sys, size, kDefaultTextFont.c_str(), attributes);
 	}
