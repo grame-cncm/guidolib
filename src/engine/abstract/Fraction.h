@@ -53,6 +53,8 @@ class Fraction
 		bool 	isOdd() const;
 		bool	isEven() const;
 
+		void 	add (const Fraction &tmp); // non normalized addition
+
       Fraction getBiggestFullNote(int exp) const;
       Fraction getReallySmallerNote(int exp) const;
 

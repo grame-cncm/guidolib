@@ -252,16 +252,27 @@ bool Fraction::operator <=(const Fraction &tmp) const
 }
 */
 
-Fraction & Fraction::operator +=(const Fraction & inValue)
+void Fraction::add (const Fraction &inValue)
 {
-	// smallest common multiple 
 	const long long scmv = scm( inValue.denominator, denominator );
 	const long long mul1 = scmv / denominator;
 	const long long mul2 = scmv / inValue.denominator;
 
 	numerator = numerator * mul1 + inValue.numerator * mul2;
 	denominator = scmv;
-	// done by normalize: dval = numerator / (double)denominator;
+}
+
+Fraction & Fraction::operator +=(const Fraction & inValue)
+{
+	add (inValue);
+//	// smallest common multiple 
+//	const long long scmv = scm( inValue.denominator, denominator );
+//	const long long mul1 = scmv / denominator;
+//	const long long mul2 = scmv / inValue.denominator;
+//
+//	numerator = numerator * mul1 + inValue.numerator * mul2;
+//	denominator = scmv;
+//	// done by normalize: dval = numerator / (double)denominator;
 	normalize();
 	return (*this);
 }
