@@ -69,6 +69,15 @@ GRMeter::GRMeter( const ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
 			mPosition.y += fCurLSPACE * linesOffset / 2;
 	}
 }
+
+// -----------------------------------------------------------------------------
+void GRMeter::setHPosition( float inX )
+{
+	GRTagARNotationElement::setHPosition(inX);
+	mMapping = mBoundingBox;
+	mMapping += mPosition + getOffset();
+}
+
 // -----------------------------------------------------------------------------
 void GRMeter::accept (GRVisitor& visitor)
 {
@@ -306,3 +315,12 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 //-------------------------------------------------------------------------------------
 const ARMeter*	GRMeter::getARMeter() const		{ return static_cast<const ARMeter*>(getAbstractRepresentation()); }
 
+
+// ----------------------------------------------------------------------------
+/** \brief Retrieves the mapping
+*/
+void GRMeter::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kMeterSel)
+		SendMap (f, getRelativeTimePosition(), getDuration(), kMeter, infos);
+}

@@ -22,6 +22,7 @@
 #include "GRDefine.h"
 #include "GRMusic.h"
 #include "FontManager.h"
+#include "TagParameterFloat.h"
 
 #include "VGDevice.h"
 
@@ -204,6 +205,12 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 	// this can only be done ONCE (during construction)
 	mTagSize *= curstaff->getSizeRatio();
 
+	float h = mBoundingBox.Height();
+	float hr = h * mTagSize;
+	float diff = (hr - h)/2;
+	mBoundingBox.top -= diff;
+	mBoundingBox.bottom += diff;
+
 	// this information must be read from the font (or a table/map) ....
 	// this is static information!
 	// reference-positions are also always according to STANDARD-size characters (staffFormat 3pt per Halfspace)
@@ -253,6 +260,17 @@ void GRClef::setHPosition( float inX )
 {
 //	cerr << (void*)this << " GRClef::setHPosition " << inX << endl;
 	GRTagARNotationElement::setHPosition(inX);
+	mMapping = mBoundingBox;
+	mMapping += mPosition + getOffset();
+}
+
+// ----------------------------------------------------------------------------
+/** \brief Retrieves the mapping
+*/
+void GRClef::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
+{
+	if (sel == kClefSel)
+		SendMap (f, getRelativeTimePosition(), getDuration(), kClef, infos);
 }
 
 // -----------------------------------------------------------------------------

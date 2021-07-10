@@ -49,7 +49,8 @@ public:
 	int getBaseLine() const					{ return mClefStaffLine; }
 
 	virtual void setHPosition( float inX );
-
+	virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+	
 protected:
 
 	TYPE_PITCH 		mClefBasePitch;

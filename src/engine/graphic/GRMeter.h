@@ -37,6 +37,8 @@ class GRMeter : public GRTagARNotationElement
 		virtual void	OnDraw(VGDevice & hdc ) const;
 		virtual bool	checkCollisionWith() const	{ return true; }
 		virtual void	accept (GRVisitor& visitor);
+		virtual void 	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void 	setHPosition( float inX );
 	
 		const ARMeter*	getARMeter() const;
 
