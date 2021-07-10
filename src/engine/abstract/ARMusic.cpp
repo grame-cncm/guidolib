@@ -417,7 +417,7 @@ void ARMusic::doOctavaCheck()
 	GuidoPos pos = GetHeadPosition();
 	while (pos) {
 		ARMusicalVoice * arvc = GetNext(pos);
-		arvc->doOctavaCheck(num++, map);
+		arvc->getOctava(num++, map);
 	}
 	
 	for (auto elt: map) {
