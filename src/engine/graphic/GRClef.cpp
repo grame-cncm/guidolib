@@ -205,12 +205,6 @@ GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 	// this can only be done ONCE (during construction)
 	mTagSize *= curstaff->getSizeRatio();
 
-	float h = mBoundingBox.Height();
-	float hr = h * mTagSize;
-	float diff = (hr - h)/2;
-	mBoundingBox.top -= diff;
-	mBoundingBox.bottom += diff;
-
 	// this information must be read from the font (or a table/map) ....
 	// this is static information!
 	// reference-positions are also always according to STANDARD-size characters (staffFormat 3pt per Halfspace)
@@ -261,6 +255,11 @@ void GRClef::setHPosition( float inX )
 //	cerr << (void*)this << " GRClef::setHPosition " << inX << endl;
 	GRTagARNotationElement::setHPosition(inX);
 	mMapping = mBoundingBox;
+	float h = mBoundingBox.Height();
+	float hr = h * mTagSize;
+	float diff = (hr - h)/2;
+	mMapping.top -= diff;
+	mMapping.bottom += diff;
 	mMapping += mPosition + getOffset();
 }
 
