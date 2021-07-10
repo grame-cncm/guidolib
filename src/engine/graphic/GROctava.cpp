@@ -27,6 +27,7 @@
 #include "GRSpecial.h"
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
+#include "TagParameterFloat.h"
 
 using namespace std;
 
@@ -53,6 +54,8 @@ GROctava::GROctava( GRStaff * staff, const NVstring & text, const AROctava* ar, 
 	mBoundingBox.left -= (GCoord)(LSPACE/4);
 	mBoundingBox.bottom = (GCoord)(4*LSPACE);
 	fTextHeight = y; // - 10;
+	fHidden = ar->getHidden();
+	fDy = ar->getDY()->getValue();
 }
 
 GROctava::~GROctava()
@@ -136,6 +139,7 @@ int GROctava::countSegments()
 	if (fSegmentsCount) return fSegmentsCount;
 	float currentXPos = 0;
 	int fSegmentsCount = 1;
+	if (!getAssociations()) return 0;
 	GuidoPos pos = getAssociations()->GetHeadPosition();
 	while (pos) {
 		const GRNotationElement* el = getAssociations()->GetNext(pos);
@@ -152,7 +156,8 @@ int GROctava::countSegments()
 //---------------------------------------------------------------------------------
 void GROctava::OnDraw( VGDevice & hdc) const
 {
-	if (fText.empty()) return;		// nothing to draw
+	if (fText.empty()) 	return;		// nothing to draw
+	if (fHidden) 		return;		// nothing to draw
 
 	static int drawingstate = 0;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
@@ -176,7 +181,7 @@ void GROctava::OnDraw( VGDevice & hdc) const
 		hdc.SetFontColor(color);
 	}
 	if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
-		NVPoint pos (r.left - fStaff->getStaffLSPACE(), r.top);
+		NVPoint pos (r.left - fStaff->getStaffLSPACE(), r.top - fDy);
 		pos.y += fBassa ? -5 : fTextHeight - 5;
 		OnDrawText(hdc, pos, fText.c_str(), int(fText.length()) );
 	}
@@ -188,9 +193,10 @@ void GROctava::OnDraw( VGDevice & hdc) const
 	float xEnd = r.right;
 	float linespace = drawingstate ? 0 : fStaff->getStaffLSPACE() / 4;
 	while (xEnd >= (xStart + linespace)) {
+		float y = r.top - fDy;
 		if ((xEnd == r.right) && endSegment)		// is it the last extension line ?
-			hdc.Line(xEnd, r.top, xEnd, fBassa ? r.top - space : r.top + space);
-		hdc.Line(xEnd - space, r.top, xEnd, r.top);
+			hdc.Line(xEnd, y, xEnd, fBassa ? y - space : y + space);
+		hdc.Line(xEnd - space, y, xEnd, y);
 		xEnd -= 2.5f * space;
 	}
 	hdc.PopPenWidth();

@@ -47,7 +47,9 @@ class GROctava : public GRARNotationElement, public GRPositionTag
 		GRStaff *	fStaff;
 		NVstring 	fText;
 		bool		fBassa;
+		bool		fHidden;
 		float		fTextHeight;
+		float		fDy;
 		int			fSegmentsCount;
 };
 

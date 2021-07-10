@@ -19,6 +19,7 @@
 #include "ARPositionTag.h"
 
 class TagParameterInt;
+class TagParameterString;
 
 /*@mkdoc
 
@@ -33,6 +34,7 @@ class TagParameterInt;
 
 @params:
 @param:i:integer:a signed number of octaves (up or down):*none*:false
+@param:hidden:bool:hides the octava sign:false:true
 @paramdesc
 @paramend
 
@@ -42,6 +44,10 @@ class TagParameterInt;
 */
 class AROctava : public ARMTParameter, public ARPositionTag
 {
+	const TagParameterInt * fOctava = nullptr;
+	bool 					fHidden = false;
+	TYPE_TIMEPOSITION		fEnd = 0;
+
 	public:
 					 AROctava(const AROctava * p_saveoct = NULL, const AROctava * copyoct = NULL);
 		virtual		~AROctava() {}
@@ -50,14 +56,18 @@ class AROctava : public ARMTParameter, public ARPositionTag
 
 		virtual ARMusicalObject * getEndTag() const { return new AROctava(NULL, fSaveoct); }
 
-		virtual const TagParameterInt * getTPOctava() const; // { return fOctave; }
-		virtual int getOctava() const;
+		virtual void 	setTagParameters(const TagParameterMap & params);
+		virtual int 	getOctava() const;
+		virtual bool 	getHidden() const	{ return fHidden; }
 
 		virtual const char*	getParamsStr() const	{ return kAROctavaParams; };
 		virtual const char*	getTagName() const		{ return "AROctava"; };
 		virtual std::string getGMNName() const		{ return "\\octava"; };
 
 		virtual AROctava*	isAROctava()		  { return this; }
+		
+		void 				setEnd (TYPE_TIMEPOSITION pos) 		{ fEnd = pos; }
+		TYPE_TIMEPOSITION 	getEnd () const 					{ return fEnd; }
 
 	private:
 		const AROctava *			fSaveoct; // this is required to save the current octava state ...

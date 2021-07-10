@@ -15,8 +15,9 @@
 #include <iostream>
 
 #include "AROctava.h"
-#include "TagParameterStrings.h"
 #include "TagParameterInt.h"
+#include "TagParameterString.h"
+#include "TagParameterStrings.h"
 
 
 AROctava::AROctava(const AROctava * p_saveoct, const AROctava * copyoct)
@@ -31,12 +32,13 @@ AROctava::AROctava(const AROctava * p_saveoct, const AROctava * copyoct)
 
 int AROctava::getOctava() const
 {
-	const TagParameterInt * oct = getTPOctava();
-	return oct ? oct->getValue() : 0;
+	return fOctava ? fOctava->getValue() : 0;
 }
 
-const TagParameterInt * AROctava::getTPOctava() const
+void AROctava::setTagParameters(const TagParameterMap & params)
 {
-	return getParameter<TagParameterInt>(kIStr);
+	fOctava = getParameter<TagParameterInt>(kIStr);
+	const TagParameterString* str = getParameter<TagParameterString>(kHiddenStr);
+	if (str)
+		fHidden = str->getBool();
 }
-
