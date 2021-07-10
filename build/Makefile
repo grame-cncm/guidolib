@@ -42,7 +42,7 @@ $(PROJ) : CMakeLists.txt
 	$(MAKE) cmake
 
 cmake : $(BUILDDIR) $(MSLIGHT)/MidiShareLight.h
-	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT)
+	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT) $(GENERATOR)
 
 $(MSLIGHT)/MidiShareLight.h:
 	git submodule update --init
