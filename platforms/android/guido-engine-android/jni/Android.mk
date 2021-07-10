@@ -13,8 +13,8 @@ LOCAL_SRC_FILES         := $(subst $(LOCAL_PATH)/,,$(wildcard $(SRC)/*/*.cpp))
 LOCAL_EXPORT_C_INCLUDES := $(addprefix $(SRC)/, include devices lib)
 LOCAL_C_INCLUDES        := $(subst $(LOCAL_PATH)/../,,$(wildcard $(SRC)/*/))
 LOCAL_CPPFLAGS          := -Dandroid -frtti -DINDEPENDENTSVG -fexceptions
-LOCAL_CPP_FEATURES 	+= exceptions
-LOCAL_LDLIBS 		+= -latomic
+LOCAL_CPP_FEATURES 		+= exceptions
+#LOCAL_LDLIBS 		+= -latomic
 
 include $(BUILD_SHARED_LIBRARY)
 
