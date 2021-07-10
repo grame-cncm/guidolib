@@ -65,6 +65,8 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 protected:
 
     void doAutoBreaks();
+	// check multiple octava on multiple voice, same staff
+	void doOctavaCheck();
 
     NVstring mName;
     std::vector<std::string> mPaths;

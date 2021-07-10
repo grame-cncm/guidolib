@@ -18,6 +18,7 @@
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
+#include "AROctava.h"
 #include "MeterVisitor.h"
 #include "TempoVisitor.h"
 #include "TimeMapper.h"
@@ -399,9 +400,36 @@ void ARMusic::doAutoStuff()
 		ARMusicalVoice * arvc = GetNext(pos);
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
+	// check multiple octava on multiple voice, same staff
+//	timebench("doOctavaCheck", doOctavaCheck());
 
 //	GMNCodePrintVisitor v(cerr);
 //	this->accept (v);
+}
+
+//____________________________________________________________________________________
+/** \brief check multiple octava on multiple voice, same staff
+*/
+void ARMusic::doOctavaCheck()
+{
+	int num = 1;
+	map<int, vector<AROctava*> > map;
+	GuidoPos pos = GetHeadPosition();
+	while (pos) {
+		ARMusicalVoice * arvc = GetNext(pos);
+		arvc->doOctavaCheck(num++, map);
+	}
+	
+	for (auto elt: map) {
+		if (elt.second.size() > 1) {
+cerr << "ARMusic::doOctavaCheck check dup on staff " << elt.first << endl;
+			for (AROctava* o: elt.second) {
+cerr << "	- date: " << o->getRelativeTimePosition() << " end: " << o->getEnd() << endl;
+				
+			}
+		}
+		
+	}
 }
 
 /** \brief Removes tags that were added automatically

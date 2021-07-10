@@ -15,6 +15,7 @@
 
 */
 
+#include <map>
 #include <vector>
 
 #include "ObjectList.h"
@@ -202,6 +203,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void doAutoFeatheredBeam();
 
 		void doMicroTonal();
+		void getOctava(int voice, std::map< int, std::vector<AROctava*> >& list);
 
 		void CloseBase			( ARBase * curbase, ARTuplet * autotuplet, GuidoPos lastevpos, GuidoPos FLA);
 		void ReplacePositionTag	( const ARPositionTag * ptold, ARPositionTag * ptnew, ARMusicalVoiceState & vst, const char * endtagname = 0 );

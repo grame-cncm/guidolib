@@ -1021,6 +1021,39 @@ void ARMusicalVoice::doMicroTonal()
 }
 
 //____________________________________________________________________________________
+/** \brief collects octava with their associated staff
+*/
+void ARMusicalVoice::getOctava(int voice, std::map< int, std::vector<AROctava*> >& list)
+{
+cerr << "ARMusicalVoice::getOctava " << voice << endl;
+	setReadMode (EVENTMODE);
+	
+	int curstaff = voice;
+	AROctava * last = nullptr;
+	ARMusicalVoiceState vst;
+	
+	GuidoPos pos = GetHeadPosition(vst);
+	while (pos) {
+		ARMusicalObject * o = GetNext(pos, vst);
+        AROctava * oct	= o->isAROctava();
+
+		if (oct) {
+			if (oct->getOctava()) {
+				list[curstaff].push_back(oct);
+				last = oct;
+			}
+			else if (last) {
+				last->setEnd(oct->getRelativeTimePosition());
+				last = nullptr;
+			}
+		}
+
+        const ARStaff * staff	= static_cast<const ARStaff *>(o->isARStaff());
+        if (staff) curstaff = staff->getStaffNumber();
+	}
+	setReadMode (CHORDMODE);
+}
+//____________________________________________________________________________________
 /** \brief doAutoStuff1 does automatic Bar-Line-introduction
 */
 void ARMusicalVoice::doAutoStuff1()
