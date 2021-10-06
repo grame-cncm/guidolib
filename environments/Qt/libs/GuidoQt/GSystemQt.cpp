@@ -11,6 +11,15 @@
  * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
  * research@grame.fr
  */
+
+#include <QtGlobal>
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#define Qt6 true
+#else
+#define Qt6 false
+#endif
+
 #include "GDeviceQt.h"
 #include "GFontQt.h"
 #include "GSystemQt.h"
@@ -67,7 +76,11 @@ VGDevice*		GSystemQt::CreateMemoryDevice( const char * inPath)
 	}
 
     QPainter * mQPainter = new QPainter(new QImage (qImage.convertToFormat (QImage::Format_ARGB32)));
+#if Qt6
+	mQPainter->setRenderHints (QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+#else
 	mQPainter->setRenderHints (QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
+#endif
 	memDevice = new GDeviceQt(mQPainter, this);
 	
 #else

@@ -46,7 +46,7 @@ public:
 	QFont * GetNativeFont() const { return mNativeFont; }
 
 	/// Returns the symbol corresponding to the input index.
-	QChar Symbol(unsigned int sym) const	{ return sym; }
+	QChar Symbol(unsigned int sym) const	{ return QChar(sym); }
 
 protected:
 	QFont * mNativeFont;
