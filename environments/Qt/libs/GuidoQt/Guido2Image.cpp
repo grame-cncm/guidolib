@@ -239,7 +239,7 @@ Guido2ImageErrorCodes Guido2Image::guidoPainterToImage(QGuidoPainter * guidoPain
 
 #define PDF_FORMAT				QString(".pdf")
 //----------------------------------------------------------------------------
-#ifdef IOS
+#if defined(IOS) || defined(INSCORE_IOS)
 Guido2ImageErrorCodes Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fname )
 {
 	return GUIDO_2_IMAGE_OUTPUT_IS_NULL;
