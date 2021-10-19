@@ -22,8 +22,10 @@ android :
 	@echo "### Android platform is android-$(PLATFORM)"
 	@echo "### Use PLATFORM=xx to change"
 	ndk-build -C guido-engine-android -j $(J) APP_PLATFORM=android-$(PLATFORM)
-	cp guido-engine-android/libs/armeabi-v7a/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine.armeabi-v7a.so
-	cp guido-engine-android/libs/x86/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine.x86.so
+	cp guido-engine-android/libs/armeabi-v7a/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine_armeabi-v7a.so
+	cp guido-engine-android/libs/x86/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine_x86.so
+	cp guido-engine-android/libs/arm64-v8a/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine_arm64-v8a.so
+	cp guido-engine-android/libs/x86_64/libGUIDOEngine.so $(ROOT)/build/lib/libGUIDOEngine_x86_64.so
 
 clean:
 	cd guido-engine-android && rm -rf obj libs
