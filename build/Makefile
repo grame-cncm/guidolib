@@ -18,6 +18,9 @@ else
 endif
 endif
 
+INSTALLPREFIX := $(if $(PREFIX), -DPREFIX=$(PREFIX))
+
+
 MAKE     ?= make
 CMAKE    ?= cmake
 BUILDDIR ?= guidodir
@@ -42,7 +45,7 @@ $(PROJ) : CMakeLists.txt
 	$(MAKE) cmake
 
 cmake : $(BUILDDIR) $(MSLIGHT)/MidiShareLight.h
-	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT) $(GENERATOR)
+	cd $(BUILDDIR) && $(CMAKE) .. $(CMAKEOPT) $(INSTALLPREFIX) $(GENERATOR)
 
 $(MSLIGHT)/MidiShareLight.h:
 	git submodule update --init
