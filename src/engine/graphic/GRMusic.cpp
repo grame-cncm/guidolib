@@ -719,28 +719,6 @@ int GRMusic::getVoiceNum(ARMusicalVoice * arv) const
 }
 
 // --------------------------------------------------------------------------
-void GRMusic::getGuido() const
-{
-	const ARMusic * arm = getconstARMusic();
-
-	ostringstream os;		// was ostrstream os; (deprecated)
-
-  // no AUTO-tags !
-    arm->print(os);
-	size_t charCount = os.str().size(); // was: os.pcount();
-	char * s = new char[ charCount +  2];
-
-	const char * guidoString = os.str().c_str();
-	if( guidoString && charCount)
-		strncpy( s, guidoString, charCount );
-
-	s[ charCount ] = '\n';
-	s[ charCount ] = 0;
-
-  delete [] s;
-}
-
-// --------------------------------------------------------------------------
 /** \brief Not yet implemented.
 */
 void GRMusic::MarkVoice(int voicenum, int numfrom, int denomfrom, int numlength, int denomlength, unsigned char red, unsigned char green, unsigned char blue)

@@ -47,7 +47,6 @@ class GRMusic : public GREvent
 		virtual ~GRMusic();
 
 				void 		startNewSystem( GRSystem * grsystem );
-		virtual void 		getGuido() const;
 	 	 		void 		setName( const char * in )	 { mName = in; }
 	  			const 		NVstring & getName();
 
