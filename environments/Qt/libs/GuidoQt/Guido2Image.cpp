@@ -23,7 +23,9 @@
 #include <string>
 
 #include <QPainter>
+#if !defined(__MOBILE__)
 #include <QPrinter>
+#endif
 #include <QImage>
 #include <QRectF>
 #include <QRect>
@@ -239,8 +241,13 @@ Guido2ImageErrorCodes Guido2Image::guidoPainterToImage(QGuidoPainter * guidoPain
 
 #define PDF_FORMAT				QString(".pdf")
 //----------------------------------------------------------------------------
-#if defined(IOS) || defined(INSCORE_IOS)
+#if defined(__MOBILE__)
 Guido2ImageErrorCodes Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fname )
+{
+	return GUIDO_2_IMAGE_OUTPUT_IS_NULL;
+}
+
+Guido2ImageErrorCodes Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, PianoRoll *pianoRoll, int width, int height)
 {
 	return GUIDO_2_IMAGE_OUTPUT_IS_NULL;
 }

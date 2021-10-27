@@ -22,7 +22,9 @@
 #include <QPainter>
 #include <QPaintDevice>
 #include <QWidget>
+#ifndef __MOBILE__
 #include <QPrinter>
+#endif
 #include <QImage>
 #include <QBuffer>
 
@@ -902,7 +904,7 @@ unsigned int GDeviceQt::GetFontAlign() const
 //--------------------------------------------------------------------
 void GDeviceQt::SetDPITag( float )
 {
-#if !defined(IOS) && !defined(INSCORE_IOS)
+#if !defined(__MOBILE__)
 	QPrinter * device = dynamic_cast<QPrinter *>( mQPainter->device() );
 	if ( device != 0 )
 	{
@@ -914,7 +916,7 @@ void GDeviceQt::SetDPITag( float )
 //--------------------------------------------------------------------
 float GDeviceQt::GetDPITag()const
 {  
-#if !defined(IOS) && !defined(INSCORE_IOS)
+#if !defined(__MOBILE__)
 	QPrinter * device = dynamic_cast<QPrinter *>( mQPainter->device() );
 	if ( device != 0 )
 	{
