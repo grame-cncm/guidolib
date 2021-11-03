@@ -76,11 +76,7 @@ VGDevice*		GSystemQt::CreateMemoryDevice( const char * inPath)
 	}
 
     QPainter * mQPainter = new QPainter(new QImage (qImage.convertToFormat (QImage::Format_ARGB32)));
-#if Qt6
 	mQPainter->setRenderHints (QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
-#else
-	mQPainter->setRenderHints (QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
-#endif
 	memDevice = new GDeviceQt(mQPainter, this);
 	
 #else
