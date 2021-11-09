@@ -155,7 +155,7 @@ android :
 #===============================================================
 ios : iosdir/guidolib.xcodeproj
 	git submodule update --init
-	cd iosdir && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine 
+	cd iosdir && $(CMAKE) --build .  $(BUILDOPT) --target GUIDOEngine -- OTHER_CFLAGS="-fembed-bitcode"
 
 iosdir/guidolib.xcodeproj:
 	@[ -d iosdir ] || mkdir iosdir
