@@ -33,7 +33,7 @@ ifeq ($(SMUFL), yes)
 endif
 
 OPT ?= -O3
-CXXFLAGS += $(addprefix -I, $(subprojects)) $(SMUFLDEF) -DMSLIGHT -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM $(OPT) -std=c++11
+CXXFLAGS += $(addprefix -I, $(subprojects)) $(SMUFLDEF) -DMSLIGHT -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM $(OPT) -std=c++11 --llvm-opts "['-O3']"
 
 
 library = libGUIDOEngine
@@ -41,8 +41,7 @@ target = $(library).js
 
 
 OPTIONS :=  -s ALLOW_MEMORY_GROWTH=1 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0 -s MODULARIZE=1 -s EXPORT_NAME="'GuidoModule'"
-
-OPT1    := -O3 --bind --memory-init-file 0
+OPT1    := -O3 --bind --memory-init-file 0 --llvm-opts "['-O3']"
 
 all: $(library).js
 
