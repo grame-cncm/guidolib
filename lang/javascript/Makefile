@@ -53,7 +53,7 @@ help :
 	@echo "   clean        : remove objects and output files"	
 	@echo "   depend       : recompute dependencies"	
 	@echo "   test         : run API tests"	
-	@echo "   npm          : publish to npm (use with caution),"	
+	@echo "   publish      : publish to npm (use with caution),"	
 	@echo "                  check the npm folder."	
 	@echo "Options:"
 	@echo "   SMUFL   use SMUFL Bravura font when set to 'yes' (default is $(SMUFL))"
@@ -78,9 +78,20 @@ test: $(npmdir)/$(library).js $(npmdir)/$(library).wasm
 ##############################################################
 # publishing to npm
 ##############################################################
-npm: $(npmdir)/$(library).js $(npmdir)/$(library).wasm $(webfont)
-	npm publish $(npmdir) --access public
-	@echo "Guido Engine version " $(shell grep version $(npmdir)/package.json | cut -d: -f 2) "published"
+publish: VERSION := $(shell grep '"version"' $(npmdir)/package.json | sed -e 's/[^0-9.]*//g')
+publish: GVERSION := $(shell grep '"engine-version"' $(npmdir)/package.json | sed -e 's/[^0-9.]*//g')
+publish: $(npmdir)/$(library).js $(npmdir)/$(library).wasm $(webfont)
+	@echo "You are about to publish the Guido Engine package v.$(VERSION) on npm."
+	@echo "Engine version $(GVERSION)."
+	@echo "Make sure you are logged in (npm login)"
+	@read -p "Continue [y|n]: " answer && [ $$answer == "y" ]
+	cd npm && npm publish --access public
+	@echo "Guido Engine version " $(VERSION) " published"
+
+# 
+# publish: $(npmdir)/$(library).js $(npmdir)/$(library).wasm $(webfont)
+# 	npm publish $(npmdir) --access public
+# 	@echo "Guido Engine version " $(shell grep version $(npmdir)/package.json | cut -d: -f 2) "published"
 	
 $(npmdir)/$(library).js : $(library).js
 	cp $(library).js $(npmdir)/$(library).js
