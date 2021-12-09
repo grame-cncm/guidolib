@@ -140,7 +140,7 @@ class GREvent : public GRARCompositeNotationElement
 		virtual const GREvent *	isGREvent() const		{ return this; }
 		virtual 	  GREvent *	isGREvent() 			{ return this; }
 
-		GRNoteDot *		getDot();
+		GRNoteDot *		getDot() const;
 
   protected:
 		int		mArticulationFlags;
@@ -163,5 +163,3 @@ class GREvent : public GRARCompositeNotationElement
 };
 
 #endif
-
-

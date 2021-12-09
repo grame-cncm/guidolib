@@ -148,7 +148,7 @@ NVPoint GREvent::getCrescEnd()	// may be obsolete
 // ----------------------------------------------------------------------------
 /** \brief Looks for a dot in the notation elements list.
 */
-GRNoteDot * GREvent::getDot()
+GRNoteDot * GREvent::getDot() const
 {
 	GuidoPos pos = First();
 	GRNotationElement * e;
