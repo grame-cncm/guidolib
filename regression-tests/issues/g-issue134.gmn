@@ -1,0 +1,27 @@
+(*
+	issue #134
+	incorrect octava rendering with new line
+*)
+
+{[ \accol<id=0, range="1-2"> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<-3> \meter<"2/4">   b&0/16 d1 f a& b& d f a&  \bar<measNum=2> 
+   (* meas. 2 *)    b&2  d3 f a& 
+				\oct<1> b& d4 f a&  \bar<measNum=3> 
+   (* meas. 3 *)    b& a& f 
+				\oct<0> d3 b& a& f d \bar<measNum=4> 
+   (* meas. 4 *)    b&2 a& f d b&1 a& f d \bar<measNum=5> 
+   (* meas. 5 *)   \beamsOff b&0/2 
+]
+ , 
+[  
+   (* meas. 1 *)  \clef<"f4"> \key<-3> \meter<"2/4">   
+	b&-1/16  d0 f a& 
+	\clef<"g2"> b& d1 f a& \bar<measNum=2> 
+   (* meas. 2 *)    b& d2 f a& 
+					\oct<1>  b& d3 f a& \bar<measNum=3> 
+   (* meas. 3 *)    b& a& f 
+					\oct<0>  d2 b& a& f d \bar<measNum=4> 
+   (* meas. 4 *)    b&1 a& f d \clef<"f4"> b&0 a& f d \bar<measNum=5> 
+   (* meas. 5 *)   \beamsOff b&-1/2 
+]
+}
