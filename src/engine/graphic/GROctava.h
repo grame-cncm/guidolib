@@ -15,6 +15,9 @@
 
 */
 
+#include <map>
+#include <vector>
+
 #include "TagParameterString.h"
 #include "GRARNotationElement.h"
 #include "GRPositionTag.h"
@@ -36,13 +39,36 @@ class GROctava : public GRARNotationElement, public GRPositionTag
 		virtual void tellPosition(GObject *caller, const NVPoint & );
 
 		virtual void OnDraw( VGDevice & hdc ) const;
+		virtual void oldOnDraw( VGDevice & hdc ) const;
 		virtual void setColRef(const TagParameterString *tps);
 		virtual bool DeleteStaff(GRStaff * grstaff);
 	
 	private:
+		typedef struct segment {
+			float x1 = 0;
+			float x2 = 0;
+			float x3 = 0;
+			float y = 0;
+			int   index = 0;
+			void reset() { x1 = x2 = x3 = y = 0; }
+		} TSegment;
+		std::vector<TSegment> fSegments;
+		std::map<const GRSystem*, TSegment>	fSegmentsMap;
+		TSegment fCurrent;
+		
+		int		fOctava = 0;
+		
 		int		countSegments();
 		NVRect	getExtensionLine (const NEPointerList * assoc, int num) const;
+		NVRect	getExtensionLine (const NEPointerList * assoc) const;
+		NVRect	getExtensionLine (const NEPointerList * assoc, GuidoPos start, GuidoPos end) const;
 		NVRect	getEltBox (const GRNotationElement* el) const;
+		void 	showAssoc (const GRSystemStartEndStruct * sse) const;
+		float 	endPos (const GRSystemStartEndStruct * sse) const;
+
+		TSegment nvrect2Segment(const NVRect& r) const;
+		void 	 drawText (const TSegment& seg, VGDevice & hdc ) const;
+		void 	 drawLine (const TSegment& seg, bool last, VGDevice & hdc ) const;
 
 		GRStaff *	fStaff;
 		NVstring 	fText;
