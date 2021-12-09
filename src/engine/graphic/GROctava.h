@@ -39,7 +39,6 @@ class GROctava : public GRARNotationElement, public GRPositionTag
 		virtual void tellPosition(GObject *caller, const NVPoint & );
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void oldOnDraw( VGDevice & hdc ) const;
 		virtual void setColRef(const TagParameterString *tps);
 		virtual bool DeleteStaff(GRStaff * grstaff);
 	
@@ -58,13 +57,8 @@ class GROctava : public GRARNotationElement, public GRPositionTag
 		
 		int		fOctava = 0;
 		
-		int		countSegments();
-		NVRect	getExtensionLine (const NEPointerList * assoc, int num) const;
-		NVRect	getExtensionLine (const NEPointerList * assoc) const;
 		NVRect	getExtensionLine (const NEPointerList * assoc, GuidoPos start, GuidoPos end) const;
 		NVRect	getEltBox (const GRNotationElement* el) const;
-		void 	showAssoc (const GRSystemStartEndStruct * sse) const;
-		float 	endPos (const GRSystemStartEndStruct * sse) const;
 
 		TSegment nvrect2Segment(const NVRect& r) const;
 		void 	 drawText (const TSegment& seg, VGDevice & hdc ) const;
@@ -75,8 +69,8 @@ class GROctava : public GRARNotationElement, public GRPositionTag
 		bool		fBassa;
 		bool		fHidden;
 		float		fTextHeight;
-		float		fDy;
-		int			fSegmentsCount;
+		float		fDx = 0;
+		float 		fDy = 0;
 };
 
 #endif

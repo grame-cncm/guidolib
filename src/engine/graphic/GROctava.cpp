@@ -35,7 +35,7 @@ extern GRSystem * gCurSystem;
 
 GROctava::GROctava( GRStaff * staff, const NVstring & text, const AROctava* ar, bool bassa)
 	: GRARNotationElement(ar),
-	fStaff(staff), fText (text), fBassa(bassa), fSegmentsCount(0) //, fElement(0)
+	fStaff(staff), fText (text), fBassa(bassa)
 {
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	sse->grsystem = staff->getGRSystem();
@@ -55,6 +55,7 @@ GROctava::GROctava( GRStaff * staff, const NVstring & text, const AROctava* ar, 
 	mBoundingBox.bottom = (GCoord)(4*LSPACE);
 	fTextHeight = y; // - 10;
 	fHidden = ar->getHidden();
+	fDx = ar->getDX()->getValue();
 	fDy = ar->getDY()->getValue();
 	fOctava = ar->getOctava();
 }
@@ -93,42 +94,6 @@ NVRect GROctava::getEltBox (const GRNotationElement* el) const
 	return outRect;
 }
 
-
-//---------------------------------------------------------------------------------
-// assumes that there is a single segment and no line break
-NVRect GROctava::getExtensionLine (const NEPointerList * assoc) const
-{
-	NVRect outRect;
-	if (!assoc) return outRect;
-
-	float space = fStaff->getStaffLSPACE();
-	float staffTop		= 0 - space * 0.5f; // fStaff->getPosition().y - space * 0.5f;
-	float staffBottom	= staffTop + fStaff->getDredgeSize() + space * 2.5f;
-	GuidoPos pos = assoc->GetHeadPosition();
-cerr << "------------- GROctava::getExtensionLine " << endl;
-	while (pos) {
-		const GRNotationElement* el = assoc->GetNext(pos);
-		NVRect bb = getEltBox(el);
-cerr << "... " << el << " " << bb << endl;
-		if (bb.Height()) {
-			if (!outRect.left)		// set the left border
-				outRect.left = bb.left + space;
-			outRect.right = bb.right + space /3;	// and adjust the right border
-			if (fBassa) {
-				float y = bb.bottom + space * 1.7f;
-				float bottom = (y > staffBottom) ? y : staffBottom;
-				if (bottom > outRect.bottom) outRect.top = outRect.bottom = bottom;
-			}
-			else {
-				float y = bb.top - space * 0.2f;
-				float top = (y < staffTop) ? y : staffTop;
-				if (top < outRect.top) outRect.top = outRect.bottom = top - fTextHeight;
-			}
-		}
-	}
-	return outRect;
-}
-
 //---------------------------------------------------------------------------------
 NVRect GROctava::getExtensionLine (const NEPointerList * assoc, GuidoPos start, GuidoPos end) const
 {
@@ -136,7 +101,7 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, GuidoPos start, 
 	if (!assoc) return outRect;
 
 	float space = fStaff->getStaffLSPACE();
-	float staffTop		= 0 - space * 0.5f; // fStaff->getPosition().y - space * 0.5f;
+	float staffTop		= space * -0.5f;
 	float staffBottom	= staffTop + fStaff->getDredgeSize() + space * 2.5f;
 	GuidoPos pos = start ? start :  assoc->GetHeadPosition();
 //cerr << "------------- GROctava::getExtensionLine " << endl;
@@ -164,192 +129,6 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, GuidoPos start, 
 }
 
 //---------------------------------------------------------------------------------
-NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
-{
-	NVRect outRect;
-	if (!assoc) return outRect;
-
-	float space = fStaff->getStaffLSPACE();
-	float staffTop		= 0 - space * 0.5f; // fStaff->getPosition().y - space * 0.5f;
-	float staffBottom	= staffTop + fStaff->getDredgeSize() + space * 2.5f;
-	GuidoPos pos = assoc->GetHeadPosition();
-	float currentXPos = 0;
-	while (pos) {
-		const GRNotationElement* el = assoc->GetNext(pos);
-		NVRect bb = getEltBox(el);
-		if (bb.Height()) {
-			if (bb.right < currentXPos) {		// there is a line break
-				if (!num) {						// and it is the required segment
-					outRect.right = /*gCurSystem->getPosition().x +*/ gCurSystem->getBoundingBox().Width();
-					return outRect;
-				}
-				num--;
-			}
-			if (!num) {					// this is the required segment
-				if (!outRect.left)		// set the left border
-					outRect.left = bb.left + space;
-				outRect.right = bb.right + space /3;	// and adjust the right border
-				if (fBassa) {
-					float y = bb.bottom + space * 1.7f;
-					float bottom = (y > staffBottom) ? y : staffBottom;
-					if (bottom > outRect.bottom) outRect.top = outRect.bottom = bottom;
-				}
-				else {
-					float y = bb.top - space * 0.2f;
-					float top = (y < staffTop) ? y : staffTop;
-					if (top < outRect.top) outRect.top = outRect.bottom = top - fTextHeight;
-				}
-			}
-			currentXPos = bb.left;
-		}
-	}
-	return outRect;
-}
-
-//---------------------------------------------------------------------------------
-int GROctava::countSegments()
-{
-	if (fSegmentsCount) return fSegmentsCount;
-	float currentXPos = 0;
-	int fSegmentsCount = 1;
-	if (!getAssociations()) return 0;
-	GuidoPos pos = getAssociations()->GetHeadPosition();
-	while (pos) {
-		const GRNotationElement* el = getAssociations()->GetNext(pos);
-		const GRSingleNote * note = dynamic_cast<const GRSingleNote *>(el);
-		if (note) {
-			float nx = note->getPosition().x;
-			if (nx < currentXPos) fSegmentsCount++;
-			currentXPos = nx;
-		}
-	}
-	return fSegmentsCount;
-}
-
-//---------------------------------------------------------------------------------
-void GROctava::showAssoc(const GRSystemStartEndStruct * sse) const
-{
-	if (!getAssociations()) return 0;
-	if (sse->startpos) {
-		GRNotationElement* el = getAssociations()->GetAt(sse->startpos);
-		if (el) cerr << "GROctava::showAssoc startpos: " << el << " " << el->getPosition().x << endl;
-		else cerr << "GROctava::showAssoc startpos is null" << endl;
-	}
-	else cerr << "GROctava::showAssoc: no startpos" << endl;
-	if (sse->endpos) {
-		GRNotationElement* el = getAssociations()->GetAt(sse->endpos);
-		if (el) cerr << "GROctava::showAssoc endpos: " << el << " " << el->getPosition().x << endl;
-		else cerr << "GROctava::showAssoc endpos is null" << endl;
-	}
-	else cerr << "GROctava::showAssoc: no endpos" << endl;
-}
-
-//---------------------------------------------------------------------------------
-float GROctava::endPos(const GRSystemStartEndStruct * sse) const
-{
-	if (!getAssociations()) return 0;
-	GRNotationElement* el = sse->endpos ? getAssociations()->GetAt(sse->endpos) : 0;
-	return el ? el->getPosition().x : 0;
-}
-
-//---------------------------------------------------------------------------------
-void GROctava::oldOnDraw( VGDevice & hdc) const
-{
-	if (fText.empty()) 	return;		// nothing to draw
-	if (fHidden) 		return;		// nothing to draw
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
-
-	const GRSystem * sys = sse->grsystem ? sse->grsystem : gCurSystem;
-	
-	TSegment seg;
-	if (fSegmentsMap.empty()) {		// assume there is a single segment
-		// actually this segment might be associated to another GROctava,
-		// which draw method is never called
-		// this is clearly looking like a bug
-		NVRect r = getExtensionLine(getAssociations(), 0, 0);
-		seg.x1 = r.left;
-		seg.x2 = r.right;
-		seg.y = fBassa ? r.bottom : r.top;
-	}
-	else {
-//cerr  << "GROctava::OnDraw map size " << fSegmentsMap.size() << endl;
-//cerr  << "GROctava::OnDraw map: ";
-//for (auto a: fSegmentsMap) cerr << (void*)a.first << " " << a.second.index << " " << a.second.x1 << " " << a.second.x2 << " " << a.second.x3 << " - " ;
-//cerr << endl;
-
-		auto i = fSegmentsMap.find(sys);
-		if (i != fSegmentsMap.end())
-			seg = i->second;
-		else {
-			NVRect r = getExtensionLine(getAssociations(), sse->startpos, sse->endpos);
-			seg.x1 = r.left;
-			seg.x2 = r.right;
-			seg.y = fBassa ? r.bottom : r.top;
-			seg.index = fSegmentsMap.size() + 1;
-		}
-	}
-	cerr  << (void*)sys << " " << (void*)this << " GROctava::OnDraw " << fOctava << ": " << sse->startflag << "-" << sse->endflag << " [" << seg.x1 << ", " << seg.x2 << "] " << seg.index << endl;
-	if (seg.x1) {
-		float y = -200;
-		float x2 = (seg.index < fSegmentsMap.size()) ? seg.x3 : seg.x2;
-		hdc.PushPenWidth(5);
-		hdc.Line (seg.x1, y, x2, y);
-		hdc.PopPenWidth();
-	}
-
-	static int drawingstate = 0;
-	int nsegments = const_cast<GROctava*>(this)->countSegments();
-	
-//	if (!drawingstate) {
-//cerr << "GROctava::OnDraw " << fSegments.size() << " segments"  << endl;
-//for (auto a: fSegments) cerr << "   " << a.x1 << " - " << a.x2 << endl;
-//}
-	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT && (nsegments == 1))
-		return;		// nothing to do : this is due to the bar before the octava change
-	
-	bool endSegment =   (sse->endflag == GRSystemStartEndStruct::NOTKNOWN) || (nsegments == 1);
-	float space = fStaff->getStaffLSPACE() / 2;
-
-//cerr << "GROctava::OnDraw seg: " << drawingstate << "/" << nsegments << endl;
-//if (drawingstate == 1)
-//cerr << "GROctava::OnDraw seg 1" << endl;
-//	NVRect r = getExtensionLine (getAssociations(), sse);
-	NVRect r = getExtensionLine (getAssociations(), drawingstate);
-	VGColor savedColor = hdc.GetFontColor();
-	VGColor color;	// custom or black
-   if (mColRef) {
-		color = VGColor(mColRef);
-		hdc.SetFontColor(color);
-	}
-	if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
-		NVPoint pos (r.left - fStaff->getStaffLSPACE(), r.top - fDy);
-		pos.y += fBassa ? -5 : fTextHeight - 5;
-		OnDrawText(hdc, pos, fText.c_str(), int(fText.length()) );
-	}
-	
-	// next, draw the extension lines
-    if (mColRef) hdc.PushPenColor(color);
-	hdc.PushPenWidth(6);
-	float xStart = r.left;
-	float xEnd = r.right;
-	float linespace = drawingstate ? 0 : fStaff->getStaffLSPACE() / 4;
-	while (xEnd >= (xStart + linespace)) {
-		float y = r.top - fDy;
-		if ((xEnd == r.right) && endSegment)		// is it the last extension line ?
-			hdc.Line(xEnd, y, xEnd, fBassa ? y - space : y + space);
-		hdc.Line(xEnd - space, y, xEnd, y);
-		xEnd -= 2.5f * space;
-	}
-	hdc.PopPenWidth();
-    if (mColRef) {
-		hdc.PopPenColor();
-        hdc.SetFontColor(savedColor);
-	}
-	if (endSegment) drawingstate = 0;
-	else drawingstate++;
-}
-
-//---------------------------------------------------------------------------------
 GROctava::TSegment GROctava::nvrect2Segment(const NVRect& r) const
 {
 	TSegment seg;
@@ -367,7 +146,7 @@ void GROctava::drawText (const TSegment& seg, VGDevice & hdc ) const
 		VGColor color = VGColor(mColRef);
 		hdc.SetFontColor(color);
 	}
-	NVPoint pos (seg.x1 - fStaff->getStaffLSPACE(), seg.y - fDy);
+	NVPoint pos (seg.x1 - fStaff->getStaffLSPACE() + fDx, seg.y - fDy);
 	pos.y += fBassa ? -5 : fTextHeight - 5;
 	OnDrawText(hdc, pos, fText.c_str(), int(fText.length()) );
     if (mColRef) {
@@ -383,10 +162,11 @@ void GROctava::drawLine (const TSegment& seg, bool last, VGDevice & hdc ) const
 		hdc.PushPenColor(color);
 	}
 	hdc.PushPenWidth(6);
+	bool first = (seg.index == 1);
 	float space = fStaff->getStaffLSPACE() / 2;
-	float xStart = seg.x1;
+	float xStart = seg.x1 + (first ? fDx : 0);
 	float xEnd   = seg.x2;
-	float linespace = (seg.index == 1) ? 0 : fStaff->getStaffLSPACE() / 4;
+	float linespace = first ? 0 : fStaff->getStaffLSPACE() / 4;
 	while (xEnd >= (xStart + linespace)) {
 		float y = seg.y - fDy;
 		if ((xEnd == seg.x2) && last)		// is it the last extension line ?
