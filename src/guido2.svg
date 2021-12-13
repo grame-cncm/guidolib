@@ -2,9 +2,9 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 <metadata>
-Created by FontForge 20161003 at Mon Oct 14 21:55:44 2019
+Created by FontForge 20201107 at Mon Dec 13 09:33:29 2021
  By Dominique Fober
-Copyright (c) 1996-2001 Keith A. Hamel, 2009-2019 Grame. All rights reserved. To be used with GUIDO Engine. Version 3.9 October 14 2019.
+Copyright (c) 1996-2001 Keith A. Hamel, 2009-2021 Grame.
 </metadata>
 <defs>
 <font id="Guido2" horiz-adv-x="512" >
@@ -20,7 +20,7 @@ Copyright (c) 1996-2001 Keith A. Hamel, 2009-2019 Grame. All rights reserved. To
     cap-height="187"
     bbox="-261 -1236 1477.57 1315"
     underline-thickness="19"
-    underline-position="-251"
+    underline-position="-269"
     unicode-range="U+0003-00FF"
   />
 <missing-glyph 
@@ -168,7 +168,7 @@ q0 -13 25 -12q49 1 64 79q7 37 7 116q-59 -31 -105 -31q-51 0 -87 32t-36 82q0 61 52
     <glyph glyph-name="colon" unicode=":" horiz-adv-x="365" 
 d="M0 19h367v-38h-367v38z" />
     <glyph glyph-name="semicolon" unicode=";" horiz-adv-x="423" 
-d="M0 19h428v-38h-428v38z" />
+d="M0 19l760 1v-40l-760 1v38z" />
     <glyph glyph-name="less" unicode="&#x3c;" horiz-adv-x="206" 
 d="M0 -378zM207 -72zM0 -346q-2 -1 -3 -2v0q0 -1 59 51t70 73q36 65 36 128q0 12 -1 23q-3 35 -38 65t-79 30q-15 0 -31 -5q-2 -10 -1 -17h-27q0 2 -1 35q0 22 6 25q17 12 46 13q71 0 125 -45q26 -22 34 -37q12 -22 12 -63q0 -71 -53 -158q-32 -52 -154 -148v32z" />
     <glyph glyph-name="equal" unicode="=" horiz-adv-x="1024" 
@@ -657,7 +657,7 @@ d="M126 495q14 0 17 -14l106 -459v-4q0 -14 -14 -17h-4q-14 0 -17 13l-89 385l-88 -3
     <glyph glyph-name="ugrave" unicode="&#xf9;" horiz-adv-x="392" 
 d="M301 241h83l3 -32h-92l-23 -110q-8 -37 -30 -95q-28 -73 -59 -113q-40 -52 -99 -56q-31 -2 -56 18.5t-28 52.5q-5 52 42 58q19 2 33.5 -11.5t14.5 -33.5q0 -13 -28 -41q-6 -3 -4 -10t11 -7q52 0 84 134q22 106 43 214h-64l-3 32h76q20 65 66 108q51 47 116 47
 q47 0 67 -44q3 -10 3 -21q0 -48 -48 -58q-14 0 -25.5 11.5t-10.5 25.5q1 20 21 33.5t19 16.5q-1 11 -24 14q-32 3 -58 -47q-18 -32 -30 -86zM593 206q-40 5 -64 -72q-17 -57 -13 -100q4 -37 27 -37q31 0 56 76q21 63 17 103q-3 27 -23 30zM371 94h-24q55 143 129 143
-q27 0 35 -40q70 40 98 40q83 0 91 -97q5 -59 -34 -115q-42 -59 -101 -59q-34 0 -66 31l-33 -113q-4 -15 12 -15h47v-30h-223v30h50q17.4108 -1.7053e-13 23 20l83 297q2 8 -3 14t-10 6q-28 1 -74 -112z" />
+q27 0 35 -40q70 40 98 40q83 0 91 -97q5 -59 -34 -115q-42 -59 -101 -59q-34 0 -66 31l-33 -113q-4 -15 12 -15h47v-30h-223v30h50q17 0 23 20l83 297q2 8 -3 14t-10 6q-28 1 -74 -112z" />
     <glyph glyph-name="uacute" unicode="&#xfa;" 
 d="M65 0v819h384v-819h-384zM128 65h256v691h-256v-691z" />
     <glyph glyph-name="ucircumflex" unicode="&#xfb;" 
