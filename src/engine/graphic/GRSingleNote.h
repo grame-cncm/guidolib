@@ -129,14 +129,18 @@ protected:
 	TYPE_DURATION mDurTemplate; // the template for the display
 
 private:
-	void handleAccidental	(const ARAccidental* acc);
-	void createNote(const TYPE_DURATION & p_durtemplate /*= DURATION_0*/ );
+	void 	handleAccidental	(const ARAccidental* acc);
+	void 	createNote(const TYPE_DURATION & p_durtemplate /*= DURATION_0*/ );
+	void 	drawLedges (VGDevice & hdc) const;
+	float 	getLedgeWidth (VGDevice & hdc) const;
 
 	GRStdNoteHead *	mNoteHead; // exists also in element list.
 	GDirection		mStemDir;
 	float		    mStemLen;
 	bool 		    mStemLengthSet;
 	bool 		    mStemDirSet;
+
+	static float 	fLedgeWidth;
 
 	ARTHead::HEADSTATE mHeadState;
         

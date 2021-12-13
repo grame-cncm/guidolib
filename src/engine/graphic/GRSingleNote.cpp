@@ -22,6 +22,7 @@
 #include "GuidoDefs.h"
 #include "NVPoint.h"
 #include "VGDevice.h"
+#include "VGFont.h"
 
 // - Guido AR
 #include "ARNoteFormat.h"
@@ -62,6 +63,7 @@ using namespace std;
 #define traceMethod(method)	
 #endif
 
+float GRSingleNote::fLedgeWidth = 0.f;
 
 //____________________________________________________________________________________
 GRSingleNote::GRSingleNote( GRStaff* inStaff, const ARNote* arnote, const TYPE_TIMEPOSITION& pos, const TYPE_DURATION& dur)
@@ -117,48 +119,82 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
         SendMap (f, getARNote()->getStartTimePosition(), dur, (isGraceNote() ? kGraceNote : kNote), infos);
 	}
 }
+
+//____________________________________________________________________________________
+float GRSingleNote::getLedgeWidth (VGDevice & hdc) const
+{
+	if (!fLedgeWidth) {
+		const VGFont* font = hdc.GetMusicFont();
+		if (font) {
+			float foo;
+			font->GetExtent(kLedgerLineSymbol, &fLedgeWidth, &foo, &hdc);
+		}
+	}
+	return fLedgeWidth;
+}
+
+
+//____________________________________________________________________________________
+// draw ledger lines
+void GRSingleNote::drawLedges (VGDevice & hdc) const
+{
+    float incy = 1;
+    float posy = 0;
+    int count = mNumHelpLines;
+    if (!count) return;
+
+	GRStdNoteHead * head = getNoteHead();
+	NVRect r = head->getBoundingBox() + head->getNoteHeadPosition();
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
+
+    if (mNumHelpLines > 0) { 	// ledger lines up
+        incy = -mCurLSPACE;
+        posy = -mCurLSPACE;
+    }
+    else if (mNumHelpLines < 0) {
+        incy = mCurLSPACE;
+        posy = mGrStaff->getNumlines() * mCurLSPACE;
+        count = - count;
+    }
+	hdc.SetFontAlign(VGDevice::kAlignLeft | VGDevice::kAlignBase);
+
+#ifdef SMUFL
+    float ledXPos = -mCurLSPACE * 0.65;;
+#else
+    float ledXPos = - 60 * 0.85f * mSize;
+#endif
+	
+	bool largeledge = false;
+	if (!getDuration() && !fClusterNote)  { // denotes a chord and not a cluster
+		const float xPos = mPosition.x + getOffset().x + getReferencePosition().x + ledXPos;
+		if (xPos > r.left) {
+			largeledge = true;
+			ledXPos -= r.Width() * 0.8;
+		}
+		else if ((xPos +  getLedgeWidth(hdc)) < r.right) {
+			largeledge = true;
+		}
+	}
+//cerr << "GRSingleNote::drawLedges note " << this << " " << largeledge << " " << r << endl;
+    for (int i = 0; i < count; ++i, posy += incy) {
+		GRNote::DrawSymbol(hdc, largeledge ? kLedgerLargeSymbol : kLedgerLineSymbol, ledXPos, posy - mPosition.y);
+	}
+}
+
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
 	if (!mDraw || !mShow) return;
 
-    float incy = 1;
-    float posy = 0;
-    int sum = mNumHelpLines;
-
-//	NVRect r = getEnclosingBox(false, false, false);
-//	hdc.Frame(r.left, r.top, r.right, r.bottom);
-//	NVPoint p = getStemEndPos();
-//	float w = 25.f;
-//	hdc.Rectangle(p.x-w, p.y-w, p.x+w, p.y+w);
-//cerr << "GRSingleNote::OnDraw " << this << " box: " << r << endl;
-
-    if (mNumHelpLines > 0) { 	// ledger lines up
-        incy = -mCurLSPACE;
-        posy = -mCurLSPACE;
-        hdc.SetFontAlign(VGDevice::kAlignLeft | VGDevice::kAlignBase);
-    }
-    else if (mNumHelpLines < 0) {
-        incy = mCurLSPACE;
-        posy = mGrStaff->getNumlines() * mCurLSPACE;
-        sum = - sum;
-        hdc.SetFontAlign(VGDevice::kAlignLeft | VGDevice::kAlignBase);
-    }
-
 	const VGColor prevFontColor = hdc.GetFontColor();
-    if (mGrStaff->getStffrmtColRef())
-        hdc.SetFontColor(VGColor(mGrStaff->getStffrmtColRef()));
+	const unsigned char* staffColor = mGrStaff->getStffrmtColRef();
+    if (staffColor)
+        hdc.SetFontColor(VGColor(staffColor));
 
     // draw ledger lines
-#ifdef SMUFL
-    const float ledXPos = -mCurLSPACE * 0.65;;
-#else
-    const float ledXPos = - 60 * 0.85f * mSize;
-#endif
-    for (int i = 0; i < sum; ++i, posy += incy)
-        GRNote::DrawSymbol(hdc, kLedgerLineSymbol, ledXPos, (posy - mPosition.y)); // REM: the ledger line width can't change with staffFormat width
-                                                                                   //      because it's drawn with the font, not with a line
-    if (mGrStaff->getStffrmtColRef())
+    drawLedges(hdc);
+
+    if (staffColor)
         hdc.SetFontColor(prevFontColor);
 	if (fCluster)
 		getNoteHead()->setHaveToBeDrawn(false);
