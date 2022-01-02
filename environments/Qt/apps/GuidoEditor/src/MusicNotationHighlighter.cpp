@@ -23,7 +23,11 @@ void MusicNotationHighlighter::appendLineRule(const QStringList& patterns,
 	foreach (QString pattern, patterns) 
 	{
 		QRegExp rx=QRegExp(pattern);
+#if Qt6
+		if (setMinimal) rx.setPatternOptions(QRegularExpression::InvertedGreedinessOption);
+#else
 		rx.setMinimal(setMinimal);
+#endif
 		mLineRule.pattern = rx;
 		mLineRule.format = format;
 		mHighlightingLineRules.append(mLineRule);
@@ -60,6 +64,16 @@ void MusicNotationHighlighter::highlightLine(const QString& text,bool )
 	foreach (HighlightingLineRule rule, mHighlightingLineRules)
 	{
 		QRegExp expression(rule.pattern);
+#ifdef Qt6
+		QRegularExpressionMatch match;
+		int index = text.indexOf(expression, 0, &match);
+		while (index >= 0)
+		{
+			int length = match.capturedLength();
+			setFormat(index, length, rule.format);
+			index = text.indexOf(expression, index + length, &match);
+		}
+#else
 		int index = text.indexOf(expression);
 		while (index >= 0) 
 		{
@@ -67,6 +81,7 @@ void MusicNotationHighlighter::highlightLine(const QString& text,bool )
 			setFormat(index, length, rule.format);
 			index = text.indexOf(expression, index + length);
 		}
+#endif
 	}
 }
 
@@ -80,28 +95,29 @@ bool MusicNotationHighlighter::highlightMultiline(const QString& text )
 
 		int startIndex = 0;
 		if (previousBlockState() != IN_BLOCK)
-		{
 			startIndex = text.indexOf(mHighlightingMultilineRules[i].startPattern);
-		}
-		else
-		{
-			result = true;
-		}
+		else result = true;
 		
 		while (startIndex >= 0) 
 		{
 			result = true;
+#ifdef Qt6
+			QRegularExpressionMatch endMatch;
+			int endIndex = text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex, &endMatch);
+#else
 			int endIndex = text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex);
-
+#endif
 			int commentLength;
-			if (endIndex == -1) 
-			{
+			if (endIndex == -1) {
 				setCurrentBlockState(IN_BLOCK);
 				commentLength = text.length() - startIndex;
-			} else 
-			{
-				commentLength = endIndex - startIndex
-						+ mHighlightingMultilineRules[i].endPattern.matchedLength();
+			}
+			else {
+#ifdef Qt6
+				commentLength = endIndex - startIndex + endMatch.capturedLength();
+#else
+				commentLength = endIndex - startIndex + mHighlightingMultilineRules[i].endPattern.matchedLength();
+#endif
 			}
 			setFormat( startIndex, commentLength, mHighlightingMultilineRules[i].format );
 			startIndex = text.indexOf(mHighlightingMultilineRules[i].startPattern, startIndex + commentLength);

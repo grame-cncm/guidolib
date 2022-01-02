@@ -14,6 +14,19 @@
 
 #ifndef MNHIGHLIGHTER_H_
 #define MNHIGHLIGHTER_H_
+
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+# define Qt6 true
+#endif
+
+#ifdef Qt6
+#include <QRegularExpression>
+#define QRegExp QRegularExpression
+#else
+#include <QRegExp>
+#endif
+
 #include <QSyntaxHighlighter>
 #include <QHash>
 #include <QTextCharFormat>

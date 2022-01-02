@@ -14,6 +14,19 @@
 
 #ifndef MNHIGHLIGHTER_H_
 #define MNHIGHLIGHTER_H_
+
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+# define Qt6 true
+#endif
+
+#ifdef Qt6
+#include <QRegularExpression>
+#define QRegExp QRegularExpression
+#else
+#include <QRegExp>
+#endif
+
 #include <QSyntaxHighlighter>
 #include <QHash>
 #include <QTextCharFormat>
@@ -34,8 +47,13 @@ class MusicNotationHighlighter : public QSyntaxHighlighter
 
 	protected:
 
-		void appendLineRule(const QStringList& patterns, const QTextCharFormat& format, bool setMinimal);
-		void appendMultilineRule(const QString& startPattern, const QString& endPattern, const QTextCharFormat& format, bool setMinimal);
+		void appendLineRule(const QStringList& patterns,
+							  const QTextCharFormat& format,
+							  bool setMinimal);
+		void appendMultilineRule(const QString& startPattern,
+							 const QString& endPattern,
+								  const QTextCharFormat& format,
+								  bool setMinimal);
 		void highlightLine(const QString& text,bool useLastBackground);
 		bool highlightMultiline(const QString& text);
 	

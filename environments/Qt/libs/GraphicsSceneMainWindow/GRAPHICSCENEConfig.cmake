@@ -8,10 +8,16 @@ set (GUIDODIR  	${GSROOT}/../../..)
 set (CMAKE_AUTOMOC ON)
 set (CMAKE_AUTOUIC ON)
 set (CMAKE_AUTORCC ON)
-set (CMAKE_CXX_STANDARD 11)
 
+if (QT6)
+find_package(Qt6 COMPONENTS Xml Widgets PrintSupport REQUIRED)
+set (QTINCDIRS 	${Qt6Xml_INCLUDE_DIRS} ${Qt6Widget_INCLUDE_DIRS} ${Qt6PrintSupport_INCLUDE_DIRS})
+set (QTVERS ${Qt6Widgets_VERSION} )
+else()
 find_package(Qt5 COMPONENTS Xml Widgets PrintSupport REQUIRED)
 set (QTINCDIRS 	${Qt5Xml_INCLUDE_DIRS} ${Qt5Widget_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+set (QTVERS ${Qt5Widgets_VERSION} )
+endif()
 
 #######################################
 # set sources and headers files
@@ -35,4 +41,4 @@ set (RSRC ${GSROOT}/rsc/application.qrc)
 
 set (GRAPHICSCENE_SRC ${SRC} ${UI} ${RSRC})
 
-message (STATUS "GraphicsSceneMainWindow library using Qt version ${Qt5Widgets_VERSION}")
+message (STATUS "GraphicsSceneMainWindow library using Qt version ${QTVERS}")

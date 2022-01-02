@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 
 project(GuidoQTApplications)
 
+option ( QT6    "Use Qt6"	off )
+set (CMAKE_CXX_STANDARD 17)
+
 #######################################
 set (ROOT 		${CMAKE_CURRENT_SOURCE_DIR})
 set (GUIDODIR  	${CMAKE_CURRENT_SOURCE_DIR}/../../..)

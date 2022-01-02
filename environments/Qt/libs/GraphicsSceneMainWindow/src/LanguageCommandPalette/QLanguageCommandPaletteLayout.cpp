@@ -12,6 +12,10 @@
  * research@grame.fr
  */
 #include <QtGui>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+# define Qt6 true
+#endif
 
 #include "QLanguageCommandPaletteLayout.h"
 
@@ -19,7 +23,11 @@
 QLanguageCommandPaletteLayout::QLanguageCommandPaletteLayout(QWidget *parent, int margin, int spacing)
     : QLayout(parent)
 {
+#if Qt6
+    setContentsMargins(margin, margin, margin, margin);
+#else
     setMargin(margin);
+#endif
     setSpacing(spacing);
 }
 
@@ -91,7 +99,11 @@ QSize QLanguageCommandPaletteLayout::minimumSize() const
     foreach (item, mItemList)
         size = size.expandedTo(item->minimumSize());
 
+#if Qt6
+    size += QSize(5,5);
+#else
     size += QSize(2*margin(), 2*margin());
+#endif
     return size;
 }
 

@@ -27,6 +27,10 @@
 #include <QTextDocument>
 #include <QMessageBox>
 #include <QToolBar>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+# define Qt6 true
+#endif
 
 #ifdef WIN32
 #pragma warning(disable:4996)
@@ -821,8 +825,14 @@ void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer)
 	if ( printer.toPage() )
 		lastPage = printer.toPage();
 
+#if Qt6
+	QRect drawRect = printer.paperRect(QPrinter::DevicePixel).toRect();
+#else
+	QRect drawRect = printer.paperRect();
+#endif
+
 	for (int page = firstPage; page <= lastPage ; ++page) {
-		guidoPainter->draw(&painter , page , printer.paperRect() );
+		guidoPainter->draw(&painter , page , drawRect );
 		if (page != lastPage)
 			printer.newPage();
 	}

@@ -3,7 +3,12 @@ MAKE 	?= make
 CMAKE 	?= cmake
 BUILDDIR  ?= builddir
 IOSDIR    ?= iosdir
-CMAKEOPT  ?= 
+QTVERS := $(shell qmake --version | grep Using | sed -e 's/[^0-9.]//g' | cut -d'.' -f 1)
+ifeq ($(QTVERS), 6)
+	CMAKEOPT := $(CMAKEOPT) -DQT6=on
+else
+	CMAKEOPT := $(CMAKEOPT) -DQT6=off
+endif
 
 all: 
 	$(MAKE) cmake

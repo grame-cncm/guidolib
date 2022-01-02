@@ -182,8 +182,9 @@ void QLanguageItem::removeFile(const QString& fileName , QLanguageItem* usingIte
 //								Public functions						//
 //-------------------------------------------------------------------------
 
-#include <QRegExp>
+//#include <QRegExp>
 //-------------------------------------------------------------------------
+/*
 QString getCopyName( QString originalName )
 {
 	QRegExp rx(".*\\(\\d+\\)");
@@ -201,6 +202,7 @@ QString getCopyName( QString originalName )
 	}
 	return originalName + "(" + QVariant(copyNumber).toString() + ")";
 }
+*/
 
 //-------------------------------------------------------------------------
 QLanguageItem::QLanguageItem(QGraphicsItem * parent) : QGraphicsRectItem(parent)
