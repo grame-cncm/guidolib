@@ -26,6 +26,7 @@
 #include "ARNote.h"
 #include "ARIntens.h"
 #include "ARTempo.h"
+#include "ARTie.h"
 
 #include "MIDIMapper.h"
 #include "MidiShareLight.h"
@@ -120,6 +121,8 @@ void MidiMapper::Event(const ARMusicalObject * ev, EventType type)
 		case kIntens:	IntensChge (ev);
 			break;
 		case kTie:		fFlags |= hasTie;
+			break;
+		case kNoTie:	fTiedNotes.clear();
 			break;
 		default:
 			break;

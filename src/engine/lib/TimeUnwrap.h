@@ -53,7 +53,7 @@ class TimeUnwrap
 						kDaCapo, kDaCapoAlFine, kDaCoda,
 						kDalSegno, kDalSegnoAlFine, kVolta, kTempo,
 						kFermata, kAccent, kSlur, kStaccato, kTenuto,
-						kMarcato, kIntens, kTie, kGlissando, kChordComma } EventType;
+						kMarcato, kIntens, kTie, kGlissando, kChordComma, kNoTie } EventType;
 
 				 TimeUnwrap(ARMusicalVoice* voice) : fVoice(voice),
 												fStartPos(0), fFinePos(0), fCodaPos(0),
@@ -62,9 +62,9 @@ class TimeUnwrap
 		virtual ~TimeUnwrap() {}
 		
 		virtual void	AtPos (const ARMusicalObject * ev, EventType type);
+		virtual void	Event (const ARMusicalObject * ev, EventType type) {}
 
 	protected:
-		virtual void		Event (const ARMusicalObject * ev, EventType type) {}
 		virtual void		Note (const ARMusicalObject * ev);
 		virtual void		Rest (const ARMusicalObject * ev);
 		const TYPE_TIMEPOSITION& PrevPosition() const	{ return fRPosition; }

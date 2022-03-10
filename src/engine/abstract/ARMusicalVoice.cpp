@@ -735,10 +735,14 @@ void ARMusicalVoice::browse(TimeUnwrap& mapper, ARMusicalVoiceState& state) cons
 		tag->browse(mapper);
 	}
 	pos = cptags ? cptags->GetHeadPosition() : 0;
+	bool hastie = false;
 	while (pos) {
-		ARMusicalTag* tag = dynamic_cast<ARMusicalTag*>(cptags->GetNext(pos));
+		const ARPositionTag* ptag = cptags->GetNext(pos);
+		const ARMusicalTag* tag = dynamic_cast<const ARMusicalTag*>(ptag);
+		if (dynamic_cast<const ARTie*>(ptag)) hastie = true;
 		if (tag) tag->browse(mapper);
 	}
+	if (!hastie) mapper.Event(0, TimeUnwrap::kNoTie);
 }
 
 //____________________________________________________________________________________
