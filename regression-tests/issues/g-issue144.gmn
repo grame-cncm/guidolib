@@ -1,0 +1,16 @@
+{
+[ 
+	\barFormat<style= "system">
+	\clef<"g2"> \key<-1> \meter<"2/4">
+	c2/1
+]
+,
+[ 
+	\clef<"f4"> \key<-1> \meter<"2/4"> 
+  	f#-1/8
+	{ f#0/4, e&1 } 
+	{ f#0/8, e&1 } 
+
+	g0/2
+]
+}
