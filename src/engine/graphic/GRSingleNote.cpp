@@ -347,7 +347,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	if (accidentals > 2) accidentals = 2;
 	else if (accidentals < -2) accidentals = -2;
 
-	mGrStaff->checkSystemBar (arNote->getRelativeTimePosition());
+	mGrStaff->checkSystemBar (arNote->getStartTimePosition());
 	AccList * mylist = mGrStaff->askAccidentals(pitch, octave, accidentals, arNote->getDetune());
 	if (!mylist->empty()) {
 		GuidoPos pos = mylist->GetHeadPosition();
