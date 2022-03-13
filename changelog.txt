@@ -6,6 +6,7 @@ GUIDO Engine history
 - octava add support for dx
 - fix incorrect octava rendering (issue #134)
 - fix ledger line width with chords and heads reversed (issue #135)
+- fix incorrect accidental rendering with chords (issue #144 and #81)
 
 ----------------------------------------------------------------
   version 1.7.1
