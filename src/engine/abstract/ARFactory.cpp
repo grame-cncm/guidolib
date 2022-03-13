@@ -273,13 +273,6 @@ void ARFactory::addVoice()
 
     mCurrentVoice->ConvertToNormalForm();
 
-    // old: this is now done
-    // when returning the complete voice ...
-
-    // this does automatic conversion,
-    // for example autobeaming ...
-    // mCurrentVoice->doAutoStuff();
-
     mCurrentMusic->AddTail(mCurrentVoice);
     mCurrentVoice=NULL;
     mCurrentDenominator = DEFAULT_DENOMINATOR;
@@ -350,7 +343,6 @@ void ARFactory::createChord()
 */
 void ARFactory::addChord()
 {
-
 #if ARFTrace
  	cerr << "ARFactory::addChord " << endl;
 #endif
@@ -512,7 +504,6 @@ void ARFactory::addEvent()
     else
         mCurrentVoice->AddTail( mCurrentEvent );
  
-
     // In the "toadd" list are all musical objects (Ties, Fermatas, ...) stored which
     // must be definitly stored AFTER the event.
     // otherwise an update of the graphical position is very hard todo
