@@ -15,7 +15,6 @@
 #include "ARUserChordTag.h"
 
 #include "GRStaff.h"
-#include "GRSpring.h"
 #include "GRSystem.h"
 #include "GRSystemTag.h"
 #include "GRChordTag.h"

@@ -36,9 +36,7 @@ using namespace std;
 
 // - Guido GR
 #include "GRMusic.h"
-#include "GRSpringForceIndex.h"
 #include "GRStaffManager.h"
-#include "GRSpring.h"
 #include "GRPage.h"
 
 // - Guido Misc

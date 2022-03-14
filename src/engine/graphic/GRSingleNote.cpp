@@ -49,7 +49,6 @@
 #include "GRTrill.h"
 #include "GRCluster.h"
 #include "GRTuplet.h"
-#include "GRSpring.h"
 #include "GRPage.h"
 #include "GRSlur.h"
 #include "secureio.h"

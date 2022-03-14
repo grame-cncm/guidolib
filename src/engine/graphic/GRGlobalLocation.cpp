@@ -16,7 +16,6 @@
 #include "GRGlobalLocation.h"
 #include "GRStaff.h"
 #include "GREmpty.h"
-#include "GRSpring.h"
 #include "GRStdNoteHead.h"
 #include "GRGlobalStem.h"
 #include "GRVoice.h"

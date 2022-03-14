@@ -20,7 +20,6 @@
 #include "GRRod.h"
 #include "GRSpace.h"
 #include "GRStaffManager.h"
-#include "GRSpringForceIndex.h"
 #include "GRSpacingMatrix.h"
 #include "GRClef.h"
 #include "GRStaff.h"

@@ -23,7 +23,6 @@
 #include "GRGlobalStem.h"
 #include "GRNoteDot.h"
 #include "GRSingleNote.h"
-#include "GRSpring.h"
 #include "GRStaff.h"
 #include "GRStdNoteHead.h"
 #include "GRStem.h"
