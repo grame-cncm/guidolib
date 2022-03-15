@@ -41,6 +41,10 @@ class GRMark : public GRText
 
 		virtual void		OnDraw( VGDevice & hdc ) const;
 		virtual FloatRect	getTextMetrics(VGDevice & hdc, const GRStaff* staff) const;
+		
+		// left and right space overriden to minimize the space taken by the mark
+		virtual float 		getLeftSpace() const	{ return 0; }
+		virtual float 		getRightSpace() const	{ return 0; }
 
 		const ARMark *	getARMark() const;
 

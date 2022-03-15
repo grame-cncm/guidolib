@@ -1038,7 +1038,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		// then we introduce a text...
 		GRMark * grmark = new GRMark(mCurGrStaff, static_cast<ARMark *>(arOfCompleteObject));
-		grmark->setNeedsSpring(1);
 		mCurGrStaff->AddTag(grmark);
 		fMusic->addVoiceElement(arVoice,grmark);
 

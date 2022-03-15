@@ -26,9 +26,9 @@ extern GRStaff * gCurStaff;
 
 GRMark::GRMark(GRStaff * staff, const ARMark * ar) : GRText(staff, ar)
 {
+	mNeedsSpring = 1;
 	mPosition.y -= yoffset(staff);
 }
-
 
 GRMark::~GRMark()
 {
@@ -177,4 +177,3 @@ const ARMark * GRMark::getARMark() const
 {
 	return static_cast<const ARMark*>(getAbstractRepresentation());
 }
-
