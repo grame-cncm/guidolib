@@ -54,8 +54,8 @@ void GRFingering::OnDraw( VGDevice & hdc ) const
 	const ARFingering * fing = getARFingering();
 	if( fing == 0 ) return;
 
-	const VGColor textColor = startDraw(hdc);
-//	hdc.SetFontAlign( VGDevice::kAlignCenter + VGDevice::kAlignTop );
+	unsigned int fontalign;
+	const VGColor textColor = startDraw(hdc, fontalign);
 	const VGFont* font = hdc.GetTextFont();
 	float offset = LSPACE * (font->GetSize() / 52.f);
 
@@ -68,7 +68,7 @@ void GRFingering::OnDraw( VGDevice & hdc ) const
 	    hdc.DrawString( mPosition.x, ypos, list[i].c_str(), (int)list[i].size());
 	    ypos -= offset;
 	}
-	endDraw (hdc, textColor);
+	endDraw (hdc, textColor, fontalign);
 }
 
 // -----------------------------------------------------------------------------

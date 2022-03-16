@@ -73,8 +73,8 @@ class GRText : public GRPTagARNotationElement
 		virtual const GRText*	isText() const			{ return this; }
 
 	protected:
-		virtual const VGColor 	startDraw( VGDevice & hdc ) const;
-		virtual void			endDraw( VGDevice & hdc, const VGColor) const;
+		virtual const VGColor 	startDraw( VGDevice & hdc, unsigned int& fontalign ) const;
+		virtual void			endDraw( VGDevice & hdc, const VGColor, unsigned int fontalign) const;
 	
 		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()
 			{ return new GRTextSaveStruct; }	
