@@ -75,8 +75,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 7;
-const int GUIDOENGINE_SUB_VERSION   = 2;
-const char* GUIDOENGINE_VERSION_STR = "1.7.2";
+const int GUIDOENGINE_SUB_VERSION   = 3;
+const char* GUIDOENGINE_VERSION_STR = "1.7.3";
 
 ARPageFormat* gARPageFormat;
 const TagParametersMaps* gMaps = 0;
