@@ -5,6 +5,9 @@ Javascript lib history
 2022-03-16 	version 1.7.21
 	update to latest guido engine 1.7.2
 
+2021-12-13 	version 1.7.2
+	update to guido engine 1.7.2
+
 2021-11-17 	version 1.7.12
 	update unstable wasm library
 
