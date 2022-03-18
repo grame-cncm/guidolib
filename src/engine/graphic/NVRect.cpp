@@ -36,6 +36,7 @@ bool NVRect::Contains( const NVPoint & p ) const
 */
 bool NVRect::Collides( const NVRect & r ) const
 {
+	if (!r.Width()*r.Height()) return false;
 	return (( r.left < right ) && ( r.right > left )
 		&& ( r.top < bottom ) && ( r.bottom > top ));
 //	return (( r.left <= right ) && ( r.right >= left )

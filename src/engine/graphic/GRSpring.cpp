@@ -314,6 +314,7 @@ int GRSpring::setGRPositionX(GCoord p_posx)
 	fPosx = p_posx;
 	GuidoPos pos = fGrolst.GetHeadPosition();
 
+//if ((fId == 7) || (fId == 6)) print (cerr);
 	while (pos) {
 		GRNotationElement * el = fGrolst.GetNext(pos);
 		el->setHPosition(fPosx);
@@ -689,7 +690,10 @@ void GRSpring::checkAccidentalCollisions()
 			NVRect bb = acc->getBoundingBox();
 			bb += acc->getPosition();
 			bb += ystaffOffset;						// on next staff, add a y offset
-			accbbs.push_back(bb);
+			if (acc->getSize())
+				accbbs.push_back(bb);
+			else
+				accbbs.push_back(NVRect(0,0,0,0));
 			previousStaff = staff;
 		}
 		
@@ -822,7 +826,7 @@ void GRSpring::OnDraw( VGDevice & hdc ) const
 //------------------------------------------------------------------------
 void GRSpring::print(ostream& out) const
 {
-	out << "GRSpring id: " << fId << " date: " << fTp << " dur: " << fDur << " force/x/const: " << fForce << " " << fX << " " << fSconst << endl;
+	out << "GRSpring id: " << fId << " date: " << fTp << " dur: " << fDur << " force/x/sconst/fPosx: " << fForce << "/" << fX << "/" << fSconst << "/" << fPosx << endl;
 	GuidoPos pos = fGrolst.GetHeadPosition();
 	while (pos) {
 		GRNotationElement* elt = fGrolst.GetNext(pos);

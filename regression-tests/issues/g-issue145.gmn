@@ -1,0 +1,15 @@
+(*
+	issue #145
+	"none" Accidental introduces extra Offset in Chords 
+*)
+{
+[ 
+\stemsUp { a#1/16,  e2/16 }  
+], 
+[ 
+\staff<1>
+\acc<"none">( 
+\stemsDown a#1/16
+) 
+]
+}
