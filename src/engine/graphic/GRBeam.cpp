@@ -102,7 +102,6 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		
 	float ax [4] = { st->p[0].x, st->p[1].x, st->p[3].x, st->p[2].x };
 	float ay [4] = { st->p[0].y, st->p[1].y, st->p[3].y, st->p[2].y };
-	
 	// This does the drawing!
 	hdc.Polygon(ax, ay, 4);
 	
