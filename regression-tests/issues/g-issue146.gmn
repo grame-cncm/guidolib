@@ -1,0 +1,10 @@
+(*
+	issue #146
+	Beam Height becomes zero if Empty is present in sequence 
+*)
+
+[ 
+\beamBegin:1 
+d1/8 empty/8  d1/8 % empty/8  d1/8 empty/8  d1/8 
+\beamEnd:1
+]
