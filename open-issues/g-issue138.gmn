@@ -1,0 +1,23 @@
+(*
+	issue #138
+	unwanted space at clef change 
+	seems to be triggered by bar insertion
+*)
+
+{[ 
+	\clef<"g2">  
+	c/1 \bar 
+
+  \beamsOff  
+	g1/8 
+	\clef<"f4"> 
+	d1/8
+	c1/2
+]
+ , 
+[ \staff<1>  
+	empty/1  
+%	empty/2.
+]
+
+}

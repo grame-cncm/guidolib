@@ -1,0 +1,11 @@
+(* 
+	issue #147
+	Extra Accidental on multi-voice Chord
+*)
+{
+[ 
+	\clef<"g2"> \stemsUp { a#1/16,  e2/16}  ], 
+[ 
+	\staff<1>  \stemsDown  a#1/16 
+]
+}

@@ -1,0 +1,18 @@
+(*
+	issue #139
+	Wrong displayed duration when using \displayNote and \tuplet together
+*)
+{
+[
+	\clef<"g2-8"> 
+%	\key<0> \meter<"4/4", autoBarlines="off", autoMeasuresNum="system"> 
+%	\stemsUp
+%	\beamBegin:1
+	\tuplet<"3",dispNote="/8">(
+		\displayDuration<1,1,0>(a-1/12)
+  		c1/12
+		e/12
+	)
+%	\beamEnd:1
+]
+}
