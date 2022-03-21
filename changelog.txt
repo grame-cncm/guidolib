@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.7.3
+- fix extra accidental on multi-voice chord (issue #147)
 - fix incorrect beaming with empty (issue #146)
 - fix accidental extra space in chords (issue #145)
 
