@@ -958,12 +958,12 @@ void GRStaff::DebugPrintState(const char * info) const
 // ----------------------------------------------------------------------------
 /** \brief A new measure.
 */
-void GRStaff::newMeasure(const TYPE_TIMEPOSITION & tp)
+void GRStaff::newMeasure(const TYPE_TIMEPOSITION & tp, bool reset)
 {
 	// reset of accidentals
 	// quick-hack-implementation -> encode which accidentals are already set
 	// and which must be deleted in the next measure etc.
-	mStaffState.reset2key ();
+	if (reset) mStaffState.reset2key ();
 }
 
 // ----------------------------------------------------------------------------
@@ -1403,7 +1403,7 @@ staff_debug("AddDoubleBar");
 GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITION & date)
 {
 staff_debug("AddFinishBar");
-	newMeasure(date); // erhoeht u.a. mnum!
+	newMeasure(date, false); // erhoeht u.a. mnum!
 	if (mStaffState.curbarfrmt) arfbar->setRanges(mStaffState.curbarfrmt->getRanges());
 	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, date, fProportionnalRendering);
 

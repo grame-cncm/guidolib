@@ -323,7 +323,7 @@ class GRStaff : public GRCompositeNotationElement
 		
  	 private:
 		TYPE_TIMEPOSITION	fLastSystemBarChecked;
-		void newMeasure(const TYPE_TIMEPOSITION & tp);
+		void newMeasure(const TYPE_TIMEPOSITION & tp, bool reset=true);
 		
 		std::map<TYPE_TIMEPOSITION, bool> fOnOffList;
 		std::map<float, float> fPositions;
