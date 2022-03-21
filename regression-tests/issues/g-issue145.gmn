@@ -4,7 +4,7 @@
 *)
 {
 [ 
-\stemsUp { a#1/16,  e2/16 }  
+\stemsUp { \acc(a#1/16),  e2/16 }  
 ], 
 [ 
 \staff<1>
