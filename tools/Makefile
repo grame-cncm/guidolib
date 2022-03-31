@@ -1,13 +1,14 @@
 
 INC = -I../src/engine/include -I../src/engine/devices
+LIBDIR = ../build/lib
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
-  lib =  -stdlib=libc++ -mmacosx-version-min=10.7 -F../build/MacOS/Release/ -framework GUIDOEngine
+  lib =  -stdlib=libc++ -L$(LIBDIR) -l GUIDOEngine
   INC := $(INC)  -I../platforms/macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)
-  lib =  ../../build/win32/Release/GUIDOEngine.lib
+  lib =  $(LIBDIR)/GUIDOEngine.lib
 else
   lib = -lGUIDOEngine
   INC := $(INC)  -I../../platforms/linux/src $(shell pkg-config --cflags cairo)
