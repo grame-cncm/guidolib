@@ -39,7 +39,7 @@ class MIDI2GMNConverter;
 		\return a Guido error code.
 	*/
 // voir pour un préambule
-	GUIDOAPI(GuidoErrCode) GuidoMIDIFile2AR (const char* filename, int tracknum, std::string& outgmn);
+	GUIDOAPI GuidoErrCode GuidoMIDIFile2AR (const char* filename, int tracknum, std::string& outgmn);
 
 
 // voir pour un préambule
@@ -48,27 +48,27 @@ class MIDI2GMNConverter;
 		
 		A midi converter is designed to handle real-time midi streams. It should be release using GuidoMIDI2GMNStop.
 	*/
-	GUIDOAPI(MIDI2GMNConverter*) GuidoMIDI2GMNStart ();
+	GUIDOAPI MIDI2GMNConverter* GuidoMIDI2GMNStart ();
 
 	/**	\brief Closes a midi 2 guido converter
 		\param converter: a converter previously created with GuidoMIDI2GMNStart
 		\param date: a time expressed in midi ticks (mls could be used with the default tpqn)
 	*/
-	GUIDOAPI(std::string) GuidoMIDI2GMNStop (MIDI2GMNConverter* converter, int date);
+	GUIDOAPI std::string GuidoMIDI2GMNStop (MIDI2GMNConverter* converter, int date);
 
 	/**	\brief Converts a MIDI pitch to GMN
 		\param converter: a converter previously created with GuidoMIDI2GMNStart
 		\param date: a time expressed in midi ticks (mls could be used with the default tpqn)
 		\param pitch: a MIDI pitch
 	*/
-	GUIDOAPI(std::string) GuidoMIDINoteOn2GMN (MIDI2GMNConverter* converter, int date, int pitch);
+	GUIDOAPI std::string GuidoMIDINoteOn2GMN (MIDI2GMNConverter* converter, int date, int pitch);
 
 	/**	\brief Fix the duration of the note previously opened with GuidoMIDINoteOn2GMN
 		\param converter: a converter previously created with GuidoMIDI2GMNStart
 		\param date: a time expressed in midi ticks (mls could be used with the default tpqn)
 		\param pitch: a MIDI pitch
 	*/
-	GUIDOAPI(std::string) GuidoMIDINoteOff2GMN (MIDI2GMNConverter* converter, int date, int pitch);
+	GUIDOAPI std::string GuidoMIDINoteOff2GMN (MIDI2GMNConverter* converter, int date, int pitch);
 
 #ifdef __cplusplus
 }
