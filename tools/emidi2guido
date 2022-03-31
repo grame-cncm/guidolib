@@ -1,7 +1,0 @@
-#!/bin/sh
-#
-
-echo "[ \\meter<\"4/4\"> \\stemsOff"
-midi2guido $*
-echo "]"
-
