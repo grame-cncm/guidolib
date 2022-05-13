@@ -1,0 +1,19 @@
+(*
+	issue #151
+	cannot use both staccato and tenuto on more than one note at the same time
+*)
+{
+[ \clef<"g2"> \key<0>
+
+g2/8 _/8
+\stacc(\ten(g2/8)) _/8
+\stacc(\marcato(g2/8)) _/8
+\stacc(\accent(g2/8)) _/8
+\stacc(\mord(g2/8)) _/8\bar
+	
+{e2/8, g2/8} _/8
+\stacc(\ten({e2/8, g2/8})) _/8
+\stacc(\marcato({e2/8, g2/8})) _/8
+\stacc(\accent({e2/8, g2/8})) _/8
+\stacc(\mord({e2/8, g2/8})) _/8\bar]
+}
