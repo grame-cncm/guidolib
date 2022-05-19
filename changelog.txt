@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.7.4
+- fix multiple articulations on chords (issue #151)
 
 ----------------------------------------------------------------
   version 1.7.3

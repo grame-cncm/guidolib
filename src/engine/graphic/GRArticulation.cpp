@@ -141,7 +141,7 @@ GRArticulation::GRArticulation(const ARMusicalTag * inTag, float curLSPACE, bool
 
 void GRArticulation::print(ostream& os) const
 {
-	os << "articulation " << mArticulationFlag << endl;
+	os << "articulation " << mArticulationFlag ;
 }
 
 
@@ -257,7 +257,8 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 {																			// is set
 	GREvent * ev = GREvent::cast(caller);
 	if( ev == 0 ) return;
-	
+	if (ev->isEmpty() && !ev->getDuration()) return;
+
 	NVPoint newPoint (inPos);
 	switch( mArticulationFlag )
 	{

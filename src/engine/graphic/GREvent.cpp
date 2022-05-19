@@ -298,7 +298,7 @@ void GREvent::addArticulation( const ARMusicalTag * inTag )
 	// DEBUG, try to place the articulation correctly. (OK, this fixes bugs)
 	newArticulation->tellPosition( this, getPosition());
 
-	mArticulationFlags |= newArticulation->getArticulationType(); // Avoids the use of 2 identical articulations
+//	mArticulationFlags |= newArticulation->getArticulationType(); // Avoids the use of 2 identical articulations
 	updateBoundingBox(); // ok ?
 }
 

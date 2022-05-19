@@ -2235,32 +2235,38 @@ void GRVoiceManager::handleSharedArticulations(const TSharedArticulationsList& l
 
 	int placement = ARArticulation::kDefaultPosition;
 
-	GRRange* r = list[0].first;
 	GDirection stemdir = high->getStemDirection();
 	low->setStemDirection(stemdir);			// required for a correct placement of the articulation
 	high->setStemDirection(stemdir);			// required for a correct placement of the articulation
 
-	const ARArticulation* art = dynamic_cast<const ARArticulation*>(r->getAbstractRepresentation());
-	if (art)  placement = art->getArticulationPosition();
+	std::map<GRRange*, bool> previous;
+	for (auto elt: list) {
+		GRRange* r = elt.first;
+		if (previous[r]) continue;
+		previous[r] = true;
 
-	if (placement == ARArticulation::kAbove)
-		r->addAssociation (high);
-	else if (placement == ARArticulation::kBelow)
-		r->addAssociation (low);
-	else {
-		switch (stemdir) {
-		case dirOFF:
+		const ARArticulation* art = dynamic_cast<const ARArticulation*>(r->getAbstractRepresentation());
+		if (art)  placement = art->getArticulationPosition();
+
+		if (placement == ARArticulation::kAbove)
 			r->addAssociation (high);
-			break;
-		case dirUP:
+		else if (placement == ARArticulation::kBelow)
 			r->addAssociation (low);
-			break;
-		case dirDOWN:
-			r->addAssociation (high);
-			break;
-		case dirAUTO:
-			r->addAssociation (high);
-			break;
+		else {
+			switch (stemdir) {
+			case dirOFF:
+				r->addAssociation (high);
+				break;
+			case dirUP:
+				r->addAssociation (low);
+				break;
+			case dirDOWN:
+				r->addAssociation (high);
+				break;
+			case dirAUTO:
+				r->addAssociation (high);
+				break;
+			}
 		}
 	}
 }
