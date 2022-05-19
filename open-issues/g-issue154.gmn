@@ -4,13 +4,19 @@
 *)
 {
 [ \staff<1>  
-   (* meas. 1 *)  \clef<"f4"> \key<0> \meter<"C", autoBarlines="off", autoMeasuresNum="system"> 
-   \staff<2> \stemsUp  \beamBegin:1 \beamBegin:2  f-1/16 c0/16 d0/16 e0/16 \beamEnd:2 \beamBegin:2 
-   \staff<1> \stemsDown f0/16 a0/16 c1/16 d1/16 \beamEnd:1 \beamEnd:2 
-   \staff<2> \stemsUp \beamBegin:1 \beamBegin:2 e1/16 
-   \staff<1> \stemsDown d1/16 c1/16 a0/16 \beamEnd:2 \beamBegin:2 f0/16 
-   \staff<2> \stemsUp e0/16 d0/16 c0/16 \beamEnd:1 \beamEnd:2 ]
- , 
+   (* meas. 1 *)  \clef<"f4"> \key<0> 
+	\meter<"C", autoBarlines="off", autoMeasuresNum="system"> 
+   \staff<2> \stemsUp  
+	\beamBegin:1 \beamBegin:2  f-1/16 c0/16 d0/16 e0/16 \beamEnd:2 \beamBegin:2 
+   \staff<1> \stemsDown f0/16 a0/16 c1/16 d1/16 
+	\beamEnd:1 \beamEnd:2 
+   \staff<2> \stemsUp 
+	\beamBegin:1 \beamBegin:2 e1/16 
+   \staff<1> \stemsDown d1/16 c1/16 a0/16 
+	\beamEnd:2 \beamBegin:2 f0/16 
+   \staff<2> \stemsUp e0/16 d0/16 c0/16 
+	\beamEnd:1 \beamEnd:2 
+] , 
 [ \staff<2> 
    (* meas. 1 *) \clef<"f4"> \key<0> \meter<"C", autoBarlines="off", autoMeasuresNum="system"> \beamsOff 
    \ten<position="below">( f-1/1)
