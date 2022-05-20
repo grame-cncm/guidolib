@@ -377,13 +377,17 @@ void ARMusic::doAutoStuff()
 
 	int counter = 0;
 	pos = GetHeadPosition();
-	//char statusmsg[100];
 
 	while (pos) {
 		++counter;
 		ARMusicalVoice * arvc = GetNext(pos);
 		timebench("doAutoStuff1", arvc->doAutoStuff1());
 	}
+
+//cerr << "======================== after auto stuff 1" << endl;
+//	GMNCodePrintVisitor va(cerr);
+//	this->accept (va);
+
 
 	// now, we do the stuff that needs to be done by ALL voices ...
 	// AutoBreaks inserts possible breaks at the positions, keeping track of explicit newlines ....

@@ -45,8 +45,7 @@ NVPoint GRClef::refposAlto;
 unsigned int GRClef::sClefTextAlign;
 
 GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
- 				 : GRTagARNotationElement(arClef, curstaff->getStaffLSPACE(), ownsAR),
-    				mOctaveStr(0)
+ 				 : GRTagARNotationElement(arClef, curstaff->getStaffLSPACE(), ownsAR)
 {
 	assert(arClef);
 	assert(curstaff);
@@ -252,7 +251,7 @@ void GRClef::accept (GRVisitor& visitor)
 // -----------------------------------------------------------------------------
 void GRClef::setHPosition( float inX )
 {
-//	cerr << (void*)this << " GRClef::setHPosition " << inX << endl;
+//cerr << (void*)this << " GRClef::setHPosition " << inX << " spring id: " << getSpringID() << endl;
 	GRTagARNotationElement::setHPosition(inX);
 	mMapping = mBoundingBox;
 	float h = mBoundingBox.Height();
