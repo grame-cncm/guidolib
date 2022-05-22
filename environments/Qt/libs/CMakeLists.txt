@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 project(GuidoQTLibraries)
 
 option ( IOS    "Generate iOS libraries"	off )
-option ( QT6    "Use Qt6"	off )
+option ( QT6    "Use Qt6"	on )
 
 set (CMAKE_CXX_STANDARD 17)
 
@@ -25,6 +25,12 @@ if(IOS)
 	message (STATUS "Generate libraries for iOS")
 	set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "iphoneos")
 	set (CMAKE_OSX_SYSROOT "iphoneos")
+endif()
+
+#######################################
+if(WIN32)
+	# the following flags have beeen introduced for VS 16 2019
+	set (CMAKE_CXX_FLAGS "-DWIN32 /EHsc /Zc:__cplusplus /permissive-")
 endif()
 
 #######################################

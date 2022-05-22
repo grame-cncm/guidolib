@@ -1,8 +1,8 @@
 
 @echo off
 
-set MSVC="Visual Studio 15 2017 Win64"
-set VERSION="1.7.1"
+set MSVC="Visual Studio 16 2019"
+set VERSION="1.7.5"
 set BUILDDIR="builddir"
 
 if [%1]==[]     GOTO USAGE

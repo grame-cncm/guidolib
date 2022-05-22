@@ -88,7 +88,7 @@ if (WIN32)
 		set( DEFS ${DEFS} GCC )
 	endif()
 
-	if (${CMAKE_GENERATOR} MATCHES ".*Win64")
+	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set( DEFS ${DEFS} WIN64 )
 		set (WIN64 1)
 		set (target GUIDOEngine64)

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 
 project(GuidoQTApplications)
 
-option ( QT6    "Use Qt6"	off )
+option ( QT6    "Use Qt6"	on )
 set (CMAKE_CXX_STANDARD 17)
 
 #######################################
@@ -15,7 +15,7 @@ set (CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} guido2image GuidoEditor GuidoSceneCo
 # shared guidoengine settings
 set (GUIDO_INCLUDE_DIRS ${GUIDODIR}/src/engine/include)
 if (WIN32)
-	if ("${CMAKE_GENERATOR}" MATCHES "(Win64|IA64)")
+	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set (GUIDO_LIBRARY ${GUIDODIR}/build/lib/GUIDOEngine64.lib)
 	else()
 		set (GUIDO_LIBRARY ${GUIDODIR}/build/lib/GUIDOEngine.lib)
