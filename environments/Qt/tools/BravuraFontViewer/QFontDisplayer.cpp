@@ -125,11 +125,11 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	int xOffset = cellSize / 4;
 	int yOffset = cellSize / 4;
 	QPen lightPen( Qt::red );
-	lightPen.setWidth( 0.5f );
+	lightPen.setWidth( 1 );
 	lightPen.setStyle( Qt::DotLine );
 
 	QPen pen;
-	pen.setWidth(1.5);
+	pen.setWidth(2);
 	for (int i = 0 ; i < mNbOfColumns ; i++ )
 	{
 		int x = (i+2) * CELL_WIDTH;
@@ -149,7 +149,7 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	}
 	
 	QPen bbpen (Qt::blue);
-	bbpen.setWidth(1.5);
+	bbpen.setWidth(2);
 	unsigned int glyph = STARTGLYPH;
 	for (int j = 0 ; j < nbOfRows ; j++ )
 	{

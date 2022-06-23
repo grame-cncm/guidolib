@@ -14,7 +14,7 @@ set (CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} guido2image GuidoEditor GuidoSceneCo
 # Qt settings
 if (QT6)
 	find_package(Qt6 COMPONENTS Widgets REQUIRED)
-	set (QTINCDIRS 	${Qt6Widget_INCLUDE_DIRS})
+	set (QTINCDIRS 	${Qt6Widget_INCLUDE_DIRS} ${Qt6Core_INCLUDE_DIRS})
 	set (QTLIBS 	Qt6::Widgets)
 	set ( TOOLS_DEFINITIONS -DQTFONTMETRICS_511)
 	message (STATUS "Using Qt version ${Qt6Widgets_VERSION}")
@@ -43,14 +43,12 @@ else()
 	set (GUIDO_LIBRARY "-L${GUIDODIR}/build/lib -lGUIDOEngine")
 endif()
 
-#message ("GUIDO_LIBRARY ${GUIDO_LIBRARY}")
-
 
 set (BINDIR ${ROOT}/bin)
 
 #######################################
 # add fontmetrics
-message (STATUS "Include FontMetrics tools")
+message (STATUS "Include FontMetrics tool")
 set (fontmetrics fontmetrics)
 add_executable(${fontmetrics} FontMetrics/main.cpp)
 target_include_directories (${fontmetrics} PRIVATE ${Qt5Widget_INCLUDE_DIRS})
@@ -65,7 +63,7 @@ set_target_properties (${fontmetrics} PROPERTIES
 
 #######################################
 # add GuidoFontMetrics
-message (STATUS "Include GuidoFontMetrics tools")
+message (STATUS "Include GuidoFontMetrics")
 set (gfmetrics guidofontmetrics)
 add_executable(${gfmetrics} GuidoFontMetrics/main.cpp)
 target_include_directories (${gfmetrics} PRIVATE ${Qt5Widget_INCLUDE_DIRS})
@@ -80,7 +78,7 @@ set_target_properties (${gfmetrics} PROPERTIES
 
 #######################################
 # add GuidoQtFontViewer
-message (STATUS "Include GuidoQtFontViewer tools")
+message (STATUS "Include GuidoQtFontViewer")
 set (fontviewer GuidoQtFontViewer)
 if (WIN32)
 	set(EXE WIN32)
@@ -89,12 +87,33 @@ elseif(APPLE)
 endif()
 set (VSRC 	GuidoQtFontViewer/main.cpp GuidoQtFontViewer/QFontDisplayer.cpp GuidoQtFontViewer/QFontDisplayer.h )
 add_executable(${fontviewer} ${EXE} ${VSRC} )
-target_include_directories (${fontviewer} PRIVATE ${Qt5Widget_INCLUDE_DIRS})
+target_include_directories (${fontviewer} PRIVATE ${QTINCDIRS})
 target_link_libraries (${fontviewer} PRIVATE ${QTLIBS})
 if (DEFINED TOOLS_DEFINITIONS)
 	target_compile_definitions (${fontviewer} PRIVATE ${TOOLS_DEFINITIONS})
 endif()
 set_target_properties (${fontviewer} PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY  ${BINDIR}
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${BINDIR}
+)
+
+#######################################
+# add BravuraFontViewer
+message (STATUS "Include BravuraFontViewer")
+set (bfontviewer BravuraFontViewer)
+if (WIN32)
+	set(EXE WIN32)
+elseif(APPLE)
+	set(EXE MACOSX_BUNDLE)
+endif()
+set (BSRC 	BravuraFontViewer/main.cpp BravuraFontViewer/QFontDisplayer.cpp BravuraFontViewer/QFontDisplayer.h )
+add_executable(${bfontviewer} ${EXE} ${BSRC} )
+target_include_directories (${bfontviewer} PRIVATE ${QTINCDIRS})
+target_link_libraries (${bfontviewer} PRIVATE ${QTLIBS})
+if (DEFINED TOOLS_DEFINITIONS)
+	target_compile_definitions (${bfontviewer} PRIVATE ${TOOLS_DEFINITIONS})
+endif()
+set_target_properties (${bfontviewer} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY  ${BINDIR}
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE  ${BINDIR}
 )

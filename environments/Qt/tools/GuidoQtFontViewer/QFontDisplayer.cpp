@@ -135,7 +135,7 @@ void QFontDisplayer::paintEvent( QPaintEvent * event )
 	int xOffset = cellSize / 4;
 	int yOffset = cellSize / 4;
 	QPen lightPen( Qt::red );
-	lightPen.setWidth( 0.5f );
+	lightPen.setWidth( 1 );
 	lightPen.setStyle( Qt::DotLine );
 #endif	
 
