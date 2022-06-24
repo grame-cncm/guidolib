@@ -1028,7 +1028,7 @@ void ARMusicalVoice::doMicroTonal()
 */
 void ARMusicalVoice::getOctava(int voice, std::map< int, std::vector<AROctava*> >& list)
 {
-cerr << "ARMusicalVoice::getOctava " << voice << endl;
+//cerr << "ARMusicalVoice::getOctava " << voice << endl;
 	setReadMode (EVENTMODE);
 	
 	int curstaff = voice;
@@ -3161,6 +3161,17 @@ void ARMusicalVoice::doAutoDisplayCheck()
 		TYPE_DURATION dur = DURATION_0;
 		// track tie- and merge-tags
 
+
+//const PositionTagList * tl = vst.getCurPositionTags();
+//GuidoPos tlpos = tl ? tl->GetHeadPosition() : 0;
+//bool hasDispDur = false;
+//while (tlpos) {
+//	ARPositionTag* ptag = tl->GetNext(tlpos);
+//	ARDisplayDuration * disp = dynamic_cast<ARDisplayDuration *>(ptag);
+//	if (disp) cerr << __LINE__ << " ARMusicalVoice::doAutoDisplayCheck disp " << disp << " " << disp->getIsAuto() << " " << disp->getRelativeTimePosition() << " " << disp->getDuration() << endl;
+//	hasDispDur = true;
+//}
+
 		// check, whether positiontags have been removed ...
 		if (vst.removedpositiontags)
 		{
@@ -3381,6 +3392,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				// if there is a base other than 1, we have to tell the dispduration for the event ...
 				// we need to do this also, when a merge-tag is active ...
 				if (base.getNumerator() != 1 || mergelookahead)
+//				if ((!hasDispDur && base.getNumerator() != 1) || mergelookahead)
 					InsertDisplayDurationTag( dispdur,b_punkt, ev->getRelativeTimePosition(),pos, vst);
 
 				if (mergelookahead) {
@@ -3399,6 +3411,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						GetNext(tmppos,armergestate);
 					}
 				}
+//				hasDispDur = false;
 			}
 			else if (!dontsplit) {
 				// not Displayable ... this means, we have to adjust the event ...
