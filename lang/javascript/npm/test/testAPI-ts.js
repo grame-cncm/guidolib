@@ -11,25 +11,6 @@ class GuidoEngine {
         this.fSPR = new module.GUIDOReducedProportionalAdapter();
         this.fEngine.init();
     }
-    // async initialise():Promise<any> { 
-    //     var module = GuidoModule();
-    //     return new Promise( (success: any, failure: any) => {
-    //         module['onRuntimeInitialized'] = () => {
-    //             this.moduleInit (module);
-    //             success ( this ); 
-    //             }
-    //     });
-    // }
-    //------------------------------------------------------------------------
-    // async initialization
-    // moduleInit ( module : any ) : void {
-    //     this.fEngine 		= new module.GuidoEngineAdapter();
-    //     this.fScoreMap      = new module.GUIDOScoreMap();
-    //     this.fPianoRoll		= new module.GUIDOPianoRollAdapter();
-    //     this.fFactory		= new module.GUIDOFactoryAdapter();
-    //     this.fSPR           = new module.GUIDOReducedProportionalAdapter();
-    //     this.fEngine.init();
-    // }
     //------------------------------------------------------------------------
     // Guido Engine interface
     start() { this.fEngine.init(); }

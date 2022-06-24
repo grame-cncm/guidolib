@@ -3,7 +3,7 @@
 
 const fs = require ("fs");
 const GuidoEngine = require ("../guidoengine");
-const run = require ("./testAPI");
+const test = require ("./testAPI.ts.node");
 const GuidoModule = require ("../libGUIDOEngine");
 
 GuidoModule().then ( (module) => { doit (new GuidoEngine (module)); } );
@@ -16,5 +16,5 @@ function svg(str, name) {
 
 function doit (engine) {
 	console.log( "Guido Engine version " + engine.getVersion().str);
- 	run ( engine, log, svg );
+ 	test.run ( engine, log, svg );
 }
