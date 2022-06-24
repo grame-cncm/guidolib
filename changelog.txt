@@ -3,6 +3,8 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.7.5
+- extends guido font version 3.92 with inverted turn (with a bar)
+- add invertedb type to \turn 
 
 ----------------------------------------------------------------
   version 1.7.4
