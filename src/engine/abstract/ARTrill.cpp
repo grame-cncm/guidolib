@@ -181,6 +181,7 @@ void ARTrill::setTagParameters (const TagParameterMap& params)
 	if (type == "prall")			fType = kPrall;
 	else if (type == "prallprall")	fType = kPrallPrall;
 	else if (type == "inverted")	fType = kInverted;
+	else if (type == "invertedb")	fType = kInvertedBar;
 	else if (type == "prallinverted") fType = kPrallInverted;
 }
 

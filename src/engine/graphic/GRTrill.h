@@ -65,7 +65,7 @@ class GRTrill : public GRPTagARNotationElement
 		
 		void setupTrill();
 		void setupTurn();
-		void setupInvertedTurn();
+		void setupInvertedTurn(bool bar);
 //		void setupTurnComplex();
 //		void setupInvertedTurnComplex();
 		void setupMord();

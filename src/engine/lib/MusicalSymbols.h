@@ -152,6 +152,7 @@ ConstMusicalSymbolID kBuzzPizzSymbol		 = 226;
 ConstMusicalSymbolID kFingernailPizzSymbol	 = 227;
 ConstMusicalSymbolID kStaccmoUpSymbol		 = 228;
 ConstMusicalSymbolID kInvertedTurnSymbol	 = 229;
+ConstMusicalSymbolID kInvertedTurnBarSymbol	 = 250;
 ConstMusicalSymbolID kCodaSymbol			 = 230;
 
 // version 1.39

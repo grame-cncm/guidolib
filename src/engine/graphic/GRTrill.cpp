@@ -74,7 +74,9 @@ GRTrill::GRTrill(GRStaff * inStaff, const ARTrill * ar ) : GRPTagARNotationEleme
 
 		case ARTrill::TURN:
 			switch (type) {
-				case ARTrill::kInverted:			setupInvertedTurn();
+				case ARTrill::kInverted:			setupInvertedTurn(false);
+					break;
+				case ARTrill::kInvertedBar:			setupInvertedTurn(true);
 					break;
 				default :							setupTurn();
 			}
@@ -390,10 +392,10 @@ void GRTrill::setupTurn()
 	mBoundingBox.Set(-mLeftSpace, -height/2, mRightSpace, height/2);
 }
 
-void GRTrill::setupInvertedTurn()
+void GRTrill::setupInvertedTurn(bool bar)
 {
 	const float hs = LSPACE * 0.5f;
-	setTrillSymbol (kInvertedTurnSymbol);
+	setTrillSymbol (bar ? kInvertedTurnBarSymbol : kInvertedTurnSymbol);
 	NVPoint offsetAccidental = NVPoint(-3*hs, 0);
 	fAccidental->addToOffset(offsetAccidental);
 	
@@ -401,30 +403,6 @@ void GRTrill::setupInvertedTurn()
 	sRefPos = NVPoint(-mLeftSpace, 0);
 	mBoundingBox.Set(-mLeftSpace, -height/2, mRightSpace, height/2);
 }
-
-//void GRTrill::setupTurnComplex()
-//{
-//	const float hs = LSPACE * 0.5f;
-//	setTrillSymbol (kTurnSymbol);
-//	NVPoint offsetAccidental = NVPoint(2*hs, 0);
-//	fAccidental->addToOffset(offsetAccidental);
-//	
-//	const float height = LSPACE * 0.98f;
-//	sRefPos = NVPoint(LSPACE * 1.5f, 0);
-//	mBoundingBox.Set(1.5f*LSPACE, -height/2, 2*mRightSpace+1.5f*LSPACE, height/2);
-//}
-
-//void GRTrill::setupInvertedTurnComplex()
-//{
-//	const float hs = LSPACE * 0.5f;
-//	setTrillSymbol (kInvertedTurnSymbol);
-//	NVPoint offsetAccidental = NVPoint(2*hs, 0);
-//	fAccidental->addToOffset(offsetAccidental);
-//	
-//	const float height = LSPACE * 0.98f;
-//	sRefPos = NVPoint(LSPACE * 1.5f, 0);
-//	mBoundingBox.Set(1.5f*LSPACE, -height/2, 2*mRightSpace+1.5f*LSPACE, height/2);
-//}
 
 void GRTrill::setupMord()
 {

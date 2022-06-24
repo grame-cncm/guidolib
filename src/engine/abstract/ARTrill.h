@@ -57,7 +57,7 @@ See the [Sonata](@EXAMPLES/cpebach/) example.
 @tagname:\trill
 @tagalias:\trillBegin \trillEnd
 @tagtype:R
-@tagnotation:a turn ornament
+@tagnotation:a trill ornament
 @tagdesc
 @tagend
 
@@ -92,13 +92,15 @@ See the [Sonata](@EXAMPLES/cpebach/) example.
 
 @params:
 @param:note:string:a note, part of the ornament:*none*:true
-@param:type:string:inverted or regular:regular:true
+@param:type:string:inverted, invertedb or regular:regular:true
 @param:detune:float:note tuning (for microtonality):0.0:true
 @param:accidental:string:cautionary or force:*none*:true
 @param:adx:unit:accidental displacement (if any):0hs:true
 @param:ady:unit:accidental displacement (if any):0hs:true
 @param:position:string:above, below:above:true
 @paramdesc
+- **invertedb** displays as a regular turn with a bar.
+
 The parameters have the same effect as for [\mordent](#mordent)
 
 See the [Ornaments](@EXAMPLES/ornaments/) example.<br />
@@ -114,7 +116,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 {		
 	public:
 			enum ORNAMENT { TRILL,TURN,MORD };
-			enum TYPE { kPrall, kInverted, kPrallPrall, kPrallInverted };
+			enum TYPE { kPrall, kInverted, kInvertedBar, kPrallPrall, kPrallInverted };
 			enum POS  { BELOW, /*ONNOTE,*/ ABOVE, AUTO };
 			enum	{ kUndefined, kOn, kOff };
 
