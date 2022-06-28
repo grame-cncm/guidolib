@@ -1,0 +1,12 @@
+(*
+	issue #158
+	Notes collisions in multi-voices context
+*)
+
+{
+[ 
+	\set<resolveMultiVoiceCollisions="on">
+	\clef<"g2"> \key<-3> \meter<"2/4"> \stemsUp a1/8 c2/4 ]
+, 
+[ \staff<1> \stemsDown g&1/16 ]
+}

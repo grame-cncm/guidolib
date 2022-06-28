@@ -1,0 +1,10 @@
+(*
+	this script illustrates the new 'resolveMultiVoiceCollisions' parameter
+	of the \set (or \auto) tag
+*)
+{ 
+	[ 	\set<resolveMultiVoiceCollisions="on">
+		\stemsUp g ]
+	, [ \staff<1> \stemsDown f#/8 e& ]
+	, [ \staff<1> \stemsDown d&] 
+}
