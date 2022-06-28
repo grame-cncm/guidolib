@@ -2,6 +2,10 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+  version 1.7.6
+- new \auto tag parameter: resolveMultiVoiceCollisions intended to multi voices note collisions (issue #158)
+
+----------------------------------------------------------------
   version 1.7.5
 - extends guido font version 3.92 with inverted turn (with a bar)
 - add invertedb type to \turn 
