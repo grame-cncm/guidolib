@@ -309,6 +309,9 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 	else if ((arauto = dynamic_cast<const ARAuto *>(mtag)) != 0) {
 			// we have an auto(set)-Tag set...
 			mStaffMgr->setAutoTag(arauto);
+			if (mCurGrStaff && arauto->hasMultiVoiceCollision()) {
+				mCurGrStaff->getGRStaffState().setMultiVoiceCollisions (arauto->getAutoMultiVoiceCollisions());
+			}
 	}
 	else
 		retval = false;

@@ -119,6 +119,8 @@ class GRStaffState
         const TagParameterFloat* getStaffDistance() const       { return staffDistance; }
     
         void setStaffLSPACE(float value)                        { staffLSPACE = value * 2; } // Factor 2 to be consistent with GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
+        void setMultiVoiceCollisions(bool state)                { fMultiVoiceCollisions = state; }
+        bool multiVoiceCollisions() const                       { return fMultiVoiceCollisions; }
 
 	private:
 		// Meter-Parameters
@@ -160,6 +162,7 @@ class GRStaffState
         unsigned char *colRef;
 		float	distance;
 		bool	distanceset;
+		bool	fMultiVoiceCollisions = false;
 		// this is VOICE-Stuff!
 		// Stemdirection
 		// stemstate stemset;  // STEMUP, STEMDOWN, STEMAUTO
@@ -288,6 +291,7 @@ class GRStaff : public GRCompositeNotationElement
 		float	getProportionnalRender() const { return this->fProportionnalRendering; }
 		float	getStaffBottom () const;
 		void	checkCollisions (TCollisions& state) const;
+		void	checkMultiVoiceNotesCollision ();
 		float	getNotesDensity () const;
 		size_t	getLyrics (std::vector<const GRNotationElement*>& list) const;
 	

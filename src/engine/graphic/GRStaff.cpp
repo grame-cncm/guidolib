@@ -62,6 +62,7 @@ using namespace std;
 #include "GRStaff.h"
 #include "GRBar.h"
 #include "GRBarFormat.h"
+#include "GRBeam.h"
 #include "GRClef.h"
 #include "GRDoubleBar.h"
 #include "GRDummy.h"
@@ -509,13 +510,122 @@ float GRStaff::getNotesDensity () const
 	return occupied / getBoundingBox().Width();
 }
 
+
+// ----------------------------------------------------------------------------
+// detect and fix multi-voices note collisions e.g. { [ \stemsUp g ], [\staff<1>\stemsDown f] }
+void GRStaff::checkMultiVoiceNotesCollision ()
+{
+	bool inChord = false, pendingChord = false;		// used for chords detection
+	NEPointerList* elts = getElements();
+	map<TYPE_TIMEPOSITION, map<GRSingleNote*, float> > vmap;	// map of notes at a given date
+																// notes are associated to their shift value (which is currently no used)
+	map<GRSingleNote*, GRBeam*> beamed;							// map of notes that are beamed
+
+	GuidoPos pos = elts->GetHeadPosition();
+	while (pos) {
+		GRNotationElement * e = elts->GetNext(pos);
+		GRBeam* beam = dynamic_cast<GRBeam*>(e);
+		if (e->isEmpty()) {
+			if (inChord)							// at this point this is a chord end
+				inChord = pendingChord = false;		// set the chord flags off
+			else pendingChord = true;				// at this point, we possibly enter a chord
+		}
+		else if (e->isChordComma() && pendingChord)
+			inChord = true;							// at this point we're entering a chord
+		else if (!inChord) {						// here we deal with notes outside chords
+			GRSingleNote* note = e->isSingleNote();
+			if (note && !note->isGraceNote() && !note->isEmpty()) { // ignore empty and grace notes
+				TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
+				map<GRSingleNote*, float> list = vmap[date];
+				float shift = 0;
+				for (auto elt: list) {								// check each note at a given date
+					const ARNote* first = elt.first->getARNote();
+					const ARNote* second = note->getARNote();
+					if ((first->getOctave() == second->getOctave()) &&  (std::abs(first->getPitch() - second->getPitch()) == 1)) {
+						NVPoint npos = note->getPosition();
+						shift = getStaffLSPACE() * 0.83f;
+						npos.x += shift;
+						note->setPosition(npos);
+						GRBeam* beam = beamed[note];
+						if (beam) beam->refreshPosition();			// beams of shifted note needs to ne refreshed
+						break;
+					}
+				}
+				vmap[date][note] = shift;							// store note in the map with it's shift value
+			}
+			else if (beam) {										// collect beams and associated notes
+				NEPointerList * assoc = beam->getAssociations();
+				GuidoPos bpos = assoc ? assoc->GetHeadPosition() : 0;
+				while (bpos) {
+					GRNotationElement * e = assoc->GetNext(bpos);
+					beamed[e->isSingleNote()] = beam;
+				}
+			}
+		}
+	}
+}
+
+// ----------------------------------------------------------------------------
+// detect and fix multi-voices note collisions e.g. { [ \stemsUp g ], [\staff<1>\stemsDown f] }
+// works only
+//void GRStaff::checkMultiVoiceNotesCollision ()
+//{
+//	bool inChord = false, pendingChord = false;		// used for chords detection
+//	NEPointerList* elts = getElements();
+//
+//	map<TYPE_TIMEPOSITION, GRSingleNote*> vmap;
+//	map<GRSingleNote*, bool> shifted;
+//	map<GRSingleNote*, GRBeam*> beamed;
+//	GuidoPos pos = elts->GetHeadPosition();
+//	while (pos) {
+//		GRNotationElement * e = elts->GetNext(pos);
+//		GRBeam* beam = dynamic_cast<GRBeam*>(e);
+//		if (e->isEmpty()) {
+//			if (inChord)							// at this point this is a chord end
+//				inChord = pendingChord = false;		// set the chord flags off
+//			else pendingChord = true;				// at this point, we possibly enter a chord
+//		}
+//		else if (e->isChordComma() && pendingChord)
+//			inChord = true;							// at this point we're entering a chord
+//		else if (!inChord) {						// here we deal notes outside chords
+//			GRSingleNote* note = e->isSingleNote();
+//			if (note && !note->isGraceNote() && !note->isEmpty()) { // ignore empty and grace notes
+//				TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
+//				GRSingleNote* prev = vmap[date];
+//				if (prev) {
+//					const ARNote* first = prev->getARNote();
+//					const ARNote* second = note->getARNote();
+//					if ((first->getOctave() == second->getOctave()) &&  (std::abs(first->getPitch() - second->getPitch()) == 1)) {
+//						NVPoint npos = note->getPosition();
+//						npos.x += shifted[prev] ? getStaffLSPACE()*-0.30f : getStaffLSPACE()*0.83f;
+//						note->setPosition(npos);
+//						GRBeam* beam = beamed[note];
+//						if (beam) beam->refreshPosition();
+//
+//						shifted[note] = true;
+//					}
+//				}
+//				vmap[date] = note;
+//			}
+//			else if (beam) {
+//				NEPointerList * assoc = beam->getAssociations();
+//				GuidoPos bpos = assoc ? assoc->GetHeadPosition() : 0;
+//				while (bpos) {
+//					GRNotationElement * e = assoc->GetNext(bpos);
+//					beamed[e->isSingleNote()] = beam;
+//				}
+//			}
+//		}
+//	}
+//}
+
 // ----------------------------------------------------------------------------
 void GRStaff::checkCollisions (TCollisions& state) const
 {
-//if (state.lastElement())
-//cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << " last: " << state.lastElement() << endl;
-//else
-//cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << endl;
+if (state.lastElement())
+cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << " last: " << state.lastElement() << endl;
+else
+cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << endl;
 	
 	NVRect chordbb;									// the last chord bounding box
 	bool inChord = false, pendingChord = false;		// used for chords detection
@@ -524,6 +634,7 @@ void GRStaff::checkCollisions (TCollisions& state) const
 	GuidoPos pos = elts.GetHeadPosition();
 	while (pos) {
 		const GRNotationElement * e = elts.GetNext(pos);
+cerr << "GRStaff::checkCollisions " << e << endl;
 		if (e->isEmpty()) {
 			if (inChord) {							// at this point this is a chord end
 				inChord = pendingChord = false;		// set the chord flags off
@@ -1752,6 +1863,7 @@ staff_debug("setStaffState");
 	mStaffState.keyset = state->keyset;
 	mStaffState.curkey = state->curkey;
 	mStaffState.numkeys = state->numkeys;
+	mStaffState.fMultiVoiceCollisions = state->fMultiVoiceCollisions;
 	for ( int i = 0; i < NUMNOTES; ++i )
 	{
 //		mStaffState.MeasureAccidentals[i]	= state->MeasureAccidentals[i];
@@ -1879,6 +1991,7 @@ void GRStaff::FinishStaff()
     for (i=ptags.begin(); i!=ptags.end(); i++) {
        (*i)->FinishPTag (this);
     }
+    if (mStaffState.fMultiVoiceCollisions) checkMultiVoiceNotesCollision();
 	updateBoundingBox();
 //	GRStaffOnOffVisitor v;
 //	accept (v);
