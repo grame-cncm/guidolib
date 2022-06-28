@@ -23,7 +23,6 @@
 #include "TagList.h"		// is a typedef
 #include  "kf_ilist.h"		// for ObjectList
 
-class ARAuto;
 class ARMusicalVoiceState;
 class ARPositionTag;
 class ARVoiceManager;
