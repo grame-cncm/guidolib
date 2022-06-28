@@ -37,6 +37,7 @@ ARAuto::ARAuto()
 	fAutoHideTiedAccidentals = kOff;
 	fHarmonyPos				= kDefault;
 	fFingeringSize			= 0;
+	fAutoMultiVoiceCollisions = kOff;
 }
 
 void ARAuto::setTagParameters (const TagParameterMap& params)
@@ -81,9 +82,16 @@ void ARAuto::setTagParameters (const TagParameterMap& params)
 		fHasHarmonyPos = true;
 	}
 
+	p = getParameter<TagParameterString>(kAutoMultiVoiceCollisions);
+	if ( p ) {
+		fAutoMultiVoiceCollisions = p->getBool() ? kOn : kOff;
+		fHasMVoiceCollision = true;
+	}
+
 	const TagParameterFloat * f = getParameter<TagParameterFloat>(kFingeringSizeStr);
 	if (f) {
 		fFingeringSize = f->getValue();
 		fHasFingeringSize = true;
 	}
+	
 }

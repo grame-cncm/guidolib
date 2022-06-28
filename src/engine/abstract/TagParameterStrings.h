@@ -212,6 +212,7 @@ extern const char* kHarmonyPosStr;
 extern const char* kFingeringPosStr;
 extern const char* kFingeringSizeStr;
 extern const char* kAutoHideTiedAccidentals;
+extern const char* kAutoMultiVoiceCollisions;
 
 #endif
 

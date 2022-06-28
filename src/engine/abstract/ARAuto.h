@@ -59,8 +59,10 @@ class ARMusicalVoiceState;
 @param:fingeringPos:boolean:above or below (see [\fingering](../Text/#fingering)):*none*:true
 @param:fingeringSize:float:the fingering text size (see [\fingering](../Text/#fingering)):*none*:true
 
+@param:resolveMultiVoiceCollisions:boolean:resolve collisions between notes on the same staff in a multi voice context:off:true
+
 @paramdesc
-Collision management strategies can produce unexpected results or even create new collisions.
+Lyrics collision management can produce unexpected results or even create new collisions.
 In this case, you should switch to manual layout using the 'dx' and 'dy' [common parameters](../../tagsparams#common-parameters).
 
 See the [Jazz](@EXAMPLES/allthethings/) example.<br />
@@ -93,6 +95,7 @@ class ARAuto : public ARMTParameter
 		state getAutoInstrPos() const				{ return fInstrAutoPos; }
 		state getAutoIntensPos() const				{ return fIntensAutoPos; }
 		state getAutoHideTiedAccidentals() const	{ return fAutoHideTiedAccidentals; }
+		state getAutoMultiVoiceCollisions() const	{ return fAutoMultiVoiceCollisions; }
 
 		position getHarmonyPos() const				{ return fHarmonyPos; }
 		position getFingeringPos() const			{ return fFingeringPos; }
@@ -100,6 +103,7 @@ class ARAuto : public ARMTParameter
 		bool 	 hasFingeringPos() const			{ return fHasFingeringPos; }
 		bool     hasFingeringSize() const			{ return fHasFingeringSize; }
 		bool     hasHarmonyPos() const				{ return fHasHarmonyPos; }
+		bool     hasMultiVoiceCollision() const		{ return fHasMVoiceCollision; }
 
 		virtual void setTagParameters (const TagParameterMap& params);
 
@@ -118,10 +122,12 @@ class ARAuto : public ARMTParameter
 		state fInstrAutoPos;
 		state fIntensAutoPos;
 		state fAutoHideTiedAccidentals;
+		state fAutoMultiVoiceCollisions;
 	
 		bool		fHasFingeringPos 	= false;
 		bool		fHasHarmonyPos		= false;
 		bool		fHasFingeringSize	= false;
+		bool		fHasMVoiceCollision	= false;
 		position 	fFingeringPos;
 		position 	fHarmonyPos;
 		float		fFingeringSize;
