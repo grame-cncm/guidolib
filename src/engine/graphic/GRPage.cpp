@@ -566,7 +566,8 @@ void GRPage::finishPage( bool islastpage )
 		}
 	}
 	// hack to get correct time position for the page [DF - May 26 2010]
-	setRelativeTimePosition ( (*mSystems.begin())->getRelativeTimePosition() );
+	if (mSystems.size())
+		setRelativeTimePosition ( (*mSystems.begin())->getRelativeTimePosition() );
 }
 
 // ==========================================================================
