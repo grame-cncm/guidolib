@@ -8,18 +8,22 @@
               pluginSilenceInIsSilenceOut="0" pluginTailLength="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="JuceProjectAU" pluginAUViewClass="JuceProjectAU_V1"
               pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
-              jucerVersion="5.3.2" defines="JUCE_DONT_DEFINE_MACROS" includeBinaryInAppConfig="1"
-              pluginFormats="buildVST,buildAU" headerPath="../../../../../src/engine/include&#10;../../../Device">
+              defines="JUCE_DONT_DEFINE_MACROS&#10;JUCE_MODAL_LOOPS_PERMITTED=1"
+              includeBinaryInAppConfig="1" pluginFormats="buildVST,buildAU"
+              headerPath="../../../../../src/engine/include&#10;../../../Device"
+              jucerFormatVersion="1">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-               objCExtraSuffix="WzPHFY" extraLinkerFlags="-F../../../../../build/lib  -framework GUIDOEngine&#10;"
-               bigIcon="IAUjPh">
+               objCExtraSuffix="WzPHFY" extraLinkerFlags="-F${PROJECT_DIR}/../../../../../build/lib  -framework GUIDOEngine&#10;"
+               bigIcon="IAUjPh" useLegacyBuildSystem="1">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
-                       osxCompatibility="10.6 SDK" libraryPath="/Users/fober/src/guido/guidolib/build/lib"/>
+                       osxCompatibility="10.12 SDK" libraryPath="${PROJECT_DIR}/../../../../../build/lib"
+                       macOSDeploymentTarget="10.12"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
-                       osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
-                       binaryPath="" libraryPath="/Users/fober/src/guido/guidolib/build/lib"/>
+                       osxCompatibility="10.12 SDK" osxArchitecture="64BitUniversal"
+                       binaryPath="" libraryPath="${PROJECT_DIR}/../../../../../build/lib"
+                       macOSDeploymentTarget="10.12"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_basics" path="../../../../../../juce/modules"/>
@@ -34,10 +38,10 @@
                   extraCompilerFlags="-I../../../../src/include" bigIcon="IAUjPh">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
-                       osxCompatibility="10.6 SDK" osxArchitecture="Native"/>
+                       osxCompatibility="10.12 SDK" osxArchitecture="Native" macOSDeploymentTarget="10.12"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
-                       osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
-                       binaryPath=""/>
+                       osxCompatibility="10.12 SDK" osxArchitecture="64BitUniversal"
+                       binaryPath="" macOSDeploymentTarget="10.12"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_basics" path="../../../../../../juce/modules"/>
