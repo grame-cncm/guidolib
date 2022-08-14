@@ -30,13 +30,13 @@ public:
     void initialise (const String& )
     {
         // Do your application's initialisation code here..
-        mainWindow = new MainAppWindow();
+        mainWindow = std::make_unique<MainAppWindow>();
     }
 
     void shutdown()
     {
         // Do your application's shutdown code here..
-        mainWindow = 0;
+        mainWindow.reset();
     }
 
     //==============================================================================
@@ -67,7 +67,7 @@ public:
     }
 
 private:
-    ScopedPointer <MainAppWindow> mainWindow;
+    std::unique_ptr<MainAppWindow> mainWindow;
 };
 
 //==============================================================================
