@@ -54,7 +54,7 @@ int JuceFont::GetProperties() const
 // - Symbol services ---------------------------------------------
 void JuceFont::GetExtent( const char * s, int count, float * width, float * height, VGDevice *) const
 {
-	String text (s, count);
+	auto text = String::fromUTF8 (s, count);
 	*width = fNativeFont->getStringWidthFloat (text);
 	*height = fNativeFont->getAscent() + fNativeFont->getDescent();
 }

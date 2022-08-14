@@ -289,7 +289,7 @@ void JuceDevice::DrawString( float x, float y, const char * s, int inCharCount )
 	else if (fFontAlign & kAlignRight)
 		x -= w;
 
-	String text (s, inCharCount);
+	auto text = String::fromUTF8 (s, inCharCount);
 	fGraphics->setColour (Color2JColor(fFontColor));
 	fGraphics->drawSingleLineText (text, int(x), int(y));
 	fGraphics->setColour (Color2JColor(fFillColor));
