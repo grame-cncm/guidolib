@@ -542,11 +542,12 @@ void GRStaff::checkMultiVoiceNotesCollision ()
 					const ARNote* first = elt.first->getARNote();
 					const ARNote* second = note->getARNote();
 					if ((first->getOctave() == second->getOctave()) &&  (std::abs(first->getPitch() - second->getPitch()) == 1)) {
-						NVPoint npos = note->getPosition();
-						shift = getStaffLSPACE() * 0.83f;
+						GRSingleNote* target = note;
+						NVPoint npos = target->getPosition();
+						shift = getStaffLSPACE() * ((target->getStemDirection() == dirUP) ? -0.9f : 0.83f);
 						npos.x += shift;
-						note->setPosition(npos);
-						GRBeam* beam = beamed[note];
+						target->setPosition(npos);
+						GRBeam* beam = beamed[target];
 						if (beam) beam->refreshPosition();			// beams of shifted note needs to ne refreshed
 						break;
 					}
