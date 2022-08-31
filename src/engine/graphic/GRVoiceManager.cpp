@@ -1973,6 +1973,8 @@ GREvent * GRVoiceManager::CreateEmpty( const TYPE_TIMEPOSITION & tp, ARMusicalOb
 	assert(ev);
 
 	GREmpty * grempty = new GREmpty(mCurGrStaff, ev, tp, arObject->getDuration());
+	const ARNote * note = arObject->isARNote();
+	if (note) grempty->setAuto (note->isAuto()); // propagate auto status, used to denote chords
 	// the associations have to be handled just the same...
 	addAssociations (grempty, false);
 	mCurGrStaff->addNotationElement(grempty);
