@@ -1,0 +1,10 @@
+(*
+	issue #161
+	Incorrect beaming when mixing notes and chords and stems are down
+*)
+{
+[ 	\clef<"g2"> 
+	\stemsUp \beamBegin:1 {g1/16, e2/16  } b0/16 e1/16 {b1/16, g2/16  } \beamEnd:1 
+   \stemsDown \beamBegin:1 {b1/16, g2/16  } e1/16 g1/16 {e2/16, b2/16  } \beamEnd:1 
+]
+}
