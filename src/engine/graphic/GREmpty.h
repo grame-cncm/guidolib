@@ -38,8 +38,14 @@ class GREmpty : public GREvent
 		virtual bool isEmpty() const			{ return true; }
 
 		virtual void updateBoundingBox();
+		
+		void setAuto (bool val)		{ fIsAuto = val; }
+		bool isAuto () const		{ return fIsAuto; }
+		bool isInChord () const		{ return fIsAuto; }
 	
-	protected: 
+	protected:
+		bool fIsAuto = false;
+	
 };
 
 #endif
