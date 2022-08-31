@@ -866,7 +866,11 @@ float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool
 		GREvent * sn = GREvent::cast(mAssociated->GetNext(pos));
 		if (sn)
 		{
-			bool empty = (sn->isEmpty() && sn->getDuration());
+			bool empty = false;
+			if (sn->isEmpty()) {
+				const GREmpty* gr = static_cast<const GREmpty*>(sn);
+				empty = !gr->isInChord();
+			}
 			float rx = sn->getStemStartPos().x - st->p[0].x;
 			if (getTagType() == SYSTEMTAG)
 				rx += sn->getGRStaff()->getPosition().x;
