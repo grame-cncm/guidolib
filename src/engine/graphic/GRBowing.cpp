@@ -24,7 +24,6 @@
 
 #include "GRGlue.h"
 #include "GRBowing.h"
-#include "GREmpty.h"
 #include "GRStaff.h"
 #include "GRRest.h"
 #include "GRSingleNote.h"

@@ -13,11 +13,11 @@
 */
 
 #include "ARShareLocation.h"
+#include "GREvent.h"
 #include "GRGlobalLocation.h"
-#include "GRStaff.h"
-#include "GREmpty.h"
-#include "GRStdNoteHead.h"
 #include "GRGlobalStem.h"
+#include "GRStaff.h"
+#include "GRStdNoteHead.h"
 #include "GRVoice.h"
 
 GRGlobalLocation::GRGlobalLocation( GRStaff * grstaff, const ARShareLocation * pshare )

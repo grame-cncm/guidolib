@@ -18,7 +18,6 @@
 #include "ARTStem.h"
 #include "GRAccidental.h"
 #include "GRBeam.h"
-#include "GREmpty.h"
 #include "GRFlag.h"
 #include "GRGlobalStem.h"
 #include "GRNoteDot.h"
