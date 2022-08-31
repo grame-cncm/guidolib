@@ -1,0 +1,7 @@
+{[ \staff<1> 
+  \clef<"f4"> \staff<2> 
+   \stemsUp \beamBegin:1 \beamBegin:2 f-1/16 c0/16 d0/16 e0/16 \beamEnd:2 \beamBegin:2 
+   \staff<1> \stemsDown f0/16 a0/16 c1/16 d1/16 \beamEnd:1 \beamEnd:2 _/2 ]
+ , 
+[ \staff<2>  \clef<"f4"> \key<0> empty/1 ]
+ }
