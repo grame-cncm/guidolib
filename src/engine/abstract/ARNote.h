@@ -100,6 +100,7 @@ class ARNote : public ARMusicalEvent
 		virtual const ARNote*	isARNote() const		{ return this; }
 		virtual bool			isEmptyNote() const		{ return getName() == "empty"; }
 		bool		isAuto() const						{ return fAuto; }
+		void		setAuto(bool val)					{ fAuto = val; }
 
 
 	private:

@@ -596,6 +596,7 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 			// now I have to insert an empty event
 			// because shareStem needs an empty event at the beginning...
 			ARNote *tmpnote = new ARNote("empty", 0, 0, 0, 1, 80);
+			tmpnote->setAuto(true);
 			group->startpos = ObjectList::AddTail(tmpnote);
 		}
 
@@ -608,6 +609,7 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 			// now I have to insert an empty event
 			// because shareStem needs an empty event at the beginning...
 			ARNote * tmpnote = new ARNote("empty", 0, 0, 0, 1, 80);
+			tmpnote->setAuto(true);
 			group->startpos = ObjectList::AddTail(tmpnote);
 		}
 		newMusicalObject->setDuration(DURATION_0);
@@ -4961,6 +4963,7 @@ ARChordTag *ARMusicalVoice::BeginChord()
 
 	// this is the first event
 	ARNote *tmp     = new ARNote("empty", 0, 0, 0, 1, 80);
+	tmp->setAuto(true);
 	posfirstinchord = AddTail(tmp);
 	numchordvoice   = 0;
 
@@ -5113,6 +5116,7 @@ void ARMusicalVoice::FinishChord()
 
 	// now I insert one more empty event...
 	ARNote *tmpnote = new ARNote("empty", 0, 1, 0, 1, 80);
+	tmpnote->setAuto(true);
 	if (chordgrouplist) {
 		ARChordGroup *tmp = chordgrouplist->GetTail();
 		if (tmp) tmpnote->setDuration(tmp->dur);
