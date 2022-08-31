@@ -1334,7 +1334,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			sb->decLevel();
 			sb->tellPosition(sb->getEndElement(), sb->getEndElement()->getPosition());
 		}
-		return;
+		//return; // AC: do not return or system-level beams will have bad offset (Issue-154)
 	}
 
 	// -- Now we need to add the simplebeams as simplebeamgroups ...
@@ -1511,6 +1511,10 @@ GRNotationElement * GRBeam::getEndElement()
 
 void GRBeam::addSmallerBeam(GRBeam * beam)
 {
+    if (std::find(fSmallerBeams.begin(), fSmallerBeams.end(), beam) != fSmallerBeams.end()) {
+        return;
+    }
+
 	beam->setLevel(fLevel+1);
 	fSmallerBeams.push_back(beam);
 }
