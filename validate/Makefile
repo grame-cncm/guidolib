@@ -70,10 +70,10 @@ mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout)
 timemapout	:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
 lyricsout	:= $(patsubst ../%.gmn, $(version)/lyrics/%.svg, $(lyricsfiles))
 
-prollout	            := $(patsubst ../%.gmn, $(version)/proll/classic/%.svg, $(gmnfilesproll))
-prollvoicescolorout     := $(patsubst ../%.gmn, $(version)/proll/classic/voicescolor/%.svg, $(gmnfilesproll))
-prolltrajout            := $(patsubst ../%.gmn, $(version)/proll/trajectory/%.svg, $(gmnfilesproll))
-prollvoicescolortrajout := $(patsubst ../%.gmn, $(version)/proll/trajectory/voicescolor/%.svg, $(gmnfilesproll))
+prollout	            := $(patsubst ../%.gmn, $(version)/proll/%.svg, $(gmnfilesproll))
+prollvoicescolorout     := $(patsubst ../%.gmn, $(version)/proll/voicescolor/%.svg, $(gmnfilesproll))
+#prolltrajout            := $(patsubst ../%.gmn, $(version)/proll/trajectory/%.svg, $(gmnfilesproll))
+#prollvoicescolortrajout := $(patsubst ../%.gmn, $(version)/proll/trajectory/voicescolor/%.svg, $(gmnfilesproll))
 
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
 midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
@@ -236,11 +236,11 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
-svg: $(svgout) $(lyricsout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
+svg: $(svgout) $(lyricsout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) # $(prolltrajout) $(prollvoicescolortrajout)
 svgshort: $(svgout)  $(lyricsout)
 
 svgclean: 
-	rm -f $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
+	rm -f $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) # $(prolltrajout) $(prollvoicescolortrajout)
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
@@ -278,22 +278,22 @@ $(version)/maps/time/%.map: ../%.gmn
 	
 #########################################################################
 # tool to generate proll files
-proll: $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
-$(version)/proll/classic/%.svg: ../%.gmn
+proll: $(prollout) $(prollvoicescolorout) # $(prolltrajout) $(prollvoicescolortrajout)
+$(version)/proll/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2proll) $< > $@
     
-$(version)/proll/classic/voicescolor%.svg: ../%.gmn
+$(version)/proll/voicescolor%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2proll) -voicesautocolor true $< > $@
     
-$(version)/proll/trajectory/%.svg: ../%.gmn
-	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2proll) -pianoroll trajectory $< > $@
+#$(version)/proll/trajectory/%.svg: ../%.gmn
+#	@[ -d $(@D) ] || mkdir -p $(@D)
+#	-$(guido2proll) -pianoroll trajectory $< > $@
     
-$(version)/proll/trajectory/voicescolor%.svg: ../%.gmn
-	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2proll) -pianoroll trajectory -voicesautocolor true $< > $@
+#$(version)/proll/trajectory/voicescolor%.svg: ../%.gmn
+#	@[ -d $(@D) ] || mkdir -p $(@D)
+#	-$(guido2proll) -pianoroll trajectory -voicesautocolor true $< > $@
 
 
 #########################################################################
