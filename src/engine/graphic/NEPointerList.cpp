@@ -13,6 +13,7 @@
 */
 
 #include <climits>
+#include <sstream>
 
 #include "GRSingleNote.h"
 #include "NEPointerList.h"
@@ -44,6 +45,24 @@ void NEPointerList::print(std::ostream& os) const
 		GRNotationElement* elt = GetNext(pos);
 		os << elt << ", ";
 	}
+}
+
+// a more compact textual representation
+std::string NEPointerList::reduce_print() const
+{
+	std::stringstream sstr;
+	GuidoPos pos = GetHeadPosition();
+	const char * sep = "";
+	while (pos) {
+		const GRNotationElement* elt = GetNext(pos);
+		const ARMusicalObject * ar = elt->getAbstractRepresentation();
+//		const ARNote * note = ar->isARNote();
+//		if (note) sstr << sep << note;
+//		else
+		sstr << sep << ar->getGMNName();
+		sep = ", ";
+	}
+	return sstr.str();
 }
 
 int NEPointerList::getMaxSpacing()
