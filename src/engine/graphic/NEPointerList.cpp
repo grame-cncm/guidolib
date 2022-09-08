@@ -31,8 +31,19 @@ NEPointerList::~NEPointerList()
 {
 }
 
-void NEPointerListprint(std::ostream& os)
+std::ostream & operator << ( std::ostream & os, const NEPointerList* l)
 {
+	l->print(os);
+	return os;
+}
+
+void NEPointerList::print(std::ostream& os) const
+{
+	GuidoPos pos = GetHeadPosition();
+	while (pos) {
+		GRNotationElement* elt = GetNext(pos);
+		os << elt << ", ";
+	}
 }
 
 int NEPointerList::getMaxSpacing()

@@ -31,7 +31,6 @@ class GObject;
 class NVPoint;
 class MapInfos;
 
-
 class NEPointerList : public NEList  
 {
   public:
@@ -72,6 +71,8 @@ class NEPointerList : public NEList
 		GuidoPos AddAtCorrectTimePosition(GRNotationElement * grne);
 		GuidoPos AddAtTimePosition(const TYPE_TIMEPOSITION & tp, GRNotationElement * grne);
 };
+
+std::ostream & operator << ( std::ostream & os, const NEPointerList* l);
 
 #endif
 
