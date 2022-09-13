@@ -1658,6 +1658,9 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 			}
 		}
 	}
+//cerr << "GRVoiceManager::checkEndPTags fCurbeam : " << endl;
+//for (auto b: fCurbeam)
+//	cerr << " " << b << ": " << b->beamed() << endl;
 }
 
 /** \brief Gets called so that possible NewLine-Positions can be retrieved easily.
@@ -2187,22 +2190,25 @@ void GRVoiceManager::organizeBeaming(GRTag * grb)
 	GRBeam * caller = dynamic_cast<GRBeam *>(grb);
 	if(!caller)
 		return;
+//cerr << "GRVoiceManager::organizeBeaming fCurbeam: " << fCurbeam.size() << " caller " << (void*)caller << " " << caller << " : " << caller->beamed() << endl; 
 	GuidoPos pos = fGRTags->GetHeadPosition();
 	while(pos)
 	{
 		GRTag * tag = fGRTags->GetNext(pos);
+//cerr << " " << tag ;
 		GRBeam * beam = dynamic_cast<GRBeam *>(tag);
+//cerr << " " << beam << " : " << beam->beamed() << endl;
 		bool same = false;
 		if(beam) {
-			std::vector<GRBeam *>::iterator it = curbeam.begin();
-			while(it != curbeam.end())
+			std::vector<GRBeam *>::iterator it = fCurbeam.begin();
+			while(it != fCurbeam.end())
 			{
 				if(*it == beam) same = true;
 				if(same && beam == caller) {
-					curbeam.erase(it);
+					fCurbeam.erase(it);
 					break;
-				}	
-				// to be added as "smaller beam", it has to be on its end position, 
+				}
+				// to be added as "smaller beam", it has to be on its end position,
 				// and to have begun after the other(s) current(s) beam(s)
 				if ( (beam == caller) && !same
 					 && (*it)->getRelativeTimePosition() <= beam->getRelativeTimePosition()
@@ -2212,7 +2218,7 @@ void GRVoiceManager::organizeBeaming(GRTag * grb)
 			}
 			// if the beam is already registered, or if it is the caller (in its end position), there is no need to add it
 			if(!same && beam != caller)
-				curbeam.push_back(beam);
+				fCurbeam.push_back(beam);
 		}
 	}
 }

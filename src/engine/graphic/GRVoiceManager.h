@@ -178,7 +178,7 @@ private:
 	int				endIteration ();
 	void			checkCluster(GREvent *ev);
 	
-	std::vector<GRBeam *> curbeam;
+	std::vector<GRBeam *> fCurbeam;
 	typedef std::vector<std::pair<GRRange*, GRSingleNote*> >	TSharedArticulationsList;
 	TSharedArticulationsList fSharedArticulations;
 	void			handleSharedArticulations(const TSharedArticulationsList& list);
