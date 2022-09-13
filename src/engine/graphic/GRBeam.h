@@ -15,6 +15,8 @@
 
 */
 
+#include <vector>
+
 #include "ARBeam.h"
 #include "ARFeatheredBeam.h"
 #include "GRPTagARNotationElement.h"
@@ -24,7 +26,7 @@
 class GRSimpleBeam;
 class GREvent;
 
-typedef KF_IPointerList<GRSimpleBeam> SimpleBeamList;
+typedef std::vector<GRSimpleBeam *> SimpleBeamList;
 
 class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 {
@@ -33,7 +35,6 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 					{
 						dirset = 0;
 						direction = 0;
-						simpleBeams = 0; 
 					}
 
 		virtual ~GRBeamSaveStruct();
@@ -43,7 +44,7 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 		NVPoint p[4];
 		NVPoint DurationLine[6];
 		std::string duration;
-		SimpleBeamList * simpleBeams;
+		SimpleBeamList simpleBeams;
 };
 
 
@@ -77,6 +78,7 @@ public:
 
 			void	refreshPosition();
 			void	refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPACE, int dir);
+			std::string beamed() const;
 
 protected:
 	const ARBeam * getARBeam()									{ return static_cast<const ARBeam *>(mAbstractRepresentation); }
@@ -114,7 +116,7 @@ private:
 	bool	reverseStems  			(const NEPointerList* assoc) const;
 	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
 	void	scanStaves  			(const NEPointerList* assoc, float& highStaff, float& lowStaff) const;
-	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const;
+	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) const;
 
 	bool	fIsFeathered;
 	bool	fIsGraceBeaming;

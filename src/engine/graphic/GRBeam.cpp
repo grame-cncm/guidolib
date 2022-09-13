@@ -36,9 +36,18 @@
 
 using namespace std;
 
+std::ostream & operator << ( std::ostream & os, const NVPoint p[4] )
+{
+	os << p[0] << " " << p[1] << " " << p[2] << " " << p[3];
+	return os;
+}
+
+
 GRBeamSaveStruct::~GRBeamSaveStruct()
 {
-	delete simpleBeams;
+	for (GRSimpleBeam* b: simpleBeams) {
+		delete b;
+	}
 }
 
 pair<float, float> GRBeam::fLastPositionOfBarDuration = make_pair(0.f, 0.f);
@@ -102,18 +111,15 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		
 	float ax [4] = { st->p[0].x, st->p[1].x, st->p[3].x, st->p[2].x };
 	float ay [4] = { st->p[0].y, st->p[1].y, st->p[3].y, st->p[2].y };
+
+//float offset = 0; // LSPACE
+//cerr << (void*)getGRStaff() << " " << getGRStaff()->getPosition() << " p: " << st->p << endl;
+//if (st->p[0].y > 380) { ay[0]-=400+offset; ay[1]-=400+offset; ay[2]-=400; ay[3]-=400; };
 	// This does the drawing!
 	hdc.Polygon(ax, ay, 4);
 	
-	if (st->simpleBeams)
-	{
-		GuidoPos smplpos = st->simpleBeams->GetHeadPosition();
-		while (smplpos)
-		{
-			GRSimpleBeam * smplbeam = st->simpleBeams->GetNext(smplpos);
-			smplbeam->OnDraw(hdc);
-		}
-	}
+	for (GRSimpleBeam* b: st->simpleBeams)
+		b->OnDraw (hdc);
 
 	if(fDrawDur)
 	{
@@ -151,6 +157,15 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 }
 
+string GRBeam::beamed() const
+{
+	stringstream list;
+	const NEPointerList * p = getAssociations();
+	if (p) list << p->reduce_print();
+	return list.str();
+}
+
+
 void GRBeam::addAssociation(GRNotationElement * grnot)
 {
 	if (getError() || !grnot) return ;
@@ -158,6 +173,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	const GRStaff * staff = grnot->getGRStaff();
 	if (staff == 0) return;
 
+//cerr << (void*)this << " GRBeam::addAssociation " << grnot << endl;
     GRNote * grnote = dynamic_cast<GRNote*>(grnot);
     bool isGrace = grnote ? grnote->isGraceNote() : false;
 	if (isGrace) {
@@ -613,18 +629,12 @@ void GRBeam::refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPA
 	p[3] = st->p[3];
 	const float yFact1 = 0.75f * currentLSPACE * dir;
 //	const float yFact2 = 0.4f * currentLSPACE;
-	if (st->simpleBeams)
-	{
-		GuidoPos smplpos = st->simpleBeams->GetHeadPosition();
-		while (smplpos)
-		{
-			GRSimpleBeam * smplbeam = st->simpleBeams->GetNext(smplpos);
-			smplbeam->setPoints(p);
-			p[0].y += yFact1;
-			p[1].y += yFact1;
-			p[2].y += yFact1;
-			p[3].y += yFact1;
-		}
+	for (GRSimpleBeam* b: st->simpleBeams) {
+		b->setPoints(p);
+		p[0].y += yFact1;
+		p[1].y += yFact1;
+		p[2].y += yFact1;
+		p[3].y += yFact1;
 	}
 }
 
@@ -820,12 +830,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 					p[0].y = p[2].y;
 					p[1].y = p[3].y;
 				}
-
-				GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,p);
-				if( st->simpleBeams == 0 )
-					st->simpleBeams = new SimpleBeamList(1);
-
-				st->simpleBeams->AddTail(tmpbeam);
+				st->simpleBeams.push_back(new GRSimpleBeam(this,p));
 				
 				pos  = sse->startpos;
 				oldpos = pos;
@@ -1000,12 +1005,7 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 			p[2].y += (end-1) * yLocalFact1;
 		p[3].x = p[2].x;
 		p[3].y = p[2].y + yLocalFact2;
-
-		GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,p);
-		if( st->simpleBeams == 0 )
-			st->simpleBeams = new SimpleBeamList(1);
-
-		st->simpleBeams->AddTail(tmpbeam);
+		st->simpleBeams.push_back(new GRSimpleBeam(this,p));
 	}
 	// if end > begin
 	for(int i = begin; i < end; i++)
@@ -1019,12 +1019,7 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 		p[2].y += i * yLocalFact1;
 		p[3].x = p[2].x;
 		p[3].y = p[2].y + yLocalFact2;
-
-		GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,p);
-		if( st->simpleBeams == 0 )
-			st->simpleBeams = new SimpleBeamList(1);
-
-		st->simpleBeams->AddTail(tmpbeam);
+		st->simpleBeams.push_back(new GRSimpleBeam(this,p));
 	}
 	
 
@@ -1155,13 +1150,40 @@ void GRBeam::yRange (const NEPointerList* assoc, const GREvent*& high, const GRE
 }
 
 //--------------------------------------------------------------------
-void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const
+//void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const
+//{
+//	float maxy = 0;
+//	float miny = 100000000.f;
+//	GuidoPos pos = beams->GetHeadPosition();
+//	while (pos) {
+//		const GRSimpleBeam* b = beams->GetNext(pos);
+//		if (b->fPoints[3].y > maxy) maxy = b->fPoints[3].y;
+//		if (b->fPoints[2].y > miny) miny = b->fPoints[2].y;
+//	}
+//	float slength = ev->getStemLength();
+//	float thick = ev->getGRStaff()->getStaffLSPACE()/4; // this is to take account of the beam thickness
+//	if (ev->getStemDirection() == dirUP) {
+//		float y = ev->getPosition().y - slength;
+//		if (y > miny) ev->setStemLength(slength + y - miny - thick);
+//	}
+//	else {
+//		float y = ev->getPosition().y + slength;
+//		if (y < maxy) ev->setStemLength(slength + maxy - y - thick);
+//	}
+//}
+
+//--------------------------------------------------------------------
+void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) const
 {
 	float maxy = 0;
 	float miny = 100000000.f;
-	GuidoPos pos = beams->GetHeadPosition();
-	while (pos) {
-		const GRSimpleBeam* b = beams->GetNext(pos);
+//	GuidoPos pos = beams->GetHeadPosition();
+//	while (pos) {
+//		const GRSimpleBeam* b = beams->GetNext(pos);
+//		if (b->fPoints[3].y > maxy) maxy = b->fPoints[3].y;
+//		if (b->fPoints[2].y > miny) miny = b->fPoints[2].y;
+//	}
+	for (GRSimpleBeam* b: beams) {
 		if (b->fPoints[3].y > maxy) maxy = b->fPoints[3].y;
 		if (b->fPoints[2].y > miny) miny = b->fPoints[2].y;
 	}
@@ -1212,6 +1234,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 
 	// a new test is performed: if it is a systemTag and
 	// it is not a systemcall (checkpos), than we can just do nothing.
+
 	if (getError() || !mAssociated || ( mAssociated->GetCount() == 0 )
 		|| ( getTagType() == GRTag::SYSTEMTAG && !mIsSystemCall ))
 		return;
@@ -1221,6 +1244,9 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(el->getGRStaff()->getGRSystem());
 	assert(sse);
+
+//cerr << (void*)this <<  " GRBeam::tellPosition in type " << getTagType() << " - " << el << " start elt " << sse->startElement << " end elt " << sse->endElement << " level: " << fLevel  << endl;
+
 	if (el != sse->endElement) return;
 	if(fLevel != 0) return;
 
@@ -1234,7 +1260,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	bool differentStaves = (startEl && endEl) ? (endEl->getGRStaff()!=startEl->getGRStaff()) : false;
 
 	// this is the staff to which the beam belongs and who draws it.
-	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
+//	const GRStaff * beamstaff = sse->startElement->getGRStaff();
 	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), differentStaves, 0, 0 };
 	if (getTagType() == SYSTEMTAG) {
 		infos.startStaff = startEl->getGRStaff()->getPosition();
@@ -1282,6 +1308,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				slope = (st->p[2].y - st->p[0].y) / stemWidth;
 			}
 		}
+//cerr << " slope adjust : " << slope << endl;
 	}
 
 	bool needsadjust = true;
@@ -1338,7 +1365,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			sb->decLevel();
 			sb->tellPosition(sb->getEndElement(), sb->getEndElement()->getPosition());
 		}
-		return;
+		if (fIsFeathered || !mIsSystemCall) return;
 	}
 
 	// -- Now we need to add the simplebeams as simplebeamgroups ...
@@ -1390,19 +1417,21 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			float ratio = startEl->getGRStaff()->getSizeRatio() * endEl->getGRStaff()->getSizeRatio();
 			endEl->setStemLength(endEl->getStemLength() + LSPACE * ratio);
 		}
-		else if (st->simpleBeams) checkEndStemsReverse(endEl, st->simpleBeams);
+		else if (st->simpleBeams.size()) checkEndStemsReverse(endEl, st->simpleBeams);
 		else { mDraw = false; } 	// fix issue #86
 	}
 
 	// now we have to make sure, that the original positions for the beam are set for the right staff
 	if (getTagType() == SYSTEMTAG) {
+		const GRStaff * beamstaff = sse->startElement->getGRStaff();
 		const NVPoint &offset = beamstaff->getPosition();
+//cerr << (void*)this <<  " GRBeam::tellPosition offset \t\t" << offset << endl;
 		st->p[0] -= offset;
 		st->p[1] -= offset;
 		st->p[2] -= offset;
 		st->p[3] -= offset;
 	}
-//cerr << "GRBeam::tellPosition out: \t\t" << st->p[0] << " " << st->p[1] << " " << st->p[2] << " "  << st->p[3] << endl;
+//cerr << (void*)this <<  " GRBeam::tellPosition out: \t\t" << st->p[0] << " " << st->p[1] << " " << st->p[2] << " "  << st->p[3] << endl;
 }
 
 
