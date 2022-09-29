@@ -103,6 +103,8 @@ public:
 			const ARMusicalVoiceState * getVoiceState() const	{ return fVoiceState; }
 
 
+	std::string		getBeams() const;
+
 protected:
 	void beginOpenTags();
 
@@ -177,8 +179,12 @@ private:
 	void			addAssociations (GREvent* ev, bool setnext=true);
 	int				endIteration ();
 	void			checkCluster(GREvent *ev);
+	void			checknested(std::vector<GRBeam *>& beams); 		// check nested beams
+	bool			nested(const GRBeam *b1, const GRBeam* b2); 	// check if b2 is nested in b1
+	void			setBeamDuration(GRBeam* beam) const;
 	
 	std::vector<GRBeam *> fCurbeam;
+	std::vector<GRBeam *> fBeams;
 	typedef std::vector<std::pair<GRRange*, GRSingleNote*> >	TSharedArticulationsList;
 	TSharedArticulationsList fSharedArticulations;
 	void			handleSharedArticulations(const TSharedArticulationsList& list);

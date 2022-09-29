@@ -15,6 +15,9 @@
 
 */
 
+#include <cmath>
+#include <string>
+#include <sstream>
 #include <vector>
 
 #include "ARBeam.h"
@@ -27,6 +30,23 @@ class GRSimpleBeam;
 class GREvent;
 
 typedef std::vector<GRSimpleBeam *> SimpleBeamList;
+typedef struct beamRect {
+	NVPoint topLeft;
+	NVPoint bottomLeft;
+	NVPoint bottomRight;
+	NVPoint topRight;
+
+	void xList(float* l) const 	{ l[0] = topLeft.x; l[1] = bottomLeft.x, l[2] = bottomRight.x; l[3] = topRight.x; }
+	void yList(float* l) const 	{ l[0] = topLeft.y; l[1] = bottomLeft.y, l[2] = bottomRight.y; l[3] = topRight.y; }
+	float height() const		{ return topRight.y - topLeft.y; }
+	float width() const			{ return std::abs(topRight.x - topLeft.x); }
+	float slope() const			{ return height() / width(); }
+	std::string toString() const { std::stringstream s; s << topLeft << " " << bottomLeft << " " << bottomRight << " " << topRight; return s.str(); }
+
+	void offset (const NVPoint& p) 	{ topLeft -= p; bottomLeft -= p; bottomRight -= p; topRight -= p;}
+	void yOffset (float val) 		{ topLeft.y -= val; bottomLeft.y -= val; bottomRight.y -= val; topRight.y -= val;}
+	void tilt (float val) 			{ topLeft.y -= val; bottomLeft.y -= val; bottomRight.y += val; topRight.y += val;}
+} BeamRect;
 
 class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 {
@@ -41,14 +61,17 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 	
 		int dirset;
 		int direction;
-		NVPoint p[4];
+		NVPoint p[4];				// the main beam points. the order is top-left, bottom-left, top-right and bottom right
+		BeamRect fRect;
 		NVPoint DurationLine[6];
 		std::string duration;
-		SimpleBeamList simpleBeams;
+		SimpleBeamList simpleBeams;	// the list of all graphics beams, including the main one appart in case of nested beams
 };
 
 
 /** \brief The Beam notation element.
+ 
+	beams contains a set of rectangles
 */
 class GRBeam : public GRPTagARNotationElement, public GRSystemTagInterface
 {
@@ -78,7 +101,8 @@ public:
 
 			void	refreshPosition();
 			void	refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPACE, int dir);
-			std::string beamed() const;
+			std::string beamed() const;   // gives the list of beamed notes as a string
+			void	setParent(GRBeam* parent)	{ fParent = parent; }
 
 protected:
 	const ARBeam * getARBeam()									{ return static_cast<const ARBeam *>(mAbstractRepresentation); }
@@ -125,7 +149,9 @@ private:
 	bool 	fHasRestInMiddle;
 
 	static std::pair<float, float> fLastPositionOfBarDuration;
-	std::vector<GRBeam *> fSmallerBeams;
+	BeamRect 			  fRect;
+	std::vector<GRBeam *> fSmallerBeams;	// smaller beams are beams nested in the current one
+	GRBeam * fParent = nullptr;  // the parent beam in case of nested beams
 };
 
 #endif

@@ -14,6 +14,7 @@
 
 #include <typeinfo>
 #include <iostream>
+#include <sstream>
 
 
 #include "ARAccelerando.h"
@@ -212,6 +213,7 @@ GRVoiceManager::GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, cons
 
 GRVoiceManager::~GRVoiceManager()
 {
+	checknested (fBeams);
 	delete toadd;	toadd = 0;
 	delete fGRTags;	fGRTags = 0;
 	delete fVoiceState;	fVoiceState = 0;
@@ -1658,9 +1660,6 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 			}
 		}
 	}
-//cerr << "GRVoiceManager::checkEndPTags fCurbeam : " << endl;
-//for (auto b: fCurbeam)
-//	cerr << " " << b << ": " << b->beamed() << endl;
 }
 
 /** \brief Gets called so that possible NewLine-Positions can be retrieved easily.
@@ -2185,38 +2184,137 @@ bool & GRVoiceManager::getCurStaffDraw(int index)
 	return mCurStaffDraw[index];
 }	
 
+//void GRVoiceManager::organizeBeaming(GRTag * grb)
+//{
+//	GRBeam * caller = dynamic_cast<GRBeam *>(grb);
+//	if(!caller)
+//		return;
+//cerr << "GRVoiceManager::organizeBeaming fCurbeam: " << fCurbeam.size() << " caller " << (void*)caller << " " << caller << " : " << caller->beamed() << endl;
+//	GuidoPos pos = fGRTags->GetHeadPosition();
+//	while(pos)
+//	{
+//		GRTag * tag = fGRTags->GetNext(pos);
+////cerr << " " << tag ;
+//		GRBeam * beam = dynamic_cast<GRBeam *>(tag);
+////cerr << " " << beam << " : " << beam->beamed() << endl;
+//		bool same = false;
+//		if(beam) {
+//			std::vector<GRBeam *>::iterator it = fCurbeam.begin();
+//			while(it != fCurbeam.end())
+//			{
+//				if(*it == beam) same = true;
+//				if(same && beam == caller) {
+//					fCurbeam.erase(it);
+//					break;
+//				}
+//				// to be added as "smaller beam", it has to be on its end position,
+//				// and to have begun after the other(s) current(s) beam(s)
+//				if ( (beam == caller) && !same
+//					 && (*it)->getRelativeTimePosition() <= beam->getRelativeTimePosition()
+//					 && (beam->isGraceBeaming() == (*it)->isGraceBeaming()))
+//					(*it)->addSmallerBeam(beam);
+//				it++;
+//			}
+//			// if the beam is already registered, or if it is the caller (in its end position), there is no need to add it
+//			if(!same && beam != caller)
+//				fCurbeam.push_back(beam);
+//		}
+//	}
+//}
+
+static bool sortByDuration (const GRBeam* b1, const GRBeam* b2) { return (b1->getDuration() > b2->getDuration()); }
+
+void GRVoiceManager::checknested(std::vector<GRBeam *>& beams) {
+	sort(beams.begin(), beams.end(), sortByDuration);
+//cerr << "GRVoiceManager::checknested beams :\n" << getBeams();
+	for (vector<GRBeam*>::iterator i= fBeams.begin(); i != fBeams.end(); i++) {
+		for (vector<GRBeam*>::iterator j = i+1; j != fBeams.end(); j++) {
+			if (nested( *i, *j)) (*j)->setParent (*i);
+//cerr << "GRVoiceManager::checknested nested :" << (void*)*i << " " << (void*)*j << endl;
+			
+		}
+	}
+}
+
+bool GRVoiceManager::nested(const GRBeam *b1, const GRBeam* b2) // check if b2 is nested in b1
+{
+	TYPE_TIMEPOSITION b1start = b1->getRelativeTimePosition();
+	TYPE_TIMEPOSITION b2start = b2->getRelativeTimePosition();
+	if (b2start >= b1start) {
+		TYPE_TIMEPOSITION b1end = b1start + b1->getDuration();
+		TYPE_TIMEPOSITION b2end = b2start + b2->getDuration();
+		return b2end <= b1end;
+	}
+	if (!b1->getDuration() || !b2->getDuration())
+cerr << "  no duration: " << b1 << " " << b1->getDuration() << b2 << " " << b2->getDuration() << endl;
+	return false;
+}
+
+void GRVoiceManager::setBeamDuration(GRBeam* beam) const
+{
+	if (beam->getDuration()) return;		// already done
+	NEPointerList* assoc = beam->getAssociations();
+	if (assoc) {
+		GuidoPos apos = assoc->GetTailPosition();
+		GRNotationElement* elt = assoc->GetAt(apos);
+		beam->setDuration(elt->getRelativeTimePosition() - beam->getRelativeTimePosition() + elt->getDuration());
+	}
+}
+
+std::string	GRVoiceManager::getBeams() const
+{
+	stringstream sstr;
+	for (auto b: fBeams) sstr << (void*)b << " " << b->getRelativeTimePosition() << " " << b->getDuration() << " " << b->beamed() << "\n";
+	return sstr.str();
+}
+
 void GRVoiceManager::organizeBeaming(GRTag * grb)
 {
 	GRBeam * caller = dynamic_cast<GRBeam *>(grb);
 	if(!caller)
 		return;
-//cerr << "GRVoiceManager::organizeBeaming fCurbeam: " << fCurbeam.size() << " caller " << (void*)caller << " " << caller << " : " << caller->beamed() << endl; 
+
+//cerr << "GRVoiceManager::organizeBeaming caller " << (void*)caller <<  " " << caller->getRelativeTimePosition() << " dur: " << caller->getDuration() << " : " << caller->beamed() << " -> ";
+	setBeamDuration(caller);
+//cerr << caller->getDuration() << endl;
+	fBeams.push_back(caller);
 	GuidoPos pos = fGRTags->GetHeadPosition();
 	while(pos)
 	{
 		GRTag * tag = fGRTags->GetNext(pos);
-//cerr << " " << tag ;
 		GRBeam * beam = dynamic_cast<GRBeam *>(tag);
-//cerr << " " << beam << " : " << beam->beamed() << endl;
+		
 		bool same = false;
 		if(beam) {
+//			setBeamDuration(beam);
+//cerr << "		" << (void*)beam << " " << beam->getRelativeTimePosition() << " dur: " << beam->getDuration() << " " << beam->beamed() << endl;
 			std::vector<GRBeam *>::iterator it = fCurbeam.begin();
-			while(it != fCurbeam.end())
-			{
-				if(*it == beam) same = true;
-				if(same && beam == caller) {
-					fCurbeam.erase(it);
-					break;
+			while(it != fCurbeam.end()) {
+				GRBeam* b = *it;
+//cerr << " check nested caller at " << caller->getRelativeTimePosition() << " dur: " << caller->getDuration() << " - " << beam->getRelativeTimePosition() << " dur: " << beam->getDuration() << endl;
+//				if (nested(caller, beam) && (beam != caller)) {
+//cerr << "   nested beam '" << beam->beamed() << "' is in " << caller->beamed() << endl;
+//				}
+				if(b == beam) {		// same beam
+					same = true;
+					if (beam == caller) {
+						fCurbeam.erase(it);
+						break;
+					}
 				}
-				// to be added as "smaller beam", it has to be on its end position,
-				// and to have begun after the other(s) current(s) beam(s)
-				if ( (beam == caller) && !same
-					 && (*it)->getRelativeTimePosition() <= beam->getRelativeTimePosition()
-					 && (beam->isGraceBeaming() == (*it)->isGraceBeaming()))
-					(*it)->addSmallerBeam(beam);
+				else {
+					if (beam == caller) {
+					// to be added as "smaller beam", it has to be on its end position and to have begin after the other(s) current(s) beam(s)
+						if ((b->getRelativeTimePosition() <= beam->getRelativeTimePosition()) && (beam->isGraceBeaming() == b->isGraceBeaming())) {
+							b->addSmallerBeam(beam);
+//cerr << "   addSmallerBeam " << b->getRelativeTimePosition() << " " << b->beamed() << " smaller " << beam->getRelativeTimePosition() << " " << beam->beamed() << endl;
+						}
+					}
+//					else {
+//					}
+				}
 				it++;
 			}
-			// if the beam is already registered, or if it is the caller (in its end position), there is no need to add it
 			if(!same && beam != caller)
 				fCurbeam.push_back(beam);
 		}
