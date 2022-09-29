@@ -16,10 +16,10 @@ system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo 
 version	 ?= $(shell cat guidoversion.txt)
 LEAKTOOLS = guidoparse guidoar2gr guidodraw
 
-guido2image := guido2image
-guido2svg   := guido2svg
-guido2midi  := guido2midi
-guido2proll := guido2proll
+guido2image ?= ../environments/Qt/apps/bin/guido2image
+guido2svg   ?= ../build/bin/guido2svg
+guido2midi  ?= ./build/bin/guido2midi
+guido2proll ?= ./build/bin/guido2proll
 
 ifeq ($(MAKECMDGOALS), win32)
   PLATFORM := 32
@@ -238,9 +238,12 @@ checkcrash: $(LEAKTOOLS)
 # tools to generate svg files
 svg: $(svgout) $(lyricsout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) # $(prolltrajout) $(prollvoicescolortrajout)
 svgshort: $(svgout)  $(lyricsout)
-
+svgforce:
+	make svgclean
+	make svgshort
+	
 svgclean: 
-	rm -f $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) # $(prolltrajout) $(prollvoicescolortrajout)
+	rm -rf $(version)
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
