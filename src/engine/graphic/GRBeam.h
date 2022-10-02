@@ -43,8 +43,9 @@ typedef struct beamRect {
 	float slope() const			{ return height() / width(); }
 	std::string toString() const { std::stringstream s; s << topLeft << " " << bottomLeft << " " << bottomRight << " " << topRight; return s.str(); }
 
-	void offset (const NVPoint& p) 	{ topLeft -= p; bottomLeft -= p; bottomRight -= p; topRight -= p;}
-	void yOffset (float val) 		{ topLeft.y -= val; bottomLeft.y -= val; bottomRight.y -= val; topRight.y -= val;}
+	void operator -= (NVPoint p)	{ topLeft -= p; bottomLeft -= p; bottomRight -= p; topRight -= p; }
+//	void offset (const NVPoint& p) 	{ topLeft -= p; bottomLeft -= p; bottomRight -= p; topRight -= p;}
+	void yOffset (float val) 		{ topLeft.y += val; bottomLeft.y += val; bottomRight.y += val; topRight.y += val;}
 	void tilt (float val) 			{ topLeft.y -= val; bottomLeft.y -= val; bottomRight.y += val; topRight.y += val;}
 } BeamRect;
 
@@ -129,10 +130,10 @@ private:
 
 	} PosInfos;
 
-	void 	initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, PosInfos& infos);
-	void	initp1 (GRSystemStartEndStruct * sse, PosInfos& infos);
-	void 	initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
-	void	initp3 (GRSystemStartEndStruct * sse, PosInfos& infos);
+	void 	initTopLeft 	(GRSystemStartEndStruct * sse, const GREvent * startEl, PosInfos& infos);
+	void	initBottomLeft 	(GRSystemStartEndStruct * sse, PosInfos& infos);
+	void 	initTopRight 	(GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
+	void	initBottomRight (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	slopeAdjust 	(GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
 	void	adjustFeathered (float yFact1, float yFact2, PosInfos& info, GRSystemStartEndStruct * sse);
 	float	setStemEndPos 	(GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust, float offsetbeam);
