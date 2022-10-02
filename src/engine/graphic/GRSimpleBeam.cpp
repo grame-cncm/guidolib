@@ -18,21 +18,15 @@
 #include "GRBeam.h"
 #include "VGDevice.h"
 
-GRSimpleBeam::GRSimpleBeam (GRBeam * p_parent, const NVPoint par[4] )
+GRSimpleBeam::GRSimpleBeam (GRBeam * p_parent, const BeamRect& r)
 {
 	fParent = p_parent;
-	fPoints[0] = par[0];
-	fPoints[1] = par[1];
-	fPoints[2] = par[2];
-	fPoints[3] = par[3];
+	fRect = r;
 }
 
-void GRSimpleBeam::setPoints( const NVPoint p[] )
+void GRSimpleBeam::setPoints( const BeamRect& r )
 {
-	fPoints[0] = p[0];
-	fPoints[1] = p[1];
-	fPoints[2] = p[2];
-	fPoints[3] = p[3];
+	fRect = r;
 }
 
 void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
@@ -46,8 +40,9 @@ void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
 		hdc.PushFillColor( color );
 		hdc.PushPen( color, 1 );
 	}
-	float ax [4] = { fPoints[0].x, fPoints[1].x, fPoints[3].x, fPoints[2].x };
-	float ay [4] = { fPoints[0].y, fPoints[1].y, fPoints[3].y, fPoints[2].y };
+	float ax [4], ay[4];
+	fRect.xList(ax);
+	fRect.yList(ay);
 
 
 // DF added to check for incorrect coordinates

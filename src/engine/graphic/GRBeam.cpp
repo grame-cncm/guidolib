@@ -109,8 +109,9 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hdc.PushPen( color, 1);
 	}
 		
-	float ax [4] = { st->fRect.topLeft.x, st->fRect.bottomLeft.x, st->fRect.bottomRight.x, st->fRect.topRight.x };
-	float ay [4] = { st->fRect.topLeft.y, st->fRect.bottomLeft.y, st->fRect.bottomRight.y, st->fRect.topRight.y };
+	float ax [4], ay[4];
+	st->fRect.xList(ax);
+	st->fRect.yList(ay);
 
 //float offset = 0; // LSPACE
 //cerr << (void*)getGRStaff() << " " << getGRStaff()->getPosition() << " p: " << st->p << endl;
@@ -173,7 +174,6 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	const GRStaff * staff = grnot->getGRStaff();
 	if (staff == 0) return;
 
-//cerr << (void*)this << " GRBeam::addAssociation " << grnot << endl;
     GRNote * grnote = dynamic_cast<GRNote*>(grnot);
     bool isGrace = grnote ? grnote->isGraceNote() : false;
 	if (isGrace) {
@@ -622,19 +622,11 @@ void GRBeam::slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl,
 void GRBeam::refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPACE, int dir)
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	NVPoint p[4];
-	p[0] = st->fRect.topLeft;
-	p[1] = st->fRect.bottomLeft;
-	p[2] = st->fRect.topRight;
-	p[3] = st->fRect.bottomRight;
+	BeamRect r = st->fRect;
 	const float yFact1 = 0.75f * currentLSPACE * dir;
-//	const float yFact2 = 0.4f * currentLSPACE;
 	for (GRSimpleBeam* b: st->simpleBeams) {
-		b->setPoints(p);
-		p[0].y += yFact1;
-		p[1].y += yFact1;
-		p[2].y += yFact1;
-		p[3].y += yFact1;
+		b->setPoints(r);
+		r.yOffset(yFact1);
 	}
 }
 
@@ -665,25 +657,24 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 			{
 				float beamCount = (float)(stemNote->getBeamCount());
 				stemNote->incBeamCount();
-			
-				NVPoint p[4];
+
+				BeamRect r;
 				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {
 					// the additional beam starts at the startElement (glue), we have more beams to draw
-					p[0] = sse->startElement->getPosition();					
+					r.topLeft = sse->startElement->getPosition();
 					if (getTagType() == SYSTEMTAG)
-						p[0] += stemNote->getGRStaff()->getPosition();
-					p[1] = p[0];
+						r.topLeft += stemNote->getGRStaff()->getPosition();
+					r.bottomLeft = r.topLeft;
 				}
 				else {
 					// the additional beam starts at sn. We have more beams to draw
-					p[0] = stemNote->getStemStartPos();
+					r.topLeft = stemNote->getStemStartPos();
 					if (getTagType() == SYSTEMTAG)
-						p[0] += stemNote->getGRStaff()->getPosition();
-					p[0].y += beamCount * yLocalFact1;
+						r.topLeft += stemNote->getGRStaff()->getPosition();
+					r.topLeft.y += beamCount * yLocalFact1;
 					if (localDir != dir)
-						p[0].y -= yLocalFact2;
-					p[1].x = p[0].x;
-					p[1].y = p[0].y + yLocalFact2;
+						r.topLeft.y -= yLocalFact2;
+					r.bottomLeft.Set (r.topLeft.x, r.topLeft.y + yLocalFact2);
 				}
 				// now we look for the endposition
 				GREvent * sn2 = NULL;
@@ -712,24 +703,23 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 				if (sn2) {
 					if (!partialbeam && sse->endflag == GRSystemStartEndStruct::OPENRIGHT) {
 						// then the position is different ...
-						p[2] = sse->endElement->getPosition();
-						p[2].x += xadjust;
+						r.topRight = sse->endElement->getPosition();
+						r.topRight.x += xadjust;
 						if (getTagType() == SYSTEMTAG)
-							p[2] += sn2->getGRStaff()->getPosition();
-						p[2].y = p[0].y;						
+							r.topRight += sn2->getGRStaff()->getPosition();
+						r.topRight.y = r.topLeft.y;
 					}
 					else {
 						// we have an End-Position ...
-						p[2] = sn2->getStemEndPos();
-						p[2].x += xadjust;
+						r.topRight = sn2->getStemEndPos();
+						r.topRight.x += xadjust;
 						if (getTagType() == SYSTEMTAG)
-							p[2] += sn2->getGRStaff()->getPosition();
-						p[2].y += beamCount * yLocalFact1;
+							r.topRight += sn2->getGRStaff()->getPosition();
+						r.topRight.y += beamCount * yLocalFact1;
 					}
 					if (localDir != dir)
-						p[2].y -= yLocalFact2;
-					p[3].x = p[2].x;
-					p[3].y = p[2].y + yLocalFact2;
+						r.topRight.y -= yLocalFact2;
+					r.bottomRight.Set (r.topRight.x, r.topRight.y + yLocalFact2);
 				}
 				else {
 					// we do not have an End-Positon single beam ... (meaning a single straight flag)
@@ -742,37 +732,36 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 
 						// sn is the only element .... and we are open on the left ...
 						if (getTagType() == SYSTEMTAG)
-							p[0] += stemNote->getGRStaff()->getPosition();
+							r.topLeft += stemNote->getGRStaff()->getPosition();
 						
-						p[1] = p[0];
-						p[2] = stemNote->getStemEndPos();
-						p[2].x += xadjust;
+						r.bottomLeft = r.topLeft;
+						r.topRight = stemNote->getStemEndPos();
+						r.topRight.x += xadjust;
 						if (getTagType() == SYSTEMTAG)
-							p[2] += stemNote->getGRStaff()->getPosition();
-						p[2].y += beamCount * yLocalFact1;
+							r.topRight += stemNote->getGRStaff()->getPosition();
+						r.topRight.y += beamCount * yLocalFact1;
 						if (localDir != dir)
-							p[2].y -= yLocalFact2;
-						p[3] = p[2];
-						p[3].y += yLocalFact2;
+							r.topRight.y -= yLocalFact2;
+						r.bottomRight = r.topRight;
+						r.bottomRight.y += yLocalFact2;
 					}
 					else if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT) {						
-						p[0] = stemNote->getStemEndPos();
+						r.topLeft = stemNote->getStemEndPos();
 						if (getTagType() == SYSTEMTAG)
-							p[0] += stemNote->getGRStaff()->getPosition();
-						p[0].y += beamCount * yLocalFact1;
+							r.topLeft += stemNote->getGRStaff()->getPosition();
+						r.topLeft.y += beamCount * yLocalFact1;
 						if (localDir != dir)
-							p[0].y -= yLocalFact2;
-						p[1] = p[0];
-						p[1].y += yLocalFact2;
+							r.topLeft.y -= yLocalFact2;
+						r.bottomLeft = r.topLeft;
+						r.bottomLeft.y += yLocalFact2;
 
-						p[2] = sse->endElement->getPosition();
-						p[2].x += xadjust;
+						r.topRight = sse->endElement->getPosition();
+						r.topRight.x += xadjust;
 						if (getTagType() == SYSTEMTAG)
-							p[2] += sn2->getGRStaff()->getPosition();
-						p[2].y = p[0].y;
+							r.topRight += sn2->getGRStaff()->getPosition();
+						r.topRight.y = r.topLeft.y;
 						
-						p[3].x = p[2].x;
-						p[3].y = p[1].y;
+						r.bottomRight.Set (r.topRight.x, r.bottomLeft.y);
 					}
 					/* 26/11/03 
 					 Beaming bug: wrong direction for partial beam (beam-bug.gmn)
@@ -784,32 +773,32 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 					else if( oldpos == sse->endpos || pos == NULL || ((!stemNote->isSyncopated()) && (oldpos != sse->startpos)))
 					{
 						// Partial beams leftward ( using slope)
-						p[2] = stemNote->getStemEndPos();
-						p[2].x += xadjust;
+						r.topRight = stemNote->getStemEndPos();
+						r.topRight.x += xadjust;
 						if (getTagType() == SYSTEMTAG)
-							p[2] += stemNote->getGRStaff()->getPosition();
+							r.topRight += stemNote->getGRStaff()->getPosition();
 						
 						if (localDir != dir)
-							p[2].y -= yLocalFact2;
+							r.topRight.y -= yLocalFact2;
 
-						p[2].y += beamCount * yLocalFact1;
-						p[3] = p[2];
-						p[3].y += yLocalFact2;
+						r.topRight.y += beamCount * yLocalFact1;
+						r.bottomRight = r.topRight;
+						r.bottomRight.y += yLocalFact2;
 
-						p[0] = p[2];
-						p[0].x -= infos.currentLSPACE;
-						p[0].y -= slope * infos.currentLSPACE;
-						p[1] = p[0];
-						p[1].y += yLocalFact2;
+						r.topLeft = r.topRight;
+						r.topLeft.x -= infos.currentLSPACE;
+						r.topLeft.y -= slope * infos.currentLSPACE;
+						r.bottomLeft = r.topLeft;
+						r.bottomLeft.y += yLocalFact2;
 					}
 					else
 					{
 						// Partial beams rightward ( using slope)
-						p[2] = p[0];
-						p[2].x += infos.currentLSPACE;
-						p[2].y += slope * infos.currentLSPACE;
-						p[3] = p[2];
-						p[3].y += yLocalFact2;
+						r.topRight = r.topLeft;
+						r.topRight.x += infos.currentLSPACE;
+						r.topRight.y += slope * infos.currentLSPACE;
+						r.bottomRight = r.topRight;
+						r.bottomRight.y += yLocalFact2;
 					}
 				}
 				
@@ -818,18 +807,19 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 				{
 					const GRStaff * beamstaff = sse->startElement->getGRStaff();
 					const NVPoint & offset = beamstaff->getPosition();
-					p[0] -= offset;
-					p[1] -= offset;
-					p[2] -= offset;
-					p[3] -= offset;
+					r -= offset;
+//					r.topLeft -= offset;
+//					r.bottomLeft -= offset;
+//					r.topRight -= offset;
+//					r.bottomRight -= offset;
 				}
 
 				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
 				{
-					p[0].y = p[2].y;
-					p[1].y = p[3].y;
+					r.topLeft.y = r.topRight.y;
+					r.bottomLeft.y = r.bottomRight.y;
 				}
-				st->simpleBeams.push_back(new GRSimpleBeam(this,p));
+				st->simpleBeams.push_back(new GRSimpleBeam(this,r));
 				
 				pos  = sse->startpos;
 				oldpos = pos;
@@ -990,35 +980,31 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 	end = ar->getLastBeaming();
 	begin = ar->getFirstBeaming();
 
-	NVPoint p[4];
+	BeamRect r;
 	for(int i=1; i <= begin; i++) {
-		p[0] = st->fRect.topLeft;
-		p[0].y += (i-1) * yLocalFact1;
-		p[1].x = p[0].x;
-		p[1].y = p[0].y + yLocalFact2;
+		r.topLeft = st->fRect.topLeft;
+		r.topLeft.y += (i-1) * yLocalFact1;
+		r.bottomLeft.Set (r.topLeft.x, r.topLeft.y + yLocalFact2);
 			
-		p[2] = st->fRect.topRight;
+		r.topRight = st->fRect.topRight;
 		if(end > i || (end == i && i != 1)) 	// no need to draw the main beam again.
-			p[2].y += (i-1) * yLocalFact1;
+			r.topRight.y += (i-1) * yLocalFact1;
 		else
-			p[2].y += (end-1) * yLocalFact1;
-		p[3].x = p[2].x;
-		p[3].y = p[2].y + yLocalFact2;
-		st->simpleBeams.push_back(new GRSimpleBeam(this,p));
+			r.topRight.y += (end-1) * yLocalFact1;
+		r.bottomRight.Set (r.topRight.x, r.topRight.y + yLocalFact2);
+		st->simpleBeams.push_back(new GRSimpleBeam(this,r));
 	}
 	// if end > begin
 	for(int i = begin; i < end; i++)
 	{
-		p[0] = st->fRect.topLeft;
-		p[0].y += (begin-1) * yLocalFact1;
-		p[1].x = p[0].x;
-		p[1].y = p[0].y + yLocalFact2;
+		r.topLeft = st->fRect.topLeft;
+		r.topLeft.y += (begin-1) * yLocalFact1;
+		r.bottomLeft.Set (r.topLeft.x, r.topLeft.y + yLocalFact2);
 
-		p[2] = st->fRect.topRight;
-		p[2].y += i * yLocalFact1;
-		p[3].x = p[2].x;
-		p[3].y = p[2].y + yLocalFact2;
-		st->simpleBeams.push_back(new GRSimpleBeam(this,p));
+		r.topRight = st->fRect.topRight;
+		r.topRight.y += i * yLocalFact1;
+		r.bottomRight.Set (r.topRight.x, r.topRight.y + yLocalFact2);
+		st->simpleBeams.push_back(new GRSimpleBeam(this,r));
 	}
 	
 
@@ -1149,42 +1135,13 @@ void GRBeam::yRange (const NEPointerList* assoc, const GREvent*& high, const GRE
 }
 
 //--------------------------------------------------------------------
-//void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList * beams) const
-//{
-//	float maxy = 0;
-//	float miny = 100000000.f;
-//	GuidoPos pos = beams->GetHeadPosition();
-//	while (pos) {
-//		const GRSimpleBeam* b = beams->GetNext(pos);
-//		if (b->fPoints[3].y > maxy) maxy = b->fPoints[3].y;
-//		if (b->fPoints[2].y > miny) miny = b->fPoints[2].y;
-//	}
-//	float slength = ev->getStemLength();
-//	float thick = ev->getGRStaff()->getStaffLSPACE()/4; // this is to take account of the beam thickness
-//	if (ev->getStemDirection() == dirUP) {
-//		float y = ev->getPosition().y - slength;
-//		if (y > miny) ev->setStemLength(slength + y - miny - thick);
-//	}
-//	else {
-//		float y = ev->getPosition().y + slength;
-//		if (y < maxy) ev->setStemLength(slength + maxy - y - thick);
-//	}
-//}
-
-//--------------------------------------------------------------------
 void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) const
 {
 	float maxy = 0;
 	float miny = 100000000.f;
-//	GuidoPos pos = beams->GetHeadPosition();
-//	while (pos) {
-//		const GRSimpleBeam* b = beams->GetNext(pos);
-//		if (b->fPoints[3].y > maxy) maxy = b->fPoints[3].y;
-//		if (b->fPoints[2].y > miny) miny = b->fPoints[2].y;
-//	}
 	for (GRSimpleBeam* b: beams) {
-		if (b->fPoints[3].y > maxy) maxy = b->fPoints[3].y;
-		if (b->fPoints[2].y > miny) miny = b->fPoints[2].y;
+		if (b->fRect.bottomRight.y > maxy) maxy = b->fRect.bottomRight.y;
+		if (b->fRect.topRight.y > miny) miny = b->fRect.topRight.y;
 	}
 	float slength = ev->getStemLength();
 	float thick = ev->getGRStaff()->getStaffLSPACE()/4; // this is to take account of the beam thickness

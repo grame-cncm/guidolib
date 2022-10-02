@@ -16,6 +16,7 @@
 */
 
 #include "GRNotationElement.h"
+#include "GRBeam.h"
 
 class GRBeam;
 
@@ -25,14 +26,14 @@ class GRBeam;
 class GRSimpleBeam : public GRNotationElement
 {
 	public:
-				GRSimpleBeam(GRBeam * p_parent, const NVPoint par[4]);
+				GRSimpleBeam(GRBeam * p_parent, const BeamRect&);
 		
 		virtual const unsigned char * getColRef() const;
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-				void setPoints( const NVPoint p[] );
+				void setPoints( const BeamRect& );
 
-		NVPoint		fPoints[4];
+		BeamRect	fRect;
 		GRBeam *	fParent;
 };
 
