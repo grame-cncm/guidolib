@@ -623,18 +623,16 @@ void GRBeam::refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPA
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	BeamRect r = st->fRect;
-	const float yFact1 = 0.75f * currentLSPACE * dir;
+	const float space = getBeamSpace (currentLSPACE) * dir;
 	for (GRSimpleBeam* b: st->simpleBeams) {
 		b->setPoints(r);
-		r.yOffset(yFact1);
+		r.yOffset(space);
 	}
 }
 
 //--------------------------------------------------------------------
-void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int dir)
+void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beamSpace, float beamSize, int dir)
 {
-	if (fIsFeathered) return;
-
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	// for beam length adjustment - DF sept 15 2009
 	const float xadjust = infos.currentLSPACE/10;
@@ -649,8 +647,8 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 		if (stemNote) {
 
 			GDirection localDir = stemNote->getStemDirection();
-			float yLocalFact1 = yFact1 * localDir * infos.currentSize;
-			float yLocalFact2 = yFact2 * localDir * infos.currentSize;
+			float localSpace = beamSpace * localDir * infos.currentSize;
+			float localSize = beamSize * localDir * infos.currentSize;
 
 			// now we check the number of beams ...
 			if (stemNote->getBeamCount() < stemNote->getNumFaehnchen())
@@ -671,10 +669,10 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 					r.topLeft = stemNote->getStemStartPos();
 					if (getTagType() == SYSTEMTAG)
 						r.topLeft += stemNote->getGRStaff()->getPosition();
-					r.topLeft.y += beamCount * yLocalFact1;
+					r.topLeft.y += beamCount * localSpace;
 					if (localDir != dir)
-						r.topLeft.y -= yLocalFact2;
-					r.bottomLeft.Set (r.topLeft.x, r.topLeft.y + yLocalFact2);
+						r.topLeft.y -= localSize;
+					r.bottomLeft.Set (r.topLeft.x, r.topLeft.y + localSize);
 				}
 				// now we look for the endposition
 				GREvent * sn2 = NULL;
@@ -715,11 +713,11 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 						r.topRight.x += xadjust;
 						if (getTagType() == SYSTEMTAG)
 							r.topRight += sn2->getGRStaff()->getPosition();
-						r.topRight.y += beamCount * yLocalFact1;
+						r.topRight.y += beamCount * localSpace;
 					}
 					if (localDir != dir)
-						r.topRight.y -= yLocalFact2;
-					r.bottomRight.Set (r.topRight.x, r.topRight.y + yLocalFact2);
+						r.topRight.y -= localSize;
+					r.bottomRight.Set (r.topRight.x, r.topRight.y + localSize);
 				}
 				else {
 					// we do not have an End-Positon single beam ... (meaning a single straight flag)
@@ -739,21 +737,21 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 						r.topRight.x += xadjust;
 						if (getTagType() == SYSTEMTAG)
 							r.topRight += stemNote->getGRStaff()->getPosition();
-						r.topRight.y += beamCount * yLocalFact1;
+						r.topRight.y += beamCount * localSpace;
 						if (localDir != dir)
-							r.topRight.y -= yLocalFact2;
+							r.topRight.y -= localSize;
 						r.bottomRight = r.topRight;
-						r.bottomRight.y += yLocalFact2;
+						r.bottomRight.y += localSize;
 					}
 					else if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT) {						
 						r.topLeft = stemNote->getStemEndPos();
 						if (getTagType() == SYSTEMTAG)
 							r.topLeft += stemNote->getGRStaff()->getPosition();
-						r.topLeft.y += beamCount * yLocalFact1;
+						r.topLeft.y += beamCount * localSpace;
 						if (localDir != dir)
-							r.topLeft.y -= yLocalFact2;
+							r.topLeft.y -= localSize;
 						r.bottomLeft = r.topLeft;
-						r.bottomLeft.y += yLocalFact2;
+						r.bottomLeft.y += localSize;
 
 						r.topRight = sse->endElement->getPosition();
 						r.topRight.x += xadjust;
@@ -779,17 +777,17 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 							r.topRight += stemNote->getGRStaff()->getPosition();
 						
 						if (localDir != dir)
-							r.topRight.y -= yLocalFact2;
+							r.topRight.y -= localSize;
 
-						r.topRight.y += beamCount * yLocalFact1;
+						r.topRight.y += beamCount * localSpace;
 						r.bottomRight = r.topRight;
-						r.bottomRight.y += yLocalFact2;
+						r.bottomRight.y += localSize;
 
 						r.topLeft = r.topRight;
 						r.topLeft.x -= infos.currentLSPACE;
 						r.topLeft.y -= slope * infos.currentLSPACE;
 						r.bottomLeft = r.topLeft;
-						r.bottomLeft.y += yLocalFact2;
+						r.bottomLeft.y += localSize;
 					}
 					else
 					{
@@ -798,24 +796,18 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 						r.topRight.x += infos.currentLSPACE;
 						r.topRight.y += slope * infos.currentLSPACE;
 						r.bottomRight = r.topRight;
-						r.bottomRight.y += yLocalFact2;
+						r.bottomRight.y += localSize;
 					}
 				}
 				
 				// now we construct a SimpleBeam, we now have to "undo" the systemTag-stuff
-				if (getTagType() == SYSTEMTAG)
-				{
+				if (getTagType() == SYSTEMTAG) {
 					const GRStaff * beamstaff = sse->startElement->getGRStaff();
 					const NVPoint & offset = beamstaff->getPosition();
 					r -= offset;
-//					r.topLeft -= offset;
-//					r.bottomLeft -= offset;
-//					r.topRight -= offset;
-//					r.bottomRight -= offset;
 				}
 
-				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
-				{
+				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {
 					r.topLeft.y = r.topRight.y;
 					r.bottomLeft.y = r.bottomRight.y;
 				}
@@ -835,9 +827,9 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 				int beamscount = stemNote->getBeamCount() - 1;
 				if ((beamscount > 0) && (previousBeamsCount > beamscount) && (lastLocalDir != localDir)) {
 					if (localDir == dirUP)
-						stemNote->changeStemLength(stemNote->getStemLength() + (yLocalFact1 * beamscount));
+						stemNote->changeStemLength(stemNote->getStemLength() + (localSpace * beamscount));
 					else if (localDir == dirDOWN)
-						stemNote->changeStemLength(stemNote->getStemLength() - (yLocalFact1 * beamscount));
+						stemNote->changeStemLength(stemNote->getStemLength() - (localSpace * beamscount));
 				}			
 			}
 		}
@@ -961,7 +953,7 @@ float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool
 // if we have a feathered beam, we just have to draw the main beam (already done)
 // and the other simple beams will only depend on the begining and ending 
 // points, regardless of the durations of the inner notes.
-void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSystemStartEndStruct * sse)
+void GRBeam::adjustFeathered (float beamSpace, float beamSize, PosInfos& infos, GRSystemStartEndStruct * sse)
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 
@@ -971,8 +963,8 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 	const GREvent * stemNoteBegin = mAssociated->GetHead()->isGREvent();
 	
 	GDirection localDir = stemNoteBegin->getStemDirection();
-	float yLocalFact1 = yFact1 * localDir * infos.currentSize;
-	float yLocalFact2 = yFact2 * localDir * infos.currentSize;
+	float yLocalFact1 = beamSpace * localDir * infos.currentSize;
+	float yLocalFact2 = beamSize * localDir * infos.currentSize;
 	
 	
 	// if the user hasn't set the durations as parameters, 
@@ -1153,6 +1145,33 @@ void GRBeam::checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) c
 		float y = ev->getPosition().y + slength;
 		if (y < maxy) ev->setStemLength(slength + maxy - y - thick);
 	}
+
+//	float maxy = 0.f;
+//	float miny = 0.f;
+////	float miny = 100000000.f;
+//
+//	float slength = ev->getStemLength();
+//	float thick = ev->getGRStaff()->getStaffLSPACE()/4; // this is to take account of the beam thickness
+//
+//	for (GRSimpleBeam* b: beams) {
+////cerr << "GRBeam::checkEndStemsReverse ty/by : " << b->fRect.topRight.y << " / " << b->fRect.bottomRight.y <<  endl;
+//		if ((b->fRect.bottomRight.y > maxy) || !maxy) maxy = b->fRect.bottomRight.y;
+////		float minoffset = (staff != b->getGRStaff()) ? b->getGRStaff()->getPosition().y : 0.f;
+//		if ((b->fRect.topRight.y > miny) || !miny) miny = b->fRect.topRight.y;
+//	}
+//cerr << "GRBeam::checkEndStemsReverse maxy miny : " << maxy << " / " << miny << endl;
+//	if (ev->getStemDirection() == dirUP) {
+//		float y = ev->getPosition().y - slength;
+//		if (y > miny) ev->setStemLength(slength + y - miny - thick);
+//	}
+//	else {
+//		float y = ev->getPosition().y + slength;
+//		if (y < maxy) {
+//			ev->setStemLength(slength + maxy - y - thick);
+//cerr << "GRBeam::checkEndStemsReverse fixed : " << ev->getStemLength() << endl;
+//		}
+////		else if (std::abs(miny) > slength) ev->setStemLength(std::abs(miny));
+//	}
 }
 
 //--------------------------------------------------------------------
@@ -1323,16 +1342,16 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	else dir = infos.stemdir;
 
 	// - These constants define the space and the thickness of additionnal beams.
-	const float yFact1 = 0.75f * infos.currentLSPACE;	// was 0.7f
-	const float yFact2 = 0.4f * infos.currentLSPACE;
+	const float beamSpace = getBeamSpace (infos.currentLSPACE);
+	const float beamSize  = getBeamSize (infos.currentLSPACE);
 	
 	// if we have a feathered beam, we just have to draw the main beam (already done) 
 	// and the other simple beams will only depend on the begining and ending 
 	// points, regardless of the durations of the inner notes.
-	if (fIsFeathered) adjustFeathered (yFact1, yFact2, infos, sse);
+	if (fIsFeathered) adjustFeathered (beamSpace, beamSize, infos, sse);
 
 	// for beam length adjustment - DF sept 15 2009
-	setBeams(sse, infos, yFact1, yFact2, dir);
+	else setBeams(sse, infos, beamSpace, beamSize, dir);
 
     GuidoPos stemPos = sse->startpos;
     while(stemPos) {
@@ -1365,6 +1384,23 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		else if (st->simpleBeams.size()) checkEndStemsReverse(endEl, st->simpleBeams);
 		else { mDraw = false; } 	// fix issue #86
 	}
+
+//	if (infos.stemsReverse && (st->simpleBeams.size() > 1)) {
+//		checkEndStemsReverse(endEl, st->simpleBeams);
+//		if (infos.stavesStartEnd ) {
+//			checkEndStemsReverse(endEl, st->simpleBeams);
+//		}
+//
+//
+//
+////		if (infos.stavesStartEnd) {
+////			float ratio = startEl->getGRStaff()->getSizeRatio() * endEl->getGRStaff()->getSizeRatio();
+////			endEl->setStemLength(endEl->getStemLength() + LSPACE * ratio);
+////		}
+////		else
+////		if (infos.stavesStartEnd || st->simpleBeams.size()) checkEndStemsReverse(endEl, st->simpleBeams);
+////		else { mDraw = false; } 	// fix issue #86
+//	}
 
 	// now we have to make sure, that the original positions for the beam are set for the right staff
 	if (getTagType() == SYSTEMTAG) {
