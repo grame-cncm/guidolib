@@ -18,9 +18,6 @@
 #include "GRNotationElement.h"
 #include "GRBeam.h"
 
-class GRBeam;
-
-
 /** \brief Graphical representation af a Beam
 */
 class GRSimpleBeam : public GRNotationElement
