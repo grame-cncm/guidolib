@@ -142,6 +142,9 @@ private:
 	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
 	void	scanStaves  			(const NEPointerList* assoc, float& highStaff, float& lowStaff) const;
 	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) const;
+	bool 	checkPartialBeaming (GuidoPos pos, GuidoPos endpos, GREvent *& next);
+	BeamRect getLeftPartialBeam  (GREvent* elt, float space, float size, float lspace, float slope, bool dirchange, int num) const;
+	void 	 getRightPartialBeam (BeamRect& r1, float size, float lspace, float slope) const;
 	
 	float 	getBeamSpace(float lspace) const { return 0.75f * lspace; }
 	float 	getBeamSize (float lspace) const { return 0.4f * lspace; }
