@@ -650,72 +650,78 @@ bool GRBeam::checkPartialBeaming (GuidoPos pos, GuidoPos endpos, GREvent*& next)
 }
 
 //--------------------------------------------------------------------
+void GRBeam::setLeft (BeamRect& r, const NVPoint& pos, const GRStaff* staff) const
+{
+	r.topLeft = pos;
+	if (staff) r.topLeft += staff->getPosition();
+	r.bottomLeft = r.topLeft;
+}
+
+//--------------------------------------------------------------------
+void GRBeam::setRight (BeamRect& r, const NVPoint& pos, const GRStaff* staff, float xadjust) const
+{
+	r.topRight = pos;
+	r.topRight.x += xadjust;
+	if (staff) r.topRight += staff->getPosition();
+	r.bottomRight = r.topRight;
+}
+
+//--------------------------------------------------------------------
 void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beamSpace, float beamSize, int dir)
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	// for beam length adjustment - DF sept 15 2009
 	const float xadjust = infos.currentLSPACE/10;
-//	int previousBeamsCount = 0;
-	
+	const bool systemBeam = (getTagType() == SYSTEMTAG);
+
 	GuidoPos pos = sse->startpos;
 	while (pos) {
 
-		GuidoPos oldpos = pos;
+//		GuidoPos oldpos = pos;
 		GREvent * stemNote = GREvent::cast(mAssociated->GetNext(pos));
+cerr << "GRBeam::setBeams set note " << stemNote << endl;
 		if (stemNote) {
 
 			GDirection localDir = stemNote->getStemDirection();
 			float localSpace = beamSpace * localDir * infos.currentSize;
 			float localSize = beamSize * localDir * infos.currentSize;
 
-			// now we check the number of beams ...
-			int beamCount = stemNote->getBeamCount();
-			if (beamCount < stemNote->getNumFaehnchen())
+			// check the number of beams ...
+			while (stemNote->getBeamCount() < stemNote->getNumFaehnchen())
 			{
+				int beamCount = stemNote->getBeamCount();
 				stemNote->incBeamCount();
 				BeamRect r;
-				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {
-					// the additional beam starts at the startElement (glue), we have more beams to draw
-					r.topLeft = sse->startElement->getPosition();
-					if (getTagType() == SYSTEMTAG)
-						r.topLeft += stemNote->getGRStaff()->getPosition();
-					r.bottomLeft = r.topLeft;
-				}
-				else {
-					// the additional beam starts at sn. We have more beams to draw
-					r.topLeft = stemNote->getStemStartPos();
-					if (getTagType() == SYSTEMTAG)
-						r.topLeft += stemNote->getGRStaff()->getPosition();
-					r.topLeft.y += beamCount * localSpace;
-					if (localDir != dir)
-						r.topLeft.y -= localSize;
-					r.bottomLeft.Set (r.topLeft.x, r.topLeft.y + localSize);
-				}
-				// now we look for the endposition
 				GREvent * endElt = nullptr;
+				// look for the endposition and for partial beams
 				// partialbeam is set if the new SimpleBeam only covers part of the masterBeam.
 				bool partialbeam = checkPartialBeaming(pos, sse->endpos, endElt);
+
+				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {
+					// the additional beam starts at the startElement (glue), we have more beams to draw
+					setLeft (r, sse->startElement->getPosition(), (systemBeam ? stemNote->getGRStaff() : nullptr));
+				}
+				else {
+					// the additional beam starts at stemNote. We have more beams to draw
+					setLeft (r, stemNote->getStemStartPos(), (systemBeam ? stemNote->getGRStaff() : nullptr));
+					r.topLeft.y += beamCount * localSpace;
+					if (localDir != dir) r.topLeft.y -= localSize;
+					r.bottomLeft.y = r.topLeft.y + localSize;
+				}
 				
 				if (endElt) {
 					if (!partialbeam && sse->endflag == GRSystemStartEndStruct::OPENRIGHT) {
 						// then the position is different ...
-						r.topRight = sse->endElement->getPosition();
-						r.topRight.x += xadjust;
-						if (getTagType() == SYSTEMTAG)
-							r.topRight += endElt->getGRStaff()->getPosition();
+						setRight (r, sse->endElement->getPosition(), (systemBeam ? endElt->getGRStaff() : nullptr), xadjust);
 						r.topRight.y = r.topLeft.y;
 					}
 					else {
 						// we have an End-Position ...
-						r.topRight = endElt->getStemEndPos();
-						r.topRight.x += xadjust;
-						if (getTagType() == SYSTEMTAG)
-							r.topRight += endElt->getGRStaff()->getPosition();
+						setRight (r, endElt->getStemEndPos(), (systemBeam ? endElt->getGRStaff() : nullptr), xadjust);
 						r.topRight.y += beamCount * localSpace;
 					}
-					if (localDir != dir)
-						r.topRight.y -= localSize;
-					r.bottomRight.Set (r.topRight.x, r.topRight.y + localSize);
+					if (localDir != dir) r.topRight.y -= localSize;
+					r.bottomRight.y = r.topRight.y + localSize;
 				}
 				else {
 					// we do not have an End-Positon single beam ... (meaning a single straight flag)
@@ -727,37 +733,22 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 						// how do I know that? not now.
 
 						// sn is the only element .... and we are open on the left ...
-						if (getTagType() == SYSTEMTAG)
-							r.topLeft += stemNote->getGRStaff()->getPosition();
-						
+						if (systemBeam) r.topLeft += stemNote->getGRStaff()->getPosition();
 						r.bottomLeft = r.topLeft;
-						r.topRight = stemNote->getStemEndPos();
-						r.topRight.x += xadjust;
-						if (getTagType() == SYSTEMTAG)
-							r.topRight += stemNote->getGRStaff()->getPosition();
+						setRight(r, stemNote->getStemEndPos(), (systemBeam ? stemNote->getGRStaff() : nullptr), xadjust);
 						r.topRight.y += beamCount * localSpace;
-						if (localDir != dir)
-							r.topRight.y -= localSize;
-						r.bottomRight = r.topRight;
-						r.bottomRight.y += localSize;
+						if (localDir != dir) r.topRight.y -= localSize;
+						r.bottomRight.y = r.topRight.y + localSize;
 					}
 					else if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT) {						
-						r.topLeft = stemNote->getStemEndPos();
-						if (getTagType() == SYSTEMTAG)
-							r.topLeft += stemNote->getGRStaff()->getPosition();
+						setLeft (r, stemNote->getStemEndPos(), (systemBeam ? stemNote->getGRStaff() : nullptr));
 						r.topLeft.y += beamCount * localSpace;
-						if (localDir != dir)
-							r.topLeft.y -= localSize;
-						r.bottomLeft = r.topLeft;
-						r.bottomLeft.y += localSize;
+						if (localDir != dir) r.topLeft.y -= localSize;
+						r.bottomLeft.y = r.topLeft.y + localSize;
 
-						r.topRight = sse->endElement->getPosition();
-						r.topRight.x += xadjust;
-						if (getTagType() == SYSTEMTAG)
-							r.topRight += endElt->getGRStaff()->getPosition(); // ???? endElt is supposed to be null
+						setRight(r, sse->endElement->getPosition(), nullptr, xadjust);
 						r.topRight.y = r.topLeft.y;
-						
-						r.bottomRight.Set (r.topRight.x, r.bottomLeft.y);
+						r.bottomRight.y = r.bottomLeft.y;
 					}
 					/* 26/11/03 
 					 Beaming bug: wrong direction for partial beam (beam-bug.gmn)
@@ -766,62 +757,39 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 						startpos check added to correct problem with partial beam
 						going outside a group like in [ _/16 c d/8 ]
 					*/
-					else if( oldpos == sse->endpos || pos == NULL || ((!stemNote->isSyncopated()) && (oldpos != sse->startpos)))
+//					else if( partialbeam && (pos == sse->startpos))
+//						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
+					else if( partialbeam && (stemNote == sse->startElement))
+						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
+					else if( pos == sse->endpos || pos == NULL || ((!stemNote->isSyncopated()) && (pos != sse->startpos)))
 						r = getLeftPartialBeam(stemNote, localSpace, localSize, infos.currentLSPACE, slope, (localDir != dir), beamCount);
-//					{
-//						// Partial beams leftward ( using slope)
-//						r.topRight = stemNote->getStemEndPos();
-//						r.topRight.x += xadjust;
-//						if (getTagType() == SYSTEMTAG)
-//							r.topRight += stemNote->getGRStaff()->getPosition();
-//
-//						if (localDir != dir)
-//							r.topRight.y -= localSize;
-//
-//						r.topRight.y += beamCount * localSpace;
-//						r.bottomRight = r.topRight;
-//						r.bottomRight.y += localSize;
-//
-//						r.topLeft = r.topRight;
-//						r.topLeft.x -= infos.currentLSPACE;
-//						r.topLeft.y -= slope * infos.currentLSPACE;
-//						r.bottomLeft = r.topLeft;
-//						r.bottomLeft.y += localSize;
-//					}
 					else
 						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
-//					{
-//						// Partial beams rightward ( using slope)
-//						r.topRight = r.topLeft;
-//						r.topRight.x += infos.currentLSPACE;
-//						r.topRight.y += slope * infos.currentLSPACE;
-//						r.bottomRight = r.topRight;
-//						r.bottomRight.y += localSize;
-//					}
 				}
-				
-				// now we construct a SimpleBeam, we now have to "undo" the systemTag-stuff
-				if (getTagType() == SYSTEMTAG) {
+
+				// we now have to "undo" the systemTag-stuff
+				if (systemBeam) {
 					const GRStaff * beamstaff = sse->startElement->getGRStaff();
 					const NVPoint & offset = beamstaff->getPosition();
 					r -= offset;
 				}
 
-				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {
+				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {	// this is a beam open to the left (due a new line)
 					r.topLeft.y = r.topRight.y;
 					r.bottomLeft.y = r.bottomRight.y;
 				}
 				st->simpleBeams.push_back(new GRSimpleBeam(this,r));
 				
-				pos  = sse->startpos;
-				oldpos = pos;
+//				pos  = sse->startpos;
+//				oldpos = pos;
+
 //				previousBeamsCount = stemNote->getBeamCount() - 1;
 			}
 			// a new hack, again to catch stems directions change - DF sept 15 2009
 //			else if (localDir != dir) {
 //				// check for stems length
 //				NVPoint stemloc = stemNote->getStemStartPos();
-//				if (getTagType() == SYSTEMTAG)
+//				if (systemBeam)
 //					stemloc += stemNote->getGRStaff()->getPosition();
 //				int beamscount = stemNote->getBeamCount() - 1;
 //				if ((beamscount > 0) && (previousBeamsCount > beamscount) && (lastLocalDir != localDir)) {
@@ -832,7 +800,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 //				}
 //			}
 		}
-		if (oldpos == sse->endpos) break;
+//		if (oldpos == sse->endpos) break;
 	}
 }
 
@@ -1254,10 +1222,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(el->getGRStaff()->getGRSystem());
 	assert(sse);
 
-//cerr << (void*)this <<  " GRBeam::tellPosition in type " << getTagType() << " - " << el << " start elt " << sse->startElement << " end elt " << sse->endElement << " level: " << fLevel  << endl;
-
 	if (el != sse->endElement) return;
 	if(fLevel != 0) return;
+
+//cerr << (void*)this <<  " GRBeam::tellPosition " << el << " start elt " << sse->startElement << " end elt " << sse->endElement << " level: " << fLevel  << endl;
 
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const GREvent * startEl = sse->startElement->isGREvent();

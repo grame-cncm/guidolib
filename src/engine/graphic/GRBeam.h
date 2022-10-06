@@ -145,7 +145,11 @@ private:
 	bool 	checkPartialBeaming (GuidoPos pos, GuidoPos endpos, GREvent *& next);
 	BeamRect getLeftPartialBeam  (GREvent* elt, float space, float size, float lspace, float slope, bool dirchange, int num) const;
 	void 	 getRightPartialBeam (BeamRect& r1, float size, float lspace, float slope) const;
-	
+
+	void 	 setLeft (BeamRect& r, const NVPoint& pos, const GRStaff* staff) const;
+	void 	 setRight (BeamRect& r, const NVPoint& pos, const GRStaff* staff, float xadjust) const;
+
+
 	float 	getBeamSpace(float lspace) const { return 0.75f * lspace; }
 	float 	getBeamSize (float lspace) const { return 0.4f * lspace; }
 
