@@ -47,6 +47,9 @@ typedef struct beamRect {
 //	void offset (const NVPoint& p) 	{ topLeft -= p; bottomLeft -= p; bottomRight -= p; topRight -= p;}
 	void yOffset (float val) 		{ topLeft.y += val; bottomLeft.y += val; bottomRight.y += val; topRight.y += val;}
 	void tilt (float val) 			{ topLeft.y -= val; bottomLeft.y -= val; bottomRight.y += val; topRight.y += val;}
+	
+	bool operator == (struct beamRect& r)  { return (topLeft==r.topLeft) && (topRight==r.topRight) && (bottomLeft==r.bottomLeft) && (bottomRight==r.bottomRight); }
+	bool operator != (struct beamRect& r)  { return !(*this == r); }
 } BeamRect;
 
 class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
@@ -146,8 +149,10 @@ private:
 	BeamRect getLeftPartialBeam  (GREvent* elt, float space, float size, float lspace, float slope, bool dirchange, int num) const;
 	void 	 getRightPartialBeam (BeamRect& r1, float size, float lspace, float slope) const;
 
-	void 	 setLeft (BeamRect& r, const NVPoint& pos, const GRStaff* staff) const;
-	void 	 setRight (BeamRect& r, const NVPoint& pos, const GRStaff* staff, float xadjust) const;
+	void 	setLeft (BeamRect& r, const NVPoint& pos, const GRStaff* staff) const;
+	void 	setRight (BeamRect& r, const NVPoint& pos, const GRStaff* staff, float xadjust) const;
+	void 	adjustTremolos (GuidoPos pos);
+	void	setUserLengths(GRNotationElement* start, GRNotationElement* end, const ARBeam * arBeam);
 
 
 	float 	getBeamSpace(float lspace) const { return 0.75f * lspace; }

@@ -36,11 +36,14 @@
 
 using namespace std;
 
-std::ostream & operator << ( std::ostream & os, const NVPoint p[4] )
-{
-	os << p[0] << " " << p[1] << " " << p[2] << " " << p[3];
-	return os;
-}
+//std::ostream & operator << ( std::ostream & os, const NVPoint p[4] )
+//{
+//	os << p[0] << " " << p[1] << " " << p[2] << " " << p[3];
+//	return os;
+//}
+
+static BeamRect gDebugRect;
+static bool gBRSet = false;
 
 
 GRBeamSaveStruct::~GRBeamSaveStruct()
@@ -670,18 +673,20 @@ void GRBeam::setRight (BeamRect& r, const NVPoint& pos, const GRStaff* staff, fl
 void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beamSpace, float beamSize, int dir)
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	// for beam length adjustment - DF sept 15 2009
-	const float xadjust = infos.currentLSPACE/10;
+	const float xadjust = infos.currentLSPACE/10; // for beam length adjustment - DF sept 15 2009
 	const bool systemBeam = (getTagType() == SYSTEMTAG);
 
+gDebugRect = st->fRect;
+BeamRect tmp;
+if (gDebugRect == tmp) {
+cerr << "****> GRBeam::setBeams gDebugRect null: " << gDebugRect.toString() << endl;
+return;
+}
 	GuidoPos pos = sse->startpos;
 	while (pos) {
-
-//		GuidoPos oldpos = pos;
 		GREvent * stemNote = GREvent::cast(mAssociated->GetNext(pos));
-cerr << "GRBeam::setBeams set note " << stemNote << endl;
+//cerr << "GRBeam::setBeams set note " << stemNote << " current main: " << st->fRect.toString() << endl;
 		if (stemNote) {
-
 			GDirection localDir = stemNote->getStemDirection();
 			float localSpace = beamSpace * localDir * infos.currentSize;
 			float localSize = beamSize * localDir * infos.currentSize;
@@ -757,8 +762,6 @@ cerr << "GRBeam::setBeams set note " << stemNote << endl;
 						startpos check added to correct problem with partial beam
 						going outside a group like in [ _/16 c d/8 ]
 					*/
-//					else if( partialbeam && (pos == sse->startpos))
-//						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
 					else if( partialbeam && (stemNote == sse->startElement))
 						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
 					else if( pos == sse->endpos || pos == NULL || ((!stemNote->isSyncopated()) && (pos != sse->startpos)))
@@ -769,9 +772,7 @@ cerr << "GRBeam::setBeams set note " << stemNote << endl;
 
 				// we now have to "undo" the systemTag-stuff
 				if (systemBeam) {
-					const GRStaff * beamstaff = sse->startElement->getGRStaff();
-					const NVPoint & offset = beamstaff->getPosition();
-					r -= offset;
+					r -= sse->startElement->getGRStaff()->getPosition();
 				}
 
 				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {	// this is a beam open to the left (due a new line)
@@ -779,28 +780,8 @@ cerr << "GRBeam::setBeams set note " << stemNote << endl;
 					r.bottomLeft.y = r.bottomRight.y;
 				}
 				st->simpleBeams.push_back(new GRSimpleBeam(this,r));
-				
-//				pos  = sse->startpos;
-//				oldpos = pos;
-
-//				previousBeamsCount = stemNote->getBeamCount() - 1;
 			}
-			// a new hack, again to catch stems directions change - DF sept 15 2009
-//			else if (localDir != dir) {
-//				// check for stems length
-//				NVPoint stemloc = stemNote->getStemStartPos();
-//				if (systemBeam)
-//					stemloc += stemNote->getGRStaff()->getPosition();
-//				int beamscount = stemNote->getBeamCount() - 1;
-//				if ((beamscount > 0) && (previousBeamsCount > beamscount) && (lastLocalDir != localDir)) {
-//					if (localDir == dirUP)
-//						stemNote->changeStemLength(stemNote->getStemLength() + (localSpace * beamscount));
-//					else if (localDir == dirDOWN)
-//						stemNote->changeStemLength(stemNote->getStemLength() - (localSpace * beamscount));
-//				}
-//			}
 		}
-//		if (oldpos == sse->endpos) break;
 	}
 }
 
@@ -1191,6 +1172,51 @@ void GRBeam::refreshPosition()
 }
 
 //--------------------------------------------------------------------
+void GRBeam::adjustTremolos (GuidoPos pos) {
+    while(pos) {
+        GREvent * stemNote = GREvent::cast(mAssociated->GetNext(pos));
+        if(stemNote) {
+            GuidoPos tagpos = NULL;
+            if (stemNote->getAssociations())
+                tagpos = stemNote->getAssociations()->GetHeadPosition();
+
+            while(tagpos) {
+                GRNotationElement * tag = stemNote->getAssociations()->GetNext(tagpos);
+                GRTremolo * trem = dynamic_cast<GRTremolo*>(tag);
+                if(trem) {
+                    trem->tellPosition(stemNote,stemNote->getPosition());
+                    if(trem->isTwoNotesTremolo()) // in order to force the second pitch (especially the chords) to update
+                    {
+                        GREvent * secondPitch = dynamic_cast<GREvent*>(mAssociated->GetNext(pos));
+                        if(secondPitch) trem->tellPosition(secondPitch, secondPitch->getPosition());
+                    }
+                }
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------
+// then we have to set the length ... if it is not set otherwise ...
+void GRBeam::setUserLengths(GRNotationElement* from, GRNotationElement* to, const ARBeam * arBeam)
+{
+	GRSingleNote * nt = dynamic_cast<GRSingleNote *>(from);
+	if(nt && !nt->getStemLengthSet()) {
+		const float myval = arBeam->getDy1()->getValue();
+		 nt->setStemLength( myval);
+	}
+
+	nt = dynamic_cast<GRSingleNote *>(to);
+	if(nt && !nt->getStemLengthSet()) {
+		float myval;
+		const TagParameterFloat* p = arBeam->getDy3();
+		if (p && p->TagIsSet())		myval = p->getValue();
+		else						myval = arBeam->getDy1()->getValue();
+		nt->setStemLength( myval);
+	}
+}
+
+//--------------------------------------------------------------------
 /** \brief Called from the LAST-Note of the Beam ...
 */
 // (JB) \bug There is probably a bug somewhere: with map mode
@@ -1212,46 +1238,38 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// a new test is performed: if it is a systemTag and
 	// it is not a systemcall (checkpos), than we can just do nothing.
 
-	if (getError() || !mAssociated || ( mAssociated->GetCount() == 0 )
-		|| ( getTagType() == GRTag::SYSTEMTAG && !mIsSystemCall ))
+	if (getError() || !mAssociated || ( mAssociated->GetCount() == 0 ) || ( getTagType() == GRTag::SYSTEMTAG && !mIsSystemCall ))
 		return;
-	
 	GRNotationElement * el = dynamic_cast<GRNotationElement *>(gobj);
 	if (!el || !el->getGRStaff()) return;
-
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(el->getGRStaff()->getGRSystem());
 	assert(sse);
 
 	if (el != sse->endElement) return;
 	if(fLevel != 0) return;
 
-//cerr << (void*)this <<  " GRBeam::tellPosition " << el << " start elt " << sse->startElement << " end elt " << sse->endElement << " level: " << fLevel  << endl;
-
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const GREvent * startEl = sse->startElement->isGREvent();
 	GREvent * endEl   = sse->endElement->isGREvent();
 
-//cerr << "GRBeam::tellPosition " << endl;
-	if (startEl && startEl->getGlobalStem()) startEl->getGlobalStem()->setBeam (this);
-	if (endEl   && endEl->getGlobalStem()) endEl->getGlobalStem()->setBeam (this);
-	bool differentStaves = (startEl && endEl) ? (endEl->getGRStaff()!=startEl->getGRStaff()) : false;
+//cerr << (void*)this <<  " GRBeam::tellPosition " << el << " start elt " << sse->startElement << " end elt " << sse->endElement << " level: " << fLevel  << endl;
+
+	if (startEl && startEl->getGlobalStem()) 	startEl->getGlobalStem()->setBeam (this);
+	if (endEl   && endEl->getGlobalStem()) 		endEl->getGlobalStem()->setBeam (this);
+	bool differentStaves = (startEl && endEl) ? (endEl->getGRStaff() != startEl->getGRStaff()) : false;
 
 	// this is the staff to which the beam belongs and who draws it.
-//	const GRStaff * beamstaff = sse->startElement->getGRStaff();
 	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl), reverseStems(mAssociated), differentStaves, 0, 0 };
 	if (getTagType() == SYSTEMTAG) {
 		infos.startStaff = startEl->getGRStaff()->getPosition();
 		infos.endStaff	 = endEl->getGRStaff()->getPosition();
-		scanStaves(mAssociated, infos.highStaff, infos.lowStaff);
-		yRange(mAssociated, infos.highNote, infos.lowNote);
+		scanStaves(mAssociated, infos.highStaff, infos.lowStaff); 	// set the y postition of the staves
+		yRange(mAssociated, infos.highNote, infos.lowNote);			// retrieve the lowest and highest notes (regarding their y position)
 	}
 
-	const ARBeam * arBeam = getARBeam();
-	const bool isSpecBeam = arBeam->isGuidoSpecBeam();
 
 	if (startEl)	infos.stemdir = startEl->getStemDirection();
 	else if(endEl)	infos.stemdir = endEl->getStemDirection();
-
 	initTopLeft 	(sse, startEl, infos);
 	initBottomLeft 	(sse, infos);
 	initTopRight 	(sse, endEl, infos);
@@ -1262,9 +1280,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// we have the start and end-position in st->p
 	// We have to determine the slope and adjust the slope to minimum and maximum ...
     // -----------------------------------------------------------
-//	float stemWidth = st->fRect.topRight.x - st->fRect.topLeft.x;
 	float stemWidth = st->fRect.width();
-//	if (stemWidth < 0) stemWidth = -stemWidth;
 	float slope = 0;
 	if (stemWidth > 0) {
 		slope = st->fRect.slope();
@@ -1280,9 +1296,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				slope = st->fRect.slope();
 			}
 		}
-//cerr << " slope adjust : " << slope << endl;
 	}
-
+	
+	const ARBeam * arBeam = getARBeam();
+	const bool isSpecBeam = arBeam->isGuidoSpecBeam();
 	bool needsadjust = true;
 	// we have to adjust the slope ONLY if the stemlength
 	// of the first and last element has not been set automatically!
@@ -1294,23 +1311,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	if (needsadjust) slopeAdjust (sse, startEl, endEl, slope, infos);
 
 	if (arBeam && isSpecBeam)
-	{
-		// then we have to set the length ... if it is not set otherwise ...
-		GRSingleNote * nt = dynamic_cast<GRSingleNote *>(sse->startElement);
-		if(nt && !nt->getStemLengthSet()) {
-			const float myval = arBeam->getDy1()->getValue();
-			 nt->setStemLength( myval);
-		}
-
-		nt = dynamic_cast<GRSingleNote *>(sse->endElement);
-		if(nt && !nt->getStemLengthSet()) {
-			float myval;
-			const TagParameterFloat* p = arBeam->getDy3();
-			if (p && p->TagIsSet())		myval = p->getValue();
-			else						myval = arBeam->getDy1()->getValue();
-			nt->setStemLength( myval);
-		}		
-	}
+		setUserLengths (sse->startElement, sse->endElement, arBeam);
 	
 	// nobeamoffset describes, if no beamoffset is valid: if notes ask for different beam-offsets
 	// then, there is just no offset .... things must be changed manually then ....
@@ -1343,40 +1344,24 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	}
 	else dir = infos.stemdir;
 
+	if (getTagType() == SYSTEMTAG) {
+		const GRStaff * beamstaff = sse->startElement->getGRStaff();
+		const NVPoint &offset = beamstaff->getPosition();
+		st->fRect-= offset;
+	}
 	// - These constants define the space and the thickness of additionnal beams.
 	const float beamSpace = getBeamSpace (infos.currentLSPACE);
 	const float beamSize  = getBeamSize (infos.currentLSPACE);
-	
-	// if we have a feathered beam, we just have to draw the main beam (already done) 
-	// and the other simple beams will only depend on the begining and ending 
+
+	// if we have a feathered beam, we just have to draw the main beam (already done)
+	// and the other simple beams will only depend on the begining and ending
 	// points, regardless of the durations of the inner notes.
 	if (fIsFeathered) adjustFeathered (beamSpace, beamSize, infos, sse);
+	else setBeams(sse, infos, beamSpace, beamSize, dir);	// sets the additionals beams
+if (st->fRect != gDebugRect)
+	cerr << (void*)this <<  "===> GRBeam::tellPosition rect modified: " << st->fRect.toString() << " vs " << gDebugRect.toString()<< endl;
 
-	// for beam length adjustment - DF sept 15 2009
-	else setBeams(sse, infos, beamSpace, beamSize, dir);
-
-    GuidoPos stemPos = sse->startpos;
-    while(stemPos) {
-        GREvent * stemNote = GREvent::cast(mAssociated->GetNext(stemPos));
-        if(stemNote) {
-            GuidoPos tagpos = NULL;
-            if (stemNote->getAssociations())
-                tagpos = stemNote->getAssociations()->GetHeadPosition();
-
-            while(tagpos) {
-                GRNotationElement * tag = stemNote->getAssociations()->GetNext(tagpos);
-                GRTremolo * trem = dynamic_cast<GRTremolo*>(tag);
-                if(trem) {
-                    trem->tellPosition(stemNote,stemNote->getPosition());
-                    if(trem->isTwoNotesTremolo()) // in order to force the second pitch (especially the chords) to update
-                    {
-                        GREvent * secondPitch = dynamic_cast<GREvent*>(mAssociated->GetNext(stemPos));
-                        if(secondPitch) trem->tellPosition(secondPitch, secondPitch->getPosition());
-                    }
-                }
-            }
-        }
-    }
+	adjustTremolos(sse->startpos);
 
 	if (infos.stemsReverse) {
 		if (infos.stavesStartEnd) {
@@ -1405,13 +1390,12 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 //	}
 
 	// now we have to make sure, that the original positions for the beam are set for the right staff
-	if (getTagType() == SYSTEMTAG) {
-		const GRStaff * beamstaff = sse->startElement->getGRStaff();
-		const NVPoint &offset = beamstaff->getPosition();
-//cerr << (void*)this <<  " GRBeam::tellPosition offset \t\t" << offset << endl;
-		st->fRect-= offset;
-	}
-//cerr << (void*)this <<  " GRBeam::tellPosition out: \t\t" << st->fRect.topLeft << " " << st->fRect.bottomLeft << " " << st->fRect.topRight << " "  << st->fRect.bottomRight << endl;
+//	if (getTagType() == SYSTEMTAG) {
+//		const GRStaff * beamstaff = sse->startElement->getGRStaff();
+//		const NVPoint &offset = beamstaff->getPosition();
+////cerr << (void*)this <<  " GRBeam::tellPosition offset \t\t" << offset << endl;
+//		st->fRect-= offset;
+//	}
 }
 
 
