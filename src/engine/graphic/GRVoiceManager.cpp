@@ -151,7 +151,6 @@
 #include "GRRepeatEnd.h"
 #include "GRRest.h"
 #include "GRSegno.h"
-#include "GRSimpleBeam.h"
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
 #include "GRSlur.h"
@@ -2245,8 +2244,8 @@ bool GRVoiceManager::nested(const GRBeam *b1, const GRBeam* b2) // check if b2 i
 		TYPE_TIMEPOSITION b2end = b2start + b2->getDuration();
 		return b2end <= b1end;
 	}
-	if (!b1->getDuration() || !b2->getDuration())
-cerr << "  no duration: " << b1 << " " << b1->getDuration() << b2 << " " << b2->getDuration() << endl;
+//	if (!b1->getDuration() || !b2->getDuration())
+//cerr << "  no duration: " << b1 << " " << b1->getDuration() << b2 << " " << b2->getDuration() << endl;
 	return false;
 }
 
