@@ -49,8 +49,8 @@ void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
 // makes sure that the right point is not to the left of the left point :-)
 // actually this should be checked at coordinates computation time
 // todo: check the object that computes the beam coordinates
-	if (ax[0] > ax[2]) { ax[2] = ax[0]; }
-	if (ax[1] > ax[3]) { ax[3] = ax[1]; }
+//	if (ax[0] > ax[2]) { ax[2] = ax[0]; }		// check fRect.topLeft.x > fRect.bottomRight.x
+//	if (ax[1] > ax[3]) { ax[3] = ax[1]; }		// check bottomLeft.x > topRight.x
 	
 	// This does the drawing!
 	hdc.Polygon( ax, ay, 4 );

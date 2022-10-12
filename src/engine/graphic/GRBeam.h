@@ -139,7 +139,7 @@ private:
 	void	initBottomRight (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	slopeAdjust 	(GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
 	void	adjustFeathered (float yFact1, float yFact2, PosInfos& info, GRSystemStartEndStruct * sse);
-	float	setStemEndPos 	(GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust, float offsetbeam);
+	float	setStemEndPos 	(GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust);
 	void	setBeams 		(GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
 	bool	reverseStems  			(const NEPointerList* assoc) const;
 	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
@@ -153,11 +153,12 @@ private:
 	void 	setRight (BeamRect& r, const NVPoint& pos, const GRStaff* staff, float xadjust) const;
 	void 	adjustTremolos (GuidoPos pos);
 	void	setUserLengths(GRNotationElement* start, GRNotationElement* end, const ARBeam * arBeam);
-
+	const GREvent* previousEvent (GREvent* ev) const;
 
 	float 	getBeamSpace(float lspace) const { return 0.75f * lspace; }
 	float 	getBeamSize (float lspace) const { return 0.4f * lspace; }
-
+	float 	getStemsOffset (GRSystemStartEndStruct * sse, PosInfos& infos, bool needsadjust) const;
+	
 	bool	fIsFeathered;
 	bool	fIsGraceBeaming;
 	bool	fDrawDur;
