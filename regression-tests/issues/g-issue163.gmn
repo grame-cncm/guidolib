@@ -1,0 +1,16 @@
+(*
+	issue #163
+	incorrect beaming of grace notes (collision with the noe head)
+	incorrect stem length when set by user
+*)
+{
+[
+\stemsUp \beam(\grace(g/32 d2 g1)) 
+\stemsUp \beam(a/16 d2 g1) 
+\stemsUp< length=10> \beam(\grace(g/32 d2 g1)) 
+\stemsUp< length=12> \beam(a/16 d2 g1)
+\stemsDown< length=7.0> \beam(\grace(g/32 f1 g1)) 
+\stemsDown< length=12.0> \beam(b/16 f1 g1)
+]
+
+}
