@@ -830,12 +830,11 @@ BeamRect GRBeam::getLeftPartialBeam (GREvent* elt, float space, float size, floa
 // compute the stem length of the beamed notes
 // might return an offset because the stem length of notes in the middle might be too short
 // then the offset is used to change the main beam position (st->fRect)
-float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool needsadjust)
+void GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool needsadjust)
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	const GREvent * startEl = sse->startElement->isGREvent();
 
-	float offsetbeam = 0.f;
 	GuidoPos pos = sse->startpos;
 	while (pos)
 	{
@@ -860,6 +859,7 @@ float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool
 				cury -= sn->getStemLength();
 			
 			float diffy = y - cury;		// the difference between the target and the current y position
+//cerr << "GRBeam::setStemEndPos " << sn << " diffy " << diffy << " stem : " << sn->getStemLength() << endl;
 			if (getTagType() == SYSTEMTAG) diffy -= staffPos.y;
 			
 			// if we have a beam between grace notes, we don't want an offbase that whould make the stems too long
@@ -869,67 +869,22 @@ float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool
 			float offbase = isGrace ? 0 : 3.5f * infos.currentLSPACE;
 			if (diffy < 0)
 			{
-				if (needsadjust) {
-					if (sn->getStemDirection() == dirDOWN) {
-						const float newoffs = diffy - offbase;
-						if (newoffs < offsetbeam) {
-							if (offsetbeam > 0) {
-								GuidoTrace("WARNING: different beam adjustments!");
-								offsetbeam = 0;
-							}
-							else offsetbeam = newoffs;
-						}
+				if (needsadjust && (sn->getStemDirection() == dirDOWN))
 						diffy = -offbase;
-					}
-					else if (diffy > -offbase) {
-						const float newoffs = diffy + offbase;
-						if (newoffs > offsetbeam) {
-							if (offsetbeam < 0) {
-								GuidoTrace("WARNING: different beam adjustments!");
-								offsetbeam = 0;
-							}
-							else offsetbeam = newoffs;
-						}
-					}
-				}
 				diffy = -diffy;
 			}
 			else if (needsadjust) {
-				if (empty) {
-					offsetbeam = 0;
-				}
-				else if (sn->getStemDirection() == dirUP) {
-					const float newoffs = diffy + offbase;
-					if (newoffs > offsetbeam) {
-						if (offsetbeam < 0) {
-							GuidoTrace("WARNING: different beam adjustments!");
-							offsetbeam = 0;
-						}
-						else offsetbeam = newoffs;
-					}
+				if (! empty && (sn->getStemDirection() == dirUP)) {
 					diffy = offbase;
-				}
-				else if (diffy < offbase) {
-					const float newoffs = diffy - offbase;
-					if (newoffs < offsetbeam) {
-						if (offsetbeam > 0) {
-							GuidoTrace("WARNING: different beam adjustments!");
-							offsetbeam = 0;
-						}
-						else offsetbeam = newoffs;
-					}
 				}
 			}
 			// adjusted - DF sept 15 2009
-			sn->changeStemLength( diffy - infos.currentLSPACE/20 );
+			sn->changeStemLength( diffy - infos.currentLSPACE/20, true );
 			// so that the possible next featherd beam knows that he is chained (and dont change its slope)
 			sn->setStemChanged();
 		}
 		if (oldpos == sse->endpos) break;
 	}
-if (offsetbeam)
- cerr << "GRBeam::setStemEndPos offsetbeam " << offsetbeam << endl;
-	return offsetbeam;
 }
 
 float GRBeam::getStemsOffset (GRSystemStartEndStruct * sse, PosInfos& infos, bool needsadjust) const
@@ -944,8 +899,10 @@ float GRBeam::getStemsOffset (GRSystemStartEndStruct * sse, PosInfos& infos, boo
 		// now we calculate the stem-end-positions ...
 		GuidoPos oldpos = pos;
 		GREvent * sn = GREvent::cast(mAssociated->GetNext(pos));
+		GRSingleNote* note = dynamic_cast<GRSingleNote*>(sn);
 		NVPoint staffPos = sn->getGRStaff()->getPosition();
 		if (sn) {
+			
 			bool empty = false;
 			if (sn->isEmpty()) {
 				const GREmpty* gr = static_cast<const GREmpty*>(sn);
@@ -962,12 +919,12 @@ float GRBeam::getStemsOffset (GRSystemStartEndStruct * sse, PosInfos& infos, boo
 				cury -= sn->getStemLength();
 			
 			float diffy = y - cury;		// the difference between the target and the current y position
+			int subBeams = sn->getNumFaehnchen();
 			if (getTagType() == SYSTEMTAG) diffy -= staffPos.y;
-			
 			const GRNote * gnote = startEl ? startEl->isGRNote() : 0;
 			bool isGrace = gnote ? gnote->isGraceNote() : false;
 			// if we have a beam between grace notes, we don't want an offbase that whould make the stems too long
-			float offbase = isGrace ? 0 : 3.5f * infos.currentLSPACE;
+			float offbase = (isGrace ? 0.9f * subBeams : 3.5f) * infos.currentLSPACE;
 #if 0
 			if (diffy > 0 && (sn->getStemDirection() == dirUP)) offsetbeam = (diffy > offsetbeam ? diffy : offsetbeam);
 			else if (diffy < 0 && (sn->getStemDirection() == dirDOWN)) offsetbeam = (diffy > offsetbeam ? diffy : offsetbeam);
