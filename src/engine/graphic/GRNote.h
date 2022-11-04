@@ -46,7 +46,7 @@ class GRNote : public GREvent
 	virtual void 	recalcVerticalPosition()			= 0;
 	virtual void 	drawStemOnly( int flag )			= 0;
 	virtual void 	setStemDirection( GDirection dir )	= 0;
-	virtual float 	setStemLength( float inLen )		= 0;
+	virtual float 	setStemLength( float inLen, bool userLength )		= 0;
 	
 	virtual	void	getPitchAndOctave( int * outPitch, int * outOctave, int * outAccidentals ) const;
 

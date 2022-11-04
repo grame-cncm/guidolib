@@ -799,8 +799,9 @@ void GRSingleNote::setBeamStem(GRBeam * beam, GCoord pos)
 }
 
 //____________________________________________________________________________________
-float GRSingleNote::setStemLength( float inLen )
+float GRSingleNote::setStemLength( float inLen, bool userLength)
 {
+	fUserLength = userLength;
 	if (mGlobalStem) {
 		mGlobalStem->setNoteStemLength( this, inLen);
 		return (float)mGlobalStem->getStemLength();
@@ -826,9 +827,9 @@ float GRSingleNote::setStemLength( float inLen )
 }
 
 //____________________________________________________________________________________
-float GRSingleNote::changeStemLength( float inLen )
+float GRSingleNote::changeStemLength( float inLen, bool force )
 {
-	if (mStemLengthSet)
+	if (mStemLengthSet && !force)
         return mStemLen;
 
 	setStemLength(inLen);

@@ -1793,7 +1793,7 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 		}
 		const TagParameterFloat * tpf = curstemstate->getLength();
 		if (tpf && tpf->TagIsSet())
-			grnote->setStemLength((float)(tpf->getValue(mCurGrStaff->getStaffLSPACE())));
+			grnote->setStemLength(tpf->getValue(mCurGrStaff->getStaffLSPACE()), true);
 	}
 
 	if (curheadstate)				grnote->setHeadState(curheadstate);
@@ -1879,7 +1879,7 @@ GREvent * GRVoiceManager::CreateGraceNote( const TYPE_TIMEPOSITION & tp, ARMusic
 	GRSingleNote * grnote = CreateSingleNote (tp, arObject, size, true);
 	const TagParameterFloat * tpf = curstemstate ? curstemstate->getLength() : 0;
 	if (tpf && tpf->TagIsSet())
-		grnote->setStemLength((float)(tpf->getValue()));
+		grnote->setStemLength(tpf->getValue(), true);
 	return grnote;
 }
 

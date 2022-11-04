@@ -53,7 +53,7 @@ class GRGlobalStem : public GRPTagARNotationElement, public GRSystemTagInterface
 		virtual void	removeAssociation(GRNotationElement * grnot);
 
 		virtual void		checkPosition(const GRSystem * grsys);
-		virtual float		changeStemLength( float inLen );
+		virtual float		changeStemLength( float inLen, bool force = false );
         virtual void		setHPosition( GCoord nx);
         virtual void		setFlagOnOff(bool i);
         virtual void		setStemDirection(GDirection dir);

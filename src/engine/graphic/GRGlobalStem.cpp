@@ -825,9 +825,9 @@ void GRGlobalStem::OnDraw( VGDevice & hdc) const
 }
 
 //----------------------------------------------------------------
-float GRGlobalStem::changeStemLength( float inLen )
+float GRGlobalStem::changeStemLength( float inLen, bool force )
 {
-	if (fStemlengthSet) {
+	if (fStemlengthSet && !force) {
 		GuidoWarn("Stemlength already set!");
 		if (fStem) return fStem->getStemLength();
 	}

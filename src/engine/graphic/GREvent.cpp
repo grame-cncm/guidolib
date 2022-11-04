@@ -130,7 +130,7 @@ void GREvent::setBeamStem(GRBeam *, GCoord )
 { // ignore/ do nothing for rests and composite note 
 }
 
-float GREvent::setStemLength( float inLen )
+float GREvent::setStemLength( float inLen, bool userLength )
 {
 	return 0;
 }
@@ -385,9 +385,9 @@ NVPoint GREvent::getStemEndPos() const
 	return NVPoint(mBoundingBox.right,0); 
 }
 
-float GREvent::changeStemLength( float inLen )
+float GREvent::changeStemLength( float inLen, bool force )
 { 
-	return mGlobalStem ? mGlobalStem->changeStemLength( inLen ) : 0;
+	return mGlobalStem ? mGlobalStem->changeStemLength( inLen, force ) : 0;
 }
 
 bool GREvent::getStemDirSet() const
