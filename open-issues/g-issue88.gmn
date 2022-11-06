@@ -1,3 +1,6 @@
+(*
+	Issue #88 - Incorrect Beam Duration on Cross Staff chords
+*)
 {
 [
 	\clef<"g2"> \stemsUp 
@@ -5,6 +8,8 @@
 	\beamBegin:1 { \staff<2> f0/8.., \staff<1> f1/8..} 
 	{\staff<2>e0/32, \staff<1>e1/32} 
 	\beamEnd:1  
+
+	\bm({ f/8.., d } { g/32, c})
 ]
  , 
 [ \clef<"f4">  ]
