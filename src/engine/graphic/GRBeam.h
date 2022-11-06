@@ -44,9 +44,9 @@ typedef struct beamRect {
 	std::string toString() const { std::stringstream s; s << topLeft << " " << bottomLeft << " " << bottomRight << " " << topRight; return s.str(); }
 
 	void operator -= (NVPoint p)	{ topLeft -= p; bottomLeft -= p; bottomRight -= p; topRight -= p; }
-//	void offset (const NVPoint& p) 	{ topLeft -= p; bottomLeft -= p; bottomRight -= p; topRight -= p;}
 	void yOffset (float val) 		{ topLeft.y += val; bottomLeft.y += val; bottomRight.y += val; topRight.y += val;}
 	void tilt (float val) 			{ topLeft.y -= val; bottomLeft.y -= val; bottomRight.y += val; topRight.y += val;}
+	bool includes (float x) const	{ return (topLeft.x <= x) && (topRight.x >= x); }
 	
 	bool operator == (struct beamRect& r)  { return (topLeft==r.topLeft) && (topRight==r.topRight) && (bottomLeft==r.bottomLeft) && (bottomRight==r.bottomRight); }
 	bool operator != (struct beamRect& r)  { return !(*this == r); }
@@ -138,8 +138,10 @@ private:
 	void 	initTopRight 	(GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
 	void	initBottomRight (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	slopeAdjust 	(GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
+	float	slopeAdjust 	(BeamRect& rect);
 	void	adjustFeathered (float yFact1, float yFact2, PosInfos& info, GRSystemStartEndStruct * sse);
 	void	setStemEndPos 	(GRSystemStartEndStruct * sse, PosInfos& info, bool needsadjust);
+	void 	adjustStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	setBeams 		(GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int direction);
 	bool	reverseStems  			(const NEPointerList* assoc) const;
 	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
