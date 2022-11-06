@@ -833,23 +833,15 @@ float GRSingleNote::changeStemLength( float inLen, bool force )
         return mStemLen;
 
 	setStemLength(inLen);
-	// this makes sure, that we don't think that
-	// the stemlength was changed with a parameter.
+	// this makes sure, that we don't think that the stem length was changed with a parameter.
 	mStemLengthSet = false;
 
 	GRNEList::iterator ptr;
 	GRNEList& articulations = getArticulations();
 	sort (articulations.begin(), articulations.end(), GRArticulation::compare);
-	for( GRNEList::iterator i = articulations.begin(); i != articulations.end(); i++ ) {
-		(*i)->tellPosition( this, mPosition );
+	for(auto art: articulations) {
+		art->tellPosition( this, mPosition );
 	}
-
-//	NEPointerList & list = GetCompositeElements();
-//	GuidoPos pos = list.GetHeadPosition();
-//	while (pos) {
-//		GRNotationElement* e = list.GetNext(pos);
-//		e->tellPosition( this, mPosition );
-//	}
 	return mStemLen;
 }
 
