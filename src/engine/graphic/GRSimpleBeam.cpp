@@ -26,7 +26,22 @@ GRSimpleBeam::GRSimpleBeam (GRBeam * p_parent, const BeamRect& r)
 
 void GRSimpleBeam::setPoints( const BeamRect& r )
 {
-	fRect = r;
+	BeamRect fixed = r;
+	if (fRect.topLeft.x > r.topLeft.x) {		 // partial beam anchored to the right
+		fixed.topLeft.x 	= fRect.topLeft.x;
+		fixed.bottomLeft.x 	= fRect.bottomLeft.x;
+		float y = (fRect.topLeft.x - r.topLeft.x) * r.slope();
+		fixed.topLeft.y 	+= y;
+		fixed.bottomLeft.y 	+= y;
+	}
+	else if (fRect.topRight.x < r.topRight.x) {	 // partial beam anchored to the left
+		fixed.topRight.x 	= fRect.topRight.x;
+		fixed.bottomRight.x = fRect.bottomRight.x;
+		float y = (fRect.topRight.x - r.topLeft.x) * r.slope();
+		fixed.topRight.y 	-= y;
+		fixed.bottomRight.y -= y;
+	}
+	fRect = fixed;
 }
 
 void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
