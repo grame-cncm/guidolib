@@ -32,25 +32,26 @@ class ARPositionTag;
 class ARMusicalTag;
 class ARMusicalEvent;
 
-class NEPointerList;
-class GRStaff;
-class GRMusic;
-class GREvent;
-class GRVoice;
-class GRNotationElement;
-class GRGrace;
-class GRCluster;
-class GRTrill;
-class GRGlobalStem;
-class GRGlobalLocation;
+class GRBeam;
 class GRChordTag;
+class GRCluster;
+class GREvent;
+class GRGlissando;
+class GRGlobalLocation;
+class GRGlobalStem;
+class GRGrace;
+class GRIntens;
+class GRMusic;
+class GRNotationElement;
+class GRRange;
+class GRSingleNote;
+class GRStaff;
 class GRStaffManager;
 class GRTag;
-class GRSingleNote;
-class GRRange;
-class GRGlissando;
 class GRTagARNotationElement;
-class GRIntens;
+class GRTrill;
+class GRVoice;
+class NEPointerList;
 
 typedef KF_IPointerList<GRTag> GRTagPointerList;
 
@@ -101,9 +102,6 @@ public:
 			int		DoBreak		(const TYPE_TIMEPOSITION & tp, int system_or_page);
 			int		getStaffNum () const	{ return staffnum; }
 			const ARMusicalVoiceState * getVoiceState() const	{ return fVoiceState; }
-
-
-	std::string		getBeams() const;
 
 protected:
 	void beginOpenTags();
@@ -174,14 +172,11 @@ private:
 	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0, bool isGrace=false);
 	void			AddRegularEvent		(GREvent * ev);
 	void			organizeGlissando(GRTag * g);
-	void			organizeBeaming(GRTag * grb);
+	void			organizeBeaming(GRBeam * grb);
 	void			checkFillBar (GRTagARNotationElement* bar);
 	void			addAssociations (GREvent* ev, bool setnext=true);
 	int				endIteration ();
 	void			checkCluster(GREvent *ev);
-	void			checknested(std::vector<GRBeam *>& beams); 		// check nested beams
-	bool			nested(const GRBeam *b1, const GRBeam* b2); 	// check if b2 is nested in b1
-	void			setBeamDuration(GRBeam* beam) const;
 	
 	std::vector<GRBeam *> fCurbeam;
 	std::vector<GRBeam *> fBeams;
