@@ -4,12 +4,27 @@
 {
 [
 	\clef<"g2"> \stemsUp 
-%	\beamBegin:1 { f1/8.., \staff<2> f0/8..} 
+
 	\beamBegin:1 { \staff<2> f0/8.., \staff<1> f1/8..} 
 	{\staff<2>e0/32, \staff<1>e1/32} 
 	\beamEnd:1  
 
-	\bm({ f/8.., d } { g/32, c})
+	\beamBegin:1 \staff<2> f0/8.
+	{\staff<2>e0/16, \staff<1>e1} 
+	\beamEnd:1  
+
+	\beamBegin:1 \staff<2> f0/16
+	{\staff<2>e0/8., \staff<1>e1} 
+	\beamEnd:1  
+
+\stemsDown
+	\beamBegin:1 { \staff<2> f0/8.., \staff<1> f1/8..} 
+	e1/32
+	\beamEnd:1  
+
+	\beamBegin:1 { \staff<2> f0/32, \staff<1> a1/32} 
+	c1/8..
+	\beamEnd:1  
 ]
  , 
 [ \clef<"f4">  ]
