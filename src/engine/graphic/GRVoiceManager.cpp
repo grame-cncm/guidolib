@@ -1612,11 +1612,9 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 {
 	// the following deletes the Tags which have matching end-Positions
 	GuidoPos mpos = fGRTags->GetHeadPosition();
-	GRTag * g;
-
 	while (mpos) {
 		GuidoPos curpos = mpos;
-		g = fGRTags->GetNext(mpos);
+		GRTag * g = fGRTags->GetNext(mpos);
 		GRPositionTag * gpt = dynamic_cast<GRPositionTag *>(g);
 		if( gpt ) {
 			if (gpt->getEndPos() == tstpos) {
