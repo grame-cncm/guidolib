@@ -24,19 +24,17 @@
 
 GRPositionTag::GRPositionTag(const ARMusicalTag * armt) : GRTag(armt), mStartEndList(1)
 {
-	ep = NULL;
-	if (armt)
-	{
+	if (armt) {
 		const ARPositionTag * arpt = dynamic_cast<const ARPositionTag *>(armt);
-		if (arpt) ep = arpt->getEndPosition();
+		if (arpt) fEndPos = arpt->getEndPosition();
 	}
 	lastendflag = GRSystemStartEndStruct::NOTKNOWN;
 	lastendElement = NULL;
 	lastendpos = NULL;
 }
 
-GRPositionTag::GRPositionTag(GuidoPos p_ep, const ARMusicalTag * armt)
-	: GRTag(armt), ep(p_ep), mStartEndList(1)
+GRPositionTag::GRPositionTag(GuidoPos endpos, const ARMusicalTag * armt)
+	: GRTag(armt), fEndPos(endpos), mStartEndList(1)
 {
 	lastendflag = GRSystemStartEndStruct::NOTKNOWN;
 	lastendElement = NULL;

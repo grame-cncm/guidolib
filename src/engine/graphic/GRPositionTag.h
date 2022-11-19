@@ -88,7 +88,7 @@ class GRPositionTag : public GRTag
 		void changeCurrentSystem(GRSystem * psystem);
 		void DeleteAllSSEs();
 
-		GuidoPos getEndPos() const { return ep; }
+		GuidoPos getEndPos() const { return fEndPos; }
 
 		GRSystemStartEndStruct * getSystemStartEndStruct(const GRSystem * grsystem) const;
 		void 	 				 addSystemStartEndStruct(GRSystemStartEndStruct * sse) { mStartEndList.AddTail(sse); }
@@ -102,13 +102,15 @@ class GRPositionTag : public GRTag
 
 		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()	{ return new GRSaveStruct; }
 
-		GuidoPos ep;
-
 		SSEList mStartEndList;	// the Range tag Start-End List
 
 		GRSystemStartEndStruct::setflag lastendflag;
 		GRNotationElement * lastendElement;
 		GuidoPos lastendpos;
+
+	private:
+		GuidoPos fEndPos = nullptr;
+
 };
 
 
