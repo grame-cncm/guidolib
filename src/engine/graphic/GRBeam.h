@@ -101,6 +101,7 @@ public:
 	virtual bool	isAutoBeam() const		{ return false; } // derived by GRAutoBeam
 	virtual void	setLevel(int l)			{ fLevel = l;}
 	virtual void	decLevel()				{ fLevel--;}
+	virtual void	incLevel()				{ fLevel++;}
 	virtual bool	isGraceBeaming() const	{ return fIsGraceBeaming;}
 
 			void	refreshPosition();
@@ -146,8 +147,8 @@ private:
 	bool	reverseStems  			(const NEPointerList* assoc) const;
 	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
 	void	scanStaves  			(const NEPointerList* assoc, float& highStaff, float& lowStaff) const;
-	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) const;
-	bool 	checkPartialBeaming (GuidoPos pos, GuidoPos endpos, GREvent *& next);
+//	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) const;
+	bool 	checkPartialBeaming (GuidoPos pos, GuidoPos endpos, GREvent *& next, int curFaehnchen);
 	BeamRect getLeftPartialBeam  (GREvent* elt, float space, float size, float lspace, float slope, bool dirchange, int num) const;
 	void 	 getRightPartialBeam (BeamRect& r1, float size, float lspace, float slope) const;
 
@@ -160,6 +161,7 @@ private:
 	float 	getBeamSpace(float lspace) const { return 0.75f * lspace; }
 	float 	getBeamSize (float lspace) const { return 0.4f * lspace; }
 	float 	getStemsOffset (GRSystemStartEndStruct * sse, PosInfos& infos, bool needsadjust) const;
+	float 	getSlope (const GRSystem * system) const;
 	
 	bool	fIsFeathered;
 	bool	fIsGraceBeaming;
