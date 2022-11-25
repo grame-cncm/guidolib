@@ -1,0 +1,20 @@
+(*
+	issue #137
+	Cross-Staff Beaming Rendering Issue
+*)
+{
+[ 
+	\staff<1> \accol<id=0, range="1-2"> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<-5> \meter<"C"> 
+   \stemsDown 
+	\beamBegin:1 \beamBegin:2 f2/32 e&2/32 c2/32 b&1/32 \beamEnd:2 
+	\beamBegin:2 
+   \staff<2> \stemsUp g&1/32 e&1/32 c1/32 b&0/32 \beamEnd:1 \beamEnd:2 
+   \staff<1> \stemsDown \beamBegin:1 \beamBegin:2 c2/32 b&1/32 g&1/32 f1/32 \beamEnd:2 
+	\beamBegin:2 
+   \staff<2> \stemsUp e&1/32 c1/32 b&0/32 g&0/32 \beamEnd:1 \beamEnd:2 \staff<1> _/2 
+]
+ , 
+[ \staff<2>
+   (* meas. 1 *)  \clef<"f4"> \key<-5> \meter<"C"> _/1 ]
+}

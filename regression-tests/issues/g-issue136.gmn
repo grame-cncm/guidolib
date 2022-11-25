@@ -1,0 +1,21 @@
+(*
+	issue #136
+	Cross-staff & Multi-voice rendering issue
+*)
+{
+[ \staff<1> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<-5> 
+ \stemsUp \slurBegin:2<curve="up"> \beamBegin:1 
+ \tuplet<"", dispNote="/32">( a&2/36 \slurEnd:1 g&2/36 e&2/36
+ c2/36 a&1/36 g&1/36 e&1/36 c1/36 e&1/36g&1/36 a&1/36 c2/36 e&2/36  g&2/36  a&2/36 c3/36 e&3/36 g&3/36)
+ \slurEnd:2 \beamEnd:1  ]
+ , 
+[ \staff<2> \clef<"f"> \key<-5>
+   (* meas. 1 *)  \staff<1> 
+ \stemsDown \slurBegin:1<curve="down"> \beamBegin:1 \tuplet<"", dispNote="/32">( 
+ c2/36  b&1/36  g&1/36  e&1/36 \stemsDown c1/36 
+ \staff<2>  b&0/36 g&0/36  e&0/36  g&0/36  b&0/36 
+ \staff<1>  c1/36  e&1/36  g&1/36  b&1/36  c2/36  e&2/36 g&2/36 b&2/36)
+ \slurEnd:1 \beamEnd:1 
+]
+}

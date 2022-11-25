@@ -1,0 +1,19 @@
+(*
+	issue #164
+	lower part with half note
+
+	half note of the lower part is hidden by the upper part
+*)
+{
+[
+	\meter<"4/4"> 
+	\stemsUp \beam(c1/8 e g c2)
+	% workaround : using notehead style
+	\stemsUp \beam(\noteFormat<style="none">(c1/8) e g c2)
+]
+, [
+	\staff<1> 
+	\stemsDown c/2
+	\stemsDown c/2
+]
+}

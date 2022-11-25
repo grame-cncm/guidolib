@@ -1,5 +1,6 @@
 % this is to illustrate incorrect position of beams when
 % for grouped notes with opposite stems directions
 [
-	\stemsUp c/8 \stemsDown c3/16 c c3/8 \stemsUp c1/16 c d e  \stemsDown c3 d
+	\stemsUp c/8 \stemsDown c3/16 d c3/8 \stemsUp c1/16 c d e  \stemsDown c3 d
 ]  
+ 
