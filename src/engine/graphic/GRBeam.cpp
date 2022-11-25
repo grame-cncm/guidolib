@@ -1397,8 +1397,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 
 	// a new test is performed: if it is a systemTag and
 	// it is not a systemcall (checkpos), than we can just do nothing.
-
-	if (getError() || !mAssociated || ( mAssociated->GetCount() == 0 ) || ( getTagType() == GRTag::SYSTEMTAG && !mIsSystemCall ))
+	if (getError() || !mAssociated || ( mAssociated->GetCount() == 0 ) || ( getTagType() == GRTag::SYSTEMTAG && !mIsSystemCall && !fParent))
 		return;
 	GRNotationElement * el = dynamic_cast<GRNotationElement *>(gobj);
 	if (!el || !el->getGRStaff()) return;
@@ -1415,7 +1414,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	GuidoPos startpos = sse->startpos;
 	GREvent * stemNote = GREvent::cast(mAssociated->GetNext(startpos));
 
-//cerr << (void*)this <<  " GRBeam::tellPosition " << el << " START elt " << sse->startElement << " END elt " << sse->endElement << " level: " << fLevel  << " smaller: " << fSmallerBeams.size() << endl;
+//cerr << (void*)this <<  " GRBeam::tellPosition " << el << " START elt " << sse->startElement << " END elt " << sse->endElement << " level: " << fLevel  << " smaller: " << fSmallerBeams.size() << endl; // << " beamed: " << beamed() << endl;
 
 	if (startEl && startEl->getGlobalStem()) 	startEl->getGlobalStem()->setBeam (this);
 	if (endEl   && endEl->getGlobalStem()) 		endEl->getGlobalStem()->setBeam (this);
@@ -1450,10 +1449,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// we have to adjust the slope ONLY if the stemlength of the first and last element has not been set automatically!
 	// and if we are note in the case of a chained feather beam
 	if ( (startEl && startEl->getStemLengthSet() && endEl && endEl->getStemLengthSet())
-		|| getTagType() == SYSTEMTAG || (arBeam && isSpecBeam)
-		|| (fIsFeathered && startEl && startEl->stemHasBeenChanged()))
+		|| (arBeam && isSpecBeam) || (fIsFeathered && startEl && startEl->stemHasBeenChanged()))
 		needsadjust = false;
-	if (infos.fixCrossStaffUp()) needsadjust = true;
 	if (needsadjust) slopeAdjust (sse, startEl, endEl, slope, infos);
 
 	if (arBeam && isSpecBeam)

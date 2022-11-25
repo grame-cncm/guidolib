@@ -129,9 +129,6 @@ private:
 		float		highStaff;		// the higher staff y position
 		float		lowStaff;		// the lower staff y position
 		NVPoint		endStaff;		// the end staff position
-
-		bool	fixCrossStaffUp () const { return (stemdir == dirUP) && (!stemsReverse) && (highStaff < startStaff.y) && (highStaff != endStaff.y); }
-
 	} PosInfos;
 
 	void 	initTopLeft 	(GRSystemStartEndStruct * sse, const GREvent * startEl, PosInfos& infos);
