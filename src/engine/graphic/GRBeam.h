@@ -65,8 +65,7 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 	
 		int dirset;
 		int direction;
-		NVPoint p[4];				// the main beam points. the order is top-left, bottom-left, top-right and bottom right
-		BeamRect fRect;
+//		BeamRect fRect;
 		NVPoint DurationLine[6];
 		std::string duration;
 		SimpleBeamList simpleBeams;	// the list of all graphics beams, including the main one appart in case of nested beams
@@ -108,6 +107,11 @@ public:
 			void	refreshBeams (const GRSystemStartEndStruct * sse, float currentLSPACE, int dir);
 			std::string beamed() const;   // gives the list of beamed notes as a string
 			void	setParent(GRBeam* parent)	{ fParent = parent; }
+			GRBeam*	topParent(GRBeam* parent)	{ return fParent ? fParent->topParent(fParent) : parent; }
+			const GREvent* startElt() const 	{ return fStartElt; };
+			const GREvent* endElt() const 		{ return fEndElt; };
+			GDirection getStemsDir () const;
+
 
 protected:
 	const ARBeam * getARBeam()									{ return static_cast<const ARBeam *>(mAbstractRepresentation); }
@@ -135,6 +139,7 @@ private:
 	void	initBottomLeft 	(GRSystemStartEndStruct * sse, PosInfos& infos);
 	void 	initTopRight 	(GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
 	void	initBottomRight (GRSystemStartEndStruct * sse, PosInfos& infos);
+	void 	initRect 		(const GREvent * startEl, const GREvent * endElt, const GRBeam* parent, const PosInfos& infos);
 	void	slopeAdjust 	(GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
 	float	slopeAdjust 	(BeamRect& rect);
 	void	adjustFeathered (float yFact1, float yFact2, PosInfos& info, GRSystemStartEndStruct * sse);
@@ -144,7 +149,6 @@ private:
 	bool	reverseStems  			(const NEPointerList* assoc) const;
 	void	yRange  				(const NEPointerList* assoc, const GREvent*& high, const GREvent*& low) const;
 	void	scanStaves  			(const NEPointerList* assoc, float& highStaff, float& lowStaff) const;
-//	void	checkEndStemsReverse  	(GREvent* ev, const SimpleBeamList& beams) const;
 	bool 	checkPartialBeaming (GuidoPos pos, GuidoPos endpos, GREvent *& next, int curFaehnchen);
 	BeamRect getLeftPartialBeam  (GREvent* elt, float space, float size, float lspace, float slope, bool dirchange, int num) const;
 	void 	 getRightPartialBeam (BeamRect& r1, float size, float lspace, float slope) const;
@@ -159,6 +163,8 @@ private:
 	float 	getBeamSize (float lspace) const { return 0.4f * lspace; }
 	float 	getStemsOffset (GRSystemStartEndStruct * sse, PosInfos& infos, bool needsadjust) const;
 	float 	getSlope (const GRSystem * system) const;
+	BeamRect& mainRect ()				{ return fRect; }
+	const BeamRect& mainRect ()	const 	{ return fRect; }
 	
 	bool	fIsFeathered;
 	bool	fIsGraceBeaming;
@@ -170,6 +176,9 @@ private:
 	BeamRect 			  fRect;
 	std::vector<GRBeam *> fSmallerBeams;	// smaller beams are beams nested in the current one
 	GRBeam * fParent = nullptr;  // the parent beam in case of nested beams
+	GREvent* fStartElt = nullptr;
+	GREvent* fEndElt = nullptr;
+	
 };
 
 #endif
