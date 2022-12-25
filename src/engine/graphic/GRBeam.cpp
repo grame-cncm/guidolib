@@ -464,10 +464,14 @@ void GRBeam::initTopLeft (GRSystemStartEndStruct * sse, const GREvent * startEl,
 	infos.stemdir = refEvt ? refEvt->getStemDirection() : GDirection(st->direction);
 	infos.currentSize = refEvt ? refEvt->getSize() : 1;
 	infos.currentLSPACE = refStaff->getStaffLSPACE();
-	rect.topLeft = refEvt ? refEvt->getStemStartPos() : refStaff->getPosition();
+	if (startEl) {
+		rect.topLeft = startEl->getStemStartPos();
+		rect.topLeft.y = refEvt ? refEvt->getStemStartPos().y : refStaff->getPosition().y;
+	}
+	else rect.topLeft = refEvt ? refEvt->getStemStartPos() : refStaff->getPosition();
 
 	if (arBeam && arBeam->isGuidoSpecBeam() && refEvt)
-		rect.topLeft.y = refEvt->getPosition().y;
+		rect.topLeft.y = startEl->getPosition().y;
 
 	if (setref) {
 		rect.topLeft.x += infos.startStaff.x;
@@ -776,6 +780,9 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 						// we have an End-Position ...
 						setRight (r, endElt->getStemEndPos(), (systemBeam ? endElt->getGRStaff() : nullptr), xadjust);
 						r.topRight.y += beamCount * localSpace;
+						// hack to fix incorrect end position with nested beams
+						if (fParent && (std::abs(r.topRight.x - rect.topRight.x) < 5))
+							r.topRight.x = r.bottomRight.x = rect.topRight.x;
 					}
 					if (dirchange) r.topRight.y -= localSize;
 					r.bottomRight.y = r.topRight.y + localSize;
@@ -817,9 +824,9 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 					else if( partialbeam && (stemNote == sse->startElement))
 						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
 					else if( pos == sse->endpos || pos == NULL || ((!stemNote->isSyncopated()) && (pos != sse->startpos)))
-						r = getLeftPartialBeam(stemNote, localSpace, localSize, infos.currentLSPACE, slope, dirchange, beamCount);
+						r = getLeftPartialBeam(stemNote, localSpace, localSize, infos.currentLSPACE * infos.currentSize, slope, dirchange, beamCount);
 					else
-						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
+						getRightPartialBeam(r, localSize, infos.currentLSPACE * infos.currentSize, slope);
 				}
 
 				// we now have to "undo" the systemTag-stuff
@@ -1406,7 +1413,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	GuidoPos startpos = sse->startpos;
 	GREvent * stemNote = GREvent::cast(mAssociated->GetNext(startpos));
 
-//cerr << (void*)this <<  " GRBeam::tellPosition " << el << " START elt " << sse->startElement << " END elt " << sse->endElement << " level: " << fLevel  << " smaller: " << fSmallerBeams.size() << endl; // << " beamed: " << beamed() << endl;
+//cerr << "GRBeam::tellPosition " << el << " START elt " << sse->startElement << " END elt " << sse->endElement << " level: " << fLevel  << " smaller: " << fSmallerBeams.size() << endl; // << " beamed: " << beamed() << endl;
 
 	if (fStartElt && fStartElt->getGlobalStem()) 	fStartElt->getGlobalStem()->setBeam (this);
 	if (fEndElt   && fEndElt->getGlobalStem()) 		fEndElt->getGlobalStem()->setBeam (this);
