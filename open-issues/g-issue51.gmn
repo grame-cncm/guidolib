@@ -8,5 +8,6 @@
 	\beam( \tuplet<"", dispNote="/16">( a/4 g#/4)) \bar 
 	\beam( \tuplet<"", dispNote="/16">( { a/4, g3/4 } { c/4, a/4 })) 
 	\beam( \tuplet<"", dispNote="/32">( { a2/4, b3/4 } { a2/4, c4/4 })) 
+	\beam( \dispDur<"/16">( { a1/4, b2/4 } { a1/4, c3/4 }))
 ] 
 }
