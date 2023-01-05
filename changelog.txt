@@ -2,12 +2,19 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+  version 1.7.7
+
+----------------------------------------------------------------
   version 1.7.6
 - fix crash bug related to pageFormat (issue #159)
 - new \auto tag parameter: resolveMultiVoiceCollisions intended to multi-voices note collisions (issue #158)
 - fix incorrect font format (issue #157)
 - fix incorrect beaming (issue #161)
 - fix incorrect beaming (issue #136)
+- fix incorrect beaming (issue #58)
+- fix incorrect beaming (issue #154)
+- fix incorrect beaming (issue #88)
+- fix incorrect beaming (issue #137)
 
 ----------------------------------------------------------------
   version 1.7.5
