@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="../libGUIDOEngine.js"></script>
+    <script type="application/wasm" src="../libGUIDOEngine.wasm"></script>
+    <link rel="stylesheet" href="../guido2-webfont/stylesheet.css" type="text/css" />
+	<script>
+		function processGMN(gmncode, dest) {
+			var scorediv = document.querySelector("#scoreContainer");
+
+			var p = guidoEngine.openParser();
+			var ar = guidoEngine.string2AR(p, gmncode);
+			guidoEngine.closeParser(p);
+			if (!ar) return;
+
+			var gr = guidoEngine.ar2gr(ar);
+			if (!gr) return;
+			var result = guidoEngine.gr2SVG(gr, 1, true, 0);
+			
+			guidoEngine.freeGR(gr);
+			guidoEngine.freeAR(ar);		
+			dest.innerHTML = result;
+		}
+
+		function gmn2svg(id) {
+			let div = document.getElementById(id);
+			let dest = document.getElementById("svg");
+			processGMN (div.value, dest);
+		}
+
+		GuidoModule().then ( (module) => {
+			guidoEngine = new module.GuidoEngineAdapter();
+			var version = guidoEngine.getVersion();
+			console.log( "Guido Engine version " + version.str);
+			guidoEngine.init();
+			gmn2svg ("gmn");
+		});
+	</script>
+	</head>
+  <style>
+	 body { 
+	 	text-align: center; 
+	 	margin: 50px; 
+	 }
+	 textarea { padding: 5px; font-family: 'Courier New', Courier, monospace;}
+	 .gmn { width: 40%; padding: 10px 10px;}
+	.svg { width: 60%;}
+  </style>
+
+   <body>
+  	<h1>Dynamic rendering of GMN code.</h1>
+	<table style="width:100%">
+		<tr>
+			<td class="gmn"> <textarea id="gmn" rows="20" cols="70" oninput="gmn2svg('gmn')">
+(*
+   type your Guido code here
+*)
+
+[ \meter&lt;"3/4"> a b c c b a ]
+</textarea> </td>
+			<td class="svg" id="svg"></td>
+		</tr>
+	</table>
+  </body>
+</html>
