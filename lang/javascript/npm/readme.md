@@ -7,7 +7,7 @@ The Guido project is an open source project that encompasses a music notation fo
 
 ## About the Wasm library
 
-The libGUIDOEngine wasm library provides all the services of the Guido Engine version 1.7.1.
+The libGUIDOEngine wasm library provides all the services of the Guido Engine version 1.7.6.
 
 The `guidoengine.js` file is provided as an ES6 interface to the library. The API is similar to the C/C++ API.  
 The `guidoengine.ts` and `libGUIDOEngine.d.ts` files are provided as a typescript class and interface to the library.
@@ -18,4 +18,5 @@ See the online [GuidoEditor](https://guidoeditor.grame.fr/) for an example of us
 
 -----------------
 ##### Copyright (C) 2002-2021, [GRAME](https://www.grame.fr) - Centre National de Creation Musicale   
-All rights reserved
+##### Copyright (C) 2022-2023, D. Fober  
+All rights reserved  
