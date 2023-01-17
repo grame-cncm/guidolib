@@ -1,7 +1,11 @@
+(*
+	comment the last staffOff and eveything disappear
+*)
+
 [ 	\clef<"none"> 
 	\staffFormat<style="0-line"> 
 	\staffOff \meter<"0", autoBarlines="off"> \staffOn 
 	\stemsOff 
 	\none(  \intens<"p">   d4/8 e&2/8 b3/8 f4/8 g#2/8 e3/8 b&4/8 ) 
-	\staffOff 
+%	\staffOff 
 ]

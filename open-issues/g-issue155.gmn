@@ -1,0 +1,1326 @@
+ 
+{
+[ 
+	\staff<1>\key<0> \staffFormat \auto<autoInstrPos="on"> \instr<"146",fsize=6,dy=-18,dx=-2>\accol<id=0, range="1-2">
+	\set<autoClefKeyMeterOrder="on">
+	\set<autoSystemBreak="on">
+	\barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"f4"> \meter<"2/4", autoBarlines="on", autoMeasuresNum="system"> \tempo<"[/4] = 178 - 188",dx=24,fsize=4,dy=-1> 
+   \intens<"f",dy=-14,dx=4> \intens<"p",dy=-14,dx=12>\text<"Vivacissimo,",dy=16,dx=-32,fsize=6>(_/2) \bar 
+   (* meas. 2 *)  _/2 \bar 
+   (* meas. 3 *)  _/2 \bar 
+   (* meas. 4 *)  _/2 \bar  
+   (* meas. 5 *)  \stemsUp \beamsOff \intens<"f",dy=-0,dx=-5>d-1/2 \bar 
+   (* meas. 6 *)  _/8 d/4 _/8 \bar 
+   (* meas. 7 *)  _/4 d/4 \bar 
+   (* meas. 8 *)  _/8 \intens<"p",dy=18,dx=-2> \crescBegin<dy=18> \beamBegin:1 \clef<"g2"> \ten( {d1/8, a/8  }) \ten( {e/8, b/8  }) \ten( {f/8, c2/8  })  \beamEnd:1 \bar 
+   (* meas. 9 *) \intens<"sf",dy=18,dx=4> {g1/8, d2/8  } \crescEnd \slurBegin:1<curve="up">\intens<"mf",dy=-9,dx=0> \beamBegin:1 \acc(\fing<"3",dy=11>( g#1/8)) \acc( f#/8)
+				\fing<"5",dy=12>(a/8) \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 10 *)  \slurBegin:1<curve="down"> \beamBegin:1 \beamBegin:2 \acc( g /16) \acc( f/16)
+	 \beamEnd:2 e/8 \slurEnd:1 \beamEnd:1 \slurBegin:2<dy=2,dx=1> \intens<"sf",dy=13,dx=0> d/4 \bar 
+   (* meas. 11 *) \beamBegin:1 d/8 \slurEnd:2 \tieEnd \slurBegin:1<curve="up"> \acc( \fing<"3",dy=11>(g#/8)) \acc( f#/8)
+	\fing<"5",dy=12>(a/8) \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 12 *) \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \acc(\fing<"2",dy=11>(g /16)) a/16 \beamEnd:2 b/8 \slurEnd:1 \beamEnd:1 \beamsOff \ten( \acc( c2/4)) \bar 
+   (* meas. 13 *) \intens<"sf",dy=15,dx=0> \stemsDown \beamsOff d/8 \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \acc(\fing<"3",dy=11>( g#1/8)) \acc( f#/8)
+	\fing<"5",dy=11>(a/8) \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 14 *)  \slurBegin:1<curve="down"> \beamBegin:1 \beamBegin:2 \acc( g /16) \acc( f/16)
+	 \beamEnd:2 e/8 \slurEnd:1 \beamEnd:1 \beamsOff \tieBegin \intens<"sf",dy=17,dx=2>\acc(\fing<"1",dy=11>( e&/4))  \bar 
+   (* meas. 15 *) \beamsOff e&/8 \tieEnd \beamsOff \stacc( \acc( \fing<"5",dy=10>(\marcato<position="below">(f#/8))) )
+	\slurBegin:1<curve="down"> \beamBegin:1 \beamBegin:2 \acc( f/16)
+	\acc( e/16)
+	d/16 c/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 16 *) \beamsOff \stacc( d/8) \slurEnd:1 _/8 _/4 \clef<"f4",dx=11>\bar 
+\newLine
+   (* meas. 17 *)   \intens<"f",dy=-2,dx=4>_/8 \beamsOff d-1/4. \bar 
+   (* meas. 18 *)  _/4 \beamsOff d/4 \bar 
+   (* meas. 19 *)  _/4 _/8 \beamsOff d/8 \clef<"g2"> \bar 
+   (* meas. 20 *)  _/8 \crescBegin<dy=-8> \stemsDown \beamBegin:1 \ten( {d2/8, a/8  })
+ \stemsDown \ten( {e/8, b/8  })
+ \stemsDown \ten( {f/8, c3/8  })
+ \beamEnd:1 \crescEnd \bar 
+   (* meas. 21 *)  \stemsDown \beamsOff \intens<"f",dy=-8,dx=-0>{g2/8, d3/8  } \stemsDown \slurBegin:1<curve="up",dy=-1> \beamBegin:1 \acc( \fing<"3",dy=7>(g#2/8))
+ \stemsDown \acc( f#/8)
+ \stemsDown \fing<"5",dy=6>(a/8) \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 22 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \acc( g/16)
+ \stemsDown \acc( f#/16)
+ \beamEnd:2 \stemsDown e/8 \slurEnd:1 \beamEnd:1 \stemsDown \beamsOff \ten(\marcato( d/4))
+ \bar 
+   (* meas. 23 *)  \stemsUp \beamBegin:1 a1/8 \stemsUp \slurBegin:1<curve="up"> \acc( \fing<"3",dy=11>(d#2/8))
+ \stemsUp \acc( c#/8)
+ \stemsUp \acc( f /8)
+ \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 24 *)  \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \acc( \fing<"2",dy=11>(d /16))
+ \stemsUp e/16 \beamEnd:2 \stemsUp \acc( f#/8)
+ \slurEnd:1 \beamEnd:1 \stemsUp \beamsOff \ten( \acc( g/4)
+)
+ \bar 
+   (* meas. 25 *)  \stemsDown \beamsOff \intens<"sf",dy=-2,dx=-0>d3/8 \stemsDown \slurBegin:1<curve="up",dy=-1> \beamBegin:1 \acc( \fing<"3",dy=8>(g#2/8))
+ \stemsDown \acc( f#/8)
+ \stemsDown a/8 \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 26 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \fing<"1",dy=7>(c/16) \stemsDown d/16 \beamEnd:2 \stemsDown e/8 \slurEnd:1 \beamEnd:1 \stemsDown \beamsOff \ten( \acc( f/4)
+)
+ \bar 
+   (* meas. 27 *)  _/8 \stemsUp \beamsOff \fing<"1",dy=10>(f1/8) \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \beamBegin:2 g/16 \stemsUp a/16 \stemsUp \acc( b&/16)
+ \stemsUp c2/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 28 *) \intens<"sf",dy=-4,dx=-0> \stemsUp \beamsOff \stacc( g1/8)\slurEnd:1 
+ _/8   _/4 \clef<"f4">   \bar \newLine
+ 
+ 
+ 
+   (* meas. 29 *)   
+ _/8 \intens<"f",dy=14,dx=-0>\stemsUp \beamsOff a-1/4.   \bar 
+   (* meas. 30 *)  \stemsUp \beamsOff a/2   \bar 
+   (* meas. 31 *)  _/8  \stemsUp \beamsOff a/4.   \clef<"g2">   \bar 
+   (* meas. 32 *) \intens<"sf",dy=-13,dx=-4> \beamBegin:1\stemsDown \beamsOff \slurBegin:1<curve="up"> \fing<"1",dy=8>(a1/8 )  \stemsDown \beamsOff \acc( \fing<"2",dy=8.5>(c#2/16))
+  \stemsDown \beamsOff \acc( d#/16)
+ \slurEnd:1 \beamEnd:1   \beamBegin:1\stemsDown \slurBegin:1<curve="up"> \beamsOff {\fing<"1",dy=9.5>(a1/8), \fing<"5",dy=8.5>(e2/8)  }  \stemsDown \beamsOff {\fing<"2",dy=7.5>(c#/8), \fing<"3",dy=10>(d#/8)  } \slurEnd:1 \beamEnd:1   \bar 
+   (* meas. 33 *)  \stemsDown \beamsOff \slurBegin:1<curve="up">\beamBegin:1{a1/8, \acc( f#2/8)
+  } {c#/8, d#/8  }\beamEnd:1 \slurEnd:1\beamBegin:1 \slurBegin:1<curve="up">{\fing<"1",dy=8>(a1/8), \fing<"3",dy=9>(c#2/8)  }  b1 \beamEnd:1 \slurEnd:1\bar 
+   (* meas. 34 *)  \stemsDown \beamsOff \slurBegin:1<curve="up">\beamBegin:1{\fing<"1",dy=9>(a1/8), \acc( \fing<"2",dy=10>(c#2/8))
+  }   d#/8  \beamEnd:1 \slurEnd:1\beamBegin:1 \slurBegin:1<curve="up">{a1/8, e2/8  }  {c#2/8,d#2/8} \beamEnd:1 \slurEnd:1 \bar 
+   (* meas. 35 *)  \stemsDown \beamsOff \slurBegin:1<curve="up">\beamBegin:1{\fing<"1",dy=9>(a1/8), \acc( \fing<"3",dy=10>(c#2/8))
+  }   b1/8  \beamEnd:1 \slurEnd:1\beamBegin:1 \slurBegin:1<curve="up">{a1/8, c#2/8  }   d#2/8  \beamEnd:1 \slurEnd:1  \bar 
+   (* meas. 36 *) \ten({a1/4, e2/4  })\clef<"f4">  \stemsUp \ten(c0/4) \clef<"g2"> \bar 
+   (* meas. 37 *)  \beamBegin:1\stemsDown \beamsOff \slurBegin:1<curve="up">  a1/8    \stemsDown \beamsOff \acc( \fing<"2",dy=8.5>(c#2/16))
+  \stemsDown \beamsOff \acc( d#/16)
+ \slurEnd:1 \beamEnd:1   \beamBegin:1\stemsDown \slurBegin:1<curve="up"> \beamsOff { a1/8 , \fing<"5",dy=6.5>(e2/8)  }  \stemsDown \beamsOff { c#/8 ,  d#/8   } \slurEnd:1 \beamEnd:1     \bar 
+   (* meas. 38 *)  \stemsDown \beamsOff \slurBegin:1<curve="up">\beamBegin:1{a1/8, \acc( f#2/8)
+  } {c#/8, d#/8  }\beamEnd:1 \slurEnd:1\beamBegin:1 \slurBegin:1<curve="up">{\fing<"1",dy=8>(a1/8), \fing<"3",dy=9>(c#2/8)  }  b1 \beamEnd:1 \slurEnd:1\bar 
+   (* meas. 39 *)  \stemsDown \beamsOff \slurBegin:1<curve="up">\beamBegin:1{\fing<"1",dy=9>(a1/8), \acc( \fing<"2",dy=10>(c#2/8))
+  }   d#/8  \beamEnd:1 \slurEnd:1\beamBegin:1 \slurBegin:1<curve="up">{a1/8, f#2/8  }  {c#2/8,d#2/8} \beamEnd:1 \slurEnd:1 \bar 
+   (* meas. 40 *)  \stemsDown \beamsOff \slurBegin:1<curve="up">\beamBegin:1{\fing<"1",dy=9>(a1/8), \acc( \fing<"3",dy=10>(c#2/8))
+  }   b1/8  \beamEnd:1 \slurEnd:1\beamBegin:1 \slurBegin:1<curve="up">{a1/8, c#2/8  }   d#2/8  \beamEnd:1 \slurEnd:1  \bar 
+   (* meas. 41 *)  \stemsUp \beamsOff \ten( a1/4) \stemsDown \beamsOff \intens<"sf",dy=-1,dx=-2>\ten( {\acc( g#2/4)
+, a/4  })
+  \clef<"f4"> 
+ \bar 
+   (* meas. 42 *)  \stemsUp \ten(\marcato(a-1/4)) \clef<"g2"> \beamBegin:1\stemsDown \beamsOff \slurBegin:1<curve="up">  a1/8    \stemsDown \beamsOff \acc( \fing<"2",dy=8.5>(c#2/16))
+  \stemsDown \beamsOff \acc( d#/16)
+ \slurEnd:1 \beamEnd:1  \bar 
+   (* meas. 43 *)  \beamBegin:1\stemsDown \slurBegin:1<curve="up"> \beamsOff { a1/8 , \fing<"5",dy=6.5>(e2/8)  }  \stemsDown \beamsOff  \fing<"3",dy=6.5>( d#/8 )    \slurEnd:1 \beamEnd:1    \stemsUp \beamsOff \ten( c/4) \clef<"f4"> 
+ \bar 
+ 
+ 
+ 
+   (* meas. 44 *)  \stemsUp \beamsOff \ten( a-1/4)
+  \clef<"g2"> \stemsDown \beamsOff \ten( {\acc( g#2/4)
+, a/4  })\intens<"sf",dy=-1,dx=-15>
+ \bar 
+   (* meas. 45 *)  \beamBegin:1\stemsDown \beamsOff \slurBegin:1<curve="up">  a1/8    \stemsDown \beamsOff \acc( \fing<"2",dy=8.5>(c#2/16))
+  \stemsDown \beamsOff \acc( d#/16)
+ \slurEnd:1 \beamEnd:1  \beamBegin:1 \slurBegin:1<curve="up">{a1/8, \accent<dy=2>(f#2/8)  }  b1/8  \beamEnd:1 \slurEnd:1\bar 
+   (* meas. 46 *)   \beamBegin:1\stemsDown \beamsOff \slurBegin:1<curve="up">  a1/8    \stemsDown \beamsOff \acc( \fing<"2",dy=8.5>(c#2/16))
+  \stemsDown \beamsOff \acc( d#/16)
+ \slurEnd:1 \beamEnd:1  \beamBegin:1 \slurBegin:1<curve="up">{a1/8, \accent<dy=2>(f#2/8)  }  b1/8 \beamEnd:1 \slurEnd:1 \bar 
+   (* meas. 47 *)   _/8 \beamBegin:1\stemsDown \beamsOff \slurBegin:1<curve="up">     \stemsDown \beamsOff \acc( \fing<"2",dy=8.5>(c#2/16))
+  \stemsDown \beamsOff \acc( d#/16)
+ \slurEnd:1 \beamEnd:1  \beamBegin:1 \slurBegin:1<curve="up">{a1/8, \accent<dy=2>(f#2/8)  }  b1/8 \beamEnd:1 \slurEnd:1 \bar 
+   (* meas. 48 *)   \beamBegin:1 \slurBegin:1<curve="up">{a1/8, \accent<dy=2>(f#2/8)  }  b1/8 \beamEnd:1 \beamBegin:1\stemsDown \beamsOff \slurBegin:1<curve="up">  a1/8    \stemsDown \beamsOff \acc( \fing<"2",dy=8.5>(c#2/16))
+  \stemsDown \beamsOff \acc( d#/16)
+ \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 49 *)  \beamBegin:1 \slurBegin:1<curve="up">{a1/8, \accent<dy=2>(f#2/8)  }  b1/8 \beamEnd:1 \beamBegin:1  {a1/8, \accent<dy=2>(f#2/8)  }  b1/8 \beamEnd:1  \bar 
+   (* meas. 50 *)  _/8  \beamBegin:1\slurBegin:1<curve="up">\arpeggio({\fing<"1",dy=8,dx=-2>(a),b}) \fing<"3",dy=6>(f#2) {a1,b1}\slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 51 *)   \intens<"sf",dy=-2,dx=-2>\ten( {\acc( g#2/4)
+, a/4  })\clef<"f4">  \stemsUp \ten(\marcato(c0/4))  \clef<"g2">  \bar 
+   (* meas. 52 *)  \beamBegin:1 \slurBegin:1<curve="up">{a1/8,  f#2/8   } e/16 d#/16 \beamEnd:1 \beamBegin:1 c#/8 b1 \beamEnd:1 \slurEnd:1 \bar 
+   (* meas. 53 *)  \intens<"sf",dy=-2,dx=-2>\stemsDown \beamsOff \ten( {\acc( g#2/4)
+, a/4  }) \clef<"f4"> 
+ \stemsUp \beamsOff  \intens<"sf",dy=-3,dx=2>{\acc(\fing<"2",dy=14,dx=0>(f-1/4)), \slurBegin:2<curve="down",dy2=3,dx=2> \acc(\fing<"5",dy=14 >(c0/4)) \slurBegin:1<curve="up",dy=-1> }  \bar 
+ 
+ 
+ 
+   (* meas. 54 *)   \stemsUp \beamsOff {\acc(f-1/4),\slurEnd:2 \acc(c0/4)\slurEnd:1  } \clef<"g2">   \stemsDown \beamsOff \ten( {\acc( g#2/4)
+, a/4  }) \intens<"sf",dy=0,dx=-15>\clef<"f4">\bar 
+   (* meas. 55 *)  \intens<"sf",dy=16,dx=0>\stemsUp \beamsOff {f-1/2, c0/2  } \clef<"g2">   \bar 
+   (* meas. 56 *)   \stemsDown \beamsOff \ten( {\acc( g#2/4)
+, a/4  }) \intens<"sf",dy=0,dx=-16>
+  \stemsUp \beamsOff   \clef<"f4">{f-1/4,\slurBegin:2<curve="down",dy=-1,dx=2> c0/4 \slurBegin:1<curve="up",dy=-2> } \intens<"sf",dy=-3,dx=-14>  \bar 
+   (* meas. 57 *)  \stemsUp \beamsOff {f-1/4,\slurEnd:2 c0/4 \slurEnd:1    } \clef<"g2">  \stemsDown \beamsOff   {\acc( g#2/4)
+, \slurBegin:2<curve="down",dy2=3,dx=2> a/4 \slurBegin:1<curve="up",dy2=-5,dx=-2,dy=4> }  \bar 
+   (* meas. 58 *)   \stemsDown \beamsOff {g#/4,\slurEnd:2  a/4 \slurEnd:1   }   \stemsUp \beamsOff   {\acc( \fing<"2",dy=11.5,dx=1>(g#1/4))
+,  \slurBegin:2<curve="down",dy2=3,dx=-1> \fing<"5",dy=13.5,dx=1>(a/4 )\slurBegin:1<curve="up",dy2=1,dx=-2,dy=-5> }   \bar 
+   (* meas. 59 *)  \stemsUp \beamsOff {g#/4,\slurEnd:2  a/4 \slurEnd:1  }   \stemsUp \beamsOff {\acc(\fing<"2",dy=16,dx=1>( g#0/4))
+, \fing<"3",dy=19,dx=1>(a/4)  }  \bar 
+
+
+
+   (* meas. 60 *)  _/2 \bar 
+   (* meas. 61 *)  _/2 \bar 
+   (* meas. 62 *)  \text<"p, leggero",dy=-10,fsize=5, fattrib="bi",dx=-3>(_/4) \stemsDown \beamBegin:1 \slurBegin:1<curve="up">\fing<"3",dy=6>(d2/8) \stemsDown a1/8 \beamEnd:1\slurEnd:1 \bar 
+   (* meas. 63 *)  \stemsDown \beamBegin:1 \slurBegin:1<curve="up">d2/8 \stemsDown g/8 \beamEnd:1\slurEnd:1 \stemsDown \slurBegin:1<curve="up">\beamBegin:1 d/8 \stemsDown a1/8 \beamEnd:1\slurEnd:1 \bar 
+   (* meas. 64 *)  \slurBegin:1<curve="up">\stemsDown \beamBegin:1 \fing<"2",dy=8>(\acc( b /8))
+ \stemsDown \beamBegin:2 c2/16 \stemsDown d/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \beamBegin:2 e/16 \stemsDown d/16 \stemsDown c/16 \stemsDown b#1/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 65 *)  \stemsUp \beamsOff \stacc( a/8)\slurEnd:1
+ \stemsDown \beamBegin:1 \accent( g2/8)
+ \stemsDown d/8 \stemsDown a1/8 \beamEnd:1 \bar 
+   (* meas. 66 *) \slurBegin:1<curve="up"> \stemsDown \beamBegin:1 b/8 \stemsDown \beamBegin:2 c2/16 \stemsDown d/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \beamBegin:2 e/16 \stemsDown d/16 \stemsDown c/16 \stemsDown b1/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 67 *)  \stemsUp \beamsOff \ten( a/4)\slurEnd:1
+ \stemsUp \beamsOff \ten( a/4)
+ \bar 
+   (* meas. 68 *)  _/4  \slurBegin:1<curve="down"> \stemsUp \beamBegin:1 \fing<"3",dy=13>(g/8) \stemsUp c2/8 \beamEnd:1 \slurEnd:1\bar 
+   (* meas. 69 *) \slurBegin:1<curve="down">  \stemsUp \beamBegin:1 g1/8 \stemsUp d/8 \beamEnd:1 \slurEnd:1\stemsUp \slurBegin:1<curve="down"> \beamBegin:1 g/8 \stemsUp c2/8 \beamEnd:1\slurEnd:1 \bar 
+   (* meas. 70 *)  \slurBegin:1<curve="down"> \stemsUp \beamBegin:1 \fing<"4",dy=10>(a1/8) \stemsUp \beamBegin:2 g/16 \stemsUp f/16 \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 e/16 \stemsUp f/16 \stemsUp g/16 \stemsUp a/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 71 *)  \stemsUp \beamsOff g/8\slurEnd:1 \slurBegin:1<curve="down"> \stemsUp \beamBegin:1 \accent(d/8) \stemsUp g/8 \stemsUp c2/8 \beamEnd:1\slurEnd:1 \bar 
+   (* meas. 72 *)  \slurBegin:1<curve="down">\stemsUp \beamBegin:1 \fing<"4",dy=10>(f1/8) \stemsUp \beamBegin:2 e/16 \stemsUp d/16 \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 c/16 \stemsUp d/16 \stemsUp e/16 \stemsUp f/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 73 *)  \stemsUp \beamsOff \ten( d/4)\slurEnd:1
+ \stemsUp \beamsOff \slurBegin:1<curve="down",dy=1> d/4 \bar 
+   (* meas. 74 *)  \stemsUp \beamsOff d/4 \slurEnd:1 \stemsUp \beamsOff \slurBegin:1<curve="down",dy=1>  d/4 \bar 
+   (* meas. 75 *)  \stemsUp \beamsOff d/4 \slurEnd:1  \stemsUp \beamsOff \slurBegin:1<curve="down",dy=1>  d/4 \bar 
+   (* meas. 76 *)  \stemsUp \beamsOff d/4 \slurEnd:1  \stemsUp \beamsOff    d/4 \bar  
+   
+   
+   
+   (* meas. 77 *)  _/4  \intens<"f",dy=-10,dx=-13>\clef<"f4"> \stemsUp \beamsOff   {\slurBegin:1<curve="down",dy=1>\fing<"2",dy=19>(c-1/4),\slurBegin:2<curve="up",dy=0> \marcato(\fing<"5",dy=18>(g/4))   } \bar 
+   (* meas. 78 *)  \stemsUp \beamsOff {c/4,\slurEnd:1   g/4 \slurEnd:2   } \stemsUp \beamsOff   {\slurBegin:1<curve="down",dy=1>c-1/4,\slurBegin:2<curve="up",dy=0> \marcato(g/4)   } \bar 
+   (* meas. 79 *)  \stemsUp \beamsOff {c/4,\slurEnd:1   g/4 \slurEnd:2   } \stemsUp \beamsOff   {\slurBegin:1<curve="down",dy=1>c-1/4,\slurBegin:2<curve="up",dy=0> \marcato(g/4)    } \bar 
+   (* meas. 80 *) \stemsUp \beamsOff {c/8,\slurEnd:1   g/8 \slurEnd:2   } \stemsUp \beamsOff   {\slurBegin:1<curve="down",dy=1>c-1/4,\slurBegin:2<curve="up",dy=0> \marcato(g/4)    } _/8 \clef<"g2">  \bar\newLine 
+   (* meas. 81 *)     \stemsDown \beamBegin:1 \text<"Meno vivo,",dy=17,dx=-9,fsize=5, fattrib="b">(\fing<"5",dy=5>(e2/16)) \tempo<"[/4] = 144",dy=1,dx=13,fsize=4>d c# b1 \beamEnd:1\intens<"ff",dy=-8,dx=-31>_/8 \stemsUp \beamBegin:1 \fing<"5",dy=10>(a/16) \acc(g)\bar 
+   (* meas. 82 *)  f#/16 e/16\beamEnd:1 _/8 _/8 \beamBegin:1\fing<"1",dy=12>(d/16) e/16 \bar 
+   (* meas. 83 *)  f#/16 \acc(g) \beamEnd:1_/8 _/16 \beamBegin:1\fing<"4",dy=10>(a) g f# \bar 
+   (* meas. 84 *)  \stemsUp \beamsOff e1/16  \beamEnd:1 _/16
+ _/8 _/4 \bar 
+ 
+ 
+ 
+   (* meas. 85 *)  \stemsDown \beamBegin:1 \beamBegin:2 \fing<"4",dy=4>(e3/16) \stemsDown d/16 \stemsDown \acc( c#/16)
+ \stemsDown b2/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \beamBegin:2 c3/16 \stemsDown d/16 \stemsDown e/16 \stemsDown b2/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 86 *)  _/8 \stemsDown \beamBegin:1 \beamBegin:2 \fing<"4",dy=4.5>(a/16) \stemsDown b/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \beamBegin:2 a/16 \stemsDown g/16 \stemsDown \acc( f#/16)
+ \stemsDown e/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 87 *)  _/8 \stemsDown \beamBegin:1 \beamBegin:2 \fing<"1",dy=5>(d/16) \stemsDown e/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \beamBegin:2 \acc( f#/16)
+ \stemsDown g/16 \stemsDown a/16 \stemsDown g/16 \beamEnd:2 \beamEnd:1 \bar 
+ 
+ 
+   (* meas. 88 *)  \stemsDown \beamBegin:1 \acc( f#/16)
+ \stemsDown e/8. \beamEnd:1 \stemsDown \beamBegin:1 f#/16 \stemsDown e/8. \beamEnd:1   \bar 
+   (* meas. 89 *)  \stemsDown \beamBegin:1 \acc( f#/16)
+ \stemsDown e/8. \beamEnd:1 \stemsDown \beamsOff \beamBegin:1f#/16 \stemsDown \beamsOff e/8.  \beamEnd:1 \bar 
+   (* meas. 90 *)  \stemsDown \beamBegin:1 \acc( f#/16)
+ \stemsDown e/8. \beamEnd:1 \stemsDown \beamsOff \beamBegin:1 \slurBegin:2<curve="up",dy=0>a/16 \stemsDown \beamsOff e/8. \slurEnd:2\beamEnd:1   \bar 
+   (* meas. 91 *)  \stemsDown \slurBegin:1<curve="up",dy=-2> \beamBegin:1 \acc( \fing<"5",dy=7>(e&/16))
+ \stemsDown \acc( b&1/8.)
+ \slurEnd:1 \beamEnd:1   \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \acc( a&/16)
+ \stemsDown \acc( d&2/8.)
+ \slurEnd:1 \beamEnd:1   \bar 
+   (* meas. 92 *)  _/2\clef<"f4">  \bar 
+   (* meas. 93 *)  \stemsDown \beamsOff   {\slurBegin:1<curve="down" ,dy=2> b-1/2, \slurBegin:3<curve="up",dy=-4 > \acc( d#0/2)
+, \slurBegin:2<curve="up" ,dy=-2> \acc( g#/2)
+  } \bar 
+   (* meas. 94 *)  \stemsDown \beamsOff {b-1/4, \slurEnd:1 d0/4, \slurEnd:3 g/4 \slurEnd:2 } _/4 \bar 
+   
+   
+   (* meas. 95 *)  \stemsDown \beamsOff \ten( {\acc( d#/4)
+, \acc( g#/4)
+, b/4  })
+ _/4 \clef<"g2">\bar 
+   (* meas. 96 *)   \stemsUp \beamBegin:1 \acc(  d&1/8) 
+ \stemsUp \slurBegin:2<curve="up" ,dy=2>\acc( \fing<"3",dy=10>(g&/8))
+ \stemsUp \fing<"2",dy=11.5>(f/8) \stemsUp \acc( \fing<"5",dy=11>(a&/8))
+ \beamEnd:1 \bar 
+   (* meas. 97 *)  \stemsUp \beamBegin:1 \beamBegin:2 \acc(\fing<"4",dy=10>( g /16))
+ \stemsUp f/16 \beamEnd:2 \stemsUp \stacc<dy=12>( \acc( e&/8)
+)\slurEnd:2
+ \beamEnd:1 \stemsUp \beamsOff \ten<dy=10>( \acc( \fing<"3",dy=11.5>(f&/4))
+)
+ \bar 
+ 
+   (* meas. 98 *)   \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \acc( g&/8)
+ \stemsUp \beamBegin:2 \acc( f/16)
+ \stemsUp \acc( e&/16)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 \acc( f&/16)
+ \stemsUp g&/16 \beamEnd:2 \stemsUp \acc( a&/8)
+ \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 99 *)  \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \acc( g /16)
+ \stemsUp \acc( f/16)
+ \stemsUp \acc( e&/16)
+ \stemsUp \acc( g&/16)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamsOff \ten<dy=10.4>( \acc( f&/4)
+)
+ \slurEnd:1 \bar 
+   (* meas. 100 *)  \stemsUp \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \acc( \fing<"4",dy=10>(f/16))
+ \stemsUp \acc( e&/16)
+ \stemsUp \acc( d&/16)
+ \stemsUp \acc( c&/16)
+ \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 e&/8 \stemsUp \acc( g&/8)
+ \slurEnd:1 \beamEnd:1 \bar 
+ 
+ 
+ 
+   (* meas. 101 *)  \stemsUp \beamBegin:1 \stacc( \acc( d&/8)
+)
+ \stemsUp \stacc( d&/8)
+ \beamEnd:1 \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \acc( e&/8)
+ \stemsUp \beamBegin:2 d&/16 \stemsUp \acc( c&/16)
+ \slurEnd:1 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 102 *)  \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \acc( e&/8)
+ \stemsUp \acc( g&/8)
+ \slurEnd:1 \beamEnd:1 \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \acc( d&/8)
+ \stemsUp \beamBegin:2 e&/16 \stemsUp \acc( c&/16)
+ \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 103 *)    \stemsUp \beamBegin:1 \text<"poco  rit .  -   -      -  -",dy=15,dx=-1,fsize=4, fattrib="bi">(\stacc( \acc( d&/8)
+))
+ \slurEnd:1 \stemsUp \stacc( d&/8)
+ \stemsUp \stacc( d&/8)
+ \stemsUp \stacc( d&/8)
+ \beamEnd:1 \bar 
+ 
+ 
+ 
+   (* meas. 104 *)  \text<"f ( sub. )",dy=-8,dx=0,fsize=5, fattrib="bi">(\text<"a tempo",dy=20,dx=-10,fsize=4, fattrib="bi">(\ten<dy=5.2,dx=6>(\ten<dy=5.3,dx=18>(_/8)))) \stemsDown \beamBegin:1 \ten\stacc({\acc( \fing<"2",dy=7.9>(b#2/8))
+, \acc(  \fing<"3",dy=10>(c#3/8)) 
+  } \stemsDown \ten( c#/8)
+ \stemsDown {b#2/8, c#3/8  } )\beamEnd:1 \bar 
+   (* meas. 105 *)  \stemsDown \beamBegin:1 \ten( \acc( c#/8)
+)
+ \stemsDown \ten( {\acc( b#2/8)
+, c#3/8  })
+ \stemsDown \stacc( \ten( c#/8)
+)
+ \stemsDown {b#2/8, c#3/8  } \beamEnd:1 \bar 
+   (* meas. 106 *)  \stemsDown \beamBegin:1 \ten( \acc( c#/8)
+)
+ \stemsDown {\acc( b#2/8)
+, c#3/8  } \stemsDown \ten( c#/8)
+ \stemsDown {b#2/8, c#3/8  } \beamEnd:1 \bar 
+   (* meas. 107 *)  \stemsDown \beamBegin:1 \ten( \acc( c#/8)
+)
+ \stemsDown {\acc( b#2/8)
+, c#3/8  } \stemsDown \ten( c#/8)
+ \stemsDown \ten( {b#2/8, c#3/8  })
+ \beamEnd:1 \bar 
+   (* meas. 108 *)  \stemsDown \slurBegin:1<curve="up",dy=-1> \beamBegin:1 \beamBegin:2 \acc( \fing<"2",dy=8>(a#2/16))
+ \stemsDown b/16 \beamEnd:2 \stemsDown \acc( c#3/8)
+ \slurEnd:1 \beamEnd:1 _/8 \stemsDown \beamsOff \stacc( \fing<"5",dy=6>(c#/8))
+ \bar 
+   (* meas. 109 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 b2/16 \stemsDown \acc( a#/16)
+ \stemsDown \acc( g#/16)
+ \stemsDown a#/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \stacc( e/8)
+ \slurEnd:1 \stemsDown \stacc( e/8)
+ \beamEnd:1 \bar 
+   (* meas. 110 *)  _/8 \stemsDown \beamBegin:1 \beamBegin:2 \acc( \fing<"2",dy=5>(a#/16))
+ \stemsDown b/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamsOff \acc( c#3/4)\intens<"sf",dy=-14,dx=-37> \intens<"sf",dy=-3,dx=-16>
+ \bar 
+   (* meas. 111 *)  \stemsDown \slurBegin:1<curve="up"> \beamBegin:1 \beamBegin:2 \fing<"4",dy=6>(b2/16) \stemsDown \acc( a#/16)
+ \stemsDown \acc( g#/16)
+ \stemsDown a#/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \stacc( e/8)
+ \slurEnd:1 \stemsDown \slurBegin:1<curve="up"> \beamBegin:2 a#/16 \stemsDown b/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 112 *)  \stemsDown \beamBegin:1 \acc( c#3/8)
+ \stemsDown \beamBegin:2 b2/16 \stemsDown \acc( a#/16)
+ \beamEnd:2 \beamEnd:1 \stemsDown   \beamsOff \beamBegin:1\acc( g#/16)
+ \stemsDown \beamsOff a#/16  \stemsDown \beamsOff \stacc( e/8)
+ \slurEnd:1 \beamEnd:1 \bar 
+   (* meas. 113 *)  \stemsDown \slurBegin:1<curve="up",dy=-1> \beamBegin:1 \beamBegin:2 \acc(\fing<"2",dy=7.7>( d#/16))
+ \stemsDown e/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamsOff \acc( f#/4)
+ \slurEnd:1 \stemsDown \beamsOff f#/8 \bar 
+   (* meas. 114 *)  _/8 \stemsDown  \slurBegin:2<curve="up"> \beamBegin:1 \beamBegin:2 \fing<"4",dy=6>(e/16) \stemsDown \acc( d#/16)
+ \beamEnd:2 \beamEnd:1 \stemsDown \beamBegin:1 \beamBegin:2 \acc( c#/16)
+  \stemsDown d#/16 \beamEnd:2 \stemsDown a1/8 \slurEnd:2 \beamEnd:1 \bar 
+   (* meas. 115 *)  \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \beamBegin:2 \acc( \fing<"3",dy=11>(g#/16))
+ \stemsUp \acc( a#/16)
+ \beamEnd:2 \stemsUp b/8 \slurEnd:1 \beamEnd:1 \stemsUp \slurBegin:1<curve="down"> \beamBegin:1 \beamBegin:2 \acc( a/16)
+ \stemsUp \acc(g#/16) \stemsUp \acc( f#/16)
+ \stemsUp g#/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 116 *)  \stemsUp \beamBegin:1 \ten( \fing<"1",dy=12>(\marcato<position="below">(d/8)))
+ \slurEnd:1 \stemsUp \ten(\marcato<position="below">( d/8))
+ \stemsUp \ten( \marcato<position="below">(d/8))
+ \stemsUp \ten(\marcato<position="below">( d/8))
+ \beamEnd:1 \bar 
+   (* meas. 117 *)  \stemsUp \beamBegin:1  \text<"simile",dy=-8,dx=0,fsize=5, fattrib="bi">(d/8) \stemsUp d/8 \stemsUp d/8 \stemsUp d/8 \beamEnd:1 \bar 
+   (* meas. 118 *)  \stemsUp \beamBegin:1 d/8 \stemsUp d/8 \stemsUp d/8 \stemsUp d/8 \beamEnd:1 \bar 
+   (* meas. 119 *)  \stemsUp \beamBegin:1 d/8 \stemsUp d/8 \stemsUp f/8 \stemsUp d/8 \beamEnd:1 \bar 
+   (* meas. 120 *)  \stemsUp \beamBegin:1 d/8 \stemsUp f/8 \stemsUp d/8 \stemsUp d/8 \beamEnd:1 \bar 
+   (* meas. 121 *)  \stemsUp \beamBegin:1 \stemsUp f/8 d/8  \stemsUp d/8 \stemsUp f/8 \beamEnd:1 \bar 
+   (* meas. 122 *)  \stemsUp \beamBegin:1 \stemsUp d/8 d/8  \stemsUp f/8 \stemsUp d/8 \beamEnd:1  \bar 
+   (* meas. 123 *)  \stemsUp \beamBegin:1 f/8 \stemsUp d/8 \stemsUp d/8 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2\slurBegin:1<curve="down">  f/16 \stemsUp e/16 \beamEnd:2    \bar 
+   (* meas. 124 *)  \stemsUp \beamsOff d/8\slurEnd:1\beamEnd:1\beamBegin:1 \stemsUp \slurBegin:1<curve="down"> \beamsOff f/16 \stemsUp \beamsOff e/16  \stemsUp \beamsOff d/8 \beamEnd:1\slurEnd:1\stemsUp \beamsOff \beamBegin:1\slurBegin:1<curve="down"> f/16 \stemsUp \beamsOff e/16 \bar 
+   
+   
+   (* meas. 125 *)  \stemsUp \beamBegin:1 \text<"(non acc.)",dy=15,dx=0,fsize=4.5, fattrib=" bi">(d/8) \slurEnd:1\beamEnd:1\stemsUp \beamBegin:2\slurBegin:1<curve="down">  f/16 \stemsUp e/16 \beamEnd:2 \beamEnd:1 \stemsUp \beamBegin:1 \beamBegin:2   d/16 
+ \stemsUp \acc( \fing<"2",dy=12>(f#/16))
+ \beamEnd:2 \stemsUp \acc( a&/8)
+ \beamEnd:1\slurEnd:1 \bar 
+ 
+ 
+   (* meas. 126 *)  \stemsUp \beamBegin:1 \text<" Tempo I. ",dy=22,dx=-3,fsize=4.5, fattrib=" b ">(g/8) \tempo<"([/4] = 168 )",dy=6.5,dx=11,fsize=3, fattrib=" b">
+ \stemsUp \slurBegin:2<curve="up" ,dy=0>\acc(  c#2/8) 
+ \stemsUp  \text<" sempre  ",dy=-6,dx=-13,fsize=4.5, fattrib=" bi ">(b1/8)  \stemsUp \acc( d2/8) 
+ \beamEnd:1 \intens<"f",dy=-5.5,dx=-11>\bar  
+   (* meas. 127 *)  \stemsUp \beamBegin:1 \beamBegin:2    g1 /16  
+ \stemsUp a/16 \beamEnd:2 \stemsUp   b/8 
+ \slurEnd:2
+ \beamEnd:1 \stemsUp \beamsOff \ten<dy=12,dx=0>(  c#2/4) 
+ 
+ \bar
+   (* meas. 128 *)   \stemsUp \slurBegin:1<curve="up"> \beamBegin:1   b1/8 
+ \stemsUp d2\beamEnd:1\slurEnd:1 \stemsUp \beamBegin:1 \beamBegin:2 \slurBegin:1<curve="up">g1/16 
+ \stemsUp a/16 \beamEnd:2 \stemsUp b/8 \slurEnd:1
+  \beamEnd:1 \bar 
+   (* meas. 129 *)  \stemsUp \ten<dy=10.4>( c#2/4) \stemsUp \beamsOff \ten<dy=10.4>(   a1/4)
+ 
+ \bar  
+ 
+ 
+   (* meas. 130 *)  \stemsUp \beamBegin:1 \slurBegin:1<curve="up"> g/8   
+ \stemsUp \slurBegin:2<curve="up" ,dy=0>\acc(  c#2/8) 
+ \stemsUp   b1/8   \stemsUp  d2/8  
+ \beamEnd:1 \slurEnd:1\bar 
+   (* meas. 131 *)   \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\beamBegin:2    c#2 /8  
+ \stemsUp b1/16  \stemsUp   a/16  \beamEnd:2\stemsUp \beamBegin:1     g1 /16  
+ \stemsUp a/16   \stemsUp   b/8 
+ \slurEnd:2
+ \beamEnd:1  \bar 
+   (* meas. 132 *)   \stemsUp \ten<dy=10.4>(\fing<"2",dy=12>( c#2/4)) \stacc<position="above">(f#/8) \slurBegin:2<curve="up"> \beamBegin:1 a1/8 \bar 
+   (* meas. 133 *)  \stemsUp     g1 /16  
+ \stemsUp a/16   \stemsUp   b/8 
+ \slurEnd:2
+ \beamEnd:1 \beamBegin:1
+\stemsUp  \slurBegin:2<curve="up">    g1 /8  
+ \stemsUp a/16   \stemsUp   b/16 
+ \bar 
+   (* meas. 134 *)  c#2 /8  \slurEnd:2 \slurBegin:2<curve="up">\beamEnd:1 \stemsUp \beamBegin:1     g1 /8  
+ \stemsUp a/16   \stemsUp   b/16 
+  
+ 
+c#2/8 \beamEnd:1  \slurEnd:2 \bar 
+   (* meas. 135 *)  \slurBegin:2<curve="up",dy=-1>\stemsDown \beamBegin:1     \fing<"1",dy=7>(d#2 /8)  
+   e/16      f#/16 
+  
+ 
+g2/8 \beamEnd:1  \slurEnd:2   \beamBegin:1 \slurBegin:2<curve="up",dy=-1>\fing<"1",dy=4>(a/8) \bar 
+   (* meas. 136 *) \stemsDown \text<"cresc.      -         -   -   -   -   -   -   -   - ",dy=-6,dx=-1,fsize=4.5, fattrib=" bi ">(b/16) c3/16 d/8 \slurEnd:2\beamEnd:1  \beamBegin:1\slurBegin:2<curve="up",dy=-1> \fing<"1",dy=5>(e/8) f/16 g/16  \bar 
+   (* meas. 137 *)  \stemsDown     \oct<1,dy=-2> (\text<"-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   - ",dy=-6,dx=-5,fsize=4.5, fattrib=" bi ">(a3/16) \stemsDown b/16 \beamEnd:1 \slurEnd:2 \slurBegin:2<curve="up",dy=-1> 
+    \beamBegin:1\stemsDown \beamsOff {b2/8, d3/8, f3/8  } \intens<"sf",dy=-8.5,dx=-11>\stemsDown \beamsOff \fing<"1",dy=5>(g/16) \stemsDown \beamsOff a/16 \stemsDown \beamsOff b/16 \stemsDown \beamsOff c4/16 \beamEnd:1 \bar 
+   (* meas. 138 *)  \stemsDown \beamsOff   \text<"Più mosso ,",dy=22,dx=-1,fsize=4.5, fattrib=" b ">({d4/8, d3/8  }) \intens<"ff",dy=-13.5,dx=-11>   \tempo<"([/4] = 184 )",dy=6.5,dx=25,fsize=3, fattrib=" b">\slurEnd:2 \slurBegin:2<curve="up",dy2=3,dy=-4>\stemsDown \beamBegin:1 \acc( \fing<"3",dy=5>(g#3/8))
+ \stemsDown \acc( f#/8)
+ \stemsDown \fing<"5",dy=5>(a/8)   \beamEnd:1 \slurEnd:2\bar 
+ 
+ 
+ 
+   (* meas. 139 *) \beamBegin:1 \stemsDown \beamsOff \acc( g3/16)
+ \stemsDown \beamsOff \acc( f#/16)  
+ \stemsDown \beamsOff e/8 \beamEnd:1 \stemsDown \slurBegin:2<curve="down",dy=7>\beamsOff d/4 \bar 
+   (* meas. 140 *)  \stemsDown \beamsOff\slurBegin:3<curve="down",dy=7> d/2 \slurEnd:2  \bar 
+   (* meas. 141 *)  \stemsDown \beamsOff d/2 \slurEnd:3\stemsUp \beamsOff \bar 
+   (* meas. 142 *)  \stemsUp \beamsOff d4/8\intens<"sf",dy=-6.5,dx=-10> \slurBegin:2<curve="up",dy=-1>\stemsUp \beamBegin:1 \acc( \fing<"3",dy=10>(g#3/8))
+ \stemsUp \acc( f#/8)
+ \stemsUp \fing<"5",dy=10>(a/8) \beamEnd:1 \slurEnd:2\bar 
+ 
+ 
+   (* meas. 143 *)  \stemsUp \beamBegin:1 \beamBegin:2 \acc( g/16)
+ \stemsUp \acc( f/16)
+ \beamEnd:2 \stemsUp e/8 \beamEnd:1 \stemsUp \beamBegin:1 d/8 \stemsUp \slurBegin:2<curve="up",dy=-1>\acc(\fing<"3",dy=10>( g#/8))
+ \beamEnd:1 \bar 
+   (* meas. 144 *) \beamBegin:1 f#/8 a/8 \slurEnd:2 \beamEnd:1\beamBegin:1\slurBegin:2<curve="up",dy=-1>\acc(\fing<"2",dy=10>( g/16)) a/16 \acc(b/8)\slurEnd:2\beamEnd:1\bar 
+   (* meas. 145 *)  \ten<position="above">(c4/4) d/8 \beamBegin:1\slurBegin:2<curve="up",dy=-1>\fing<"3",dy=10>( g#3/8) \bar 
+   (* meas. 146 *)  f# \fing<"5",dy=10>( a)\slurEnd:2\beamEnd:1 \slurBegin:2<curve="up",dy=-1>\beamBegin:1\fing<"1",dy=12>( c/16) d# e#/8 \slurEnd:2\beamEnd:1\bar 
+   (* meas. 147 *)  \beamBegin:1\fing<"2",dy=10>(f#) \slurBegin:2<curve="up",dy=-1>g# f# a \slurEnd:2\beamEnd:1\bar 
+   (* meas. 148 *)  \slurBegin:2<curve="up",dy=-1>\beamBegin:1  c/16  d# e#/8 \slurEnd:2\beamEnd:1 \beamBegin:1\slurBegin:2<curve="up",dy=-1>\fing<"2",dy=12>(f#) a\slurEnd:2\beamEnd:1\bar 
+   (* meas. 149 *)  \slurBegin:2<curve="up",dy=-1>\beamBegin:1  c/16  d# e#/8 \slurEnd:2\beamEnd:1 \beamBegin:1\fing<"2",dy=12>(\ten<position="above">(f#/4)) \beamEnd:1 \bar 
+   (* meas. 150 *)  \text<"poco allerg.",dy=22,dx=-2,fattrib="bi">(b/8) _/8_/4  \bar 
+   
+   
+   
+   
+   (* meas. 151 *)  _/8 \stemsDown \beamsOff \stacc( {\acc( \fing<"3",dy=7>(f#/8))
+, \acc( \fing<"4",dy=9>(g#/8))
+  })\intens<"sf",dy=-3.5,dx=-10> 
+ \stemsDown \beamBegin:1 \beamBegin:2 \slurBegin:2<curve="up",dy=-2>\acc( \fing<"4",dy=6>(f/16))
+ \stemsDown e/16 \stemsDown d/16 \stemsDown c/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 152 *)  \stemsDown \beamsOff  \tempo<"([/4] = 188 - 156 )",dy=2.5,dx=2,fsize=3, fattrib=" b"> \text<" Tempo I. ",dy=22,dx=-3,fsize=4.5, fattrib=" b ">(d/8) \slurEnd:2_/8 _/4 \bar 
+   (* meas. 153 *)  \restFormat<dx=-2>_/8 \stemsDown \beamsOff {\acc<dx=1.5>( f#4/8)
+, \acc<dx=2.5>( g#/8)
+, \acc<dx=0.5>( f#3/8)
+, \acc<dx=0.5>( g#/8)
+  }\intens<"sf",dy=-3.5,dx=-10>  \stemsDown \beamBegin:1 \beamBegin:2 \acc( \fing<"4",dy=4>(f4/16))
+ \stemsDown e/16 \stemsDown d/16 \stemsDown c/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 154 *)  \stemsDown \beamsOff {d4/8, d3/8  } _/8 )_/4 \bar 
+   
+   
+   (* meas. 155 *)  _/8 \stemsDown \beamsOff {\acc( \fing<"3",dy=5>(f#/8))
+, \acc( \fing<"4",dy=7>(g#/8))
+  }\intens<"sf",dy=-3.5,dx=-10>  \stemsDown \beamBegin:1 \beamBegin:2 \slurBegin:2<curve="up",dy=-2>\acc(\fing<"4",dy=5.5>( f/16))
+ \stemsDown e/16 \stemsDown d/16 \stemsDown c/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 156 *)  \stemsDown \beamsOff d/8\slurEnd:2 _/8 _/8 \stemsDown \beamsOff \text<" dim. ",dy=-8,dx=-2,fattrib="bi">(\fing<"4",dy=8>( \marcato(c#/8)))
+ \bar 
+   (* meas. 157 *)   \stemsDown \beamBegin:1 \beamBegin:2 \slurBegin:2<curve="up",dy=-2>\acc(\fing<"4",dy=5.5>(c3/16)) \stemsDown b2/16 \stemsDown a/16 \stemsDown g/16 \beamEnd:2 \beamEnd:1 a/8\slurEnd:2 _/8\bar 
+   (* meas. 158 *)  \marcato<dx=7,dy=2>(_/8) \stemsDown \beamsOff \slurBegin:2<curve="up",dy=-2>\stacc( \acc( \fing<"4",dy=9>(f#2/8))
+)
+   \slurBegin:2<curve="up",dy=-2>\stemsDown \beamBegin:1 \beamBegin:2 \fing<"4",dy=5.5>(f /16) \stemsDown e/16 \stemsDown d/16 \stemsDown c/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 159 *)  \stemsDown \beamsOff d/8\slurEnd:2 _/8 \accent<dx=8,dy=-1>(_/8) \stemsDown \beamsOff \stacc( \acc( \fing<"4",dy=9>(c#/8))
+)
+ \bar 
+   (* meas. 160 *)   \stemsUp \beamBegin:1 \beamBegin:2 \slurBegin:2<curve="down",dy=1,dx=1>\acc(\fing<"4",dy=10>(c2/16))   b1/16   a/16   g/16  \beamEnd:1 a/8\slurEnd:2 _/8 \bar 
+   (* meas. 161 *)  \accent<dx=6,dy=-14>(_/8) \stemsUp \beamsOff \stacc( \acc( \fing<"4",dy=11>(f#1/8))
+)
+  \stemsUp \beamBegin:1 \beamBegin:2 \slurBegin:2<curve="down",dy=1>\acc( \fing<"4",dy=11>(f/16))
+ \stemsUp e/16 \stemsUp d/16 \stemsUp c/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 162 *) \accent<dx=14,dy=18>(d1/8)  \stemsUp \beamsOff \slurEnd:2\stemsDown \beamsOff \clef<"f4"> \stacc( \acc( \fing<"4",dy=8>(c#/8))
+)
+ \stemsDown \beamBegin:1 \beamBegin:2  \slurBegin:2<curve="up",dy=-2>\acc( \fing<"4",dy=5>(c/16))
+ \stemsDown b0/16 \stemsDown a/16 \stemsDown g/16 \beamEnd:2 \beamEnd:1 \bar 
+   (* meas. 163 *)  \stemsDown \beamsOff a/8 \slurEnd:2_/8 \accent<dx=7,dy=0>(_/8) \stemsDown \beamsOff \stacc( \acc( \fing<"4",dy=9>(f#/8))
+)
+ \bar 
+   (* meas. 164 *)   \stemsUp \beamBegin:1 \beamBegin:2 \slurBegin:2<curve="up",dy=0>\acc(\fing<"4",dy=10>(f0/16))   e/16   d/16   c/16  \beamEnd:1 d/8\slurEnd:2 _/8  \bar 
+   
+   
+   
+   
+   (* meas. 165 *)  \stemsUp \beamsOff \stacc( \acc( \fing<"4",dy=10>(c#/8))
+)
+\slurBegin:2<curve="down",dy=0> \stemsUp \beamsOff \beamBegin:1\acc( \fing<"4",dy=10>(c/16)) \accent<dx=-12,dy=0>(b-1) a g \beamEnd:1 a/8\slurEnd:2
+ \bar 
+   (* meas. 166 *)  \stemsUp \beamsOff \stacc( \acc( \fing<"4",dy=12>(f#-1/8))
+)
+ \stemsUp \beamsOff \beamBegin:1\slurBegin:2<curve="down",dy=1> \acc( \fing<"4",dy=12>(f/16))
+ \accent<dx=-11,dy=0>(e) d c \slurEnd:2\beamEnd:1 _/8\bar 
+   (* meas. 167 *) \intens<"p",dy=-9.5,dx=-3>  \accent<dx=8,dy=-19>(_/8) \stemsUp \beamsOff \stacc(\acc( \fing<"4",dy=15>(c#/8)))
+ \stemsUp \beamBegin:1 \beamBegin:2 \slurBegin:2<curve="down",dy=1>\acc( \fing<"4",dy=15>(c/16))
+ \stemsUp b-2/16 \stemsUp a/16 \stemsUp f/16 \beamEnd:2 \beamEnd:1\slurEnd:2 \bar 
+ 
+ 
+ 
+   (* meas. 168 *)  _/2\clef<"g2">  \bar 
+   (* meas. 169 *)  _/8\intens<"f",dy=-9.5,dx=1>  \crescBegin<dy=-9> \stemsDown \beamsOff \stacc( \acc( \fing<"1",dy=7>(d#2/8))
+)
+ \stemsDown \beamBegin:1 \slurBegin:2<curve="up",dy=1>\beamBegin:2 \fing<"1",dy=6.3>(e/16) \stemsDown \acc( f#/16)
+ \stemsDown \acc( g/16)
+ \stemsDown a/16 \beamEnd:2 \beamEnd:1 \slurEnd:2 \crescEnd\bar 
+   (* meas. 170 *)  \intens<"sf",dy=-9.5,dx=-1> \stemsDown \beamsOff \stacc({d/8, d3/8  }) _/8 _/4 ]
+ , 
+[ \staff<1> \key<0> \set<autoHideTiedAccidentals="on"> \staffFormat \barFormat<style= "system", range="1"> 
+   (* meas. 1 *)  empty/2  
+   (* meas. 2 *)  empty/2  
+   (* meas. 3 *)  empty/2   
+   (* meas. 4 *)  empty/2  
+   (* meas. 5 *)  empty/2  
+   (* meas. 6 *)  empty/2  
+   (* meas. 7 *)  empty/2  
+   (* meas. 8 *)  empty/2   
+   (* meas. 9 *)  empty/2  
+   (* meas. 10 *)  empty/4 \stemsDown \beamsOff \slurBegin:2<dy=-1> \noteFormat<dx=0>( d/4)
+ 
+   (* meas. 11 *)  \stemsDown \slurBegin:1<curve="down",dy=7> \beamsOff \noteFormat<dx=2.5>( d/2) \slurEnd:2
+ 
+   (* meas. 12 *)  \stemsDown \beamsOff d/2 \slurEnd:1  
+   (* meas. 13 *)  empty/2  
+   (* meas. 14 *)  empty/2  
+   (* meas. 15 *)  empty/2   
+   (* meas. 16 *)  empty/2  
+   (* meas. 17 *)  empty/2   
+   (* meas. 18 *)  empty/2  
+   (* meas. 19 *)  empty/2  
+   (* meas. 20 *)  empty/2  
+   (* meas. 21 *)  empty/2  
+   (* meas. 22 *)  empty/2   
+   (* meas. 23 *)  \stemsDown \beamsOff \slurBegin<dy=-2> \noteFormat<dx=2.5>( \fing<"1",dy=-8,dx=2>(a/2))
+  
+   (* meas. 24 *)  \stemsDown \beamsOff a/2 \slurEnd  
+   (* meas. 25 *)  empty/2  
+   (* meas. 26 *)  empty/2  
+   (* meas. 27 *)  empty/2  
+   (* meas. 28 *)  empty/2  
+   (* meas. 29 *)  empty/2 
+   (* meas. 30 *)  empty/2   
+   (* meas. 31 *)  empty/2 
+   (* meas. 32 *)  empty/2 
+   (* meas. 33 *)  empty/2  
+   (* meas. 34 *)  empty/2  
+   (* meas. 35 *)  empty/2  
+   (* meas. 36 *)  empty/2  
+   (* meas. 37 *)  empty/2  
+   (* meas. 38 *)  empty/2 
+   (* meas. 39 *)  empty/2  
+   (* meas. 40 *)  empty/2  
+   (* meas. 41 *)  empty/2 
+   (* meas. 42 *)  empty/2  
+   (* meas. 43 *)  empty/2 
+   (* meas. 44 *)  empty/2 
+   (* meas. 45 *)  empty/2  
+   (* meas. 46 *)  empty/2  
+   (* meas. 47 *)  empty/2  
+   (* meas. 48 *)  empty/2  
+   (* meas. 49 *)  empty/2  
+   (* meas. 50 *)  empty/2   
+   (* meas. 51 *)  empty/2  
+   (* meas. 52 *)  empty/2  
+   (* meas. 53 *)  empty/2 
+   (* meas. 54 *)  empty/2  
+   (* meas. 55 *)  empty/2  
+   (* meas. 56 *)  empty/2 
+   (* meas. 57 *) empty/2 
+   (* meas. 58 *)  empty/2 
+   (* meas. 59 *)  empty/2 
+   (* meas. 60 *)  empty/2 
+   (* meas. 61 *)  empty/2 
+   (* meas. 62 *)  empty/2  
+   (* meas. 63 *)  empty/2  
+   (* meas. 64 *)  empty/2  
+   (* meas. 65 *)  empty/2  
+   (* meas. 66 *)  empty/2  
+   (* meas. 67 *)  empty/2  
+   (* meas. 68 *)  empty/2   
+   (* meas. 69 *)  empty/2    
+   (* meas. 70 *)  empty/2  
+   (* meas. 71 *)  empty/2  
+   (* meas. 72 *)  empty/2  
+   (* meas. 73 *)  empty/2  
+   (* meas. 74 *)  empty/2  
+   (* meas. 75 *)  empty/2  
+   (* meas. 76 *)  empty/2   
+   (* meas. 77 *)  empty/2  
+   (* meas. 78 *)  empty/2  
+   (* meas. 79 *)  empty/2   
+   (* meas. 80 *)  empty/2  
+   (* meas. 81 *)  empty/2  
+   (* meas. 82 *)  empty/2  
+   (* meas. 83 *)  empty/2  
+   (* meas. 84 *)  empty/2
+   (* meas. 85 *)  empty/2  
+   (* meas. 86 *)  empty/2  
+   (* meas. 87 *)  empty/2  
+   (* meas. 88 *)  empty/2  
+   (* meas. 89 *) empty/2
+   (* meas. 90 *)  empty/2 
+   (* meas. 91 *)  empty/2 
+   (* meas. 92 *)  empty/2  
+   (* meas. 93 *)  empty/2  
+   (* meas. 94 *)  empty/2  
+   (* meas. 95 *)  empty/2 
+   (* meas. 96 *)  \stemsDown \beamsOff \slurBegin:1<curve="down",dy=8> \noteFormat<dx=2.5>(\fing<"1",dy=-3,dx=3>( d&/2))
+ 
+   (* meas. 97 *)  \stemsDown \beamsOff \slurBegin:2<curve="down",dy=8>d/2 \slurEnd:1  
+   (* meas. 98 *)  \stemsDown \beamsOff \slurBegin:1<curve="down",dy=8>  d/2 \slurEnd:2  
+   (* meas. 99 *)  \stemsDown \beamsOff d/2 \slurEnd:1  
+   (* meas. 100 *)  empty/2  
+   (* meas. 101 *)  empty/2  
+   (* meas. 102 *)  empty/2  
+   (* meas. 103 *)  empty/2  
+   (* meas. 104 *)  empty/2   
+   (* meas. 105 *)  empty/2  
+   (* meas. 106 *)  empty/2  
+   (* meas. 107 *)  empty/2  
+   (* meas. 108 *)  empty/2  
+   (* meas. 109 *)  empty/2  
+   (* meas. 110 *)  empty/2  
+   (* meas. 111 *)  empty/2  
+   (* meas. 112 *)  empty/1   
+   (* meas. 113 *)  empty/2  
+   (* meas. 114 *)  empty/2  
+   (* meas. 115 *)  empty/2  
+   (* meas. 116 *)  empty/2  
+   (* meas. 117 *)  empty/2 
+   (* meas. 118 *)  empty/2  
+   (* meas. 119 *)  empty/2  
+   (* meas. 120 *)  empty/2  
+   (* meas. 121 *)  empty/2 
+   (* meas. 122 *)  empty/2  
+   (* meas. 123 *)  empty/2
+   (* meas. 124 *)  empty/2
+   (* meas. 125 *)   \stemsDown \beamsOff   \noteFormat<dx=-2.5>(\fing<"1",dy=9,dx=-2>( g/2))   
+   (* meas. 126 *)  \stemsDown \beamsOff \slurBegin:2<curve="down",dy=8> \noteFormat<dx=-2.6>(  g/2)     
+   (* meas. 127 *)   \stemsDown \beamsOff  g/4\slurBegin:1<curve="down",dy=8>  \slurEnd:2  \noteFormat<dx=-2.6>( g/4)
+   (* meas. 128 *)  \stemsDown \beamsOff g/2 \slurEnd:1   
+   (* meas. 129 *)  \stemsDown \beamsOff \slurBegin:2<curve="down",dy=8> \noteFormat<dx=-2.6>(  g/2)  
+   (* meas. 130 *)  \stemsDown \beamsOff  g/4\slurBegin:1<curve="down",dy=8>  \slurEnd:2  \noteFormat<dx=0>( g/4) 
+   (* meas. 131 *)  g/4. \slurEnd:1   empty/8
+   (* meas. 132 *)   \stemsDown \beamsOff  \noteFormat<dx=2.7>(g/4)\slurBegin:1<curve="down",dy=8>  \slurEnd:2  \noteFormat<dx=0>( g/4) 
+   (* meas. 133 *)  g/8 \slurEnd:1 \noteFormat<dx=3>(g/4.)
+   (* meas. 134 *)  empty/2 
+   (* meas. 135 *)  empty/2  
+   (* meas. 136 *)  empty/2  
+   (* meas. 137 *)  empty/2 
+   (* meas. 138 *)  empty/4  
+   (* meas. 139 *)    \stemsUp \beamsOff \slurBegin<dy=1> \noteFormat<dx=0>( d2/4)
+ 
+   (* meas. 140 *)  \stemsUp \beamsOff   \noteFormat<dx=-2.5>(d/8) \slurEnd \stemsUp \beamBegin:1 \acc( \fing<"3",dy=10>(g#/8))
+ \stemsUp \acc( f#/8)
+ \stemsUp a/8 \beamEnd:1   
+   (* meas. 141 *)  \stemsUp \beamBegin:1 \beamBegin:2 \acc( \fing<"2",dy=11>(g/16))
+ \stemsUp a/16 \beamEnd:2 \stemsUp b/8 \beamEnd:1 \ten<position="above">(c3/4)     
+   (* meas. 142 *)  empty/2  
+   (* meas. 143 *)  empty/4 \stemsDown \beamsOff\slurBegin<dy=0>  \noteFormat ( d2/4)
+ 
+   (* meas. 144 *)  \slurBegin:1<curve="down",dy=9> d2/2 \slurEnd 
+   (* meas. 145 *)  d2/4 \slurEnd:1 empty/4 
+   (* meas. 146 *)  empty/4 \slurBegin<dy=-1> \acc(c#/4) 
+   (* meas. 147 *)  c#/2  \slurEnd
+   (* meas. 148 *)  \noteFormat<dx=-2>(c#/2)  
+   (* meas. 149 *) \slurBegin<dy=-1>\noteFormat<dx=-2>(c#/2)  
+   (* meas. 150 *)  c#/8\slurEnd empty/8 empty/4  \slurEnd
+   (* meas. 151 *)  empty/2  
+   (* meas. 152 *)  empty/2 
+   (* meas. 153 *)  empty/2 
+   (* meas. 154 *)  empty/2   
+   (* meas. 155 *)  empty/2  
+   (* meas. 156 *)  empty/2  
+   (* meas. 157 *)  empty/2   
+   (* meas. 158 *)  empty/2
+   (* meas. 159 *)  empty/2   
+   (* meas. 160 *)  empty/2  
+   (* meas. 161 *)  empty/2
+   (* meas. 162 *)  empty/2  
+   (* meas. 163 *)  empty/2  
+   (* meas. 164 *)  empty/2 
+   (* meas. 165 *)  empty/2   
+   (* meas. 166 *)  empty/2  
+   (* meas. 167 *)  empty/2  
+   (* meas. 168 *)  empty/2  
+   (* meas. 169 *)  empty/2  
+   (* meas. 170 *)  empty/2 ]
+ , 
+[ \staff<2>   \meter<"2/4">\key<0>
+ \staffFormat<dy=-14>\barFormat<style= "system", range="2"> 
+   (* meas. 1 *)  \clef<"f4"> \stemsDown \beamBegin:1 {d0/8, \acc( g#/8)
+, a/8  } \pedalOn<dx=-11,dy=-2> \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 2 *)  \stemsDown \beamBegin:1  {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 3 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 4 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 5 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 6 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 7 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 8 *)  \stemsDown \beamBegin:1   {d/8, \acc( g#/8)
+, a/8  }  \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \pedalOff<dx=-11,dy=-2>\stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar  
+   (* meas. 9 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 10 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 11 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 12 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 13 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 14 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 15 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 16 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 17 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 18 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 19 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 20 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 21 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 22 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 23 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown \mord<"-", "inverted">( d/8)
+ \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 24 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 25 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 26 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 \bar 
+   (* meas. 27 *)  \stemsDown \beamBegin:1 {d/8, \acc( g#/8)
+, a/8  } \stemsDown {d/8, g#/8, a/8  } \beamEnd:1 _/4 \bar 
+   (* meas. 28 *)  \beamBegin:1\noteFormat<dx=-12>( _/8)
+  \stemsDown \beamsOff {a/8, \acc( d#1/8)
+, e/8  }  \stemsDown \beamsOff {a0/8, d#1/8, e/8  }  \stemsDown \beamsOff \pedalOn<dx=-4>{a0/8, d#1/8, e/8  } \beamEnd:1  \bar 
+
+
+
+   (* meas. 29 *)   \beamBegin:1\stemsDown \beamsOff {a0/8, \acc( d#1/8)
+, e/8  }   \stemsDown \beamsOff {a0/8, d#1/8, e/8  }   \stemsDown \beamsOff {a0/8, d#1/8, e/8  }  \stemsDown \beamsOff {a0/8, d#1/8, e/8  }\beamEnd:1   \bar 
+   (* meas. 30 *)   \beamBegin:1\stemsDown \beamsOff {a0/8, \acc( d#1/8)
+, e/8  }   \stemsDown \beamsOff {a0/8, d#1/8, e/8  }   \stemsDown \beamsOff {a0/8, d#1/8, e/8  }  \stemsDown \beamsOff {a0/8, d#1/8, e/8  } \beamEnd:1\bar 
+   (* meas. 31 *)   \beamBegin:1\stemsDown \beamsOff {a0/8, \acc( d#1/8)
+, e/8  }   \stemsDown \beamsOff {a0/8, d#1/8, e/8  }   \stemsDown \beamsOff {a0/8, d#1/8, e/8  } {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  } \beamEnd:1\bar 
+   (* meas. 32 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 33 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 34 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  } \bar  
+   (* meas. 35 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 36 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 37 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 38 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 39 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 40 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  } \bar 
+   (* meas. 41 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 42 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  } \bar 
+   (* meas. 43 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }   \bar 
+   (* meas. 44 *)\stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }   \bar 
+   (* meas. 45 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }   \bar 
+   (* meas. 46 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }   \bar 
+   (* meas. 47 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }   \bar 
+   (* meas. 48 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 49 *)   \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 50 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 51 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  } \bar 
+   (* meas. 52 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  } \bar 
+   (* meas. 53 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 54 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  } \bar 
+   (* meas. 55 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   (* meas. 56 *)  \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  {a0/4, \acc(d#1/4), e/4  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dx=1,dy=2>a0/8, \slurBegin:2<curve="up",dx=2,dy=-2> d#1/8, \slurBegin:3<curve="up"> e/8  }  \bar 
+   
+   
+   
+   
+   (* meas. 57 *) \stemsDown \beamsOff {a0/8,\slurEnd:1 d1/8,\slurEnd:2 e/8 \slurEnd:3 }  \pedalOff {a0/8, \acc(d#1/8), e/8  }   \stemsUp \beamsOff  _/8 \intens<"f",dx=-3>\fing<"2",dy=10>(c0)  \bar 
+   (* meas. 58 *)  \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-1,dy=-3> \noteFormat<dx=0>(\marcato( f/4.))
+  \stemsUp \beamsOff e/8 \slurEnd:2 \bar 
+   (* meas. 59 *)  \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-1,dy=-3> \noteFormat<dx=0>(\marcato( f/4.))
+  \stemsUp \beamsOff e/8 \slurEnd:2 
+   (* meas. 60 *)  \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2 \bar 
+   (* meas. 61 *)  \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2\bar 
+   (* meas. 62 *)   \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2\bar 
+   (* meas. 63 *)   \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2 \bar 
+   (* meas. 64 *)   \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2 \bar 
+   (* meas. 65 *)   \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2\bar 
+   (* meas. 66 *)   \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2 \bar 
+   (* meas. 67 *)   \beamBegin:1\stemsUp \beamsOff\slurBegin:2<curve="up",dx=-0,dy=-0> f/8    \beamsOff e/8   \beamEnd:1 \slurEnd:2 \stemsUp \beamsOff \slurBegin:2<curve="up",dx=-0,dy=-0>\beamBegin:1f/8     \beamsOff e/8 \beamEnd:1   \slurEnd:2 \bar 
+   
+   
+   (* meas. 68 *)  \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( d#/8)
+ \stemsUp e/8 \beamEnd:1 \slurEnd:2 \stemsUp \slurBegin:2<curve="up">\beamBegin:1 f/8 \stemsUp e/8 \beamEnd:1 \slurEnd:2 \bar 
+   (* meas. 69 *) \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( d#/8)
+ \stemsUp e/8 \beamEnd:1 \slurEnd:2 \stemsUp \slurBegin:2<curve="up">\beamBegin:1 f/8 \stemsUp e/8 \beamEnd:1 \slurEnd:2\bar 
+   (* meas. 70 *)  \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( d#/8)
+ \stemsUp e/8 \beamEnd:1 \slurEnd:2 \stemsUp \slurBegin:2<curve="up">\beamBegin:1 f/8 \stemsUp e/8 \beamEnd:1 \slurEnd:2\bar 
+   (* meas. 71 *)  \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( d#/8)
+ \stemsUp e/8 \beamEnd:1 \slurEnd:2 \stemsUp \slurBegin:2<curve="up">\beamBegin:1 f/8 \stemsUp e/8 \beamEnd:1 \slurEnd:2\bar 
+   (* meas. 72 *) \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( d#/8)
+ \stemsUp e/8 \beamEnd:1 \slurEnd:2 \stemsUp \slurBegin:2<curve="up">\beamBegin:1 f/8 \stemsUp e/8 \beamEnd:1 \slurEnd:2 \bar 
+ 
+ 
+   (* meas. 73 *)  \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( e#/8)
+ \stemsUp \acc( f#/8)\slurEnd:2 
+ \beamEnd:1 \stemsUp \beamBegin:1\slurBegin:2<curve="up"> g/8 \stemsUp  f#/8 
+ \beamEnd:1\slurEnd:2  \bar 
+   (* meas. 74 *)   \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( e#/8)
+ \stemsUp \acc( f#/8)\slurEnd:2 
+ \beamEnd:1 \stemsUp \beamBegin:1\slurBegin:2<curve="up"> g/8 \stemsUp  f#/8 
+ \beamEnd:1\slurEnd:2   \bar 
+   (* meas. 75 *)   \stemsUp \beamBegin:1 \slurBegin:2<curve="up">\acc( e#/8)
+ \stemsUp \acc( f#/8)\slurEnd:2 
+ \beamEnd:1 \stemsUp \beamBegin:1\slurBegin:2<curve="up"> g/8 \stemsUp  f#/8 
+ \beamEnd:1\slurEnd:2  \bar 
+   (* meas. 76 *)  \stemsUp \beamBegin:1 \slurBegin:2<curve="up"> g/8 \stemsUp \acc( g#/8)
+ \beamEnd:1 \stemsUp \slurEnd:2 \beamBegin:1\slurBegin:2<curve="up">  a/8 \stemsUp \acc( a#/8)
+ \beamEnd:1 \slurEnd:2 \bar 
+ 
+ 
+   (* meas. 77 *)  \stemsUp \beamBegin:1 \slurBegin:2<curve="up"> b/8 \stemsUp \acc( a#/8)\slurEnd:2 
+ \beamEnd:1 _/8 \pedalOn<dy=-2> \stemsUp \beamsOff \slurBegin:2<curve="up"> a#/8 \bar 
+   (* meas. 78 *)  \stemsUp \beamBegin:1 b/8 \stemsUp \acc( a#/8)\slurEnd:2 
+ \beamEnd:1 _/8 \stemsUp \beamsOff\slurBegin:2<curve="up"> a#/8 \bar 
+   (* meas. 79 *) \stemsUp \beamBegin:1 b/8 \stemsUp \acc( a#/8)\slurEnd:2 
+ \beamEnd:1 _/8 \stemsUp \beamsOff\slurBegin:2<curve="up"> \beamBegin:1b/8  \bar 
+   (* meas. 80 *)  \stemsUp  \stemsUp \acc( a#/8) \beamEnd:1 \slurEnd:2
+  _/8 \stemsUp \beamsOff \slurBegin:2<curve="up"> \beamBegin:2b/8 a# \beamEnd:2\slurEnd:2 \pedalOff\bar 
+   (* meas. 81 *)  _/4 {c#-1/8,e/8,g#/8,b/8} _/8\bar 
+   
+   
+   (* meas. 82 *)  _/8 \beamBegin:1\stemsDown{c#0/8,e,g#,b}  {c#0/8,e,g#,b}\beamEnd:1_/8\bar 
+   (* meas. 83 *)  _/8 _/16 \stemsUp {c#-1/16,e/16,g#/16,b/16} _/4 \bar 
+   (* meas. 84 *)  _/8 {c#-1/8,e/8,g#/8,b/8} \pedalOn<dy=-4> _/8 \stemsDown{c#0/8,e,g#,b}   \bar 
+   
+   
+   
+   (* meas. 85 *)  \noteFormat<dx=-2>( _/4)\clef<"g2"> 
+ _/8 \stemsUp \beamsOff {e1/8 
+, g#1/8,   b 1/8 
+, c#/8  } \pedalOff<dx=-4> \bar 
+   (* meas. 86 *)  \stemsUp \beamBegin:1 {d1/8, f/8, a/8, \acc( c2/8)
+  } \stemsUp {\acc( c#1/8)
+, e/8, \acc( g#/8)
+, b/8  } \beamEnd:1 _/8 \clef<"f4"> \stemsDown \beamsOff {\acc( c#0/8)
+, e/8, \acc( g#/8)
+, b/8  } \bar 
+   (* meas. 87 *)  \stemsDown \beamBegin:1 {b#-1/8, d#0/8, f##/8, a#/8  } \stemsDown {\acc( c#/8)
+, e/8, \acc( g#/8)
+, b/8  } \beamEnd:1 _/4 \bar 
+   (* meas. 88 *)   _/8 
+ \stemsDown \beamsOff {\acc( d#/4)
+, g#/4, a#/4, \acc( c#1/4)
+  } \stemsDown \beamsOff {d#0/8, g#/8, a#/8, c#1/8  } \bar 
+   (* meas. 89 *)  \noteFormat<dx=-4>( _/8)
+ \stemsDown \beamsOff {\acc( f 0/4)
+, \acc( d&1/4)
+, \acc( e&/4)
+  }   \stemsDown \beamsOff {f 0/8, d&1/8, e&/8  } \bar 
+   (* meas. 90 *)  \noteFormat<dx=-4>( _/8)
+ \stemsDown \beamsOff {g0/4, \acc( c1/4)
+, \acc( f/4)
+  }   \stemsDown \beamsOff {\slurBegin:1<curve="down",dy=2> g0/8, \slurBegin:2<curve="up",dy=-2>c1/8, \slurBegin:3<curve="up",dy=-2>f/8  } \bar
+  
+  
+  
+   (* meas. 91 *)  \stemsDown \beamsOff {g0/8,\slurEnd:1 \acc(c1/8),\slurEnd:2 \acc(f/8) \slurEnd:3 } \stemsDown \beamsOff {g0/4, b/4, f1/4  } _/8   \bar 
+   (* meas. 92 *)  \stemsUp \beamsOff \text<"p (sub.)",fattrib="bi",fsize=5,dy=19>({a-1/2, c0/2, e/2  }) \bar 
+   (* meas. 93 *)  \noteFormat<dx=-6>( _/2)
+ \bar 
+   (* meas. 94 *)  \noteFormat<dx=-2>( _/4)
+ \stemsUp \beamsOff \ten( {e-1/4, a/4, c0/4  })
+ \bar 
+   (* meas. 95 *)  \stacc<dy=-16.5,dx=10>( _/4)
+ \stemsUp \beamsOff  \ten<dy=-1.9>( {c-1/8, e/8, a/8  }) 
+ \accent<dx=-6.5,dy=-21>(_/8) \bar 
+   (* meas. 96 *)  \stemsDown \beamsOff { \slurBegin:1<curve="down",dy=2,dx=3> b&/2 
+,  \slurBegin:2<curve="up",dy2=2,dy=-5> e&0/2 
+,\slurBegin:3<curve="up",dy=-2> g/2  } \bar 
+   (* meas. 97 *)  \stemsDown \beamsOff {\slurBegin:4<curve="down",dy=1,dx=3>b-1/2 
+,\slurEnd:1  \slurBegin:5<curve="up",dy=-2,dx=1> e 0/2 
+,\slurEnd:2 \slurBegin:6<curve="up",dy=-1,dx=1> g/2 \slurEnd:3  } \bar 
+
+
+   (* meas. 98 *)    \stemsDown \beamsOff {\slurBegin:1<curve="down",dy=2,dx=3> b -1/2,\slurEnd:4 \slurBegin:2<curve="up",dy2=2,dy=-5> \acc( e&0/2)
+, \slurEnd:5 \slurBegin:3<curve="up",dy=-2> g/2\slurEnd:6  } \bar 
+   (* meas. 99 *) \stemsDown \beamsOff {\slurBegin:4<curve="down",dy=1,dx=3>b-1/2 
+,\slurEnd:1  \slurBegin:5<curve="up",dy=-2,dx=1> e 0/2 
+,\slurEnd:2 \slurBegin:6<curve="up",dy=-1,dx=1> g/2 \slurEnd:3  } \bar 
+   (* meas. 100 *) \stemsDown \beamsOff {\slurBegin:1<curve="down",dy=2,dx=3> b -1/2,\slurEnd:4 \slurBegin:2<curve="up",dy2=1,dy=-3> e0/2 
+, \slurEnd:5 \slurBegin:3<curve="up",dy=-2> g/2\slurEnd:6  } \bar 
+   (* meas. 101 *) \stemsDown \beamsOff {\slurBegin:4<curve="down",dy=1,dx=3>b-1/2 
+,\slurEnd:1  \slurBegin:5<curve="up",dy=-2,dx=1> e 0/2 
+,\slurEnd:2 \slurBegin:6<curve="up",dy=-1,dx=1> g/2 \slurEnd:3  } \bar 
+   (* meas. 102 *)  \stemsDown \beamsOff {\slurBegin:1<curve="down",dy=2,dx=3> b -1/2,\slurEnd:4 \slurBegin:2<curve="up",dy2=2,dy=-5> \acc( e&0/2)
+, \slurEnd:5 \slurBegin:3<curve="up",dy=-2> g/2\slurEnd:6  }\bar 
+   (* meas. 103 *) \stemsDown \beamsOff {\slurBegin:4<curve="down",dy=1,dx=3>b-1/2 
+,\slurEnd:1  \slurBegin:5<curve="up",dy=-2,dx=1> e 0/2 
+,\slurEnd:2 \slurBegin:6<curve="up",dy=-1,dx=1> g/2 \slurEnd:3  }  \bar 
+
+
+   (* meas. 104 *)  \stemsDown \beamsOff {\acc( b -1/8)
+, \acc(e0/8), \pedalOn<dy=-4>\acc( g#/8)
+  } _/8 _/4 \bar 
+   (* meas. 105 *)  \noteFormat<dx=-4>( _/4)
+ _/8 \stemsDown \beamsOff {b-1/8, e0/8, \acc( g#/8)
+  } \bar 
+   (* meas. 106 *)  \noteFormat<dx=-4>( _/4)
+ _/8 \stemsDown \beamsOff {b-1/8, e0/8, \acc( g#/8)
+  } \bar 
+   (* meas. 107 *)  \noteFormat<dx=-4>( _/4)
+ _/8 \stemsDown \beamsOff {b-1/8, e0/8, \acc( g#/8)
+  } \pedalOff<dx=-4,dy=-3>\bar 
+  
+  
+   (* meas. 108 *)  \noteFormat<dx=-14>( _/4)
+ \stemsDown \beamsOff {b-1/8, e0/8 ,f } \restFormat<dx=4>(_/8)  \bar 
+   (* meas. 109 *)  \noteFormat<dx=-2>( _/8)
+ \stemsDown \beamsOff {b-1/8, e0/8, \acc( \fing<"2",dy=5>(f#/8))
+  } _/8 \stemsDown \beamsOff {b-1/8, e0/8, \acc( \fing<"1",dy=5>(g/8))
+  } \bar 
+   (* meas. 110 *)  \stemsDown \beamsOff {b-1/8, e0/8, \acc( \fing<"1",dy=5>(g#/8))
+  } _/8 _/8 \stemsDown \beamsOff {b-1/16, e0/16  } _/16 \bar 
+   (* meas. 111 *)  \noteFormat<dx=-2>( _/4)
+ \stemsDown \beamsOff {b-1/8, e0/8, \acc( f#/8)
+  } _/8 \bar 
+   (* meas. 112 *)  \noteFormat<dx=-4>( _/8)
+ \stemsDown \beamsOff {b-1/8, e0/8, \acc( g/8)
+  } _/8   \stemsDown \beamsOff {b-1/8, e0/8, \acc( g#/8)
+  }   \bar 
+   (* meas. 113 *)  \noteFormat<dx=-14>( _/4)
+ \stemsDown \beamsOff {c/4, d/4, g/4  } \bar 
+   (* meas. 114 *)  \stemsDown \beamsOff {c/4, \acc( e&/4)
+, g/4  } _/8 \stemsDown \beamsOff {c/8, \acc( e/8)
+, g/8  } \bar 
+   (* meas. 115 *)  \noteFormat<dx=-4>( _/8)
+ \stemsDown \beamsOff {c/8, f/8, g/8  } _/8 \stemsDown \beamsOff {c/8, \acc( f#/8)
+, g/8  } \bar 
+   (* meas. 116 *)  \noteFormat<dx=-2>( _/2)
+ \bar 
+   (* meas. 117 *)  \noteFormat<dx=-2>( _/2)
+ \bar 
+ 
+ 
+ 
+ 
+   (* meas. 118 *)  \slurBegin:3<curve="up",dy=-2> \stemsUp \beamBegin:1 \beamBegin:2 \text<"sopra",fattrib="bi",dx=-2>(c/16) \stemsUp d/16 \beamEnd:2 \beamEnd:1 \stemsDown \beamsOff \pedalOn  {\slurBegin:6<curve="down",dy=2,dx=3> \acc( e&/4.)
+, \slurBegin:5<curve="up",dy=-3> g/4., \slurBegin:4<curve="up",dy=-4>\acc( b&/4.)
+  }   \bar 
+   (* meas. 119 *)  \stemsDown \beamsOff {e /8,\slurEnd:6 g/8, \slurEnd:5 b /8 \slurEnd:4  }\slurEnd:3 _/8 \pedalOff<dx=-7> \pedalOn\stemsDown \beamsOff {\acc( a&/4)
+, c1/4, \acc( e&/4)
+  } \clef<"g2">\bar 
+   (* meas. 120 *)   \noteFormat<dx=-2>( _/8)
+ \stemsUp \beamsOff {\acc( c#/4.)
+, \pedalOff<dx=-6,dy=-3>\pedalOn<dy=-3,dx=-2>\acc( g#/4.)
+  } \bar 
+   (* meas. 121 *)  _/4 \pedalOff<dy=-3,dx=0>  \restFormat<dx=-4>(_/8) \pedalOn<dy=-3, dx=-2>  \beamBegin:1{\slurBegin:6<curve="down",dy2=-2,dx=1.5,dy=4>f#/8, \slurBegin:5<curve="down",dy2=-3,dy=5>a#,\slurBegin:4<curve="up",dy=-4>c#2 }   \bar 
+   (* meas. 122 *)  {f 1/8,\slurEnd:6a ,\slurEnd:5 c 2\slurEnd:4 }\beamEnd:1 \pedalOff<dy=-3,dx=0> _/8\pedalOn<dy=-3, dx=-2> \stemsDown{b1/4,d#2,f#2 }\bar 
+   (* meas. 123 *)  \noteFormat<dx=-2>( _/4)\pedalOff<dy=-1,dx=0> 
+ _/8 \stemsDown  \beamsOff\beamBegin:1 {\slurBegin:5<curve="down",dx=1,dy=2>e2/8, \slurBegin:2<curve="up",dy2=3,dy=-6,dx=-0>\acc( g#/8)
+, \slurBegin:1<curve="up",dy=-2>b/8  } \bar 
+   (* meas. 124 *)  \stemsDown \beamsOff {e2/8,\slurEnd:5 g/8 
+,\slurEnd:2 b/8 \slurEnd:1  }\beamEnd:1  \stemsDown \beamsOff \noteFormat<dx=3>( {\acc( f#/4)
+, a#/4, \acc( c#3/4)
+  }  ) \stemsDown \beamsOff {\acc(g#2/8), b/8, \acc( d#3/8)
+  } \bar 
+   (* meas. 125 *)  \noteFormat<dx=-2>( _/8)
+ \stemsDown \beamsOff {a2/4, c3/4, e/4  } _/8 \bar 
+ 
+ 
+ 
+   (* meas. 126 *)    
+ _/8 \stemsUp \beamsOff { f2/4,  b/4
+,  d3/4 ,f/4 } \beamsOff\beamBegin:1 
+
+{\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar  
+   (* meas. 127 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 128 *) \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 129 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 130 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 131 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 132 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 133 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 134 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1   { f2/4,  b/4
+,  d3/4 ,f/4 }  \beamBegin:1 {\slurBegin:5<curve="down" ,dy=2>f2/8, \slurBegin:2<curve="up", dy=-3,dx=-0> b/8
+, \slurBegin:1<curve="up",dy=-2>d3/8, \slurBegin:4<curve="up",dy=-2>f/8 } \bar 
+   (* meas. 135 *)  \stemsUp \beamsOff {f2/8,\slurEnd:5 b/8 
+,\slurEnd:2 d3/8, \slurEnd:1 f/8\slurEnd:4 }\beamEnd:1  \stemsDown {    b2/4
+,  d3/4 ,f/4 }  \beamBegin:1 { d3/8,  f/8 } \bar 
+   (* meas. 136 *)  _/4 {\slurBegin:5<curve="down" ,dy=2> b2/4,  \slurBegin:4<curve="up",dy=-2>d3/4 }  \bar 
+   (* meas. 137 *)  \stemsDown \beamsOff {b2/8,\slurEnd:5 d3/8 \slurEnd:4 }   \stemsUp \beamBegin:1 f2/8\slurBegin:1<curve="down" ,dy2=44> \stemsUp \beamBegin:2 \fing<"4",dy=4,dx=-1>(g/16) \stemsUp a/16 \stemsUp b/16 \stemsUp \pedalOff<dy=-3>  c3/16 
+ \beamEnd:2 \beamEnd:1 \bar 
+ 
+ 
+   (* meas. 138 *)  \stemsUp \beamBegin:1 {a0/8, e1/8, \acc( f#/8)
+, a/8  } \pedalOn<dx=-10,dy=-4> \slurEnd:1\stemsUp   {b0/8, e1/8, f#/8, a/8  } 
+ \beamEnd:1 _/8 \stemsUp \beamsOff {b0/8, e1/8, f#/8, a/8  } \bar 
+   (* meas. 139 *)  
+  \stemsUp \beamBegin:1 {b0/8, e1/8, \acc( f#/8)
+, a/8  } \stemsUp {b0/8, e1/8, f#/8, a/8  } \stemsUp {b0/8, e1/8, f#/8, a/8  } \beamEnd:1 _/8 \bar 
+   (* meas. 140 *)  \stemsUp \beamBegin:1 {b0/8, e1/8, \acc( f#/8)
+, a/8  } \stemsUp {b0/8, e1/8, f#/8, a/8  } \beamEnd:1 _/8 \stemsUp \beamsOff {b0/8, e1/8, f#/8, a/8  }   \bar 
+   (* meas. 141 *)  \noteFormat<dx=-2>( _/8)\pedalOff<dx=-12,dy=-4>
+  \stemsUp \beamBegin:1 {\acc( b&0/8)
+, e1/8, \acc(f/8), \acc( g#/8)
+  } \pedalOn<dx=-10,dy=-4>\stemsUp {b&0/8, e1/8, f/8, g#/8  } \pedalOff<dx=0,dy=-4>\stemsUp {b&0/8, \acc( d#1/8)
+, f/8, g#/8  } \beamEnd:1   \bar 
+   (* meas. 142 *)  \stemsUp \beamBegin:1 {\acc( b0/8)
+, e1/8, \acc( f#/8)
+, a/8  } \pedalOn<dx=-11,dy=-4>\stemsUp {b0/8, e1/8, f#/8, a/8  } \beamEnd:1 _/8 \stemsUp \beamsOff {b0/8, e1/8, f#/8, a/8  } \bar 
+   (* meas. 143 *)  \noteFormat<dx=-2>( _/8)
+ \stemsUp \beamsOff {b0/8, e1/8, \acc( f#/8)
+, a/8  } _/8 \stemsUp \beamsOff {b0/8, e1/8, f#/8, a/8  } \bar 
+   (* meas. 144 *)  \noteFormat<dx=-2>( _/8)
+ \stemsUp \beamsOff {b0/8, e1/8, \acc( f#/8)
+, a/8  } \pedalOff<dy=-4> _/8  \beamBegin:1 {c1/8, g1/8, \acc( f /8)
+, b&/8  } \pedalOn<dx=-10,dy=-4>   \bar 
+   (* meas. 145 *)   {c1/8, g1/8,   f /8 
+, b&/8  } {c1/8, g1/8,   f /8 
+, b&/8  }\beamEnd:1 \pedalOff<dy=-4,dx=-6> _/8 \pedalOn<dx=-4,dy=-4> \beamBegin:1  {\slurBegin:1<curve="down",dy2=-2,dy=2,dx=1>c#1/8, \slurBegin:3<curve="up",dy2=2,dy=-3,dx=-4>g#1/8,   \slurBegin:2<curve="up",dy2=2,dy=-4,dx=-0>f#/8 
+, \slurBegin:4<curve="up",dy2=2,dy=-3>\acc(b/8)  }\bar 
+   (* meas. 146 *)  {c 1/8,\slurEnd:1 g 1/8,\slurEnd:3   f /8 
+,\slurEnd:2  b/8 \slurEnd:4  } \beamEnd:1 {c#1/4, g#1/4,   f#/4 
+,  b/4  }\beamBegin:1 {\slurBegin:1<curve="down", dy=2,dx=1>c#1/8, \slurBegin:3<curve="up", dy=-3,dx=-4>g#1/8,   \slurBegin:2<curve="up", dy=-4,dx=-0>f#/8 
+, \slurBegin:4<curve="up", dy=-3> b/8   } \bar 
+   (* meas. 147 *) {c 1/8,\slurEnd:1 g 1/8,\slurEnd:3   f /8 
+,\slurEnd:2  b/8 \slurEnd:4  } \beamEnd:1 {c#1/4, g#1/4,   f#/4 
+,  b/4  }\beamBegin:1 {\slurBegin:1<curve="down",dy2=-2,dy=2,dx=1>c#1/8, \slurBegin:3<curve="up",dy2=2,dy=-3,dx=-4>g#1/8,   \slurBegin:2<curve="up",dy2=2,dy=-4,dx=-0>f#/8 
+, \slurBegin:4<curve="up",dy2=2,dy=-3> b/8   }  \bar 
+   (* meas. 148 *)  {c 1/8,\slurEnd:1 g 1/8,\slurEnd:3   f /8 
+,\slurEnd:2  b/8 \slurEnd:4  } \beamEnd:1 {c#1/4, g#1/4,   f#/4 
+,  b/4  }\beamBegin:1 {\slurBegin:1<curve="down",dy2=-2,dy=2,dx=1>c#1/8, \slurBegin:3<curve="up",dy2=2,dy=-3,dx=-4>g#1/8,   \slurBegin:2<curve="up",dy2=2,dy=-4,dx=-0>f#/8 
+, \slurBegin:4<curve="up",dy2=2,dy=-3> b/8   } \bar 
+   (* meas. 149 *)  {c 1/8,\slurEnd:1 g 1/8,\slurEnd:3   f /8 
+,\slurEnd:2  b/8 \slurEnd:4  } \beamEnd:1 {c#1/4, g#1/4,   f#/4 
+,  b/4  }\beamBegin:1 {\slurBegin:1<curve="down",dy2=-2,dy=2,dx=1>c#1/8, \slurBegin:3<curve="up",dy2=2,dy=-3,dx=-4>g#1/8,   \slurBegin:2<curve="up",dy2=2,dy=-4,dx=-0>f#/8 
+, \slurBegin:4<curve="up",dy2=2,dy=-3> b/8   } \bar 
+   (* meas. 150 *) {c 1/8,\slurEnd:1 g 1/8,\slurEnd:3   f /8 
+,\slurEnd:2  b/8 \slurEnd:4  } \beamEnd:1 \beamBegin:1{c#1/8, g#1/8,   f#/8 
+,  b/8  } { c#1/8,  g#1/8,    f#/8 
+,  b/8   }{ c#1/8,  g#1/8,    f#/8 
+,  b/8   } \beamEnd:1\pedalOff<dy=-4,dx=-6>\bar 
+
+
+
+   (* meas. 151 *)  \stemsUp \beamsOff {  c#/8 
+, e#/8, \acc( g#/8)
+, b/8  } _/8 _/4 \bar 
+   (* meas. 152 *)  \noteFormat<dx=-12>( _/8)\pedalOn<dy=-2>
+ \stemsDown \beamBegin:1 {d2/8, \acc( f#/8)
+, a/8  } \stemsDown {d/8, f#/8, a/8  } \stemsDown {d/8, f#/8, a/8  } \beamEnd:1 \pedalOff<dy=-2,dx=-8>\bar 
+   (* meas. 153 *)  \stemsDown \beamBegin:1\pedalOn<dy=-2> {c#/8, f#/8, \acc( g#/8)
+, b/8  } \stemsDown {c#/8, f#/8, g#/8, b/8  } \beamEnd:1 \slurBegin:2<curve="down",dy2=21,dy=18 >\stemsDown \beamBegin:1 \beamBegin:2 f3/16 \stemsDown e/16 \stemsDown d/16 \stemsDown c/16 \beamEnd:2 \beamEnd:1 \pedalOff<dy=-2,dx=-8> \bar 
+   (* meas. 154 *)  \pedalOn<dy=-2>\noteFormat<dx=-2>( _/8)\slurEnd:2
+ \stemsDown \beamBegin:1 {d2/8, \acc( f#/8)
+, a/8  } \stemsDown {d/8, f#/8, a/8  } \stemsDown {d/8, f#/8, a/8  } \beamEnd:1 \pedalOff<dy=-2,dx=-8>\bar 
+   (* meas. 155 *)  \stemsDown \beamBegin:1\pedalOn<dy=-2> {c#/8, f#/8, \acc( g#/8)
+, b/8  } \stemsDown {c#/8, f#/8, g#/8, b/8  } \beamEnd:1 _/4 \pedalOff<dy=-2,dx=-8>\bar 
+   (* meas. 156 *)  \noteFormat<dx=-2>( _/8)
+ \stemsDown \beamBegin:1 \stacc( {d/8, \acc( f#/8)
+, a/8  })
+ \stemsDown \stacc( {d/8, f#/8, a/8  })
+ \stemsDown \stacc( {d/8, e/8, \acc( g#/8)
+  })
+ \beamEnd:1 \bar 
+   (* meas. 157 *)  _/4 _/8 \beamBegin:1\stacc( {\fing<"3",dy=-10>(f#),\fing<"5",dy=-11>(d)} \bar 
+   (* meas. 158 *)  \stemsDown \beamsOff {d/8, \acc( f#/8)
+  }
+ \stemsDown \beamsOff {\acc( g#/8)
+, b/8  } )\beamEnd:1_/4 \bar 
+   (* meas. 159 *)  \noteFormat<dx=-2>( _/8)
+ \stemsDown \beamBegin:1 \stacc( {\acc( \fing<"1",dy=-8.1>(f#/8))
+, \fing<"3",dy=-13>(a/8 ) })
+ \stemsDown \stacc( {f#/8, a/8  }
+ \stemsDown {e/8, \acc( g#/8)
+, a/8  } )\beamEnd:1 \bar 
+   (* meas. 160 *)  _/4 _/8 \beamBegin:1 \stacc( {\fing<"1",dy=-7.5>(d),\fing<"3",dy=-11.9>(f#),\fing<"5",dy=-16.5>(a)} \bar 
+   (* meas. 161 *)  \stemsDown \beamsOff {d/8, \acc( f#/8)
+, a/8  })
+ \stemsDown \beamsOff \stacc( {\acc( c#/8)
+, \acc( g#/8)
+, a/8  })\beamEnd:1
+ _/4 \bar 
+   (* meas. 162 *)  \stemsUp \beamBegin:1 \stacc( {\acc( \fing<"3",dy=-6>(f#1/8))
+, \fing<"1",dy=-5>(a/8 ) })
+ \stemsUp \stacc( {e/8, \acc( g#/8)
+, a/8  })
+ \beamEnd:1 _/4 \bar 
+   (* meas. 163 *)  \noteFormat<dx=-2>( _/8)
+ \stemsUp \beamBegin:1 \stacc( {d/8, \acc( f#/8)
+, a/8  })
+ \stemsUp \stacc( {d/8, f#/8, a/8  })
+ \stemsUp \stacc( {\acc( c#/8)
+, \acc( g#/8)
+, a/8  })
+ \beamEnd:1 \bar 
+   (* meas. 164 *)  _/4 _/8\clef<"f4"> \stemsDown {\fing<"1",dy=-7>(f#0/8),   \fing<"3",dy=-12>(a/8)}  \bar 
+   
+   
+   
+   (* meas. 165 *)  \stemsDown \beamsOff \stacc( {e0/8, \acc( g#/8)
+, a/8  }) _/8 _/8  \beamBegin:1 \stacc({\fing<"1",dy=-9>(f#0/8),   \fing<"3",dy=-14>(a/8)})
+ \bar 
+   (* meas. 166 *)  \stemsDown \beamsOff \stacc( {\acc( c#/8)
+, \acc( g#/8)
+, a/8  })\beamEnd:1 _/8 _/4
+ \bar 
+   (* meas. 167 *)  \stemsDown \beamBegin:1 \stacc( {\acc( f#/8)
+, a/8  })
+ \stemsDown {\acc( g#/8)
+, a/8  } \beamEnd:1 _/4 \bar 
+   (* meas. 168 *)  _/2 \bar 
+   (* meas. 169 *)  \noteFormat<dx=-14>( _/8)
+ \stemsDown \beamsOff \stacc( \acc( \fing<"1",dy=-11>(c#1/8))
+)
+ \stemsDown \beamBegin:1 \beamBegin:2\slurBegin:2<curve="up",dy=-2> \acc( \fing<"1",dy=-11>(c/16))
+ \stemsDown \acc( b&0/16)
+ \stemsDown \acc( g#/16)
+ \stemsDown \acc( g/16)
+ \beamEnd:2 \beamEnd:1 \slurEnd:2\bar 
+   (* meas. 170 *)  \stemsUp \beamsOff \stacc({d-1/8, d0/8  }) _/8 _/4 ]
+ , 
+[ \staff<2> \key<0> \set<autoHideTiedAccidentals="on"> \staffFormat<dy=-15> \barFormat<style= "system", range="2"> 
+   (* meas. 1 *)  empty/2  
+   (* meas. 2 *)  empty/2   
+   (* meas. 3 *)  empty/2  
+   (* meas. 4 *)  empty/2  
+   (* meas. 5 *)  empty/2  
+   (* meas. 6 *)  empty/2  
+   (* meas. 7 *)  empty/2  
+   (* meas. 8 *)  empty/2  
+   (* meas. 9 *)  empty/2 
+   (* meas. 10 *)  empty/2  
+   (* meas. 11 *)  empty/2  
+   (* meas. 12 *)  empty/2  
+   (* meas. 13 *)  empty/2  
+   (* meas. 14 *)  empty/2  
+   (* meas. 15 *)  empty/2 
+   (* meas. 16 *)  empty/2  
+   (* meas. 17 *)  empty/2  
+   (* meas. 18 *)  empty/2 
+   (* meas. 19 *)  empty/2  
+   (* meas. 20 *)  empty/2  
+   (* meas. 21 *)  empty/2  
+   (* meas. 22 *)  empty/2  
+   (* meas. 23 *)  empty/2  
+   (* meas. 24 *)  empty/2  
+   (* meas. 25 *)  empty/2  
+   (* meas. 26 *)  empty/2  
+   (* meas. 27 *)  empty/2  
+   (* meas. 28 *)  empty/2   
+   (* meas. 29 *)  empty/2 
+   (* meas. 30 *)  empty/2  
+   (* meas. 31 *)  empty/2  
+   (* meas. 32 *)  empty/2  
+   (* meas. 33 *)  empty/2  
+   (* meas. 34 *)  empty/2 
+   (* meas. 35 *)  empty/2  
+   (* meas. 36 *)  empty/2 
+   (* meas. 37 *)  empty/2  
+   (* meas. 38 *)  empty/2 
+   (* meas. 39 *)  empty/2   
+   (* meas. 40 *)  empty/2  
+   (* meas. 41 *)  empty/2 
+   (* meas. 42 *)  empty/2  
+   (* meas. 43 *)  empty/2 
+   (* meas. 44 *)  empty/2 
+   (* meas. 45 *)  empty/2 
+   (* meas. 46 *)  empty/2  
+   (* meas. 47 *)  empty/2  
+   (* meas. 48 *)  empty/2  
+   (* meas. 49 *)  empty/2 
+   (* meas. 50 *)  empty/2  
+   (* meas. 51 *)  empty/2 
+   (* meas. 52 *)  empty/2 
+   (* meas. 53 *) empty/2 
+   (* meas. 54 *)  empty/2  
+   (* meas. 55 *)  empty/2 
+   (* meas. 56 *)  empty/2  
+   (* meas. 57 *)  empty/2  
+   (* meas. 58 *)  \stemsDown \beamsOff \acc( \noteFormat<dx=0>( b&-1/2)
+)
+  
+   (* meas. 59 *)  \stemsDown \beamsOff \acc( b&/2)
+ 
+   (* meas. 60 *)  \stemsDown \beamsOff \acc( b&/4)
+  \stemsDown \beamsOff \noteFormat<dx=0>( b&/4)
+ 
+   (* meas. 61 *)  \stemsDown \beamsOff \acc( b&/4)
+  \stemsDown \beamsOff \noteFormat<dx=0>( b&/4)
+ 
+   (* meas. 62 *)  \stemsDown \beamsOff \acc( b&/4)
+ \stemsDown \beamsOff b&/4  
+   (* meas. 63 *)  \stemsDown \beamsOff \acc( b&/4)
+ \stemsDown \beamsOff b&/4  
+   (* meas. 64 *)  \stemsDown \beamsOff \acc( b&/4)
+ \stemsDown \beamsOff b&/4  
+   (* meas. 65 *)  \stemsDown \beamsOff \acc( b&/4)
+ \stemsDown \beamsOff b&/4  
+   (* meas. 66 *)  \stemsDown \beamsOff \acc( b&/4)
+ \stemsDown \beamsOff b&/4  
+   (* meas. 67 *)  \stemsDown \beamsOff \acc( b&/4)
+ \stemsDown \beamsOff \acc( \accent<dy=-17>(b/4))
+ 
+   (* meas. 68 *)  \stemsDown \beamsOff b/4 \stemsDown \beamsOff b/4  
+   (* meas. 69 *)  \stemsDown \beamsOff b/4 \stemsDown \beamsOff b/4  
+   (* meas. 70 *)  \stemsDown \beamsOff b/4 \stemsDown \beamsOff b/4  
+   (* meas. 71 *)  \stemsDown \beamsOff b/4 \stemsDown \beamsOff b/4   
+   (* meas. 72 *)  \stemsDown \beamsOff b/4 \stemsDown \beamsOff b/4  
+   (* meas. 73 *)  \stemsDown \beamsOff \fing<"3",dy=-7.5>(\fing<"5",dy=-10.5>(c#0/4)) \stemsDown \beamsOff c#/4 
+   (* meas. 74 *)  \stemsDown \beamsOff \acc( c#/4)
+ \stemsDown \beamsOff c#/4 
+   (* meas. 75 *)  \stemsDown \beamsOff \acc( c#/4)
+ \stemsDown \beamsOff c#/4  
+   (* meas. 76 *)  \stemsDown \beamsOff \fing<"3",dy=-7.5>(\fing<"5",dy=-10.5>(d/4)) \stemsDown \beamsOff \fing<"2",dy=-7.5>(\acc( \fing<"5",dy=-10.5>(d#/4)))
+ 
+   (* meas. 77 *)  \stemsDown \beamsOff \fing<"1",dy=-7.5>(\fing<"5",dy=-10.5>(e/4)) empty/8 \stemsDown \beamsOff \slurBegin<curve="down",dy=6,dx=1> e/8  
+   (* meas. 78 *)  \stemsDown \beamsOff e/4 \slurEnd _/8 \stemsDown \beamsOff\slurBegin<curve="down",dy=6,dx=1> e/8  
+   (* meas. 79 *)  \stemsDown \beamsOff e/4 \slurEnd _/8 \stemsDown \beamsOff\slurBegin<curve="down",dy=6,dx=1> e/8  
+   (* meas. 80 *)  \stemsDown \beamsOff e/8 \slurEnd _/8 \stemsDown \beamsOff\slurBegin<curve="down",dy=6,dx=1> e/4  
+   (* meas. 81 *)  empty/2  
+   (* meas. 82 *)  empty/2  
+   (* meas. 83 *)  empty/2   
+   (* meas. 84 *)  empty/2
+   (* meas. 85 *)  empty/2  
+   (* meas. 86 *)  empty/2  
+   (* meas. 87 *)  empty/2  
+   (* meas. 88 *)  empty/2  
+   (* meas. 89 *)  empty/2
+   (* meas. 90 *)  empty/2 
+   (* meas. 91 *)  empty/2 
+   (* meas. 92 *)  empty/2  
+   (* meas. 93 *)  empty/2  
+   (* meas. 94 *)  empty/2  
+   (* meas. 95 *)  empty/2  
+   (* meas. 96 *)  empty/2  
+   (* meas. 97 *)  empty/2  
+   (* meas. 98 *)  empty/2   
+   (* meas. 99 *)  empty/2  
+   (* meas. 100 *)  empty/2  
+   (* meas. 101 *)  empty/2  
+   (* meas. 102 *)  empty/2  
+   (* meas. 103 *)  empty/2 
+   (* meas. 104 *)  empty/2   
+   (* meas. 105 *)  empty/2  
+   (* meas. 106 *)  empty/2  
+   (* meas. 107 *)  empty/2  
+   (* meas. 108 *)  empty/2  
+   (* meas. 109 *)  empty/2  
+   (* meas. 110 *)  empty/2 
+   (* meas. 111 *)  empty/2  
+   (* meas. 112 *)  empty/1  
+   (* meas. 113 *)  empty/2  
+   (* meas. 114 *)  empty/2 
+   (* meas. 115 *)  empty/2  
+   (* meas. 116 *)  empty/2  
+   (* meas. 117 *)  empty/2 
+   (* meas. 118 *)  empty/2 
+   (* meas. 119 *)  empty/2  
+   (* meas. 120 *)  empty/2  
+   (* meas. 121 *)  empty/2  
+   (* meas. 122 *)  empty/2  
+   (* meas. 123 *)  empty/2
+   (* meas. 124 *)  empty/2
+   (* meas. 125 *)  empty/2 
+   (* meas. 126 *)  empty/2  
+   (* meas. 127 *)  empty/2 
+   (* meas. 128 *)  empty/2  
+   (* meas. 129 *)  empty/2  
+   (* meas. 130 *)  empty/2  
+   (* meas. 131 *)  empty/2  
+   (* meas. 132 *)  empty/2  
+   (* meas. 133 *)  empty/2  
+   (* meas. 134 *)  empty/2  
+   (* meas. 135 *)  empty/2 
+   (* meas. 136 *)  empty/8 
+   (* meas. 137 *)    \stemsDown \beamsOff {b1/4, d2/4, f/4  } \pedalOn<dx=-22,dy=-3> 
+   (* meas. 138 *)  empty/2  
+   (* meas. 139 *)  empty/2
+   (* meas. 140 *) empty/2
+   (* meas. 141 *)  empty/2
+   (* meas. 142 *)  empty/2  
+   (* meas. 143 *)  empty/2   
+   (* meas. 144 *)  empty/2   
+   (* meas. 145 *)  empty/2  
+   (* meas. 146 *)  empty/2  
+   (* meas. 147 *)  empty/2  
+   (* meas. 148 *)  empty/2  
+   (* meas. 149 *)  empty/2  
+   (* meas. 150 *)  empty/2   
+   (* meas. 151 *)  empty/2  
+   (* meas. 152 *)  empty/2  
+   (* meas. 153 *)  empty/2  
+   (* meas. 154 *)  empty/2 
+   (* meas. 155 *)  empty/2   
+   (* meas. 156 *)  empty/2   
+   (* meas. 157 *)  empty/2  
+   (* meas. 158 *)  empty/2
+   (* meas. 159 *)  empty/2  
+   (* meas. 160 *)  empty/2   
+   (* meas. 161 *) empty/2
+   (* meas. 162 *)  empty/2   
+   (* meas. 163 *)  empty/2  
+   (* meas. 164 *)  empty/2  
+   (* meas. 165 *)  empty/4  
+   (* meas. 166 *)  empty/4  
+   (* meas. 167 *)  empty/2  
+   (* meas. 168 *)  empty/2  
+   (* meas. 169 *)  empty/2  
+   (* meas. 170 *)  empty/2 ]
+  }

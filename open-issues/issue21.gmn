@@ -1,18 +1,18 @@
 {
     [ 
-     \key<0> \meter<"2/4">  \clef<"f4"> 
-	_  \clef<"g2"> 
-	%\space<35pt> 
+	\clef<"g2"> \meter<"2/4"> _  
+	\space<35pt> 
 	\stemsUp 
-	{  g&1/8 , b&1 , d&3 , e&1 , c#} \bar
+	{  g&1/8 , b&1 , d&3 , e&1 , c#} 
 %	{  g&1/1 , b&1 , d&3 , e&1 , c#} \bar
 %	\space<1cm> 
    	{ g&1/4 , b& , d&2 }
    	{ g1 , c#2 , d#1, c# } 
-	\bar 
- %	\space<0.8cm> 
+	 
+% 	\space<0.8cm> 
    	{  c#2 , e#1 }
- %	\space<1.6cm> 
+% 	\space<1.6cm> 
   	{  c#1 , d#, e,f#, g&, a#, c2  }
 ]
+,[ \meter<"2/4"> a a a a a a]
 }

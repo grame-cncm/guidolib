@@ -1,0 +1,86 @@
+(*
+	Issue #167
+	Alterations on chords collide with previous score elements
+*)
+
+{[ 
+   (* meas. 1 *)  \clef<"g2"> \key<0> \meter<"2/4"> 
+   \stemsUp \beamBegin:1 {d1/8, f1/8  }
+  {\acc( d#1/8), \acc( f#1/8)}
+  {e1/8, g1/8  }
+  {\acc( e&1/8), \acc( g&1/8)}
+ \beamEnd:1  \bar<measNum=3> 
+   (* meas. 3 *)  \beamBegin:1 {\acc( c1/8), \acc( e&1/8)}
+  {b0/8, d1/8  }
+  {\acc( b&0/8), \acc( d&1/8) }
+ \stacc<position="below">( {a0/8, c1/8  })
+ \beamEnd:1 \bar<measNum=4> 
+   (* meas. 4 *)  \clef<"f4"> \stemsDown \beamBegin:1  {\acc( a&0/8), \acc( b0/8)}
+  {g0/8, \acc( b&0/8)}
+ {\acc( g&0/8), \acc( a0/8) }
+  {f0/8, \acc( a&0/8) }
+ \beamEnd:1 \bar<measNum=5> 
+   (* meas. 5 *)  \beamBegin:1 {e0/8, g0/8  }
+ 	{\acc( e&0/8), \acc( g&0/8) }
+  {d0/8, f0/8  }
+  {\acc( d#0/8), \acc( f#0/8)}
+ \beamEnd:1 \bar<measNum=6> 
+   (* meas. 6 *)  \clef<"g2"> \stemsUp \beamBegin:1 
+   {\acc( d#1/8), \acc( f#1/8)}
+  {\acc( d#1/8), \acc( f#1/8)}
+  {e1/8, g1/8  }
+ {\acc( e&1/8), \acc( g&1/8) }
+ \beamEnd:1 \bar<measNum=7> 
+   (* meas. 7 *)  \beamBegin:1 {d1/8, f1/8  }
+  {\acc( e&1/8), \acc( g&1/8)}
+  {d1/8, f1/8  }
+  {\acc( c#1/8), \acc( e1/8)}
+ \beamEnd:1 \bar<measNum=8> 
+   (* meas. 8 *)  \beamBegin:1 {\acc( c1/8), \acc( e&1/8)}
+  {b0/8, d1/8  }
+  {\acc( b&0/8), \acc( d&1/8)}
+  {a0/8, c1/8  }
+ \beamEnd:1 \bar<measNum=9> 
+   (* meas. 9 *)  \clef<"f4"> \stemsDown \beamBegin:1 
+   {\acc( a&0/8), \acc( b0/8)}
+  {g0/8, \acc( b&0/8)}
+  {\acc( g&0/8), \acc( a0/8)}
+ {f0/8, \acc( a&0/8)}
+ \beamEnd:1 \bar<measNum=10> 
+   (* meas. 10 *)  \beamBegin:1  {e0/8, g0/8  }
+ 	{\acc( e&0/8), \acc( g&0/8)}
+   {d0/8, f0/8  }
+   {\acc( d#0/8), \acc( f#0/8) }
+ \beamEnd:1 \bar<measNum=11> 
+   (* meas. 11 *)  \clef<"g2"> \stemsUp \beamBegin:1 
+   {d1/8, f1/8  }
+  {\acc( d#1/8), \acc( f#1/8)}
+  {e1/8, g1/8  }
+ {\acc( e&1/8), \acc( g&1/8)}
+ \beamEnd:1 \bar<measNum=12> 
+   (* meas. 12 *)  \beamBegin:1  {d1/8, f1/8  }
+    {\acc( e&1/8), \acc( g&1/8) }
+ 	{d1/8, f1/8  }
+ 	{\acc( c#1/8), \acc( e1/8)}
+ \beamEnd:1 \bar<measNum=13> 
+   (* meas. 13 *)  \beamBegin:1 \stacc<position="below">( {\acc( c1/8), \acc( e&1/8)})
+ \stacc<position="below">( {b0/8, d1/8  })
+ \stacc<position="below">( {\acc( b&0/8), \acc( d&1/8)})
+ \stacc<position="below">( {a0/8, c1/8  })
+ \beamEnd:1 \bar<measNum=14> 
+   (* meas. 14 *)  \clef<"f4"> \stemsDown \beamBegin:1 \stacc<position="above">( {\acc( a&0/8), \acc( b0/8)})
+ \stacc<position="above">( {g0/8, \acc( b&0/8)})
+ \stacc<position="above">( {\acc( g&0/8), \acc( a0/8)})
+ \stacc<position="above">( {f0/8, \acc( a&0/8)})
+ \beamEnd:1 \bar<measNum=15> 
+   (* meas. 15 *)  \beamBegin:1 \stacc<position="above">( {e0/8, g0/8  })
+ \stacc<position="above">( {\acc( e&0/8), \acc( g&0/8)})
+ \stacc<position="above">( {d0/8, f0/8  })
+ \stacc<position="above">( {\acc( d#0/8), \acc( f#0/8)})
+ \beamEnd:1 \bar<measNum=16> 
+   (* meas. 16 *)  \stemsUp \beamBegin:1  {\acc( d0/8), \acc( f0/8)}
+ \stacc<position="below">( g-1/8)
+ \beamEnd:1 \beamBegin:1  {\acc( d&0/8), f0/8  }
+  g-1/8
+ \beamEnd:1 ]
+  }
