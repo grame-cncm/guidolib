@@ -192,7 +192,7 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 			int n = staves->size();
 			for( int i = staves->GetMinimum(); i <= staves->GetMaximum(); ++i) {
 				const GRStaff* tmp = staves->Get(i);
-				float bottom = tmp->getPosition().y + tmp->getDredgeSize();
+				float bottom = tmp ? (tmp->getPosition().y + tmp->getDredgeSize()) : 0;
 				if (bottom > y) y = bottom;
 			}
 		}
