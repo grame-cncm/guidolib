@@ -32,10 +32,14 @@ class TagParameterString;
 @tagend
 
 @params:
-@param:style:string:a style string in the form n-lines:5-lines:true
+@param:style:string:a style string in the form n-lines or 'TAB':5-lines:true
 @param:lineThickness:float:the staff lines thickness:0.08:true
 @param:distance:unit:sets a fixed distance to the preceding staff:0hs:true
 @paramdesc
+The "TAB" style is intended to display tablatures, it is similar to
+- style="6-lines"
+- size = 1.35
+
 Note: the **\staffFormat** tag supports common parameters but dx has no effect.
 
 See the [Layout](@EXAMPLES/layout/) example.
