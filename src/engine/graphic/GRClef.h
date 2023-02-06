@@ -52,6 +52,7 @@ public:
 	virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
 protected:
+	void DrawTAB( VGDevice & hdc ) const;
 
 	TYPE_PITCH 		mClefBasePitch;
 	TYPE_REGISTER 	mClefBaseOctave;
