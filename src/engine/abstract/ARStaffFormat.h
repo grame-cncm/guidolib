@@ -63,13 +63,15 @@ class ARStaffFormat : public ARMTParameter
 
 //				const TagParameterString *	getStyle() const;
 				const TagParameterFloat *	getStaffDistance() const;
-				float getLineThickness() const		{ return fLineThickness; }
+				float getLineThickness() const	{ return fLineThickness; }
 				int   getLinesCount() const		{ return fLinesCount; }
+				bool  isTAB () const 			{ return fTAB; }
 
 	protected:
 		TagParameterFloat	fSize;
 		float				fLineThickness;
 		int					fLinesCount = 5;
+		bool				fTAB = false;
 };
 
 #endif 
