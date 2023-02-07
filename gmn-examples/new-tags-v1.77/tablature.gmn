@@ -1,0 +1,15 @@
+(*
+	test file for tablatures
+*)
+{
+[
+	\clef<"g"> \meter<"4/4"> \accolade<type="none">
+	_/1 _ _ _
+]
+, 
+[
+	\clef<"TAB"> \meter<"4/4", hidden="on">
+	\staffFormat<style="TAB">
+	empty/1 empty empty c/1
+]
+}
