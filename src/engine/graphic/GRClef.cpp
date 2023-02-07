@@ -281,26 +281,11 @@ void GRClef::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos 
 }
 
 // -----------------------------------------------------------------------------
-void GRClef::DrawTAB(VGDevice & hdc) const
+void GRClef::DrawTAB(VGDevice & hdc, float size, float lspace) const
 {
-	const GRStaff* staff = getGRStaff();
-	float lspace = staff ? staff->getStaffLSPACE() : LSPACE;
-	const TagParameterFloat * p = getARClef()->getSize();
-	
-	float size = p ? p->getValue() : 1;
 	const int fontSize = (int)(1.8 * lspace * size);
 	const VGFont* font = FontManager::FindOrCreateFont( fontSize, "Helvetica");
-
-	const float octX = mPosition.x + mOctaveOffset.x;
-	const float octY = mPosition.y +  mOctaveOffset.y;
-
-
 	hdc.SetTextFont( font );
-	const unsigned char * colref = getColRef();
-	const VGColor prevFontColor = hdc.GetFontColor();
-  	if (colref)
-		hdc.SetFontColor( VGColor( colref ));
-
 	unsigned int savedalign = hdc.GetFontAlign();
 	hdc.SetFontAlign( VGDevice::kAlignBottom | VGDevice::kAlignCenter );
 	float y = mPosition.y - (2 * lspace);
@@ -309,33 +294,41 @@ void GRClef::DrawTAB(VGDevice & hdc) const
 	hdc.DrawString( mPosition.x, y + lspace, "A", 1 );
 	hdc.DrawString( mPosition.x, y + lspace * 2, "B", 1 );
 	hdc.SetFontAlign( savedalign );
-
-  	if (colref)
-		hdc.SetFontColor( prevFontColor);
 }
 
 // -----------------------------------------------------------------------------
 void GRClef::OnDraw(VGDevice & hdc) const
 {
 	if (getError() || !mDraw || !mShow) return;
+
+	const unsigned char * colref = getColRef();
+	const VGColor prevFontColor = hdc.GetFontColor();
+  	if (colref)
+		hdc.SetFontColor( VGColor( colref ));
+
+	const ARClef* arclef = getARClef();
+	const TagParameterFloat * p = arclef->getSize();
+	float size = p ? p->getValue() : 1;
+	const GRStaff* staff = getGRStaff();
+	float lspace = staff ? staff->getStaffLSPACE() : LSPACE;
 	
-	if (getARClef()->getClefType() == ARClef::TAB)
-		DrawTAB (hdc);
+	if (arclef->getClefType() == ARClef::TAB)
+		DrawTAB (hdc, size, lspace);
 
 	else {
 		GRTagARNotationElement::OnDraw(hdc);
 		if (mDoubleTreble)
 		{
-			const float xOffset = ((mRightSpace + mLeftSpace) * float(0.5)) - LSPACE * float(0.2);
+			const float xOffset = ((mRightSpace + mLeftSpace) * float(0.5)) - lspace * float(0.2);
 			OnDrawSymbol( hdc, mSymbol, xOffset, 0 );
 		}
 		else if (mOctaveStr) // Draws the octava
 		{
-			const int fontSize = (int)(float(1.5) * LSPACE);
+			const int fontSize = (int)(float(1.5) * lspace * size);
 			const VGFont* fontRef = FontManager::FindOrCreateFont( fontSize, FontManager::kDefaultTextFont.c_str());
 
 			const float octX = mPosition.x + mOctaveOffset.x;
-			const float octY = mPosition.y +  mOctaveOffset.y;
+			const float octY = mPosition.y +  (mOctaveOffset.y * size);
 
 			hdc.SetTextFont( fontRef );
 			unsigned int savedalign = hdc.GetFontAlign();
@@ -344,6 +337,9 @@ void GRClef::OnDraw(VGDevice & hdc) const
 			hdc.SetFontAlign( savedalign );
 		}
 	}
+
+  	if (colref)
+		hdc.SetFontColor( prevFontColor);
 }
 
 const ARClef * GRClef::getARClef() const
