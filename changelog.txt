@@ -4,6 +4,11 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.7.7
 - fix crash bug with repeat begin
+- add new 'hidden' parameter to \meter
+- support for guitar tablatures
+	- add new 'TAB' clef
+	- add new 'TAB' style to \staffFormat
+
 
 ----------------------------------------------------------------
   version 1.7.6
