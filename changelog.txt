@@ -8,7 +8,7 @@ GUIDO Engine history
 - support for guitar tablatures
 	- add new 'TAB' clef
 	- add new 'TAB' style to \staffFormat
-
+	- add new note style for tablatures
 
 ----------------------------------------------------------------
   version 1.7.6
