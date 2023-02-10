@@ -53,6 +53,14 @@ void GuidoParser::noteInit (const char *id)
 }
 
 //--------------------------------------------------------------------------
+void GuidoParser::tabInit (int string, const char *disp)
+{
+	faccidentals = 0;
+	fzaehlerSet = 0;
+	fFactory->createTab(string, disp);
+}
+
+//--------------------------------------------------------------------------
 void GuidoParser::noteAcc (int n)		{ faccidentals += n; }
 void GuidoParser::noteOct (int n)		{ fFactory->setRegister(n); }
 

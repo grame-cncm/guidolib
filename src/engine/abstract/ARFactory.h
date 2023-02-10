@@ -75,6 +75,7 @@ class ARFactory
 	  	virtual void 		initChordNote();
 
 		virtual void 		createEvent( const char * name );
+		virtual void 		createTab( int string, const char * disp );
 		virtual void 		addEvent();
 
 		virtual void 		addSharp();

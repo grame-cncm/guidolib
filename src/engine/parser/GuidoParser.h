@@ -85,6 +85,7 @@ class GuidoParser {
 		virtual bool                get(char& c);  // return the next char in stream or in expanded variable 
 
 		virtual void noteInit		(const char *id);
+		virtual void tabInit		(int string, const char *fret);
 		virtual void noteAcc		(int n);
 		virtual void noteOct		(int n);
 		virtual void noteEnum		(long int n);

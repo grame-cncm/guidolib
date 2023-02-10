@@ -141,6 +141,7 @@ EOL		[\x0a\x0d]
 "cis"|"dis"|"fis"|"gis"|"ais"				yyextra->fText = yytext; return CHROMATIC;
 {NOTE}				yyextra->fText = yytext; return DIATONIC;
 "empty"				yyextra->fText = yytext; return EMPTYT;
+"s"[1-6]			yyextra->fText = yytext; return TAB;
 "_"					return RESTT;
 
 \"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;

@@ -97,6 +97,7 @@
 #include "ARStaffOn.h"
 #include "ARSymbol.h"
 #include "ARSystemFormat.h"
+#include "ARTab.h"
 #include "ARTDummy.h"
 #include "ARTempo.h"
 #include "ARTenuto.h"
@@ -397,6 +398,15 @@ void ARFactory::createEvent( const char * name )
 		if (mCurrentTrill && !note->isEmptyNote()) note->setOrnament(mCurrentTrill, false);
 	}
 	assert(mCurrentEvent);
+	mLastEvent = NULL;
+}
+
+void ARFactory::createTab( int string, const char * disp )
+{
+	ARTab* tab = new ARTab(string, disp);
+	mCurrentEvent = tab;
+	tab->setOctava (0);
+	tab->setDuration (TYPE_DURATION(mCurrentNumerator, mCurrentDenominator));
 	mLastEvent = NULL;
 }
 

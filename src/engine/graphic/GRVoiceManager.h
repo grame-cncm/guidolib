@@ -138,6 +138,7 @@ protected:
 	int staffnum;
 
 	GREvent *CreateNote			(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
+	GREvent *CreateTab			(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateEmpty		(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateRest			(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateGraceNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, const TYPE_DURATION & dur);
@@ -177,6 +178,8 @@ private:
 	void			addAssociations (GREvent* ev, bool setnext=true);
 	int				endIteration ();
 	void			checkCluster(GREvent *ev);
+	TYPE_DURATION	findDuration (const ARMusicalVoiceState * state, const ARMusicalEvent* ev) const;
+	void 			doAssociate(GRSingleNote * grnote);
 	
 	std::vector<GRBeam *> fCurbeam;
 	std::vector<GRBeam *> fBeams;
