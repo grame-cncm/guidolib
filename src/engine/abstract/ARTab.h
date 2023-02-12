@@ -17,12 +17,16 @@
 class ARTab : public ARNote
 {
 	public:
-				 ARTab( int string, const char* disp) :
-					ARNote( "tab", 0, 0, 1, 4, 100 ),
-					fString(string), fDisplay(disp) {}
+				 ARTab( int string, const char* disp) : ARNote( "tab", 0, 0, 1, 4, 100 ),
+					fString(string), fDisplay(disp) {
+						setPitch (string2pitch (string));
+						setOctave(string2octave(string));
+					}
+				 ARTab( const ARTab* tab, bool istied) : ARNote( *tab, istied ),
+					fString(tab->getString()), fDisplay(tab->getDisplay()) {}
 		virtual ~ARTab() {}
 
-		virtual ARNote*	Clone (bool istied = false )	{ ARNote* tab = new ARTab(fString, fDisplay.c_str()); (*tab) = this; return tab; }
+		virtual ARNote*	Clone (bool istied = false )	{ return new ARTab(this, istied); }
 
 		virtual const char*	getTagName() const		{ return "ARTab"; };
 		virtual std::string getGMNName() const		{
@@ -35,6 +39,21 @@ class ARTab : public ARNote
 		std::string getDisplay() const	{ return fDisplay; }
 	
 	private:
+		int string2pitch (int string) {
+			switch (string) {
+				case 1 : return NOTE_A;
+				case 2 : return NOTE_F;
+				case 3 : return NOTE_D;
+				case 4 : return NOTE_H;
+				case 5 : return NOTE_G;
+				case 6 : return NOTE_E;
+			}
+			return NOTE_E;
+		}
+		int string2octave (int string) {
+			if (string > 2) return 1;
+			return 2;
+		}
 		int		   fString;
 		std::string fDisplay;
 };
