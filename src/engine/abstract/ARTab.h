@@ -22,6 +22,8 @@ class ARTab : public ARNote
 					fString(string), fDisplay(disp) {}
 		virtual ~ARTab() {}
 
+		virtual ARNote*	Clone (bool istied = false )	{ ARNote* tab = new ARTab(fString, fDisplay.c_str()); (*tab) = this; return tab; }
+
 		virtual const char*	getTagName() const		{ return "ARTab"; };
 		virtual std::string getGMNName() const		{
 			std::stringstream sstr; sstr << "s" << fString << '"' << fDisplay << '"' << '*' << getDuration(); return sstr.str(); }
