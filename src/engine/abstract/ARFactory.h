@@ -176,6 +176,10 @@ protected:
 	ARAuto::position 	mHarmonyPos;
 	float				mFingeringSize;
 
+private:
+	int					mChordNotesCount;
+
+
     NVstring mFilePath;
 };
 

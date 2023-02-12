@@ -333,7 +333,7 @@ void ARFactory::createChord()
             }
         }
     }
-    
+    mChordNotesCount = 0;
     mCurrentChordTag = mCurrentVoice->BeginChord();
 }
 // ----------------------------------------------------------------------------
@@ -361,7 +361,7 @@ void ARFactory::addChord()
     if (mCurrentTrill)			mCurrentVoice->finishTrilledChord();
     else if (mCurrentCluster)	mCurrentVoice->setClusterChord(mCurrentCluster);
 
-	mCurrentVoice->FinishChord ();
+	mCurrentVoice->FinishChord (mChordNotesCount > 0);
     mCurrentChordTag = NULL;
 }
 
@@ -399,6 +399,7 @@ void ARFactory::createEvent( const char * name )
 	}
 	assert(mCurrentEvent);
 	mLastEvent = NULL;
+	mChordNotesCount++;
 }
 
 void ARFactory::createTab( int string, const char * disp )
