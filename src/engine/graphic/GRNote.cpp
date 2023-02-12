@@ -19,7 +19,6 @@
 #include "GRStaff.h"
 #include "GRTrill.h"
 #include "GRCluster.h"
-#include "GRGlobalStem.h"
 
 using namespace std;
 
