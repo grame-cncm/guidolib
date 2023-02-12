@@ -99,6 +99,7 @@ class GRSingleNote : public GRNote
 	    virtual bool	getStemDirSet() const  		{ return mStemDirSet; }
 		virtual bool	getStemLengthSet() const	{ return mStemLengthSet; }
 		virtual bool	userLength() const			{ return fUserLength; }
+		virtual bool	isTab() const				{ return false; }
 
 		// -
 		virtual const TYPE_DURATION & getDurTemplate() const { return mDurTemplate; }

@@ -33,6 +33,8 @@ class GRTab : public GRSingleNote
 	virtual void 	drawStemOnly( int flag ) {}
 	virtual void 	setStemDirection( GDirection dir )				{};
 	virtual float 	setStemLength( float inLen, bool userLength )	{};
+	virtual ARTHead::HEADSTATE adjustHeadPosition(ARTHead::HEADSTATE sugHeadState = ARTHead::NORMAL) { return ARTHead::NORMAL; }
+	virtual bool	isTab() const				{ return true; }
 
 	private:
 		std::string fDisplay;

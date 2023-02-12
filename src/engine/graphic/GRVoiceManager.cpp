@@ -599,7 +599,9 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 				else {
 					// careful, what happens to dispDur !!!!
 					if (fVoiceState->fCurdispdur != NULL && fVoiceState->fCurdispdur->getDisplayDuration() > DURATION_0) {
-                        if (static_cast<ARNote *>(o->isARNote()))
+						if (o->isARTab())
+							ev = CreateTab(timepos,o);
+						else if (o->isARNote())
                             ev = CreateNote(timepos,o);
                         else if (static_cast<ARRest *>(o->isARRest()))
                             ev = CreateRest(timepos,o);
