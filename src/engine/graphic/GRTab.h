@@ -25,16 +25,18 @@ class GRTab : public GRSingleNote
 	  			 GRTab (GRStaff * inStaff, const ARTab * tab, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration );
 	virtual 	~GRTab () {}
 
-	const ARTab * getARTab() const;
+		const ARTab * getARTab() const;
 
-	virtual void 	OnDraw( VGDevice & hdc ) const;
+		virtual void 	OnDraw( VGDevice & hdc ) const;
 
-	virtual void 	recalcVerticalPosition() {}
-	virtual void 	drawStemOnly( int flag ) {}
-	virtual void 	setStemDirection( GDirection dir )				{};
-	virtual float 	setStemLength( float inLen, bool userLength )	{};
-	virtual ARTHead::HEADSTATE adjustHeadPosition(ARTHead::HEADSTATE sugHeadState = ARTHead::NORMAL) { return ARTHead::NORMAL; }
-	virtual bool	isTab() const				{ return true; }
+		virtual void 	recalcVerticalPosition() {}
+		virtual void 	drawStemOnly( int flag ) {}
+		virtual void 	setStemDirection( GDirection dir )				{};
+		virtual float	setStemLength( float inLen, bool userLength)	{ return 0.f; }
+		virtual GRGlobalStem * getGlobalStem() const 					{ return  nullptr; }
+		virtual ARTHead::HEADSTATE adjustHeadPosition(ARTHead::HEADSTATE sugHeadState = ARTHead::NORMAL) { return ARTHead::NORMAL; }
+		virtual bool	isTab() const				{ return true; }
+		virtual int		getNumFaehnchen() const		{ return 0; }
 
 	private:
 		std::string fDisplay;
