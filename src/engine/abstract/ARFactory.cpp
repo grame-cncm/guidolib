@@ -514,22 +514,6 @@ void ARFactory::addEvent()
     else
         mCurrentVoice->AddTail( mCurrentEvent );
  
-    // In the "toadd" list are all musical objects (Ties, Fermatas, ...) stored which
-    // must be definitly stored AFTER the event.
-    // otherwise an update of the graphical position is very hard todo
-    // The position of the last note is needed before 
-    // the calculation of the  position can be done
-    // ATTENTION: This  is not true anymore! Ties and slurs are now
-    // handled totally differently. Only for fermatas this solution
-    // maybe needed now (I believe).
-
-    /*	while (!mToAddList.empty())
-    {
-    // old
-    // mCurrentVoice->AddTailNoDuration(mToAddList.RemoveHead());
-    mCurrentVoice->AddTail(mToAddList.RemoveHead());
-    }*/
-
     mLastEvent = mCurrentEvent;
     mCurrentEvent = 0;
 }

@@ -2131,32 +2131,30 @@ void ARMusicalVoice::doAutoBarlines()
 			curmeterlen = curmeter->getMeterDuration();
 			disableAutoBar = (curmeterlen.getNumerator() == 0) || (curmeter->getAutoBarlines() == 0);
 			measuretime = DURATION_0;
-//			lookahead = false; // even lookahead-mode is discarded ...
 		}
 
-		ARMusicalObject * o = GetAt(pos);
-		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
-        const ARBar   *bar   = static_cast<const ARBar *>(o->isARBar());
+		ARMusicalObject * obj = GetAt(pos);
+		ARMusicalEvent * ev = ARMusicalEvent::cast(obj);
+        const ARBar   *bar   = static_cast<const ARBar *>(obj->isARBar());
 
 		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
         TYPE_TIMEPOSITION currentDate;
-        if (o) {
-			currentDate = o->getRelativeTimePosition();
-			if (o->isARRepeatBegin())
+        if (obj) {
+			currentDate = obj->getRelativeTimePosition();
+			if (obj->isARRepeatBegin())
 				foundbarline = isRepeatBar = true;
 		}
-        ARKey *key = static_cast<ARKey *>(o->isARKey());
-        if( key ) {
+        if( obj->isARKey() ) {
 			previousKey = pos;
 			lastkeyp = currentDate;
 		}
 
 		if (lookahead) {
-			// we are in lookahead-mode, that is, we have found a measureend already ...
+			// we are in lookahead-mode, that is, we have found a measure end already ...
 			// we need to track explicit bars until we have an event with duration>0
-            ARNewPage   *page = static_cast<ARNewPage *>(o->isARNewPage());
-			ARNewSystem *sys  = static_cast<ARNewSystem *>(o->isARNewSystem());
+            ARNewPage   *page = static_cast<ARNewPage *>(obj->isARNewPage());
+			ARNewSystem *sys  = static_cast<ARNewSystem *>(obj->isARNewSystem());
 
 			if (bar || isRepeatBar)
 				foundbarline = true;
@@ -2167,8 +2165,7 @@ void ARMusicalVoice::doAutoBarlines()
 				}
 			}
 			else {
-				bool insertbefore = o->isARTempo() || o->isARGrace() || o->isARCoda() || o->isARSegno() || o->isARNote();
-				bool insertbar = insertbefore || (ev && (ev->getDuration() > DURATION_0));
+				bool insertbar = obj->isARTempo() || obj->isARGrace() || obj->isARCoda() || obj->isARSegno() || obj->isARNote() || (ev && (ev->getDuration() > DURATION_0));
 				if (insertbar) {
 					// now, we are at the end of the lookahead ...
 					if (!foundbarline) {
@@ -2269,7 +2266,7 @@ void ARMusicalVoice::doAutoBarlines()
 
 					// now we create a new event, that is a copy of ev and has a new duration ...
 					ARNote* note = ev->isARNote();
-					ARMusicalEvent *ev2 = note ? new ARNote (*note, true) : static_cast<ARMusicalEvent *>(ev->Copy());
+					ARMusicalEvent *ev2 = note ? note->Clone(true) : static_cast<ARMusicalEvent *>(ev->Copy());
 					if (ev2) {
 						ev2->setRelativeTimePosition( lastbartp );
 						ev2->setDuration( olddur - newdur );
@@ -2296,11 +2293,6 @@ void ARMusicalVoice::doAutoBarlines()
 						artie->setIsAuto(true);
 						artie->setRelativeTimePosition(ev->getRelativeTimePosition());
 						artie->setPosition(pos);
-//						if (existingTie) {
-//							TagParameterList *tpl = existingTie->getTagParameterList();
-//							artie->setTagParameterList(*tpl);
-//							delete tpl;
-//						}
 
 						ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);
 						arde->setID(artie->getID());
@@ -5287,11 +5279,8 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur)
     dispdum->setAssociation(ARMusicalTag::LA);
     dispdur->setCorrespondence(dispdum);
 
-    ARShareStem     *shrstem = 0;
-    ARDummyRangeEnd *shrdum  = 0;
-
-	shrstem = new ARShareStem();
-	shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+	ARShareStem     *shrstem = new ARShareStem();
+	ARDummyRangeEnd *shrdum = new ARDummyRangeEnd(SHARESTEMEND);
 	shrstem->setIsAuto(true);
 	shrstem->setPosition(group->startpos);
 	shrstem->setAssociation(ARMusicalTag::RA);
