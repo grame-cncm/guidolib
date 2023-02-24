@@ -2279,7 +2279,8 @@ void ARMusicalVoice::doAutoBarlines()
 					// tie repositioning works ...
 					GuidoPos newptagpos = NULL;
 					ARNote *nt = ev2->isARNote();
-					if (!nt || !nt->isEmptyNote()) {
+//					if (!nt || !nt->isEmptyNote() || !nt->isARTab()) {
+					if (nt && !nt->isEmptyNote() && !nt->isARTab()) {
 						// new: just insert a tie anyways ....
 						if (mPosTagList == NULL) {
 							mPosTagList = createPositionTagList();
@@ -2832,7 +2833,7 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 
 		if (ARMusicalEvent::cast(obj) && obj->getDuration() == DURATION_0) {
             ARNote * nt = obj->isARNote();
-			if (nt && nt->isEmptyNote()) {
+			if (nt && (nt->isEmptyNote() || nt->isARTab())) {
 			}
 			else {
 				// then we must add a tieBegin or end
@@ -3501,7 +3502,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					GuidoPos newptagpos = NULL;
                     ARNote * n2 = ev2->isARNote();
 					// now look, if there are any ties and merge-tags ..
-					if (tiecount == 0 && n2 && !(n2->getName() == ARNoteName::empty) )
+					if (tiecount == 0 && n2 && !(n2->getName() == ARNoteName::empty) && !(n2->isARTab()) )
 					{
 						if (mPosTagList == NULL)
 						{
@@ -4116,7 +4117,7 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 
         ARNote * n2 = ev2->isARNote();
 		// now look, if there are any ties and merge-tags ..
-		if (tiemergecount==0 && n2 && !(n2->getName() == ARNoteName::empty))
+		if (tiemergecount==0 && n2 && !(n2->getName() == ARNoteName::empty) && !n2->isARTab())
 		{
 			if (mPosTagList == NULL) {
 				mPosTagList = createPositionTagList();

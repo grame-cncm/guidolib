@@ -22,9 +22,13 @@ GRTab::GRTab( GRStaff * staff, const ARTab * tab, const TYPE_TIMEPOSITION & date
 {
 	float lspace = staff->getStaffLSPACE();
 	int pos = tab->getString() - 1;
-	mSize = lspace; // * 1.1f;
+	mSize = lspace * 1.1f;
 	mPosition.y = lspace * pos + mSize / 3;
-	fDisplay = tab->getDisplay();
+	if (tab->isTied()) {
+		string p("(");
+		fDisplay = p + tab->getDisplay() + ")";
+	}
+	else fDisplay = tab->getDisplay();
 }
 
 
