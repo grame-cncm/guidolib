@@ -23,10 +23,11 @@ class ARTab : public ARNote
 						setOctave(string2octave(string));
 					}
 				 ARTab( const ARTab* tab, bool istied) : ARNote( *tab, istied ),
-					fString(tab->getString()), fDisplay(tab->getDisplay()) {}
+					fString(tab->getString()), fDisplay(tab->getDisplay()), fTied(istied) {}
 		virtual ~ARTab() {}
 
-		virtual ARNote*	Clone (bool istied = false )	{ return new ARTab(this, istied); }
+		virtual ARNote*	Clone (bool istied = false ) const	{ return new ARTab(this, istied); }
+		virtual ARMusicalObject * Copy() const 				{ return new ARTab(this, true); }
 
 		virtual const char*	getTagName() const		{ return "ARTab"; };
 		virtual std::string getGMNName() const		{
@@ -37,6 +38,7 @@ class ARTab : public ARNote
 		
 		int 		getString() const	{ return fString; }
 		std::string getDisplay() const	{ return fDisplay; }
+		bool 		isTied() const		{ return fTied; }
 	
 	private:
 		int string2pitch (int string) {
@@ -56,4 +58,5 @@ class ARTab : public ARNote
 		}
 		int		   fString;
 		std::string fDisplay;
+		bool		fTied = false;
 };
