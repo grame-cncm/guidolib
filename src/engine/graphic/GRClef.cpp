@@ -283,12 +283,12 @@ void GRClef::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos 
 // -----------------------------------------------------------------------------
 void GRClef::DrawTAB(VGDevice & hdc, float size, float lspace) const
 {
-	const int fontSize = (int)(1.8 * lspace * size);
+	const int fontSize = (int)(1.5 * lspace * size);
 	const VGFont* font = FontManager::FindOrCreateFont( fontSize, "Helvetica");
 	hdc.SetTextFont( font );
 	unsigned int savedalign = hdc.GetFontAlign();
-	hdc.SetFontAlign( VGDevice::kAlignBottom | VGDevice::kAlignCenter );
-	float y = mPosition.y - (2 * lspace);
+	hdc.SetFontAlign( VGDevice::kAlignBase | VGDevice::kAlignCenter );
+	float y = mPosition.y - (2.5 * lspace);
 	lspace *= 1.5 * size;
 	hdc.DrawString( mPosition.x, y, "T", 1 );
 	hdc.DrawString( mPosition.x, y + lspace, "A", 1 );
