@@ -64,7 +64,7 @@ ARNote::ARNote(const ARNote & arnote, bool istied)
 	(*this) = &arnote;
 }
 
-ARNote * ARNote::Clone(bool istied)	{ return new ARNote (*this, istied); }
+ARNote * ARNote::Clone(bool istied) const	{ return new ARNote (*this, istied); }
 
 ARNote::~ARNote()
 {

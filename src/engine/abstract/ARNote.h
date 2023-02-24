@@ -38,7 +38,7 @@ class ARNote : public ARMusicalEvent
 
 		virtual void operator=(const ARNote* note);
 
-		virtual ARNote*	Clone(bool istied = false );
+		virtual ARNote*	Clone(bool istied = false ) const;
 		virtual int		CompareNameOctavePitch( const ARNote & nt );
 		virtual void	setDuration( const TYPE_DURATION & newdur );
 		virtual bool	CanBeMerged( const ARMusicalEvent * ev2 );
