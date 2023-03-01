@@ -37,6 +37,7 @@ class GRTab : public GRSingleNote
 		virtual ARTHead::HEADSTATE adjustHeadPosition(ARTHead::HEADSTATE sugHeadState = ARTHead::NORMAL) { return ARTHead::NORMAL; }
 		virtual bool	isTab() const				{ return true; }
 		virtual int		getNumFaehnchen() const		{ return 0; }
+		virtual void 	updateBoundingBox();
 
 	private:
 		std::string fDisplay;

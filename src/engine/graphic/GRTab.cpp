@@ -12,6 +12,7 @@
 #include "GRArticulation.h"
 #include "GRTab.h"
 #include "GRStaff.h"
+#include "GUIDOInternal.h"
 #include "VGDevice.h"
 #include "VGFont.h"
 
@@ -24,11 +25,17 @@ GRTab::GRTab( GRStaff * staff, const ARTab * tab, const TYPE_TIMEPOSITION & date
 	int pos = tab->getString() - 1;
 	mSize = lspace * 1.1f;
 	mPosition.y = lspace * pos + mSize / 3;
+	float size = mSize / 2;
+	mBoundingBox.top = -mSize * 0.85;
+	mBoundingBox.bottom = mBoundingBox.top + mSize;
+	mBoundingBox.left = -size;
+	mBoundingBox.right = size;
 	if (tab->isTied()) {
 		string p("(");
 		fDisplay = p + tab->getDisplay() + ")";
 	}
 	else fDisplay = tab->getDisplay();
+	mNoteBreite = mSize;
 }
 
 
@@ -37,7 +44,7 @@ void GRTab::OnDraw( VGDevice & hdc ) const
 {
 	const GRStaff* staff = getGRStaff();
 	float y = staff->getPosition().y + mPosition.y;
-//	cerr << "GRTab::OnDraw " << this << " pos: " << getPosition() << endl;
+//cerr << "GRTab::OnDraw " << this << " pos: " << getPosition() << " bb " << getBoundingBox() << endl;
 	const VGFont* font = FontManager::FindOrCreateFont( mSize, "Helvetica");
 	hdc.SetTextFont( font );
 	hdc.SetFontAlign( VGDevice::kAlignBase );
@@ -53,7 +60,23 @@ void GRTab::OnDraw( VGDevice & hdc ) const
 	for (auto elt: getArticulations()) {
 		elt->OnDraw(hdc);
 	}
+
+	if (gBoundingBoxesMap & kEventsBB) 	DrawBoundingBox(hdc, kEventBBColor);
 }
 
 //---------------------------------------------------------
 const ARTab * GRTab::getARTab() const 	{ return static_cast<const ARTab*>(getAbstractRepresentation()); }
+
+
+//____________________________________________________________________________________
+void GRTab::updateBoundingBox()
+{
+//	mBoundingBox -= getOffset();
+//
+//	float scale = getSize();
+	mMapping.left 	= mPosition.x + mBoundingBox.left;
+	mMapping.right 	= mPosition.x + mBoundingBox.right;
+	mMapping.top 	= mPosition.y + mBoundingBox.top;
+	mMapping.bottom = mPosition.y + mBoundingBox.bottom;
+	mMapping += getOffset();
+}
