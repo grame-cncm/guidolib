@@ -83,8 +83,12 @@ void GRSlur::automaticCurveDirection( GRBowingContext * context, const ARBowing 
 float GRSlur::getEltOffset (const GRNotationElement* el ) const
 {
 	const GRSingleNote* note = el->isSingleNote();
-	if (note)
-		return note->getNoteHead()->getOffset().x;
+	if (note) {
+		if (note->isTab())
+			return 0;
+		else
+			return note->getNoteHead()->getOffset().x;
+	}
 	return 0;
 }
 
