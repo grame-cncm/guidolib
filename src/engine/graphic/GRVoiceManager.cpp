@@ -2020,7 +2020,7 @@ void GRVoiceManager::addAssociations(GREvent* ev, bool setnext)
 		if (el)		el->addAssociation(ev);
 		if (fCurrentTrill && (el == fCurrentTrill)) addedToTrill = true;
 	}
-	if (setnext && fCurrentTrill && !addedToTrill)
+	if (setnext && fCurrentTrill && !addedToTrill && !ev->isEmpty())
 		setTrillNext (ev);
 }
 
@@ -2036,7 +2036,9 @@ GREvent * GRVoiceManager::CreateEmpty( const TYPE_TIMEPOSITION & tp, ARMusicalOb
 	// the associations have to be handled just the same...
 	addAssociations (grempty, false);
 	mCurGrStaff->addNotationElement(grempty);
-	fMusic->addVoiceElement(arVoice,grempty);		
+	fMusic->addVoiceElement(arVoice,grempty);
+	if (fCurrentTrill && !grempty->isAuto())
+		setTrillNext (grempty);
 	lastev = grempty;
 	return grempty;
 }
