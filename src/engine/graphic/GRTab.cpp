@@ -23,19 +23,19 @@ GRTab::GRTab( GRStaff * staff, const ARTab * tab, const TYPE_TIMEPOSITION & date
 {
 	float lspace = staff->getStaffLSPACE();
 	int pos = tab->getString() - 1;
-	mSize = lspace * 1.1f;
-	mPosition.y = lspace * pos + mSize / 3;
-	float size = mSize / 2;
-	mBoundingBox.top = -mSize * 0.85;
-	mBoundingBox.bottom = mBoundingBox.top + mSize;
-	mBoundingBox.left = -size;
-	mBoundingBox.right = size;
+	fSize = lspace * 1.1f;
+	mPosition.y = lspace * pos + fSize / 3;
+	float offset = fSize / 2;
+	mBoundingBox.top = -offset * 0.85;
+	mBoundingBox.bottom = mBoundingBox.top + fSize;
+	mBoundingBox.left = -offset;
+	mBoundingBox.right = offset;
 	if (tab->isTied()) {
 		string p("(");
 		fDisplay = p + tab->getDisplay() + ")";
 	}
 	else fDisplay = tab->getDisplay();
-	mNoteBreite = mSize;
+	mNoteBreite = fSize;
 }
 
 
@@ -44,8 +44,7 @@ void GRTab::OnDraw( VGDevice & hdc ) const
 {
 	const GRStaff* staff = getGRStaff();
 	float y = staff->getPosition().y + mPosition.y;
-//cerr << "GRTab::OnDraw " << this << " pos: " << getPosition() << " bb " << getBoundingBox() << endl;
-	const VGFont* font = FontManager::FindOrCreateFont( mSize, "Helvetica");
+	const VGFont* font = FontManager::FindOrCreateFont( fSize, "Helvetica");
 	hdc.SetTextFont( font );
 	hdc.SetFontAlign( VGDevice::kAlignBase );
 	VGColor	back = hdc.GetFontBackgroundColor();

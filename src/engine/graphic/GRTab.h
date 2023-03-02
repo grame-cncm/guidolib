@@ -41,6 +41,7 @@ class GRTab : public GRSingleNote
 
 	private:
 		std::string fDisplay;
+		float 		fSize;
 };
 
 
