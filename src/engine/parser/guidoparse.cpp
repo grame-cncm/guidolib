@@ -175,58 +175,59 @@ enum yysymbol_kind_t
   YYSYMBOL_EXTRA = 38,                     /* EXTRA  */
   YYSYMBOL_ENDVAR = 39,                    /* ENDVAR  */
   YYSYMBOL_VARNAME = 40,                   /* VARNAME  */
-  YYSYMBOL_YYACCEPT = 41,                  /* $accept  */
-  YYSYMBOL_gmn = 42,                       /* gmn  */
-  YYSYMBOL_score = 43,                     /* score  */
-  YYSYMBOL_44_1 = 44,                      /* $@1  */
-  YYSYMBOL_45_2 = 45,                      /* $@2  */
-  YYSYMBOL_46_3 = 46,                      /* $@3  */
-  YYSYMBOL_voicelist = 47,                 /* voicelist  */
-  YYSYMBOL_voice = 48,                     /* voice  */
-  YYSYMBOL_49_4 = 49,                      /* $@4  */
-  YYSYMBOL_symbols = 50,                   /* symbols  */
-  YYSYMBOL_variables = 51,                 /* variables  */
-  YYSYMBOL_vardecl = 52,                   /* vardecl  */
-  YYSYMBOL_varname = 53,                   /* varname  */
-  YYSYMBOL_tag = 54,                       /* tag  */
-  YYSYMBOL_positiontag = 55,               /* positiontag  */
-  YYSYMBOL_rangetag = 56,                  /* rangetag  */
-  YYSYMBOL_57_5 = 57,                      /* $@5  */
-  YYSYMBOL_tagname = 58,                   /* tagname  */
-  YYSYMBOL_tagid = 59,                     /* tagid  */
-  YYSYMBOL_tagarg = 60,                    /* tagarg  */
-  YYSYMBOL_tagparam = 61,                  /* tagparam  */
-  YYSYMBOL_tagparams = 62,                 /* tagparams  */
-  YYSYMBOL_chord = 63,                     /* chord  */
-  YYSYMBOL_64_6 = 64,                      /* $@6  */
-  YYSYMBOL_chordsymbols = 65,              /* chordsymbols  */
-  YYSYMBOL_66_7 = 66,                      /* $@7  */
-  YYSYMBOL_67_8 = 67,                      /* $@8  */
-  YYSYMBOL_tagchordsymbol = 68,            /* tagchordsymbol  */
-  YYSYMBOL_chordsymbol = 69,               /* chordsymbol  */
-  YYSYMBOL_rangechordtag = 70,             /* rangechordtag  */
-  YYSYMBOL_71_9 = 71,                      /* $@9  */
-  YYSYMBOL_taglist = 72,                   /* taglist  */
-  YYSYMBOL_music = 73,                     /* music  */
-  YYSYMBOL_rest = 74,                      /* rest  */
-  YYSYMBOL_75_10 = 75,                     /* $@10  */
-  YYSYMBOL_76_11 = 76,                     /* $@11  */
-  YYSYMBOL_note = 77,                      /* note  */
-  YYSYMBOL_noteid = 78,                    /* noteid  */
-  YYSYMBOL_notename = 79,                  /* notename  */
-  YYSYMBOL_tab = 80,                       /* tab  */
-  YYSYMBOL_string = 81,                    /* string  */
-  YYSYMBOL_accidentals = 82,               /* accidentals  */
-  YYSYMBOL_accidental = 83,                /* accidental  */
-  YYSYMBOL_octave = 84,                    /* octave  */
-  YYSYMBOL_duration = 85,                  /* duration  */
-  YYSYMBOL_dots = 86,                      /* dots  */
-  YYSYMBOL_id = 87,                        /* id  */
-  YYSYMBOL_number = 88,                    /* number  */
-  YYSYMBOL_pnumber = 89,                   /* pnumber  */
-  YYSYMBOL_nnumber = 90,                   /* nnumber  */
-  YYSYMBOL_floatn = 91,                    /* floatn  */
-  YYSYMBOL_signednumber = 92               /* signednumber  */
+  YYSYMBOL_FRETTE = 41,                    /* FRETTE  */
+  YYSYMBOL_YYACCEPT = 42,                  /* $accept  */
+  YYSYMBOL_gmn = 43,                       /* gmn  */
+  YYSYMBOL_score = 44,                     /* score  */
+  YYSYMBOL_45_1 = 45,                      /* $@1  */
+  YYSYMBOL_46_2 = 46,                      /* $@2  */
+  YYSYMBOL_47_3 = 47,                      /* $@3  */
+  YYSYMBOL_voicelist = 48,                 /* voicelist  */
+  YYSYMBOL_voice = 49,                     /* voice  */
+  YYSYMBOL_50_4 = 50,                      /* $@4  */
+  YYSYMBOL_symbols = 51,                   /* symbols  */
+  YYSYMBOL_variables = 52,                 /* variables  */
+  YYSYMBOL_vardecl = 53,                   /* vardecl  */
+  YYSYMBOL_varname = 54,                   /* varname  */
+  YYSYMBOL_tag = 55,                       /* tag  */
+  YYSYMBOL_positiontag = 56,               /* positiontag  */
+  YYSYMBOL_rangetag = 57,                  /* rangetag  */
+  YYSYMBOL_58_5 = 58,                      /* $@5  */
+  YYSYMBOL_tagname = 59,                   /* tagname  */
+  YYSYMBOL_tagid = 60,                     /* tagid  */
+  YYSYMBOL_tagarg = 61,                    /* tagarg  */
+  YYSYMBOL_tagparam = 62,                  /* tagparam  */
+  YYSYMBOL_tagparams = 63,                 /* tagparams  */
+  YYSYMBOL_chord = 64,                     /* chord  */
+  YYSYMBOL_65_6 = 65,                      /* $@6  */
+  YYSYMBOL_chordsymbols = 66,              /* chordsymbols  */
+  YYSYMBOL_67_7 = 67,                      /* $@7  */
+  YYSYMBOL_68_8 = 68,                      /* $@8  */
+  YYSYMBOL_tagchordsymbol = 69,            /* tagchordsymbol  */
+  YYSYMBOL_chordsymbol = 70,               /* chordsymbol  */
+  YYSYMBOL_rangechordtag = 71,             /* rangechordtag  */
+  YYSYMBOL_72_9 = 72,                      /* $@9  */
+  YYSYMBOL_taglist = 73,                   /* taglist  */
+  YYSYMBOL_music = 74,                     /* music  */
+  YYSYMBOL_rest = 75,                      /* rest  */
+  YYSYMBOL_76_10 = 76,                     /* $@10  */
+  YYSYMBOL_77_11 = 77,                     /* $@11  */
+  YYSYMBOL_note = 78,                      /* note  */
+  YYSYMBOL_noteid = 79,                    /* noteid  */
+  YYSYMBOL_notename = 80,                  /* notename  */
+  YYSYMBOL_tab = 81,                       /* tab  */
+  YYSYMBOL_string = 82,                    /* string  */
+  YYSYMBOL_accidentals = 83,               /* accidentals  */
+  YYSYMBOL_accidental = 84,                /* accidental  */
+  YYSYMBOL_octave = 85,                    /* octave  */
+  YYSYMBOL_duration = 86,                  /* duration  */
+  YYSYMBOL_dots = 87,                      /* dots  */
+  YYSYMBOL_id = 88,                        /* id  */
+  YYSYMBOL_number = 89,                    /* number  */
+  YYSYMBOL_pnumber = 90,                   /* pnumber  */
+  YYSYMBOL_nnumber = 91,                   /* nnumber  */
+  YYSYMBOL_floatn = 92,                    /* floatn  */
+  YYSYMBOL_signednumber = 93               /* signednumber  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -542,7 +543,7 @@ union yyalloc
 #define YYLAST   139
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  41
+#define YYNTOKENS  42
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  52
 /* YYNRULES -- Number of rules.  */
@@ -551,7 +552,7 @@ union yyalloc
 #define YYNSTATES  146
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   295
+#define YYMAXUTOK   296
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -594,24 +595,24 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40
+      35,    36,    37,    38,    39,    40,    41
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   120,   120,   121,   124,   124,   125,   125,   126,   126,
-     129,   130,   133,   133,   136,   137,   138,   139,   140,   149,
-     150,   153,   154,   155,   158,   163,   164,   167,   168,   171,
-     171,   174,   177,   178,   179,   182,   183,   184,   185,   186,
-     187,   188,   195,   196,   199,   200,   206,   206,   209,   209,
-     210,   210,   213,   214,   215,   216,   219,   220,   223,   223,
-     226,   227,   233,   234,   237,   237,   238,   238,   241,   242,
-     243,   246,   247,   250,   251,   252,   253,   256,   259,   262,
-     263,   266,   267,   270,   271,   274,   275,   276,   277,   278,
-     281,   282,   283,   284,   289,   291,   293,   295,   297,   300,
-     301,   302
+       0,   121,   121,   122,   125,   125,   126,   126,   127,   127,
+     130,   131,   134,   134,   137,   138,   139,   140,   141,   150,
+     151,   154,   155,   156,   159,   164,   165,   168,   169,   172,
+     172,   175,   178,   179,   180,   183,   184,   185,   186,   187,
+     188,   189,   196,   197,   200,   201,   207,   207,   210,   210,
+     211,   211,   214,   215,   216,   217,   220,   221,   224,   224,
+     227,   228,   234,   235,   238,   238,   239,   239,   242,   243,
+     244,   247,   248,   251,   252,   253,   254,   257,   260,   263,
+     264,   267,   268,   271,   272,   275,   276,   277,   278,   279,
+     282,   283,   284,   285,   290,   292,   294,   296,   298,   301,
+     302,   303
 };
 #endif
 
@@ -633,8 +634,8 @@ static const char *const yytname[] =
   "BAR", "TAGNAME", "IDT", "DIATONIC", "CHROMATIC", "SOLFEGE", "EMPTYT",
   "RESTT", "DOT", "DDOT", "TDOT", "SHARPT", "FLATT", "TAB", "MLS", "SEC",
   "UNIT", "MULT", "DIV", "EQUAL", "STRING", "EXTRA", "ENDVAR", "VARNAME",
-  "$accept", "gmn", "score", "$@1", "$@2", "$@3", "voicelist", "voice",
-  "$@4", "symbols", "variables", "vardecl", "varname", "tag",
+  "FRETTE", "$accept", "gmn", "score", "$@1", "$@2", "$@3", "voicelist",
+  "voice", "$@4", "symbols", "variables", "vardecl", "varname", "tag",
   "positiontag", "rangetag", "$@5", "tagname", "tagid", "tagarg",
   "tagparam", "tagparams", "chord", "$@6", "chordsymbols", "$@7", "$@8",
   "tagchordsymbol", "chordsymbol", "rangechordtag", "$@9", "taglist",
@@ -659,7 +660,7 @@ static const yytype_int16 yytoknum[] =
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295
+     295,   296
 };
 #endif
 
@@ -683,7 +684,7 @@ static const yytype_int8 yypact[] =
       27,  -108,    50,    67,  -108,  -108,  -108,  -108,  -108,  -108,
     -108,  -108,  -108,  -108,  -108,  -108,    56,  -108,  -108,  -108,
       55,  -108,    53,    59,  -108,  -108,  -108,  -108,    22,    61,
-      13,    36,  -108,    13,    64,  -108,    76,     5,  -108,  -108,
+      13,    32,  -108,    13,    64,  -108,    76,     5,  -108,  -108,
       22,  -108,    13,  -108,    77,    76,    76,    30,  -108,    26,
      109,    30,    78,  -108,  -108,  -108,  -108,  -108,  -108,  -108,
       16,    57,    62,    66,  -108,    13,    30,    74,     9,  -108,
@@ -768,7 +769,7 @@ static const yytype_int16 yycheck[] =
       31,    15,    37,   120,    35,    40,    40,    34,    35,    58,
       28,    29,    17,    18,    37,    25,    26,    27,     0,     9,
        8,    70,    39,   124,    39,   142,    39,    11,    13,    16,
-      11,   131,    11,    37,     7,    11,   108,    10,   110,     3,
+      11,   131,    11,    41,     7,    11,   108,    10,   110,     3,
        3,     3,   114,   114,    17,    18,    12,    20,    21,    22,
       23,    24,    13,    36,    12,    33,   128,    30,   130,    33,
       14,     6,    83,     6,   117,     7,   116,    40,   110,   141,
@@ -781,37 +782,37 @@ static const yytype_int16 yycheck[] =
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     7,    40,    42,    43,    46,    51,    52,    53,    44,
-      45,     0,     9,    48,    43,    52,    36,     8,    47,    48,
-      49,     3,     4,     5,     6,    37,    88,    89,    90,    91,
-      92,     8,    15,    50,    39,    39,    39,    48,     7,    10,
-      17,    18,    20,    21,    22,    23,    24,    30,    53,    54,
-      55,    56,    58,    59,    63,    73,    74,    77,    78,    79,
-      80,    81,    64,    75,    76,    13,    16,    11,    28,    29,
-      82,    83,    84,    92,    11,    34,    35,    85,    37,    65,
-      66,    85,    11,    57,    88,    19,    37,    53,    60,    61,
-      62,    87,    91,    92,    83,    84,    85,     3,    88,    88,
-      25,    26,    27,    86,     8,    15,    55,    68,    69,    70,
-      72,    73,    86,     3,    50,    12,    15,    36,    33,    33,
-      85,    86,    12,    31,    35,    67,    13,    55,    72,    55,
-      69,    12,    14,    61,    60,    87,    86,    88,    68,    71,
-      55,    72,    85,    68,    86,    14
+       0,     7,    40,    43,    44,    47,    52,    53,    54,    45,
+      46,     0,     9,    49,    44,    53,    36,     8,    48,    49,
+      50,     3,     4,     5,     6,    37,    89,    90,    91,    92,
+      93,     8,    15,    51,    39,    39,    39,    49,     7,    10,
+      17,    18,    20,    21,    22,    23,    24,    30,    54,    55,
+      56,    57,    59,    60,    64,    74,    75,    78,    79,    80,
+      81,    82,    65,    76,    77,    13,    16,    11,    28,    29,
+      83,    84,    85,    93,    11,    34,    35,    86,    41,    66,
+      67,    86,    11,    58,    89,    19,    37,    54,    61,    62,
+      63,    88,    92,    93,    84,    85,    86,     3,    89,    89,
+      25,    26,    27,    87,     8,    15,    56,    69,    70,    71,
+      73,    74,    87,     3,    51,    12,    15,    36,    33,    33,
+      86,    87,    12,    31,    35,    68,    13,    56,    73,    56,
+      70,    12,    14,    62,    61,    88,    87,    89,    69,    72,
+      56,    73,    86,    69,    87,    14
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    41,    42,    42,    44,    43,    45,    43,    46,    43,
-      47,    47,    49,    48,    50,    50,    50,    50,    50,    51,
-      51,    52,    52,    52,    53,    54,    54,    55,    55,    57,
-      56,    58,    59,    59,    59,    60,    60,    60,    60,    60,
-      60,    60,    61,    61,    62,    62,    64,    63,    66,    65,
-      67,    65,    68,    68,    68,    68,    69,    69,    71,    70,
-      72,    72,    73,    73,    75,    74,    76,    74,    77,    77,
-      77,    78,    78,    79,    79,    79,    79,    80,    81,    82,
-      82,    83,    83,    84,    84,    85,    85,    85,    85,    85,
-      86,    86,    86,    86,    87,    88,    89,    90,    91,    92,
-      92,    92
+       0,    42,    43,    43,    45,    44,    46,    44,    47,    44,
+      48,    48,    50,    49,    51,    51,    51,    51,    51,    52,
+      52,    53,    53,    53,    54,    55,    55,    56,    56,    58,
+      57,    59,    60,    60,    60,    61,    61,    61,    61,    61,
+      61,    61,    62,    62,    63,    63,    65,    64,    67,    66,
+      68,    66,    69,    69,    69,    69,    70,    70,    72,    71,
+      73,    73,    74,    74,    76,    75,    77,    75,    78,    78,
+      78,    79,    79,    80,    80,    80,    80,    81,    82,    83,
+      83,    84,    84,    85,    85,    86,    86,    86,    86,    86,
+      87,    87,    87,    87,    88,    89,    90,    91,    92,    93,
+      93,    93
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -1671,441 +1672,441 @@ yyreduce:
   switch (yyn)
     {
   case 4: /* $@1: %empty  */
-#line 124 "guido.y"
+#line 125 "guido.y"
                              { context->segmInit (); }
-#line 1677 "guidoparse.cpp"
+#line 1678 "guidoparse.cpp"
     break;
 
   case 5: /* score: STARTCHORD $@1 ENDCHORD  */
-#line 124 "guido.y"
+#line 125 "guido.y"
                                                                                         { context->segmExit (); }
-#line 1683 "guidoparse.cpp"
+#line 1684 "guidoparse.cpp"
     break;
 
   case 6: /* $@2: %empty  */
-#line 125 "guido.y"
+#line 126 "guido.y"
                                      { context->segmInit (); }
-#line 1689 "guidoparse.cpp"
+#line 1690 "guidoparse.cpp"
     break;
 
   case 7: /* score: STARTCHORD $@2 voicelist ENDCHORD  */
-#line 125 "guido.y"
+#line 126 "guido.y"
                                                                                         { context->segmExit (); }
-#line 1695 "guidoparse.cpp"
+#line 1696 "guidoparse.cpp"
     break;
 
   case 8: /* $@3: %empty  */
-#line 126 "guido.y"
+#line 127 "guido.y"
                           { context->segmInit (); }
-#line 1701 "guidoparse.cpp"
+#line 1702 "guidoparse.cpp"
     break;
 
   case 9: /* score: $@3 voice  */
-#line 126 "guido.y"
+#line 127 "guido.y"
                                                                                                                 { context->segmExit (); }
-#line 1707 "guidoparse.cpp"
+#line 1708 "guidoparse.cpp"
     break;
 
   case 10: /* voicelist: voice  */
-#line 129 "guido.y"
+#line 130 "guido.y"
                                                                                                                         { context->segmAppendSeq (); }
-#line 1713 "guidoparse.cpp"
+#line 1714 "guidoparse.cpp"
     break;
 
   case 11: /* voicelist: voicelist SEP voice  */
-#line 130 "guido.y"
+#line 131 "guido.y"
                                                                                                                 { context->segmAppendSeq (); }
-#line 1719 "guidoparse.cpp"
+#line 1720 "guidoparse.cpp"
     break;
 
   case 12: /* $@4: %empty  */
-#line 133 "guido.y"
+#line 134 "guido.y"
                            { context->seqInit (); }
-#line 1725 "guidoparse.cpp"
+#line 1726 "guidoparse.cpp"
     break;
 
   case 13: /* voice: STARTSEQ $@4 symbols ENDSEQ  */
-#line 133 "guido.y"
+#line 134 "guido.y"
                                                                                 { context->seqExit( ); }
-#line 1731 "guidoparse.cpp"
+#line 1732 "guidoparse.cpp"
     break;
 
   case 15: /* symbols: symbols music  */
-#line 137 "guido.y"
+#line 138 "guido.y"
                                                                                                         { context->appendNote (); }
-#line 1737 "guidoparse.cpp"
+#line 1738 "guidoparse.cpp"
     break;
 
   case 17: /* symbols: symbols chord  */
-#line 139 "guido.y"
+#line 140 "guido.y"
                                                                                                         { context->seqAppendChord (); }
-#line 1743 "guidoparse.cpp"
+#line 1744 "guidoparse.cpp"
     break;
 
   case 18: /* symbols: symbols varname  */
-#line 140 "guido.y"
+#line 141 "guido.y"
                                                                                                         { bool ret = context->variableSymbols ((yyvsp[0].str)->c_str()); 
 															  if (!ret) varerror ((yylsp[0]).last_line, (yylsp[0]).first_column, context, (yyvsp[0].str)->c_str());
 															  delete (yyvsp[0].str);
 															  if (!ret)  YYABORT;
 															}
-#line 1753 "guidoparse.cpp"
+#line 1754 "guidoparse.cpp"
     break;
 
   case 21: /* vardecl: varname EQUAL STRING ENDVAR  */
-#line 153 "guido.y"
+#line 154 "guido.y"
                                                                                 { context->variableDecl ((yyvsp[-3].str)->c_str(), context->fText.c_str(), GuidoParser::kString); delete (yyvsp[-3].str); }
-#line 1759 "guidoparse.cpp"
+#line 1760 "guidoparse.cpp"
     break;
 
   case 22: /* vardecl: varname EQUAL signednumber ENDVAR  */
-#line 154 "guido.y"
+#line 155 "guido.y"
                                                                                         { context->variableDecl ((yyvsp[-3].str)->c_str(), context->fText.c_str(), GuidoParser::kInt); delete (yyvsp[-3].str); }
-#line 1765 "guidoparse.cpp"
+#line 1766 "guidoparse.cpp"
     break;
 
   case 23: /* vardecl: varname EQUAL floatn ENDVAR  */
-#line 155 "guido.y"
+#line 156 "guido.y"
                                                                                         { context->variableDecl ((yyvsp[-3].str)->c_str(), context->fText.c_str(), GuidoParser::kFloat); delete (yyvsp[-3].str); }
-#line 1771 "guidoparse.cpp"
+#line 1772 "guidoparse.cpp"
     break;
 
   case 24: /* varname: VARNAME  */
-#line 158 "guido.y"
+#line 159 "guido.y"
                                                                                                         { (yyval.str) = new string(context->fText); }
-#line 1777 "guidoparse.cpp"
+#line 1778 "guidoparse.cpp"
     break;
 
   case 25: /* tag: positiontag  */
-#line 163 "guido.y"
+#line 164 "guido.y"
                                                                                                         { context->tagEnd (); }
-#line 1783 "guidoparse.cpp"
+#line 1784 "guidoparse.cpp"
     break;
 
   case 26: /* tag: rangetag  */
-#line 164 "guido.y"
+#line 165 "guido.y"
                                                                                                                 { context->tagEnd (); }
-#line 1789 "guidoparse.cpp"
+#line 1790 "guidoparse.cpp"
     break;
 
   case 27: /* positiontag: tagid  */
-#line 167 "guido.y"
+#line 168 "guido.y"
                                                                                                         { context->tagAdd (); }
-#line 1795 "guidoparse.cpp"
+#line 1796 "guidoparse.cpp"
     break;
 
   case 28: /* positiontag: tagid STARTPARAM tagparams ENDPARAM  */
-#line 168 "guido.y"
+#line 169 "guido.y"
                                                                                 { context->tagAdd (); }
-#line 1801 "guidoparse.cpp"
+#line 1802 "guidoparse.cpp"
     break;
 
   case 29: /* $@5: %empty  */
-#line 171 "guido.y"
+#line 172 "guido.y"
                                          { context->tagRange (); }
-#line 1807 "guidoparse.cpp"
+#line 1808 "guidoparse.cpp"
     break;
 
   case 31: /* tagname: TAGNAME  */
-#line 174 "guido.y"
+#line 175 "guido.y"
                                                                                                         { (yyval.str) = new string(context->fText); }
-#line 1813 "guidoparse.cpp"
+#line 1814 "guidoparse.cpp"
     break;
 
   case 32: /* tagid: tagname  */
-#line 177 "guido.y"
+#line 178 "guido.y"
                                                                                                         { context->tagStart ( (yyvsp[0].str)->c_str(), 0); delete (yyvsp[0].str); }
-#line 1819 "guidoparse.cpp"
+#line 1820 "guidoparse.cpp"
     break;
 
   case 33: /* tagid: tagname IDSEP number  */
-#line 178 "guido.y"
+#line 179 "guido.y"
                                                                                                 { context->tagStart ( (yyvsp[-2].str)->c_str(),(yyvsp[0].num)); delete (yyvsp[-2].str); }
-#line 1825 "guidoparse.cpp"
+#line 1826 "guidoparse.cpp"
     break;
 
   case 34: /* tagid: BAR  */
-#line 179 "guido.y"
+#line 180 "guido.y"
                                                                                                                 { context->tagStart ( "\\bar", 0); }
-#line 1831 "guidoparse.cpp"
+#line 1832 "guidoparse.cpp"
     break;
 
   case 35: /* tagarg: signednumber  */
-#line 182 "guido.y"
+#line 183 "guido.y"
                                                                                                 { (yyval.param) = context->intParam   ((yyvsp[0].num)); }
-#line 1837 "guidoparse.cpp"
+#line 1838 "guidoparse.cpp"
     break;
 
   case 36: /* tagarg: floatn  */
-#line 183 "guido.y"
+#line 184 "guido.y"
                                                                                                                 { (yyval.param) = context->floatParam ((yyvsp[0].real)); }
-#line 1843 "guidoparse.cpp"
+#line 1844 "guidoparse.cpp"
     break;
 
   case 37: /* tagarg: signednumber UNIT  */
-#line 184 "guido.y"
+#line 185 "guido.y"
                                                                                                         { (yyval.param) = context->intParam   ((yyvsp[-1].num), context->fText.c_str() ); }
-#line 1849 "guidoparse.cpp"
+#line 1850 "guidoparse.cpp"
     break;
 
   case 38: /* tagarg: floatn UNIT  */
-#line 185 "guido.y"
+#line 186 "guido.y"
                                                                                                         { (yyval.param) = context->floatParam ((yyvsp[-1].real), context->fText.c_str() ); }
-#line 1855 "guidoparse.cpp"
+#line 1856 "guidoparse.cpp"
     break;
 
   case 39: /* tagarg: STRING  */
-#line 186 "guido.y"
+#line 187 "guido.y"
                                                                                                                 { (yyval.param) = context->strParam   (context->fText.c_str() ); }
-#line 1861 "guidoparse.cpp"
+#line 1862 "guidoparse.cpp"
     break;
 
   case 40: /* tagarg: id  */
-#line 187 "guido.y"
+#line 188 "guido.y"
                                                                                                                 { /* unused */ (yyval.param) = 0; delete (yyvsp[0].str); }
-#line 1867 "guidoparse.cpp"
+#line 1868 "guidoparse.cpp"
     break;
 
   case 41: /* tagarg: varname  */
-#line 188 "guido.y"
+#line 189 "guido.y"
                                                                                                                 { (yyval.param) = context->varParam ((yyvsp[0].str)->c_str() ); 
 															  if (!(yyval.param)) varerror ((yylsp[0]).last_line, (yylsp[0]).first_column, context, (yyvsp[0].str)->c_str());
 															  delete (yyvsp[0].str);
 															  if (!(yyval.param)) YYABORT; 
 															}
-#line 1877 "guidoparse.cpp"
+#line 1878 "guidoparse.cpp"
     break;
 
   case 42: /* tagparam: tagarg  */
-#line 195 "guido.y"
+#line 196 "guido.y"
                                                                                                         { (yyval.param) = (yyvsp[0].param); }
-#line 1883 "guidoparse.cpp"
+#line 1884 "guidoparse.cpp"
     break;
 
   case 43: /* tagparam: id EQUAL tagarg  */
-#line 196 "guido.y"
+#line 197 "guido.y"
                                                                                                         { if((yyvsp[0].param)) context->setParamName ((yyvsp[0].param), (yyvsp[-2].str)->c_str()); (yyval.param) = (yyvsp[0].param); delete (yyvsp[-2].str); }
-#line 1889 "guidoparse.cpp"
+#line 1890 "guidoparse.cpp"
     break;
 
   case 44: /* tagparams: tagparam  */
-#line 199 "guido.y"
+#line 200 "guido.y"
                                                                                                         { context->tagParameter ((yyvsp[0].param)); }
-#line 1895 "guidoparse.cpp"
+#line 1896 "guidoparse.cpp"
     break;
 
   case 45: /* tagparams: tagparams SEP tagparam  */
-#line 200 "guido.y"
+#line 201 "guido.y"
                                                                                                 { context->tagParameter ((yyvsp[0].param)) ; }
-#line 1901 "guidoparse.cpp"
+#line 1902 "guidoparse.cpp"
     break;
 
   case 46: /* $@6: %empty  */
-#line 206 "guido.y"
+#line 207 "guido.y"
                              { context->chordInit (); }
-#line 1907 "guidoparse.cpp"
+#line 1908 "guidoparse.cpp"
     break;
 
   case 48: /* $@7: %empty  */
-#line 209 "guido.y"
+#line 210 "guido.y"
               { context->chordInitNote (); }
-#line 1913 "guidoparse.cpp"
+#line 1914 "guidoparse.cpp"
     break;
 
   case 50: /* $@8: %empty  */
-#line 210 "guido.y"
+#line 211 "guido.y"
                                            { context->chordInitNote ();}
-#line 1919 "guidoparse.cpp"
+#line 1920 "guidoparse.cpp"
     break;
 
   case 56: /* chordsymbol: music  */
-#line 219 "guido.y"
+#line 220 "guido.y"
                                                                                         { context->appendNote ();  }
-#line 1925 "guidoparse.cpp"
+#line 1926 "guidoparse.cpp"
     break;
 
   case 58: /* $@9: %empty  */
-#line 223 "guido.y"
+#line 224 "guido.y"
                                         { context->tagRange (); }
-#line 1931 "guidoparse.cpp"
+#line 1932 "guidoparse.cpp"
     break;
 
   case 59: /* rangechordtag: positiontag STARTRANGE $@9 tagchordsymbol ENDRANGE  */
-#line 223 "guido.y"
+#line 224 "guido.y"
                                                                                           { context->tagEnd (); }
-#line 1937 "guidoparse.cpp"
+#line 1938 "guidoparse.cpp"
     break;
 
   case 60: /* taglist: positiontag  */
-#line 226 "guido.y"
+#line 227 "guido.y"
                                                                                 { context->tagEnd (); }
-#line 1943 "guidoparse.cpp"
+#line 1944 "guidoparse.cpp"
     break;
 
   case 61: /* taglist: taglist positiontag  */
-#line 227 "guido.y"
+#line 228 "guido.y"
                                                                                 { context->tagEnd (); }
-#line 1949 "guidoparse.cpp"
+#line 1950 "guidoparse.cpp"
     break;
 
   case 64: /* $@10: %empty  */
-#line 237 "guido.y"
+#line 238 "guido.y"
                         { context->noteInit ( "_" ); }
-#line 1955 "guidoparse.cpp"
+#line 1956 "guidoparse.cpp"
     break;
 
   case 66: /* $@11: %empty  */
-#line 238 "guido.y"
+#line 239 "guido.y"
                                 { context->noteInit ( "_" ); }
-#line 1961 "guidoparse.cpp"
+#line 1962 "guidoparse.cpp"
     break;
 
   case 73: /* notename: DIATONIC  */
-#line 250 "guido.y"
+#line 251 "guido.y"
                                                                                         { context->noteInit ( context->fText.c_str() ); }
-#line 1967 "guidoparse.cpp"
+#line 1968 "guidoparse.cpp"
     break;
 
   case 74: /* notename: CHROMATIC  */
-#line 251 "guido.y"
+#line 252 "guido.y"
                                                                                                 { context->noteInit ( context->fText.c_str() ); }
-#line 1973 "guidoparse.cpp"
+#line 1974 "guidoparse.cpp"
     break;
 
   case 75: /* notename: SOLFEGE  */
-#line 252 "guido.y"
+#line 253 "guido.y"
                                                                                                 { context->noteInit ( context->fText.c_str() ); }
-#line 1979 "guidoparse.cpp"
+#line 1980 "guidoparse.cpp"
     break;
 
   case 76: /* notename: EMPTYT  */
-#line 253 "guido.y"
+#line 254 "guido.y"
                                                                                                 { context->noteInit ( context->fText.c_str() ); }
-#line 1985 "guidoparse.cpp"
+#line 1986 "guidoparse.cpp"
     break;
 
-  case 77: /* tab: string STRING  */
-#line 256 "guido.y"
+  case 77: /* tab: string FRETTE  */
+#line 257 "guido.y"
                                                                                         { context->tabInit ( (yyvsp[-1].num), context->fText.c_str() ); }
-#line 1991 "guidoparse.cpp"
+#line 1992 "guidoparse.cpp"
     break;
 
   case 78: /* string: TAB  */
-#line 259 "guido.y"
+#line 260 "guido.y"
                                                                                         { (yyval.num) = atoi( &context->fText.c_str()[1]); }
-#line 1997 "guidoparse.cpp"
+#line 1998 "guidoparse.cpp"
     break;
 
   case 81: /* accidental: SHARPT  */
-#line 266 "guido.y"
+#line 267 "guido.y"
                                                                                         {  context->noteAcc (SHARP); }
-#line 2003 "guidoparse.cpp"
+#line 2004 "guidoparse.cpp"
     break;
 
   case 82: /* accidental: FLATT  */
-#line 267 "guido.y"
+#line 268 "guido.y"
                                                                                                 {  context->noteAcc (FLAT); }
-#line 2009 "guidoparse.cpp"
+#line 2010 "guidoparse.cpp"
     break;
 
   case 84: /* octave: signednumber  */
-#line 271 "guido.y"
+#line 272 "guido.y"
                                                                                         { context->noteOct ((yyvsp[0].num)); }
-#line 2015 "guidoparse.cpp"
+#line 2016 "guidoparse.cpp"
     break;
 
   case 86: /* duration: MULT number DIV number  */
-#line 275 "guido.y"
+#line 276 "guido.y"
                                                                                 {  context->noteEnum ((yyvsp[-2].num)); context->noteDenom ((yyvsp[0].num)); }
-#line 2021 "guidoparse.cpp"
+#line 2022 "guidoparse.cpp"
     break;
 
   case 87: /* duration: MULT number  */
-#line 276 "guido.y"
+#line 277 "guido.y"
                                                                                         {  context->noteEnum ((yyvsp[0].num));  }
-#line 2027 "guidoparse.cpp"
+#line 2028 "guidoparse.cpp"
     break;
 
   case 88: /* duration: MULT number MLS  */
-#line 277 "guido.y"
+#line 278 "guido.y"
                                                                                         {  context->noteAbsDur((yyvsp[-1].num));  }
-#line 2033 "guidoparse.cpp"
+#line 2034 "guidoparse.cpp"
     break;
 
   case 89: /* duration: DIV number  */
-#line 278 "guido.y"
+#line 279 "guido.y"
                                                                                         {  context->noteDenom ((yyvsp[0].num)); }
-#line 2039 "guidoparse.cpp"
+#line 2040 "guidoparse.cpp"
     break;
 
   case 91: /* dots: DOT  */
-#line 282 "guido.y"
+#line 283 "guido.y"
                                                                                                 {  context->noteDot  ();  }
-#line 2045 "guidoparse.cpp"
+#line 2046 "guidoparse.cpp"
     break;
 
   case 92: /* dots: DDOT  */
-#line 283 "guido.y"
+#line 284 "guido.y"
                                                                                                 {  context->noteDdot (); }
-#line 2051 "guidoparse.cpp"
+#line 2052 "guidoparse.cpp"
     break;
 
   case 93: /* dots: TDOT  */
-#line 284 "guido.y"
+#line 285 "guido.y"
                                                                                                 {  context->noteTdot (); }
-#line 2057 "guidoparse.cpp"
+#line 2058 "guidoparse.cpp"
     break;
 
   case 94: /* id: IDT  */
-#line 289 "guido.y"
+#line 290 "guido.y"
                                                                                                 { (yyval.str) = new string(context->fText); }
-#line 2063 "guidoparse.cpp"
+#line 2064 "guidoparse.cpp"
     break;
 
   case 95: /* number: NUMBER  */
-#line 291 "guido.y"
+#line 292 "guido.y"
                                                                                         { (yyval.num) = atol(context->fText.c_str() ); }
-#line 2069 "guidoparse.cpp"
+#line 2070 "guidoparse.cpp"
     break;
 
   case 96: /* pnumber: PNUMBER  */
-#line 293 "guido.y"
+#line 294 "guido.y"
                                                                                         { (yyval.num) = atol(context->fText.c_str() ); }
-#line 2075 "guidoparse.cpp"
+#line 2076 "guidoparse.cpp"
     break;
 
   case 97: /* nnumber: NNUMBER  */
-#line 295 "guido.y"
+#line 296 "guido.y"
                                                                                         { (yyval.num) = atol(context->fText.c_str() ); }
-#line 2081 "guidoparse.cpp"
+#line 2082 "guidoparse.cpp"
     break;
 
   case 98: /* floatn: FLOAT  */
-#line 297 "guido.y"
+#line 298 "guido.y"
                                                                                         { (yyval.real) = atof(context->fText.c_str() ); }
-#line 2087 "guidoparse.cpp"
+#line 2088 "guidoparse.cpp"
     break;
 
   case 99: /* signednumber: number  */
-#line 300 "guido.y"
+#line 301 "guido.y"
                                                                                 { (yyval.num) = (yyvsp[0].num); }
-#line 2093 "guidoparse.cpp"
+#line 2094 "guidoparse.cpp"
     break;
 
   case 100: /* signednumber: pnumber  */
-#line 301 "guido.y"
+#line 302 "guido.y"
                                                                                                 { (yyval.num) = (yyvsp[0].num); }
-#line 2099 "guidoparse.cpp"
+#line 2100 "guidoparse.cpp"
     break;
 
   case 101: /* signednumber: nnumber  */
-#line 302 "guido.y"
+#line 303 "guido.y"
                                                                                                 { (yyval.num) = (yyvsp[0].num); }
-#line 2105 "guidoparse.cpp"
+#line 2106 "guidoparse.cpp"
     break;
 
 
-#line 2109 "guidoparse.cpp"
+#line 2110 "guidoparse.cpp"
 
       default: break;
     }
@@ -2335,7 +2336,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 304 "guido.y"
+#line 305 "guido.y"
 
 #ifdef TEST
 int	gParseErrorLine = 0;

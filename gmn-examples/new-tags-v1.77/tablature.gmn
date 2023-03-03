@@ -18,15 +18,15 @@
 [
 	\clef<"TAB"> \meter<"4/4", hidden="on">
 	\staffFormat<style="TAB">
-	empty/2 { s4"5"/8, s3"5" } s4"7" { s4"5"/8, s3"5" } { s4"x"/8, s3"x" }
-	{ s4"5"/8, s3"5" }	{ s4"7"/8, s3"7" } empty/2.
-	empty/2 empty/8 s4"5" s4"7" \trill<begin="off">(s3"7"/2.)
-	s4"7"/8 s3"10" s3"7"/2
-	s3"7"/16 s2"6" s1"5"/8 s1"8"/4 s1"5"/8
+	empty/2 { s4:5:/8, s3:5: } s4:7: { s4:5:/8, s3:5: } { s4:x:/8, s3:x: }
+	{ s4:5:/8, s3:5: }	{ s4:7:/8, s3:7: } empty/2.
+	empty/2 empty/8 s4:5: s4:7: \trill<begin="off">(s3:7:/2.)
+	s4:7:/8 s3:10: s3:7:/2
+	s3:7:/16 s2:6: s1:5:/8 s1:8:/4 s1:5:/8
 
-	\trill<begin="off">(s2"6"/4.) s2"6"/8 
-	\text<"H", dy=13, fsize=2, dx =1> (\sl<curve="up">(s2"5" s2"6")) s2"5" 
-	\trill<begin="off">( s3"7" s3"(7)"/1)
+	\trill<begin="off">(s2:6:/4.) s2:6:/8 
+	\text<"H", dy=13, fsize=2, dx =1> (\sl<curve="up">(s2:5: s2:6:)) s2:5: 
+	\trill<begin="off">( s3:7: s3:(7):/1)
 	|
 ]
 }

@@ -52,6 +52,9 @@ static  char* unescape (char * str) {
 			if (str[i+1] == '\\') {
 				str[j++] = str[i++];
 			}
+			else if (str[i+1] == ':') {
+				str[j++] = str[++i];
+			}
 			else if (str[i+1] != '"') {
 				str[j++] = str[i];
 			}
@@ -146,6 +149,7 @@ EOL		[\x0a\x0d]
 
 \"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
 \'(\\\\|\\.|[^\\\'])*\'   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
+":"(\\:|[^:])*":"         unescape(yytext); unquote(yytext); yyextra->fText = yytext; return FRETTE;
 
 {SPACE}+			/* eat up space */
 

@@ -91,7 +91,8 @@ extern int guidodebug;
     STRING = 292,                  /* STRING  */
     EXTRA = 293,                   /* EXTRA  */
     ENDVAR = 294,                  /* ENDVAR  */
-    VARNAME = 295                  /* VARNAME  */
+    VARNAME = 295,                 /* VARNAME  */
+    FRETTE = 296                   /* FRETTE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -111,7 +112,7 @@ union YYSTYPE
 	ARMusicalTag*	tag;
 //	GuidoParser::ParamsList*	plist;
 
-#line 115 "guidoparse.hpp"
+#line 116 "guidoparse.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

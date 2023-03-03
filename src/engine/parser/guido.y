@@ -99,6 +99,7 @@ using namespace std;
 %token EXTRA
 %token ENDVAR
 %token VARNAME
+%token FRETTE
 
 
 /*------------------------------   types  ------------------------------*/
@@ -253,7 +254,7 @@ notename	: DIATONIC								{ context->noteInit ( context->fText.c_str() ); }
 			| EMPTYT								{ context->noteInit ( context->fText.c_str() ); }
 			;		
 
-tab			: string STRING 						{ context->tabInit ( $1, context->fText.c_str() ); }
+tab			: string FRETTE 						{ context->tabInit ( $1, context->fText.c_str() ); }
 			;
 
 string		: TAB 									{ $$ = atoi( &context->fText.c_str()[1]); }
