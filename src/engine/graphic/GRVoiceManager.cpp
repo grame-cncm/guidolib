@@ -1769,6 +1769,8 @@ GREvent * GRVoiceManager::CreateTab( const TYPE_TIMEPOSITION & tp, ARMusicalObje
 	GRTab * grtab = new GRTab(mCurGrStaff, curev->isARTab(), tp, arObject->getDuration());
 	grtab->setDuration(dur);
 
+	if (curnoteformat != NULL)		grtab->setNoteFormat(curnoteformat);
+
 	// Associate the note with the current tags...
 	GuidoPos pos = fGRTags->GetHeadPosition();
 	bool addedToTrill = false;

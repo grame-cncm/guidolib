@@ -24,7 +24,7 @@ GRTab::GRTab( GRStaff * staff, const ARTab * tab, const TYPE_TIMEPOSITION & date
 	float lspace = staff->getStaffLSPACE();
 	int pos = tab->getString() - 1;
 	fSize = lspace * 1.1f;
-	mPosition.y = lspace * pos + fSize / 3;
+	mPosition.y = lspace * pos;
 	float offset = fSize / 2;
 	mBoundingBox.top = -offset * 0.85;
 	mBoundingBox.bottom = mBoundingBox.top + fSize;
@@ -36,30 +36,48 @@ GRTab::GRTab( GRStaff * staff, const ARTab * tab, const TYPE_TIMEPOSITION & date
 	}
 	else fDisplay = tab->getDisplay();
 	mNoteBreite = fSize;
+	mSize = 1;
 }
 
+//---------------------------------------------------------
+void GRTab::setNoteFormat(const ARNoteFormat * frmt)
+{
+	GRSingleNote::setNoteFormat(frmt);
+	mSize /= mGrStaff->getSizeRatio();		// undo the staff size stuff
+}
 
 //---------------------------------------------------------
 void GRTab::OnDraw( VGDevice & hdc ) const
 {
-	const GRStaff* staff = getGRStaff();
-	float y = staff->getPosition().y + mPosition.y;
-	const VGFont* font = FontManager::FindOrCreateFont( fSize, "Helvetica");
+	if (!mDraw || !mShow) return;
+
+	const VGFont* font = FontManager::FindOrCreateFont( fSize * mSize, "Helvetica");
 	hdc.SetTextFont( font );
 	hdc.SetFontAlign( VGDevice::kAlignBase );
-	VGColor	back = hdc.GetFontBackgroundColor();
-	hdc.SetFontBackgroundColor(VGColor(255, 255, 255));
-
 	float w, h;
 	font->GetExtent( fDisplay.c_str(), fDisplay.size(), &w, &h, &hdc);
-	hdc.DrawString( mPosition.x - (w/2), mPosition.y, fDisplay.c_str(), fDisplay.size() );
-	hdc.SetFontBackgroundColor(back);
+
+	float x = mPosition.x - (w/2) + mOffset.x;
+	float y = mPosition.y + (fSize * mSize / 3) + mOffset.y;
+
+	hdc.PushPenColor(VGColor(255, 255, 255));
+	hdc.PushFillColor(VGColor(255, 255, 255));
+	NVRect r = mMapping.Scale(mSize);
+	hdc.Rectangle(x - 3, r.top, x + w + 6, r.bottom);
+	hdc.PopFillColor();
+	hdc.PopPenColor();
+
+	const VGColor oldcolor = hdc.GetFontColor();
+	if (mColRef)
+        hdc.SetFontColor(VGColor(mColRef));
+
+	hdc.DrawString( x, y, fDisplay.c_str(), fDisplay.size() );
 
 	// - draw articulations & ornament
 	for (auto elt: getArticulations()) {
 		elt->OnDraw(hdc);
 	}
-
+	if (mColRef) 						hdc.SetFontColor(oldcolor);
 	if (gBoundingBoxesMap & kEventsBB) 	DrawBoundingBox(hdc, kEventBBColor);
 }
 

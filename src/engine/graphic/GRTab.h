@@ -38,6 +38,7 @@ class GRTab : public GRSingleNote
 		virtual bool	isTab() const				{ return true; }
 		virtual int		getNumFaehnchen() const		{ return 0; }
 		virtual void 	updateBoundingBox();
+		virtual void	setNoteFormat(const ARNoteFormat * frmt);
 
 	private:
 		std::string fDisplay;
