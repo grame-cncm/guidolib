@@ -59,6 +59,16 @@ void NVRect::Merge( const NVRect & in )
 
 }
 
+/** \brief Rect scaling centered on the rect center
+*/
+NVRect NVRect::Scale( float val ) const
+{
+	float ow = (right - left) / 2 * (val - 1);
+	float oh = (bottom - top) / 2 * (val - 1);
+	NVRect r (left - ow, top - oh, right + ow, bottom + oh);
+	return r;
+}
+
 NVRect & NVRect::operator *= (float v)
 {
 	left	*= v;
