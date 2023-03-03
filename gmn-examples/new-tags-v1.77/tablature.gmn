@@ -1,9 +1,8 @@
 (*
-	test file for tablatures
+	Example of tablatures mixed with regular notation
 *)
 {
 [
-	\title<"Sultans Of Swing">
 	\clef<"g"> \meter<"4/4", autoMeasuresNum="on"> \accolade<type="none">
 	_/2 { g/8, c2 } a1 { g/8, c2 } \noteFormat<style="x"> ({ g1, d })
 	\stemsDown	
