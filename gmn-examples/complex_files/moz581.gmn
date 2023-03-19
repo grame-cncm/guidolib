@@ -28,7 +28,7 @@ _/4 _/4  \slurBegin<dx1=-2hs,dy1=-2hs,dy2=-2hs,r3=0.4,h=-8hs>  h0/12 f# d  |
 % measure 9, voice 1
 \bm( f#0/8 \slurEnd \stacc( h d1 f# h d2 ) ) | 
 % measure 10, voice 1
-\sl<h=3hs,dx2=1hs,dy2=2hs>( \bm( f#2/8 e d c# d h1 ) )  |
+\sl( \bm( f#2/8 e d c# d h1 ) )  |
 % measure 11, voice 1
 \sl( a/2 c#2/8 h1 ) 
 % measure 12, voice 1
@@ -47,8 +47,7 @@ f# _ \sl( c#2/8 a#1|
 % measure 8, voice 2
 \staff<id=2,dy=1.3cm> h d2 f#/4 ) _  |
 % measures 9 to 10, voice 2
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4 | 
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+_*3/4 _
 % measure 11, voice 2
 \bm( c#1/8 e c# e d e )
 % measure 12, voice 2
@@ -61,27 +60,21 @@ _/4 |
 % measures 1 to 5, voice 3
 _ \i<"p"> e e _ f# f# _ d d _ c# c# _ e e |
 % measures 6 to 12, voice 3
-d _ \sl<dy1=-2,dy2=-3,r3=0.4,h=-4>( g f#/2 g/4 f#/2) _/4 
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+d _ \sl<dy1=-2,dy2=-2,h=-4>( g f#/2 g/4 f#/2) _/4 
+_*3/4 _
 % _*6/4 
 | \sl( a0/2 g#/4 ) a/4 _ ],
 [ % fourth voice, viola
 \instr<"viola",dx=-2cm,dy=-0.75cm> \clef<"c"> \key<"A"> \meter<"3/4">
 _/4 | 
 _ \i<"p"> c#1/4 c# _ b0 b _ b b _ a a _ c#1 c# |
-h0 _ \sl<dy1=2,dy2=3,r3=0.6,h=4>( e1 d/2 e/4 d/2 ) _/4 
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
-% _*6/4 
+h0 _ \sl<dy1=3,dy2=1,r3=0.5,h=5>( e1 d/2 e/4 d/2 ) _/4 
+_*3/4 _
 e0*4/4 _/4 ],
 
 [ % fifth voice, violoncello
 \instr<"violoncello",dx=-2cm,dy=-0.6cm> \clef<"f"> \key<"A"> \meter<"3/4"> _/4 |
 \i<"p"> a0/4 _ _ | d _ _ e _ _ f# _ _ c# _ _ d _ _ 
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
-\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+_*3/4 _ _ _
 \sl( \stacc( e-1/4 e e ) ) a _ ]
 }

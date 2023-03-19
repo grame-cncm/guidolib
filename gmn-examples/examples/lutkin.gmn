@@ -42,10 +42,10 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/LutkinPC/TheLordBle
 	(_/4 \slurBegin c#2 f# e
 	d \slurEnd \slurBegin f# a \acc(g))
 	\i<"f", dy=-2> f# e d \text<"dim. poco a poco e", fattrib="i", dy=-3> (c#) 
-	b1/2. \slurEnd \slur<h=3, dy1=3, dy2=1>(c2/8 b1
+	b1/2. \slurEnd \slur<h=2, dy1=4, dy2=6>(c2/8 b1
 
 	% measure 20
-	a/2.) \ritBegin<dy=-1, dx=-1> \slurBegin<"up", dy=2> b/8 a
+	a/2.) \ritBegin<dy=-1, dx=-1> \slurBegin<"up"> b/8 a
 	g/4 e a b \slurEnd 
 	a/1 \ritEnd 
 	\i<"pp"> \dim<dx1=3, dx2=15>(\fermata (a))

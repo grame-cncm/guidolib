@@ -44,12 +44,12 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BachCPE/Wq132/Sonat
 	\sl(c/8 \trill(b1/16)) \sl(g b d2)
 	f \sl(d3 b2 f) g1 f2
 	\stemsUp \sl<"down", dy1=-0.5>(\grace(g/16) \stemsDown \trill<dx=0.5>(f/8)) e e1/16 c2
-	\sl<dy1=2, dy2=1, dy=1>(b&2 a) f1 e&2 f#1 d2
+	\sl<dy1=1, dy2=1, dy=1>(b&2 a) f1 e&2 f#1 d2
 	\sl(c3 b2) g1 f2 g#1 e2
 	\sl(d3 c) a1 \sl(e2 g f#)
 	\sl(a g) b1/8. f2/16
 	\bm ( \tuplet<format="3">(e/24 d c)) \trill(d/8.) c/16
-	\stacc(f#1/8) \slurBegin<"up", dy=3> \i<"p">c2 d
+	\stacc(f#1/8) \slurBegin<"up", dy=1> \i<"p">c2 d
 
 	\stemsUp \slur<"down", dy2=1, dy=-1>(\grace(f2/16) \stemsDown e&/8) d c \slurEnd
 	\i<"f", dx=4> \stacc(g1) \slurBegin<"up", dy=3> \i<"p"> c2 d 

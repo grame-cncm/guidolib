@@ -85,7 +85,7 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BeethovenLv/O2/LVB_
 % measure 4
 		{ c0., c1 } _/8 _/4 \stemsUp
 % measure 5
-		\sl<"up", dy=-2> ( \fing<"2", position="above">(c1) \bm(d/8 c b&0 
+		\sl<"up"> ( \fing<"2", position="above">(c1) \bm(d/8 c b&0 
 		\fing<"4", position="above">(a)) \stemsDown 
 % measure 6
 		{ \fing<"1", dy=-4>(b&/4), \fing<"3">(d1) })

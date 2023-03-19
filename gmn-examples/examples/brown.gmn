@@ -22,7 +22,7 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BrownCJ/bagatelle2/
 		\sl<"up", dy2=-6>(c/4. b&/8 c/4 a)
 		\slurBegin<"up", dy=-2> f/4. c/8 \beam(d e f g) 
 		a/4. c2/8 g1/4 \slurEnd c2
-		\slurBegin<"up", dy=-2> f1/4. c/8 \beam(d e f g) 
+		\slurBegin<"up"> f1/4. c/8 \beam(d e f g) 
 		f/4. c/8 b&/4 c \slurEnd
 		\slurBegin<"up", dy=-2> f/4. c/8 b&/4 e \slurEnd
 		g/2 \fermata(f)  \fine \doubleBar
@@ -43,12 +43,12 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BrownCJ/bagatelle2/
 		% measure 17
 		\slurBegin<"up"> c2/4. a1/8 c2/4. a1/8
 		 c2/4. a1/8 \beam(b& c2 d e) \slurEnd
-		\slurBegin<h=5, dy1=4, dy2=12> c2/4. a1/8 c2/4. a1/8
+		\slurBegin c2/4. a1/8 c2/4. a1/8
 
 		% measure 20
 		 a/4. f/8 \beam(g a g d) \slurEnd
 		\text<"sonore", fattrib="bi", dy=-3.5, dx=-1>(
-		\slurBegin<"up", dy=3, dy2=-6> c/4. b&/8 c/4 a)
+		\slurBegin<"up", dy=2, dy2=-2> c/4. b&/8 c/4 a)
 		c/4. b&/8 c/4 g \slurEnd
 		
 		% measure 23
@@ -58,8 +58,8 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BrownCJ/bagatelle2/
 		\slurBegin<"up"> c/4. f1/8 c2/4 \slurEnd \slur<dy=2>(d/8 c)
 	
 		% measure 27
-		\cresc<deltay=2, dy=-1>(\slurBegin<"up"> c/4. f1/8 c2/4 \slurEnd \slur<dy=2>(e&/8 c))
-		\slurBegin<"up"> c/4. \cresc<deltay=2, dy=-1>(f1/8 c2/4 \slurEnd \slur<dy=2>(f/8 c))
+		\cresc<deltaY=2, dy=-1>(\slurBegin<"up"> c/4. f1/8 c2/4 \slurEnd \slur<dy=2>(e&/8 c))
+		\slurBegin<"up"> c/4. \cresc<deltaY=2, dy=-1>(f1/8 c2/4 \slurEnd \slur<dy=2>(f/8 c))
 	
 		% measure 29
 		\slur<dy=2>(f/8 d) \slur<dy=2>(f/8 \crescBegin<deltaY=2, dy=-1> c) \slur<dy=2>(f/8 d) 
@@ -79,7 +79,7 @@ Source: [Mutopia project](https://www.mutopiaproject.org/ftp/BrownCJ/bagatelle2/
 	
 		% measure 40
 		\slur<"up">(e/4. g2/8 e3/4) \slur(f/8 e)
-		\slur<"up">(e/4. \dimBegin<deltay=2> g2/8 e3/4) \slur(f/8 e) \dimEnd
+		\slur<"up">(e/4. \dimBegin<deltaY=2> g2/8 e3/4) \slur(f/8 e) \dimEnd
 		\slur<"up">(c/4. g2/8 c3/4) \slur(d/8 c)
 		\slur<"up">(c/4. g2/8 c3/4) \slur(c/8 b2)
 		\slur<"up">(b/4. e/8 b/4) \slur(b/8 a)

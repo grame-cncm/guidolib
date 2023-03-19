@@ -59,7 +59,7 @@
                 \fingering<text="3",fsize=7pt,dy=11hs>(f#) 
 				\stemsUp<6.5hs> g# \stemsUp)
            \stemsUp<4.75hs> a/4  \stemsUp 
-           \slurBegin<dx1=2hs,dy1=3hs,dx2=0hs,dy2=2hs,h=2hs>
+           \slurBegin<"up">
       \fingering<text="5",fsize=7pt,dy=6hs>(  \stemsUp<4.5hs> e/4  )  
            \bar
 % measure 4 (voice 1)
@@ -75,7 +75,7 @@
 			 \stemsUp<7.5hs> c# \stemsUp ) 
           \bm( \fingering<text="2",dy=12.5hs,fsize=7pt>( 
 		  \stemsUp<8hs> h1/8 ) \acc( \stemsUp<5hs> g#2 \stemsUp)) 
-		  \slurBegin<dx1=2hs, dy1=3hs, h=3>
+		  \slurBegin<"up", h=3>
 		      \fingering<text="5",dy=5hs,fsize=7pt>( \stemsUp<4hs> a/2)
 % measure 6 (voice 1)
           \staff<1> % ,dy=1.08cm> 
