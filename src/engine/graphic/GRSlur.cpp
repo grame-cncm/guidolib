@@ -19,11 +19,14 @@
 #include <algorithm>
 
 #include "GRGlobalStem.h"
+#include "GRPage.h"
 #include "GRSingleNote.h"
 #include "GRSlur.h"
 #include "GRStaff.h"
 #include "GRStem.h"
 #include "GRStdNoteHead.h"
+#include "GRSystem.h"
+#include "VGDevice.h"
 
 using namespace std;
 
@@ -124,6 +127,112 @@ NVRect	GRSlur::getElementBox 	(const GRBowingContext * context, const GRNotation
 	return r;
 }
 
+
+// -----------------------------------------------------------------------------
+void GRSlur::tellPositionEnd(GRNotationElement * el)
+{
+	if (el == 0 ) return;
+
+	GRStaff * staff = el->getGRStaff();
+	if (staff == 0 ) return;
+
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem());
+	if (sse == 0)	return;
+
+	GRBowing::tellPositionEnd( el );
+
+
+//	if( el == sse->endElement || ( sse->endElement == 0 && el == sse->startElement)) {
+//		if ((sse->startflag == GRSystemStartEndStruct::OPENLEFT) || (sse->endflag == GRSystemStartEndStruct::OPENRIGHT) ) {
+
+	bool doit = ( el == sse->endElement || ( sse->endElement == 0 && el == sse->startElement))
+				&& ((sse->startflag == GRSystemStartEndStruct::OPENLEFT) || (sse->endflag == GRSystemStartEndStruct::OPENRIGHT) );
+	if (!doit) return;
+
+	// special case of slurs spanning multiple staves
+//cerr << (void*)this << " GRSlur::tellPositionEnd assoc " << sse->startflag << " " << sse->endflag << " sse: " << (void*)sse << endl;
+	NEPointerList* al = getAssociations();
+	GuidoPos pos = al->GetHeadPosition();
+	NVRect r, max(1000,1000,1000,1000), min;
+	int count = 0;
+	while (pos) {
+		const GRSystem* system = staff->getGRSystem();
+		const GRNotationElement * elt = al->GetNext(pos);
+		if (elt->getGRStaff()->getGRSystem() == system) {
+			NVRect bb = elt->getBoundingBox() + elt->getPosition();
+			if (bb.bottom > min.bottom) min = bb;
+			if (bb.top < max.top) max = bb;
+			r.Merge (elt->getBoundingBox() + elt->getPosition());
+			if (elt->isGRNote()) count++;
+		}
+	}
+	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
+	bowInfos->box = r;
+	bowInfos->max = max;
+	bowInfos->min = min;
+
+	const GRBowingContext* context = &bowInfos->context;
+	const bool upward = (context->curveDir == 1);
+	float shift = (upward ? -LSPACE : LSPACE) / 2;
+	if (context->openRight) {
+		if (count == 1) {
+			bowInfos->offsets[2].y = bowInfos->offsets[0].y + shift;
+			bowInfos->offsets[1].y = bowInfos->offsets[2].y + shift;
+			bowInfos->inflexion = bowInfos->offsets[2].x / 100;
+		}
+		else if (upward) {
+			if (bowInfos->offsets[2].y > 0) bowInfos->offsets[2].y = 0;
+			if (bowInfos->offsets[2].y > bowInfos->offsets[0].y) bowInfos->offsets[2].y = bowInfos->offsets[0].y - LSPACE;
+		}
+	}
+	if (context->openLeft) {
+		bowInfos->offsets[0].y = (upward ? bowInfos->box.top - LSPACE : bowInfos->box.bottom + LSPACE) - bowInfos->position.y;
+		if (count == 1) {
+			bowInfos->offsets[0].y = bowInfos->offsets[2].y + shift;
+			bowInfos->offsets[1].y = bowInfos->offsets[0].y + shift;
+			bowInfos->inflexion = bowInfos->offsets[2].x / 100;
+		}
+		else if (upward) {
+			if (bowInfos->offsets[0].y > 0) bowInfos->offsets[0].y = -LSPACE;
+			float dist = bowInfos->offsets[1].y - r.top;
+			if (dist < -100) bowInfos->offsets[1].y = -100; // force an arbitrary limit to the distance of the inflexion point
+			else if (bowInfos->offsets[0].y > bowInfos->offsets[2].y) bowInfos->offsets[0].y = bowInfos->offsets[2].y - LSPACE;
+		}
+		else {
+			float dist = r.bottom - bowInfos->offsets[1].y;
+			if (dist > 100) bowInfos->offsets[1].y = 100; 	// force an arbitrary limit to the distance of the inflexion point
+		}
+	}
+}
+
+// -----------------------------------------------------------------------------
+void GRSlur::OnDraw( VGDevice & hdc ) const
+{
+	GRBowing::OnDraw (hdc);
+	
+//	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
+//	if( sse == 0) return; // don't draw
+//
+//	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
+
+//	NVRect r = bowInfos->box;
+//	hdc.Frame (r.left, r.top, r.right, r.bottom);
+//	r = bowInfos->max;
+//	hdc.PushPen(VGColor(255,0,0), 5);
+//	hdc.Frame (r.left, r.top, r.right, r.bottom);
+//	hdc.PopPen();
+//	r = bowInfos->min;
+//	hdc.PushPen(VGColor(0,0,255), 5);
+//	hdc.Frame (r.left, r.top, r.right, r.bottom);
+//	hdc.PopPen();
+
+//	float d = 30;
+//	NVPoint p = bowInfos->position;
+//	hdc.Ellipse(bowInfos->offsets[0].x + p.x, bowInfos->offsets[0].y + p.y, d, d, VGColor(0,255,0));
+//	hdc.Ellipse(bowInfos->offsets[1].x + p.x, bowInfos->offsets[1].y + p.y, d, d, VGColor(255,0,0));
+//	hdc.Ellipse(bowInfos->offsets[2].x + p.x, bowInfos->offsets[2].y + p.y, d, d, VGColor(0,0,255));
+}
+
 // -----------------------------------------------------------------------------
 void GRSlur::automaticAnchorPoints( const GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
@@ -178,9 +287,8 @@ void GRSlur::automaticAnchorPoints( const GRBowingContext * context, const ARBow
 	if (spanStaves) posRight.y += endStaff->getPosition().y - startStaff->getPosition().y;
 
 	// - Handle broken slurs and minimal width
-	const float minWidth = float(1.5) * LSPACE; // arbitrary miminal width of a tie
+	const float minWidth = 3 * LSPACE; // arbitrary miminal width of a tie
 	const float openYOffset = upward ? - LSPACE : LSPACE;
-
 	if (context->openLeft) {
 		posLeft.y = posRight.y + openYOffset;
 		if( posLeft.x > (posRight.x - minWidth))
@@ -188,7 +296,10 @@ void GRSlur::automaticAnchorPoints( const GRBowingContext * context, const ARBow
 	}
 
 	if (context->openRight) {
+		const GRStaff* curStaff = endElement->getGRStaff();
+		NVRect rs = curStaff->getBoundingBox();
 		posRight.y = posLeft.y + openYOffset;
+		posRight.y = upward ? rs.top : rs.bottom;
 		if( posRight.x < (posLeft.x + minWidth))
 			posRight.x = (posLeft.x + minWidth);
 	}
@@ -198,7 +309,6 @@ void GRSlur::automaticAnchorPoints( const GRBowingContext * context, const ARBow
 	// - Store results.
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
-//	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
 }
 
 // -----------------------------------------------------------------------------
@@ -396,7 +506,7 @@ void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBo
     const float maxInflexion = 7;  // Max inflexion (for small arc)
     const float power = 600;        // Arbitrary, scale the arc size
     const float arcWidth = (float)sqrt(pow(startX-endX,2)+ pow(startY-endY,2));
-    bowInfos->inflexion = (maxInflexion-2) * exp( - arcWidth/power) + 2;
+	bowInfos->inflexion = (maxInflexion-2) * exp( - arcWidth/power) + 2;
 
 	// -- Apply the new control point.
 	bowInfos->offsets[1].y = crossY - bowInfos->position.y;

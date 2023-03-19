@@ -28,6 +28,9 @@ class GRSlur : public GRBowing
 	 		  GRSlur (GRStaff * grstaff, const ARSlur * inAR )	: GRBowing(grstaff, inAR ) {}
 	 virtual ~GRSlur() {}
 
+		virtual void	tellPositionEnd(GRNotationElement * caller);
+		virtual void 	OnDraw( VGDevice & hdc ) const;
+
 		GRNotationElement*	nextDeferred()		{ GRNotationElement* elt= fDeferredTellPostion.front(); fDeferredTellPostion.pop(); return elt; }
 		size_t				countDeferred()		{ return fDeferredTellPostion.size(); }
 
