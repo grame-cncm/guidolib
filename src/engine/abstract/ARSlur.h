@@ -39,6 +39,8 @@
 @paramdesc
 The **r3** parameter should be between 0 (leftmost) and 1 (rightmost).
 
+Note that using **h** parameter while **curve** direction is also specified may be conflicting.
+
 See the [Slurs](@EXAMPLES/slurs/) example.
 @paramend
 
