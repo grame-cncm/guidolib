@@ -4,6 +4,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.7.7
 - fix crash bug with repeat begin
+- improve slur rendering it spans several systems 
 
 ----------------------------------------------------------------
   version 1.7.6
