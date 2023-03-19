@@ -269,23 +269,24 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 	GRSystemStartEndStruct * sse = prepareSSEStructForBow( inStaff );
 	if ( sse == 0 ) return;
 
-	// --- Collects informations about the context ---
-	GRBowingContext context;
-	context.staff = inStaff;
-	getBowBeginingContext( &context, sse );
-	getBowEndingContext( &context, sse );
-
-	// --- Handles the cases where the bow is opened to the left or to the right ---
-	// find out, if the elements contain shareStem associations!?
-	// this shows, wether any parameter for the bow was set or not.
 
 	GRNotationElement * startElement = sse->startElement;
 	GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 
+	// --- Collects informations about the context ---
+	GRBowingContext* context = &bowInfos->context;
+	context->staff = inStaff;
+	getBowBeginingContext( context, sse );
+	getBowEndingContext( context, sse );
+
+	// --- Handles the cases where the bow is opened to the left or to the right ---
+	// find out, if the elements contain shareStem associations!?
+	// this shows, wether any parameter for the bow was set or not.
+
 	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT || !startElement)
 	{
-		context.openLeft = true;
+		context->openLeft = true;
 		if (!startElement && inStaff) {
 			setStartElement( inStaff, inStaff->getSecondGlue());
 			sse->startflag = GRSystemStartEndStruct::OPENLEFT;
@@ -295,7 +296,7 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 
 	if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT || !endElement)
 	{
-		context.openRight = true;
+		context->openRight = true;
 		if (!endElement && inStaff) {
 			setEndElement(inStaff, inStaff->getEndGlue());
 			sse->endflag = GRSystemStartEndStruct::OPENRIGHT;
@@ -313,23 +314,23 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 	float paramH = arBow->getH();
 	ARBowing::CurveDirection dir = arBow->getCurve();
 	if (dir != ARBowing::kUndefined) {
-		context.curveDir = (dir == ARBowing::kDown) ? -1 : 1;
+		context->curveDir = (dir == ARBowing::kDown) ? -1 : 1;
 	}
 	else if( paramH != ARBowing::undefined()) {
-		context.curveDir = (paramH > 0) ? 1 : -1;
+		context->curveDir = (paramH > 0) ? 1 : -1;
 	}
-	else automaticCurveDirection( &context, arBow, sse );
+	else automaticCurveDirection( context, arBow, sse );
 
 	// --- Calculate the start and end anchor points positions --
 	// NOTE: in the futur, offsets could also be applied after automatic
 	// positionning. (tag parameter list for 'curve' would be completed)
 	if (grace)
-		graceAnchorPoints( &context, arBow, sse, inStaff );
+		graceAnchorPoints( context, arBow, sse, inStaff );
 	else if( (dir != ARBowing::kUndefined) || !arBow->getParSet() )
-		automaticAnchorPoints( &context, arBow, sse );
+		automaticAnchorPoints( context, arBow, sse );
 	else
-		manualAnchorPoints( &context, arBow, sse );
-	applyAnchorPointsOffsets( &context, arBow, sse );
+		manualAnchorPoints( context, arBow, sse );
+	applyAnchorPointsOffsets( context, arBow, sse );
 
 	// WARNING: THE PRECEDING CODE MODIFIED THE VALUE OF paramH WHILE
 	// PROCESSING ANCHOR CALCULATION: THEN PTR BECAME UNVALID (DELETED
@@ -341,7 +342,7 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 	if ( (paramH != ARBowing::undefined()) || (paramR3 != ARBowing::undefined()))
 	{
 		// A tag for control points has been specified in the guido script.
-		manualControlPoints( &context, arBow, sse );
+		manualControlPoints( context, arBow, sse );
 	}
 	else { // Automatic placement of control points, it will try to avoid collisions.
 #ifdef NONE //FIX_SLOPE
@@ -381,14 +382,14 @@ void GRBowing::updateBow( GRStaff * inStaff, bool grace )
 //cerr << "GRBowing::updateBow position 3: " << bowInfos->position << endl;
 		return;
 #else
-		automaticControlPoints( &context, arBow, sse );
+		automaticControlPoints( context, arBow, sse );
 		float corr = LSPACE ;
 		float hcorr = LSPACE / 2;
-		if (context.openLeft) {
+		if (context->openLeft) {
 			bowInfos->offsets[0].x -= corr;
-			bowInfos->offsets[0].y = bowInfos->offsets[1].y - ((context.curveDir > 0) ? hcorr : -hcorr);
+			bowInfos->offsets[0].y = bowInfos->offsets[1].y - ((context->curveDir > 0) ? hcorr : -hcorr);
 		}
-		if (context.openRight) {
+		if (context->openRight) {
 			bowInfos->offsets[2].x += corr;
 		}
 #endif
@@ -549,10 +550,9 @@ void GRBowing::automaticCurveDirection( GRBowingContext * context, const ARBowin
 	int firstDir = context->stemDirLeft;
 	if( firstDir == 0 )
 	{
-		GRNote * firstNote = dynamic_cast<GRNote *>(startElement);
+		const GRNote * firstNote = startElement->isGRNote();
 		if( firstNote )
 			firstDir = firstNote->getThroatDirection();
-
 		context->stemDirLeft = firstDir;
 	}
 
@@ -560,10 +560,9 @@ void GRBowing::automaticCurveDirection( GRBowingContext * context, const ARBowin
 	int lastDir = context->stemDirRight;
 	if( lastDir == 0 )
 	{
-		GRNote * lastNote = dynamic_cast<GRNote *>(endElement);
+		const GRNote * lastNote = endElement->isGRNote();
 		if( lastNote )
 			lastDir = lastNote->getThroatDirection();
-
 		context->stemDirRight = lastDir;
 	}
 

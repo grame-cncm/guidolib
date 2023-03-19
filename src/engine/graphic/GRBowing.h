@@ -38,22 +38,6 @@ class GRBowing : public GRPTagARNotationElement
 	protected:
 		std::queue<GRNotationElement*>	fDeferredTellPostion;
 
-	/** \brief Save informations needed to draw the bow 
-			when different staves are needed, see GRPositionTag for comment.
-	*/
-	class GRBowingSaveStruct : public GRPositionTag::GRSaveStruct
-	{
-		public:
-            GRBowingSaveStruct() : numoffsets(3), inflexion(4) { }  // Previous default inflexion: 6
-			
-			virtual ~GRBowingSaveStruct() { }
-			int numoffsets;
-			
-			NVPoint offsets[3];	
-			NVPoint position;
-			float inflexion;
-	};
-	
 	class GRBowingContext	// (JB) new
 	{
 		public:
@@ -77,6 +61,27 @@ class GRBowing : public GRPTagARNotationElement
 			GRGlobalStem *  rightChordStem;
 			int				curveDir;	// -1: downward, 0: unspecified, 1: upward.
 	};
+
+	/** \brief Save informations needed to draw the bow
+			when different staves are needed, see GRPositionTag for comment.
+	*/
+	class GRBowingSaveStruct : public GRPositionTag::GRSaveStruct
+	{
+		public:
+            GRBowingSaveStruct() : numoffsets(3), inflexion(4) { }  // Previous default inflexion: 6
+			
+			virtual ~GRBowingSaveStruct() { }
+			int numoffsets;
+			
+			NVPoint offsets[3];	
+			NVPoint position;
+			float inflexion;
+			NVRect  box;
+			NVRect  max;
+			NVRect  min;
+			GRBowingContext context;
+	};
+	
 	
 	public:
 					 GRBowing( GRStaff * grstaff, GRNotationElement * startEl, GRNotationElement * endEl );
