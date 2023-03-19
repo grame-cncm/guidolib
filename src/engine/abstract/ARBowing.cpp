@@ -91,11 +91,11 @@ void ARBowing::setTagParameters (const TagParameterMap& params)
 			pf.setValue (2.f);
 		}
 	}
-	else {
+//	else {
 		const TagParameterFloat* r3 = getParameter<TagParameterFloat> (kR3Str);
 		const TagParameterFloat* h = getParameter<TagParameterFloat> (kHStr);
 		fCtrlPoint = r3 ? r3->getValue() : undefined();
 		fCtrlPointOffset = h ? h->getValue() : undefined();
 		fParSet |= (r3 || h);
-	}
+//	}
 }
