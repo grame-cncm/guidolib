@@ -18,8 +18,8 @@ LEAKTOOLS = guidoparse guidoar2gr guidodraw
 
 guido2image ?= ../environments/Qt/apps/bin/guido2image
 guido2svg   ?= ../build/bin/guido2svg
-guido2midi  ?= ./build/bin/guido2midi
-guido2proll ?= ./build/bin/guido2proll
+guido2midi  ?= ../build/bin/guido2midi
+guido2proll ?= ../build/bin/guido2proll
 
 ifeq ($(MAKECMDGOALS), win32)
   PLATFORM := 32
