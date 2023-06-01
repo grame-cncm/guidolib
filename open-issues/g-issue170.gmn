@@ -1,0 +1,8 @@
+(*
+	Dots are not drawn in Tuplets (Issue #170)
+*)
+{
+[
+	\tuplet<"">( d1/12 d2/12. c2/24)
+]
+}

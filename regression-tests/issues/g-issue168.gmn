@@ -1,0 +1,23 @@
+(*
+	issue #168
+	Slur Collision when the slur spams more than one system
+*)
+{
+[
+	\key<-1> \meter<"6/8">  _/4 _/8 _/4 \stemsUp a0/8   
+
+%	\stemsDown
+	\slurBegin:1<curve="down"> 
+	b&1/8. a1/16 g1/8 f0/8. e&1/16 d1/8 
+   c1/8. d1/16 b0/8 c1/8. a&0/16 a0/8
+   b&0/8. c1/16 a0/8 b&0/8. g&0/16 a&0/8
+ 	b&0/4. f0/8 
+	\slurEnd:1 
+
+	_/8 _/8 _*3/4
+]
+(*
+,
+[
+]*)
+}

@@ -1,0 +1,10 @@
+(*
+	Incorrect beam dash direction (Issue #171)
+*)
+{
+[ \clef<"g2"> \key<-1> \meter<"6/8">
+   \beamBegin:1  f2/8.. e2/32 d2/16. c2/32 \beamEnd:1 
+   \beamBegin:1  b1/8.. a2/32 g2/16. b1/32 \beamEnd:1 
+   \beamBegin:1  f2/8.. e2/32 d2/8.. c2/32 \beamEnd:1 
+]
+}

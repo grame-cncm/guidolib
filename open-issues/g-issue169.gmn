@@ -1,0 +1,14 @@
+(*
+	Double flat is rendered as four if repeated on a 2nd voice (Issue #169)
+*)
+{
+[ \staff<1> 
+   \clef<"g2"> \meter<"6/8"> g1/4. \stemsUp 
+	\beamBegin:1 b&&1/8. c&2/16 d&2/8 \beamEnd:1 
+   g1/4. \stemsUp \beamBegin:1  b&&1/8. c&2/16 d&2/8 \beamEnd:1 
+]
+ , [ \staff<1> 
+	\stemsDown g1/4. { g&1/4., b&&1/4.  } 
+	g1/4. { g&1/4., b&&1/4. } 
+]
+}
