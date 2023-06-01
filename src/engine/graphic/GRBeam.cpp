@@ -732,6 +732,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 	if (fParent) dir = fParent->getStemsDir ();
 
 	GuidoPos pos = sse->startpos;
+	int previousCount = 0;
 	while (pos) {
 		GREvent * stemNote = GREvent::cast(mAssociated->GetNext(pos));
 		if (stemNote) {
@@ -742,9 +743,11 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 
 			// check the number of beams ...
 			BeamRect r = rect;
+			int previousdir = 0;
 			while (stemNote->getBeamCount() < stemNote->getNumFaehnchen())
 			{
-//if (fParent) cerr << "GRBeam::setBeams " << stemNote << " rect " << rect.topLeft.y << " " << rect.topRight.y << endl;
+//cerr << "GRBeam::setBeams " << stemNote << " " << stemNote->getBeamCount() << endl;
+
 				int beamCount = stemNote->getBeamCount();
 				stemNote->incBeamCount();
 				GREvent * endElt = nullptr;
@@ -752,7 +755,6 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 				// partialbeam is set if the new SimpleBeam only covers part of the masterBeam.
 				bool partialbeam = checkPartialBeaming(pos, sse->endpos, endElt, stemNote->getNumFaehnchen());
 				if (fParent && !beamCount) {	// first beam is actually the main rect
-//					r = rect;
 					GRSimpleBeam* sb = new GRSimpleBeam(this,r);
 					st->simpleBeams.push_back(new GRSimpleBeam(this,r));
 					continue;
@@ -814,17 +816,13 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 						r.topRight.y = r.topLeft.y;
 						r.bottomRight.y = r.bottomLeft.y;
 					}
-					/* 26/11/03 
-					 Beaming bug: wrong direction for partial beam (beam-bug.gmn)
-					 can be tested but changing this test. 				 
-
-						startpos check added to correct problem with partial beam
-						going outside a group like in [ _/16 c d/8 ]
-					*/
-					else if( partialbeam && (stemNote == sse->startElement))
+					else if( partialbeam && ((stemNote == sse->startElement) || ((beamCount > 1) && (previousCount != beamCount) && (previousdir > 0))) ) {
+//cerr << "GRBeam::setBeams right " << stemNote << " prevdir "<< previousdir << " bc: " << beamCount << " pc: " << previousCount << endl;
 						getRightPartialBeam(r, localSize, infos.currentLSPACE, slope);
-					else if( pos == sse->endpos || pos == NULL || ((!stemNote->isSyncopated()) && (pos != sse->startpos)))
+					}
+					else if( pos == sse->endpos || pos == NULL || ((!stemNote->isSyncopated()) && (pos != sse->startpos))) {
 						r = getLeftPartialBeam(stemNote, localSpace, localSize, infos.currentLSPACE * infos.currentSize, slope, dirchange, beamCount);
+					}
 					else
 						getRightPartialBeam(r, localSize, infos.currentLSPACE * infos.currentSize, slope);
 				}
@@ -840,7 +838,17 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float beam
 				}
 				GRSimpleBeam* sb = new GRSimpleBeam(this,r);
 				st->simpleBeams.push_back(new GRSimpleBeam(this,r));
+
+				float curx = stemNote->getStemStartPos().x;
+				bool toRight = (r.topRight.x - curx) > beamSpace;
+				bool toLeft  = (curx - r.topLeft.x) > beamSpace;
+				if (toRight && toLeft) previousdir = 0;
+				else if (toRight) previousdir = 1;
+				else if (toLeft) previousdir = -1;
+
+//cerr << "GRBeam::setBeams previous " << stemNote << " --- "<< r.topLeft.x << " - " << stemNote->getStemStartPos().x << " - " << r.topRight.x << "sp: " << beamSpace << " bc: " << stemNote->getBeamCount() << " dir: " << previousdir << endl;
 			}
+			previousCount = stemNote->getBeamCount();
 		}
 	}
 }
