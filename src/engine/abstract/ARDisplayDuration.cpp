@@ -55,6 +55,27 @@ bool ARDisplayDuration::MatchEndTag(const char * s)
 	return 0;
 }
 
+void ARDisplayDuration::addTagParameters (const TYPE_DURATION & dur, int numdots)
+{
+	STagParameterPtr n (new TagParameterInt (dur.getNumerator()));
+	n->setName("n");
+	addTagParameter(n);
+	STagParameterPtr d (new TagParameterInt (dur.getDenominator()));
+	d->setName("d");
+	addTagParameter(d);
+	STagParameterPtr p (new TagParameterInt (numdots));
+	p->setName("ndots");
+	addTagParameter(p);
+
+}
+
+void ARDisplayDuration::setDisplayDuration(const TYPE_DURATION & tmp, int numdots) {
+	fDuration = tmp;
+	fDots = numdots;
+	addTagParameters (tmp, numdots);
+}
+
+
 void ARDisplayDuration::setDisplayDuration(const TYPE_DURATION & tmp)
 {
 	fDots = 0;
@@ -80,4 +101,5 @@ void ARDisplayDuration::setDisplayDuration(const TYPE_DURATION & tmp)
 		//TRACE("dispduration of unknown length");
 	}
 	fDuration = mydur;
+	addTagParameters (fDuration, fDots);
 }

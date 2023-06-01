@@ -63,10 +63,7 @@ class ARDisplayDuration : public ARMTParameter, public ARPositionTag
 		virtual void setTagParameters (const TagParameterMap& params);
 	
 		void setDisplayDuration(const TYPE_DURATION & tmp);
-		void setDisplayDuration(const TYPE_DURATION & tmp, int numdots) { 
-			fDuration = tmp;
-			fDots = numdots; 
-		}
+		void setDisplayDuration(const TYPE_DURATION & tmp, int numdots);
 
 		TYPE_DURATION	getDisplayDuration() const	{ return fDuration; }
 		int				getDots() const				{ return fDots; }
@@ -77,6 +74,8 @@ class ARDisplayDuration : public ARMTParameter, public ARPositionTag
 		// the parameters ...
 		TYPE_DURATION	fDuration; // the dur of this tuplet
 		int				fDots;
+		
+		void addTagParameters (const TYPE_DURATION& dur, int ndots);
 };
 
 #endif
