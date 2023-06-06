@@ -14,6 +14,7 @@
   research@grame.fr
 
 */
+
 #include "ARMusicalTag.h"
 #include "ARPositionTag.h"
 #include "ARMusicalEvent.h"
@@ -26,7 +27,7 @@ public:
 			 ARBase() { rangesetting = ONLY; setAssociation(ARMusicalTag::RA); }
 	virtual	~ARBase() {}
 
-	virtual std::string getGMNName() const			{ return "ARBase"; };
+	virtual std::string getGMNName() const			{ return "\\ARBase(" + std::string(dur) + ", " + std::string(base) + ")"; };
 
 	void setBaseDuration(const TYPE_DURATION & tmp) { dur = tmp; }
 	void setBase(const TYPE_DURATION & tmp)         { base = tmp; }
@@ -40,7 +41,7 @@ public:
 	// right now, the next smaller note is taken
 	void finish()		{}
 
-protected:
+private:
 	// the parameters ...
 	TYPE_DURATION dur;		// the dur of this tuplet
 	TYPE_DURATION base;		// the base of this tuplet
