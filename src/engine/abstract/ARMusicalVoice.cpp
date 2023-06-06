@@ -2938,34 +2938,23 @@ is returned (it is the denominator divided by any power of two)
 this is equivalent to the primfaktorzerlegung and removing the
 2^n.
 */
-bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
-										const TYPE_DURATION &base,
-										TYPE_DURATION & newbase)
+bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur, const TYPE_DURATION &base, TYPE_DURATION & newbase)
 {
 	TYPE_DURATION ndur = dur * base;
 
-	// check, whether the calculated duration is a power
-	// of two (up to 1/32 == 1/2^5)
-	if (IsPowerOfTwoDenom(ndur/*,5*/) && (ndur <= DURATION_1)
-		&& (ndur.getNumerator()==1 ))
-	{
+	// check, whether the calculated duration is a power of two (up to 1/32 == 1/2^5)
+	if (IsPowerOfTwoDenom(ndur/*,5*/) && (ndur <= DURATION_1) && (ndur.getNumerator()==1 ))
 		return true;// yes, then we are finished ...
-	}
 
-	// no
 	// OK, there is work to do: we need to determine the new base
 	int val = ndur.getDenominator();
 
-	// this removes divides l as long as it can be
-	// divided (removes powers of 2)
+	// this removes divides l as long as it can be divided (removes powers of 2)
 	while ( !(val & 1) )
-	{
 		val >>= 1;
-	}
 
 	// now we set the base ...
-	switch (val)
-	{
+	switch (val) {
 		case 1:
 			newbase.setNumerator(val);
 			newbase.setDenominator(1);
@@ -3027,30 +3016,21 @@ bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
 bool ARMusicalVoice::DurationIsDisplayable(TYPE_DURATION & dur, int & outDotCount )
 {
 	dur.normalize();
-
-	// assert, that the duration is a power of two
-//	assert(IsPowerOfTwoDenom(dur/*,8*/));   DF - removed on march 19 2014 when trying to improve incorrect displayed duration (e.g. a/21)
-
 	const int num = dur.getNumerator();
-
 	const bool canBeLongaNote = true;	// (JB) TODO: handle rests, accept longa notes or not...
 
-	if( num == 1 || ( num == 2 && canBeLongaNote ))
-	{
+	if( num == 1 || ( num == 2 && canBeLongaNote )) {
 		// finished, the note can be displayed
 		// without change
-		outDotCount = 0;
+//		outDotCount = 0;
 		return true;
 	}
 
 	const int denom = dur.getDenominator();
-	if (outDotCount)
-	{
-		if (num == 3)
-		{
+	if (outDotCount) {
+		if (num == 3) {
 			// displayable with one dot
-			if (denom >= 2)
-			{
+			if (denom >= 2) {
 				outDotCount = 1;
 				return true;
 			}
@@ -3058,8 +3038,7 @@ bool ARMusicalVoice::DurationIsDisplayable(TYPE_DURATION & dur, int & outDotCoun
 		else if (num == 7)
 		{
 			// displayable with two dots.
-			if (denom >=4)
-			{
+			if (denom >=4) {
 				outDotCount = 2;
 				return true;
 			}
@@ -3068,23 +3047,18 @@ bool ARMusicalVoice::DurationIsDisplayable(TYPE_DURATION & dur, int & outDotCoun
 
 	// if we get here, the note is note displayable ...
 	// now, we look for the biggest full note.
-
 	TYPE_DURATION tmp ( num-1, denom); // TODO: num-2 for longa notes !?
 	tmp.normalize();
 
-	while (tmp.getNumerator() != 1 && tmp.getNumerator() > 0)
-	{
+	while (tmp.getNumerator() != 1 && tmp.getNumerator() > 0) {
 		tmp.setNumerator( tmp.getNumerator()-1);
 		tmp.normalize();
 	}
-
 	assert(tmp.getNumerator() == 1);
-
 	dur = tmp;
 
 	// no dots for this note!
 	outDotCount = 0;
-
 	return false;
 }
 
@@ -3155,6 +3129,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 	ARMeter * curmeter = NULL;
 	TYPE_DURATION curmetertime;
 	ARMusicalVoiceState vst;
+	const ARDisplayDuration* ardisp = nullptr;
 
 	// this operation eats all but the first non-state  events or tags.
 	GuidoPos pos = GetHeadPosition(vst);
@@ -3321,6 +3296,8 @@ void ARMusicalVoice::doAutoDisplayCheck()
 
 		if (dur > DURATION_0)
 		{
+			int dots = ev->getPoints();
+//cerr << __FILE__ << " " << __LINE__ << " check ev " << ev << " points: " << ev->getPoints() << endl;
 			// check, whether the duration fits the current base
 			TYPE_DURATION newbase;
 			if( DurationFitsBase(dur,base,newbase) == false ) {
@@ -3393,9 +3370,9 @@ void ARMusicalVoice::doAutoDisplayCheck()
 			if (DurationIsDisplayable(dispdur,b_punkt)) {
 				// if there is a base other than 1, we have to tell the dispduration for the event ...
 				// we need to do this also, when a merge-tag is active ...
-				if (base.getNumerator() != 1 || mergelookahead)
+				if (base.getNumerator() != 1 || mergelookahead || (tupletcount && b_punkt && ardisp && dots))
 //				if ((!hasDispDur && base.getNumerator() != 1) || mergelookahead)
-					InsertDisplayDurationTag( dispdur,b_punkt, ev->getRelativeTimePosition(),pos, vst);
+					ardisp = InsertDisplayDurationTag( dispdur,b_punkt, ev->getRelativeTimePosition(),pos, vst);
 
 				if (mergelookahead) {
 					// now set displayDuration for the other events in the merge-range to 0
@@ -3406,7 +3383,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						ARMusicalEvent * tmpev = ARMusicalEvent::cast(GetAt(tmppos));
 						if (tmpev) {
 							// the current tagposition is in armergestate.ptagpos ...
-							InsertDisplayDurationTag(DURATION_0, 0,tmpev->getRelativeTimePosition(), tmppos,armergestate);
+							ardisp = InsertDisplayDurationTag(DURATION_0, 0,tmpev->getRelativeTimePosition(), tmppos,armergestate);
 						}
 						if (tmppos == curmerge->getEndPosition())
 							break;
@@ -3576,7 +3553,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					// now we have to set a displayDuration tag for the first event ....
 					// this determines, wether the event gets a displayDuration-Tag ...
 					if (base.getNumerator() != 1)
-						InsertDisplayDurationTag(dispdur,b_punkt, ev->getRelativeTimePosition(), pos, vst,0);
+						ardisp = InsertDisplayDurationTag(dispdur,b_punkt, ev->getRelativeTimePosition(), pos, vst,0);
 
 					// the added and removedpositiontags have to be removed ... otherwise the removedpositiontags can make problems ...
 					vst.DeleteAddedAndRemovedPTags();
@@ -3616,6 +3593,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 				curbase = NULL;
 				autotuplet = NULL;
 				base = DURATION_1;
+				ardisp = nullptr;
 			}
 		}
 
@@ -3641,7 +3619,8 @@ void ARMusicalVoice::doAutoDisplayCheck()
 		arde->setPosition(lastevpos);
 		curbase->setCorrespondence(arde);
 		arde->setCorrespondence(curbase);
-
+		ardisp = nullptr;
+		
 		// this adds the Element ....
 		if (vst.ptagpos != NULL) {
 			if (autotuplet) 	mPosTagList->AddElementAt(vst.ptagpos,ardetpl);
@@ -3685,7 +3664,7 @@ void ARMusicalVoice::DispdurToTupletdur( TYPE_DURATION & dur, const TYPE_DURATIO
 }
 
 //____________________________________________________________________________________
-void ARMusicalVoice::InsertDisplayDurationTag(const TYPE_DURATION &dispdur, int b_punkt,
+const ARDisplayDuration * ARMusicalVoice::InsertDisplayDurationTag(const TYPE_DURATION &dispdur, int b_punkt,
 											  const TYPE_TIMEPOSITION &tp, GuidoPos pos,
 											  ARMusicalVoiceState &vst, int setptagpos)
 {
@@ -3703,26 +3682,23 @@ void ARMusicalVoice::InsertDisplayDurationTag(const TYPE_DURATION &dispdur, int 
 	GuidoPos newptagpos = NULL;
 
 	// add the position tag ...
-	if (!mPosTagList)
-	{
+	if (!mPosTagList) {
 		mPosTagList = createPositionTagList();
 		vst.ptagpos = mPosTagList->GetHeadPosition();
 	}
 
-	if (vst.ptagpos != NULL)
-	{
+	if (vst.ptagpos != NULL) {
 		mPosTagList->AddElementAt(vst.ptagpos,ardisp);
 		newptagpos = mPosTagList->AddElementAt(vst.ptagpos,ardre);
 	}
-	else
-	{
+	else {
 		mPosTagList->AddTail(ardisp);
 		newptagpos = mPosTagList->AddTail(ardre);
 	}
 
 	vst.AddPositionTag(ardisp,0);
-	if (setptagpos)
-		vst.ptagpos = newptagpos;
+	if (setptagpos) vst.ptagpos = newptagpos;
+	return ardisp;
 }
 
 //____________________________________________________________________________________
