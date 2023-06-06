@@ -17,8 +17,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
-
-//#include "defines.h"
+#include <sstream>
 
 #include "Fraction.h"
 
@@ -92,6 +91,12 @@ void Fraction::set(long long num, long long denom)
 	dval = (double)num / (double)denom;
 }
 
+
+Fraction::operator std::string() const		{
+	std::stringstream s;
+	print (s);
+	return s.str();
+}
 
 void Fraction::print(std::ostream& out) const
 {
@@ -202,55 +207,6 @@ const Fraction Frac_1_64(1,64);
 const Fraction Frac_1_128(1,128);
 
 const Fraction Frac_Max(0xffff,1);
-
-/* (JB) Now based only on the dval, not 100% sure it is 
-	the exact equivalent.
-
-bool Fraction::operator >(const Fraction &tmp) const
-{
-	return ( (double) *this > (double) tmp);
-
-	// in this case an error will occur
-	//	if (tmp.numerator == MAXLONG && tmp.denominator == 1) return 0;
-	//	if (numerator == MAXLONG && denominator == 1) return 1; // etwas so grosses ist
-	//					// auf jeden Fall groesser ....
-	//
-	//	int res = (numerator*tmp.denominator > tmp.numerator*denominator);
-	//	// Schutz gegen "uberlauf!!!!!
-	//	if ( res != (   (double) *this > (double) tmp ) )
-	//		return !res;
-	//	return res;
-}
-
-bool Fraction::operator ==(const Fraction &tmp) const
-{
-	#ifdef DEBUG
-		 if (denominator == 0 || tmp.denominator == 0)
-			 assert(false);
-	#endif
-	if (numerator == 0 && tmp.numerator == 0) return 1;
-	return (numerator==tmp.numerator && denominator == tmp.denominator);
-}
-
-bool Fraction::operator !=(const Fraction &tmp) const
-{
-	return (! (*this == tmp) );
-}
-
-bool Fraction::operator <(const Fraction &tmp) const
-{
-	return (!( *this>=tmp ));
-}
- bool Fraction::operator >=(const Fraction &tmp) const
-{
-	return ( *this == tmp || *this>tmp );
-}
-
-bool Fraction::operator <=(const Fraction &tmp) const
-{
-	return (! ( *this> tmp ) );
-}
-*/
 
 void Fraction::add (const Fraction &inValue)
 {
