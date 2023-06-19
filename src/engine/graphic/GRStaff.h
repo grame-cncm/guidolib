@@ -121,6 +121,7 @@ class GRStaffState
         void setStaffLSPACE(float value)                        { staffLSPACE = value * 2; } // Factor 2 to be consistent with GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
         void setMultiVoiceCollisions(bool state)                { fMultiVoiceCollisions = state; }
         bool multiVoiceCollisions() const                       { return fMultiVoiceCollisions; }
+        const MeasureAccidentals& getMeasureAccidentals() const { return fMeasureAccidentals; }
 
 	private:
 		// Meter-Parameters
