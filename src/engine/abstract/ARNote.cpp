@@ -271,11 +271,17 @@ string ARNote::getGMNName () const
 {
     const char* accidental = "";
     switch (getAccidentals()) {
+		case -2:
+			accidental = "&&";
+			break;
 		case -1:
 			accidental = "&";
 			break;
 		case 1:
 			accidental = "#";
+			break;
+		case 2:
+			accidental = "##";
 			break;
 		default:
 			break;
