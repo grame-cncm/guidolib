@@ -2891,11 +2891,9 @@ void ARMusicalVoice::doAutoEndBar()
 		// voice ...
 
 	ARMusicalObject * el = GetTail();
-	if (el)
-	{
-        if (static_cast<ARRepeatEnd *>(el->isARRepeatEnd()) || static_cast<ARFinishBar *>(el->isARFinishBar()))
-		{
-//			bool end = true;
+	if (el) {
+        if (el->isARRepeatEnd() || el->isARFinishBar()) {
+			// nothing to do, the bar is already there
 		}
 		else
 		{
@@ -2907,9 +2905,10 @@ void ARMusicalVoice::doAutoEndBar()
 				if (autotag && autotag->getEndBarState() == ARAuto::kOff)
 					finishbar = false;
 			}
+			bool endchord = (el->isEmptyNote() && el->getDuration() == DURATION_0);
 			// now check whether there is a bar tag at the end ...
 			// if this is the case, we do not set an endbar ....
-			if (endState->curlastbartp == endState->curtp)
+			if ((endState->curlastbartp == endState->curtp) && !endchord)
 			{
 				finishbar = false;
 			}
@@ -4589,23 +4588,18 @@ void ARMusicalVoice::doAutoGlissando()
 				}
 				
 				bool isTied = false;
-				if(vst.curpositiontags)
-				{
+				if(vst.curpositiontags) {
 					GuidoPos tmppos = vst.curpositiontags->GetHeadPosition();
-					while (tmppos)
-					{
+					while (tmppos) {
 						ARTie * tie = dynamic_cast<ARTie *>(vst.curpositiontags->GetNext(tmppos));
 						if (tie && tie->getEndPosition() == vst.vpos)
-						{
 							isTied = true;
-						}
 					}
 				}
 
-				if (glissStruct->curchordtag == prevchordtag && (glissStruct->startnote->getRelativeEndTimePosition() == note->getStartTimePosition()))
+				if (glissStruct->curchordtag == prevchordtag && (glissStruct->startnote->getRelativeEndTimePosition() <= note->getRelativeTimePosition()))
 				{
-					if (note->getName() != ARNoteName::empty && 
-						(!note->CompareNameOctavePitch(*glissStruct->startnote) ||
+					if (!note->isEmptyNote() && (!note->CompareNameOctavePitch(*glissStruct->startnote) ||
 						(note->CompareNameOctavePitch(*glissStruct->startnote) && note->getDetune() != glissStruct->startnote->getDetune()))
 						&& !isTied)
 					{
@@ -5162,13 +5156,7 @@ void ARMusicalVoice::FinishChord()
 			firstevent = 1;
 			ev->setDuration(chorddur);
 		}
-		else if (firstevent) {
-			// the first event has happened
-			o->setStartTimePosition(starttp);
-			o->setRelativeTimePosition(newtp);
-		}
-		else
-			o->setRelativeTimePosition(starttp); // aber dass muesste ja eh schon so sein...?
+		else o->setRelativeTimePosition(starttp); 
 
 		if (mCurVoiceState->removedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
