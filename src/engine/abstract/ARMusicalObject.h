@@ -46,10 +46,6 @@ class ARMusicalObject : public ARVisitable
 
 		// must be re-designed!!! Should be put to another place  but is needed here from several alg.
 		virtual TYPE_TIMEPOSITION getRelativeEndTimePosition() const;
-
-		// introduced to get correct tie pos for notes in chords [DF 2012-03-19]
-		// do nothing at this level
-		virtual void setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{}
 		
 		virtual void setRelativeTimePosition(const TYPE_TIMEPOSITION  & newRelativeTimePosition);
 		virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp)	{ fDuration = tp - relativeTimePosition; }

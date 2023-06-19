@@ -32,7 +32,7 @@ const char * gd_pc2noteName(int fPitch);
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),
     fAccidentals(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
-    fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fStartPosition(-1,1), fNoteAppearance(""), fOctava(0)
+    fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fNoteAppearance(""), fOctava(0)
 {
 }
 
@@ -40,7 +40,7 @@ ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
 		fOctave(MIN_REGISTER), fAccidentals(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
         fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0),
-        fStartPosition(-1,1), fNoteAppearance(""), fOctava(0)
+        fNoteAppearance(""), fOctava(0)
 {
 }
 
@@ -48,7 +48,7 @@ ARNote::ARNote( const std::string & name, int accidentals, int octave, int numer
 	:	ARMusicalEvent(numerator, denominator), fName( name ), fPitch ( UNKNOWN ),
 		fOctave( octave ),	fAccidentals( accidentals ), fIntensity( intensity ),
 		fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), 
-		fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fStartPosition(-1,1), fNoteAppearance(""), fOctava(0)
+		fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fNoteAppearance(""), fOctava(0)
 {
 	assert(fAccidentals>=MIN_ACCIDENTALS);
 	assert(fAccidentals<=MAX_ACCIDENTALS);
@@ -59,7 +59,7 @@ ARNote::ARNote( const std::string & name, int accidentals, int octave, int numer
 ARNote::ARNote(const ARNote & arnote, bool istied)
 	:	ARMusicalEvent( (const ARMusicalEvent &) arnote),
 		fName(arnote.fName), fOrnament(NULL),  fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
-        fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(true), fTremolo(0), fStartPosition(-1,1), fOctava(0)
+        fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(true), fTremolo(0), fOctava(0)
 {
 	fPitch = arnote.fPitch;
 	fOctave = arnote.fOctave;
@@ -238,11 +238,6 @@ void ARNote::setDuration(const TYPE_DURATION & newdur)
 	ARMusicalEvent::setDuration(newdur);
 	if (newdur == DURATION_0)
 		mPoints = 0;
-}
-
-const TYPE_TIMEPOSITION& ARNote::getStartTimePosition() const 
-{
-	return (fStartPosition.getNumerator() >= 0) ? fStartPosition : getRelativeTimePosition();
 }
 
 // this compares the name, fPitch, fOctave and fAccidentals

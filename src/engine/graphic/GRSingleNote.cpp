@@ -110,12 +110,7 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
 			dur = getDurTemplate();
         }
-//		const ARNote * ar = getARNote();
-//		std::cout << "mapped pos: " << ar->getStartTimePosition() << " ar pos: " << ar->getRelativeTimePosition() << " ";
-//		ar->print(std::ostream& os);
-		// ARNote and GRNote don't have the same time position in chords
-		// actually chord notes have a wrong time position, it has been corrected in ARMusicalVoice::FinishChord
-        SendMap (f, getARNote()->getStartTimePosition(), dur, (isGraceNote() ? kGraceNote : kNote), infos);
+        SendMap (f, getARNote()->getRelativeTimePosition(), dur, (isGraceNote() ? kGraceNote : kNote), infos);
 	}
 }
 
@@ -346,7 +341,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	if (accidentals > 2) accidentals = 2;
 	else if (accidentals < -2) accidentals = -2;
 
-	mGrStaff->checkSystemBar (arNote->getStartTimePosition());
+	mGrStaff->checkSystemBar (arNote->getRelativeTimePosition());
 	AccList * mylist = mGrStaff->askAccidentals(pitch, octave, accidentals, arNote->getDetune());
 	if (!mylist->empty()) {
 		GuidoPos pos = mylist->GetHeadPosition();

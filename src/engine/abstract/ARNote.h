@@ -49,10 +49,6 @@ class ARNote : public ARMusicalEvent
 
 		virtual void browse(TimeUnwrap& mapper) const;
 
-		// start time position has been introduced to get correct time position for notes in chords [DF 2012-03-19]
-		virtual void						setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{ fStartPosition = pos; }
-		virtual const TYPE_TIMEPOSITION&	getStartTimePosition() const;
-
 		void		 addFlat();
 		void	 	 addSharp();
 
@@ -121,9 +117,6 @@ class ARNote : public ARMusicalEvent
 		const ARAlter *   fAlter	= 0;
 
 		bool		fTrillOwner = false;
-	
-		TYPE_TIMEPOSITION	fStartPosition;
-
 		NVstring   fNoteAppearance;
 		int		   fOctava;			// for octava signs
 };
