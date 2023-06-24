@@ -1350,7 +1350,8 @@ GRInstrument * GRStaff::AddInstrument(const ARInstrument * arinstr)
 GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & date)
 {
 staff_debug("AddBar");
-	newMeasure(date); // erhoeht u.a. mnum!
+	newMeasure(date, !fInhibitNextReset2key); // erhoeht u.a. mnum!
+	fInhibitNextReset2key = false;
 
 	if (mStaffState.curbarfrmt) abar->setRanges(mStaffState.curbarfrmt->getRanges());
 	GRBar * bar = new GRBar( abar, this, date, fProportionnalRendering);
@@ -1499,7 +1500,9 @@ staff_debug("EndStaff 2");
 GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITION & date)
 {
 staff_debug("AddDoubleBar");
-	newMeasure(date); // erhoeht u.a. mnum!
+	newMeasure(date, !fInhibitNextReset2key); // erhoeht u.a. mnum!
+	fInhibitNextReset2key = false;
+
 	if (mStaffState.curbarfrmt) ardbar->setRanges(mStaffState.curbarfrmt->getRanges());
 	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, date, fProportionnalRendering);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 

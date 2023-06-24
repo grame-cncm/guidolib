@@ -295,7 +295,7 @@ class GRStaff : public GRCompositeNotationElement
 		void	checkMultiVoiceNotesCollision ();
 		float	getNotesDensity () const;
 		size_t	getLyrics (std::vector<const GRNotationElement*>& list) const;
-	
+		void	inhibitNextReset2Key()		{ fInhibitNextReset2key = true; }
 
   protected:
 		void	DebugPrintState(const char * info) const;
@@ -334,7 +334,8 @@ class GRStaff : public GRCompositeNotationElement
 		std::map<float, float> fPositions;
 		bool			isNextOn;
 		bool			firstOnOffSetting;
-
+		
+		bool			fInhibitNextReset2key = false;
 		float			fProportionnalRendering;
 };
 
