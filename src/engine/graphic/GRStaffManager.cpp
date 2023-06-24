@@ -215,14 +215,13 @@ GRStaffManager::~GRStaffManager()
 // returns a boolean value to indicate the end of all voices
 bool GRStaffManager::nextTimePosition (int nvoices, bool filltagmode, TCreateStavesState& state)
 {
-	TYPE_TIMEPOSITION tp;
+	TYPE_TIMEPOSITION timepos;
 	bool end = true;
 	for (int i = 0; i < nvoices; i++)
 	{
 		GRVoiceManager *voiceManager = mVoiceMgrList->Get(i);
-		tp = state.timePos;
-
-		// this does the next timeposition ... 
+		timepos = state.timePos;
+		// this does the next timeposition ...
 		// behavior:
 		// 1. independant of filltagmode:
 		//	  if curtp > tmptp then tmptp is set to curtp and -1 is returned.
@@ -242,8 +241,7 @@ bool GRStaffManager::nextTimePosition (int nvoices, bool filltagmode, TCreateSta
 		//    ret = tmp->Next(tmptp, filltagmode);
 		// see Iterate-description for documentation
 
-		int ret = voiceManager->Iterate(tp, filltagmode);
-
+		int ret = voiceManager->Iterate(timepos, filltagmode);
 		// there is still a voice active ...
 		if (ret != GRVoiceManager::ENDOFVOICE)
 			end = false;
@@ -253,8 +251,8 @@ bool GRStaffManager::nextTimePosition (int nvoices, bool filltagmode, TCreateSta
 		// This value is also important for potential Breakpoint determination.
 		if (ret == GRVoiceManager::CURTPBIGGER_ZEROFOLLOWS || ret == GRVoiceManager::DONE_ZEROFOLLOWS)
 		{
-			if (tp < state.minswitchtp)
-				state.minswitchtp = tp;
+			if (timepos < state.minswitchtp)
+				state.minswitchtp = timepos;
 		}
 
 		if (ret != GRVoiceManager::MODEERROR) {
@@ -284,7 +282,7 @@ bool GRStaffManager::nextTimePosition (int nvoices, bool filltagmode, TCreateSta
 					ret == GRVoiceManager::CURTPBIGGER_ZEROFOLLOWS )
 				{
 					// set the increment of timeposition
-					if (tp < state.mintp) state.mintp = tp;
+					if (timepos < state.mintp) state.mintp = timepos;
 				}
 			}
 		}
