@@ -4,7 +4,11 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.7.7
 - fix crash bug with repeat begin
-- improve slur rendering it spans several systems 
+- fix issue #168: Slur Collision when the slur spams more than one system
+- fix issue #170: Dots not drawn in Tuplets
+- fix issue #171: Incorrect beam dash direction
+- fix issue #169: Double flat is rendered as four if repeated on a 2nd voice
+
 
 ----------------------------------------------------------------
   version 1.7.6
