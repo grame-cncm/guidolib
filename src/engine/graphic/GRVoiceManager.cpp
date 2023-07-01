@@ -709,14 +709,58 @@ int GRVoiceManager::IterateTag	(ARMusicalObject * obj)
 }
 
 //-----------------------------------------------------------------------------------------
+// intended to multi voices staves to catch notes that cover each other
+// e.g. the same note appears as a quarter and as a half note
+// takes a list of notes as parameter, all the notes are supposed to be at the same time position
+void GRVoiceManager::checkHiddenNotes(const std::vector<GRSingleNote *>& notes)
+{
+	if (notes.size() < 2) return;
+
+	for (int i=0; i < notes.size()-1; i++) {
+		GRSingleNote * n = notes[i];
+		const ARNote* arn = n->getARNote();
+		TYPE_DURATION nd = arn->getDuration();
+		for(int j=i+1; j < notes.size(); j++){
+			GRSingleNote * m = notes[j];
+			const ARNote* arm = m->getARNote();
+			if ((arn->getMidiPitch() == arm->getMidiPitch()) && (n->getGRStaff() == m->getGRStaff()) && (n->getOffset().x == m->getOffset().x)) {
+				GRSingleNote* tohide = nullptr;
+				TYPE_DURATION md = arm->getDuration();
+				if (nd > md) {
+					if (nd > DURATION_4) tohide = m;
+				}
+				else if (nd < md) {
+					if (md > DURATION_4) tohide = n;
+				}
+				if (tohide && tohide->getStyle().empty())
+					tohide->hideHead();
+			}
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------------------
 int GRVoiceManager::IterateEvent(ARMusicalEvent * arev, TYPE_TIMEPOSITION &timepos)
 {
+	static TYPE_TIMEPOSITION currentTime;
+	static vector<GRSingleNote *> currentNotes;
+	
 	// This creates the graphical representation for position-tags, that start at the current position...
 	checkStartPTags(fVoiceState->vpos);
 	GREvent * grev = NULL;
 
-	if (arev->isARNote())
+	if (timepos != currentTime) {
+		if (timepos > currentTime) checkHiddenNotes (currentNotes);
+		currentTime = timepos;
+		currentNotes.clear();
+	}
+	if (arev->isARNote()) {
 		grev = CreateNote(timepos, arev);
+		GRSingleNote * note = grev->isSingleNote();
+		if (note && note->getARNote()) {
+			currentNotes.push_back (note);
+		}
+	}
 	else if (arev->isARRest())
 		grev = CreateRest(timepos, arev);
 	
@@ -748,11 +792,6 @@ int GRVoiceManager::IterateEvent(ARMusicalEvent * arev, TYPE_TIMEPOSITION &timep
 		getCurStaff()->inhibitNextReset2Key();
 	}
 
-#if 0
-	if (fVoiceState->vpos && dynamic_cast<ARChordComma*>(arVoice->GetAt(fVoiceState->vpos)) && (getARVoice()->getVoiceNum() > 1)) {
-		/*retCode =*/ IterateChord(timepos);
-	}
-#endif
 	timepos = arev->getRelativeEndTimePosition();
 	return retCode;
 }
@@ -882,7 +921,8 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	if (mytag)
 	{
 		if (mytag->getRange()){
-			GuidoTrace("range without range tag");
+//			GuidoTrace("range without range tag");
+			cerr << mytag << " : range without range tag" << endl;
 		}
 	}
     else if (static_cast<const ARDummyRangeEnd *>(arOfCompleteObject->isARDummyRangeEnd()))

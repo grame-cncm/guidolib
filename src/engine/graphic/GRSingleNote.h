@@ -116,9 +116,10 @@ class GRSingleNote : public GRNote
 
         ARTHead::HEADSTATE getHeadState() { return mHeadState; }
 
-        void forceAppearance();
-		const GRStem *getStem() const;
-		float getNoteWidth() const			{ return mNoteBreite; }
+        void 			forceAppearance();
+		const GRStem *	getStem() const;
+		float 			getNoteWidth() const	{ return mNoteBreite; }
+		void			hideHead ();
 
 protected:
 	GRStem *	  getStem();

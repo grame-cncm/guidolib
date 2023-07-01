@@ -178,6 +178,7 @@ private:
 	void			addAssociations (GREvent* ev, bool setnext=true);
 	int				endIteration ();
 	void			checkCluster(GREvent *ev);
+	void			checkHiddenNotes(const std::vector<GRSingleNote *>& notes);
 
 	int 			IterateEvent		(ARMusicalEvent * arev, TYPE_TIMEPOSITION &timepos);
 	int 			IterateNoDurEvent	(ARMusicalObject * obj, const TYPE_TIMEPOSITION& timepos);

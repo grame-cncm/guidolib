@@ -450,6 +450,14 @@ void GRSingleNote::forceAppearance()
 }
 
 //____________________________________________________________________________________
+void GRSingleNote::hideHead ()
+{
+	if (mNoteHead)
+		mNoteHead->setHaveToBeDrawn(false);
+	else mStyle = "none";
+}
+
+//____________________________________________________________________________________
 /** \brief Called by GRGlobalStem to allow the note to adjust its headposition.
 
 	If head Headstate is set by the user the sugHeadState (suggested Head State) is just ignored.
