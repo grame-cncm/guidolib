@@ -103,6 +103,7 @@ public:
 			int		getStaffNum () const	{ return staffnum; }
 			const ARMusicalVoiceState * getVoiceState() const	{ return fVoiceState; }
 			const ARMusicalVoice* getARVoice() const 			{ return arVoice; }
+	static  void 	resetCurrentNotesTP() 						{ fCurrentNotesTP.clear(); }
 
 protected:
 	void beginOpenTags();
@@ -191,6 +192,8 @@ private:
 	TSharedArticulationsList fSharedArticulations;
 	void			handleSharedArticulations(const TSharedArticulationsList& list);
 	void			setTrillNext (GRNotationElement* ev);
+
+	static std::vector<GRSingleNote *> fCurrentNotesTP;   // current notes at a given time position (shared)
 };
 
 #endif

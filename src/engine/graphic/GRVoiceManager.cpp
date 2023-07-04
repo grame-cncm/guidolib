@@ -178,6 +178,9 @@
 
 using namespace std;
 
+
+vector<GRSingleNote *> GRVoiceManager::fCurrentNotesTP;   // current notes at a given time position
+
 GRVoiceManager::GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, const ARMusicalVoice * p_voice,  int p_voicenum)
 {
 	fMusic	= music;
@@ -290,12 +293,7 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 		curheadstate = mhead;
 	}
 	else if ((theColor = dynamic_cast<const ARColor *>(mtag)) != 0) {
-		// it is a color tag...
-
-	/*	mColor.Set(	(unsigned char) theColor->getColorR(),
-					(unsigned char) theColor->getColorG(),
-					(unsigned char) theColor->getColorB(),
-					(unsigned char) theColor->getColorA());*/
+		// it is a color tag... (?)
 	}
 	else if (typeid(*mtag) == typeid(ARUnits)) {
 		// just ignore units tag... (it is a state
@@ -392,22 +390,6 @@ void GRVoiceManager::BeginManageVoice()
 	// just ignore this: this procedure is only
 	// called once. There are NO OPEN TAGS!
 }
-
-
-//static void debugstate(const char* context, const TagList* tl)
-//{
-//	cout << "\ndebugstate :" << context << endl;
-//	GuidoPos pos = tl->GetHeadPosition();
-//	while (pos) {
-//		ARMusicalTag * tag = tl->GetNext (pos);
-//		if (tag) {
-//			tag->PrintName (cout);
-//			tag->PrintParameters (cout);
-//			cout << endl;
-//		}
-//		else cout << "null tag" << endl;
-//	}
-//}
 
 /** \brief Actually does a newSystem or a newPage-break.
 
@@ -743,22 +725,21 @@ void GRVoiceManager::checkHiddenNotes(const std::vector<GRSingleNote *>& notes)
 int GRVoiceManager::IterateEvent(ARMusicalEvent * arev, TYPE_TIMEPOSITION &timepos)
 {
 	static TYPE_TIMEPOSITION currentTime;
-	static vector<GRSingleNote *> currentNotes;
 	
 	// This creates the graphical representation for position-tags, that start at the current position...
 	checkStartPTags(fVoiceState->vpos);
 	GREvent * grev = NULL;
 
 	if (timepos != currentTime) {
-		if (timepos > currentTime) checkHiddenNotes (currentNotes);
+		if (timepos > currentTime) checkHiddenNotes (fCurrentNotesTP);
 		currentTime = timepos;
-		currentNotes.clear();
+		fCurrentNotesTP.clear();
 	}
 	if (arev->isARNote()) {
 		grev = CreateNote(timepos, arev);
 		GRSingleNote * note = grev->isSingleNote();
 		if (note && note->getARNote()) {
-			currentNotes.push_back (note);
+			fCurrentNotesTP.push_back (note);
 		}
 	}
 	else if (arev->isARRest())
