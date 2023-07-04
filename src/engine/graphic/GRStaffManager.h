@@ -193,9 +193,9 @@ class GRStaffManager
 
 		virtual bool	setStaffStateTag(const ARMusicalTag * tag, int staffnum);
 		virtual float	getSystemWidthCm();
-		virtual void	EndPage(ARMusicalVoice * voice, GuidoPos pos);
-		virtual void	EndSystem(ARMusicalVoice * arVoice, GuidoPos pos);
-		virtual void	setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp);
+//		virtual void	EndPage(ARMusicalVoice * voice, GuidoPos pos);
+//		virtual void	EndSystem(ARMusicalVoice * arVoice, GuidoPos pos);
+//		virtual void	setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp);
 		virtual TYPE_TIMEPOSITION getRelativeTimePositionOfGR() const		{ return relativeTimePositionOfGR; }
 		virtual GRStaff *	getStaff(int staff);
 		virtual void		prepareStaff(int staff);
@@ -320,6 +320,8 @@ class GRStaffManager
 			float	pbreakval;
 		} TCreateStavesState;
 
+		void 	checkAccidentalsCollisions();
+		void 	finishStaves(const TCreateStavesState& state, float beginheight);
 		bool	nextTimePosition (int nvoices, bool filltagMode, TCreateStavesState& state);
 		float	systemBreak (int newlineMode, float beginheight);
 		int		initVoices(int cnt);
@@ -331,7 +333,7 @@ class GRStaffManager
 		GRSystemSlice * CreateBeginSlice (const GRSystemSlice * lastslice);
 		void			createNewSystemRods(int startid,int endid);
 		int				CheckForBarSpring(int sprid);
-		void			EndStaves(const TYPE_TIMEPOSITION & tp, int lastline = 0);
+//		void			EndStaves(const TYPE_TIMEPOSITION & tp, int lastline = 0);
 		void			handleDeletedElements();
 
 		void			MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState * pbs2 = 0);

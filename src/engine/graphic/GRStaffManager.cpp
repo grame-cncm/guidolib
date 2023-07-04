@@ -175,6 +175,8 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 // ----------------------------------------------------------------------------
 GRStaffManager::~GRStaffManager()
 {
+	GRVoiceManager::resetCurrentNotesTP();
+
 	if (mSystemSlices)
 	{
 		// This is important for ABORT issues ...
@@ -488,7 +490,37 @@ void GRStaffManager::createStaves()
 		// if the force is alright
 	} while ( /* !sizer && */ !ender);
 
+//	checkAccidentalsCollisions();
+	finishStaves (state, beginheight);
+}
 
+//----------------------------------------------------------------------------------
+void GRStaffManager::checkAccidentalsCollisions()
+{
+	const int mini = mMyStaffs->GetMinimum();
+	const int maxi = mMyStaffs->GetMaximum();
+	for( int i = mini; i <= maxi; ++i )
+	{
+		GRStaff * staff = mMyStaffs->Get(i);
+		if (staff) {
+cerr << "GRStaffManager::checkAccidentalsCollisions staff " << i << endl;
+			NEPointerList* elts = staff->getElements();
+			GuidoPos pos = elts->GetHeadPosition();
+			while (pos) {
+				GRNotationElement * e = elts->GetNext(pos);
+				if (e) {
+cerr << "	check " << e << endl;
+				}
+			}
+		}
+	}
+
+}
+
+//----------------------------------------------------------------------------------
+// was initially at the end of createStaves
+void GRStaffManager::finishStaves (const TCreateStavesState& state, float beginheight)
+{
 	// I have to rethink the following ...
 	// it may be, that I have to finish the last slice before calling the optimum-Break-Routine ....
 	if (mSpringVector->GetMaximum() >= mSpringVector->GetMinimum())
@@ -500,7 +532,7 @@ void GRStaffManager::createStaves()
 		{
 			sff = BuildSFF();
 
-            // add the thing to the slice-list 
+            // add the thing to the slice-list
             GRPossibleBreakState * pbs = new GRPossibleBreakState();
             pbs->sff = sff;
             pbs->copyofcompletesff = NULL;
@@ -556,22 +588,24 @@ GRStaff * GRStaffManager::getStaff(int staff)
 	return mMyStaffs->Get(staff);
 }
 
-void GRStaffManager::setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp)
-{
-	mDurationOfGR = tp - relativeTimePositionOfGR;
-}
-
-void GRStaffManager::EndSystem(ARMusicalVoice * arVoice, GuidoPos pos)
-{
-	// pos is the Position of the newLine -Tag
-	setRelativeEndTimePosition( arVoice->GetAt(pos)->getRelativeEndTimePosition() );
-}
-
-void GRStaffManager::EndPage(ARMusicalVoice * voice, GuidoPos pos)
-{
-	// pos is the Position of the newPage-Tag
-	setRelativeEndTimePosition ( voice->GetAt(pos)->getRelativeEndTimePosition() );
-}
+// the functions below are never called D.F.
+//
+//void GRStaffManager::setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp)
+//{
+//	mDurationOfGR = tp - relativeTimePositionOfGR;
+//}
+//
+//void GRStaffManager::EndSystem(ARMusicalVoice * arVoice, GuidoPos pos)
+//{
+//	// pos is the Position of the newLine -Tag
+//	setRelativeEndTimePosition( arVoice->GetAt(pos)->getRelativeEndTimePosition() );
+//}
+//
+//void GRStaffManager::EndPage(ARMusicalVoice * voice, GuidoPos pos)
+//{
+//	// pos is the Position of the newPage-Tag
+//	setRelativeEndTimePosition ( voice->GetAt(pos)->getRelativeEndTimePosition() );
+//}
 
 float GRStaffManager::getSystemWidthCm()
 {
@@ -1536,48 +1570,50 @@ void GRStaffManager::addElementToSpring(GRNotationElement * grne, int springid)
 
 	(EndStaff) Then, all open tags are finished 
 	(all VoiceManagers get called with closeOpenTags)
+	
+	actually this function is never called D.F.
 */
-void GRStaffManager::EndStaves( const TYPE_TIMEPOSITION & tp, int lastline )
-{
-	// now we attach one last spring to the springvect
-	// This spring is NOT stretchable and is ignored in the SPF!
-	// this last spring is for the glue only.
-
-	GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
-	spr->setID(mSpringID);
-	spr->fIsfrozen = 1;
-	mSpringVector->Set(mSpringID++,spr);
-
-	int i;
-	int mini = mMyStaffs->GetMinimum();
-	int maxi = mMyStaffs->GetMaximum();
-
-	for( i = mini; i <= maxi; ++i )
-	{
-		GRStaff * staff = mMyStaffs->Get(i);
-		if (staff)
-		{
-			// this call adds an endglue to this staff (attaching it to the last spring)
-			staff->EndStaff(tp,this,NULL,lastline);
-		}
-		/* else
-		{
-			// then we need to create
-			// empty staves ...
-			mMyStaffs->Set(i,getStaff(i));
-		} */
-	}
-
-	// now all the voiceManagers get called
-	mini = mVoiceMgrList->GetMinimum();
-	maxi = mVoiceMgrList->GetMaximum();
-
-	for( i= mini; i <= maxi; ++i )
-	{
-		GRVoiceManager * vcmg = mVoiceMgrList->Get(i);
-		vcmg->closeOpenTags();
-	}
-}
+//void GRStaffManager::EndStaves( const TYPE_TIMEPOSITION & tp, int lastline )
+//{
+//	// now we attach one last spring to the springvect
+//	// This spring is NOT stretchable and is ignored in the SPF!
+//	// this last spring is for the glue only.
+//
+//	GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
+//	spr->setID(mSpringID);
+//	spr->fIsfrozen = 1;
+//	mSpringVector->Set(mSpringID++,spr);
+//
+//	int i;
+//	int mini = mMyStaffs->GetMinimum();
+//	int maxi = mMyStaffs->GetMaximum();
+//
+//	for( i = mini; i <= maxi; ++i )
+//	{
+//		GRStaff * staff = mMyStaffs->Get(i);
+//		if (staff)
+//		{
+//			// this call adds an endglue to this staff (attaching it to the last spring)
+//			staff->EndStaff(tp,this,NULL,lastline);
+//		}
+//		/* else
+//		{
+//			// then we need to create
+//			// empty staves ...
+//			mMyStaffs->Set(i,getStaff(i));
+//		} */
+//	}
+//
+//	// now all the voiceManagers get called
+//	mini = mVoiceMgrList->GetMinimum();
+//	maxi = mVoiceMgrList->GetMaximum();
+//
+//	for( i= mini; i <= maxi; ++i )
+//	{
+//		GRVoiceManager * vcmg = mVoiceMgrList->Get(i);
+//		vcmg->closeOpenTags();
+//	}
+//}
 
 /** \brief Take into account that pbs2 must not be completed at the time of calling!
 	Assumes, that mLastSpringID is set as the mSpringID at the first pbs.
