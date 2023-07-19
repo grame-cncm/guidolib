@@ -9,6 +9,7 @@ GUIDO Engine history
 - fix issue #171: Incorrect beam dash direction
 - fix issue #169: Double flat is rendered as four if repeated on a 2nd voice
 - fix issue #164: Conflicting notes on a multi voices staff 
+- fix occasional incorrect dots placement in repeatEnd (depending on context)
 
 
 ----------------------------------------------------------------

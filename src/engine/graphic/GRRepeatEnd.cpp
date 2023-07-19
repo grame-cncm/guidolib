@@ -117,6 +117,7 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 	}
 
     float x  = -hlspace * 0.75f - getXOffset();
+    hdc.SetFontAlign(VGDevice::kAlignBaseLeft);
     DrawSymbol(hdc, kDotSymbol, x, y1, pointSize);
     DrawSymbol(hdc, kDotSymbol, x, y2, pointSize);
 }
