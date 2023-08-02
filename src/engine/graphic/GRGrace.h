@@ -31,7 +31,9 @@ class GRGrace : public GRARCompositeNotationElement,
 		virtual 	~GRGrace() {}
 
 		virtual void tellPosition( GObject * caller,const NVPoint & inPos );
-//		virtual void addAssociation( GRNotationElement * p );
+		// DF-02-08-2023 don't add associations to grace (useless)
+		// solves the crash bug in issue #173
+		virtual void addAssociation( GRNotationElement * p ) {}
 
 		virtual GuidoPos AddTail( GRNotationElement * el );
 };

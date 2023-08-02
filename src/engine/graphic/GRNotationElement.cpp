@@ -29,6 +29,7 @@
 #include "GRClef.h"
 #include "GRKey.h"
 #include "GRMeter.h"
+#include "GRGrace.h"
 
 // - Guido AR
 #include "ARMusicalObject.h"
@@ -372,6 +373,11 @@ NVRect GRNotationElement::getAssociatedBoundingBox() const
 // -------------------------------------------------------------------------
 void GRNotationElement::addAssociation( GRNotationElement * p )
 {
+	// DF 02-08-2023 don't associate a GRGrace to any element
+	// it's useless since notes are already notified of their 'grace' status
+	// solves the crash of issue #173
+	if (dynamic_cast<const GRGrace*>(p)) return;
+
 	if (mAssociated == 0)
 		mAssociated = new NEPointerList; // these elements don't belong to the list
 
