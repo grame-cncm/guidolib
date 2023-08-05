@@ -1,0 +1,18 @@
+(*
+	Issue #173
+	Cross Staff Grace Notes rendering issue with Beaming
+*)
+
+{[ \staff<1>  \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<-1> \meter<"C/"> 
+   \stemsUp f#1/2  a1/4 \stemsDown  d#2/4 \bar<measNum=2> 
+   (* meas. 2 *)  f#2/2. _/4 
+ ]
+ , 
+[ \staff<2> 
+   (* meas. 1 *)  \clef<"f4"> \key<-1> \meter<"C/"> \stemsUp \grace( \beamBegin:1  b#-2/16 d#-1/16 f#-1/16 a-1/16  b#-1/16 d#0/16 f#0/16
+ \beamEnd:1 \staff<1> \stemsDown \beamBegin:1 a0/16 b#0/16 d#1/16 
+ \beamEnd:1)
+ empty/1 \staff<2>  
+   (* meas. 2 *)  \fermata( _/1)
+]}

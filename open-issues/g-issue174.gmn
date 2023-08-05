@@ -1,0 +1,19 @@
+(*
+	Issue #174
+	Octavia on cross-staff can lead to destructor Crash
+*)
+{
+[  (* meas. 1 *)  \clef<"g2"> \key<2> \meter<"C"> 
+   \oct<1> 
+   \staff<2> \stemsUp \beamBegin:1 {f#2/8, f#3/8  } 
+%   \staff<1> {f#3/8, f#4/8  } 
+%   \staff<2> {e2/8, e3/8  } 
+   \staff<1> {e3/8, e4/8  } \beamEnd:1 
+%   \staff<2> \beamBegin:1 {c#2/8, c#3/8  } 
+%   \staff<1> {c#3/8, c#4/8  } 
+   \staff<2> {\acc( a#1/8), \acc( a#2/8)} 
+%   \oct<0> 
+   \staff<1> {a#2/8, \acc( a#3/8)} 
+   \beamEnd:1 
+] 
+}
