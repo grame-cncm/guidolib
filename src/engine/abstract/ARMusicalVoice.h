@@ -200,6 +200,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void doAutoBeaming();
 		void doAutoGlissando();
 		void doAutoFeatheredBeam();
+		void doAutoFixOctavaStaff();
 
 		void doMicroTonal();
 		void getOctava(int voice, std::map< int, std::vector<AROctava*> >& list);

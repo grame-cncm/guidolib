@@ -404,8 +404,6 @@ void ARMusic::doAutoStuff()
 		ARMusicalVoice * arvc = GetNext(pos);
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
-	// check multiple octava on multiple voice, same staff
-//	timebench("doOctavaCheck", doOctavaCheck());
 
 //	GMNCodePrintVisitor v(cerr);
 //	this->accept (v);
