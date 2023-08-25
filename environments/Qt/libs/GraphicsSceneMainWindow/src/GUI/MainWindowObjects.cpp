@@ -30,6 +30,11 @@
 #include <QTextStream>
 #include <QStatusBar>
 #include <QtDebug>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+# define Qt6 true
+#endif
+
 
 #define DOM_GMN_CONTAINER_ITEM "containerItem"
 #define DOM_GMN_CONTAINER_ITEM_X "containerItemX"
@@ -198,14 +203,14 @@ void QHistoryGraphicsView::reorderItems()
 	
 	int currentY = 0;
 	int maxWidth = 0;
-	for ( int i = mAddedItems.size()-1 ; i >= 0  ; i-- )
+	for ( int i = (int)mAddedItems.size()-1 ; i >= 0  ; i-- )
 	{
 		QRectF r(mAddedItems[i]->sceneBoundingRect());
 		mAddedItems[i]->setPos( 0 , currentY );
 		currentY += r.height();
 		maxWidth = MAX( r.width() , maxWidth );
 	}
-	for ( int i = mAddedItems.size()-1 ; i >= 0  ; i-- )
+	for ( int i = (int)mAddedItems.size()-1 ; i >= 0  ; i-- )
 	{
 		QRectF r(mAddedItems[i]->sceneBoundingRect());
 		mAddedItems[i]->setPos( (maxWidth - r.width())/2.0f , mAddedItems[i]->pos().y() );
@@ -331,7 +336,11 @@ void QStorageGraphicsView::dropEvent(QDropEvent* event)
 		if ( other )
 		{
 			QRectF itemRect = other->sceneBoundingRect();
+#if Qt6
+			other->setPos( event->position().toPoint() - QPointF(itemRect.width(),itemRect.height())/2.0f );
+#else
 			other->setPos( event->pos() - QPointF(itemRect.width(),itemRect.height())/2.0f );
+#endif
 			reorderItems();
 			delete container;
 		}
@@ -339,7 +348,11 @@ void QStorageGraphicsView::dropEvent(QDropEvent* event)
 		{
 			// There is no equivalent item in the scene : add the created item.
 			addItem( container );
+#if Qt6
+			QPointF scenePos = mapToScene( event->position().toPoint() );
+#else
 			QPointF scenePos = mapToScene( event->pos() );
+#endif
 			QRectF itemRect = container->sceneBoundingRect();
 			container->setPos( scenePos - QPointF( itemRect.width() , itemRect.height() )/2.0f );
 		}
@@ -643,13 +656,16 @@ void LanguageGraphicsView::dropEvent(QDropEvent* event)
 
 	QLanguageItem* droppedItem = 0;
 
+#ifdef Qt6
+	QPointF pos = mapToScene( event->position().toPoint() );
+#else
 	QPointF pos = mapToScene( event->pos() );
-
+#endif
 	// Check if the drop QMimeData contains the "copy drag" flag.
 	bool doCopy = false;
 	if ( event->mimeData()->hasFormat( MIME_DO_COPY ) )
 	{
-		doCopy = QVariant( event->mimeData()->data( MIME_DO_COPY ).data() ).toBool();
+		doCopy = QVariant( event->mimeData()->data( MIME_DO_COPY ).constData() ).toBool();
 	}
 
 	// Check if the drop triggers a palette interaction.
@@ -671,7 +687,11 @@ void LanguageGraphicsView::dropEvent(QDropEvent* event)
 		{
 			droppedItem = (QLanguageItem*)((const void *) event->mimeData()->data( FROM_SCENE_DRAG_MIME ));
 			// Move the item to the drop position, and get the resulting movement coordinate.
+#if Qt6
+			QPointF movementValue = droppedItem->moveItem( mapToScene( event->position().toPoint() ) );
+#else
 			QPointF movementValue = droppedItem->moveItem( mapToScene( event->pos() ) );
+#endif
 			// Move all other selected item of the scene by the same (dx,dy).
 			QList<QLanguageItem*> selectedItems = mMainWindow->selectedLanguageItems();
 			QList<QLanguageItem*> otherSelectedItems(selectedItems);
@@ -721,7 +741,11 @@ void LanguageGraphicsView::dragMoveEvent(QDragMoveEvent* event)
 		int paletteId = event->mimeData()->data( MIME_PALETTE_ID ).toInt();
 		QGraphicsItem * draggedItem = (QGraphicsItem*)((const void *) event->mimeData()->data( MIME_PALETTE_ITEM ));
 		// ... and notify the QPaletteManager that we are moving it, so it can, if necessary, activate the palette.
+#if Qt6
+		QPaletteManager::instance()->move( mapToScene( event->position().toPoint() ) , scene() , paletteId , draggedItem );
+#else
 		QPaletteManager::instance()->move( mapToScene( event->pos() ) , scene() , paletteId , draggedItem );
+#endif
 	}
 }
 

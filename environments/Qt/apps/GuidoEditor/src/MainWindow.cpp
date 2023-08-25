@@ -251,8 +251,12 @@ void MapGuidoWidget::mousePressEvent ( QMouseEvent* event)
 		GuidoErrCode err = GuidoGetSystemMap( getGRHandler(), p, size().width(), size().height(), map);
 		if (err) break;
 		TimeSegment t; FloatRect r;
+#if Qt6
+		if (GuidoGetPoint( event->position().x(), event->position().y(), map, t, r)) {
+#else
 		if (GuidoGetPoint( event->x(), event->y(), map, t, r)) {
-//			cout << "clicked page " << p << " in time segment " << t << endl; 
+#endif
+//			cout << "clicked page " << p << " in time segment " << t << endl;
 			break;
 		}
 	}
@@ -746,7 +750,7 @@ void MainWindow::exportToImage(QGuidoPainter * guidoPainter, const QString& file
 //-------------------------------------------------------------------------
 void MainWindow::about()
 {
-	QString guidoeditor_version("2.8");
+	QString guidoeditor_version("2.9");
     int major, minor, sub;
 	GuidoGetVersionNums(&major, &minor, &sub);
 	QString mastr, mistr, substr;
@@ -1159,8 +1163,15 @@ void MainWindow::setCurrentPage(int pageIndex)
 void MainWindow::updatePageLabel(int currentPage, int pageCount)
 {
 	char buffer[30];
+#ifdef Qt6
+	QString cp; cp.setNum(currentPage);
+	QString pc; pc.setNum(pageCount);
+	QString str = "Page " + cp + "/" + pc;
+	mPageLabel->setText( str );
+#else
 	sprintf(buffer,"Page %d/%d" , currentPage , pageCount);
 	mPageLabel->setText( tr(buffer) );
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -1698,7 +1709,7 @@ void MainWindow::updateRecentFilesMenu()
 		mRecentFileActions.removeAt(0);
 	}
 	
-	for ( int i = mRecentFiles.size()-1 ; i >=0 ; i-- )
+	for ( int i = int(mRecentFiles.size()-1) ; i >=0 ; i-- )
 	{
 		QAction * action = new QAction( QVariant(mRecentFiles.size() - i).toString() + ". " + QFileInfo(mRecentFiles[i]).fileName() , mFileMenu );
 		connect( action, SIGNAL(triggered()) , this , SLOT(openRecentFile()) );
