@@ -43,7 +43,8 @@ QString weightToString( QFont::Weight w )
 }
 
 QString weightToString(int weight) { return weightToString( QFont::Weight(weight) ); }
-QColorDialog* SetupDialog::mColorDialog = 0;
+//QColorDialog* SetupDialog::mColorDialog = 0;
+ColorDialog* SetupDialog::mColorDialog = 0;
 //-------------------------------------------------------------------------
 SetupDialog::SetupDialog(MainWindow *parent) 
  : QDialog(parent), mMainWindow(parent)
@@ -148,7 +149,7 @@ SetupDialog::SetupDialog(MainWindow *parent)
 	}
 
 	if (!mColorDialog) {
-		mColorDialog = new QColorDialog( this );
+		mColorDialog = new ColorDialog( this);
 		mColorDialog->setWindowTitle("Choose score color");
 		mColorDialog->setOption (QColorDialog::NoButtons);
 	}
@@ -220,10 +221,10 @@ void SetupDialog::setDisplayState(const THideState& state)
 //-------------------------------------------------------------------------
 void SetupDialog::changeColor()
 {
-	mColorDialog->disconnect();
+//	mColorDialog->disconnect();
 	mColorDialog->setCurrentColor (mSavedColor);
-	connect( mColorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( scoreColorChanged(const QColor&) ) );		
-	mColorDialog->open();
+//	connect( mColorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( scoreColorChanged(const QColor&) ) );
+//	mColorDialog->open();
 }
 
 //-------------------------------------------------------------------------
@@ -357,12 +358,21 @@ void SetupDialog::fontColorButtonClicked()
 	QPushButton * button = (QPushButton *)sender();
 	mColorDialog->disconnect();
 	mColorDialog->setCurrentColor (button->property( BUTTON_COLOR ).value<QColor>());
-	connect( mColorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( fontColorChanged(const QColor&) ) );	
+	connect( mColorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( fontColorChanged(const QColor&) ) );
 	mColorDialog->setProperty( DIALOG_ELEMENT_ID , button->property( SYNTAX_ELT_ID ).toInt() );
-	mColorDialog->open();
-	if (mColorDialog->result() == QDialog::Rejected) {
-	}
+	mColorDialog->exec();
 }
+
+void ColorDialog::closeEvent(QCloseEvent *event){
+	parentWidget()->activateWindow();
+	parentWidget()->raise();
+}
+
+void ColorDialog::reject()
+{
+	close();
+}
+
 
 //-------------------------------------------------------------------------
 void SetupDialog::fontColorChanged(const QColor& color)

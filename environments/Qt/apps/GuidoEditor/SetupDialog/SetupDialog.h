@@ -25,6 +25,22 @@
 class QGuidoWidget;
 class MainWindow;
 
+class ColorDialog : public QColorDialog
+{
+    Q_OBJECT
+
+	public :
+		ColorDialog (QWidget *parent) : QColorDialog(parent) { setAttribute(Qt::WA_QuitOnClose); }
+		~ColorDialog() {}
+	
+	protected:
+	virtual void	reject() override;
+	
+	private:
+	virtual void closeEvent(QCloseEvent *event);
+
+};
+
 class SetupDialog : public QDialog, public Ui::Setup
 {
     Q_OBJECT
@@ -68,7 +84,7 @@ private:
 	QMap<int, QComboBox*>	mFontWeightMap;
 	QMap<int, QColor>		mSavedColors;
 	QMap<int, int>			mSavedWeights;
-static QColorDialog *		mColorDialog;
+static ColorDialog *		mColorDialog;
 };
 
 #endif
