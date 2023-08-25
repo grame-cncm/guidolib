@@ -28,54 +28,14 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.7</string>
+	<string>2.9</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.7</string>
+	<string>2.9</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
-</dict>
-<!--
-<key>CFBundleIcons</key>
-<dict>
-    <key>CFBundlePrimaryIcon</key>
-    <dict>
-        <key>CFBundleIconFiles</key>
-        <array>
-            <string>guidoIcon29x29.png</string>
-            <string>guidoIcon29x29@2x.png</string>
-            <string>guidoIcon40x40@2x.png</string>
-            <string>guidoIcon57x57.png</string>
-            <string>guidoIcon57x57@2x.png</string>
-            <string>guidoIcon60x60@2x.png</string>
-        </array>
+	<key>NSRequiresAquaSystemAppearance</key>
+    <true/>
     </dict>
-</dict>
-<key>CFBundleIcons~ipad</key>
-<dict>
-    <key>CFBundlePrimaryIcon</key>
-    <dict>
-        <key>CFBundleIconFiles</key>
-        <array>
-            <string>guidoIcon29x29.png</string>
-            <string>guidoIcon29x29@2x.png</string>
-            <string>guidoIcon40x40@2x.png</string>
-            <string>guidoIcon57x57.png</string>
-            <string>guidoIcon57x57@2x.png</string>
-            <string>guidoIcon60x60@2x.png</string>
-            <string>guidoIcon29x29~ipad.png</string>
-            <string>guidoIcon29x29@2x~ipad.png</string>
-            <string>guidoIcon40x40~ipad.png</string>
-            <string>guidoIcon40x40@2x~ipad.png</string>
-            <string>guidoIcon50x50~ipad.png</string>
-            <string>guidoIcon50x50@2x~ipad.png</string>
-            <string>guidoIcon72x72~ipad.png</string>
-            <string>guidoIcon72x72@2x~ipad.png</string>
-            <string>guidoIcon76x76~ipad.png</string>
-            <string>guidoIcon76x76@2x~ipad.png</string>
-        </array>
-    </dict>
-</dict>
--->
 </plist>

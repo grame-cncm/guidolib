@@ -27,8 +27,8 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,7,0,0
- PRODUCTVERSION 2,7,0,0
+ FILEVERSION 2,9,0,0
+ PRODUCTVERSION 2,9,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -45,12 +45,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Grame"
             VALUE "FileDescription", "GuidoEditor"
-            VALUE "FileVersion", "2, 7, 0, 0"
+            VALUE "FileVersion", "2, 9, 0, 0"
             VALUE "InternalName", "GuidoEditor"
             VALUE "LegalCopyright", "Copyright © Grame 2008-2014"
             VALUE "OriginalFilename", "GuidoEditor.exe"
             VALUE "ProductName", "GuidoEditor"
-            VALUE "ProductVersion", "2, 7, 0, 0"
+            VALUE "ProductVersion", "2, 9, 0, 0"
         END
     END
     BLOCK "VarFileInfo"
