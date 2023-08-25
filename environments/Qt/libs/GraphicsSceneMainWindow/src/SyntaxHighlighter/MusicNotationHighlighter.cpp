@@ -66,11 +66,11 @@ void MusicNotationHighlighter::highlightLine(const QString& text,bool )
 		QRegExp expression(rule.pattern);
 #ifdef Qt6
 		QRegularExpressionMatch match;
-		int index = text.indexOf(expression, 0, &match);
+		qsizetype index = text.indexOf(expression, 0, &match);
 		while (index >= 0)
 		{
-			int length = match.capturedLength();
-			setFormat(index, length, rule.format);
+			qsizetype length = match.capturedLength();
+			setFormat((int)index, (int)length, rule.format);
 			index = text.indexOf(expression, index + length, &match);
 		}
 #else
@@ -93,7 +93,7 @@ bool MusicNotationHighlighter::highlightMultiline(const QString& text )
 	{
 		setCurrentBlockState(OUTOFF_BLOCK);
 
-		int startIndex = 0;
+		qsizetype startIndex = 0;
 		if (previousBlockState() != IN_BLOCK)
 			startIndex = text.indexOf(mHighlightingMultilineRules[i].startPattern);
 		else result = true;
@@ -103,11 +103,11 @@ bool MusicNotationHighlighter::highlightMultiline(const QString& text )
 			result = true;
 #ifdef Qt6
 			QRegularExpressionMatch endMatch;
-			int endIndex = text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex, &endMatch);
+			qsizetype endIndex = text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex, &endMatch);
 #else
 			int endIndex = text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex);
 #endif
-			int commentLength;
+			qsizetype commentLength;
 			if (endIndex == -1) {
 				setCurrentBlockState(IN_BLOCK);
 				commentLength = text.length() - startIndex;
@@ -119,7 +119,7 @@ bool MusicNotationHighlighter::highlightMultiline(const QString& text )
 				commentLength = endIndex - startIndex + mHighlightingMultilineRules[i].endPattern.matchedLength();
 #endif
 			}
-			setFormat( startIndex, commentLength, mHighlightingMultilineRules[i].format );
+			setFormat( (int)startIndex, (int)commentLength, mHighlightingMultilineRules[i].format );
 			startIndex = text.indexOf(mHighlightingMultilineRules[i].startPattern, startIndex + commentLength);
 		}
 	}

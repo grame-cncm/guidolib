@@ -134,7 +134,7 @@ int QPageManager::firstVisiblePage() const
 //-------------------------------------------------------------------------
 int QPageManager::lastVisiblePage() const
 {
-	return MIN( mFirstPageIndex - 1 + ( mGridWidth * mGridHeight ) , mPages.size()-1 );
+	return MIN( mFirstPageIndex - 1 + ( mGridWidth * mGridHeight ) , (int)mPages.size()-1 );
 }
 
 //-------------------------------------------------------------------------

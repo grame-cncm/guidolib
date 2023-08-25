@@ -953,7 +953,7 @@ const char* GDeviceQt::GetImageData(const char* & outDataPtr, int& outLength)
         buffer.open(QIODevice::WriteOnly);
         image->save(&buffer, "PNG"); // writes image into ba in PNG format
 		outDataPtr = ba->data();
-		outLength = ba->size();
+		outLength = (int)ba->size();
 		return "image/png";
 	}
 	return 0;

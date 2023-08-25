@@ -296,7 +296,7 @@ void QPaletteItem::reorderItems()
 	littleRect.moveTo( rect().x() + rect().width()/2 - littleRect.width()/2 , rect().y() + rect().height()/2 - littleRect.height()/2 );
 		
 	int baseItemAngle = 360 / mInteractions.size();
-	int completingAngle = 360 - baseItemAngle * mInteractions.size();
+	int completingAngle = 360 - baseItemAngle * (int)mInteractions.size();
 	
 	int currentAngle = mOriginAngle - baseItemAngle/2;
 	for ( int i = 0 ; i < mInteractions.size() ; i++ )

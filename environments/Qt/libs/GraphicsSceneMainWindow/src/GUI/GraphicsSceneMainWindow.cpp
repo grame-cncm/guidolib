@@ -1021,7 +1021,7 @@ void GraphicsSceneMainWindow::bringForward()
 	if ( !languageItem )
 		return;
 
-	int index = mZOrderedItems.indexOf( languageItem );
+	qsizetype index = mZOrderedItems.indexOf( languageItem );
 	mZOrderedItems.move( index , MIN(mZOrderedItems.size() - 1 , index + 1) );
 	updateZOrders();
 }
@@ -1035,7 +1035,7 @@ void GraphicsSceneMainWindow::sendBackward()
 	if ( !languageItem )
 		return;
 	
-	int index = mZOrderedItems.indexOf( languageItem );
+	qsizetype index = mZOrderedItems.indexOf( languageItem );
 	mZOrderedItems.move( index , MAX(0,index - 1) );
 	updateZOrders();
 }
@@ -1049,7 +1049,7 @@ void GraphicsSceneMainWindow::bringToFront()
 	if ( !languageItem )
 		return;
 
-	int index = mZOrderedItems.indexOf( languageItem );
+	qsizetype index = mZOrderedItems.indexOf( languageItem );
 	mZOrderedItems.move( index , mZOrderedItems.size() - 1 );
 	updateZOrders();
 }
@@ -1063,7 +1063,7 @@ void GraphicsSceneMainWindow::sendToBack()
 	if ( !languageItem )
 		return;
 
-	int index = mZOrderedItems.indexOf( languageItem );
+	qsizetype index = mZOrderedItems.indexOf( languageItem );
 	mZOrderedItems.move( index , 0 );
 	updateZOrders();
 }

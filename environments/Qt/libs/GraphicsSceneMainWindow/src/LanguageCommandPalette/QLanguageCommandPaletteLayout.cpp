@@ -54,7 +54,7 @@ void QLanguageCommandPaletteLayout::addItem(QLayoutItem *item)
 //----------------------------------------------------------------------
 int QLanguageCommandPaletteLayout::count() const
 {
-    return mItemList.size();
+    return (int)mItemList.size();
 }
 
 //----------------------------------------------------------------------

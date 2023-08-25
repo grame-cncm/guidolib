@@ -66,11 +66,11 @@ void MusicNotationHighlighter::highlightLine(const QString& text,bool )
 		QRegExp expression(rule.pattern);
 #ifdef Qt6
 		QRegularExpressionMatch match;
-		int index = text.indexOf(expression, 0, &match);
+		qsizetype index = text.indexOf(expression, 0, &match);
 		while (index >= 0)
 		{
-			int length = match.capturedLength();
-			setFormat(index, length, rule.format);
+			qsizetype length = match.capturedLength();
+			setFormat(int(index), int(length), rule.format);
 			index = text.indexOf(expression, index + length, &match);
 		}
 #else
@@ -95,7 +95,7 @@ bool MusicNotationHighlighter::highlightMultiline(const QString& text )
 
 		int startIndex = 0;
 		if (previousBlockState() != IN_BLOCK)
-			startIndex = text.indexOf(mHighlightingMultilineRules[i].startPattern);
+			startIndex = (int)text.indexOf(mHighlightingMultilineRules[i].startPattern);
 		else result = true;
 		
 		while (startIndex >= 0) 
@@ -103,24 +103,24 @@ bool MusicNotationHighlighter::highlightMultiline(const QString& text )
 			result = true;
 #ifdef Qt6
 			QRegularExpressionMatch endMatch;
-			int endIndex = text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex, &endMatch);
+			int endIndex = (int)text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex, &endMatch);
 #else
 			int endIndex = text.indexOf(mHighlightingMultilineRules[i].endPattern, startIndex);
 #endif
 			int commentLength;
 			if (endIndex == -1) {
 				setCurrentBlockState(IN_BLOCK);
-				commentLength = text.length() - startIndex;
+				commentLength = (int)text.length() - startIndex;
 			}
 			else {
 #ifdef Qt6
-				commentLength = endIndex - startIndex + endMatch.capturedLength();
+				commentLength = endIndex - startIndex + (int)endMatch.capturedLength();
 #else
 				commentLength = endIndex - startIndex + mHighlightingMultilineRules[i].endPattern.matchedLength();
 #endif
 			}
 			setFormat( startIndex, commentLength, mHighlightingMultilineRules[i].format );
-			startIndex = text.indexOf(mHighlightingMultilineRules[i].startPattern, startIndex + commentLength);
+			startIndex = (int)text.indexOf(mHighlightingMultilineRules[i].startPattern, startIndex + commentLength);
 		}
 	}
 	return result;

@@ -86,7 +86,7 @@ void QTextPathItem::setText(const QString& text)
 		mText->setText(text);
 	
 	QString truncString = "...";
-	int skippedChar = truncString.length() + 1;
+	int skippedChar = (int)truncString.length() + 1;
 	while ( ( mText->boundingRect().width() > boundingRect().width() - TITLE_BAR_TEXT_MARGIN ) && ( skippedChar < text.length() ) )
 	{
 		mText->setText( text.left( text.length() - skippedChar ) + truncString );
@@ -665,7 +665,7 @@ QMenu * QLanguageItem::buildContextMenu()
 	QMenu * fileMenu = menu->addMenu( "File" );
 	fileMenu->setObjectName( OBJECT_NAME_FILE_MENU );
 
-	for ( int i = actions.size()-1 ; i >= 0 ; i-- )
+	for ( int i = (int)actions.size()-1 ; i >= 0 ; i-- )
 	{
 		if ( actions[i]->property( FILE_MENU ).toBool() )
 		{
