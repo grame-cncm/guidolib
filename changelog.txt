@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.7.7
+- support for line break ('\n') in text elements
 - fix crash bug with repeat begin
 - fix issue #168: Slur Collision when the slur spams more than one system
 - fix issue #170: Dots not drawn in Tuplets
@@ -10,7 +11,6 @@ GUIDO Engine history
 - fix issue #169: Double flat is rendered as four if repeated on a 2nd voice
 - fix issue #164: Conflicting notes on a multi voices staff 
 - fix occasional incorrect dots placement in repeatEnd (depending on context)
-
 
 ----------------------------------------------------------------
   version 1.7.6

@@ -49,11 +49,20 @@ static  char* unescape (char * str) {
 	int n = strlen(str);
 	for (int i=0, j=0; i <= n; i++) {		
 		if (str[i] == '\\') {
-			if (str[i+1] == '\\') {
-				str[j++] = str[i++];
-			}
-			else if (str[i+1] != '"') {
-				str[j++] = str[i];
+			switch (str[i+1]) {
+				case '\\':
+					str[j++] = str[i++];
+					break;
+				case 'n':
+					str[j++] = '\n';
+					i++;
+					break;
+				case '"':
+				case '\'':
+					break;
+				default:
+					str[j++] = str[i];
+					break;
 			}
 		}
 		else str[j++] = str[i];

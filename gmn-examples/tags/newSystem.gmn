@@ -5,7 +5,7 @@
 {
 [ 
 	c d e f g a h c2 \newSystem<dy=10.5cm> 
-	\text<"Distance between systems set using \newSystem-Tag",dy=18hs>
+	\text<"Distance between systems set using \\newSystem-Tag",dy=18hs>
 	( c d e f g a h )  c2 
 	\newSystem<dy=5cm> a1 a a a a a
 ],
