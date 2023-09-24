@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:latest
 
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
