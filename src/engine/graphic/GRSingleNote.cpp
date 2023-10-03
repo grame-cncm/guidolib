@@ -543,9 +543,11 @@ NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals, bool includeSlurs,
 	if (!getDuration()) {
 		// we're in a chord, needs to add the stem
 		const GRStem * stem = getStem();
-		NVRect r = stem->getBoundingBox();
-		r += stem->getPosition();
-		outrect.Merge (r);
+		if (stem) {
+			NVRect r = stem->getBoundingBox();
+			r += stem->getPosition();
+			outrect.Merge (r);
+		}
 	}
 	if (!includeAccidentals) {
 		outrect.left = mPosition.x - mNoteBreite / 2 * getSize();
