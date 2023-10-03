@@ -2283,8 +2283,16 @@ bool & GRVoiceManager::getCurStaffDraw(int index)
 	return mCurStaffDraw[index];
 }	
 
+/*
+	check nested beams :
+	when a beam is included in a parent beam sets the beam parent
+	this avoids to re-compute the main beam
+	nested beams are not supported for grace notes
+ */
 void GRVoiceManager::organizeBeaming(GRBeam * beam)
 {
+	if (beam->isGraceBeaming()) return;
+
 	NEPointerList* assoc = beam->getAssociations();
 	GRNotationElement* lastEvt = assoc ? assoc->GetAt(assoc->GetTailPosition()) : nullptr;
 	if (!lastEvt) return;
