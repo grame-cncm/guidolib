@@ -12,6 +12,7 @@ GUIDO Engine history
 - fix issue #164: Conflicting notes on a multi voices staff 
 - fix occasional incorrect dots placement in repeatEnd (depending on context)
 - fix issue #173: Cross Staff Grace Notes rendering issue with Beaming
+- fix issue #174: Octavia on cross-staff can lead to destructor crash + incorrect rendering
 
 ----------------------------------------------------------------
   version 1.7.6
