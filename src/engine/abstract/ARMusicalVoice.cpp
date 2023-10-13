@@ -1085,7 +1085,7 @@ void ARMusicalVoice::doAutoFixOctavaStaff()
 				lastOctStaffNum = curStaffNum;
 			}
 			else if (lastOctStaffNum != curStaffNum) {
-cerr << "Warning! Auto fix octava on different staves: current:" << curStaffNum << " expected: " << lastOctStaffNum << endl;
+cerr << "Warning! Auto fix octava on different staves: current: " << curStaffNum << " expected: " << lastOctStaffNum << endl;
 				ARStaff * staff = new ARStaff (lastOctStaffNum);
 				staff->setRelativeTimePosition(octava->getRelativeTimePosition());
 				insert(lastpos,staff);
