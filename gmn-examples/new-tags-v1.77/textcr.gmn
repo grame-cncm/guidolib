@@ -1,0 +1,16 @@
+(*
+  text with \n example
+*)
+
+{
+[
+	\title<"Text with ' \\n '", font="Helvetica">
+
+	\clef<"g"> \key<-3> \meter<"3/4"> 
+
+	_/4
+	\lyrics<"I\nam\nlyrics", dy=-5, fattrib="b", textformat='lt'>({ c1*2/4, d#1, g1 })
+	\text<"regular text   ", textformat='lt'> (a/1)
+	\text<"centered text\nwith cr\nand another long part", textformat='ct'> (a)
+]
+}

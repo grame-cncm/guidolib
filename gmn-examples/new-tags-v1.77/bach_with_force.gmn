@@ -1,0 +1,295 @@
+(*
+	this example illustrates engine settings 
+	embedded in the gmn file
+*)
+
+$FORCE = 500;      % default is 750
+
+{ [ % general stuff
+    \pageFormat<w=21cm,h=31cm,lm=0.8cm,tm=4.25cm,bm=2cm,rm=1.1cm>
+    \title<"SINFONIA 3",pageformat="42",textformat="lc",dx=-2cm,dy=0.5cm> 
+    \composer<"BWV 789",dy=1.35cm,fsize=10pt>
+ 
+   % this turns automatic breaking of systems and pages off.
+   % this tag is specific to the NoteViewer/NoteServer
+   % other implementations may just ignore this tag and its
+   % parameters.
+%     \set<autoSystemBreak="off",autoPageBreak="off">
+  
+   % indent of 1.05 cm for the first system.
+     \systemFormat<dx=1.05cm>
+
+% voice 1
+
+    \staff<1> % ,dy=0.85cm> % next staff is 0.85 cm below 
+    \staffFormat<style="5-line",size=0.9375mm>
+    % barlines go through whole system 
+    \barFormat<style="system">   
+% measure 1 (voice 1)
+     \clef<"treble"> \key<"D"> \meter<"C"> \stemsUp 
+              _/8 \beam( \fingering<text="3",
+                   dy=8hs,dx=-0.1hs,fsize=7pt>(f#2/16) g) 
+              \beam( \stemsUp<5hs> a/8 
+                   \fingering<text="2",dx=1hs,dy=11.5hs,fsize=7pt>( \stemsUp<8hs> c )
+                   ) 
+                \beam( \stemsUp h1 e2/16 f#) 
+				\beam( \stemsUp<5hs> g/8 \stemsUp<8.5hs> h1 \stemsUp) \bar 
+     % measure 2 (voice 1)
+     \beam( a1/8 d2/16 e) \beam( f#/8 a1) 
+                    \beam( \stemsUp<12hs> g/16 
+          \stemsUp \fingering<text="4",fsize=7pt,dy=9hs,dx=-0.2hs>(f#2) e 
+           \stemsUp<8hs> d \stemsUp)
+          \beam( \stemsUp<12hs> c#  \stemsUp 
+                \fingering<text="5",fsize=7pt,dy=9hs>(h) a  
+                \stemsUp<8hs> g \stemsUp ) \bar
+     % measure 3 (voice 1)
+     \beam( \stemsUp<5.5hs> f#2/16 \stemsUp e 
+	     \fingering<text="2",fsize=7pt,dy=10hs>( d ) \stemsUp<5.5hs> e \stemsUp)
+           \beam( \stemsUp<6hs> f# \stemsUp 
+		      \fingering<text="1",fsize=7pt,dy=11hs>(e) 
+                \fingering<text="3",fsize=7pt,dy=11hs>(f#) 
+				\stemsUp<6.5hs> g# \stemsUp)
+           \stemsUp<4.75hs> a/4  \stemsUp 
+           \slurBegin<"up">
+      \fingering<text="5",fsize=7pt,dy=6hs>(  \stemsUp<4.5hs> e/4  )  
+           \bar
+% measure 4 (voice 1)
+          \staff<1> % ,dy=0.98cm>  
+          e/4 \slurEnd 
+         \tie<dy1=2.4hs,dx2=-1hs,dy2=2.4hs,h=1.75hs>( 
+		 \fingering<text="4 5",dy=8hs,fsize=7pt>( \stemsUp<5hs> d) d ) 
+		  \tieBegin
+		      \fingering<text="4 5",dy=8hs,fsize=7pt>(c#) 
+ %measure 5 (voice 1)
+          \bm( \stemsUp<8hs> c#/16 \stemsUp 
+		     \tieEnd \fingering<text="5",dy=11hs,fsize=7pt>(e) d 
+			 \stemsUp<7.5hs> c# \stemsUp ) 
+          \bm( \fingering<text="2",dy=12.5hs,fsize=7pt>( 
+		  \stemsUp<8hs> h1/8 ) \acc( \stemsUp<5hs> g#2 \stemsUp)) 
+		  \slurBegin<"up", h=3>
+		      \fingering<text="5",dy=5hs,fsize=7pt>( \stemsUp<4hs> a/2)
+% measure 6 (voice 1)
+          \staff<1> % ,dy=1.08cm> 
+\bm( \stemsUp<5.5hs> a/16 \stemsUp 
+			     \slurEnd \fingering<text="2",dy=13hs,fsize=7pt>( c# ) 
+				 \fingering<text="1",dy=11.25hs,fsize=7pt>(d) 
+				 \stemsUp<6hs> \fingering<text="3",dy=9.5hs,fsize=7pt>(e)  
+				 \stemsUp)
+          \bm( \stemsUp<7hs> f# \stemsUp g f# \stemsUp<7.5hs>
+		    \fingering<text="5",dy=11hs,fsize=7pt>(e) \stemsUp )
+          \bm( \stemsUp<6hs> d# \stemsUp h1 c#2 \stemsUp<6hs> d# \stemsUp )
+          \bm( \stemsUp<7hs> e \stemsUp \fingering<text="4",dy=9hs,fsize=7pt>(f#)
+		  \fingering<text="5",dy=9.5hs,fsize=7pt>(e) \stemsUp<7.5hs> d \stemsUp )
+% measure 7 (voice 1)
+         \bm( \stemsUp<6hs> c# \stemsUp a1 
+		 \fingering<text="4",dy=10hs,fsize=7pt>(h) 
+		   \stemsUp<6hs> \fingering<text="3",dy=9.25hs,fsize=7pt>(c#2) 
+		   \stemsUp) 
+         \bm( \stemsUp<7hs> 
+		 \fingering<text="4",fsize=7pt,dy=9.25hs>(d)
+		   \stemsUp e d \stemsUp<7hs> c# \stemsUp )
+         \stemsUp<5.5hs> \fingering<text="5",fsize=7pt,dy=8hs>(h1/4)
+		  \tieBegin<"up">
+		\stemsUp<4.5hs> e2
+% measure 8 (voice 1)
+	      \staff<1>
+          \bm( e/8 \tieEnd \stemsUp<6.5hs> 
+		      \fingering<text="3",fsize=7pt,dy=12hs>(a1) \stemsUp)
+		\dotFormat<dy=1hs>
+           \bm( d2/8. e/16)
+           \bm(c# h1 a h )
+           \bm( c#2 h1 c#2 d# )
+% measure 9 (voice 1)
+		\bm( e/8 h1)
+		 \dotFormat<dy=0>
+		\bm(e2/8. f#/16)
+		\bm(d c# h1 c#2)
+		\bm(d c# d e)
+% measure 10 (voice 1)
+	     \staff<1>
+		\bm( \stemsDown f# e d e)
+		\bm(f#/8 \acc(a1))
+		 \bm(g# c#2/16 d)
+		 \bm(e/8 \acc(g1))
+% measure 11 (voice 1)
+		\bm( \stemsUp f# h/16 c#2)
+		\bm(d/8 f#1)
+		\bm( \stemsUp<13hs> e/16 \stemsUp d2 c# 
+		    \stemsUp<9hs> h1 \stemsUp )
+		\bm( \stemsDown<5.5hs> a# \stemsDown g2 f# 
+		   \stemsDown<8.5hs> e \stemsDown)
+%		\newSystem<dy=4.45cm>
+% measure 12 (voice 1)
+		\staff<1> % ,dy=1.09cm>
+	 \bm(d/16 c# h1 c#2 )
+	 \bm(d h1 c#2 d)
+	 \bm( \stemsUp<9.5hs> e#1 \stemsUp g# a 
+	    \stemsUp<6hs> h \stemsUp )
+	 \tieBegin<"up">c#2/4
+% measure 13 (voice 1)
+	 \bm(c#/16 \tieEnd f#1 g# a)
+	 \tieBegin<curve="up"> h/4
+	 \bm( h/16 \tieEnd e# f# g#)
+	 \tieBegin<"up"> a/4 
+% measure 14 (voice 1)
+     a/16 \tieEnd  
+     ] , 
+  [ % voice 2
+
+    \staff<1> 
+% measure 1 (voice 2) 
+      \restFormat<dx=2.5cm> _/1 
+     % measure 2 (voice 2) 
+       _/1
+% measure 3 (voice 2)
+      _/2 _/8 
+      \stemsDown \beam( \fingering<text="2",fsize=7pt,dy=6hs>(c#2/16) 
+              \stemsDown<7.5hs> d \stemsDown ) 
+    \beam( \stemsDown<8hs> e/8 \stemsDown 
+             \stemsDown<5hs> \acc<dx=0.02cm>( 
+              \fingering<"2",fsize=7pt,dy=-3hs,dx=0.8hs>( g1 ) ) 
+             \stemsDown ) 
+% measure 4 (voice 2)
+        \bm( \stemsDown<4.5hs> f#1/8 \stemsDown 
+		  \fingering<text="2",fsize=7pt,dy=-6.5hs>(h/16) 
+		    \stemsDown<6hs> c#2 \stemsDown) 
+       \bm( \stemsDown<7hs> d/8 \stemsDown<4.25hs> f#1 \stemsDown )
+       \bm( \stemsDown<5hs> e \stemsDown a/16 \stemsDown<7hs> h \stemsDown)
+       \bm( \stemsDown<7hs> c#2/8 \stemsDown<4.5hs> e1 \stemsDown )
+% measure 5 (voice 2)
+    \bm( \stemsDown<5hs> d/16 \stemsDown 
+	   \fingering<text="3",fsize=7pt,dy=11hs>(c#2) h1 
+	      \stemsDown<7hs> a \stemsDown )
+     \bm( \stemsDown<6hs> 
+	    \fingering<text="1",fsize=7pt,dy=12.25hs>( g# ) 
+		   \stemsDown f#2 e \stemsDown<8.5hs> 
+		   \fingering<text="1",dy=5hs,fsize=7pt>(d) 
+		      \stemsDown)
+     \bm( \stemsDown<8hs> c# \stemsDown 
+	   \fingering<text="1",fsize=7pt,dy=7hs>(h1)
+	   \fingering<text="2",fsize=7pt,dy=8hs>( a )
+	   \fingering<text="1",fsize=7pt,dy=7hs>( 
+	       \stemsDown<7.5hs> h \stemsDown) )
+    \bm( \stemsDown<9hs> \fingering<text="3",dy=6hs,fsize=7pt>( c#2 ) 
+	    \stemsDown a1 h \stemsDown<8.75hs> c#2 \stemsDown )
+% measure 6 (voice 2)
+      d2/4 \tieBegin<dx1=0,dy1=-3.25hs,dx2=-2hs,dy2=-3.25hs,h=-1hs> a1 
+	  \fingering<text="1 2",fsize=7pt,dx=1.3cm,dy=-4hs>(a) \tieEnd
+     \tieBegin<dx1=0,dy1=-2.25hs,dx2=-2hs,dy2=-2.25hs,h=-1hs> g
+% measure 7 (voice 2)
+     g \tieEnd  \tieBegin<dx1=-0.5hs,dy1=-2hs,dx2=-2hs,dy2=-2hs,h=-1hs> f# 
+     \bm( f#/16 \tieEnd a g f# )
+     \bm( e d2 c# h1 )
+% measure 8 (voice 2)
+     \bm( a1/16 g f# g)
+     \bm( a g# a h )
+     \tieBegin<dx1=0.25hs,dy1=-1.5hs,dx2=-2hs,dy2=-1.5hs,h=-2hs> e1/2
+% measure 9 (voice 2)
+      \bm( e/8 \tieEnd g/16 a)
+     \bm( h a h c#2) 
+     f#1/4 \staff<2> 
+	   \tieBegin \stemsUp h0
+	\bar 
+% measure 10 (voice 2)
+\bm(  h/16 \tieEnd a# h c#1)
+	  \bm(d e d c#)
+	  \bm(h0 g# \acc(a#) h)
+	  \bm(c#1 d c# h0)
+% measure 11 (voice 2)
+	  \bm( a# f# g# a#)
+	  \tieBegin<curve="up"> h/4
+	  \bm(h/16 \tieEnd h c#1 d)
+	  \bm(e/8 a#0)
+% measure 12  (voice 2)
+	  \bm( h \acc(a) )
+	  \bm(g# f#)
+	  \tieBegin g#/4
+	  \bm(g#/16 \tieEnd \staff<1> \stemsDown 
+                          \acc(g#1/16) f# \acc(e) )
+% measure 13 (voice 2) 
+	  \tieBegin<dx1=0.5hs,dy1=-1.9hs,dx2=-2hs,dy2=-1.9hs,h=-1hs> d#/4
+	  \bm(d#/16 \tieEnd f# e d)
+	  \tieBegin<dx1=0hs,dy1=-1.9hs,dx2=-2hs,dy2=-1.9hs,h=-1hs> c#/4
+	  \bm(c#/16 \tieEnd \acc(e) \acc(d) c#) 
+      ],
+  [ % voice 3 
+    \staff<2>
+  \staffFormat<"5-line",size=0.9375mm> 
+% measure 1 (voice 3)
+     \clef<"bass"> \key<"D"> \meter<"C"> 
+      d1/4 _/8 \stemsDown 
+         \fingering<text="3",dy=-7hs,fsize=7pt>( f#0 ) g/4 _/8 e 
+% measure 2 (voice 3)
+      f#/4 _/8 d \beam( h \fingering<text="2",fsize=7pt,dy=-8hs>(g)) 
+           \beam(a a-1) 
+% measure 3 (voice 3)
+     \bm( \stemsDown<7hs>d0 \stemsDown d1 c# 
+              \fingering<text="1",fsize=7pt,dy=-10hs>(
+         \stemsDown<9hs> h0 \stemsDown ) )
+   \beam( \stemsDown<8.25hs> a/16 \stemsDown g# a 
+       \stemsDown<9.25hs> h  \stemsDown ) 
+    \bm( \fingering<text="3",fsize=7pt,dy=-10hs>( 
+                \stemsDown<8hs> c#1 \stemsDown ) 
+              d c# 
+             \fingering<text="1",fsize=7pt,dy=-9hs>( 
+                 \stemsDown<7hs> h0 \stemsDown )) 
+% measure 4 (voice 3)
+     \bm( \stemsDown<8.25hs> a# \stemsDown f# g# 
+	    \stemsDown<8.25hs> a# \stemsDown)
+     \bm( \stemsDown<7hs> \fingering<text="1",fsize=7pt,dy=-9hs>( h ) 
+	    \stemsDown c#1 \fingering<text="1",fsize=7pt,dy=-9hs>( h0 ) 
+	    \stemsDown<6.25hs> \acc(a) \stemsDown )
+     \bm( \stemsDown<9hs> g# \stemsDown e f# 
+	     \stemsDown<9hs> g#  \stemsDown )
+      \bm( \stemsDown<8hs> a \stemsDown h a 
+	     \stemsDown<7.25hs> g \stemsDown )
+% measure 5 (voice 3)
+     \bm( \stemsDown<7hs> 
+	    \fingering<text="4",fsize=7pt,dy=-7hs>(f#/8 )
+		  \stemsDown<6.25hs> d \stemsDown)
+    \bm( \stemsUp<6hs> 
+	   \fingering<text="1",fsize=7pt,dy=-5hs>(e) 
+	   \stemsUp<11hs> e-1) 
+    \bm( \stemsUp<8.75hs> 
+	   \fingering<text="2",fsize=7pt,dy=-1hs>(a/16) \stemsUp h 
+	   \fingering<text="3",fsize=7pt,dy=-3hs>(c#0 ) \stemsUp<6hs> d \stemsUp )
+    \bm( \stemsDown<7hs> e \stemsDown 
+	   \fingering<text="3",fsize=7pt,dy=-7.5hs>(f#) \acc(g) 
+	   \stemsDown<7hs> e \stemsDown )
+% measure 6 (voice 3)
+	\bm(f# e f# g)
+	\bm(a/8 \acc(c))
+	\bm(h-1 e0/16 f#)
+	\bm(g/8 h-1)
+% measure 7 (voice 3)
+	\bm( \stemsUp a d0/16 e)
+	\bm(f#/8 a-1)
+	\bm( \stemsUp<12hs> g/16 \stemsUp f#0 e \stemsUp<8hs> d )
+	\bm( \stemsDown c# h a g)
+% measure 8 (voice 3)
+	\bm(f# e d e)
+	\bm(f# e f# g#)
+	\bm(a/8 e)
+	\dotFormat<dy=1hs>
+	\bm(a. h/16)
+% measure 9 (voice 3)
+	\bm( \acc(g) f# e f#)
+	\bm( g f# g a)
+	\bm( h/8 a)
+	g/4
+% measure 10 (voice 3)
+	\tie<dx1=0.25hs,dy1=-1.5hs,dx2=-2hs,dy2=-1.5hs,h=-2hs>( f#/2 f#/4 )
+	\tieBegin<dx1=0,dy1=-1.25hs,dx2=-2hs,dy2=-1.25hs,h=-1.5hs> e
+% measure 11 (voice 3)
+	e \tieEnd
+	_/16 \bm(d e f#)
+	\acc( g/4 ) f#
+% measure 12 (voice 3)
+	\tie<dx1=0,dy1=-2.2hs,dx2=-2hs,dy2=-2.2hs,h=-2hs>( h-1/2 h/4)
+	\tieBegin<dx1=0.2hs,dy1=-1.9hs,dx2=-2hs,dy2=-1.9hs,h=-2hs> a/4
+% measure 13 (voice 3)
+	a/4 \bm( a/16 \tieEnd a0 g# f#)
+	\bm(e# c# d# e#)
+	\bm(f#/8 h-1/16 c#0)
+% measure 14 (voice 3)
+] }
