@@ -289,6 +289,7 @@ class TestTimeMap : public TimeMapCollector
 static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutSettings * settings)
 {
 	ARMusic * arMusic = ar->armusic;
+	if (!settings && ar->fEngineSettings) settings = ar->fEngineSettings;
 
 	long startTime = GuidoTiming::getCurrentmsTime();
 
@@ -318,6 +319,11 @@ GUIDOAPI GuidoErrCode GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * sett
 	if( !gInited )	return guidoErrNotInitialized;
 	*gr = 0;
 
+	if (ar->fEngineSettings) {
+		settings = ar->fEngineSettings;	// override settings when specified by the ar
+	}
+
+
 #ifdef TESTTIMEMAP
 	TestTimeMap timeCollector;
 	GuidoGetTimeMap (ar, timeCollector);
@@ -333,7 +339,23 @@ GUIDOAPI GuidoErrCode GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * sett
 	return guidoNoErr;
 }
 
+// --------------------------------------------------------------------------
+std::ostream & operator << ( std::ostream & os, const GuidoLayoutSettings* s)
+{
+	os << "systemsDistance:       " << s->systemsDistance << endl;
+	os << "systemsDistribution:   " << s->systemsDistribution << endl;
+	os << "systemsDistribLimit:   " << s->systemsDistribLimit << endl;
+	os << "force:                 " << s->force << endl;
+	os << "spring:                " << s->spring << endl;
+	os << "neighborhoodSpacing:   " << s->neighborhoodSpacing << endl;
+	os << "optimalPageFill:       " << s->optimalPageFill << endl;
+	os << "resizePage2Music:      " << s->resizePage2Music << endl;
+	os << "checkLyricsCollisions: " << s->checkLyricsCollisions << endl;
+	os << "proportionalRFM:       " << s->proportionalRenderingForceMultiplicator;
+	return os;
+}
 
+// --------------------------------------------------------------------------
 GUIDOAPI GRHandler GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters* gp)
 {
 	if( ar == 0 )	return 0;
@@ -354,13 +376,14 @@ GUIDOAPI GRHandler GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters
 	const GuidoLayoutSettings * settings = 0;
 	// Apply settings
 	if(gp) {
-		settings = &gp->layoutSettings;
+		settings = ar->fEngineSettings ? ar->fEngineSettings : &gp->layoutSettings;
 		// A new page format is created.
 		pf.setPageFormat(gp->pageFormat.width, gp->pageFormat.height,
 							  gp->pageFormat.marginleft, gp->pageFormat.margintop,
 							  gp->pageFormat.marginright, gp->pageFormat.marginbottom);
 	} else {
 		// Copy of the default page format.
+		settings = ar->fEngineSettings;
 		pf = *gARPageFormat;
 	}
 
@@ -384,6 +407,8 @@ GUIDOAPI GuidoErrCode GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * s
 {
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
+
+	if (!settings && gr->arHandle->fEngineSettings) settings = gr->arHandle->fEngineSettings;
 
 	GRMusic* music = gr->grmusic;
 	if (music->lyricsChecked() && (!settings || !settings->checkLyricsCollisions)) {
@@ -437,6 +462,7 @@ GUIDOAPI void	GuidoFreeAR( ARHandler ar )
 	if( !ar->refCount )	// No more GR using this AR
 	{
 		delete ar->armusic;
+		delete ar->fEngineSettings;
 		delete ar;
 	}
 }

@@ -16,6 +16,8 @@
 
 */
 
+#include <iostream>
+
 #include "GUIDOEngine.h"
 #include "VGSystem.h"
  
@@ -30,6 +32,7 @@ struct NodeAR
 {
     int refCount;			// Number of GRMusic using this NodeAR.
 	ARMusic * armusic;
+	GuidoLayoutSettings* fEngineSettings;
 };
 
 struct NodeGR
@@ -77,5 +80,7 @@ void 			guido_cleanup();
 
 ARHandler		guido_RegisterARMusic( ARMusic * inMusic );
 GRHandler		guido_RegisterGRMusic( GRMusic * inMusic, ARHandler inHandleAR );
+
+std::ostream & operator << ( std::ostream & os, const GuidoLayoutSettings* );
 
 #endif

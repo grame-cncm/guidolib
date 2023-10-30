@@ -11,8 +11,9 @@
  
  */
 
-#include "GuidoParser.h"
 #include "ARFactory.h"
+#include "GUIDOInternal.h"
+#include "GuidoParser.h"
 #include "TagParameterFloat.h"
 #include "TagParameterInt.h"
 #include "TagParameterString.h"
@@ -35,6 +36,112 @@ GuidoParser::~GuidoParser()
 	setlocale(LC_NUMERIC, 0);
 	destroyScanner();
 	delete fFactory;
+}
+
+//--------------------------------------------------------------------------
+static bool getIntValue (const GuidoParser::variable& var, int& value)
+{
+	try {
+		if (var.fType == GuidoParser::kInt) {
+			int tmp = std::stoi(var.fValue);
+			if (tmp > 0) {
+				value = tmp;
+				return true;
+			}
+		}
+	}
+	catch (exception e) {
+		cerr << "Warning - engine settings: incorrect int value " << var.fValue << endl;
+	}
+	return false;
+}
+
+//--------------------------------------------------------------------------
+static bool getFloatValue (const GuidoParser::variable& var, float& value)
+{
+	int tmp;
+	if (getIntValue(var, tmp)) {
+		value = float(tmp);
+		return true;
+	}
+	try {
+		if (var.fType == GuidoParser::kFloat) {
+			float tmp = std::stof(var.fValue);
+			if (tmp > 0) {
+				value = tmp;
+				return true;
+			}
+		}
+	}
+	catch (exception e) {
+		cerr << "Warning - engine settings: incorrect float value " << var.fValue << endl;
+	}
+	return false;
+}
+
+//--------------------------------------------------------------------------
+static bool getBoolValue (const GuidoParser::variable& var, int& value)
+{
+	try {
+		if (var.fType == GuidoParser::kInt)
+			value = std::stoi(var.fValue);
+		else if (var.fValue == "true")
+			value = 1;
+		else if (var.fValue == "false")
+			value = 0;
+		else return false;
+		return true;
+	}
+	catch (exception e) {
+		cerr << "Warning - engine settings: incorrect bool (int) value " << var.fValue << endl;
+	}
+	return false;
+}
+
+//--------------------------------------------------------------------------
+bool GuidoParser::getSettings(GuidoLayoutSettings& settings)
+{
+	bool retcode = false;
+	for (auto e: fEnv) {
+		if (e.first == "$SYSTEM_DISTANCE") {
+			if (getFloatValue (e.second, settings.systemsDistance )) retcode = true;
+		}
+		else if (e.first == "$SYSTEM_DISTRIBUTION") {
+			int val;
+			if (getIntValue (e.second, val )) {
+				if ((val >= 1) && (val <=3)) {
+					settings.systemsDistribution = val;
+					retcode = true;
+				}
+			}
+		}
+		else if (e.first == "$SYSTEM_DISTRIBUTION_LIMIT") {
+			if (getFloatValue (e.second, settings.systemsDistribLimit )) retcode = true;
+		}
+		else if (e.first == "$FORCE") {
+			if (getFloatValue (e.second, settings.force )) retcode = true;
+		}
+		else if (e.first == "$SPRING") {
+			if (getFloatValue (e.second, settings.spring )) retcode = true;
+		}
+		else if (e.first == "$NEIGHBORHOOD_SPACING") {
+			if (getIntValue (e.second, settings.neighborhoodSpacing )) retcode = true;
+		}
+		else if (e.first == "$OPTIMAL_PAGE_FILL") {
+			if (getIntValue (e.second, settings.optimalPageFill )) retcode = true;
+		}
+		else if (e.first == "$RESIZE_PAGE_TO_MUSIC") {
+			if (getBoolValue (e.second, settings.resizePage2Music )) retcode = true;
+		}
+		else if (e.first == "$CHECK_LYRICS_COLLISIONS") {
+			int val;
+			if (getBoolValue (e.second, val )) {
+				settings.checkLyricsCollisions = val ? true : false;
+				retcode = true;
+			}
+		}
+	}
+	return retcode;
 }
 
 //--------------------------------------------------------------------------
@@ -301,6 +408,19 @@ ARHandler GuidoParser::parse()
     fEnv.clear();
 
 	_yyparse ();
+
+	if (fErrorLine == 0) {
+		ARHandler ar = GuidoFactoryCloseMusic (fFactory);
+		GuidoLayoutSettings settings;
+		GuidoGetDefaultLayoutSettings (&settings);
+		if (getSettings(settings)) {
+			 ar->fEngineSettings = new GuidoLayoutSettings;
+			 *(ar->fEngineSettings) = settings;
+		}
+		else ar->fEngineSettings = nullptr;
+		return ar;
+	}
     
-    return (fErrorLine == 0 ? GuidoFactoryCloseMusic (fFactory) : 0);
+    return 0;
+//    return (fErrorLine == 0 ? GuidoFactoryCloseMusic (fFactory) : 0);
 }

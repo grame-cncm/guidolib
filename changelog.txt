@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.7.7
+- introduce special variables at gmn level to control engine settings 
 - support for line break ('\n') in text elements
 - fix crash bug with repeat begin
 - fix issue #168: Slur Collision when the slur spams more than one system

@@ -82,7 +82,8 @@ class GuidoParser {
         virtual const ARFactory    *getFactory() const  { return fFactory; }
 
         virtual void                setStream(std::istream *stream);
-		virtual bool                get(char& c);  // return the next char in stream or in expanded variable 
+		virtual bool                get(char& c);  // return the next char in stream or in expanded variable
+		virtual bool 				getSettings(GuidoLayoutSettings&);  // return the engine settings if any
 
 		virtual void noteInit		(const char *id);
 		virtual void noteAcc		(int n);
