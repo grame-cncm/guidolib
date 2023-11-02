@@ -97,6 +97,7 @@
 #include "ARStaffOn.h"
 #include "ARSymbol.h"
 #include "ARSystemFormat.h"
+#include "ARTab.h"
 #include "ARTDummy.h"
 #include "ARTempo.h"
 #include "ARTenuto.h"
@@ -332,7 +333,7 @@ void ARFactory::createChord()
             }
         }
     }
-    
+    mChordNotesCount = 0;
     mCurrentChordTag = mCurrentVoice->BeginChord();
 }
 // ----------------------------------------------------------------------------
@@ -360,7 +361,7 @@ void ARFactory::addChord()
     if (mCurrentTrill)			mCurrentVoice->finishTrilledChord();
     else if (mCurrentCluster)	mCurrentVoice->setClusterChord(mCurrentCluster);
 
-	mCurrentVoice->FinishChord ();
+	mCurrentVoice->FinishChord (mChordNotesCount > 0);
     mCurrentChordTag = NULL;
 }
 
@@ -397,6 +398,16 @@ void ARFactory::createEvent( const char * name )
 		if (mCurrentTrill && !note->isEmptyNote()) note->setOrnament(mCurrentTrill, false);
 	}
 	assert(mCurrentEvent);
+	mLastEvent = NULL;
+	mChordNotesCount++;
+}
+
+void ARFactory::createTab( int string, const char * disp )
+{
+	ARTab* tab = new ARTab(string, disp);
+	mCurrentEvent = tab;
+	tab->setOctava (0);
+	tab->setDuration (TYPE_DURATION(mCurrentNumerator, mCurrentDenominator));
 	mLastEvent = NULL;
 }
 
@@ -504,22 +515,6 @@ void ARFactory::addEvent()
     else
         mCurrentVoice->AddTail( mCurrentEvent );
  
-    // In the "toadd" list are all musical objects (Ties, Fermatas, ...) stored which
-    // must be definitly stored AFTER the event.
-    // otherwise an update of the graphical position is very hard todo
-    // The position of the last note is needed before 
-    // the calculation of the  position can be done
-    // ATTENTION: This  is not true anymore! Ties and slurs are now
-    // handled totally differently. Only for fermatas this solution
-    // maybe needed now (I believe).
-
-    /*	while (!mToAddList.empty())
-    {
-    // old
-    // mCurrentVoice->AddTailNoDuration(mToAddList.RemoveHead());
-    mCurrentVoice->AddTail(mToAddList.RemoveHead());
-    }*/
-
     mLastEvent = mCurrentEvent;
     mCurrentEvent = 0;
 }

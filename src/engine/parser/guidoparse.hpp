@@ -1,14 +1,14 @@
-/* A Bison parser, made by GNU Bison 2.3.  */
+/* A Bison parser, made by GNU Bison 3.7.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
+/* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
 
-   This program is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,9 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -33,97 +31,78 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Tokens.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
+
+#ifndef YY_GUIDO_GUIDOPARSE_HPP_INCLUDED
+# define YY_GUIDO_GUIDOPARSE_HPP_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int guidodebug;
+#endif
+
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     NUMBER = 258,
-     PNUMBER = 259,
-     NNUMBER = 260,
-     FLOAT = 261,
-     STARTCHORD = 262,
-     ENDCHORD = 263,
-     STARTSEQ = 264,
-     ENDSEQ = 265,
-     STARTPARAM = 266,
-     ENDPARAM = 267,
-     STARTRANGE = 268,
-     ENDRANGE = 269,
-     SEP = 270,
-     IDSEP = 271,
-     BAR = 272,
-     TAGNAME = 273,
-     IDT = 274,
-     DIATONIC = 275,
-     CHROMATIC = 276,
-     SOLFEGE = 277,
-     EMPTYT = 278,
-     RESTT = 279,
-     DOT = 280,
-     DDOT = 281,
-     TDOT = 282,
-     SHARPT = 283,
-     FLATT = 284,
-     MLS = 285,
-     SEC = 286,
-     UNIT = 287,
-     MULT = 288,
-     DIV = 289,
-     EQUAL = 290,
-     STRING = 291,
-     EXTRA = 292,
-     ENDVAR = 293,
-     VARNAME = 294
-   };
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    NUMBER = 258,                  /* NUMBER  */
+    PNUMBER = 259,                 /* PNUMBER  */
+    NNUMBER = 260,                 /* NNUMBER  */
+    FLOAT = 261,                   /* FLOAT  */
+    STARTCHORD = 262,              /* STARTCHORD  */
+    ENDCHORD = 263,                /* ENDCHORD  */
+    STARTSEQ = 264,                /* STARTSEQ  */
+    ENDSEQ = 265,                  /* ENDSEQ  */
+    STARTPARAM = 266,              /* STARTPARAM  */
+    ENDPARAM = 267,                /* ENDPARAM  */
+    STARTRANGE = 268,              /* STARTRANGE  */
+    ENDRANGE = 269,                /* ENDRANGE  */
+    SEP = 270,                     /* SEP  */
+    IDSEP = 271,                   /* IDSEP  */
+    BAR = 272,                     /* BAR  */
+    TAGNAME = 273,                 /* TAGNAME  */
+    IDT = 274,                     /* IDT  */
+    DIATONIC = 275,                /* DIATONIC  */
+    CHROMATIC = 276,               /* CHROMATIC  */
+    SOLFEGE = 277,                 /* SOLFEGE  */
+    EMPTYT = 278,                  /* EMPTYT  */
+    RESTT = 279,                   /* RESTT  */
+    DOT = 280,                     /* DOT  */
+    DDOT = 281,                    /* DDOT  */
+    TDOT = 282,                    /* TDOT  */
+    SHARPT = 283,                  /* SHARPT  */
+    FLATT = 284,                   /* FLATT  */
+    TAB = 285,                     /* TAB  */
+    MLS = 286,                     /* MLS  */
+    SEC = 287,                     /* SEC  */
+    UNIT = 288,                    /* UNIT  */
+    MULT = 289,                    /* MULT  */
+    DIV = 290,                     /* DIV  */
+    EQUAL = 291,                   /* EQUAL  */
+    STRING = 292,                  /* STRING  */
+    EXTRA = 293,                   /* EXTRA  */
+    ENDVAR = 294,                  /* ENDVAR  */
+    VARNAME = 295,                 /* VARNAME  */
+    FRETTE = 296                   /* FRETTE  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
-#define NUMBER 258
-#define PNUMBER 259
-#define NNUMBER 260
-#define FLOAT 261
-#define STARTCHORD 262
-#define ENDCHORD 263
-#define STARTSEQ 264
-#define ENDSEQ 265
-#define STARTPARAM 266
-#define ENDPARAM 267
-#define STARTRANGE 268
-#define ENDRANGE 269
-#define SEP 270
-#define IDSEP 271
-#define BAR 272
-#define TAGNAME 273
-#define IDT 274
-#define DIATONIC 275
-#define CHROMATIC 276
-#define SOLFEGE 277
-#define EMPTYT 278
-#define RESTT 279
-#define DOT 280
-#define DDOT 281
-#define TDOT 282
-#define SHARPT 283
-#define FLATT 284
-#define MLS 285
-#define SEC 286
-#define UNIT 287
-#define MULT 288
-#define DIV 289
-#define EQUAL 290
-#define STRING 291
-#define EXTRA 292
-#define ENDVAR 293
-#define VARNAME 294
 
-
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
+union YYSTYPE
+{
 #line 44 "guido.y"
-{         
+         
 	long int		num;
 	float			real;
 	const char*		token;
@@ -132,28 +111,31 @@ typedef union YYSTYPE
 	TagParameter*	param;
 	ARMusicalTag*	tag;
 //	GuidoParser::ParamsList*	plist;
-}
-/* Line 1529 of yacc.c.  */
-#line 138 "guidoparse.hpp"
-	YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
+
+#line 116 "guidoparse.hpp"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
 #endif
 
-
-
+/* Location type.  */
 #if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
-typedef struct YYLTYPE
+typedef struct YYLTYPE YYLTYPE;
+struct YYLTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
-} YYLTYPE;
-# define yyltype YYLTYPE /* obsolescent; will be withdrawn */
+};
 # define YYLTYPE_IS_DECLARED 1
 # define YYLTYPE_IS_TRIVIAL 1
 #endif
 
 
+
+int guidoparse (GuidoParser* context);
+
+#endif /* !YY_GUIDO_GUIDOPARSE_HPP_INCLUDED  */

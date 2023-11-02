@@ -60,6 +60,12 @@ static  char* unescape (char * str) {
 				case '"':
 				case '\'':
 					break;
+
+				case ';':
+				case ' ':
+					str[j++] = str[++i];
+					break;
+				
 				default:
 					str[j++] = str[i];
 					break;
@@ -150,10 +156,12 @@ EOL		[\x0a\x0d]
 "cis"|"dis"|"fis"|"gis"|"ais"				yyextra->fText = yytext; return CHROMATIC;
 {NOTE}				yyextra->fText = yytext; return DIATONIC;
 "empty"				yyextra->fText = yytext; return EMPTYT;
+"s"[1-6]			yyextra->fText = yytext; return TAB;
 "_"					return RESTT;
 
 \"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
 \'(\\\\|\\.|[^\\\'])*\'   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
+":"(\\[: ]|[^:\\\n])*":"    unescape(yytext); unquote(yytext); yyextra->fText = yytext; return FRETTE;
 
 {SPACE}+			/* eat up space */
 

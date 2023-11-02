@@ -96,6 +96,7 @@
 #include "ARStaffOn.h"
 #include "ARSymbol.h"
 #include "ARSystemFormat.h"
+#include "ARTab.h"
 #include "ARTempo.h"
 #include "ARTenuto.h"
 #include "ARHarmony.h"
@@ -163,6 +164,7 @@
 #include "GRSymbol.h"
 #include "GRSystemSlice.h"
 #include "GRSystemTag.h"
+#include "GRTab.h"
 #include "GRTag.h"
 #include "GRTempo.h"
 #include "GRTempoChange.h"
@@ -408,8 +410,7 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 	}
 	else if (fVoiceState->curtp < tp)
 	{
-//		assert(false);		// then we have a problem
-		cerr << "GRVoiceManager::DoBreak Warning: curtp < tp (" << fVoiceState->curtp << " " << tp << ")" << endl;
+		assert(false);		// then we have a problem
 	}
 
 	ARMusicalObject *o = NULL;
@@ -632,7 +633,9 @@ int GRVoiceManager::IterateNoDurEvent(ARMusicalObject * obj, const TYPE_TIMEPOSI
 	else {
 		// careful, what happens to dispDur !!!!
 		if (fVoiceState->fCurdispdur != NULL && fVoiceState->fCurdispdur->getDisplayDuration() > DURATION_0) {
-			if (obj->isARNote())
+			if (obj->isARTab())
+				ev = CreateTab(timepos,obj);
+			else if (obj->isARNote())
 				ev = CreateNote(timepos, obj);
 			else if (obj->isARRest())
 				ev = CreateRest(timepos, obj);
@@ -735,7 +738,9 @@ int GRVoiceManager::IterateEvent(ARMusicalEvent * arev, TYPE_TIMEPOSITION &timep
 		currentTime = timepos;
 		fCurrentNotesTP.clear();
 	}
-	if (arev->isARNote()) {
+	if (arev->isARTab())
+		grev = CreateTab(timepos,arev);
+    else if (arev->isARNote()) {
 		grev = CreateNote(timepos, arev);
 		GRSingleNote * note = grev->isSingleNote();
 		if (note && note->getARNote()) {
@@ -902,8 +907,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	if (mytag)
 	{
 		if (mytag->getRange()){
-//			GuidoTrace("range without range tag");
-			cerr << mytag << " : range without range tag" << endl;
+			GuidoTrace("range without range tag");
 		}
 	}
     else if (static_cast<const ARDummyRangeEnd *>(arOfCompleteObject->isARDummyRangeEnd()))
@@ -1852,26 +1856,98 @@ GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 //-------------------------------------------------------------------------------------------------
 /** \brief Creates a GRNote from a ARNote
 */
-GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size, bool isGrace)
+GREvent * GRVoiceManager::CreateTab( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject)
 {
-	curev = ARMusicalEvent::cast(arObject);
-	// make sure to recognize the displayduration-tag...
+    ARTab * artab = arObject->isARTab();
+	if ((artab->getDuration() <= DURATION_0) && (fVoiceState->fCurdispdur == NULL))
+		return NULL;		// this should not happen...
 
-	TYPE_DURATION dtempl;
-	if (fVoiceState->fCurdispdur != NULL)
+	curev = ARMusicalEvent::cast(arObject);
+
+	TYPE_DURATION dur = findDuration (fVoiceState, curev);
+	dur.normalize();
+	GRTab * grtab = new GRTab(mCurGrStaff, curev->isARTab(), tp, arObject->getDuration());
+	grtab->setDuration(dur);
+
+	if (curnoteformat != NULL)		grtab->setNoteFormat(curnoteformat);
+
+	// Associate the note with the current tags...
+	GuidoPos pos = fGRTags->GetHeadPosition();
+	bool addedToTrill = false;
+	while (pos)
 	{
-		dtempl = fVoiceState->fCurdispdur->getDisplayDuration();
-		int i = fVoiceState->fCurdispdur->getDots();
-		TYPE_DURATION tmpdur (dtempl);
-		while (i>0)
-		{
+		GRNotationElement * el = dynamic_cast<GRNotationElement *>(fGRTags->GetNext(pos));
+		if (el)	{
+			el->addAssociation(grtab);
+			if (fCurrentTrill && (fCurrentTrill == el)) addedToTrill = true;
+		}
+	}
+	if (fCurrentTrill && !addedToTrill)
+		setTrillNext (grtab);
+	mCurGrStaff->addNotationElement(grtab);
+	fMusic->addVoiceElement(arVoice,grtab);
+	lastev = grtab;
+
+	return grtab;
+
+}
+
+//-------------------------------------------------------------------------------------------------
+/** \brief scan for associated tags
+*/
+void GRVoiceManager::doAssociate(GRSingleNote * grnote)
+{
+	// Associate the note with the current tags...
+	GuidoPos pos = fGRTags->GetHeadPosition();
+	bool addedToTrill = false;
+	while (pos)
+	{
+		GRNotationElement * el = dynamic_cast<GRNotationElement *>(fGRTags->GetNext(pos));
+		if (el)	{
+            GRRange * r = dynamic_cast<GRRange *>(el);
+			const ARAccidental* acc = r ? dynamic_cast<const ARAccidental*>(r->getAbstractRepresentation()) : 0;
+			if (r && !acc && curgloballocation) {
+				fSharedArticulations.push_back(make_pair(r, grnote));
+			}
+			else
+				el->addAssociation(grnote);
+			if (fCurrentTrill && (fCurrentTrill == el)) addedToTrill = true;
+		}
+	}
+	if (fCurrentTrill && !addedToTrill)
+		setTrillNext (grnote);
+}
+
+//-------------------------------------------------------------------------------------------------
+/** \brief scan for the event duration
+*/
+TYPE_DURATION GRVoiceManager::findDuration(const ARMusicalVoiceState * state, const ARMusicalEvent* ev ) const
+{
+	TYPE_DURATION duration;
+	if (state->fCurdispdur != NULL) {
+		// make sure to recognize the displayduration-tag...
+		duration = state->fCurdispdur->getDisplayDuration();
+		int i = state->fCurdispdur->getDots();
+		TYPE_DURATION tmpdur (duration);
+		while (i>0) {
 			// this takes care of dots maybe this should be a parameter for GRSingleNote later...
 			tmpdur = tmpdur * DURATION_2;
-			dtempl = dtempl + tmpdur;
+			duration = duration + tmpdur;
 			-- i;
 		}
 	}
-	else	dtempl = curev->getDuration();
+	else duration = ev->getDuration();
+	return duration;
+}
+
+//-------------------------------------------------------------------------------------------------
+/** \brief Creates a GRNote from a ARNote
+*/
+GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size, bool isGrace)
+{
+	curev = ARMusicalEvent::cast(arObject);
+
+	TYPE_DURATION dtempl = findDuration (fVoiceState, curev);
 
 	// we need to take care of dots !
     const ARNote * tmpNote = static_cast<const ARNote *>(curev->isARNote());
@@ -1907,24 +1983,7 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 
 
 	// Associate the note with the current tags...
-	GuidoPos pos = fGRTags->GetHeadPosition();
-	bool addedToTrill = false;
-	while (pos)
-	{
-		GRNotationElement * el = dynamic_cast<GRNotationElement *>(fGRTags->GetNext(pos));
-		if (el)	{
-            GRRange * r = dynamic_cast<GRRange *>(el);
-			const ARAccidental* acc = r ? dynamic_cast<const ARAccidental*>(r->getAbstractRepresentation()) : 0;
-			if (r && !acc && curgloballocation) {
-				fSharedArticulations.push_back(make_pair(r, grnote));
-			}
-			else
-				el->addAssociation(grnote);
-			if (fCurrentTrill && (fCurrentTrill == el)) addedToTrill = true;
-		}
-	}
-	if (fCurrentTrill && !addedToTrill)
-		setTrillNext (grnote);
+	doAssociate (grnote);
 	mCurGrStaff->addNotationElement(grnote);
 	fMusic->addVoiceElement(arVoice,grnote);
 	lastev = grnote;
@@ -2063,7 +2122,7 @@ void GRVoiceManager::addAssociations(GREvent* ev, bool setnext)
 		if (el)		el->addAssociation(ev);
 		if (fCurrentTrill && (el == fCurrentTrill)) addedToTrill = true;
 	}
-	if (setnext && fCurrentTrill && !addedToTrill)
+	if (setnext && fCurrentTrill && !addedToTrill && !ev->isEmpty())
 		setTrillNext (ev);
 }
 
@@ -2079,7 +2138,9 @@ GREvent * GRVoiceManager::CreateEmpty( const TYPE_TIMEPOSITION & tp, ARMusicalOb
 	// the associations have to be handled just the same...
 	addAssociations (grempty, false);
 	mCurGrStaff->addNotationElement(grempty);
-	fMusic->addVoiceElement(arVoice,grempty);		
+	fMusic->addVoiceElement(arVoice,grempty);
+	if (fCurrentTrill && !grempty->isAuto())
+		setTrillNext (grempty);
 	lastev = grempty;
 	return grempty;
 }

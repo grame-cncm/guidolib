@@ -115,6 +115,7 @@ int gd_noteName2pc (const char *name)
 	if ((note == "h") || (note == "b") || (note == "si") || (note == "ti"))	return NOTE_H;
 	if ((note == "_") || (note == "rest"))					return REST;
 	if (note == "empty")									return EMPTY;
+	if (note == "tab")										return REST;
 	std::cerr << "Unknown notename, replaced by rest." << std::endl;
 	return REST;
 }

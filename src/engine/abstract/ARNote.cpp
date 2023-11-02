@@ -61,26 +61,33 @@ ARNote::ARNote(const ARNote & arnote, bool istied)
 		fName(arnote.fName), fOrnament(NULL),  fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
         fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(true), fTremolo(0), fOctava(0)
 {
-	fPitch = arnote.fPitch;
-	fOctave = arnote.fOctave;
-	fAccidentals = arnote.fAccidentals;
-	fAlter = arnote.getAlter();
-	fIntensity = arnote.fIntensity;
-    fVoiceNum = arnote.getVoiceNum(); // Added to fix a bug during chord copy (in doAutoBarlines)
-	fOctava = arnote.getOctava();
-	const ARTrill* trill = arnote.getOrnament();
-	if (trill) {
-		ARTrill* copy = new ARTrill(-1, trill);
-		copy->setContinue();
-		if (istied) copy->setIsAuto(true);
-		setOrnament(copy);
-	}
+	(*this) = &arnote;
 }
+
+ARNote * ARNote::Clone(bool istied) const	{ return new ARNote (*this, istied); }
 
 ARNote::~ARNote()
 {
 	if (fTrillOwner)	delete fOrnament;
 	if (fOwnCluster)	delete fCluster;
+}
+
+void ARNote::operator= (const ARNote* note)
+{
+	fPitch = note->fPitch;
+	fOctave = note->fOctave;
+	fAccidentals = note->fAccidentals;
+	fAlter = note->getAlter();
+	fIntensity = note->fIntensity;
+    fVoiceNum = note->getVoiceNum(); // Added to fix a bug during chord copy (in doAutoBarlines)
+	fOctava = note->getOctava();
+	const ARTrill* trill = note->getOrnament();
+	if (trill) {
+		ARTrill* copy = new ARTrill(-1, trill);
+		copy->setContinue();
+		if (isAuto()) copy->setIsAuto(true);
+		setOrnament(copy);
+	}
 }
 
 ARMusicalObject * ARNote::Copy() const

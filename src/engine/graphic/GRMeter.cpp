@@ -68,6 +68,7 @@ GRMeter::GRMeter( const ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
 		if (linesOffset)
 			mPosition.y += fCurLSPACE * linesOffset / 2;
 	}
+	if (ar->hidden()) mShow = false;
 }
 
 // -----------------------------------------------------------------------------

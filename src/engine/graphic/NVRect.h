@@ -34,15 +34,13 @@ class NVRect
 				bool	 operator ==( const NVRect& r ) const { return (left==r.left) && (top==r.top) && (right==r.right) && (bottom==r.bottom); }
 				NVRect   operator +( const NVPoint & in ) const;
 	
-				
-//				NVRect operator +( const NVPoint & in );
-
 		void	Print( std::ostream& os ) const { os << "[" << left << ", " << top << ", " << right << ", " << bottom << "]"; }
 		void	Set( const NVRect & in )
 					{ Set( in.left, in.top, in.right, in.bottom ); }
 
 		void	Set( float inL, float inT, float inR, float inB );
 		void	Merge( const NVRect & in );
+		NVRect	Scale( float val ) const;
 
 		float	Height() const 		{ return bottom - top; }
 		float	Width() const 		{ return right - left; }

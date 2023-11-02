@@ -32,10 +32,10 @@ using namespace std;
 
 %}
 
-%pure-parser
+%define api.pure
 %locations
 %defines
-%error-verbose
+%define parse.error verbose
 %parse-param { GuidoParser* context }
 %lex-param { void* scanner  }
 
@@ -86,6 +86,7 @@ using namespace std;
 %token TDOT
 %token SHARPT
 %token FLATT
+%token TAB
 
 /*------------------------------   misc  ------------------------------*/
 %token MLS
@@ -98,6 +99,7 @@ using namespace std;
 %token EXTRA
 %token ENDVAR
 %token VARNAME
+%token FRETTE
 
 
 /*------------------------------   types  ------------------------------*/
@@ -108,9 +110,9 @@ using namespace std;
 %type <c>		STARTCHORD ENDCHORD STARTSEQ ENDSEQ STARTPARAM ENDPARAM STARTRANGE ENDRANGE SEP IDSEP BAR 
 %type <c>		SHARPT FLATT MULT DIV EQUAL
 
-%type <str>		notename noteid tagname id varname
-%type <num>		number pnumber nnumber signednumber
-%type<param>	tagarg tagparam
+%type <str>		notename noteid tagname id varname 
+%type <num>		number pnumber nnumber signednumber string
+%type<param>	tagarg tagparam tab
 // %type<plist>	tagparams
 
 %%
@@ -178,11 +180,11 @@ tagid		: tagname										{ context->tagStart ( $1->c_str(), 0); delete $1; }
 			| BAR											{ context->tagStart ( "\\bar", 0); }
 			;
 
-tagarg		: signednumber									{ $$ = context->intParam   ($1) }
-			| floatn										{ $$ = context->floatParam ($1) }
-			| signednumber UNIT								{ $$ = context->intParam   ($1, context->fText.c_str() ) }
-			| floatn UNIT									{ $$ = context->floatParam ($1, context->fText.c_str() ) }
-			| STRING										{ $$ = context->strParam   (context->fText.c_str() ) }
+tagarg		: signednumber									{ $$ = context->intParam   ($1); }
+			| floatn										{ $$ = context->floatParam ($1); }
+			| signednumber UNIT								{ $$ = context->intParam   ($1, context->fText.c_str() ); }
+			| floatn UNIT									{ $$ = context->floatParam ($1, context->fText.c_str() ); }
+			| STRING										{ $$ = context->strParam   (context->fText.c_str() ); }
 			| id											{ /* unused */ $$ = 0; delete $1; }
 			| varname										{ $$ = context->varParam ($1->c_str() ); 
 															  if (!$$) varerror (@1.last_line, @1.first_column, context, $1->c_str());
@@ -239,6 +241,7 @@ rest		: RESTT { context->noteInit ( "_" ); } duration dots
 
 note		: noteid octave duration dots
 			| noteid accidentals octave duration dots
+			| tab duration dots
 			;
 
 noteid		: notename
@@ -250,6 +253,12 @@ notename	: DIATONIC								{ context->noteInit ( context->fText.c_str() ); }
 			| SOLFEGE								{ context->noteInit ( context->fText.c_str() ); }
 			| EMPTYT								{ context->noteInit ( context->fText.c_str() ); }
 			;		
+
+tab			: string FRETTE 						{ context->tabInit ( $1, context->fText.c_str() ); }
+			;
+
+string		: TAB 									{ $$ = atoi( &context->fText.c_str()[1]); }
+			;
 
 accidentals	: accidental
 			| accidentals accidental

@@ -38,6 +38,7 @@ The **\meter** tag displays a time signature.
 @param:autoBarlines:boolean:control automatic barlines:on:true
 @param:autoMeasuresNum:string:on, off, system, page:off:true
 @param:group:boolean:control complex meter appearance:off:true
+@param:hidden:boolean:to be used to hide the meter:off:true
 @paramdesc
 - C, c, C/, c/ : a C or a crossed C meter.
 - complex time strings are in on of the following forms:
@@ -83,6 +84,7 @@ class ARMeter : public ARMTParameter
 		int	 getAutoMeasuresNum()               const { return fAutoMeasuresNum; }
 		bool isSingleUnit()						const { return fSingleUnit; }
 		bool groupComplex()						const { return fGroupComplex; }
+		bool hidden()							const { return fHidden; }
 
 		const std::vector<Fraction>& getMeters()const { return fMetersVector; }
         int getNumerator()                      const { return fMeterDuration.getNumerator(); }
@@ -126,6 +128,7 @@ class ARMeter : public ARMTParameter
 		bool					fSingleUnit;		// a flag that indicates if one or several units are used
 		bool					fGroupComplex;		// a flag that indicates if complex meters must be grouped by common denominator
 		metertype				fType;
+		bool					fHidden = false;
 };
 
 #endif

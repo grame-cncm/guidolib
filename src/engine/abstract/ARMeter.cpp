@@ -175,6 +175,7 @@ void ARMeter::setTagParameters (const TagParameterMap& params)
 	else if (am == "page")		fAutoMeasuresNum = kAutoMeasureNumPage;
 	else if (am == "system")	fAutoMeasuresNum = kAutoMeasureNumSystem;
 
+	fHidden			= getParameter<TagParameterString>(kHiddenStr, true)->getBool();
 	fAutoBarlines	= getParameter<TagParameterString>(kAutoBarlinesStr, true)->getBool();
 	fGroupComplex	= getParameter<TagParameterString>(kGroupStr, true)->getBool();
 	fMeterDuration	= metersDuration(fMetersVector);

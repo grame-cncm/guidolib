@@ -37,6 +37,7 @@ ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 	setTagParameters (stffrmt.getTagParameters());
 	fSize = stffrmt.fSize;
 	fLineThickness = stffrmt.getLineThickness();
+	fTAB = stffrmt.fTAB;
 }
 
 const TagParameterFloat * ARStaffFormat::getStaffDistance() const	{ return getParameter<TagParameterFloat>(kDistanceStr); }
@@ -71,6 +72,10 @@ void ARStaffFormat::setTagParameters (const TagParameterMap& params)
 		smatch m;
 		if (regex_match (str, m, e))
 			fLinesCount = std::stoi(m[1].str());
+		else if (str == "TAB") {
+			fLinesCount = 6;
+			fTAB = true;
+		}
 	}
 }
 

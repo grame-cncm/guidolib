@@ -24,6 +24,7 @@ class AROctava;
 class ARGrace;
 class ARNote;
 class ARSpace;
+class ARTab;
 class ARTempo;
 
 /** \brief The base class for all AR objects. 
@@ -67,6 +68,8 @@ class ARMusicalObject : public ARVisitable
     virtual ARMusicalObject  *isARRepeatBegin()   { return NULL; }
     virtual ARNote			 *isARNote()          { return NULL; }
     virtual const ARNote	 *isARNote() const    { return NULL; }
+    virtual ARTab			 *isARTab()           { return NULL; }
+    virtual const ARTab	 	 *isARTab() const     { return NULL; }
     virtual ARMusicalObject  *isARCoda()          { return NULL; }
     virtual ARMusicalObject  *isARSegno()         { return NULL; }
     virtual ARMusicalObject  *isARNewPage()       { return NULL; }

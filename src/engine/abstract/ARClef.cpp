@@ -85,6 +85,7 @@ void ARClef::buildMap ()
 	fClefsMap["perc3"]	= make_pair(PERC, 3);
 	fClefsMap["perc2"]	= make_pair(PERC, 2);
 	fClefsMap["perc1"]	= make_pair(PERC, 1);
+	fClefsMap["TAB"]	= make_pair(TAB, 2);
 	fClefsMap["none"]	= make_pair(OFF, 2);
 	fClefsMap["off"]	= make_pair(OFF, 2);
 	fClefsMap[""]		= make_pair(OFF, 2);

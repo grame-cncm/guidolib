@@ -62,6 +62,7 @@ class GuidoParser {
 		}
 
 		virtual void noteInit		(const char *id) {}
+		virtual void tabInit		(int n, const char *fret) {}
 		virtual void noteAcc		(int n) {}
 		virtual void noteOct		(int n) {}
 		virtual void noteEnum		(long int n) {}

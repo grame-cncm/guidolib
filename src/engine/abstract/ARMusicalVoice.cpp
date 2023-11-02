@@ -2172,32 +2172,30 @@ void ARMusicalVoice::doAutoBarlines()
 			curmeterlen = curmeter->getMeterDuration();
 			disableAutoBar = (curmeterlen.getNumerator() == 0) || (curmeter->getAutoBarlines() == 0);
 			measuretime = DURATION_0;
-//			lookahead = false; // even lookahead-mode is discarded ...
 		}
 
-		ARMusicalObject * o = GetAt(pos);
-		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
-        const ARBar   *bar   = static_cast<const ARBar *>(o->isARBar());
+		ARMusicalObject * obj = GetAt(pos);
+		ARMusicalEvent * ev = ARMusicalEvent::cast(obj);
+        const ARBar   *bar   = static_cast<const ARBar *>(obj->isARBar());
 
 		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
         TYPE_TIMEPOSITION currentDate;
-        if (o) {
-			currentDate = o->getRelativeTimePosition();
-			if (o->isARRepeatBegin())
+        if (obj) {
+			currentDate = obj->getRelativeTimePosition();
+			if (obj->isARRepeatBegin())
 				foundbarline = isRepeatBar = true;
 		}
-        ARKey *key = static_cast<ARKey *>(o->isARKey());
-        if( key ) {
+        if( obj->isARKey() ) {
 			previousKey = pos;
 			lastkeyp = currentDate;
 		}
 
 		if (lookahead) {
-			// we are in lookahead-mode, that is, we have found a measureend already ...
+			// we are in lookahead-mode, that is, we have found a measure end already ...
 			// we need to track explicit bars until we have an event with duration>0
-            ARNewPage   *page = static_cast<ARNewPage *>(o->isARNewPage());
-			ARNewSystem *sys  = static_cast<ARNewSystem *>(o->isARNewSystem());
+            ARNewPage   *page = static_cast<ARNewPage *>(obj->isARNewPage());
+			ARNewSystem *sys  = static_cast<ARNewSystem *>(obj->isARNewSystem());
 
 			if (bar || isRepeatBar)
 				foundbarline = true;
@@ -2208,8 +2206,7 @@ void ARMusicalVoice::doAutoBarlines()
 				}
 			}
 			else {
-				bool insertbefore = o->isARTempo() || o->isARGrace() || o->isARCoda() || o->isARSegno() || o->isARNote();
-				bool insertbar = insertbefore || (ev && (ev->getDuration() > DURATION_0));
+				bool insertbar = obj->isARTempo() || obj->isARGrace() || obj->isARCoda() || obj->isARSegno() || obj->isARNote() || (ev && (ev->getDuration() > DURATION_0));
 				if (insertbar) {
 					// now, we are at the end of the lookahead ...
 					if (!foundbarline) {
@@ -2310,7 +2307,7 @@ void ARMusicalVoice::doAutoBarlines()
 
 					// now we create a new event, that is a copy of ev and has a new duration ...
 					ARNote* note = ev->isARNote();
-					ARMusicalEvent *ev2 = note ? new ARNote (*note, true) : static_cast<ARMusicalEvent *>(ev->Copy());
+					ARMusicalEvent *ev2 = note ? note->Clone(true) : static_cast<ARMusicalEvent *>(ev->Copy());
 					if (ev2) {
 						ev2->setRelativeTimePosition( lastbartp );
 						ev2->setDuration( olddur - newdur );
@@ -2322,8 +2319,9 @@ void ARMusicalVoice::doAutoBarlines()
 					// tieEnd that could be introduced. This is important, so that
 					// tie repositioning works ...
 					GuidoPos newptagpos = NULL;
-					ARNote *nt = static_cast<ARNote *>(ev2->isARNote());
-					if (!nt || !nt->isEmptyNote()) {
+					ARNote *nt = ev2->isARNote();
+//					if (!nt || !nt->isEmptyNote() || !nt->isARTab()) {
+					if (nt && !nt->isEmptyNote() && !nt->isARTab()) {
 						// new: just insert a tie anyways ....
 						if (mPosTagList == NULL) {
 							mPosTagList = createPositionTagList();
@@ -2337,11 +2335,6 @@ void ARMusicalVoice::doAutoBarlines()
 						artie->setIsAuto(true);
 						artie->setRelativeTimePosition(ev->getRelativeTimePosition());
 						artie->setPosition(pos);
-//						if (existingTie) {
-//							TagParameterList *tpl = existingTie->getTagParameterList();
-//							artie->setTagParameterList(*tpl);
-//							delete tpl;
-//						}
 
 						ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);
 						arde->setID(artie->getID());
@@ -2582,7 +2575,8 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 		PointerClass * pc = mylist->GetNext(objpos);
 		ARMusicalObject * obj = pc->pobj;
 		ARNote * note = obj->isARNote();
-		ARMusicalObject * newobj = note ? new ARNote (*note, true) : obj->Copy();
+//		ARMusicalObject * newobj = note ? new ARNote (*note, true) : obj->Copy();
+		ARMusicalObject * newobj = note ? note->Clone (true) : obj->Copy();
 		newobj->setRelativeTimePosition(tp);
 		if (newobj->getDuration() > DURATION_0) {
 			newobj->setDuration(newdur);
@@ -2879,8 +2873,8 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 		ARMusicalObject * obj = GetAt(myvst2.vpos);
 
 		if (ARMusicalEvent::cast(obj) && obj->getDuration() == DURATION_0) {
-            ARNote * nt = static_cast<ARNote *>(obj->isARNote());
-			if (nt && nt->getName() == ARNoteName::empty) {
+            ARNote * nt = obj->isARNote();
+			if (nt && (nt->isEmptyNote() || nt->isARTab())) {
 			}
 			else {
 				// then we must add a tieBegin or end
@@ -3523,9 +3517,9 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					// this position remembers the location of the MergeEnd or
 					// tieEnd that could be introduced. this is important, so that tie repositioning works ...
 					GuidoPos newptagpos = NULL;
-                    ARNote * n2 = static_cast<ARNote *>(ev2->isARNote());
+                    ARNote * n2 = ev2->isARNote();
 					// now look, if there are any ties and merge-tags ..
-					if (tiecount == 0 && n2 && !(n2->getName() == ARNoteName::empty) )
+					if (tiecount == 0 && n2 && !(n2->getName() == ARNoteName::empty) && !(n2->isARTab()) )
 					{
 						if (mPosTagList == NULL)
 						{
@@ -4137,9 +4131,9 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 		// this is important, so that tie repositioning works ...
 		GuidoPos newptagpos = NULL;
 
-        ARNote * n2 = static_cast<ARNote *>(ev2->isARNote());
+        ARNote * n2 = ev2->isARNote();
 		// now look, if there are any ties and merge-tags ..
-		if (tiemergecount==0 && n2 && !(n2->getName() == ARNoteName::empty))
+		if (tiemergecount==0 && n2 && !(n2->getName() == ARNoteName::empty) && !n2->isARTab())
 		{
 			if (mPosTagList == NULL) {
 				mPosTagList = createPositionTagList();
@@ -4323,19 +4317,19 @@ void ARMusicalVoice::doAutoTies()
 					// 1. we are not in the chord that has already been handled by the first case (vst.vpos is equal)
 					// 2. the name and position match...
 					if (ischordtie && tiestruct->tie->getPosition() != vst.vpos) {
-                        ARNote *nt = static_cast<ARNote *>(o->isARNote());
+                        ARNote *nt = o->isARNote();
 						if (nt && !(nt->getName() == ARNoteName::empty))
 							mustcreate = 1;
 					}
 					else if (tiestruct->curchordtag != vst.curchordtag) {
-                        ARNote *nt = static_cast<ARNote *>(o->isARNote());
+                        ARNote *nt = o->isARNote();
 						if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 							mustcreate = 1;
 					}
 				}
 				else {
 					// we are not in a chord...
-                    ARNote *nt = static_cast<ARNote *>(o->isARNote());
+                    ARNote *nt = o->isARNote();
 					if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 						mustcreate = 1;
 				}
@@ -5095,7 +5089,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 	it involves setting all the event-times and stuff !?
 */
 // C.D. method optimized 22/10/14
-void ARMusicalVoice::FinishChord()
+void ARMusicalVoice::FinishChord(bool regular)
 {
     if (!currentChord)
         return;
@@ -5113,10 +5107,10 @@ void ARMusicalVoice::FinishChord()
 
         /* Separated for performance improvement */
         if (chordgrouplist->GetCount() == 1)
-            finishChordWithOneChordGroup(chorddur);
+            finishChordWithOneChordGroup(chorddur, regular);
         else {
             GuidoPos vposBackup = mCurVoiceState->vpos;
-            finishChordWithSeveralChordGroups(chorddur);
+            finishChordWithSeveralChordGroups(chorddur, regular);
             mCurVoiceState->vpos = vposBackup;
         }
         mCurVoiceState->ptagpos = ptagposBackup;
@@ -5214,12 +5208,9 @@ void ARMusicalVoice::FinishChord()
 
 				if (ptag) {
 					ARTagEnd *tgend = ARTagEnd::cast(ptag->getCorrespondence());
-					
                     if (tgend) {
 						ARMusicalObject *po = tgend;
-
-						if (po)
-							po->setRelativeTimePosition(mytp);
+						if (po) po->setRelativeTimePosition(mytp);
 					}
 				}
 			}
@@ -5249,7 +5240,7 @@ void ARMusicalVoice::FinishChord()
 /** \brief Called by FinishChord(), to finish chords which have only one chord group. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur)
+void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool regular)
 {
     mPosTagList->GetNext(mCurVoiceState->ptagpos);
     ARChordGroup *group = chordgrouplist->GetAt(chordgrouplist->GetHeadPosition());
@@ -5292,11 +5283,28 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur)
     dispdum->setAssociation(ARMusicalTag::LA);
     dispdur->setCorrespondence(dispdum);
 
-    ARShareStem     *shrstem = 0;
-    ARDummyRangeEnd *shrdum  = 0;
+	if (dispdur) {
+		if (mCurVoiceState->ptagpos)
+			mPosTagList->AddElementAt(mCurVoiceState->ptagpos, dispdur);
+		else
+			mPosTagList->AddTail(dispdur);
+	}
+	ARShareStem * shrstem = regular ? createSharedStem(group) : nullptr;
+	if (shrstem) {
+		if (mCurVoiceState->ptagpos)
+			mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
+		else
+			mPosTagList->AddTail(shrstem);
+		mPosTagList->AddTail(shrstem->getCorrespondence());
+	}
+    if (dispdum) mPosTagList->AddTail(dispdum);
+}
 
-	shrstem = new ARShareStem();
-	shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+//____________________________________________________________________________________
+ARShareStem * ARMusicalVoice::createSharedStem(ARChordGroup* group)
+{
+	ARShareStem     *shrstem = new ARShareStem();
+	ARDummyRangeEnd *shrdum = new ARDummyRangeEnd(SHARESTEMEND);
 	shrstem->setIsAuto(true);
 	shrstem->setPosition(group->startpos);
 	shrstem->setAssociation(ARMusicalTag::RA);
@@ -5305,25 +5313,14 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur)
 	shrdum->setCorrespondence(shrstem);
 	shrdum->setAssociation(ARMusicalTag::LA);
 	shrstem->setCorrespondence(shrdum);
-
-    if (mCurVoiceState->ptagpos) {
-        if (dispdur)
-            mPosTagList->AddElementAt(mCurVoiceState->ptagpos, dispdur);
-		mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
-    }
-    else {
-        if (dispdur)	mPosTagList->AddTail(dispdur);
-        mPosTagList->AddTail(shrstem);
-    }
-    mPosTagList->AddTail(shrdum);
-    if (dispdum)	mPosTagList->AddTail(dispdum);
+	return shrstem;
 }
 
 //____________________________________________________________________________________
 /** \brief Called by FinishChord(), to finish chords which have several chord groups. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur) {
+void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, bool regular) {
     mPosTagList->GetNext(mCurVoiceState->ptagpos);
 
     GuidoPos pos = chordgrouplist->GetHeadPosition();
@@ -5365,19 +5362,7 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur) 
         dispdum->setAssociation(ARMusicalTag::LA);
         dispdur->setCorrespondence(dispdum);
 
-        ARShareStem     *shrstem = 0;
-        ARDummyRangeEnd *shrdum  = 0;
-
-		shrstem = new ARShareStem();
-		shrdum = new ARDummyRangeEnd(SHARESTEMEND);
-		shrstem->setIsAuto(true);
-		shrstem->setPosition(group->startpos);
-		shrstem->setAssociation(ARMusicalTag::RA);
-		shrdum->setIsAuto(true);
-		shrdum->setPosition(group->endpos);
-		shrdum->setCorrespondence(shrstem);
-		shrdum->setAssociation(ARMusicalTag::LA);
-		shrstem->setCorrespondence(shrdum);
+		ARShareStem * shrstem = regular ? createSharedStem(group) : nullptr;
 
         while (mCurVoiceState->vpos && mCurVoiceState->vpos != group->startpos)
             GetNext(mCurVoiceState->vpos, *mCurVoiceState);
@@ -5385,7 +5370,7 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur) 
         if (mCurVoiceState->ptagpos) {
             if (dispdur)
                 mPosTagList->AddElementAt(mCurVoiceState->ptagpos, dispdur);
-			mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
+			if (shrstem) mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
 
             // this adds the tags to the curpositiontags
             // this is needed, because we traverse the voice later (GetNext) and then,
@@ -5394,11 +5379,11 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur) 
             if (dispdur)
                 mCurVoiceState->AddPositionTag(dispdur, 0);
 
-            mCurVoiceState->AddPositionTag(shrstem, 0);
+            if (shrstem) mCurVoiceState->AddPositionTag(shrstem, 0);
         }
         else {
             if (dispdur) mPosTagList->AddTail(dispdur);
-            mPosTagList->AddTail(shrstem);
+            if (shrstem) mPosTagList->AddTail(shrstem);
         }
 
         if (pos != NULL) {
@@ -5406,7 +5391,7 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur) 
                 GetNext(mCurVoiceState->vpos, *mCurVoiceState);
         }
 
-        mPosTagList->AddTail(shrdum);
+        if (shrstem) mPosTagList->AddTail(shrstem->getCorrespondence());
         if (dispdum) mPosTagList->AddTail(dispdum);
     }
 }

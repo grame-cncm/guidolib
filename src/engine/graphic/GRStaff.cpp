@@ -1811,6 +1811,8 @@ void GRStaff::setStaffFormat( const ARStaffFormat * staffrmt)
 		const TagParameterFloat* size = staffrmt->getSize();
 		if (size && size->TagIsSet())
 			mStaffState.staffLSPACE = size->getValue() * 2;
+		else if (staffrmt->isTAB())
+			mStaffState.staffLSPACE = 70.f;
 		
 		mStaffState.numlines = staffrmt->getLinesCount();		
         mStaffState.lineThickness = staffrmt->getLineThickness();

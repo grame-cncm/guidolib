@@ -75,6 +75,7 @@ class ARFactory
 	  	virtual void 		initChordNote();
 
 		virtual void 		createEvent( const char * name );
+		virtual void 		createTab( int string, const char * disp );
 		virtual void 		addEvent();
 
 		virtual void 		addSharp();
@@ -174,6 +175,10 @@ protected:
 	ARAuto::position 	mFingeringPos;
 	ARAuto::position 	mHarmonyPos;
 	float				mFingeringSize;
+
+private:
+	int					mChordNotesCount;
+
 
     NVstring mFilePath;
 };

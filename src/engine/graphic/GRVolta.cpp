@@ -23,7 +23,6 @@ ofstream vdebug("voltadebug.txt");
 #include "GRBar.h"
 #include "GRDefine.h"
 #include "GREvent.h"
-#include "GRGlobalStem.h"
 #include "GRGlue.h"
 #include "GRNote.h"
 #include "GRRest.h"
