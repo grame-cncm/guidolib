@@ -6,7 +6,7 @@
 	\clef<"g"> \meter<"4/4", autoMeasuresNum="on"> \accolade<type="none">
 	_/2 { g/8, c2 } a1 { g/8, c2 } \noteFormat<style="x"> ({ g1, d })
 	\stemsDown	
-	{ g/8, c2 } \tie( { a1, d2 } { a1/2., d2 })
+	\text<"sl", fsize=11pt, dy=13, dx=2, fattrib="i">({ g/8, c2 } \tie( { a1, d2 } { a1/2., d2 }))
 	_/2 _/8 g1/8 a \trill<begin="off">(d2/2.) a1/8 f2 d/2  
 	d/16 f a/8 c3/4 a2/8
 	\trill<begin="off">(f/4.) f/8 
@@ -18,7 +18,7 @@
 	\clef<"TAB"> \meter<"4/4", hidden="on">
 	\staffFormat<style="TAB">
 	empty/2 { s4:5:/8, s3:5: } s4:7: { s4:5:/8, s3:5: } { s4:x:/8, s3:x: }
-	{ s4:5:/8, s3:5: }	{ s4:7:/8, s3:7: } empty/2.
+	\text<"sl", fsize=8pt, dy=13, dx=1.5, fattrib="i">({ s4:5:/8, s3:5: }	{ s4:7:/8, s3:7: }) empty/2.
 	empty/2 empty/8 s4:5: s4:7: \trill<begin="off">(s3:7:/2.)
 	s4:7:/8 s3:10: s3:7:/2
 	s3:7:/16 s2:6: s1:5:/8 s1:8:/4 s1:5:/8
