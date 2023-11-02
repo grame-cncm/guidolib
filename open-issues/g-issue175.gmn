@@ -1,0 +1,23 @@
+(*
+	Issue #175
+	Incorrect chords beaming
+	Additionnaly, commenting the first \staff tag leads to incorrect octava position
+*)
+{
+[  \clef<"g2"> \meter<"C"> 
+   \staff<2> 
+%	\stemsDown 
+	\stemsUp
+	\oct<1> 
+   \beamBegin:1 
+	\staff<2> {c2/8, c3/8  } 
+   \staff<1> {c2/8, c3/8  } 
+   \staff<2> a2/8
+   \beamEnd:1 
+%	\staff<1>
+]
+, 
+[
+	\clef<"g2"> \meter<"C"> 
+] 
+}

@@ -1,0 +1,10 @@
+(*
+	fichier test pour les tablatures
+*)
+{
+[
+	\clef<"TAB"> \meter<"4/4", hidden="on">
+	\staffFormat<style="TAB">
+	s2:x:/4 s2:6:
+]
+}
