@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,7,6,0
- PRODUCTVERSION 1,7,6,0
+ FILEVERSION 1,7,7,0
+ PRODUCTVERSION 1,7,7,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -72,13 +72,13 @@ BEGIN
             VALUE "Comments", "Free software, Mozilla Public License (MPL)"
             VALUE "CompanyName", "Grame"
             VALUE "FileDescription", "GUIDOEngine"
-            VALUE "FileVersion", "1, 7, 6, 0"
+            VALUE "FileVersion", "1, 7, 7, 0"
             VALUE "InternalName", "GUIDOEngine"
-            VALUE "LegalCopyright", "Copyright © 2003-2022"
+            VALUE "LegalCopyright", "Copyright © 2003-2023"
             VALUE "LegalTrademarks", "Free software, Mozilla Public License (MPL)"
             VALUE "OriginalFilename", "GUIDOEngine.dll"
             VALUE "ProductName", "GUIDOEngine"
-            VALUE "ProductVersion", "1, 7, 6, 0"
+            VALUE "ProductVersion", "1, 7, 7, 0"
         END
     END
     BLOCK "VarFileInfo"
