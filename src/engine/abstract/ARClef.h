@@ -47,7 +47,7 @@
 - gg1, gg3, gg4, gg5 represent a double G clef on the 1st, 3rd, 4th and 5th staff line
 - perc, perc3 are equivalent and represent a percussion clef on the 3rd staff line
 - perc1, perc2, perc4, perc5 represent a percussion clef on the 1st, 2nd, 4th and 5th staff line
-- TAB to be used for tablatures (expects a 'TAB' staff format)
+- TAB for guitar tablatures (expects a 'TAB' [staff format](../Layout/#staffformat))
 - none, off prevents the clef to be displayed
 
 See the [Clefs](@EXAMPLES/clefkeymeter/) example.
