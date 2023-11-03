@@ -5,12 +5,12 @@ GUIDO Engine history
   version 1.7.7
 - introduce special system variables at gmn level to control engine settings 
 - support for line break ('\n') in text elements
-- fix crash bug with repeat begin
 - add new 'hidden' parameter to \meter
 - support for guitar tablatures
 	- add new 'TAB' clef
 	- add new 'TAB' style to \staffFormat
 	- add new note style for tablatures
+- fix crash bug with repeat begin
 - fix issue #168: Slur Collision when the slur spams more than one system
 - fix issue #170: Dots not drawn in Tuplets
 - fix issue #171: Incorrect beam dash direction
