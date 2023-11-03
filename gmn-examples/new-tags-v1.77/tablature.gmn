@@ -3,7 +3,11 @@
 *)
 {
 [
-	\clef<"g"> \meter<"4/4", autoMeasuresNum="on"> \accolade<type="none">
+	\title<"Sultan Of Swing">
+	\composer<"Words & Music by Dire Straits", dy=5>
+
+	\pageFormat<w=21cm, h=29.7cm, lm=2.5cm, rm=2.5cm, bm=4cm, tm=6cm>
+	\clef<"g"> \meter<"4/4", autoMeasuresNum="system"> \accolade<type="none">
 	_/2 { g/8, c2 } a1 { g/8, c2 } \noteFormat<style="x"> ({ g1, d })
 	\stemsDown	
 	\text<"sl", fsize=11pt, dy=13, dx=2, fattrib="i">({ g/8, c2 } \tie( { a1, d2 } { a1/2., d2 }))
