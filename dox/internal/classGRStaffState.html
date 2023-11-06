@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -106,6 +106,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af2266e5234d8b66f6071898a54c38549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb40cece2db1af15525414671598b30b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffState.html#afb40cece2db1af15525414671598b30b">setStaffLSPACE</a> (float value)</td></tr>
 <tr class="separator:afb40cece2db1af15525414671598b30b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38aa2fca8cdaf211ca318b9f6f156575"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffState.html#a38aa2fca8cdaf211ca318b9f6f156575">setMultiVoiceCollisions</a> (bool state)</td></tr>
+<tr class="separator:a38aa2fca8cdaf211ca318b9f6f156575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc15dfcd0a48246612030d964490e821"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffState.html#acc15dfcd0a48246612030d964490e821">multiVoiceCollisions</a> () const</td></tr>
+<tr class="separator:acc15dfcd0a48246612030d964490e821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1112db2197f20d5a76ab2bf649d4b450"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classMeasureAccidentals.html">MeasureAccidentals</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffState.html#a1112db2197f20d5a76ab2bf649d4b450">getMeasureAccidentals</a> () const</td></tr>
+<tr class="separator:a1112db2197f20d5a76ab2bf649d4b450"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -212,6 +218,31 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a1112db2197f20d5a76ab2bf649d4b450"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1112db2197f20d5a76ab2bf649d4b450">&#9670;&nbsp;</a></span>getMeasureAccidentals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classMeasureAccidentals.html">MeasureAccidentals</a>&amp; GRStaffState::getMeasureAccidentals </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af2266e5234d8b66f6071898a54c38549"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2266e5234d8b66f6071898a54c38549">&#9670;&nbsp;</a></span>getStaffDistance()</h2>
 
@@ -287,6 +318,31 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="acc15dfcd0a48246612030d964490e821"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc15dfcd0a48246612030d964490e821">&#9670;&nbsp;</a></span>multiVoiceCollisions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GRStaffState::multiVoiceCollisions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab86a18218d4ad7ef675b1fd06a8d8bad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab86a18218d4ad7ef675b1fd06a8d8bad">&#9670;&nbsp;</a></span>operator=()</h2>
 
@@ -318,6 +374,32 @@ Friends</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38aa2fca8cdaf211ca318b9f6f156575"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38aa2fca8cdaf211ca318b9f6f156575">&#9670;&nbsp;</a></span>setMultiVoiceCollisions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GRStaffState::setMultiVoiceCollisions </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

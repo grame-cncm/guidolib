@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -84,6 +84,7 @@ Inheritance diagram for ARNote:</div>
 <area href="classARMusicalEvent.html" title="Class for musical events (events have an own duration tags not)" alt="ARMusicalEvent" shape="rect" coords="0,112,110,136"/>
 <area href="classARMusicalObject.html" title="The base class for all AR objects. It contains all musical information : duration and time position." alt="ARMusicalObject" shape="rect" coords="0,56,110,80"/>
 <area href="classARVisitable.html" alt="ARVisitable" shape="rect" coords="0,0,110,24"/>
+<area href="classARTab.html" title="Representation of a guitar tablature." alt="ARTab" shape="rect" coords="0,224,110,248"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -99,6 +100,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2f2d4a96d0076827ab45a6d2b50e6eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fd2ccbf359894f1b22607a07761fa6a"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a1fd2ccbf359894f1b22607a07761fa6a">~ARNote</a> ()</td></tr>
 <tr class="separator:a1fd2ccbf359894f1b22607a07761fa6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a469f9e1604e1433c8f2f6b2f81372446"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a469f9e1604e1433c8f2f6b2f81372446">operator=</a> (const <a class="el" href="classARNote.html">ARNote</a> *note)</td></tr>
+<tr class="separator:a469f9e1604e1433c8f2f6b2f81372446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9093379f60849ea7d360702c093011e4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARNote.html">ARNote</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a9093379f60849ea7d360702c093011e4">Clone</a> (bool istied=false) const</td></tr>
+<tr class="separator:a9093379f60849ea7d360702c093011e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0841f055f3d5c47292bacf4859a8df3d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a0841f055f3d5c47292bacf4859a8df3d">CompareNameOctavePitch</a> (const <a class="el" href="classARNote.html">ARNote</a> &amp;nt)</td></tr>
 <tr class="separator:a0841f055f3d5c47292bacf4859a8df3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab9e0c5010ff3de0591ba0508c0f564b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#aab9e0c5010ff3de0591ba0508c0f564b">setDuration</a> (const <a class="el" href="classFraction.html">TYPE_DURATION</a> &amp;newdur)</td></tr>
@@ -117,10 +122,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab73d4c5b5a5f369034b9a12ecaeb2ce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a826ba8b4c30c5b21bff6b37654284dd2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a826ba8b4c30c5b21bff6b37654284dd2">browse</a> (<a class="el" href="classTimeUnwrap.html">TimeUnwrap</a> &amp;mapper) const</td></tr>
 <tr class="separator:a826ba8b4c30c5b21bff6b37654284dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc5f49be9c06f09a5ff60345d906eb7b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#abc5f49be9c06f09a5ff60345d906eb7b">setStartTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;pos)</td></tr>
-<tr class="separator:abc5f49be9c06f09a5ff60345d906eb7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14ba728ca4675322c1d19f92371ae360"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a14ba728ca4675322c1d19f92371ae360">getStartTimePosition</a> () const</td></tr>
-<tr class="separator:a14ba728ca4675322c1d19f92371ae360"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab60dbae33eb32103d2103bd7cc8b2d65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#ab60dbae33eb32103d2103bd7cc8b2d65">addFlat</a> ()</td></tr>
 <tr class="separator:ab60dbae33eb32103d2103bd7cc8b2d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25d596d34da45beef6bbabecb5e9458d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a25d596d34da45beef6bbabecb5e9458d">addSharp</a> ()</td></tr>
@@ -191,6 +192,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1563b24e89dc6b8803f7cf6a059ef347"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d070d522a762fbb4df0d3161a4eb9e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#a0d070d522a762fbb4df0d3161a4eb9e2">isAuto</a> () const</td></tr>
 <tr class="separator:a0d070d522a762fbb4df0d3161a4eb9e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace27e33836ba2b5260694dbde4060f3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARNote.html#ace27e33836ba2b5260694dbde4060f3e">setAuto</a> (bool val)</td></tr>
+<tr class="separator:ace27e33836ba2b5260694dbde4060f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classARMusicalEvent"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classARMusicalEvent')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classARMusicalEvent.html">ARMusicalEvent</a></td></tr>
 <tr class="memitem:a6a11d3c5ad883454078da24a6bb88604 inherit pub_methods_classARMusicalEvent"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalEvent.html#a6a11d3c5ad883454078da24a6bb88604">ARMusicalEvent</a> ()</td></tr>
 <tr class="separator:a6a11d3c5ad883454078da24a6bb88604 inherit pub_methods_classARMusicalEvent"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -249,6 +252,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9b850665abd05fe1b6b7ce3b0b9dd827 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3249ffadc85fdba7ea44623fec545f83 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a3249ffadc85fdba7ea44623fec545f83">isARRepeatBegin</a> ()</td></tr>
 <tr class="separator:a3249ffadc85fdba7ea44623fec545f83 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a78a5ba24d0cfc4c5774da276b9901969">isARTab</a> ()</td></tr>
+<tr class="separator:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#ad6fd19bc33aba3960b7e0057f19eef73">isARTab</a> () const</td></tr>
+<tr class="separator:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#adcf3eb9c4691a82c1e26996ee339c32e">isARCoda</a> ()</td></tr>
 <tr class="separator:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c87794126884c4f545fb65f63ddb1c9 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a8c87794126884c4f545fb65f63ddb1c9">isARSegno</a> ()</td></tr>
@@ -578,6 +585,34 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a9093379f60849ea7d360702c093011e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9093379f60849ea7d360702c093011e4">&#9670;&nbsp;</a></span>Clone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classARNote.html">ARNote</a>* ARNote::Clone </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>istied</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classARTab.html#a5f16f6a22cf1e5cca2ccd8c74293e92a">ARTab</a>.</p>
+
+</div>
+</div>
 <a id="a0841f055f3d5c47292bacf4859a8df3d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0841f055f3d5c47292bacf4859a8df3d">&#9670;&nbsp;</a></span>CompareNameOctavePitch()</h2>
 
@@ -628,6 +663,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classARMusicalEvent.html#a15d21f5512bd83a4cd350c0dd71532c7">ARMusicalEvent</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classARTab.html#ad555d006c0882de6521cf159697ce144">ARTab</a>.</p>
 
 </div>
 </div>
@@ -913,6 +950,8 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classARMusicalEvent.html#ab60d04ee4f6192d833c5b9e93eb06a1c">ARMusicalEvent</a>.</p>
 
+<p>Reimplemented in <a class="el" href="classARTab.html#a41509211011df53bf89241b9063970ab">ARTab</a>.</p>
+
 </div>
 </div>
 <a id="af30a59848efa7f830d0722491864f7bd"></a>
@@ -1107,31 +1146,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a14ba728ca4675322c1d19f92371ae360"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14ba728ca4675322c1d19f92371ae360">&#9670;&nbsp;</a></span>getStartTimePosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a>&amp; ARNote::getStartTimePosition </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a106db1358dc18c542307808104895394"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a106db1358dc18c542307808104895394">&#9670;&nbsp;</a></span>getTagName()</h2>
 
@@ -1156,6 +1170,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classARMusicalEvent.html#a3890da0d8358db6e9bc10fe4a1487999">ARMusicalEvent</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classARTab.html#a2fa2c3bc351a6ec1f48e29cb413d967f">ARTab</a>.</p>
 
 </div>
 </div>
@@ -1358,6 +1374,32 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a469f9e1604e1433c8f2f6b2f81372446"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a469f9e1604e1433c8f2f6b2f81372446">&#9670;&nbsp;</a></span>operator=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void ARNote::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classARNote.html">ARNote</a> *&#160;</td>
+          <td class="paramname"><em>note</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3882afa5cb632b2f8bd1ba498750bef7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3882afa5cb632b2f8bd1ba498750bef7">&#9670;&nbsp;</a></span>print()</h2>
 
@@ -1418,6 +1460,32 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classARAlter.html">ARAlter</a> *&#160;</td>
           <td class="paramname"><em>alter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ace27e33836ba2b5260694dbde4060f3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace27e33836ba2b5260694dbde4060f3e">&#9670;&nbsp;</a></span>setAuto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ARNote::setAuto </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1612,34 +1680,6 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="abc5f49be9c06f09a5ff60345d906eb7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc5f49be9c06f09a5ff60345d906eb7b">&#9670;&nbsp;</a></span>setStartTimePosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void ARNote::setStartTimePosition </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;&#160;</td>
-          <td class="paramname"><em>pos</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplemented from <a class="el" href="classARMusicalObject.html#a1097d316fd86d8b7ef593e35b4e473a3">ARMusicalObject</a>.</p>
 
 </div>
 </div>

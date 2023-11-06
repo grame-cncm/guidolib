@@ -13,6 +13,7 @@ var searchData=
   ['midi2rproportional',['midi2RProportional',['../group__ReducedProportionalAdapter.html#gac0bbde3520e4f198189aae419f1d137f',1,'GUIDOReducedProportionalAdapter.h']]],
   ['midimapper',['MidiMapper',['../classMidiMapper.html#af3adfd371b24b1f2df4be253db82a79e',1,'MidiMapper']]],
   ['moveto',['MoveTo',['../classVGDevice.html#a175b552db89c0aaaf21e54f35f4263af',1,'VGDevice::MoveTo()'],['../classDecoratorDevice.html#ab665b9cef2811085510d8684d4276ecb',1,'DecoratorDevice::MoveTo()'],['../classNullGDevice.html#a766afebfdf1b7c10f8348f2ceeb2c475',1,'NullGDevice::MoveTo()'],['../group__VGSys.html#gaac37e36974fb1da5cc988242f2b610e0',1,'MoveTo():&#160;AbstractDevice.h']]],
+  ['multivoicecollisions',['multiVoiceCollisions',['../classGRStaffState.html#acc15dfcd0a48246612030d964490e821',1,'GRStaffState']]],
   ['musicfont',['MusicFont',['../classMusicFont.html#ab72ff09f83d10d4765f86a913c975124',1,'MusicFont']]],
   ['mustfollowpitch',['mustFollowPitch',['../classGRHarmony.html#a7d69a241dfa9eed6e59b6a01941c75fb',1,'GRHarmony::mustFollowPitch()'],['../classGRText.html#a702b864760c8de67f0046e396f589209',1,'GRText::mustFollowPitch()']]]
 ];

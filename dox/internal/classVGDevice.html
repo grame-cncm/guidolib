@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -139,6 +139,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afcf2f3597e222f658e20a312c314e7dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23f39a8e51c4e543081390742f2129b0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVGDevice.html#a23f39a8e51c4e543081390742f2129b0">Arc</a> (float left, float top, float right, float bottom, float startX, float startY, float endX, float endY)=0</td></tr>
 <tr class="separator:a23f39a8e51c4e543081390742f2129b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c60757053aacb92d3a5666ee9b1fe15"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVGDevice.html#a6c60757053aacb92d3a5666ee9b1fe15">FrameEllipse</a> (float x, float y, float width, float height)=0</td></tr>
+<tr class="memdesc:a6c60757053aacb92d3a5666ee9b1fe15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws an ellipse.  <a href="#a6c60757053aacb92d3a5666ee9b1fe15">More...</a><br /></td></tr>
+<tr class="separator:a6c60757053aacb92d3a5666ee9b1fe15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83b59160d483947216385bbf90ba5e82"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVGDevice.html#a83b59160d483947216385bbf90ba5e82">Ellipse</a> (float x, float y, float width, float height, const <a class="el" href="classVGColor.html">VGColor</a> &amp;color)=0</td></tr>
+<tr class="memdesc:a83b59160d483947216385bbf90ba5e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a filled ellipse.  <a href="#a83b59160d483947216385bbf90ba5e82">More...</a><br /></td></tr>
+<tr class="separator:a83b59160d483947216385bbf90ba5e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad22194cf3bfa496e382bb94ada26794a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVGDevice.html#ad22194cf3bfa496e382bb94ada26794a">Triangle</a> (float x1, float y1, float x2, float y2, float x3, float y3)=0</td></tr>
 <tr class="separator:ad22194cf3bfa496e382bb94ada26794a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bbba3bd6a64d10cf863f8688c13a3f0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVGDevice.html#a0bbba3bd6a64d10cf863f8688c13a3f0">Polygon</a> (const float *xCoords, const float *yCoords, int count)=0</td></tr>
@@ -695,7 +701,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Makes the exact copy of the content (pixmap) of the specified rectangle from the pSrcDC source <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a> to the specified destination of the current device. The raster operation mode should be specified using <a class="el" href="classVGDevice.html#a6b9ecfbd03e553c84efad25691c9d5c0">SetRasterOpMode()</a>. Default alpha (-1.0) means copying bits using their own transparency values, if any; if no alpha channel value is available, opaque copy (alpha = 1.0) is performed. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#aeb232f2c59691aa12af30895eecdd9fe">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#acb943489937d61098f462514c10ae577">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#acb943489937d61098f462514c10ae577">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#aeb232f2c59691aa12af30895eecdd9fe">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -734,7 +740,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Copies the entire content (pixmap) of the pSrcDC source <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a> to the current device. The raster operation mode should be specified using <a class="el" href="classVGDevice.html#a6b9ecfbd03e553c84efad25691c9d5c0">SetRasterOpMode()</a>. Default alpha (-1.0) means copying bits using their own transparency values, if any; if no alpha channel value is available, opaque copy (alpha = 1.0) is performed. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a5ebf8b38b6a6659254e49e32cc05b970">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#af346bb87381b01db8f95d89f99439441">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#af346bb87381b01db8f95d89f99439441">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a5ebf8b38b6a6659254e49e32cc05b970">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -873,6 +879,64 @@ the guido engine (see Set/GetSymbolMap).
 
 </div>
 </div>
+<a id="a83b59160d483947216385bbf90ba5e82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83b59160d483947216385bbf90ba5e82">&#9670;&nbsp;</a></span>Ellipse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void VGDevice::Ellipse </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classVGColor.html">VGColor</a> &amp;&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws a filled ellipse. </p>
+
+<p>Implemented in <a class="el" href="classNullGDevice.html#a0611900bb29f572b59fe8dcc365f6a1f">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a8657a93c942441149e5dbdb3e35c02dd">DecoratorDevice</a>.</p>
+
+</div>
+</div>
 <a id="a0d0691b099570dbdd7c417c6b818ecf3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d0691b099570dbdd7c417c6b818ecf3">&#9670;&nbsp;</a></span>EndDraw()</h2>
 
@@ -949,6 +1013,58 @@ the guido engine (see Set/GetSymbolMap).
 <p>Draws a frame using the specified coordinates. The frame is outlined by using the current pen, but not filled. </p>
 
 <p>Implemented in <a class="el" href="classNullGDevice.html#ae7157b154ad1be0e1d6853ae83b1b076">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a07bfd07c1aad9520bc6d203727772b17">DecoratorDevice</a>.</p>
+
+</div>
+</div>
+<a id="a6c60757053aacb92d3a5666ee9b1fe15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c60757053aacb92d3a5666ee9b1fe15">&#9670;&nbsp;</a></span>FrameEllipse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void VGDevice::FrameEllipse </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws an ellipse. </p>
+
+<p>Implemented in <a class="el" href="classNullGDevice.html#a71bed077e4d215f8a37cc695ad32668c">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#af012cc311ae3b52929990d9762e68acc">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1190,7 +1306,7 @@ the guido engine (see Set/GetSymbolMap).
 
 <p>Returns the currently selected music <a class="el" href="classVGFont.html" title="Generic pure virtual &amp; device-independant font class.">VGFont</a>. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a80fa0168aa52e8d647430ec97a399512">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a664c9766ebac9ae9a3c8a16a4aba6b1e">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a664c9766ebac9ae9a3c8a16a4aba6b1e">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a80fa0168aa52e8d647430ec97a399512">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1248,7 +1364,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Retrieves the foreground mix mode of the specified device. The mix mode specifies how the pen or interior color and the color already on the device are combined to yield a new color. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#ab04c38a987fafffc945f5e4fa11d73b5">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a579465035653df842f1b205dc7465086">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a579465035653df842f1b205dc7465086">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#ab04c38a987fafffc945f5e4fa11d73b5">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1277,7 +1393,7 @@ the guido engine (see Set/GetSymbolMap).
 
 <p>Returns the currently selected text <a class="el" href="classVGFont.html" title="Generic pure virtual &amp; device-independant font class.">VGFont</a>. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a35fe7f86c0b6e392ad626fc493d1617a">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#abc9944de82f4d7bda64773385b08ab70">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#abc9944de82f4d7bda64773385b08ab70">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a35fe7f86c0b6e392ad626fc493d1617a">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1845,7 +1961,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Restores the previous color brush from the stack into the current <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a>. This method was previously called PopBrush(). </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a02bab3ecb69bb1f576ebfbcc73a4e392">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a92932eada96e0779e71b0d3df4c33e03">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a92932eada96e0779e71b0d3df4c33e03">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a02bab3ecb69bb1f576ebfbcc73a4e392">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1873,7 +1989,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Restores the previous <a class="el" href="classVGPen.html" title="Generic class to manipulate device independant pens.">VGPen</a> object from the stack into the current <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a>. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#aa69310d944c6b294199ed27e853e37a8">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a85e33a5efe3b95f8b04e0ba2b41cf8a9">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a85e33a5efe3b95f8b04e0ba2b41cf8a9">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#aa69310d944c6b294199ed27e853e37a8">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1900,7 +2016,7 @@ the guido engine (see Set/GetSymbolMap).
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a0eda29704f3a733bcb279eb19b8985ce">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a50edde5ac19887fa268d14cde9e69d5c">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a50edde5ac19887fa268d14cde9e69d5c">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a0eda29704f3a733bcb279eb19b8985ce">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1927,7 +2043,7 @@ the guido engine (see Set/GetSymbolMap).
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a88c2d6ed9c5525073d3d77d7256626ae">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#aaa69375e52b64be81cf3b33ee7afd4f4">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#aaa69375e52b64be81cf3b33ee7afd4f4">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a88c2d6ed9c5525073d3d77d7256626ae">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1956,7 +2072,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Saves the current color brush and selects the new one using the specified <a class="el" href="classVGColor.html" title="Generic class to manipulate device independant colors.">VGColor</a> into the current <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a>. This method was previously called PushBrush(). </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a2f78fc5a047658db00daf25cbb7f7740">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a1ad223ba4795b14be9000e660c9dd6bc">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a1ad223ba4795b14be9000e660c9dd6bc">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a2f78fc5a047658db00daf25cbb7f7740">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -1995,7 +2111,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Saves the current <a class="el" href="classVGPen.html" title="Generic class to manipulate device independant pens.">VGPen</a> and selects the new one using the specified <a class="el" href="classVGColor.html" title="Generic class to manipulate device independant colors.">VGColor</a> and width into the current <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a>. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#ac35c74d7d46126471930377f87d54f9a">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#aa1edfa6404df4999b82e0fafac61d221">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#aa1edfa6404df4999b82e0fafac61d221">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#ac35c74d7d46126471930377f87d54f9a">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -2023,7 +2139,7 @@ the guido engine (see Set/GetSymbolMap).
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a72ab83223de3401944963c4897cda744">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a90e01958f5c93a33c921c3bcdd231392">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a90e01958f5c93a33c921c3bcdd231392">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a72ab83223de3401944963c4897cda744">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -2051,7 +2167,7 @@ the guido engine (see Set/GetSymbolMap).
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a5163d297354e1966c45ff5652667734b">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#ac77605282458c2169668c34da82670ac">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#ac77605282458c2169668c34da82670ac">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a5163d297354e1966c45ff5652667734b">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -2190,7 +2306,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Creates a new solid brush (to paint the interiors of filled shapes) with the specified <a class="el" href="classVGColor.html" title="Generic class to manipulate device independant colors.">VGColor</a> and selects it into the current <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a>. This method was previously called SelectBrush(). </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a7b40b9206bd906a84cda6ec3717d0db3">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a865c7f7bffd3a0733213201c6538b3d3">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a865c7f7bffd3a0733213201c6538b3d3">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a7b40b9206bd906a84cda6ec3717d0db3">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -2465,7 +2581,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Selects the specified music <a class="el" href="classVGFont.html" title="Generic pure virtual &amp; device-independant font class.">VGFont</a> into the current <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a>. Warning ! this method doesn't return the previously selected font anymore. Use <a class="el" href="classVGDevice.html#ab2b952f9695e451876ca6bf93e449724" title="Returns the currently selected music VGFont.">GetMusicFont()</a> instead. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a49e5990faf8bb11b6918544cf16270ac">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a99c72168cba680d4933384e4c938f23b">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a99c72168cba680d4933384e4c938f23b">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a49e5990faf8bb11b6918544cf16270ac">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -2534,7 +2650,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Sets the current foreground mix mode. We use the foreground mix mode to combine pens and interiors of filled objects with the colors already on the device. The foreground mix mode defines how colors from the brush or pen and the colors in the existing image are to be combined. See enum VRasterOpMode above. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a49e061d9b67e68f4dd6dfd0f16598ef3">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#aaa4d1ac5b26e19280db88e4b3fe5774a">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#aaa4d1ac5b26e19280db88e4b3fe5774a">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a49e061d9b67e68f4dd6dfd0f16598ef3">DecoratorDevice</a>.</p>
 
 </div>
 </div>
@@ -2603,7 +2719,7 @@ the guido engine (see Set/GetSymbolMap).
 </div><div class="memdoc">
 <p>Selects the specified text <a class="el" href="classVGFont.html" title="Generic pure virtual &amp; device-independant font class.">VGFont</a> into the current <a class="el" href="classVGDevice.html" title="Generic platform independant drawing device.">VGDevice</a>. Warning ! this method doesn't return the previously selected font anymore. Use <a class="el" href="classVGDevice.html#ab2b952f9695e451876ca6bf93e449724" title="Returns the currently selected music VGFont.">GetMusicFont()</a> instead. </p>
 
-<p>Implemented in <a class="el" href="classDecoratorDevice.html#a3439f7f078e53e74cf587b894f4ac5ed">DecoratorDevice</a>, and <a class="el" href="classNullGDevice.html#a4a96e226c052d5731bcef7f0020bcee6">NullGDevice</a>.</p>
+<p>Implemented in <a class="el" href="classNullGDevice.html#a4a96e226c052d5731bcef7f0020bcee6">NullGDevice</a>, and <a class="el" href="classDecoratorDevice.html#a3439f7f078e53e74cf587b894f4ac5ed">DecoratorDevice</a>.</p>
 
 </div>
 </div>

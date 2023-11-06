@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -88,6 +88,7 @@ Inheritance diagram for ARMusicalEvent:</div>
 <area href="classARMusicalVoice.html" title="The class for GUIDO sequence, list of timepositions of events of a stream." alt="ARMusicalVoice" shape="rect" coords="120,168,230,192"/>
 <area href="classARNote.html" title="Representation of a GUIDO note." alt="ARNote" shape="rect" coords="240,168,350,192"/>
 <area href="classARRest.html" title="Abstract representation of the rest event." alt="ARRest" shape="rect" coords="360,168,470,192"/>
+<area href="classARTab.html" title="Representation of a guitar tablature." alt="ARTab" shape="rect" coords="240,224,350,248"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -150,8 +151,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae8a44a0370935dc7561c9665315dc47f inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a00afb14e07a8ebd63e091b85542228 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a9a00afb14e07a8ebd63e091b85542228">getRelativeEndTimePosition</a> () const</td></tr>
 <tr class="separator:a9a00afb14e07a8ebd63e091b85542228 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1097d316fd86d8b7ef593e35b4e473a3 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a1097d316fd86d8b7ef593e35b4e473a3">setStartTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;pos)</td></tr>
-<tr class="separator:a1097d316fd86d8b7ef593e35b4e473a3 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a640ed0e2672181ed31c8aed2569e16c5 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a640ed0e2672181ed31c8aed2569e16c5">setRelativeTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;newRelativeTimePosition)</td></tr>
 <tr class="separator:a640ed0e2672181ed31c8aed2569e16c5 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada0f2d93cacbb5f6147b4b206c7ef3c8 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#ada0f2d93cacbb5f6147b4b206c7ef3c8">setRelativeEndTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp)</td></tr>
@@ -174,6 +173,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a751f462e2d09c0d1a7c4ece0a6446ef6 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a220511ef444c1d3a939641a4cca5cc3f inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classARNote.html">ARNote</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a220511ef444c1d3a939641a4cca5cc3f">isARNote</a> () const</td></tr>
 <tr class="separator:a220511ef444c1d3a939641a4cca5cc3f inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a78a5ba24d0cfc4c5774da276b9901969">isARTab</a> ()</td></tr>
+<tr class="separator:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#ad6fd19bc33aba3960b7e0057f19eef73">isARTab</a> () const</td></tr>
+<tr class="separator:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#adcf3eb9c4691a82c1e26996ee339c32e">isARCoda</a> ()</td></tr>
 <tr class="separator:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c87794126884c4f545fb65f63ddb1c9 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a8c87794126884c4f545fb65f63ddb1c9">isARSegno</a> ()</td></tr>
@@ -481,7 +484,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classARMusicalObject.html#a2a487e048ec3d24db14c738b797dbebf">ARMusicalObject</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classARNote.html#a6f9a7f37feef5ffb3c9082a5c7c70bb5">ARNote</a>, and <a class="el" href="classARRest.html#a5f632bf699439f41a78fb2d91ce9f177">ARRest</a>.</p>
+<p>Reimplemented in <a class="el" href="classARNote.html#a6f9a7f37feef5ffb3c9082a5c7c70bb5">ARNote</a>, <a class="el" href="classARRest.html#a5f632bf699439f41a78fb2d91ce9f177">ARRest</a>, and <a class="el" href="classARTab.html#ad555d006c0882de6521cf159697ce144">ARTab</a>.</p>
 
 </div>
 </div>
@@ -565,7 +568,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classARMusicalObject.html#a3868acbad5c53c2df2bff2fc663dca1f">ARMusicalObject</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classARNote.html#ab73d4c5b5a5f369034b9a12ecaeb2ce6">ARNote</a>, and <a class="el" href="classARRest.html#a38d8aad80550a50578fe17a881da84f8">ARRest</a>.</p>
+<p>Reimplemented in <a class="el" href="classARNote.html#ab73d4c5b5a5f369034b9a12ecaeb2ce6">ARNote</a>, <a class="el" href="classARRest.html#a38d8aad80550a50578fe17a881da84f8">ARRest</a>, and <a class="el" href="classARTab.html#a41509211011df53bf89241b9063970ab">ARTab</a>.</p>
 
 </div>
 </div>
@@ -609,7 +612,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classARNote.html#a106db1358dc18c542307808104895394">ARNote</a>, and <a class="el" href="classARRest.html#a9228a7f61415c5e8e33f73109da46b00">ARRest</a>.</p>
+<p>Reimplemented in <a class="el" href="classARNote.html#a106db1358dc18c542307808104895394">ARNote</a>, <a class="el" href="classARRest.html#a9228a7f61415c5e8e33f73109da46b00">ARRest</a>, and <a class="el" href="classARTab.html#a2fa2c3bc351a6ec1f48e29cb413d967f">ARTab</a>.</p>
 
 </div>
 </div>

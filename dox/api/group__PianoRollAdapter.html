@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">A Music Score Rendering Engine</div>
 						</td>
@@ -106,6 +106,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga2b0b7cd78416e9956ac1b3cbba478aea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__PianoRollAdapter.html#ga2b0b7cd78416e9956ac1b3cbba478aea">setHtmlColorToVoice</a> (PianoRoll *pr, int voiceNum, long color)</td></tr>
 <tr class="memdesc:ga2b0b7cd78416e9956ac1b3cbba478aea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a html color to a voice (first voice is number 1) (black by default)  <a href="#ga2b0b7cd78416e9956ac1b3cbba478aea">More...</a><br /></td></tr>
 <tr class="separator:ga2b0b7cd78416e9956ac1b3cbba478aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae9e1639e385873fa28c917383e9a23c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__PianoRollAdapter.html#gae9e1639e385873fa28c917383e9a23c1">setColorToVoice</a> (PianoRoll *pr, int voiceNum, const std::string &amp;color)</td></tr>
+<tr class="memdesc:gae9e1639e385873fa28c917383e9a23c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a html color to a voice (first voice is number 1) (black by default)  <a href="#gae9e1639e385873fa28c917383e9a23c1">More...</a><br /></td></tr>
+<tr class="separator:gae9e1639e385873fa28c917383e9a23c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1986103f63b645898d9c4cc70a67e940"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__PianoRollAdapter.html#ga1986103f63b645898d9c4cc70a67e940">removeColorToVoice</a> (PianoRoll *pr, int voiceNum)</td></tr>
 <tr class="memdesc:ga1986103f63b645898d9c4cc70a67e940"><td class="mdescLeft">&#160;</td><td class="mdescRight">remove a color to a voice (first voice is number 1) (black by default)  <a href="#ga1986103f63b645898d9c4cc70a67e940">More...</a><br /></td></tr>
 <tr class="separator:ga1986103f63b645898d9c4cc70a67e940"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -517,6 +520,51 @@ Variables</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">pr</td><td>a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll </td></tr>
     <tr><td class="paramname">voiceNum</td><td>the voice number (first voice is number 1) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a Guido error code </dd></dl>
+
+</div>
+</div>
+<a id="gae9e1639e385873fa28c917383e9a23c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae9e1639e385873fa28c917383e9a23c1">&#9670;&nbsp;</a></span>setColorToVoice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a> setColorToVoice </td>
+          <td>(</td>
+          <td class="paramtype">PianoRoll *&#160;</td>
+          <td class="paramname"><em>pr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>voiceNum</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets a html color to a voice (first voice is number 1) (black by default) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pr</td><td>a pianoroll previously created with ar2PianoRoll or midi2PianoRoll </td></tr>
+    <tr><td class="paramname">voiceNum</td><td>the voice number (first voice is number 1) </td></tr>
+    <tr><td class="paramname">color</td><td>the html color name </td></tr>
   </table>
   </dd>
 </dl>

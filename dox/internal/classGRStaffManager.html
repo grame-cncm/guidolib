@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -121,12 +121,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af79304c51c773762f4b4f18980686b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a17dd43873ba34c7d268dc54fc7208a"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffManager.html#a6a17dd43873ba34c7d268dc54fc7208a">getSystemWidthCm</a> ()</td></tr>
 <tr class="separator:a6a17dd43873ba34c7d268dc54fc7208a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82a6eb27f0eaeba38f9224d0c4f01ae4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffManager.html#a82a6eb27f0eaeba38f9224d0c4f01ae4">EndPage</a> (<a class="el" href="classARMusicalVoice.html">ARMusicalVoice</a> *voice, GuidoPos pos)</td></tr>
-<tr class="separator:a82a6eb27f0eaeba38f9224d0c4f01ae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33e8e0ae1744a65e900621c23d236221"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffManager.html#a33e8e0ae1744a65e900621c23d236221">EndSystem</a> (<a class="el" href="classARMusicalVoice.html">ARMusicalVoice</a> *arVoice, GuidoPos pos)</td></tr>
-<tr class="separator:a33e8e0ae1744a65e900621c23d236221"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa27ef842f567276fd2e3b5a8c160cca6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffManager.html#aa27ef842f567276fd2e3b5a8c160cca6">setRelativeEndTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp)</td></tr>
-<tr class="separator:aa27ef842f567276fd2e3b5a8c160cca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a275de23f7ce272c8d364ac11419349"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffManager.html#a4a275de23f7ce272c8d364ac11419349">getRelativeTimePositionOfGR</a> () const</td></tr>
 <tr class="separator:a4a275de23f7ce272c8d364ac11419349"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae41b0ada870e6d6d3484ea2d6d7dd9eb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classGRStaff.html">GRStaff</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRStaffManager.html#ae41b0ada870e6d6d3484ea2d6d7dd9eb">getStaff</a> (int staff)</td></tr>
@@ -531,78 +525,6 @@ Friends</h2></td></tr>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a82a6eb27f0eaeba38f9224d0c4f01ae4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82a6eb27f0eaeba38f9224d0c4f01ae4">&#9670;&nbsp;</a></span>EndPage()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void GRStaffManager::EndPage </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classARMusicalVoice.html">ARMusicalVoice</a> *&#160;</td>
-          <td class="paramname"><em>voice</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">GuidoPos&#160;</td>
-          <td class="paramname"><em>pos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a33e8e0ae1744a65e900621c23d236221"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33e8e0ae1744a65e900621c23d236221">&#9670;&nbsp;</a></span>EndSystem()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void GRStaffManager::EndSystem </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classARMusicalVoice.html">ARMusicalVoice</a> *&#160;</td>
-          <td class="paramname"><em>arVoice</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">GuidoPos&#160;</td>
-          <td class="paramname"><em>pos</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -1071,32 +993,6 @@ Friends</h2></td></tr>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa27ef842f567276fd2e3b5a8c160cca6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa27ef842f567276fd2e3b5a8c160cca6">&#9670;&nbsp;</a></span>setRelativeEndTimePosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void GRStaffManager::setRelativeEndTimePosition </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;&#160;</td>
-          <td class="paramname"><em>tp</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

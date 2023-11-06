@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -67,6 +67,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
@@ -138,6 +139,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa2b5bc0d82bef7120dd324c51f99ce93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a460a36e3cd50384769a747567f9fa24e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classARMusicalVoiceState.html">ARMusicalVoiceState</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRVoiceManager.html#a460a36e3cd50384769a747567f9fa24e">getVoiceState</a> () const</td></tr>
 <tr class="separator:a460a36e3cd50384769a747567f9fa24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5fd63e2d41365528c910b5a8bc43cc3"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classARMusicalVoice.html">ARMusicalVoice</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRVoiceManager.html#ae5fd63e2d41365528c910b5a8bc43cc3">getARVoice</a> () const</td></tr>
+<tr class="separator:ae5fd63e2d41365528c910b5a8bc43cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a0e4130117cdeaf37501bd0dc1d7b5dee"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRVoiceManager.html#a0e4130117cdeaf37501bd0dc1d7b5dee">resetCurrentNotesTP</a> ()</td></tr>
+<tr class="separator:a0e4130117cdeaf37501bd0dc1d7b5dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -150,6 +158,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a35352a953832d0521fbe7a843243015e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1dba8e7d4e5a26c1a9fe157e9de2a035"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGREvent.html">GREvent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRVoiceManager.html#a1dba8e7d4e5a26c1a9fe157e9de2a035">CreateNote</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp, <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *arObject)</td></tr>
 <tr class="separator:a1dba8e7d4e5a26c1a9fe157e9de2a035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fad9c60b76856b20ea5912409ec1767"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGREvent.html">GREvent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRVoiceManager.html#a8fad9c60b76856b20ea5912409ec1767">CreateTab</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp, <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *arObject)</td></tr>
+<tr class="separator:a8fad9c60b76856b20ea5912409ec1767"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1345d7a9c0e55e5855d573c6d3462441"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGREvent.html">GREvent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRVoiceManager.html#a1345d7a9c0e55e5855d573c6d3462441">CreateEmpty</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp, <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *arObject)</td></tr>
 <tr class="separator:a1345d7a9c0e55e5855d573c6d3462441"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39640e07fb8447b89558d130b560323d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGREvent.html">GREvent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRVoiceManager.html#a39640e07fb8447b89558d130b560323d">CreateRest</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp, <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *arObject)</td></tr>
@@ -694,6 +704,42 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a8fad9c60b76856b20ea5912409ec1767"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fad9c60b76856b20ea5912409ec1767">&#9670;&nbsp;</a></span>CreateTab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classGREvent.html">GREvent</a>* GRVoiceManager::CreateTab </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;&#160;</td>
+          <td class="paramname"><em>tp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td>
+          <td class="paramname"><em>arObject</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae7803422dd2a35ee40d8e86d6460254a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae7803422dd2a35ee40d8e86d6460254a">&#9670;&nbsp;</a></span>DoBreak()</h2>
 
@@ -718,6 +764,31 @@ Friends</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae5fd63e2d41365528c910b5a8bc43cc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5fd63e2d41365528c910b5a8bc43cc3">&#9670;&nbsp;</a></span>getARVoice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classARMusicalVoice.html">ARMusicalVoice</a>* GRVoiceManager::getARVoice </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -1031,6 +1102,31 @@ Friends</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0e4130117cdeaf37501bd0dc1d7b5dee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e4130117cdeaf37501bd0dc1d7b5dee">&#9670;&nbsp;</a></span>resetCurrentNotesTP()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void GRVoiceManager::resetCurrentNotesTP </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

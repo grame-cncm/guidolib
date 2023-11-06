@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -113,6 +113,9 @@ $(function() {
 <li>fAutoHideTiedAccidentals
 : <a class="el" href="classARAuto.html#a0503e9e70990eb6b41b43a6d00e40adc">ARAuto</a>
 </li>
+<li>fAutoMultiVoiceCollisions
+: <a class="el" href="classARAuto.html#afebb7f241285287b6b0832182c681bd2">ARAuto</a>
+</li>
 <li>fAutoPos
 : <a class="el" href="classARIntens.html#a2036816669657673b6693d5a8b12e3ec">ARIntens</a>
 , <a class="el" href="classARLyrics.html#a756be72084f186dc743dbd520c2500e3">ARLyrics</a>
@@ -195,6 +198,9 @@ $(function() {
 <li>fData
 : <a class="el" href="classKF__ListNode.html#a7260a17b06ee8c699370d0422356276f">KF_ListNode&lt; TYPE &gt;</a>
 </li>
+<li>fDeferredTellPostion
+: <a class="el" href="classGRBowing.html#a39066b02ee9e29b47cf1f0520be32a30">GRBowing</a>
+</li>
 <li>fDeltaY
 : <a class="el" href="classGRTremolo.html#a1214b46989d7fa50d69e9591b2c284df">GRTremolo</a>
 </li>
@@ -267,6 +273,12 @@ $(function() {
 <li>fEndPos
 : <a class="el" href="classGRTremolo.html#a49b36c9ca594941738a43dcc2d54ef72">GRTremolo</a>
 </li>
+<li>fEngineSettings
+: <a class="el" href="structNodeAR.html#a89a5491e24c70c6b2d5aadb0bc4e7cda">NodeAR</a>
+</li>
+<li>fEnv
+: <a class="el" href="classGuidoParser.html#a8603a8898b1c6f2e0601937f261170eb">GuidoParser</a>
+</li>
 <li>fErrorColumn
 : <a class="el" href="classGuidoParser.html#a8991bbe81df6ca87df17c9af5edfaf6a">GuidoParser</a>
 </li>
@@ -297,8 +309,14 @@ $(function() {
 <li>fFingeringPos
 : <a class="el" href="classARAuto.html#a59174c5d00d3f4c700be088ad4e4ed7e">ARAuto</a>
 </li>
+<li>fFingerings
+: <a class="el" href="classARFingering.html#aa7478adb2a8ad253e7dfda11da891f00">ARFingering</a>
+</li>
 <li>fFingeringSize
 : <a class="el" href="classARAuto.html#a101d3ddd94949a668bc0ed9c211c8580">ARAuto</a>
+</li>
+<li>fFirstbar
+: <a class="el" href="classGRSingleRest.html#a807b5daff6c761bb3cc3692ef2744f12">GRSingleRest</a>
 </li>
 <li>fFirstEl
 : <a class="el" href="classGRGlobalStem.html#a215b8ab598e4aafe50c7a83be75b46d7">GRGlobalStem</a>
@@ -359,6 +377,9 @@ $(function() {
 <li>fHasHarmonyPos
 : <a class="el" href="classARAuto.html#a9f3a8a7602573a6741d1fc7091b79ad2">ARAuto</a>
 </li>
+<li>fHasMVoiceCollision
+: <a class="el" href="classARAuto.html#a275c622f20e099506ab7512c710cdd63">ARAuto</a>
+</li>
 <li>fHdx
 : <a class="el" href="classARCluster.html#a688d85170b05a694abcdb3d86b88205d">ARCluster</a>
 </li>
@@ -416,9 +437,6 @@ $(function() {
 <li>fIntensity
 : <a class="el" href="structGuido2MidiParams.html#ae75948bc9d78c92b7b8eb08d7a812e8b">Guido2MidiParams</a>
 </li>
-<li>firstbar
-: <a class="el" href="classGRSingleRest.html#a6bafcd7a0a89eac5af3f82ac501672a3">GRSingleRest</a>
-</li>
 <li>firstLeftHead
 : <a class="el" href="classGRGlissando_1_1GRGlissandoContext.html#acd99623039b8e5237bd8f9c431d80936">GRGlissando::GRGlissandoContext</a>
 </li>
@@ -441,6 +459,9 @@ $(function() {
 </li>
 <li>fis
 : <a class="el" href="classARNoteName.html#a95a0bbe870ee2cc3564781b389cfc937">ARNoteName</a>
+</li>
+<li>fIsAuto
+: <a class="el" href="classGREmpty.html#aba37b3c938be9194419cbd2c38d45d74">GREmpty</a>
 </li>
 <li>fIsAutoPos
 : <a class="el" href="classARText.html#a7453a549b76b28ddad34b8f6e2482dab">ARText</a>
@@ -471,6 +492,9 @@ $(function() {
 </li>
 <li>fLeftBrace
 : <a class="el" href="classARTuplet.html#ac37f4bf509b32cf40c1e786c166c6cc9">ARTuplet</a>
+</li>
+<li>fLineHeight
+: <a class="el" href="classGRText.html#a4a32577e0e9df7c5461c786887b81405">GRText</a>
 </li>
 <li>fLinesCount
 : <a class="el" href="classARStaffFormat.html#ada461e4205572155d10c771bdcba4830">ARStaffFormat</a>
@@ -509,7 +533,8 @@ $(function() {
 : <a class="el" href="classPianoRoll.html#a0ad32a6f8523010ff0f59feab05170da">PianoRoll</a>
 </li>
 <li>fName
-: <a class="el" href="classNullGFont.html#a206c5ae543211c0497110943173acc7a">NullGFont</a>
+: <a class="el" href="structGuidoParser_1_1vareval.html#a6dc3161e9d150578781eb48b6844e480">GuidoParser::vareval</a>
+, <a class="el" href="classNullGFont.html#a206c5ae543211c0497110943173acc7a">NullGFont</a>
 , <a class="el" href="classStaticFont.html#a15bc1f3bdcebc0a45c5da4cc84cc5800">StaticFont</a>
 </li>
 <li>fndots
@@ -576,9 +601,6 @@ $(function() {
 <li>fPitchLinesDisplayMode
 : <a class="el" href="classPianoRoll.html#a48f0ca7e7459b71278db7b2fa41cf144">PianoRoll</a>
 </li>
-<li>fPoints
-: <a class="el" href="classGRSimpleBeam.html#abdddeed66d796b0cb56289e905ccf11a">GRSimpleBeam</a>
-</li>
 <li>fPos
 : <a class="el" href="classMapInfos.html#aacf47eb0b01fd0ceee0f011b3ed7517e">MapInfos</a>
 </li>
@@ -601,12 +623,18 @@ $(function() {
 <li>fProportionalRendering
 : <a class="el" href="classGRSpring.html#a8e963fedf1a7a3fa4bed5f2d500928c9">GRSpring</a>
 </li>
+<li>fPtr
+: <a class="el" href="structGuidoParser_1_1vareval.html#a84d625676a698bcc03b6d0512bef9da7">GuidoParser::vareval</a>
+</li>
 <li>fR
 : <a class="el" href="classARColor.html#a0c23d708451260ec4fbae34aa9a404a8">ARColor</a>
 </li>
 <li>fRanges
 : <a class="el" href="classARBarFormat.html#aabe1c2896415c6a04c8d5b08d7c35ed9">ARBarFormat</a>
 , <a class="el" href="classGRBar.html#a824c649427287a3930f88d9f076b0450">GRBar</a>
+</li>
+<li>fRect
+: <a class="el" href="classGRSimpleBeam.html#ab441ef5709af0d9626bbe108303adaac">GRSimpleBeam</a>
 </li>
 <li>fRefSize
 : <a class="el" href="classStaticFont.html#a04b5fd8cde1719a78859b7c61c55fe44">StaticFont</a>
@@ -624,7 +652,10 @@ $(function() {
 : <a class="el" href="classMapInfos.html#a56abd0d479333bac817c19e201b3ab5a">MapInfos</a>
 </li>
 <li>fScanner
-: <a class="el" href="classGuidoParser.html#ad277ff9978c0187f9c193eeacca94e94">GuidoParser</a>
+: <a class="el" href="classGuidoParser.html#ad3eac8d4f0ffa965544fed2655798ffe">GuidoParser</a>
+</li>
+<li>fSecondbar
+: <a class="el" href="classGRSingleRest.html#a5a580b6f2ff315907c42096927609f91">GRSingleRest</a>
 </li>
 <li>fSecondNote
 : <a class="el" href="classARCluster.html#a4457964d2a621747679797879147cfd4">ARCluster</a>
@@ -635,6 +666,12 @@ $(function() {
 <li>fShowTR
 : <a class="el" href="classARTrill.html#a18e7d0a4f92b5446805285b60003a704">ARTrill</a>
 , <a class="el" href="classGRTrill.html#a7b20c54cb09c7edb909b677083e33add">GRTrill</a>
+</li>
+<li>fShowWavy
+: <a class="el" href="classGRTrill.html#af376b473a4d9d4da11fe3edc0615714c">GRTrill</a>
+</li>
+<li>fShowWavyLine
+: <a class="el" href="classARTrill.html#a14604952c02baeaf15334ac3cd003beb">ARTrill</a>
 </li>
 <li>fSingleNote
 : <a class="el" href="classARCluster.html#ac41c12f1892c2afaa45115faa5e33007">ARCluster</a>
@@ -708,13 +745,16 @@ $(function() {
 : <a class="el" href="classGRTremolo.html#a69ad42d51a2f511d0ab686f65aa00280">GRTremolo</a>
 </li>
 <li>fStream
-: <a class="el" href="classGuidoParser.html#a22fef2ed14ee69ff08edcaec01c38957">GuidoParser</a>
+: <a class="el" href="classGuidoParser.html#a8f598fb385233a67de1c5d641d03c9e3">GuidoParser</a>
 </li>
 <li>fStyle
 : <a class="el" href="classARBarFormat.html#a4d3d7e2689bc3894d785891233cd579d">ARBarFormat</a>
 </li>
 <li>fSystemBreakState
 : <a class="el" href="classARAuto.html#a75f5763a5d2f15f5849930d42e61e954">ARAuto</a>
+</li>
+<li>fTAB
+: <a class="el" href="classARStaffFormat.html#a111e5ee2ddff2539113f2655a89c97f7">ARStaffFormat</a>
 </li>
 <li>fTail
 : <a class="el" href="classKF__List.html#a515c53a8b84ca3ad410cadecb0db9dc5">KF_List&lt; TYPE &gt;</a>
@@ -780,6 +820,7 @@ $(function() {
 : <a class="el" href="classARFermata.html#a8391e56b4337b324875058623cec42b8">ARFermata</a>
 , <a class="el" href="classARTrill.html#a8b510b236438d1bc0e008be1b5ee8449">ARTrill</a>
 , <a class="el" href="classGRTrill.html#a3ce8019df4f0fe464a0b4bca89464da1">GRTrill</a>
+, <a class="el" href="structGuidoParser_1_1variable.html#a0dada7d4641e705a33218c6493f54f1a">GuidoParser::variable</a>
 </li>
 <li>fUnit
 : <a class="el" href="classTagParameterFloat.html#a3e6650ca54fb17006bd30f1ff2c28f85">TagParameterFloat</a>
@@ -791,7 +832,9 @@ $(function() {
 : <a class="el" href="classARBow.html#a0c90ab3a9af46eb64369b8125420e387">ARBow</a>
 </li>
 <li>fValue
-: <a class="el" href="classTagParameterFloat.html#a2451510e2ae26dfabaae9a8114ea8f5b">TagParameterFloat</a>
+: <a class="el" href="structGuidoParser_1_1vareval.html#aa8cb06e303141e7e03a8ae3a4399e491">GuidoParser::vareval</a>
+, <a class="el" href="structGuidoParser_1_1variable.html#a0295f4096fffb26877ac610679658df3">GuidoParser::variable</a>
+, <a class="el" href="classTagParameterFloat.html#a2451510e2ae26dfabaae9a8114ea8f5b">TagParameterFloat</a>
 </li>
 <li>fVChans
 : <a class="el" href="structGuido2MidiParams.html#a8ba3ea03ce924b54050d326492ac0088">Guido2MidiParams</a>
@@ -807,6 +850,9 @@ $(function() {
 </li>
 <li>fVoicesColors
 : <a class="el" href="classPianoRoll.html#a4eac0f7c850d1702e2146300df876c9b">PianoRoll</a>
+</li>
+<li>fVStreams
+: <a class="el" href="classGuidoParser.html#a4e53a008d6896c42eb2b5fb7c42aef5c">GuidoParser</a>
 </li>
 <li>fWidth
 : <a class="el" href="classGRDynamics.html#a00b0c8724cc46b4d2bc415f2a7397970">GRDynamics</a>

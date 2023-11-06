@@ -10,7 +10,7 @@ var searchData=
   ['dirset',['dirset',['../classGRBeamSaveStruct.html#aa307c5c3872faa71842d2802014e30ed',1,'GRBeamSaveStruct']]],
   ['dis',['dis',['../classARNoteName.html#a7067ec458a0666bb18aff46623b2e06d',1,'ARNoteName']]],
   ['do_5f',['do_',['../classARNoteName.html#a50a0de7d1b8a635e4bf7f6ad02fe9278',1,'ARNoteName']]],
-  ['dur',['dur',['../classARBase.html#a1afa1cb4dc8efc742283437b0c17d7ec',1,'ARBase::dur()'],['../classARChordGroup.html#add746774bcdc7d09aaf94d6430302ff3',1,'ARChordGroup::dur()']]],
+  ['dur',['dur',['../classARChordGroup.html#add746774bcdc7d09aaf94d6430302ff3',1,'ARChordGroup']]],
   ['duration',['duration',['../classGRBeamSaveStruct.html#a7c111068e674360ad28ca75cd500c026',1,'GRBeamSaveStruct']]],
   ['durationline',['DurationLine',['../classGRBeamSaveStruct.html#a54848bbc4f1b4e62559cfc02dcd52773',1,'GRBeamSaveStruct']]],
   ['durtemplate',['durtemplate',['../classGRSingleRest.html#a8d25efc7177bd040cf7fe5c6d974f9c9',1,'GRSingleRest']]],

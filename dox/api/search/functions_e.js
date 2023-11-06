@@ -6,6 +6,7 @@ var searchData=
   ['selectpencolor',['SelectPenColor',['../classVGDevice.html#ab8ca913a64f247ca55d634be7a0f4cd6',1,'VGDevice']]],
   ['selectpenwidth',['SelectPenWidth',['../classVGDevice.html#acc74b7d49363c8d58e20cec4f6904477',1,'VGDevice']]],
   ['set',['Set',['../classVGColor.html#a05bcb9ab840e0814dfa0d387bc005ca8',1,'VGColor::Set(int r, int g, int b, int a=ALPHA_OPAQUE)'],['../classVGColor.html#af5146302f79862bad0dfe66bc0c1c4f5',1,'VGColor::Set(const VGColor &amp;in)'],['../classVGPen.html#a51ac2165c8ab13a679d38b93ceeec907',1,'VGPen::Set(const VGColor &amp;inColor, float inWidth)'],['../classVGPen.html#a1452a554737f0f62176ece99473b171d',1,'VGPen::Set(const VGColor &amp;inColor)'],['../classVGPen.html#a57d2d6c142acd2d93a1e3e51a4923ac5',1,'VGPen::Set(float inWidth)']]],
+  ['setcolortovoice',['setColorToVoice',['../group__PianoRollAdapter.html#gae9e1639e385873fa28c917383e9a23c1',1,'GUIDOPianoRollAdapter.h']]],
   ['setdefaultpageformat',['setDefaultPageFormat',['../group__EngineAdapter.html#ga18293a5216521f27b1ccfe2b1224628c',1,'GUIDOEngineAdapter.h']]],
   ['setdpitag',['SetDPITag',['../classVGDevice.html#a9cdbe726bc6558ef4a1521da244d4036',1,'VGDevice']]],
   ['setdrawboundingboxes',['setDrawBoundingBoxes',['../group__EngineAdapter.html#ga660ec7da80d4fb2e49e951f5faf8b7ea',1,'GUIDOEngineAdapter.h']]],

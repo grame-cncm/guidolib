@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -106,6 +106,7 @@ $(function() {
 </li>
 <li>add()
 : <a class="el" href="classChordTrills.html#a7dfae29ec415d2fe3cfa5acd010bfe08">ChordTrills</a>
+, <a class="el" href="classFraction.html#a53c0e668f0b0086d7768cc91848440bf">Fraction</a>
 , <a class="el" href="classguido_1_1GuidoMapCollector.html#a79fe4bfea8b0bfea090f53a2f2857f1b">guido::GuidoMapCollector</a>
 </li>
 <li>Add()
@@ -123,6 +124,7 @@ $(function() {
 , <a class="el" href="classGRGlissando.html#a6c9b09daa6f916964bc76a24a1ec874e">GRGlissando</a>
 , <a class="el" href="classGRGlobalLocation.html#a2becfd0457209c8523238f4526f90587">GRGlobalLocation</a>
 , <a class="el" href="classGRGlobalStem.html#a8c11fa60e3c7192b11f62488494d75b4">GRGlobalStem</a>
+, <a class="el" href="classGRGrace.html#a3d40faada039ddcd5a1c9f9c003fc527">GRGrace</a>
 , <a class="el" href="classGRHarmony.html#a7684fc88de484220ce09e053d9253b05">GRHarmony</a>
 , <a class="el" href="classGRNotationElement.html#aed43260c5b66944c615ef2416a592c32">GRNotationElement</a>
 , <a class="el" href="classGRPositionTag.html#a9f0565371e43aa922aa89c425f519373">GRPositionTag</a>
@@ -322,7 +324,7 @@ $(function() {
 : <a class="el" href="classNoteAndChordFactory.html#aeec3a154ed50d9a77a8f246f133f9ea4">NoteAndChordFactory</a>
 </li>
 <li>addTagParameter()
-: <a class="el" href="classARFactory.html#a480fcb9a306e20c5f23d96ba19572e1f">ARFactory</a>
+: <a class="el" href="classARFactory.html#a7050e08a06cd8243ab0cac7c3fc9e8bd">ARFactory</a>
 , <a class="el" href="classARMusicalTag.html#a51d4a4acaa564b18051471bb413bcaea">ARMusicalTag</a>
 , <a class="el" href="classNoteAndChordFactory.html#a822c88f32abceb5e58a01c969ccb585e">NoteAndChordFactory</a>
 </li>
@@ -369,6 +371,7 @@ $(function() {
 </li>
 <li>adjustHeadPosition()
 : <a class="el" href="classGRSingleNote.html#a3701810562969f9af5044a7fe48257a9">GRSingleNote</a>
+, <a class="el" href="classGRTab.html#aa8c24e4cd153d2ec2f8ace0da0a593de">GRTab</a>
 </li>
 <li>adjustHorizontalDotPosition()
 : <a class="el" href="classGRNoteDot.html#a3c356c3cf634c1abc57f821399f544cb">GRNoteDot</a>
@@ -390,12 +393,6 @@ $(function() {
 </li>
 <li>adjustPositionForChords()
 : <a class="el" href="classGRStdNoteHead.html#a2eba3722404700f20246f9998233963d">GRStdNoteHead</a>
-</li>
-<li>adjustPrevious()
-: <a class="el" href="classGRVolta.html#accbdc9fc3f18740d15889b2647c7cd07">GRVolta</a>
-</li>
-<li>adjustRight()
-: <a class="el" href="classGRVolta.html#addc64ff187a6dfb753445ebe15a19c3e">GRVolta</a>
 </li>
 <li>AnalyzeString()
 : <a class="el" href="classGuidoStream.html#a426fc2f99ee891ed1915ba5064c528ea">GuidoStream</a>
@@ -478,7 +475,7 @@ $(function() {
 : <a class="el" href="classARChordTag.html#a884a2ca9ae7ee3cf038feaae95c000be">ARChordTag</a>
 </li>
 <li>ARClef()
-: <a class="el" href="classARClef.html#ad4af856c5cfef6c19b3b09b10f67381a">ARClef</a>
+: <a class="el" href="classARClef.html#a2bf88a40fce9e0ca6fd69b8067e99dd6">ARClef</a>
 </li>
 <li>ARCluster()
 : <a class="el" href="classARCluster.html#a506eecff7930cc8ff66a1fedc5656515">ARCluster</a>
@@ -493,7 +490,7 @@ $(function() {
 : <a class="el" href="classARComposer.html#ab027db67dfa6dbde34590a9b75392287">ARComposer</a>
 </li>
 <li>ARCrescendo()
-: <a class="el" href="classARCrescendo.html#adc3b5789c01fb978748b8ee0ff91edfd">ARCrescendo</a>
+: <a class="el" href="classARCrescendo.html#a08b7b17f847b6c5c735dd1ef50b0f750">ARCrescendo</a>
 </li>
 <li>ARCue()
 : <a class="el" href="classARCue.html#a30858392b23f83b464def3a35e389a4a">ARCue</a>
@@ -580,7 +577,7 @@ $(function() {
 : <a class="el" href="classARInstrument.html#abf0fc2626b5934cae613345fdadce136">ARInstrument</a>
 </li>
 <li>ARIntens()
-: <a class="el" href="classARIntens.html#a08472e0439e5c9129c8c439d1971d842">ARIntens</a>
+: <a class="el" href="classARIntens.html#ac8ed23536f4095c8a9a8eec09296380b">ARIntens</a>
 </li>
 <li>ARJump()
 : <a class="el" href="classARJump.html#abe265d9e0d0d6ca6077b5d37620ecea1">ARJump</a>
@@ -606,6 +603,9 @@ $(function() {
 <li>ARMeter()
 : <a class="el" href="classARMeter.html#a6b2d1090526337d66f951867a1cde14b">ARMeter</a>
 </li>
+<li>ARMMRest()
+: <a class="el" href="classARMMRest.html#aa744f94c5ea01f5aef47e0d267dbdbb6">ARMMRest</a>
+</li>
 <li>ARMTParameter()
 : <a class="el" href="classARMTParameter.html#a78936c58244ebede170c25ecd568b2aa">ARMTParameter</a>
 </li>
@@ -613,19 +613,19 @@ $(function() {
 : <a class="el" href="classARMusic.html#ab509104fe060258d3bcc911ac5c2e78e">ARMusic</a>
 </li>
 <li>ARMusicalEvent()
-: <a class="el" href="classARMusicalEvent.html#a6a11d3c5ad883454078da24a6bb88604">ARMusicalEvent</a>
+: <a class="el" href="classARMusicalEvent.html#acafda83fce9c4861b1313798a12526d6">ARMusicalEvent</a>
 </li>
 <li>ARMusicalObject()
-: <a class="el" href="classARMusicalObject.html#aca31a92cf4a8d1c0bf9f02c03b732d90">ARMusicalObject</a>
+: <a class="el" href="classARMusicalObject.html#a1798307c4048bb7fef9eca10405e1ba5">ARMusicalObject</a>
 </li>
 <li>ARMusicalTag()
-: <a class="el" href="classARMusicalTag.html#ad8497a8d92e897538da5ea5615607698">ARMusicalTag</a>
+: <a class="el" href="classARMusicalTag.html#abd830543101b9cf89f20e32eb0402244">ARMusicalTag</a>
 </li>
 <li>ARMusicalVoice()
 : <a class="el" href="classARMusicalVoice.html#a97093c0c4a0f68f89f04a432e9f909c6">ARMusicalVoice</a>
 </li>
 <li>ARMusicalVoiceState()
-: <a class="el" href="classARMusicalVoiceState.html#a50faeb826356395a59569c3248ad86f5">ARMusicalVoiceState</a>
+: <a class="el" href="classARMusicalVoiceState.html#ad4cf3fe12d02fc7cc5f1dd911fa0d7d5">ARMusicalVoiceState</a>
 </li>
 <li>ARNaturalKey()
 : <a class="el" href="classARNaturalKey.html#a0716d84e7f64313ff0bbf72f49ebc5b3">ARNaturalKey</a>
@@ -640,7 +640,7 @@ $(function() {
 : <a class="el" href="classARNotations.html#a5a8780f18a88ba8ca17537e630894a56">ARNotations</a>
 </li>
 <li>ARNote()
-: <a class="el" href="classARNote.html#ad205b5627d7fc9cafea4606c89409932">ARNote</a>
+: <a class="el" href="classARNote.html#ad6224abd0c50b6278d4783987866af21">ARNote</a>
 </li>
 <li>ARNoteFormat()
 : <a class="el" href="classARNoteFormat.html#ae95e9a0f608cb73f133a4adab5206fe8">ARNoteFormat</a>
@@ -673,7 +673,7 @@ $(function() {
 : <a class="el" href="classARRepeatEndRangeEnd.html#a57269c4f473fd717d5651c08a1746d33">ARRepeatEndRangeEnd</a>
 </li>
 <li>ARRest()
-: <a class="el" href="classARRest.html#a2cd8e78272d21aa06896f15d03a67bc3">ARRest</a>
+: <a class="el" href="classARRest.html#a3a3cf86f5d2b45bd6692a4283e36628d">ARRest</a>
 </li>
 <li>ARRestFormat()
 : <a class="el" href="classARRestFormat.html#a854596e7b5abb98769c2aa60ce98b182">ARRestFormat</a>
@@ -688,13 +688,13 @@ $(function() {
 : <a class="el" href="classARSegno.html#aef6934122cd621d6bb818a3b769038b5">ARSegno</a>
 </li>
 <li>ARShareLocation()
-: <a class="el" href="classARShareLocation.html#adea25c316f3dbd764256d8730c5f01bd">ARShareLocation</a>
+: <a class="el" href="classARShareLocation.html#a63e6568a41103b16bad61fac176a5ecd">ARShareLocation</a>
 </li>
 <li>ARShareStem()
 : <a class="el" href="classARShareStem.html#accc0e9be2c8de2c650b7c59357508ab0">ARShareStem</a>
 </li>
 <li>ARSlur()
-: <a class="el" href="classARSlur.html#ae2209e807985a11b631900c36be3b0b0">ARSlur</a>
+: <a class="el" href="classARSlur.html#afef5f84979fb20c906e2ea89c096ac99">ARSlur</a>
 </li>
 <li>ARSpace()
 : <a class="el" href="classARSpace.html#ac9692f8a1a67e5099322fcb7f33d2998">ARSpace</a>
@@ -706,7 +706,7 @@ $(function() {
 : <a class="el" href="classARStaccato.html#a0bedb888c73f3fab61b53e5c33e33d67">ARStaccato</a>
 </li>
 <li>ARStaff()
-: <a class="el" href="classARStaff.html#a1598b960fa27e37a83ff7cee8e65dc1f">ARStaff</a>
+: <a class="el" href="classARStaff.html#acc24e14a1106bb4254738495c3bfca88">ARStaff</a>
 </li>
 <li>ARStaffFormat()
 : <a class="el" href="classARStaffFormat.html#a2351f822d854782c7d77e112d909b4de">ARStaffFormat</a>
@@ -722,6 +722,9 @@ $(function() {
 </li>
 <li>ARSystemFormat()
 : <a class="el" href="classARSystemFormat.html#a55875fb38f2c83cf2c38311ce0b8f6ed">ARSystemFormat</a>
+</li>
+<li>ARTab()
+: <a class="el" href="classARTab.html#a338b8166e241cced860f1809c0bf8540">ARTab</a>
 </li>
 <li>ARTagBegin()
 : <a class="el" href="classARTagBegin.html#a04ca957846bc913ab2df9858f91af1b7">ARTagBegin</a>
@@ -739,7 +742,7 @@ $(function() {
 : <a class="el" href="classARText.html#a45da7c7370032b5a95cde80bfa36fad4">ARText</a>
 </li>
 <li>ARTHead()
-: <a class="el" href="classARTHead.html#a52e9bbc4328108d7f799d30277ff9ace">ARTHead</a>
+: <a class="el" href="classARTHead.html#aa21ef385d040888f365af16fa173aef7">ARTHead</a>
 </li>
 <li>ARTie()
 : <a class="el" href="classARTie.html#a981aadce35e2e3a24743fe87ce044b64">ARTie</a>
@@ -751,7 +754,7 @@ $(function() {
 : <a class="el" href="classARTremolo.html#aca57d5cfae6c919c96ea72a1c4bb76b6">ARTremolo</a>
 </li>
 <li>ARTrill()
-: <a class="el" href="classARTrill.html#a4f56ec8ad40e936be8c586e2d968f337">ARTrill</a>
+: <a class="el" href="classARTrill.html#a1986825b84c89116c987d48ba1b74de6">ARTrill</a>
 </li>
 <li>ARTStem()
 : <a class="el" href="classARTStem.html#af72453571624ac56baa7b867fc8bf0d1">ARTStem</a>
@@ -763,7 +766,7 @@ $(function() {
 : <a class="el" href="classARUnits.html#a7da1ca7a072824072b14ae443896b209">ARUnits</a>
 </li>
 <li>ARUserChordTag()
-: <a class="el" href="classARUserChordTag.html#aac8586cc672e9baf4cb8efcb8f42e524">ARUserChordTag</a>
+: <a class="el" href="classARUserChordTag.html#a135ad78afd72a1def064a1e58ed69a36">ARUserChordTag</a>
 </li>
 <li>ARVisitable()
 : <a class="el" href="classARVisitable.html#ad2c765c5c559fd8024737099625c18ce">ARVisitable</a>
@@ -788,14 +791,14 @@ $(function() {
 : <a class="el" href="classPianoRoll.html#a7ee3ed994ddd0e4cb1ddee715d26ed53">PianoRoll</a>
 </li>
 <li>automaticAnchorPoints()
-: <a class="el" href="classGRBowing.html#a8048610c1b22d4472cb6bbe8c5dd29ba">GRBowing</a>
-, <a class="el" href="classGRSlur.html#a8019cbcc34d792633b169664f2e136e1">GRSlur</a>
-, <a class="el" href="classGRTie.html#aab29fe2713b32165a3fd79127cada951">GRTie</a>
+: <a class="el" href="classGRBowing.html#aca52f51a068d7056ca80ba168133ae9d">GRBowing</a>
+, <a class="el" href="classGRSlur.html#a925d92302507cb7c467b1cd7a4c85ba9">GRSlur</a>
+, <a class="el" href="classGRTie.html#a354c8e858a6e8ab7cbb9a79b398d253f">GRTie</a>
 </li>
 <li>automaticControlPoints()
-: <a class="el" href="classGRBowing.html#a4c6fcd29384d6a4d4e93cecf168bcc6c">GRBowing</a>
-, <a class="el" href="classGRSlur.html#a74f499713c775c0d25f79ccce89b0de8">GRSlur</a>
-, <a class="el" href="classGRTie.html#a4dd40b6287b9b9ec7ec56061bc1a0461">GRTie</a>
+: <a class="el" href="classGRBowing.html#a4165c603d160adeb3c5f4e2bcda2856e">GRBowing</a>
+, <a class="el" href="classGRSlur.html#ac7f26f58f875ca56e7bdf33a3ff85c86">GRSlur</a>
+, <a class="el" href="classGRTie.html#ae2f11380b7239912bc7ca246f99f6643">GRTie</a>
 </li>
 <li>automaticCurveDirection()
 : <a class="el" href="classGRBowing.html#ab8647e50327c8a09ed20e118b4f3f953">GRBowing</a>

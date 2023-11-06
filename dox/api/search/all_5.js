@@ -11,6 +11,7 @@ var searchData=
   ['fmarcatofactor',['fMarcatoFactor',['../structGuido2MidiParams.html#a1394fef9b2dfe21746d76e7b5989e49d',1,'Guido2MidiParams']]],
   ['force',['force',['../structGuidoLayoutSettings.html#a97fe6374cd3cfc64808aa98f42e9857c',1,'GuidoLayoutSettings']]],
   ['frame',['Frame',['../classVGDevice.html#afcf2f3597e222f658e20a312c314e7dd',1,'VGDevice']]],
+  ['frameellipse',['FrameEllipse',['../classVGDevice.html#a6c60757053aacb92d3a5666ee9b1fe15',1,'VGDevice']]],
   ['freear',['freeAR',['../group__enginecpp.html#ga22274bf29159dde2d2c773e50d4fc444',1,'GUIDOEngineAdapter.h']]],
   ['freegr',['freeGR',['../group__enginecpp.html#ga82b2de9574421aff3a2116a9da84828f',1,'GUIDOEngineAdapter.h']]],
   ['fslurfactor',['fSlurFactor',['../structGuido2MidiParams.html#ae156613f72c642dc92b34e875d799959',1,'Guido2MidiParams']]],

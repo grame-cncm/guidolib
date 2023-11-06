@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -149,8 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0aa7321ededf66b8aa0f3d276f8ec900"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3ed446fbde46ba6ce5df165dd8334f0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#ac3ed446fbde46ba6ce5df165dd8334f0">initChordNote</a> ()</td></tr>
 <tr class="separator:ac3ed446fbde46ba6ce5df165dd8334f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef664e3eda2bddbd03ffd0fd59f3423d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#aef664e3eda2bddbd03ffd0fd59f3423d">FinishChord</a> ()</td></tr>
-<tr class="separator:aef664e3eda2bddbd03ffd0fd59f3423d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad250972551daa3da6e5b1725d63c32a8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#ad250972551daa3da6e5b1725d63c32a8">FinishChord</a> (bool regular=true)</td></tr>
+<tr class="separator:ad250972551daa3da6e5b1725d63c32a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7efe72ccd4be4e73ac3ce32627847f3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARChordTag.html">ARChordTag</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#aa7efe72ccd4be4e73ac3ce32627847f3">BeginChord</a> ()</td></tr>
 <tr class="separator:aa7efe72ccd4be4e73ac3ce32627847f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2796c5a1533dd8cdf4e0b8a4f4a44ba0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classARNote.html">ARNote</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#a2796c5a1533dd8cdf4e0b8a4f4a44ba0">setTrillChord</a> (<a class="el" href="classARMusicalVoice.html#a924e99ffaa332348cac273f2ceedb6e1">CHORD_TYPE</a> &amp;param_type, <a class="el" href="classARMusicalVoice.html#a4de026908b03910572bf939e327a195a">CHORD_ACCIDENTAL</a> &amp;param_accidental)</td></tr>
@@ -379,8 +379,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae8a44a0370935dc7561c9665315dc47f inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a00afb14e07a8ebd63e091b85542228 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a9a00afb14e07a8ebd63e091b85542228">getRelativeEndTimePosition</a> () const</td></tr>
 <tr class="separator:a9a00afb14e07a8ebd63e091b85542228 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1097d316fd86d8b7ef593e35b4e473a3 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a1097d316fd86d8b7ef593e35b4e473a3">setStartTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;pos)</td></tr>
-<tr class="separator:a1097d316fd86d8b7ef593e35b4e473a3 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a640ed0e2672181ed31c8aed2569e16c5 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a640ed0e2672181ed31c8aed2569e16c5">setRelativeTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;newRelativeTimePosition)</td></tr>
 <tr class="separator:a640ed0e2672181ed31c8aed2569e16c5 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada0f2d93cacbb5f6147b4b206c7ef3c8 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#ada0f2d93cacbb5f6147b4b206c7ef3c8">setRelativeEndTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp)</td></tr>
@@ -397,6 +395,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a751f462e2d09c0d1a7c4ece0a6446ef6 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a220511ef444c1d3a939641a4cca5cc3f inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classARNote.html">ARNote</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a220511ef444c1d3a939641a4cca5cc3f">isARNote</a> () const</td></tr>
 <tr class="separator:a220511ef444c1d3a939641a4cca5cc3f inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a78a5ba24d0cfc4c5774da276b9901969">isARTab</a> ()</td></tr>
+<tr class="separator:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#ad6fd19bc33aba3960b7e0057f19eef73">isARTab</a> () const</td></tr>
+<tr class="separator:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#adcf3eb9c4691a82c1e26996ee339c32e">isARCoda</a> ()</td></tr>
 <tr class="separator:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c87794126884c4f545fb65f63ddb1c9 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a8c87794126884c4f545fb65f63ddb1c9">isARSegno</a> ()</td></tr>
@@ -502,14 +504,18 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a1fbf1820304a14c652642994c1cf8bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68751800faf1b6780738a89aafc4e739"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#a68751800faf1b6780738a89aafc4e739">doAutoFeatheredBeam</a> ()</td></tr>
 <tr class="separator:a68751800faf1b6780738a89aafc4e739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed6129c2ec730081856ab0f14483177c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#aed6129c2ec730081856ab0f14483177c">doAutoFixOctavaStaff</a> ()</td></tr>
+<tr class="separator:aed6129c2ec730081856ab0f14483177c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19b2a9e71ab43915ba164621818d6279"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#a19b2a9e71ab43915ba164621818d6279">doMicroTonal</a> ()</td></tr>
 <tr class="separator:a19b2a9e71ab43915ba164621818d6279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a74810d227e7b5e6bd7d9b7ab4a27b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#a8a74810d227e7b5e6bd7d9b7ab4a27b1">getOctava</a> (int voice, std::map&lt; int, std::vector&lt; <a class="el" href="classAROctava.html">AROctava</a> * &gt; &gt; &amp;list)</td></tr>
+<tr class="separator:a8a74810d227e7b5e6bd7d9b7ab4a27b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab33b5b3d78fe203f73bf13cd08e00b76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#ab33b5b3d78fe203f73bf13cd08e00b76">CloseBase</a> (<a class="el" href="classARBase.html">ARBase</a> *curbase, <a class="el" href="classARTuplet.html">ARTuplet</a> *autotuplet, GuidoPos lastevpos, GuidoPos FLA)</td></tr>
 <tr class="separator:ab33b5b3d78fe203f73bf13cd08e00b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69caf6ee637180139daae1e8d3439f96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#a69caf6ee637180139daae1e8d3439f96">ReplacePositionTag</a> (<a class="el" href="classARPositionTag.html">ARPositionTag</a> *ptold, <a class="el" href="classARPositionTag.html">ARPositionTag</a> *ptnew, <a class="el" href="classARMusicalVoiceState.html">ARMusicalVoiceState</a> &amp;vst, const char *endtagname=0)</td></tr>
-<tr class="separator:a69caf6ee637180139daae1e8d3439f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0872f5b5b454471dc3f3b64a27c14864"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#a0872f5b5b454471dc3f3b64a27c14864">InsertDisplayDurationTag</a> (const <a class="el" href="classFraction.html">TYPE_DURATION</a> &amp;dispdur, int b_punkt, const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp, GuidoPos pos, <a class="el" href="classARMusicalVoiceState.html">ARMusicalVoiceState</a> &amp;vst, int setptagpos=1)</td></tr>
-<tr class="separator:a0872f5b5b454471dc3f3b64a27c14864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc08f112c4ad0a6eede552bb4b86882a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#afc08f112c4ad0a6eede552bb4b86882a">ReplacePositionTag</a> (const <a class="el" href="classARPositionTag.html">ARPositionTag</a> *ptold, <a class="el" href="classARPositionTag.html">ARPositionTag</a> *ptnew, <a class="el" href="classARMusicalVoiceState.html">ARMusicalVoiceState</a> &amp;vst, const char *endtagname=0)</td></tr>
+<tr class="separator:afc08f112c4ad0a6eede552bb4b86882a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29d3dfaf31de1de1db67f0d846f8f9ed"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classARDisplayDuration.html">ARDisplayDuration</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#a29d3dfaf31de1de1db67f0d846f8f9ed">InsertDisplayDurationTag</a> (const <a class="el" href="classFraction.html">TYPE_DURATION</a> &amp;dispdur, int b_punkt, const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp, GuidoPos pos, <a class="el" href="classARMusicalVoiceState.html">ARMusicalVoiceState</a> &amp;vst, int setptagpos=1)</td></tr>
+<tr class="separator:a29d3dfaf31de1de1db67f0d846f8f9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca21312c2d8d030bafee8a17e2898a34"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalVoice.html#aca21312c2d8d030bafee8a17e2898a34">beamLookAhead</a> (GuidoPos &amp;pos, <a class="el" href="classFraction.html">TYPE_DURATION</a> &amp;unit)</td></tr>
 <tr class="separator:aca21312c2d8d030bafee8a17e2898a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -1395,6 +1401,31 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="aed6129c2ec730081856ab0f14483177c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed6129c2ec730081856ab0f14483177c">&#9670;&nbsp;</a></span>doAutoFixOctavaStaff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ARMusicalVoice::doAutoFixOctavaStaff </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1fbf1820304a14c652642994c1cf8bd0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1fbf1820304a14c652642994c1cf8bd0">&#9670;&nbsp;</a></span>doAutoGlissando()</h2>
 
@@ -1648,8 +1679,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="aef664e3eda2bddbd03ffd0fd59f3423d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef664e3eda2bddbd03ffd0fd59f3423d">&#9670;&nbsp;</a></span>FinishChord()</h2>
+<a id="ad250972551daa3da6e5b1725d63c32a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad250972551daa3da6e5b1725d63c32a8">&#9670;&nbsp;</a></span>FinishChord()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1660,7 +1691,8 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">virtual void ARMusicalVoice::FinishChord </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>regular</em> = <code>true</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1840,6 +1872,42 @@ Friends</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8a74810d227e7b5e6bd7d9b7ab4a27b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a74810d227e7b5e6bd7d9b7ab4a27b1">&#9670;&nbsp;</a></span>getOctava()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ARMusicalVoice::getOctava </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>voice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::map&lt; int, std::vector&lt; <a class="el" href="classAROctava.html">AROctava</a> * &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2071,8 +2139,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a0872f5b5b454471dc3f3b64a27c14864"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0872f5b5b454471dc3f3b64a27c14864">&#9670;&nbsp;</a></span>InsertDisplayDurationTag()</h2>
+<a id="a29d3dfaf31de1de1db67f0d846f8f9ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29d3dfaf31de1de1db67f0d846f8f9ed">&#9670;&nbsp;</a></span>InsertDisplayDurationTag()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2081,7 +2149,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void ARMusicalVoice::InsertDisplayDurationTag </td>
+          <td class="memname">const <a class="el" href="classARDisplayDuration.html">ARDisplayDuration</a>* ARMusicalVoice::InsertDisplayDurationTag </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classFraction.html">TYPE_DURATION</a> &amp;&#160;</td>
           <td class="paramname"><em>dispdur</em>, </td>
@@ -2342,8 +2410,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a69caf6ee637180139daae1e8d3439f96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69caf6ee637180139daae1e8d3439f96">&#9670;&nbsp;</a></span>ReplacePositionTag()</h2>
+<a id="afc08f112c4ad0a6eede552bb4b86882a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc08f112c4ad0a6eede552bb4b86882a">&#9670;&nbsp;</a></span>ReplacePositionTag()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2354,7 +2422,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">void ARMusicalVoice::ReplacePositionTag </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classARPositionTag.html">ARPositionTag</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classARPositionTag.html">ARPositionTag</a> *&#160;</td>
           <td class="paramname"><em>ptold</em>, </td>
         </tr>
         <tr>

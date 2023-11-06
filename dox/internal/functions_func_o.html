@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -95,6 +95,7 @@ $(function() {
 , <a class="el" href="classGRDrRenz.html#ac430fbe4d62e68685d521ad795314282">GRDrRenz</a>
 , <a class="el" href="classGRDummy.html#abbd6f055d1a9b3f4e13c3188401a45aa">GRDummy</a>
 , <a class="el" href="classGREmpty.html#a51ea32986c508d75161f1c65e6e2866a">GREmpty</a>
+, <a class="el" href="classGRFingering.html#a5ad120e803a8221c750c774d2d2a85d5">GRFingering</a>
 , <a class="el" href="classGRFlag.html#aaaf3be37a7359fd1ad1f0cbf963afca4">GRFlag</a>
 , <a class="el" href="classGRGlissando.html#a0a6a59549132af64fb6c392f15cf67ea">GRGlissando</a>
 , <a class="el" href="classGRGlobalLocation.html#aae012ff74817913ddd34eaeeb035b4f8">GRGlobalLocation</a>
@@ -121,6 +122,7 @@ $(function() {
 , <a class="el" href="classGRSimpleBeam.html#aaaee4c3c84e4e6904022a2e919c311d6">GRSimpleBeam</a>
 , <a class="el" href="classGRSingleNote.html#a6c6f68437a18f1147ad1f13474c624a0">GRSingleNote</a>
 , <a class="el" href="classGRSingleRest.html#a7a84b31127c8d9d81c8c6cf5ca7eff03">GRSingleRest</a>
+, <a class="el" href="classGRSlur.html#a0e0736bcb8c0735b0ec441916274c841">GRSlur</a>
 , <a class="el" href="classGRSpace.html#af2b67c2a9c11536aa8bf86ad79057810">GRSpace</a>
 , <a class="el" href="classGRSpecial.html#a1eb3ba72ad024708a2f42bdfe716687b">GRSpecial</a>
 , <a class="el" href="classGRSpring.html#ac630f21c23566421fa42fb682c58d799">GRSpring</a>
@@ -132,6 +134,7 @@ $(function() {
 , <a class="el" href="classGRSystem.html#a524857ca1c38a659894e9d1adc1f2644">GRSystem</a>
 , <a class="el" href="classGRSystemSlice.html#ac1364533a6c49dff1825ccd588146d06">GRSystemSlice</a>
 , <a class="el" href="classGRSystemTag.html#ac8aaf3fb5259f912db810184e6acf383">GRSystemTag</a>
+, <a class="el" href="classGRTab.html#a6bb84c32da0443c3c7a60bc2a9e0ef13">GRTab</a>
 , <a class="el" href="classGRTempo.html#a389dd79e1a3d3440b0cd8e72cddc20ce">GRTempo</a>
 , <a class="el" href="classGRTempoChange.html#a36fa4431c6c38cd3526e815fc1903bb4">GRTempoChange</a>
 , <a class="el" href="classGRText.html#a770d3a728e5eee0a460f336d1f7e60f5">GRText</a>
@@ -170,8 +173,12 @@ $(function() {
 <li>operator float()
 : <a class="el" href="classFraction.html#a9f5e07c86110697506bdfb5d6fd8d3e5">Fraction</a>
 </li>
+<li>operator std::string()
+: <a class="el" href="classFraction.html#a7cfbd3806663ca899707b029158513e4">Fraction</a>
+</li>
 <li>operator!=()
-: <a class="el" href="classFraction.html#a78f1c5c9bb80905d8ba2d2839d4d9f99">Fraction</a>
+: <a class="el" href="structbeamRect.html#af49aba585e462d35503b1d5603510000">beamRect</a>
+, <a class="el" href="classFraction.html#a78f1c5c9bb80905d8ba2d2839d4d9f99">Fraction</a>
 , <a class="el" href="classGRTag.html#a33750fc3dd54a61aa9e8f8c28d29d374">GRTag</a>
 , <a class="el" href="classNVPoint.html#abe81ad4cb2a8edaf14164cf73f053f67">NVPoint</a>
 , <a class="el" href="classVGColor.html#a387ad9f257c7b6b2a310ca135c416d7b">VGColor</a>
@@ -203,7 +210,8 @@ $(function() {
 : <a class="el" href="classsvgendl.html#aeb61a34f542546c78666636cc11741e1">svgendl</a>
 </li>
 <li>operator-=()
-: <a class="el" href="classFraction.html#a9a7002f79ebb03d09960c20fd603ee1f">Fraction</a>
+: <a class="el" href="structbeamRect.html#a7d66e978a29d52276540678937c07dd2">beamRect</a>
+, <a class="el" href="classFraction.html#a9a7002f79ebb03d09960c20fd603ee1f">Fraction</a>
 , <a class="el" href="classNVPoint.html#a3f325d7996fc41edc8f6de2131033cc7">NVPoint</a>
 , <a class="el" href="classNVRect.html#a58d209d565350175db90e4e4c9794134">NVRect</a>
 </li>
@@ -218,6 +226,7 @@ $(function() {
 </li>
 <li>operator=()
 : <a class="el" href="classARMusicalVoiceState.html#a38887de2e5c5ca23ab3de6efe02830b1">ARMusicalVoiceState</a>
+, <a class="el" href="classARNote.html#a469f9e1604e1433c8f2f6b2f81372446">ARNote</a>
 , <a class="el" href="classARPageFormat.html#aabccc2b0b42d1c31c95afc424d7d1e9d">ARPageFormat</a>
 , <a class="el" href="classGRStaffState.html#ab86a18218d4ad7ef675b1fd06a8d8bad">GRStaffState</a>
 , <a class="el" href="classMeasureAccidentals.html#a50b56848a24225cf4ef7d3998cdf2762">MeasureAccidentals</a>
@@ -226,9 +235,10 @@ $(function() {
 <li>operator==()
 : <a class="el" href="classARClef.html#a8ac1c18540fe08672dec2a1105c99aff">ARClef</a>
 , <a class="el" href="classARKey.html#a2a1d94033f3376fffefcfcc70d9b6b4c">ARKey</a>
+, <a class="el" href="structbeamRect.html#a204c4c54ce659c56b06a3b98502ea784">beamRect</a>
 , <a class="el" href="classFraction.html#ae7010d537d5654d5281080accb7a3320">Fraction</a>
-, <a class="el" href="classGRBar.html#a80f9b3c374935a0cfc73248058accc74">GRBar</a>
-, <a class="el" href="classGRClef.html#aaa9a33a5e81eea146aed7796acdf4c18">GRClef</a>
+, <a class="el" href="classGRBar.html#ac8e28055fa488edae8184aef951f9dcb">GRBar</a>
+, <a class="el" href="classGRClef.html#ac897f53d4bfe4e9163017c2c0b49f1b6">GRClef</a>
 , <a class="el" href="classGRKey.html#a4f4e101d60198c7607680e0c84f2a122">GRKey</a>
 , <a class="el" href="classGRTag.html#a4b637c43cceee72fe9adf2a4c195f636">GRTag</a>
 , <a class="el" href="classNVPoint.html#ae1eac23621480e04b663db7a37acd616">NVPoint</a>

@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">A Music Score Rendering Engine</div>
 						</td>
@@ -94,8 +94,12 @@ Classes</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:ga3326c92b65757d52e22970ecb75c35e9"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; <a class="el" href="group__Mapping.html#ga40d03b77f307ea43850318b1abcfc089">TimeSegment</a>, FloatRect &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#ga3326c92b65757d52e22970ecb75c35e9">TMapSegments</a></td></tr>
 <tr class="separator:ga3326c92b65757d52e22970ecb75c35e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0cc81a757c3ae4e75f0f6708cf13132d"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; <a class="el" href="group__Mapping.html#ga40d03b77f307ea43850318b1abcfc089">TimeSegment</a>, <a class="el" href="group__Mapping.html#ga40d03b77f307ea43850318b1abcfc089">TimeSegment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#ga0cc81a757c3ae4e75f0f6708cf13132d">TTimeMapSegments</a></td></tr>
+<tr class="separator:ga0cc81a757c3ae4e75f0f6708cf13132d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga21ea7585080fbb6657c337425844ce54"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; <a class="el" href="group__Mapping.html#ga3326c92b65757d52e22970ecb75c35e9">TMapSegments</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#ga21ea7585080fbb6657c337425844ce54">Time2GraphicMap</a></td></tr>
 <tr class="separator:ga21ea7585080fbb6657c337425844ce54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaca75a62419ad20c5ecd0ca97ebf15337"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; <a class="el" href="group__Mapping.html#ga0cc81a757c3ae4e75f0f6708cf13132d">TTimeMapSegments</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#gaca75a62419ad20c5ecd0ca97ebf15337">TTime2TimeMap</a></td></tr>
+<tr class="separator:gaca75a62419ad20c5ecd0ca97ebf15337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab18e05a8e1c593b911d640a3b1630f06"><td class="memItemLeft" align="right" valign="top">typedef Time2GraphicMap::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#gab18e05a8e1c593b911d640a3b1630f06">Time2GraphicMapIterator</a></td></tr>
 <tr class="separator:gab18e05a8e1c593b911d640a3b1630f06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga49ee684749dcb22c93625b300064d30e"><td class="memItemLeft" align="right" valign="top">typedef std::pair&lt; FloatRect, <a class="el" href="classRectInfos.html">RectInfos</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#ga49ee684749dcb22c93625b300064d30e">MapElement</a></td></tr>
@@ -114,6 +118,9 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="group__Mapping.html#gga9b9a100c30794eb8829ac683423451ffa36c08c686d7cef1140e988ab33b74f75">kGuidoBar</a>, 
 <a class="el" href="group__Mapping.html#gga9b9a100c30794eb8829ac683423451ffa62502f11164446629ed090c3c3718407">kGuidoBarAndEvent</a>, 
 <a class="el" href="group__Mapping.html#gga9b9a100c30794eb8829ac683423451ffa3b0a244c63669501d27586828e3e312a">kGuidoEvent</a>, 
+<a class="el" href="group__Mapping.html#gga9b9a100c30794eb8829ac683423451ffaf6e8c9abc0a5925fa089688f4d2355e7">kClefSel</a>, 
+<br />
+&#160;&#160;<a class="el" href="group__Mapping.html#gga9b9a100c30794eb8829ac683423451ffa762f081a14cbea0a61a8e9a2b36eb5a2">kMeterSel</a>, 
 <a class="el" href="group__Mapping.html#gga9b9a100c30794eb8829ac683423451ffa01d99178a36d3f652ff9411a27d4e4e6">kGuidoScoreElementEnd</a>
 <br />
  }</td></tr>
@@ -131,7 +138,10 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="group__Mapping.html#ggac9a9d35b2e4fe8fa6682d773921ff4f6a291427b6a3c889b0ebab7d6a736efda6">kSystem</a>, 
 <a class="el" href="group__Mapping.html#ggac9a9d35b2e4fe8fa6682d773921ff4f6a99cc8712f1dad58c4d97764be4208cb5">kPage</a>, 
-<a class="el" href="group__Mapping.html#ggac9a9d35b2e4fe8fa6682d773921ff4f6a503bd5c11d47c11ca628f0d2d0d8e94f">kGraceNote</a>
+<a class="el" href="group__Mapping.html#ggac9a9d35b2e4fe8fa6682d773921ff4f6a503bd5c11d47c11ca628f0d2d0d8e94f">kGraceNote</a>, 
+<a class="el" href="group__Mapping.html#ggac9a9d35b2e4fe8fa6682d773921ff4f6a3dd90ba8cf18c7eb87357dbafc8d440c">kClef</a>, 
+<br />
+&#160;&#160;<a class="el" href="group__Mapping.html#ggac9a9d35b2e4fe8fa6682d773921ff4f6a13ace561e0580ca8e47379d8a1fdddff">kMeter</a>
 <br />
  }</td></tr>
 <tr class="separator:gac9a9d35b2e4fe8fa6682d773921ff4f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,9 +217,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga391c9bb51041000594ad5a3252f75d48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#ga391c9bb51041000594ad5a3252f75d48">GuidoGetSVGMap</a> (<a class="el" href="GUIDOEngine_8h.html#a7b2b7688c61d1912604dd4d29aff6eb4">GRHandler</a> gr, int pagenum, <a class="el" href="group__Mapping.html#ga9b9a100c30794eb8829ac683423451ff">GuidoElementSelector</a> sel, std::vector&lt; <a class="el" href="group__Mapping.html#ga49ee684749dcb22c93625b300064d30e">MapElement</a> &gt; &amp;outMap) <a class="el" href="GUIDOEngine_8h.html#a2ff535bb0f22baabd68d03bc92e4986d">GUIDOAPI_deprecated</a></td></tr>
 <tr class="memdesc:ga391c9bb51041000594ad5a3252f75d48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the graphic to time mapping corresponding to the SVG output.  <a href="#ga391c9bb51041000594ad5a3252f75d48">More...</a><br /></td></tr>
 <tr class="separator:ga391c9bb51041000594ad5a3252f75d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaeaf8b6e4b98c47328aef5dee422c25d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#gaeaf8b6e4b98c47328aef5dee422c25d0">GuidoGetTimeMap</a> (<a class="el" href="GUIDOEngine_8h.html#a2e031f641402f8e82ea12ca70a007390">CARHandler</a> gr, <a class="el" href="classTimeMapCollector.html">TimeMapCollector</a> &amp;f)</td></tr>
-<tr class="memdesc:gaeaf8b6e4b98c47328aef5dee422c25d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the rolled to unrolled time mapping.  <a href="#gaeaf8b6e4b98c47328aef5dee422c25d0">More...</a><br /></td></tr>
-<tr class="separator:gaeaf8b6e4b98c47328aef5dee422c25d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa248274f1dfb749e4c02d6e3248a8baf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Mapping.html#gaa248274f1dfb749e4c02d6e3248a8baf">GuidoGetTimeMap</a> (<a class="el" href="GUIDOEngine_8h.html#a2e031f641402f8e82ea12ca70a007390">CARHandler</a> ar, <a class="el" href="classTimeMapCollector.html">TimeMapCollector</a> &amp;f)</td></tr>
+<tr class="memdesc:gaa248274f1dfb749e4c02d6e3248a8baf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the rolled to unrolled time mapping.  <a href="#gaa248274f1dfb749e4c02d6e3248a8baf">More...</a><br /></td></tr>
+<tr class="separator:gaa248274f1dfb749e4c02d6e3248a8baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -292,6 +302,34 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="gaca75a62419ad20c5ecd0ca97ebf15337"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaca75a62419ad20c5ecd0ca97ebf15337">&#9670;&nbsp;</a></span>TTime2TimeMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::vector&lt;<a class="el" href="group__Mapping.html#ga0cc81a757c3ae4e75f0f6708cf13132d">TTimeMapSegments</a>&gt; <a class="el" href="group__Mapping.html#gaca75a62419ad20c5ecd0ca97ebf15337">TTime2TimeMap</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga0cc81a757c3ae4e75f0f6708cf13132d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0cc81a757c3ae4e75f0f6708cf13132d">&#9670;&nbsp;</a></span>TTimeMapSegments</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::pair&lt;<a class="el" href="group__Mapping.html#ga40d03b77f307ea43850318b1abcfc089">TimeSegment</a>, <a class="el" href="group__Mapping.html#ga40d03b77f307ea43850318b1abcfc089">TimeSegment</a>&gt; <a class="el" href="group__Mapping.html#ga0cc81a757c3ae4e75f0f6708cf13132d">TTimeMapSegments</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="ga9b9a100c30794eb8829ac683423451ff"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga9b9a100c30794eb8829ac683423451ff">&#9670;&nbsp;</a></span>GuidoElementSelector</h2>
@@ -312,6 +350,8 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="gga9b9a100c30794eb8829ac683423451ffa36c08c686d7cef1140e988ab33b74f75"></a>kGuidoBar&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga9b9a100c30794eb8829ac683423451ffa62502f11164446629ed090c3c3718407"></a>kGuidoBarAndEvent&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga9b9a100c30794eb8829ac683423451ffa3b0a244c63669501d27586828e3e312a"></a>kGuidoEvent&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga9b9a100c30794eb8829ac683423451ffaf6e8c9abc0a5925fa089688f4d2355e7"></a>kClefSel&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="gga9b9a100c30794eb8829ac683423451ffa762f081a14cbea0a61a8e9a2b36eb5a2"></a>kMeterSel&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="gga9b9a100c30794eb8829ac683423451ffa01d99178a36d3f652ff9411a27d4e4e6"></a>kGuidoScoreElementEnd&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
@@ -340,6 +380,8 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="ggac9a9d35b2e4fe8fa6682d773921ff4f6a291427b6a3c889b0ebab7d6a736efda6"></a>kSystem&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ggac9a9d35b2e4fe8fa6682d773921ff4f6a99cc8712f1dad58c4d97764be4208cb5"></a>kPage&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ggac9a9d35b2e4fe8fa6682d773921ff4f6a503bd5c11d47c11ca628f0d2d0d8e94f"></a>kGraceNote&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ggac9a9d35b2e4fe8fa6682d773921ff4f6a3dd90ba8cf18c7eb87357dbafc8d440c"></a>kClef&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ggac9a9d35b2e4fe8fa6682d773921ff4f6a13ace561e0580ca8e47379d8a1fdddff"></a>kMeter&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -1112,8 +1154,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="gaeaf8b6e4b98c47328aef5dee422c25d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaeaf8b6e4b98c47328aef5dee422c25d0">&#9670;&nbsp;</a></span>GuidoGetTimeMap()</h2>
+<a id="gaa248274f1dfb749e4c02d6e3248a8baf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa248274f1dfb749e4c02d6e3248a8baf">&#9670;&nbsp;</a></span>GuidoGetTimeMap()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1122,7 +1164,7 @@ Variables</h2></td></tr>
           <td class="memname"><a class="el" href="group__Errors.html#gaca62da9cddc3c9ab9b21ff9b450a2469">GuidoErrCode</a> GuidoGetTimeMap </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="GUIDOEngine_8h.html#a2e031f641402f8e82ea12ca70a007390">CARHandler</a>&#160;</td>
-          <td class="paramname"><em>gr</em>, </td>
+          <td class="paramname"><em>ar</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

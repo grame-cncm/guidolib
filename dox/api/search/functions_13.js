@@ -7,6 +7,7 @@ var searchData=
   ['_7eguidoscoremapadapter',['~GuidoScoreMapAdapter',['../group__ScoreMapAdapter.html#gabd8f68b8a9bcb836a633eb703246693a',1,'GUIDOScoreMapAdapter.h']]],
   ['_7emapcollector',['~MapCollector',['../classMapCollector.html#a58227c259abff887fca0b0f808431b27',1,'MapCollector']]],
   ['_7erectinfos',['~RectInfos',['../classRectInfos.html#abfd878f7508ade97e7b6ff41ee93a64e',1,'RectInfos']]],
+  ['_7erolledunrolledcollector',['~RolledUnrolledCollector',['../classRolledUnrolledCollector.html#ae66a8436d371b4dca61af2e7298404ac',1,'RolledUnrolledCollector']]],
   ['_7etimemapcollector',['~TimeMapCollector',['../classTimeMapCollector.html#a67d7cc1780725413f5cf6e05042446bd',1,'TimeMapCollector']]],
   ['_7evgdevice',['~VGDevice',['../classVGDevice.html#a4aa2dfa3fe6f0da2b3315fb8b042c9b4',1,'VGDevice']]],
   ['_7evgfont',['~VGFont',['../classVGFont.html#a916f3a70204724140ef5324ec7aec368',1,'VGFont']]],

@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -178,6 +178,9 @@ $(function() {
 <li>sARMeterMap
 : <a class="el" href="structTagParametersMaps.html#aef2454218534df62233508f1eeaff144">TagParametersMaps</a>
 </li>
+<li>sARMMRestMap
+: <a class="el" href="structTagParametersMaps.html#a5fd51e937c1cfe8c00088ea806c22ab2">TagParametersMaps</a>
+</li>
 <li>sARMusicalTagMap
 : <a class="el" href="structTagParametersMaps.html#a532de1eaf082671ed44dfe4fe26774a8">TagParametersMaps</a>
 </li>
@@ -251,7 +254,8 @@ $(function() {
 : <a class="el" href="classGRBreathMark.html#a66f70d49e023f309e7205fe4a4a40c09">GRBreathMark</a>
 </li>
 <li>Scale()
-: <a class="el" href="classTRect.html#ab1508aa76ea03a2d7a30d81258b96fb1">TRect&lt; T &gt;</a>
+: <a class="el" href="classNVRect.html#a7d2a078731ea717ec19302f5a771c144">NVRect</a>
+, <a class="el" href="classTRect.html#ab1508aa76ea03a2d7a30d81258b96fb1">TRect&lt; T &gt;</a>
 </li>
 <li>sClefTextAlign
 : <a class="el" href="classGRClef.html#a251c110b61c605e5f80df88c7e1f8a87">GRClef</a>
@@ -270,9 +274,6 @@ $(function() {
 </li>
 <li>secglue
 : <a class="el" href="classGRStaff.html#af905c086644039ed3fc839f5a5457504">GRStaff</a>
-</li>
-<li>secondbar
-: <a class="el" href="classGRSingleRest.html#a5d3d47d37778a86950b1673551ca2a4a">GRSingleRest</a>
 </li>
 <li>secondLeftHead
 : <a class="el" href="classGRGlissando_1_1GRGlissandoContext.html#a4056b0479b994923e0404163ddc3cf1f">GRGlissando::GRGlissandoContext</a>
@@ -344,14 +345,12 @@ $(function() {
 , <a class="el" href="classNVPoint.html#a73c9e35032d6256b43623cad6211215c">NVPoint</a>
 , <a class="el" href="classNVRect.html#a7cebb8e6f534b9267b5ad3825e75b80f">NVRect</a>
 </li>
-<li>set()
-: <a class="el" href="classTagParameter.html#a6a771fcb946c85b2741cfe8650278086">TagParameter</a>
-</li>
 <li>SET
 : <a class="el" href="classTagParameter.html#a9c231c671a7501d9527c926b2541af34ae9d0bc0a3e8cbd32a84007c515e11cde">TagParameter</a>
 </li>
 <li>set()
-: <a class="el" href="classTagParameterFloat.html#a256a3be5abe6195630dae7fa82443b39">TagParameterFloat</a>
+: <a class="el" href="classTagParameter.html#a6a771fcb946c85b2741cfe8650278086">TagParameter</a>
+, <a class="el" href="classTagParameterFloat.html#a256a3be5abe6195630dae7fa82443b39">TagParameterFloat</a>
 , <a class="el" href="classTagParameterRGBColor.html#ae321bf98771aa901becf3f2cefb7ab9b">TagParameterRGBColor</a>
 , <a class="el" href="classTagParameterString.html#a7391820a58e1bdc0202e311de769c021">TagParameterString</a>
 </li>
@@ -406,7 +405,9 @@ $(function() {
 : <a class="el" href="classKF__List.html#a61e8ac06b427a1bd67c7675311c74aaf">KF_List&lt; TYPE &gt;</a>
 </li>
 <li>setAuto()
-: <a class="el" href="classARTuplet.html#adf26ff81441b24a0267531f3a9446b52">ARTuplet</a>
+: <a class="el" href="classARNote.html#ace27e33836ba2b5260694dbde4060f3e">ARNote</a>
+, <a class="el" href="classARTuplet.html#adf26ff81441b24a0267531f3a9446b52">ARTuplet</a>
+, <a class="el" href="classGREmpty.html#a29d19a4f2b531832263f859b6644b41a">GREmpty</a>
 </li>
 <li>setAutoPos()
 : <a class="el" href="classARText.html#ab0da282deee2abd6f75e443d6626793a">ARText</a>
@@ -545,6 +546,9 @@ $(function() {
 <li>setDxy()
 : <a class="el" href="classGRAccidental.html#aba155eb100b8389b75bebee89d73212c">GRAccidental</a>
 </li>
+<li>setEnd()
+: <a class="el" href="classAROctava.html#aa3529fc366fa65d41ff97ca4356addac">AROctava</a>
+</li>
 <li>setEndDuration()
 : <a class="el" href="classARFeatheredBeam.html#a54d793087e8a2888eec1b4a8216fe74c">ARFeatheredBeam</a>
 </li>
@@ -585,6 +589,9 @@ $(function() {
 <li>setFirstRod()
 : <a class="el" href="classGRPossibleBreakState_1_1GRStaffAndState.html#a66d7bf0fe5fd177d8edcf3d86ad71667">GRPossibleBreakState::GRStaffAndState</a>
 , <a class="el" href="classGRPossibleBreakState_1_1GRVoiceTagsAndStaff.html#a74ddedde26cfa85cad194c366c9852ba">GRPossibleBreakState::GRVoiceTagsAndStaff</a>
+</li>
+<li>setFirstSegment()
+: <a class="el" href="classGRVolta.html#add3a13f32f0374fd90c0c7662f1b4ffa">GRVolta</a>
 </li>
 <li>setFirstSegmentDrawingState()
 : <a class="el" href="classGRSingleNote.html#a879e979b119fff47a9522f820394bcce">GRSingleNote</a>
@@ -679,6 +686,7 @@ $(function() {
 , <a class="el" href="classGRGlue.html#a783c2250b42216d57e8960e17e87497a">GRGlue</a>
 , <a class="el" href="classGRHarmony.html#a008e7892e3569b5b4fcf9d8a39072c83">GRHarmony</a>
 , <a class="el" href="classGRKey.html#a35cdd229b8be6f559972aefe57340331">GRKey</a>
+, <a class="el" href="classGRMeter.html#ace3d19229ba20936d0019a9b9f36215a">GRMeter</a>
 , <a class="el" href="classGRNotationElement.html#acd586353f7fd4039d8e20f72dbb04c41">GRNotationElement</a>
 , <a class="el" href="classGRRepeatBegin.html#a7426f8e385320e479826f8dd28ead507">GRRepeatBegin</a>
 , <a class="el" href="classGRRepeatEnd.html#afc385f5dd7ec4da2166b324e71987726">GRRepeatEnd</a>
@@ -755,11 +763,17 @@ $(function() {
 <li>setMeterParameters()
 : <a class="el" href="classGRStaff.html#a2f9184151eb0dc1940507b12ba0f09ed">GRStaff</a>
 </li>
+<li>setMMRest()
+: <a class="el" href="classGRRest.html#a577a9b96f0ff2f45b4737f809fc62bdd">GRRest</a>
+</li>
 <li>setMSCMatrix()
 : <a class="el" href="classGRSpacingMatrix.html#a60f223ff0ae7726b9dc7c351424d664a">GRSpacingMatrix</a>
 </li>
 <li>setMultiplicatedSize()
 : <a class="el" href="classGRGlobalStem.html#a95c3ba7da6ffeed0dd12ddef6e873d9b">GRGlobalStem</a>
+</li>
+<li>setMultiVoiceCollisions()
+: <a class="el" href="classGRStaffState.html#a38aa2fca8cdaf211ca318b9f6f156575">GRStaffState</a>
 </li>
 <li>SetMusicFont()
 : <a class="el" href="classDecoratorDevice.html#a49e5990faf8bb11b6918544cf16270ac">DecoratorDevice</a>
@@ -793,6 +807,7 @@ $(function() {
 <li>setNoteFormat()
 : <a class="el" href="classGRNote.html#adcb5780834617b81562ac8ab13024172">GRNote</a>
 , <a class="el" href="classGRSingleNote.html#a313ddbc0e7496613c8415128db454aa0">GRSingleNote</a>
+, <a class="el" href="classGRTab.html#a0f888bbc6fc1e89543111cdc873c5165">GRTab</a>
 </li>
 <li>setNoteParameters()
 : <a class="el" href="classGRStaff.html#aa21a31f389653d3393b7235aed2473da">GRStaff</a>
@@ -836,7 +851,7 @@ $(function() {
 : <a class="el" href="classARCluster.html#aaf2e8af3facd1c3ee23b0d49b51c1951">ARCluster</a>
 </li>
 <li>setOnOff()
-: <a class="el" href="classGRStaff.html#ae4cf46bf091b9a3151f04b0a0024c8c3">GRStaff</a>
+: <a class="el" href="classGRStaff.html#a6b9e8211ee8c53d61d1b77b5d1ae13f1">GRStaff</a>
 </li>
 <li>setOptForce()
 : <a class="el" href="classGRSpaceForceFunction2.html#a3a1406abafe4e99026188966565058f3">GRSpaceForceFunction2</a>
@@ -863,6 +878,12 @@ $(function() {
 : <a class="el" href="classARFactory.html#acf245665a06020e05c73e9d38d82c6f0">ARFactory</a>
 , <a class="el" href="classNoteAndChordFactory.html#a54654b1982d1ac5733a28fa472bbca1f">NoteAndChordFactory</a>
 </li>
+<li>setParamName()
+: <a class="el" href="classGuidoParser.html#a0a557917a7e36c958aef7c9131271998">GuidoParser</a>
+</li>
+<li>setParent()
+: <a class="el" href="classGRBeam.html#a2ae220afb48ce88bdae7e1567bcf4506">GRBeam</a>
+</li>
 <li>setParentCorrespondence()
 : <a class="el" href="classARPositionTag.html#aeb9de389c67bcad9a4e2b978a011796b">ARPositionTag</a>
 </li>
@@ -887,7 +908,7 @@ $(function() {
 <li>setPoints()
 : <a class="el" href="classARFactory.html#af54fd0dfd582aa533e1965f7c3d8f47b">ARFactory</a>
 , <a class="el" href="classARMusicalEvent.html#a5e4f2e3dbcc39eb751bf0e491e07437f">ARMusicalEvent</a>
-, <a class="el" href="classGRSimpleBeam.html#af5f01e30fdaae467f165736274fb1afb">GRSimpleBeam</a>
+, <a class="el" href="classGRSimpleBeam.html#a24766837257293c03c0fe4fc7c1e5ec9">GRSimpleBeam</a>
 </li>
 <li>setPointsNoDurationChange()
 : <a class="el" href="classARMusicalEvent.html#a4deae850d2ed54b3d3aadf2138cd702a">ARMusicalEvent</a>
@@ -966,7 +987,6 @@ $(function() {
 <li>setRelativeEndTimePosition()
 : <a class="el" href="classARMusicalObject.html#ada0f2d93cacbb5f6147b4b206c7ef3c8">ARMusicalObject</a>
 , <a class="el" href="classGRNotationElement.html#a9cb82e0f4bdc4b573a5615fba2c81df2">GRNotationElement</a>
-, <a class="el" href="classGRStaffManager.html#aa27ef842f567276fd2e3b5a8c160cca6">GRStaffManager</a>
 </li>
 <li>setRelativeTimePosition()
 : <a class="el" href="classARMusicalObject.html#a640ed0e2672181ed31c8aed2569e16c5">ARMusicalObject</a>
@@ -1048,10 +1068,6 @@ $(function() {
 <li>setStartPosition()
 : <a class="el" href="classARPositionTag.html#aaa971524eb3dd7e6b0f16a8d80adfb26">ARPositionTag</a>
 </li>
-<li>setStartTimePosition()
-: <a class="el" href="classARMusicalObject.html#a1097d316fd86d8b7ef593e35b4e473a3">ARMusicalObject</a>
-, <a class="el" href="classARNote.html#abc5f49be9c06f09a5ff60345d906eb7b">ARNote</a>
-</li>
 <li>setStemChanged()
 : <a class="el" href="classGREvent.html#acdeacda70dd0066afdfbe7301e3472cb">GREvent</a>
 </li>
@@ -1063,12 +1079,14 @@ $(function() {
 , <a class="el" href="classGRGlobalStem.html#ae382fdde600577a27acbd777573eba83">GRGlobalStem</a>
 , <a class="el" href="classGRNote.html#ade85398bd9d22686a785339d1500fba7">GRNote</a>
 , <a class="el" href="classGRSingleNote.html#aea38392f09e24ae995c537cce40052ee">GRSingleNote</a>
+, <a class="el" href="classGRTab.html#a2bf94cdee680135d5e4405d8a9dee2e1">GRTab</a>
 </li>
 <li>setStemLength()
-: <a class="el" href="classGREvent.html#acf609ac1ae86cb65e7184d97b976e8e7">GREvent</a>
-, <a class="el" href="classGRNote.html#a869a00fde744eed7e125af75f74ef95a">GRNote</a>
-, <a class="el" href="classGRSingleNote.html#a72e3f373ab25232023b266207a068eb4">GRSingleNote</a>
+: <a class="el" href="classGREvent.html#a1dbfc7d965e0846293cc54740712cf83">GREvent</a>
+, <a class="el" href="classGRNote.html#af0d2fb40f2f153169102536aec5f6a43">GRNote</a>
+, <a class="el" href="classGRSingleNote.html#ae7b67ffb57e46fc718f41cf9a7551dbe">GRSingleNote</a>
 , <a class="el" href="classGRStem.html#ad7984f3c9c7bf1eaae74a54a128c4311">GRStem</a>
+, <a class="el" href="classGRTab.html#a7ec844742bcc1017d4a65749c22184e8">GRTab</a>
 </li>
 <li>setStemOffsetStartPosition()
 : <a class="el" href="classGRSingleNote.html#a236694891a9f6ada487f55ad5b1d50a0">GRSingleNote</a>
@@ -1124,6 +1142,7 @@ $(function() {
 , <a class="el" href="classARMark.html#af2b02b261a88b78dac18f9fa7ac8b5ec">ARMark</a>
 , <a class="el" href="classARMeter.html#ac2365d578016c0c9db82207e0904bae2">ARMeter</a>
 , <a class="el" href="classARMusicalTag.html#a29979b1769d5994f9bcb2b9e058246d2">ARMusicalTag</a>
+, <a class="el" href="classAROctava.html#a1e3343d57f543587fd5a2880ea681508">AROctava</a>
 , <a class="el" href="classARPageFormat.html#a11430d578c8505bb4f1fd62200c6e29a">ARPageFormat</a>
 , <a class="el" href="classARPizzicato.html#a7f5db712e7383dba84cc70fea3db4d7f">ARPizzicato</a>
 , <a class="el" href="classARSpace.html#abb507539c85f9feaa08e31fca101e6bd">ARSpace</a>
@@ -1132,6 +1151,7 @@ $(function() {
 , <a class="el" href="classARStaffFormat.html#aebc778e4c5da3b561f3710ac76afc80b">ARStaffFormat</a>
 , <a class="el" href="classARTempo.html#a3b29474d69036b348d68a8bacb596a69">ARTempo</a>
 , <a class="el" href="classARText.html#a34192c112bc22c6cf0e5114bb4e35bc5">ARText</a>
+, <a class="el" href="classARTremolo.html#ab0da5361b2320c74dcbbfe4c2535f75b">ARTremolo</a>
 , <a class="el" href="classARTrill.html#a45f39124ed087c353d3861cb52ece48a">ARTrill</a>
 , <a class="el" href="classARTuplet.html#afe6c378e415e001736dce50eeb398c99">ARTuplet</a>
 , <a class="el" href="classARUnits.html#ac3793186a64229a66ba6a6a8161d23fa">ARUnits</a>
@@ -1180,7 +1200,7 @@ $(function() {
 : <a class="el" href="classGRTrill.html#a94411467c81acfa23bc733ab9c9126b4">GRTrill</a>
 </li>
 <li>setupInvertedTurn()
-: <a class="el" href="classGRTrill.html#a24bc8df20aac142c1dbfbec6f8460096">GRTrill</a>
+: <a class="el" href="classGRTrill.html#acd9fb0d887a7932d4122a7dc1f07e7aa">GRTrill</a>
 </li>
 <li>setupMord()
 : <a class="el" href="classGRTrill.html#abdaecd989f1dea9b39f79b83f75febed">GRTrill</a>
@@ -1261,7 +1281,7 @@ $(function() {
 : <a class="el" href="classARNoteName.html#a16d3b8ffee02c3b21c7482a800025740">ARNoteName</a>
 </li>
 <li>simpleBeams
-: <a class="el" href="classGRBeamSaveStruct.html#a74bbbbcb1425d704866c24c67168a7d9">GRBeamSaveStruct</a>
+: <a class="el" href="classGRBeamSaveStruct.html#a05922ea9336c84717b7c8ff79826d219">GRBeamSaveStruct</a>
 </li>
 <li>simplerods
 : <a class="el" href="classGRSystem.html#a93a49178d650e6ab6deba5d54afac3d2">GRSystem</a>
@@ -1289,6 +1309,9 @@ $(function() {
 </li>
 <li>sizey
 : <a class="el" href="structGuidoOnDrawDesc.html#a43bab2e53653fc11996d0dd7f580c52d">GuidoOnDrawDesc</a>
+</li>
+<li>slope()
+: <a class="el" href="structbeamRect.html#a868b60a5694fc6c86e9db1285dcc2ff3">beamRect</a>
 </li>
 <li>SNAP
 : <a class="el" href="classARPizzicato.html#a55b0b7275b44a1299b975d3e8b73a859a00657e406d506e3a0e098087761b3eb6">ARPizzicato</a>
@@ -1446,8 +1469,14 @@ $(function() {
 <li>startDate
 : <a class="el" href="structLimitParams.html#a5bc535021651aa8ec01c6ed4a8cfb270">LimitParams</a>
 </li>
+<li>startDraw()
+: <a class="el" href="classGRText.html#a81d56429fe9fd931026c9c72cdd7e1cf">GRText</a>
+</li>
 <li>startElement
 : <a class="el" href="classGRSystemStartEndStruct.html#a3258e26aced1dd8dd241e6e792ae66c4">GRSystemStartEndStruct</a>
+</li>
+<li>startElt()
+: <a class="el" href="classGRBeam.html#ad3c70cca34ba0a8dbc4d5564999146d8">GRBeam</a>
 </li>
 <li>startflag
 : <a class="el" href="classGRSystemStartEndStruct.html#ac5d0e95b1b1a4a75ce95be3249384bfb">GRSystemStartEndStruct</a>

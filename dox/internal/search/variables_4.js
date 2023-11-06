@@ -11,7 +11,7 @@ var searchData=
   ['endstr',['endstr',['../classARDummyRangeEnd.html#af7803b7a45357eb0b80b0808874bb262',1,'ARDummyRangeEnd']]],
   ['entry1',['entry1',['../classGRPenaltyEntry.html#a3198bdb4816b36ba60d01582f6720b80',1,'GRPenaltyEntry']]],
   ['entry2',['entry2',['../classGRPenaltyEntry.html#a2fe0033af9f779ad3f0f4a93d6a33858',1,'GRPenaltyEntry']]],
-  ['ep',['ep',['../classARPositionTag.html#ae7e1d0bbcbd474a3216d7436de479222',1,'ARPositionTag::ep()'],['../classGRPositionTag.html#a3cb795a40ca091e514591645bd274e79',1,'GRPositionTag::ep()']]],
+  ['ep',['ep',['../classARPositionTag.html#ae7e1d0bbcbd474a3216d7436de479222',1,'ARPositionTag']]],
   ['erase',['erase',['../structGPaintStruct.html#a915ba3986fff6fa4acb2a8f0ec6f5cd5',1,'GPaintStruct']]],
   ['error',['error',['../classARMusicalTag.html#a4c8973cd5c57307ff0f27777aa36c2a1',1,'ARMusicalTag']]],
   ['ev',['ev',['../classVoiceEvent.html#a0ed8228c883ac55033265e948db9f997',1,'VoiceEvent']]],

@@ -10,5 +10,6 @@ var searchData=
   ['resizepage2music',['resizePage2Music',['../structGuidoLayoutSettings.html#a06fe5fe4aac78d3edda85b16d125707e',1,'GuidoLayoutSettings']]],
   ['resizepagetomusic',['resizePageToMusic',['../group__EngineAdapter.html#gaffb6e83c68f7227e3e1dbf06994e1a5a',1,'GUIDOEngineAdapter.h']]],
   ['right',['right',['../structGPaintStruct.html#a62acc46dacc9e4e3995fedabb8f8ffde',1,'GPaintStruct']]],
+  ['rolledunrolledcollector',['RolledUnrolledCollector',['../classRolledUnrolledCollector.html',1,'RolledUnrolledCollector'],['../classRolledUnrolledCollector.html#a62ec2c80e518f99f091909b5afeb488a',1,'RolledUnrolledCollector::RolledUnrolledCollector()']]],
   ['reduced_20proportional_20representation',['Reduced proportional representation',['../group__Rproportional.html',1,'']]]
 ];

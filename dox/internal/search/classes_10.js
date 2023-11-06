@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['vareval',['vareval',['../structGuidoParser_1_1vareval.html',1,'GuidoParser']]],
+  ['variable',['variable',['../structGuidoParser_1_1variable.html',1,'GuidoParser']]],
   ['vgcolor',['VGColor',['../classVGColor.html',1,'']]],
   ['vgdevice',['VGDevice',['../classVGDevice.html',1,'']]],
   ['vgfont',['VGFont',['../classVGFont.html',1,'']]],

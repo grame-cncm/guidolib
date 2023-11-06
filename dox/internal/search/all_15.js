@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['width',['Width',['../classNVRect.html#af716f311ac9cfdb0e47d414c25e9d865',1,'NVRect::Width()'],['../classTRect.html#a587974480bc540f0bbeb5e4109de946d',1,'TRect::Width()'],['../structPianoRoll_1_1DrawParams.html#a26817ac0e950ab19efa7ad66a72b492b',1,'PianoRoll::DrawParams::width()'],['../structGuidoPageFormat.html#ac88646aafb4d7b4ee249c4f198a7812c',1,'GuidoPageFormat::width()']]],
+  ['width',['width',['../structPianoRoll_1_1DrawParams.html#a26817ac0e950ab19efa7ad66a72b492b',1,'PianoRoll::DrawParams::width()'],['../structGuidoPageFormat.html#ac88646aafb4d7b4ee249c4f198a7812c',1,'GuidoPageFormat::width()'],['../structbeamRect.html#a3a02b52d00cf9b7faabf3c146e7fea71',1,'beamRect::width()'],['../classNVRect.html#af716f311ac9cfdb0e47d414c25e9d865',1,'NVRect::Width()'],['../classTRect.html#a587974480bc540f0bbeb5e4109de946d',1,'TRect::Width()']]],
   ['writeallextents',['writeAllExtents',['../classGRSpaceForceFunction2.html#a2f6f628052f6fb5aefd127d964dbbea6',1,'GRSpaceForceFunction2']]],
   ['writecolor',['writeColor',['../group__VGSys.html#gaedc3c21b41737a04d17c0a34ad38a7cc',1,'AbstractDevice.h']]],
   ['writefont',['writeFont',['../group__VGSys.html#ga6ead5f599703bff0ecd6aabbd65879e9',1,'AbstractDevice.h']]],

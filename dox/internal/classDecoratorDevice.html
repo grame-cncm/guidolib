@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -109,6 +109,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a07bfd07c1aad9520bc6d203727772b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fdca3c946cee63d2a1490af46f18cc8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDecoratorDevice.html#a1fdca3c946cee63d2a1490af46f18cc8">Arc</a> (float left, float top, float right, float bottom, float startX, float startY, float endX, float endY)</td></tr>
 <tr class="separator:a1fdca3c946cee63d2a1490af46f18cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af012cc311ae3b52929990d9762e68acc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDecoratorDevice.html#af012cc311ae3b52929990d9762e68acc">FrameEllipse</a> (float x, float y, float width, float height)</td></tr>
+<tr class="memdesc:af012cc311ae3b52929990d9762e68acc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws an ellipse.  <a href="#af012cc311ae3b52929990d9762e68acc">More...</a><br /></td></tr>
+<tr class="separator:af012cc311ae3b52929990d9762e68acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8657a93c942441149e5dbdb3e35c02dd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDecoratorDevice.html#a8657a93c942441149e5dbdb3e35c02dd">Ellipse</a> (float x, float y, float width, float height, const <a class="el" href="classVGColor.html">VGColor</a> &amp;color)</td></tr>
+<tr class="memdesc:a8657a93c942441149e5dbdb3e35c02dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a filled ellipse.  <a href="#a8657a93c942441149e5dbdb3e35c02dd">More...</a><br /></td></tr>
+<tr class="separator:a8657a93c942441149e5dbdb3e35c02dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a373d0715ec33d15f435706a24e90aca4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDecoratorDevice.html#a373d0715ec33d15f435706a24e90aca4">Triangle</a> (float x1, float y1, float x2, float y2, float x3, float y3)</td></tr>
 <tr class="separator:a373d0715ec33d15f435706a24e90aca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4991fca5eb5590ea87d39871c209a65e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDecoratorDevice.html#a4991fca5eb5590ea87d39871c209a65e">Polygon</a> (const float *xCoords, const float *yCoords, int count)</td></tr>
@@ -847,6 +853,64 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a8657a93c942441149e5dbdb3e35c02dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8657a93c942441149e5dbdb3e35c02dd">&#9670;&nbsp;</a></span>Ellipse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DecoratorDevice::Ellipse </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classVGColor.html">VGColor</a> &amp;&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws a filled ellipse. </p>
+
+<p>Implements <a class="el" href="classVGDevice.html#a83b59160d483947216385bbf90ba5e82">VGDevice</a>.</p>
+
+</div>
+</div>
 <a id="a16c729e9556f5d29588b0c57356cfa12"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a16c729e9556f5d29588b0c57356cfa12">&#9670;&nbsp;</a></span>EndDraw()</h2>
 
@@ -923,6 +987,58 @@ Additional Inherited Members</h2></td></tr>
 <p>Draws a frame using the specified coordinates. The frame is outlined by using the current pen, but not filled. </p>
 
 <p>Implements <a class="el" href="classVGDevice.html#afcf2f3597e222f658e20a312c314e7dd">VGDevice</a>.</p>
+
+</div>
+</div>
+<a id="af012cc311ae3b52929990d9762e68acc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af012cc311ae3b52929990d9762e68acc">&#9670;&nbsp;</a></span>FrameEllipse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DecoratorDevice::FrameEllipse </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws an ellipse. </p>
+
+<p>Implements <a class="el" href="classVGDevice.html#a6c60757053aacb92d3a5666ee9b1fe15">VGDevice</a>.</p>
 
 </div>
 </div>

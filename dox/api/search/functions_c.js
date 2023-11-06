@@ -7,6 +7,7 @@ var searchData=
   ['poppencolor',['PopPenColor',['../classVGDevice.html#a4b06de32ec25648197967df3fe262f48',1,'VGDevice']]],
   ['poppenwidth',['PopPenWidth',['../classVGDevice.html#a8b8a02757fdfd432ef6b81de52997168',1,'VGDevice']]],
   ['print',['print',['../classVGColor.html#aecda2f760a69e648d193003a09873ad3',1,'VGColor']]],
+  ['process',['process',['../classRolledUnrolledCollector.html#ae5b855d2e79e9ce568f43d4fba7c7a95',1,'RolledUnrolledCollector']]],
   ['pushfillcolor',['PushFillColor',['../classVGDevice.html#a35c25bca4ad9abca718658edf4863a4f',1,'VGDevice']]],
   ['pushpen',['PushPen',['../classVGDevice.html#ab5b5eb6b33ec98e2b5c7261fba993e7d',1,'VGDevice']]],
   ['pushpencolor',['PushPenColor',['../classVGDevice.html#a816821c8adc6825605373e5bd766b98d',1,'VGDevice']]],

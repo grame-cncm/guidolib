@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -73,8 +73,17 @@ $(function() {
 <li>incBeamCount()
 : <a class="el" href="classGREvent.html#ad46e5a18e2c7eeb1efb4d714cafa7d65">GREvent</a>
 </li>
+<li>incLevel()
+: <a class="el" href="classGRBeam.html#a835738beccf586c4f2906345c37fe346">GRBeam</a>
+</li>
+<li>includes()
+: <a class="el" href="structbeamRect.html#aa98d3adf0d5518072dbc8793323856a7">beamRect</a>
+</li>
 <li>infos()
 : <a class="el" href="classRectInfos.html#aedb403477ff040bbe5458280c7677f18">RectInfos</a>
+</li>
+<li>inhibitNextReset2Key()
+: <a class="el" href="classGRStaff.html#a8293a2382fa6625926e4cd7817f69db7">GRStaff</a>
 </li>
 <li>init()
 : <a class="el" href="classHtmlColor.html#aceb86d1907afc3f55edd847677b6b6ea">HtmlColor</a>
@@ -114,7 +123,7 @@ $(function() {
 : <a class="el" href="classARVoiceManager.html#a227b0451af7620740a26d69b78327465">ARVoiceManager</a>
 </li>
 <li>InsertDisplayDurationTag()
-: <a class="el" href="classARMusicalVoice.html#a0872f5b5b454471dc3f3b64a27c14864">ARMusicalVoice</a>
+: <a class="el" href="classARMusicalVoice.html#a29d3dfaf31de1de1db67f0d846f8f9ed">ARMusicalVoice</a>
 </li>
 <li>Intersect()
 : <a class="el" href="classTRect.html#ac000b99fb31c4f799eb2e15c3764a2cf">TRect&lt; T &gt;</a>
@@ -247,6 +256,10 @@ $(function() {
 : <a class="el" href="classARMusicalObject.html#aec17f0613d53fe1bbcd267b474d6e23f">ARMusicalObject</a>
 , <a class="el" href="classARStaff.html#aa7e604ddbcd5a6e745e6bdae825f4554">ARStaff</a>
 </li>
+<li>isARTab()
+: <a class="el" href="classARMusicalObject.html#a78a5ba24d0cfc4c5774da276b9901969">ARMusicalObject</a>
+, <a class="el" href="classARTab.html#a7136c6c3d7f0e25296e89f2d706fb55c">ARTab</a>
+</li>
 <li>isARTempo()
 : <a class="el" href="classARMusicalObject.html#a0df2918b43c0d68912914b80d9f96101">ARMusicalObject</a>
 , <a class="el" href="classARTempo.html#af91bedd3b583752ea547baeab2eefd2a">ARTempo</a>
@@ -257,6 +270,7 @@ $(function() {
 </li>
 <li>isAuto()
 : <a class="el" href="classARNote.html#a0d070d522a762fbb4df0d3161a4eb9e2">ARNote</a>
+, <a class="el" href="classGREmpty.html#a9fa4401b33666161ddc73d99b9eead69">GREmpty</a>
 </li>
 <li>isAutoBeam()
 : <a class="el" href="classGRAutoBeam.html#a5d63172c916bdef7217cdaad34b8fd6e">GRAutoBeam</a>
@@ -348,20 +362,32 @@ $(function() {
 , <a class="el" href="classGRNotationElement.html#a94c2f88ae038c736dbf5539798a7738e">GRNotationElement</a>
 </li>
 <li>isGREvent()
-: <a class="el" href="classGREvent.html#abf6a4bb231049d56adbd190feeacd759">GREvent</a>
+: <a class="el" href="classGREvent.html#a3932c0bc2337c2717eb5f04506abea5d">GREvent</a>
 , <a class="el" href="classGRNotationElement.html#a4315ae85c9683387ebf152138ad66ba6">GRNotationElement</a>
 </li>
 <li>isGREventClass()
 : <a class="el" href="classGObject.html#a0f35fc58ce42c1ee2b1c64618b3dec07">GObject</a>
 , <a class="el" href="classGREvent.html#ad6b4c9120410a6be3de51fd80fc84503">GREvent</a>
 </li>
+<li>isGRFingering()
+: <a class="el" href="classGRFingering.html#ab83e2a11af4f119d44c42304dbec167b">GRFingering</a>
+, <a class="el" href="classGRNotationElement.html#a980f33938ef46e850fd7699032d2a47f">GRNotationElement</a>
+</li>
 <li>isGRGlue()
 : <a class="el" href="classGRGlue.html#a53415a82e10ba26b6d4f8052b22a4fd3">GRGlue</a>
 , <a class="el" href="classGRNotationElement.html#a8938dd80e77577b3e42dc22806145422">GRNotationElement</a>
 </li>
+<li>isGRHarmony()
+: <a class="el" href="classGRHarmony.html#ade418cb5a80a6d988a3905af017f404c">GRHarmony</a>
+, <a class="el" href="classGRNotationElement.html#ab71aa087b67e8a1c1ba9b319f524b9bd">GRNotationElement</a>
+</li>
 <li>isGRNote()
 : <a class="el" href="classGRNotationElement.html#ae2dc81649e6009ff16e0d84469e84c45">GRNotationElement</a>
 , <a class="el" href="classGRNote.html#a76778d0730de72723be4142927d89373">GRNote</a>
+</li>
+<li>isGRSlur()
+: <a class="el" href="classGRNotationElement.html#a03ae6828d6325b60d023410f77ac8aea">GRNotationElement</a>
+, <a class="el" href="classGRSlur.html#aaf875610dcdb07d9d052c50e626b04fe">GRSlur</a>
 </li>
 <li>isGRTempo()
 : <a class="el" href="classGRNotationElement.html#a6409e25cc6edc6e13930c9d375154ea0">GRNotationElement</a>
@@ -376,6 +402,9 @@ $(function() {
 </li>
 <li>isHideAutoNaturalsSet()
 : <a class="el" href="classARKey.html#a0ada89fa9907be1fec1e2b36c96dcaf1">ARKey</a>
+</li>
+<li>isInChord()
+: <a class="el" href="classGREmpty.html#a9049a8d8a50b886731348d3a431ba98a">GREmpty</a>
 </li>
 <li>isInHeader()
 : <a class="el" href="classARMusicalTag.html#aead5336479991b57773241f5c58a2e7f">ARMusicalTag</a>
@@ -413,6 +442,9 @@ $(function() {
 <li>isOdd()
 : <a class="el" href="classFraction.html#ad5ca9cc610f8870726b898663454c24a">Fraction</a>
 </li>
+<li>isPitched()
+: <a class="el" href="classARTremolo.html#ad56f1e3efaf1ad0713e6f9bc07aca75c">ARTremolo</a>
+</li>
 <li>isPositionAbove()
 : <a class="el" href="classARTuplet.html#a51a25c69bc17be7b6423165c99d508d5">ARTuplet</a>
 </li>
@@ -431,7 +463,7 @@ $(function() {
 : <a class="el" href="classARTremolo.html#affdde6a64c6eb06934632fd56eb2981b">ARTremolo</a>
 </li>
 <li>isSingleNote()
-: <a class="el" href="classGRNotationElement.html#af7f244de090673d6d216eddd9a1dd30f">GRNotationElement</a>
+: <a class="el" href="classGRNotationElement.html#a89232bcc7e0ac5615c24723aff7ffb30">GRNotationElement</a>
 , <a class="el" href="classGRSingleNote.html#a02c5b44bd14bf0241fb4675d45fd9185">GRSingleNote</a>
 </li>
 <li>isSingleUnit()
@@ -483,12 +515,22 @@ $(function() {
 : <a class="el" href="classGRBar.html#ab06e39582f378c7c2df474e5291cc90e">GRBar</a>
 , <a class="el" href="classGRRepeatBegin.html#a8fcd7ab0eee77ebfa1496479bafcdf5a">GRRepeatBegin</a>
 </li>
+<li>isTAB()
+: <a class="el" href="classARStaffFormat.html#ad565d1592885bad9c35795bbcc555ea6">ARStaffFormat</a>
+</li>
+<li>isTab()
+: <a class="el" href="classGRSingleNote.html#a1cdc88069e930e93c2e8cb17dc85ae8a">GRSingleNote</a>
+, <a class="el" href="classGRTab.html#a3a9d0b323244d2753cf1468f08fbc470">GRTab</a>
+</li>
 <li>isText()
 : <a class="el" href="classGRNotationElement.html#ab230944a4935525de95fc2d8993d88de">GRNotationElement</a>
 , <a class="el" href="classGRText.html#af36565f97ff1901d42b1c3fff63746fe">GRText</a>
 </li>
 <li>isTextBold()
 : <a class="el" href="classARTuplet.html#a036a5327f6d20132befe1afb89c9bf07">ARTuplet</a>
+</li>
+<li>isTied()
+: <a class="el" href="classARTab.html#ae42071fe974e28e8b14223e714cfc372">ARTab</a>
 </li>
 <li>isTwoNotesTremolo()
 : <a class="el" href="classGRTremolo.html#a039f20ba51d22cd68fe97759980b3d07">GRTremolo</a>

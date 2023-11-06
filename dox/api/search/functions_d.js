@@ -6,5 +6,6 @@ var searchData=
   ['releaseimagedata',['ReleaseImageData',['../classVGDevice.html#ad867104bd8b2de1bec574e9f538e8628',1,'VGDevice']]],
   ['removecolortovoice',['removeColorToVoice',['../group__PianoRollAdapter.html#ga1986103f63b645898d9c4cc70a67e940',1,'removeColorToVoice(PianoRoll *pr, int voiceNum):&#160;GUIDOPianoRollAdapter.h'],['../group__ReducedProportionalAdapter.html#gaafcbadec167aae2300ecb28e6ad8c40a',1,'removeColorToVoice(RProportional *pr, int voiceNum):&#160;GUIDOReducedProportionalAdapter.h']]],
   ['resetstream',['resetStream',['../group__parsercpp.html#ga378372dc83ca83fc527b70d9530f85a5',1,'GUIDOEngineAdapter.h']]],
-  ['resizepagetomusic',['resizePageToMusic',['../group__EngineAdapter.html#gaffb6e83c68f7227e3e1dbf06994e1a5a',1,'GUIDOEngineAdapter.h']]]
+  ['resizepagetomusic',['resizePageToMusic',['../group__EngineAdapter.html#gaffb6e83c68f7227e3e1dbf06994e1a5a',1,'GUIDOEngineAdapter.h']]],
+  ['rolledunrolledcollector',['RolledUnrolledCollector',['../classRolledUnrolledCollector.html#a62ec2c80e518f99f091909b5afeb488a',1,'RolledUnrolledCollector']]]
 ];

@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -98,10 +98,14 @@ Public Types</h2></td></tr>
 <a class="el" href="classARTrill.html#adbcb3335958b2995c428134fbec584c7a2e8bcc9815d4f92a526b74116b76d657">MORD</a>
  }</td></tr>
 <tr class="separator:adbcb3335958b2995c428134fbec584c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e33f6cf34f7f007a006ca0123aa22af"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22af">TYPE</a> { <a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22afa3eef8b595b5b0bbfc5a5e452c564b9ed">kPrall</a>, 
+<tr class="memitem:a8e33f6cf34f7f007a006ca0123aa22af"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22af">TYPE</a> { <br />
+&#160;&#160;<a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22afa3eef8b595b5b0bbfc5a5e452c564b9ed">kPrall</a>, 
 <a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22afa3373a4c4d1c33ea6917632168643858b">kInverted</a>, 
+<a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22afa5f6e3f2bbe28c4964d0221154d11304e">kInvertedBar</a>, 
 <a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22afaed4d0511263278d6560de4608c59afbd">kPrallPrall</a>, 
-<a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22afacf4f978087b4893e3a52fac84c483df7">kPrallInverted</a>
+<br />
+&#160;&#160;<a class="el" href="classARTrill.html#a8e33f6cf34f7f007a006ca0123aa22afacf4f978087b4893e3a52fac84c483df7">kPrallInverted</a>
+<br />
  }</td></tr>
 <tr class="separator:a8e33f6cf34f7f007a006ca0123aa22af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ed0a2299a12570c62a31433e8a5765e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a4ed0a2299a12570c62a31433e8a5765e">POS</a> { <a class="el" href="classARTrill.html#a4ed0a2299a12570c62a31433e8a5765ea55dce50d561ac07a8730e93d21e4c9e1">BELOW</a>, 
@@ -191,6 +195,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa797cd8cd08a002772d7bdb3dccbb706"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fc66416ada01eac4a0baa31f2f01a05"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a0fc66416ada01eac4a0baa31f2f01a05">getShowTR</a> () const</td></tr>
 <tr class="separator:a0fc66416ada01eac4a0baa31f2f01a05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc4331b51ad5c2334e144c82021ccb82"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#acc4331b51ad5c2334e144c82021ccb82">getShowWavyLine</a> () const</td></tr>
+<tr class="separator:acc4331b51ad5c2334e144c82021ccb82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18630e2d0b48739bf7db6c376ee3773e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classARTrill.html#a4ed0a2299a12570c62a31433e8a5765e">POS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a18630e2d0b48739bf7db6c376ee3773e">getTrillPos</a> () const</td></tr>
 <tr class="separator:a18630e2d0b48739bf7db6c376ee3773e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ac06608cb89aa86f18da8b0830e15e7"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a1ac06608cb89aa86f18da8b0830e15e7">getTrilledNote</a> () const</td></tr>
@@ -303,8 +309,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae8a44a0370935dc7561c9665315dc47f inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a00afb14e07a8ebd63e091b85542228 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a9a00afb14e07a8ebd63e091b85542228">getRelativeEndTimePosition</a> () const</td></tr>
 <tr class="separator:a9a00afb14e07a8ebd63e091b85542228 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1097d316fd86d8b7ef593e35b4e473a3 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a1097d316fd86d8b7ef593e35b4e473a3">setStartTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;pos)</td></tr>
-<tr class="separator:a1097d316fd86d8b7ef593e35b4e473a3 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a640ed0e2672181ed31c8aed2569e16c5 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a640ed0e2672181ed31c8aed2569e16c5">setRelativeTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;newRelativeTimePosition)</td></tr>
 <tr class="separator:a640ed0e2672181ed31c8aed2569e16c5 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada0f2d93cacbb5f6147b4b206c7ef3c8 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#ada0f2d93cacbb5f6147b4b206c7ef3c8">setRelativeEndTimePosition</a> (const <a class="el" href="classFraction.html">TYPE_TIMEPOSITION</a> &amp;tp)</td></tr>
@@ -331,6 +335,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a751f462e2d09c0d1a7c4ece0a6446ef6 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a220511ef444c1d3a939641a4cca5cc3f inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classARNote.html">ARNote</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a220511ef444c1d3a939641a4cca5cc3f">isARNote</a> () const</td></tr>
 <tr class="separator:a220511ef444c1d3a939641a4cca5cc3f inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a78a5ba24d0cfc4c5774da276b9901969">isARTab</a> ()</td></tr>
+<tr class="separator:a78a5ba24d0cfc4c5774da276b9901969 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classARTab.html">ARTab</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#ad6fd19bc33aba3960b7e0057f19eef73">isARTab</a> () const</td></tr>
+<tr class="separator:ad6fd19bc33aba3960b7e0057f19eef73 inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#adcf3eb9c4691a82c1e26996ee339c32e">isARCoda</a> ()</td></tr>
 <tr class="separator:adcf3eb9c4691a82c1e26996ee339c32e inherit pub_methods_classARMusicalObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c87794126884c4f545fb65f63ddb1c9 inherit pub_methods_classARMusicalObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classARMusicalObject.html">ARMusicalObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARMusicalObject.html#a8c87794126884c4f545fb65f63ddb1c9">isARSegno</a> ()</td></tr>
@@ -452,6 +460,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a4217818a4306d0396ccdb0f78641cc80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18e7d0a4f92b5446805285b60003a704"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a18e7d0a4f92b5446805285b60003a704">fShowTR</a></td></tr>
 <tr class="separator:a18e7d0a4f92b5446805285b60003a704"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14604952c02baeaf15334ac3cd003beb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a14604952c02baeaf15334ac3cd003beb">fShowWavyLine</a></td></tr>
+<tr class="separator:a14604952c02baeaf15334ac3cd003beb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac648b55ba5523f585c6e8c017113aa56"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classARTrill.html#a4ed0a2299a12570c62a31433e8a5765e">POS</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#ac648b55ba5523f585c6e8c017113aa56">fTrillPosition</a></td></tr>
 <tr class="separator:ac648b55ba5523f585c6e8c017113aa56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dc3d9731a6b1e200f4c1ea4f3f4ed11"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classARTrill.html#a0dc3d9731a6b1e200f4c1ea4f3f4ed11">fAdx</a></td></tr>
@@ -570,6 +580,7 @@ Additional Inherited Members</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8e33f6cf34f7f007a006ca0123aa22afa3eef8b595b5b0bbfc5a5e452c564b9ed"></a>kPrall&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a8e33f6cf34f7f007a006ca0123aa22afa3373a4c4d1c33ea6917632168643858b"></a>kInverted&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a8e33f6cf34f7f007a006ca0123aa22afa5f6e3f2bbe28c4964d0221154d11304e"></a>kInvertedBar&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a8e33f6cf34f7f007a006ca0123aa22afaed4d0511263278d6560de4608c59afbd"></a>kPrallPrall&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a8e33f6cf34f7f007a006ca0123aa22afacf4f978087b4893e3a52fac84c483df7"></a>kPrallInverted&#160;</td><td class="fielddoc"></td></tr>
 </table>
@@ -912,6 +923,31 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool ARTrill::getShowTR </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc4331b51ad5c2334e144c82021ccb82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc4331b51ad5c2334e144c82021ccb82">&#9670;&nbsp;</a></span>getShowWavyLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ARTrill::getShowWavyLine </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1374,6 +1410,28 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool ARTrill::fShowTR</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a14604952c02baeaf15334ac3cd003beb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14604952c02baeaf15334ac3cd003beb">&#9670;&nbsp;</a></span>fShowWavyLine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ARTrill::fShowWavyLine</td>
         </tr>
       </table>
   </td>

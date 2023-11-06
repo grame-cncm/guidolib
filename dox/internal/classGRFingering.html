@@ -24,7 +24,7 @@
 					<tr style="height: 56px;">
 						<td id="projectalign" style="padding-left: 0.5em;">
 							<div id="projectname">GUIDOLib
-								&#160;<span id="projectnumber">1.6.8</span>
+								&#160;<span id="projectnumber">1.7.7</span>
 							</div>
 							<div id="projectbrief">Guido Engine Internal Documentation</div>
 						</td>
@@ -101,6 +101,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad3b754bb53e98e93a493b0ee7a48803a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae11d6885a5c439bc4b5730f9e0db0e48"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRFingering.html#ae11d6885a5c439bc4b5730f9e0db0e48">tellPosition</a> (<a class="el" href="classGObject.html">GObject</a> *caller, const <a class="el" href="classNVPoint.html">NVPoint</a> &amp;inPosition)</td></tr>
 <tr class="separator:ae11d6885a5c439bc4b5730f9e0db0e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ad120e803a8221c750c774d2d2a85d5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRFingering.html#a5ad120e803a8221c750c774d2d2a85d5">OnDraw</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc) const</td></tr>
+<tr class="separator:a5ad120e803a8221c750c774d2d2a85d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab83e2a11af4f119d44c42304dbec167b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classGRFingering.html">GRFingering</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRFingering.html#ab83e2a11af4f119d44c42304dbec167b">isGRFingering</a> ()</td></tr>
+<tr class="separator:ab83e2a11af4f119d44c42304dbec167b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a748467eabae98bce57062d0bd7a4b8a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRFingering.html#a748467eabae98bce57062d0bd7a4b8a9">tellPositionEnd</a> (<a class="el" href="classGRSingleNote.html">GRSingleNote</a> *caller, const <a class="el" href="classNVPoint.html">NVPoint</a> &amp;inPosition)</td></tr>
+<tr class="separator:a748467eabae98bce57062d0bd7a4b8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39df8603daa749942c12838947f78716"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classARFingering.html">ARFingering</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRFingering.html#a39df8603daa749942c12838947f78716">getARFingering</a> () const</td></tr>
 <tr class="separator:a39df8603daa749942c12838947f78716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classGRText"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classGRText')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classGRText.html">GRText</a></td></tr>
@@ -112,10 +118,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa7e9f14c420b0fb9f1888bb314ea209e inherit pub_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6574103ab5d2a6a4ac8de1917a5fdd0 inherit pub_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#ab6574103ab5d2a6a4ac8de1917a5fdd0">addAssociation</a> (<a class="el" href="classGRNotationElement.html">GRNotationElement</a> *el)</td></tr>
 <tr class="separator:ab6574103ab5d2a6a4ac8de1917a5fdd0 inherit pub_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a770d3a728e5eee0a460f336d1f7e60f5 inherit pub_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#a770d3a728e5eee0a460f336d1f7e60f5">OnDraw</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc) const</td></tr>
-<tr class="separator:a770d3a728e5eee0a460f336d1f7e60f5 inherit pub_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac75d2090eac1e90ec34e7acbdc74c314 inherit pub_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classTRect.html">FloatRect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#ac75d2090eac1e90ec34e7acbdc74c314">getTextMetrics</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc, const <a class="el" href="classGRStaff.html">GRStaff</a> *staff) const</td></tr>
 <tr class="separator:ac75d2090eac1e90ec34e7acbdc74c314 inherit pub_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a951d66c867d51042e1c7886225ae33a4 inherit pub_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#a951d66c867d51042e1c7886225ae33a4">getLineHeight</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc) const</td></tr>
+<tr class="separator:a951d66c867d51042e1c7886225ae33a4 inherit pub_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afec60fb27db2936e3d565cd152e6d8d2 inherit pub_methods_classGRText"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classARText.html">ARText</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#afec60fb27db2936e3d565cd152e6d8d2">getARText</a> () const</td></tr>
 <tr class="separator:afec60fb27db2936e3d565cd152e6d8d2 inherit pub_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e6db2029e42b2f4d99d04d536b538fb inherit pub_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#a5e6db2029e42b2f4d99d04d536b538fb">getTextAlign</a> () const</td></tr>
@@ -271,8 +277,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aafab58c56e6c3c0872c7ec000a92d25e inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4aa03df60c37da89d66073db59b5e78e inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#a4aa03df60c37da89d66073db59b5e78e">OnDrawText</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc, const char *cp, int inCharCount=-1) const</td></tr>
 <tr class="separator:a4aa03df60c37da89d66073db59b5e78e inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06cd30d073aa6d7d8a02c01b90825a60 inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#a06cd30d073aa6d7d8a02c01b90825a60">DrawSymbol</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc, unsigned int inSymbol, float inOffsetX=0, float inOffsetY=0, float inFontSize=0) const</td></tr>
-<tr class="separator:a06cd30d073aa6d7d8a02c01b90825a60 inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25a7c4839f73584abb4b381c0f02b287 inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#a25a7c4839f73584abb4b381c0f02b287">DrawSymbol</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc, unsigned int inSymbol, float x=0, float y=0, float size=0) const</td></tr>
+<tr class="separator:a25a7c4839f73584abb4b381c0f02b287 inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3f34b4e65d48894faebdd57b3524632 inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#ac3f34b4e65d48894faebdd57b3524632">DrawNumericSymbols</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc, const char *symbols, float x, float y, float size, float spacing=DEFAULTNUMERICSPACE) const</td></tr>
+<tr class="separator:ac3f34b4e65d48894faebdd57b3524632 inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38faf838f0fa0118a62a9fa85f1faad2 inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#a38faf838f0fa0118a62a9fa85f1faad2">Show</a> (bool status)</td></tr>
 <tr class="separator:a38faf838f0fa0118a62a9fa85f1faad2 inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0258fcfad67be140534940f52acdc1d6 inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#a0258fcfad67be140534940f52acdc1d6">GetShow</a> () const</td></tr>
@@ -331,6 +339,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a57580cd043207a88de7de8cf8a99833a inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94c2f88ae038c736dbf5539798a7738e inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classGRDynamics.html">GRDynamics</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#a94c2f88ae038c736dbf5539798a7738e">isGRDynamic</a> () const</td></tr>
 <tr class="separator:a94c2f88ae038c736dbf5539798a7738e inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03ae6828d6325b60d023410f77ac8aea inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classGRSlur.html">GRSlur</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#a03ae6828d6325b60d023410f77ac8aea">isGRSlur</a> ()</td></tr>
+<tr class="separator:a03ae6828d6325b60d023410f77ac8aea inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab71aa087b67e8a1c1ba9b319f524b9bd inherit pub_methods_classGRNotationElement"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classGRHarmony.html">GRHarmony</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRNotationElement.html#ab71aa087b67e8a1c1ba9b319f524b9bd">isGRHarmony</a> () const</td></tr>
+<tr class="separator:ab71aa087b67e8a1c1ba9b319f524b9bd inherit pub_methods_classGRNotationElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classGObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classGObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classGObject.html">GObject</a></td></tr>
 <tr class="memitem:a0ba2db264d7128bd1202acac12fb4ffd inherit pub_methods_classGObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGObject.html#a0ba2db264d7128bd1202acac12fb4ffd">~GObject</a> ()</td></tr>
 <tr class="separator:a0ba2db264d7128bd1202acac12fb4ffd inherit pub_methods_classGObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -383,6 +395,10 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a765ce0db01e5254e13d2a4c9b3ed7477 inherit pub_static_methods_classGObject"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGObject.html#a765ce0db01e5254e13d2a4c9b3ed7477">GetSymbolExtent</a> (unsigned int inSymbol)</td></tr>
 <tr class="separator:a765ce0db01e5254e13d2a4c9b3ed7477 inherit pub_static_methods_classGObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classGRText"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classGRText')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classGRText.html">GRText</a></td></tr>
+<tr class="memitem:a81d56429fe9fd931026c9c72cdd7e1cf inherit pro_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classVGColor.html">VGColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#a81d56429fe9fd931026c9c72cdd7e1cf">startDraw</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc, unsigned int &amp;fontalign) const</td></tr>
+<tr class="separator:a81d56429fe9fd931026c9c72cdd7e1cf inherit pro_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46753e3706825dc2566ea2eff9d47e8a inherit pro_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#a46753e3706825dc2566ea2eff9d47e8a">endDraw</a> (<a class="el" href="classVGDevice.html">VGDevice</a> &amp;hdc, const <a class="el" href="classVGColor.html">VGColor</a>, unsigned int fontalign) const</td></tr>
+<tr class="separator:a46753e3706825dc2566ea2eff9d47e8a inherit pro_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac803452ec9bbff7f83d9ba97a96dc732 inherit pro_methods_classGRText"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classGRPositionTag_1_1GRSaveStruct.html">GRPositionTag::GRSaveStruct</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#ac803452ec9bbff7f83d9ba97a96dc732">getNewGRSaveStruct</a> ()</td></tr>
 <tr class="separator:ac803452ec9bbff7f83d9ba97a96dc732 inherit pro_methods_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classGRPositionTag"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classGRPositionTag')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classGRPositionTag.html">GRPositionTag</a></td></tr>
@@ -405,9 +421,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a2459ee112d987836a84555e0a4cd05ee inherit pro_attribs_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc2f0296995da0761e8b2c0cafe2370d inherit pro_attribs_classGRText"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#acc2f0296995da0761e8b2c0cafe2370d">mStaffBottom</a></td></tr>
 <tr class="separator:acc2f0296995da0761e8b2c0cafe2370d inherit pro_attribs_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a32577e0e9df7c5461c786887b81405 inherit pro_attribs_classGRText"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRText.html#a4a32577e0e9df7c5461c786887b81405">fLineHeight</a> = 0.f</td></tr>
+<tr class="separator:a4a32577e0e9df7c5461c786887b81405 inherit pro_attribs_classGRText"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classGRPositionTag"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classGRPositionTag')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classGRPositionTag.html">GRPositionTag</a></td></tr>
-<tr class="memitem:a3cb795a40ca091e514591645bd274e79 inherit pro_attribs_classGRPositionTag"><td class="memItemLeft" align="right" valign="top">GuidoPos&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRPositionTag.html#a3cb795a40ca091e514591645bd274e79">ep</a></td></tr>
-<tr class="separator:a3cb795a40ca091e514591645bd274e79 inherit pro_attribs_classGRPositionTag"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8483e95bf220f61c1266b7ae374c73aa inherit pro_attribs_classGRPositionTag"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classKF__IPointerList.html">SSEList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRPositionTag.html#a8483e95bf220f61c1266b7ae374c73aa">mStartEndList</a></td></tr>
 <tr class="separator:a8483e95bf220f61c1266b7ae374c73aa inherit pro_attribs_classGRPositionTag"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1195ce2fb2bd3bb10b81aa87a9eb419d inherit pro_attribs_classGRPositionTag"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGRSystemStartEndStruct.html#a4da5129c71da61cedd63abbd45fabbcb">GRSystemStartEndStruct::setflag</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGRPositionTag.html#a1195ce2fb2bd3bb10b81aa87a9eb419d">lastendflag</a></td></tr>
@@ -576,6 +592,61 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ab83e2a11af4f119d44c42304dbec167b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab83e2a11af4f119d44c42304dbec167b">&#9670;&nbsp;</a></span>isGRFingering()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classGRFingering.html">GRFingering</a>* GRFingering::isGRFingering </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classGRNotationElement.html#a980f33938ef46e850fd7699032d2a47f">GRNotationElement</a>.</p>
+
+</div>
+</div>
+<a id="a5ad120e803a8221c750c774d2d2a85d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ad120e803a8221c750c774d2d2a85d5">&#9670;&nbsp;</a></span>OnDraw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void GRFingering::OnDraw </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVGDevice.html">VGDevice</a> &amp;&#160;</td>
+          <td class="paramname"><em>hdc</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classGRText.html#a770d3a728e5eee0a460f336d1f7e60f5">GRText</a>.</p>
+
+</div>
+</div>
 <a id="ae11d6885a5c439bc4b5730f9e0db0e48"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae11d6885a5c439bc4b5730f9e0db0e48">&#9670;&nbsp;</a></span>tellPosition()</h2>
 
@@ -611,6 +682,34 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classGRText.html#a58dd90d5906cd46899b7465635dd2306">GRText</a>.</p>
+
+</div>
+</div>
+<a id="a748467eabae98bce57062d0bd7a4b8a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a748467eabae98bce57062d0bd7a4b8a9">&#9670;&nbsp;</a></span>tellPositionEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GRFingering::tellPositionEnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classGRSingleNote.html">GRSingleNote</a> *&#160;</td>
+          <td class="paramname"><em>caller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classNVPoint.html">NVPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>inPosition</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
