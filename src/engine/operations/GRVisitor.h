@@ -25,6 +25,7 @@ class GRIntens;
 class GRKey;
 class GRMeter;
 class GRMusic;
+class GROctava;
 class GRPage;
 class GRRange;
 class GRSingleNote;
@@ -105,6 +106,9 @@ class GRVisitor
 
 		virtual void visitStart (GRSingleRest* o)	{}
 		virtual void visitEnd   (GRSingleRest* o)	{}
+
+		virtual void visitStart (GROctava* o)	{}
+		virtual void visitEnd   (GROctava* o)	{}
 };
 
 #endif
