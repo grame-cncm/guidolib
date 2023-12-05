@@ -266,7 +266,7 @@ void GRMusic::pagetrace(VGDevice & hdc)
 				const GRSystem* sys = (*sysl)[j];
 				const StaffVector * staves = sys->getStaves();
 				if (staves) {
-					for (int i = staves->GetMinimum(); i <= staves->GetMaximum(); i++) {
+					for (int i = staves->GetMinimum(); i < staves->GetMaximum(); i++) {
 						const GRStaff * staff = staves->Get(i);
 						if (staff) {
 							cerr << "staff --- " << i << endl;
@@ -682,6 +682,28 @@ float GRMusic::getStaffSize(int staffNum) {
         return -1;
     else
         return fStaffSizes[staffNum];
+}
+
+//-------------------------------------------------------------------------------
+GRStaff* GRMusic::getStaff(int staffNum, TYPE_TIMEPOSITION at)
+{
+	for (auto p: mPages) {
+		for (auto s: *(p->getSystems())) {
+			const StaffVector * staves = s->getStaves();
+			if (staves) {
+				int n = 1;
+				for (int i = staves->GetMinimum(); i <= staves->GetMaximum(); i++) {
+					const GRStaff * staff = staves->Get(i);
+					TYPE_TIMEPOSITION start = staff->getRelativeTimePosition();
+					TYPE_TIMEPOSITION end   = staff->getRelativeEndTimePosition();
+					if ((n == staffNum) && (start <= at) && (end >= at) && (start != end))
+						return staves->Get(i);
+					n++;
+				}
+			}
+		}
+	}
+	return nullptr;
 }
 
 //-------------------------------------------------------------------------------

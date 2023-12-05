@@ -1,7 +1,7 @@
 #######################################
 # CMAKE guidolib
 #######################################
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.5)
 project(guidolib)
 
 set (CMAKE_BUILD_TYPE Release)
@@ -66,9 +66,9 @@ if(APPLE)
 		set (IOS_DEPLOYMENT_TARGET 10.0) 
 	else ()
 		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
-		set (CMAKE_CXX_FLAGS -mmacosx-version-min=10.13)
+		set (CMAKE_CXX_FLAGS -mmacosx-version-min=12.00)
 #		set (CMAKE_LDFLAGS -mmacosx-version-min=10.13)
-		set (CMAKE_OSX_DEPLOYMENT_TARGET 10.13)
+		set (CMAKE_OSX_DEPLOYMENT_TARGET 13.0)
 #		set (MACOSX_DEPLOYMENT_TARGET 10.13)
 	endif ()
 endif()

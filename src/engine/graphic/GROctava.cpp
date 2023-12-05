@@ -65,6 +65,11 @@ GROctava::~GROctava()
 {
 }
 
+void GROctava::accept (GRVisitor& visitor) {
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 bool GROctava::DeleteStaff(GRStaff * grstaff)
 {
 	delete mAssociated;		// makes sure that associated notes are deleted before the GROctava
