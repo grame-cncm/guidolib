@@ -67,6 +67,8 @@ using namespace std;
 #include "GRShowVisitor.h"
 #include "TagParametersMaps.h"
 
+#include "GRPitchYVisitor.h"
+
 //#include "GMNCodePrintVisitor.h"
 
 
@@ -336,6 +338,16 @@ GUIDOAPI GuidoErrCode GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * sett
 	GRHandler grh = CreateGr (ar, gARPageFormat, settings);
 	if (!gr) return guidoErrMemory;
 	*gr = grh;
+
+	float x, y;
+	GuidoDate date;
+	date.num = 3;
+	date.denom = 1;
+	GuidoErrCode err = GuidoGetPitchPos (grh, 1, 60, date, x, y);
+	if (err != guidoNoErr)
+cerr << "GuidoAR2GR GuidoGetPitchPos err " << err << endl;
+else
+cerr << "GuidoAR2GR GuidoGetPitchPos at " << date << " : " << x << " " << y << endl;
 	return guidoNoErr;
 }
 
@@ -615,6 +627,27 @@ GUIDOAPI GuidoErrCode GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Guid
 
 	bool result = inHandleGR->grmusic->getRTPofPage( pageNum, &date->num, &date->denom );
 	return result ? guidoNoErr : guidoErrBadParameter;
+}
+
+// --------------------------------------------------------------------------
+// introduced in guido 1.71 [DF Nov 30 2023]
+GUIDOAPI GuidoErrCode GuidoGetPitchPos( CGRHandler inHandleGR, int staffnum, int pitch, GuidoDate date, float& x, float& y)
+{
+	if ( ( !inHandleGR ) || ( !inHandleGR->grmusic ) )
+		return guidoErrInvalidHandle;
+
+	TYPE_TIMEPOSITION tp (date.num, date.denom);
+	GRStaff* staff = inHandleGR->grmusic->getStaff (staffnum, tp);
+	if (!staff)
+		return guidoErrBadParameter;
+
+	GRPitchYVisitor v;
+	NVPoint p = v.getPitchPos (staff, pitch, tp);
+	if (!p.x)
+		return guidoErrBadParameter;
+	x = p.x;
+	y = p.y;
+	return guidoNoErr;
 }
 
 // --------------------------------------------------------------------------

@@ -208,6 +208,7 @@ class GRStaff : public GRCompositeNotationElement
         const ARMeter *			getCurMeter() const		{ return mStaffState.curmeter; }
 
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
+		virtual float 		getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct, int basePitch, int baseLine, int baseOct) const;
 		virtual GDirection  getDefaultThroatDirection(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual int         getNumHelplines(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual VGColor     getNoteColor(TYPE_PITCH pit) const;

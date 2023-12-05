@@ -576,6 +576,18 @@ as by date. Page numbers start at 1.
 	*/
 	GUIDOAPI GuidoErrCode GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate* date);
 
+	/** \brief Gives a pitch position on a staff.
+
+		\param inHandleGR a Guido opaque handle to a GR structure.
+		\param staff a staff number (starts at 1).
+		\param pitch a midi pitch
+		\param date the target date
+		\param x on output: the x position
+		\param y on output: the y position
+		\return a Guido error code.
+	*/
+	GUIDOAPI GuidoErrCode GuidoGetPitchPos( CGRHandler inHandleGR, int staff, int pitch, GuidoDate date, float& x, float& y);
+
 
 	/** \brief Gives the current meter on a given date and voice.
 
