@@ -17,6 +17,8 @@
 
 class GRPitchYVisitor : public GRVisitor
 {
+	int fTargetStaff;
+	int fCurrentStaff;
 	int fBasePitch;
 	int fBaseLine;
 	int fBaseOct;
@@ -25,20 +27,22 @@ class GRPitchYVisitor : public GRVisitor
 	TYPE_TIMEPOSITION fLastDate = 0;
 	TYPE_TIMEPOSITION fTargetDate = 0;
 	bool fDone = false;
+	const GRStaff * fStaff;
 
 	public:
 				 GRPitchYVisitor() {}
 		virtual ~GRPitchYVisitor() {}
 
-		NVPoint getPitchPos (GRStaff* staff, int pitch, TYPE_TIMEPOSITION date);
+		NVPoint getPitchPos (GRMusic* music, int staffNum, int pitch, TYPE_TIMEPOSITION date);
 		
-		virtual bool voiceMode () { return true; }
+		virtual bool voiceMode () { return false; }
 	
 		virtual void visitStart (GRClef* o);
 		virtual void visitStart (GROctava* o);
 		virtual void visitStart (GRSingleNote* o);
 		virtual void visitStart (GRSingleRest* o);
 		virtual void visitStart (GREmpty* o);
+		virtual void visitStart (GRStaff* o);
 };
 
 #endif

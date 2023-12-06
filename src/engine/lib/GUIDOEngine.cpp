@@ -637,12 +637,8 @@ GUIDOAPI GuidoErrCode GuidoGetPitchPos( CGRHandler inHandleGR, int staffnum, int
 		return guidoErrInvalidHandle;
 
 	TYPE_TIMEPOSITION tp (date.num, date.denom);
-	GRStaff* staff = inHandleGR->grmusic->getStaff (staffnum, tp);
-	if (!staff)
-		return guidoErrBadParameter;
-
 	GRPitchYVisitor v;
-	NVPoint p = v.getPitchPos (staff, pitch, tp);
+	NVPoint p = v.getPitchPos (inHandleGR->grmusic, staffnum, pitch, tp);
 	if (!p.x)
 		return guidoErrBadParameter;
 	x = p.x;

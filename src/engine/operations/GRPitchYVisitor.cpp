@@ -14,6 +14,7 @@
 #include "GuidoDefs.h"
 #include "GRClef.h"
 #include "GREmpty.h"
+#include "GRMusic.h"
 #include "GROctava.h"
 #include "GREvent.h"
 #include "GRSingleNote.h"
@@ -23,8 +24,10 @@
 using namespace std;
 
 //-------------------------------------------------------------------------------
-NVPoint GRPitchYVisitor::getPitchPos (GRStaff* staff, int midipitch, TYPE_TIMEPOSITION date)
+NVPoint GRPitchYVisitor::getPitchPos (GRMusic* music, int staffNum, int midipitch, TYPE_TIMEPOSITION date)
 {
+	fTargetStaff = staffNum;
+	fCurrentStaff = 0;
 	fBasePitch 	= NOTE_G;
 	fBaseLine 	= 3;
 	fBaseOct 	= 1;
@@ -33,27 +36,36 @@ NVPoint GRPitchYVisitor::getPitchPos (GRStaff* staff, int midipitch, TYPE_TIMEPO
 	fLastDate = -1;
 	fLastX = -1;
 	fDone = false;
-	staff->accept (*this);
+	fStaff = nullptr;
+	music->accept (*this);
 	NVPoint p;
-	if (fDone) {
+	if (fDone && fStaff) {
 		// convert midi pitch in pitch class and octava
 		int oct = (midipitch / 12) - 4;
 		int pitch = midipitch % 12;
 		pitch = ((pitch < 5) ? (pitch / 2) : (pitch+1) / 2) + 2;
-cerr << "GRPitchYVisitor::getPitchPos " << pitch << " " << oct << " date: " << date << endl;
-		float y = staff->getNotePosition ( pitch, oct, fBasePitch, fBaseLine, fBaseOct);
+//cerr << "GRPitchYVisitor::getPitchPos " << pitch << " " << oct << " date: " << date << endl;
+		float y = fStaff->getNotePosition ( pitch, oct, fBasePitch, fBaseLine, fBaseOct);
 		p.x = fLastX;
 		p.y = y;
 	}
-cerr << "   resultat : " << p << endl;
 	return p;
+}
+
+//-------------------------------------------------------------------------------
+void GRPitchYVisitor::visitStart (GRStaff* o)
+{
+	if (fDone) return;
+	fCurrentStaff = o->getStaffNumber();
+//cerr << "GRPitchYVisitor::visitStart GRStaff " << fCurrentStaff << endl;
+	fStaff = o;
 }
 
 //-------------------------------------------------------------------------------
 void GRPitchYVisitor::visitStart (GRSingleNote* o)
 {
-	if (fDone) return;
-cerr << "GRPitchYVisitor::visitStart GRSingleNote " << o << endl;
+	if (fDone || (fCurrentStaff != fTargetStaff)) return;
+//cerr << "GRPitchYVisitor::visitStart GRSingleNote " << o << endl;
 	TYPE_TIMEPOSITION date = o->getRelativeTimePosition();
 	if (date > fTargetDate) fDone = true;
 	else fLastX = o->getPosition().x;
@@ -62,8 +74,8 @@ cerr << "GRPitchYVisitor::visitStart GRSingleNote " << o << endl;
 //-------------------------------------------------------------------------------
 void GRPitchYVisitor::visitStart (GREmpty* o)
 {
-	if (fDone) return;
-cerr << "GRPitchYVisitor::visitStart GREmpty " << o << endl;
+	if (fDone || (fCurrentStaff != fTargetStaff)) return;
+//cerr << "GRPitchYVisitor::visitStart GREmpty " << o << endl;
 	TYPE_TIMEPOSITION date = o->getRelativeTimePosition();
 	if (date > fTargetDate) fDone = true;
 	else fLastX = o->getPosition().x;
@@ -72,8 +84,8 @@ cerr << "GRPitchYVisitor::visitStart GREmpty " << o << endl;
 //-------------------------------------------------------------------------------
 void GRPitchYVisitor::visitStart (GRSingleRest* o)
 {
-	if (fDone) return;
-cerr << "GRPitchYVisitor::visitStart GRSingleRest " << o << endl;
+	if (fDone || (fCurrentStaff != fTargetStaff)) return;
+//cerr << "GRPitchYVisitor::visitStart GRSingleRest " << o << endl;
 	TYPE_TIMEPOSITION date = o->getRelativeTimePosition();
 	if (date > fTargetDate) fDone = true;
 	else fLastX = o->getPosition().x;
@@ -81,13 +93,13 @@ cerr << "GRPitchYVisitor::visitStart GRSingleRest " << o << endl;
 
 void GRPitchYVisitor::visitStart (GRClef* o)
 {
-	if (fDone) return;
+	if (fDone || (fCurrentStaff != fTargetStaff)) return;
 	fBasePitch = o->getBasePitch();
 	fBaseOct = o->getBaseOct();
 }
 
 void GRPitchYVisitor::visitStart (GROctava* o)
 {
-	if (fDone) return;
+	if (fDone || (fCurrentStaff != fTargetStaff)) return;
 	fOctava = o->getOctava();
 }
