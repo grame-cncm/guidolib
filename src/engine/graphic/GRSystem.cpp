@@ -653,17 +653,38 @@ void GRSystem::checkCollisions (TCollisions& state, std::vector<const GRNotation
 void GRSystem::accept (GRVisitor& visitor)
 {
 	visitor.visitStart (this);
-	const StaffVector * staves = getStaves();
-	int n = staves->size();
-//cerr << "GRSystem::accept for " << n << " staves" << endl;
-	for (int i= 1; i <= n; i++) {
-		GRStaff* staff = staves->Get (i);
-//cerr << "GRSystem::accept visit staff " << i << " " << (void*)staff << endl;
-		while (staff) {
-			staff->accept (visitor);
-			staff = staff->getNextStaff();
+	if (mStaffs) {
+		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++) {
+			GRStaff* staff = mStaffs->Get(i);
+			if (staff) staff->accept(visitor);
 		}
 	}
+	else if (mSystemSlices.size() > 0)
+	{
+		GuidoPos pos = mSystemSlices.GetHeadPosition();
+		while (pos) {
+			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
+			const StaffVector* sv = slice->getStaves();
+			if (sv) {
+				for (int i = sv->GetMinimum(); i <= sv->GetMaximum(); i++) {
+					GRStaff* staff = sv->Get(i);
+					if (staff) staff->accept (visitor);
+				}
+			}
+		}
+	}
+//
+//	const StaffVector * staves = getStaves();
+//	int n = staves->size();
+////cerr << "GRSystem::accept for " << n << " staves" << endl;
+//	for (int i= 1; i <= n; i++) {
+//		GRStaff* staff = staves->Get (i);
+////cerr << "GRSystem::accept visit staff " << i << " " << (void*)staff << endl;
+//		while (staff) {
+//			staff->accept (visitor);
+//			staff = staff->getNextStaff();
+//		}
+//	}
 	visitor.visitEnd (this);
 }
 
