@@ -677,7 +677,6 @@ void GRStaff::accept (GRVisitor& visitor)
 	GuidoPos pos = elts->GetHeadPosition();
 	while (pos) {
 		GRNotationElement * e = elts->GetNext(pos);
-cerr << "GRStaff::accept " << e << endl;
 		e->accept (visitor);
 	}
 	visitor.visitEnd (this);
