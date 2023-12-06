@@ -685,28 +685,6 @@ float GRMusic::getStaffSize(int staffNum) {
 }
 
 //-------------------------------------------------------------------------------
-GRStaff* GRMusic::getStaff(int staffNum, TYPE_TIMEPOSITION at)
-{
-	for (auto p: mPages) {
-		for (auto s: *(p->getSystems())) {
-			const StaffVector * staves = s->getStaves();
-			if (staves) {
-				int n = 1;
-				for (int i = staves->GetMinimum(); i <= staves->GetMaximum(); i++) {
-					const GRStaff * staff = staves->Get(i);
-					TYPE_TIMEPOSITION start = staff->getRelativeTimePosition();
-					TYPE_TIMEPOSITION end   = staff->getRelativeEndTimePosition();
-					if ((n == staffNum) && (start <= at) && (end >= at) && (start != end))
-						return staves->Get(i);
-					n++;
-				}
-			}
-		}
-	}
-	return nullptr;
-}
-
-//-------------------------------------------------------------------------------
 ARMusicalVoice* GRMusic::getARVoice (int n)
 {
 	const ARMusic * arm = getARMusic();
@@ -717,8 +695,6 @@ ARMusicalVoice* GRMusic::getARVoice (int n)
 	}
 	return 0;
 }
-
-
 
 // --------------------------------------------------------------------------
 /** \brief Finds the index of a given voice (zero based)
