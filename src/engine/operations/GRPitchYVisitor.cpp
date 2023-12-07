@@ -44,8 +44,8 @@ NVPoint GRPitchYVisitor::getPitchPos (GRMusic* music, int staffNum, int midipitc
 		int oct = (midipitch / 12) - 4;
 		int pitch = midipitch % 12;
 		pitch = ((pitch < 5) ? (pitch / 2) : (pitch+1) / 2) + 2;
-//cerr << "GRPitchYVisitor::getPitchPos " << pitch << " " << oct << " date: " << date << endl;
-		float y = fStaff->getNotePosition ( pitch, oct, fBasePitch, fBaseLine, fBaseOct);
+//cerr << "GRPitchYVisitor::getPitchPos " << pitch << " " << oct << " date: " << date << " staff y " << fStaff->getPosition() <<  endl;
+		float y = fStaff->getNotePosition ( pitch, oct, fBasePitch, fBaseLine, fBaseOct) + fStaff->getPosition().y;
 		p.x = fLastX;
 		p.y = y;
 	}
