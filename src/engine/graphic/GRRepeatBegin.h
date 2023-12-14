@@ -18,6 +18,7 @@
 #include "ARBar.h"
 #include "GRBar.h"
 #include "GRDefine.h"
+#include "GRVisitor.h"
 
 class ARRepeatBegin;
 
@@ -31,6 +32,8 @@ public:
               // GRRepeatBegin( ARRepeatBegin * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
                  GRRepeatBegin ( const ARRepeatBegin * arrb, GRStaff * inStaff, bool p_ownsar = false);
     virtual 	~GRRepeatBegin () {}
+
+	void accept (GRVisitor& visitor);
 
 	void setPosFrom( float posy );
 	void setPosTo( float posy );

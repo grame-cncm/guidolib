@@ -61,6 +61,13 @@ const ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() const {
 }
 
 // --------------------------------------------------------------------------
+void GRRepeatBegin::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
+// --------------------------------------------------------------------------
 void GRRepeatBegin::updateBoundingBox()
 {
 	const float halfExtent = GetSymbolExtent( mSymbol ) * 0.5f;
