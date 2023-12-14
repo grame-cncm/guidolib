@@ -15,6 +15,8 @@
 #include "GRVisitor.h"
 #include "NVPoint.h"
 
+class GRNotationElement;
+
 class GRPitchYVisitor : public GRVisitor
 {
 	int fTargetStaff;
@@ -23,9 +25,9 @@ class GRPitchYVisitor : public GRVisitor
 	int fBaseLine;
 	int fBaseOct;
 	int fOctava;
-	float fLastX;
-	TYPE_TIMEPOSITION fLastDate = 0;
+	float fNextX;
 	TYPE_TIMEPOSITION fTargetDate = 0;
+	const GRNotationElement* fTargetElt;
 	bool fDone = false;
 	const GRStaff * fStaff;
 
@@ -43,6 +45,15 @@ class GRPitchYVisitor : public GRVisitor
 		virtual void visitStart (GRSingleRest* o);
 		virtual void visitStart (GREmpty* o);
 		virtual void visitStart (GRStaff* o);
+		virtual void visitStart (GRBar* o);
+		virtual void visitStart (GRRepeatBegin* o);
+		virtual void visitStart (GRMeter* o);
+		virtual void visitStart (GRKey* o);
+
+	private:
+		void 	check (const GRNotationElement* elt);
+		bool 	checkTimePos (const GRNotationElement* elt);
+		float 	interpolateXPos (const GRNotationElement* elt, TYPE_TIMEPOSITION date, float nextx) const;
 };
 
 #endif

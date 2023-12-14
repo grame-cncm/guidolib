@@ -28,6 +28,8 @@ class GRMusic;
 class GROctava;
 class GRPage;
 class GRRange;
+class GRRepeatEnd;
+class GRRepeatBegin;
 class GRSingleNote;
 class GRSingleRest;
 class GRSlur;
@@ -94,6 +96,9 @@ class GRVisitor
 
 		virtual void visitStart (GRBar* o)		{}
 		virtual void visitEnd   (GRBar* o)		{}
+
+		virtual void visitStart (GRRepeatBegin* o)		{}
+		virtual void visitEnd   (GRRepeatBegin* o)		{}
 
 		virtual void visitStart (GRText* o)		{}
 		virtual void visitEnd   (GRText* o)		{}
