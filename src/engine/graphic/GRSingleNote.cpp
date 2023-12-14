@@ -214,6 +214,29 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	
 //	NVRect r = getEnclosingBox (false, false, true);
 //	hdc.Frame(r.left, r.top, r.right, r.bottom);
+
+
+//cerr << "GRSingleNote::OnDraw" << endl;
+//	float x, y;
+//	TYPE_TIMEPOSITION d = getRelativeTimePosition();
+//	d += float(getDuration()) / 2;
+//	GuidoDate date;
+//	date.num = d.getNumerator();
+//	date.denom = d.getDenominator();
+//	const ARNote* ar = getARNote();
+//	int pitch = ar->getMidiPitch();
+//	GuidoErrCode err = GuidoGetPitchPos( gDebugGr, 1, pitch, date, x, y);
+//	if (err == guidoNoErr) {
+//		float w = 25;
+//cerr << "GRSingleNote::OnDraw  pitch " << pitch << " pos at " << date << " " << x << " " << y <<  " note pos: " << getPosition() <<  endl;
+//		hdc.PushFillColor(VGColor(250,0,0, 180));
+//		hdc.Rectangle(x-w, y-w, x+w, y+w);
+//		hdc.PopFillColor();
+//	}
+//	else
+//cerr << "GRSingleNote::OnDraw  pitch err " << err << endl;
+
+
 }
 
 //____________________________________________________________________________________
