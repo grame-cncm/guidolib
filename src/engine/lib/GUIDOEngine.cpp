@@ -338,16 +338,6 @@ GUIDOAPI GuidoErrCode GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * sett
 	GRHandler grh = CreateGr (ar, gARPageFormat, settings);
 	if (!gr) return guidoErrMemory;
 	*gr = grh;
-
-	float x, y;
-	GuidoDate date;
-	date.num = 3;
-	date.denom = 1;
-//	GuidoErrCode err = GuidoGetPitchPos (grh, 1, 60, date, x, y);
-//	if (err != guidoNoErr)
-//cerr << "GuidoAR2GR GuidoGetPitchPos err " << err << endl;
-//else
-//cerr << "GuidoAR2GR GuidoGetPitchPos at " << date << " : " << x << " " << y << endl;
 	return guidoNoErr;
 }
 
