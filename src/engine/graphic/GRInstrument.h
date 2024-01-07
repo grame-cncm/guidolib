@@ -31,13 +31,17 @@ class GRInstrument : public GRTagARNotationElement
 	virtual ~GRInstrument() {}
 	
 	const ARInstrument* getARInstrument() const;
-	virtual void OnDraw(VGDevice & hdc ) const;
+	virtual void 		OnDraw(VGDevice & hdc ) const;
+	virtual void 		OnDraw(VGDevice & hdc, float y ) const;
 	virtual const NVPoint & getReferencePosition() const;
 	
 	private:
+		void getMetrics(VGDevice & hdc, float& h, float& w) const;
+
 		const VGFont* 	fFont = 0;
 		unsigned int	fTextAlign = 0;
 		NVPoint			fRefPos;
+		std::vector<std::string> fSubstrings;
 };
 
 #endif
