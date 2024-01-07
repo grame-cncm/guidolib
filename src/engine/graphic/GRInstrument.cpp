@@ -95,39 +95,9 @@ void GRInstrument::getMetrics(VGDevice & hdc, float& h, float& w) const
 // -----------------------------------------------------------------------------
 void GRInstrument::OnDraw(VGDevice & hdc) const
 {
+	// repeated instr are drawn by GRStaff
 	if(!mDraw || !mShow || getARInstrument()->repeat()) return;
-
 	OnDraw(hdc, mPosition.y);
-//
-//	const string name = getARInstrument()->getName();
-//	if (name.empty()) return;
-//
-//	hdc.SetTextFont( fFont );
-//	const VGColor prevTextColor = hdc.GetFontColor();
-//
-//	if( mColRef )
-//		hdc.SetFontColor( VGColor( mColRef ));
-//	hdc.SetFontAlign( fTextAlign );
-//
-//	NVPoint refpos = getReferencePosition();
-//	const NVPoint & offset = getOffset();
-//	const NVPoint pos = mPosition;
-//	float w, h;
-//	getMetrics(hdc, h, w);
-//	if (getARInstrument()->autoPos())
-//		refpos = NVPoint(gCurSystem->getBoundingBox().left - LSPACE*4, fRefPos.y);
-//
-//    float x = pos.x + offset.x + refpos.x;
-//    float y = pos.y + offset.y + refpos.y;
-//    if (fSubstrings.size() > 1) {
-//		for (auto a: fSubstrings) {
-//			hdc.DrawString(x, y, a.c_str(), (int)a.size());
-//			y += h;
-//		}
-//	}
-//	else hdc.DrawString (x, y, name.c_str(), int(name.size()) );
-//	if( mColRef )
-//		hdc.SetFontColor( prevTextColor );
 }
 
 
