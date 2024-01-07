@@ -87,7 +87,8 @@ class GObject
 				void	addToBoundingBox( const NVRect & in );
 
 		// this is not constant! Can be changed!
-		NVRect & getReferenceBoundingBox() { return mBoundingBox; }	
+		NVRect & getReferenceBoundingBox() { return mBoundingBox; }
+		const NVRect&   getMapping() const { return mMapping; }
 		
 		virtual	bool	isGREventClass() const { return false; }
 
