@@ -1139,10 +1139,8 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	}
 	else if (tinf == typeid(ARInstrument))
 	{		
-		grne = /*dynamic cast<GRNotationElement *>*/(
-			mCurGrStaff->AddInstrument(
-			static_cast<ARInstrument *>( arOfCompleteObject)));
-		fMusic->addVoiceElement(arVoice,	grne);
+		grne = mCurGrStaff->AddInstrument(static_cast<ARInstrument *>( arOfCompleteObject));
+		fMusic->addVoiceElement(arVoice, grne);
 	}
 	else if (tinf == typeid(ARMark))
 	{
