@@ -298,8 +298,7 @@
    (* meas. 39 *)  \intens<"ff"> { \tieBegin f#-1/2. \tieBegin, f#0. } \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin f#-1/2 \tieEnd \tieBegin, f#0 \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { f#-1/2. \tieEnd, f#0. \tieEnd } ]
-, [ \staff<8> \instr<"1
-2", dx=-8hs, dy=-5hs>
+, [ \staff<8> \instr<"1 2", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -341,8 +340,7 @@
    (* meas. 39 *)  \intens<"ff"> { \tieBegin a1/2. \tieBegin, f#2. } \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin a1/2 \tieEnd \tieBegin, f#2 \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { a1/2. \tieEnd, f#2. \tieEnd } ]
-, [ \staff<9> \instr<"3
-4", dx=-8hs, dy=-5hs>
+, [ \staff<9> \instr<"3 4", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -426,8 +424,7 @@
    (* meas. 39 *)  \intens<"ff"> { \tieBegin d/2. \tieBegin, g. } \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin d/2 \tieEnd \tieBegin, g \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { d/2. \tieEnd, g. \tieEnd } ]
-, [ \staff<11> \instr<"1
-2", dx=-8hs, dy=-5hs>
+, [ \staff<11> \instr<"1 2", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
