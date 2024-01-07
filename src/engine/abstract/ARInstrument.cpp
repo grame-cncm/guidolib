@@ -35,6 +35,7 @@ void ARInstrument::setTagParameters (const TagParameterMap& params)
 	const TagParameterString* autopos = getParameter<TagParameterString>(kAutoposStr);
 	if (autopos)
 		fAutoPos = getParameter<TagParameterString>(kAutoposStr, true)->getBool();
+	fRepeat	= getParameter<TagParameterString>(kRepeatStr, true)->getBool();
 }
 
 

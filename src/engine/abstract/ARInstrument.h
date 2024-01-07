@@ -67,11 +67,13 @@ class ARInstrument : public ARFontAble
 		const std::string& getName() const			{ return fName; }
 		const std::string& getTransp() const		{ return fTransp; }
 		bool			   autoPos() const			{ return fAutoPos; }
+		bool			   repeat() const			{ return fRepeat; }
 
 	private:
 		std::string fName;
 		std::string fTransp;
 		bool		fAutoPos;
+		bool		fRepeat = false;		// to display the instrument every new system
 };
 
 #endif

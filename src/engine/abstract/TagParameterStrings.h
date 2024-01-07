@@ -64,6 +64,7 @@ extern const char* kARNoteFormatParams;
 extern const char* kAROctavaParams;
 extern const char* kARPageFormatParams;
 extern const char* kARPizzicatoParams;
+extern const char* kARRepeatParams;
 extern const char* kARRitardandoParams;
 extern const char* kARSpaceParams;
 extern const char* kARSpecialParams;

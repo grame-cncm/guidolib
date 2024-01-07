@@ -61,6 +61,7 @@ typedef struct TagParametersMaps {
 	const TagParameterMap sAROctavaMap;
 	const TagParameterMap sARPageFormatMap;
 	const TagParameterMap sARPizzicatoMap;
+	const TagParameterMap sARRepeatMap;
 	const TagParameterMap sARRitardandoMap;
 	const TagParameterMap sARSpaceMap;
 	const TagParameterMap sARSpecialMap;
@@ -123,6 +124,7 @@ typedef struct TagParametersMaps {
 			sAROctavaMap (kAROctavaParams),
 			sARPageFormatMap (kARPageFormatParams),
 			sARPizzicatoMap (kARPizzicatoParams),
+			sARRepeatMap (kARRepeatParams),
 			sARRitardandoMap (kARRitardandoParams),
 			sARSpaceMap (kARSpaceParams),
 			sARSpecialMap (kARSpecialParams),
