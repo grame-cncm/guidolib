@@ -2,7 +2,7 @@
 % todo: collission avoiding for intensity signs
 
 
-{[ \title<"Voice1"> \autoBreak<"off">
+{[ \title<"Voice1"> 
  \meter<"4/4">  \clef<"g">  \key<"C"> 
  \tempo<"tempo","1/4=60"> 
 \intens<"f"> e\intens<"p"> c/16 e c e c/8\intens<"mf"> b0 c1 d\intens<"f"> e/2\intens<"p"> c/16 e c e c/4\intens<"f"> f/12 e d _*0 e/4]
