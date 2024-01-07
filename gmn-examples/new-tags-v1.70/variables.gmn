@@ -24,7 +24,7 @@ $seq = "a/4 \slur(b c2/2) a1/4 $b $b $b";
 	\meter<"4/4">
 	\text<$text1, dx=$dx>($a ) 
 	\text<$text1, dx=$dx>($a ) 
-	$a /2
+	$a
 	\text<'foo 2', dy=12>($c ) 
 	b c 
 	$seq $seq c/1
