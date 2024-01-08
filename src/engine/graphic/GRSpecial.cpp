@@ -44,6 +44,7 @@ void GRSpecial::OnDraw(VGDevice & hdc) const
 	// TODO: scale the graphic context instead.
     const int fontSize = (int)(((ar->getSize() ? ar->getSize()->getValue() : 1) * 4 * LSPACE) + float(0.5)); // +0.5 to round from float to int.
 	const VGFont* myfont = FontManager::FindOrCreateFont( fontSize );
+	const VGFont* savedFont = hdc.GetMusicFont();
 	hdc.SetMusicFont( myfont );
 	hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
 
@@ -62,5 +63,6 @@ void GRSpecial::OnDraw(VGDevice & hdc) const
     }
 	hdc.DrawMusicSymbol((mPosition.x + specialXOffset), (mPosition.y + specialYOffset), theSymbol);
     if (tps) hdc.SetFontColor(prevTextColor);
+	hdc.SetMusicFont( savedFont );
 }
 
