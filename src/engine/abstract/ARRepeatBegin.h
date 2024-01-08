@@ -38,7 +38,7 @@ See the [Repeat Signs](@EXAMPLES/repeats/) example.
 class ARRepeatBegin : public ARMTParameter
 {
 	public:
-					 ARRepeatBegin() { dur.setNumerator(-1); }
+					 ARRepeatBegin();
 		virtual		~ARRepeatBegin() {}
 
 		virtual const char*	getTagName() const		{ return "ARRepeatBegin"; };
@@ -50,6 +50,7 @@ class ARRepeatBegin : public ARMTParameter
         ARMusicalObject *isARRepeatBegin() 							{ return this; }
 		const ARBar::TRanges&	getRanges () const					{ return fRanges; }
 		void					setRanges (const ARBar::TRanges& r)	{ fRanges = r; }
+		bool					hidden () const;
 	
 	private:
 		ARBar::TRanges	fRanges;

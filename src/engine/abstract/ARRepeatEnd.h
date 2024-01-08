@@ -17,6 +17,8 @@
 
 #include "ARBar.h"
 #include "TimeUnwrap.h"
+#include "TagParameterString.h"
+#include "TagParameterStrings.h"
 
 class ARRepeatBegin;
 
@@ -39,13 +41,14 @@ See the [Repeat Signs](@EXAMPLES/repeats/) example.
 class ARRepeatEnd : public ARBar
 {
 	public:
-					 ARRepeatEnd(ARRepeatBegin * curbeg = 0) { rangesetting = RANGEDC; }
+					 ARRepeatEnd(ARRepeatBegin * curbeg = 0) { rangesetting = RANGEDC; setupTagParameters (gMaps->sARRepeatMap); }
 		virtual		~ARRepeatEnd() { }
 
 		virtual const char*	getTagName() const		{ return "ARRepeatEnd"; };
 		virtual std::string getGMNName() const		{ return "\\repeatEnd"; };
 
         ARMusicalObject *isARRepeatEnd() 			{ return this; }
+		bool			 hidden () const			{ return getParameter<TagParameterString>(kHiddenStr, true)->getBool(); }
 
 		virtual void browse(TimeUnwrap& mapper) const
 				{ mapper.AtPos (this, TimeUnwrap::kRepeatEnd); }

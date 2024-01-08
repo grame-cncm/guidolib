@@ -12,12 +12,17 @@
 
 */
 
-#include <iostream>
-
 #include "ARRepeatBegin.h"
 #include "ARRepeatEnd.h"
 #include "TimeUnwrap.h"
+#include "TagParameterString.h"
+#include "TagParameterStrings.h"
 
+ARRepeatBegin::ARRepeatBegin()
+{
+	setupTagParameters (gMaps->sARRepeatMap);
+	dur.setNumerator(-1);
+}
 
 void ARRepeatBegin::browse(TimeUnwrap& mapper) const
 {
@@ -28,5 +33,10 @@ void ARRepeatBegin::setRepeatEnd(const ARRepeatEnd *myr)
 {
 	if (dur.getNumerator() == -1)
 		dur = myr->getRelativeTimePosition() - getRelativeTimePosition();
+}
+
+bool ARRepeatBegin::hidden () const
+{
+	return getParameter<TagParameterString>(kHiddenStr, true)->getBool();
 }
 

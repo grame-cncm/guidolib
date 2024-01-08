@@ -35,6 +35,7 @@ GRRepeatEnd::GRRepeatEnd( const ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_
 {
 	setGRStaff (inStaff);
 	InitRepeatEnd();
+	if (ar->hidden()) mShow = false;
 }
 
 const ARRepeatEnd* GRRepeatEnd::getARRepeatEnd() {
@@ -117,9 +118,11 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 	}
 
     float x  = -hlspace * 0.75f - getXOffset();
+    const VGFont* savedfont = hdc.GetMusicFont();
     hdc.SetFontAlign(VGDevice::kAlignBaseLeft);
     DrawSymbol(hdc, kDotSymbol, x, y1, pointSize);
     DrawSymbol(hdc, kDotSymbol, x, y2, pointSize);
+    hdc.SetMusicFont(savedfont);
 }
 
 // --------------------------------------------------------------------------

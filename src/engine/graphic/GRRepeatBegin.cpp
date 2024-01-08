@@ -47,6 +47,7 @@ GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *ar, GRStaff * inStaff, bool p_
     fDx = ar->getDX()->getValue();
     fDy = ar->getDY()->getValue();
 	updateBoundingBox();
+	if (ar->hidden()) mShow = false;
 }
 
 // --------------------------------------------------------------------------
@@ -155,8 +156,10 @@ void GRRepeatBegin::DrawDots( VGDevice & hdc ) const
 	}
 
     float x  = getXOffset() + hlspace * 2.4f;
+    const VGFont* savedfont = hdc.GetMusicFont();
     DrawSymbol(hdc, kDotSymbol, x, y1, pointSize);
     DrawSymbol(hdc, kDotSymbol, x, y2, pointSize);
+    hdc.SetMusicFont(savedfont);
 }
 
 // --------------------------------------------------------------------------
