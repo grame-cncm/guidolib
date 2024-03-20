@@ -36,19 +36,21 @@ OPT ?= -O3
 CXXFLAGS += $(addprefix -I, $(subprojects)) $(SMUFLDEF) -DMSLIGHT -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM $(OPT) -std=c++11 --llvm-opts "['-O3']"
 
 
-library = libGUIDOEngine
-target = $(library).js
+library   := libGUIDOEngine
+target    := $(library).js
+es6target := $(library).mjs
 
 
 OPTIONS :=  -s ALLOW_MEMORY_GROWTH=1 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0 -s MODULARIZE=1 -s EXPORT_NAME="'GuidoModule'"
 OPT1    := -O3 --bind --memory-init-file 0 --llvm-opts "['-O3']"
 
-all: $(library).js
+all: $(target)
 
 help :
 	@echo "Guido Engine Wasm makefile"
 	@echo "Available argets are :"
 	@echo "   all (default): build the libGUIDOEngine wasm library"	
+	@echo "   es6          : build the libGUIDOEngine as ES6 library"	
 	@echo "   clean        : remove objects and output files"	
 	@echo "   depend       : recompute dependencies"	
 	@echo "   test         : run API tests"	
@@ -61,12 +63,18 @@ help :
 ##############################################################
 # building the library as wasm library
 ##############################################################
-$(library).js : $(objects) $(midiobj)
-	emcc $(OPT1) $(objects) $(midiobj) -o $(library).js $(OPTIONS) -s WASM=1
-	cp $(library).js $(library).wasm $(npmdir)
+es6 : $(es6target)
+
+$(es6target) : $(objects) $(midiobj)
+	emcc $(OPT1) $(objects) $(midiobj) -o $(es6target) $(OPTIONS) -s WASM=1
+	cp $(es6target) $(library).wasm $(npmdir)
+	
+$(target) : $(objects) $(midiobj)
+	emcc $(OPT1) $(objects) $(midiobj) -o $(target) $(OPTIONS) -s WASM=1
+	cp $(target) $(library).wasm $(npmdir)
 
 clean:
-	rm -f $(objects) $(midiobj) $(target) $(library).wasm.*
+	rm -f $(objects) $(midiobj) $(target) $(es6target) $(library).wasm.*
 
 ##############################################################
 # testing
@@ -108,7 +116,7 @@ $(webfont) : ../../src/guido2.ttf
 ##############################################################
 # building the library as web assembly
 ##############################################################
-$(library).wasm.js : $(objects)
+$(library).wasm.js : $(target)  $(objects)
 	emcc $(OPT) --bind --memory-init-file 0 $(objects) -o $(target) $(OPTIONS) -s WASM=1
 	
 depend :
