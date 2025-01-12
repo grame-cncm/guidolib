@@ -38,13 +38,13 @@
 //------------------------------------------------------------------------------
 // graphic elements selector definitions
 typedef enum { 
-	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoBarAndEvent, kGuidoEvent, kClefSel, kMeterSel, kTextSel, kKeySel,
+	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoBarAndEvent, kGuidoEvent, kClefSel, kMeterSel, kTextSel, kKeySel, kDynSel,
 	kGuidoScoreElementEnd
 } GuidoElementSelector;
 
 // graphic elements type definitions
 typedef enum { 
-	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage, kGraceNote, kClef, kMeter, kText, kKey
+	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage, kGraceNote, kClef, kMeter, kText, kKey, kDyn
 } GuidoElementType;
 
 

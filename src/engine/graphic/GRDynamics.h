@@ -37,6 +37,7 @@ class GRDynamics : public GRPTagARNotationElement
 		virtual void	accept			(GRVisitor& visitor);
 
     	virtual const GRDynamics *	isGRDynamic() const		{ return this; }
+		virtual void GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const;
 
 	protected:
 		typedef struct TXSegment {
