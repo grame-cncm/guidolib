@@ -48,6 +48,7 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 
 		virtual void 	OnDraw(VGDevice & dev ) const;
       	virtual void 	recalcVerticalPosition();
+		virtual void GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const;
 
   protected:
 		int		mNatural;
