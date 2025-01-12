@@ -150,7 +150,7 @@ void GRHarmony::DrawHarmonyString (VGDevice & hdc, const VGFont* font, const str
 	if (!mfont) mfont = FontManager::gFontScriab;
 	
 	float ratio = font->GetSize() / 150.f; // 150 is the default font size for harmony (20 pt)
-	int fsize = mfont->GetSize() * ratio;
+	int fsize = (int)(mfont->GetSize() * ratio);
 
 	const VGFont* mBigFont = FontManager::FindOrCreateFont( int(fsize * 1.3), mfont->GetName(), "");
 	const VGFont* mSmallFont = FontManager::FindOrCreateFont( int(fsize * 0.8), mfont->GetName(), "");

@@ -73,6 +73,7 @@ class GRText : public GRPTagARNotationElement
 		virtual bool	checkCollisionWith() const	{ return true; }
 		virtual bool	isLyrics() const;
 		virtual const GRText*	isText() const			{ return this; }
+		virtual void GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const;
 
 	protected:
 		virtual const VGColor 	startDraw( VGDevice & hdc, unsigned int& fontalign ) const;
