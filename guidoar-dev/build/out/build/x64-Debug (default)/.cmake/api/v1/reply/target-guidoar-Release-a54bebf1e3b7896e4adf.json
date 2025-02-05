@@ -1,0 +1,878 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "guidoar.dll"
+		},
+		{
+			"path" : "F:/guidolib/guidoar-dev/build/lib/guidoar.lib"
+		},
+		{
+			"path" : "guidoar.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"add_definitions",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 136,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 184,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 30,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 98,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "GUIDOAR_EXPORTS"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "WIN32"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "WINVER=0x0400"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/interface"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/guido"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/guido/abstract"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/operations"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/visitors"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/midi"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/parser"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/midisharelight"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-DWIN32"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "GUIDOAR_EXPORTS"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "WIN32"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "WINVER=0x0400"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/interface"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/guido"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/guido/abstract"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/lib"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/operations"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/visitors"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/midi"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/parser"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "F:/guidolib/guidoar-dev/build/../src/midisharelight"
+				}
+			],
+			"language" : "RC",
+			"sourceIndexes" : 
+			[
+				91
+			]
+		}
+	],
+	"id" : "guidoar::@6890427a1f51a3e7e1df",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "F:/guidolib/guidoar-dev/build/out/install/x64-Debug (default)/bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "F:/guidolib/guidoar-dev/build/out/install/x64-Debug (default)"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:x64 /INCREMENTAL:NO",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "guidoar",
+	"nameOnDisk" : "guidoar.dll",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				91
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARChord.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARFactory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARNote.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/AROthers.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARTag.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/guidoelement.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/interface/libguidoar.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/guidorational.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/streambeautifuller.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/midi/midiconverter.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/bottomOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/durationOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/eheadOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/etailOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/headOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/interleaveOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/markers.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/mirrorOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/normalizeOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/parOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/pitchApplyOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/rythmApplyOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/seqOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/tailOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/topOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/transposeOperation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/parser/guidoparser.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/parser/parser.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/clonevisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/counteventsvisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/durationvisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/event2timevisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/firstpitchvisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/gmnvisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/midicontextvisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/pitchvisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/rythmvisitor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/unrolled_guido_browser.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARChord.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARFactory.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARNote.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/AROthers.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARTag.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/abstract/ARTypes.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/guidoelement.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/guido/guidotags.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/interface/arexport.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/interface/guidorational.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/interface/libguidoar.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/browser.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/ctree.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/functor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/gar_smartpointer.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/ringvector.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/singleton.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/streambeautifuller.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/lib/tree_browser.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/midi/midiconverter.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/bottomOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/durationOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/eheadOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/etailOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/headOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/interleaveOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/markers.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/mirrorOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/normalizeOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/operation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/parOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/pitchApplyOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/rythmApplyOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/seqOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/tailOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/topOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/operations/transposeOperation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/parser/gmnreader.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/parser/guidoparser.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/basevisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/clonevisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/counteventsvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/countvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/durationvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/event2timevisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/firstpitchvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/gmnvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/midicontextvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/pitchvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/rythmvisitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/unrolled_guido_browser.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/visitable.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "F:/guidolib/guidoar-dev/src/visitors/visitor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "F:/guidolib/guidoar-dev/rsrc/libguidoar.rc",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

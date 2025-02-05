@@ -8,6 +8,7 @@
 *.vcxproj.filters
 *.vcxproj.user
 *.xcodeproj
+*.lib
 *~
 build/bin
 build/guidodir

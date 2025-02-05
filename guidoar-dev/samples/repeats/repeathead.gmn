@@ -1,0 +1,7 @@
+{
+    [
+        \meter<"4/4"> f g a b 
+         \repeatBegin c2 b1 a g 
+         \repeatEnd<opened="end"> 
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    [
+        \systemFormat<dx=1cm> \instr<"Voice.",dx=-2cm,dy=-0.8cm> \staffFormat<size=5pt>
+         \barFormat<style="system"> \clef<"c2",dx=1hs> \space<10hs> \meter<"4/4">
+         \noteFormat<color="red"> c1 d e f g a h c2 
+    ],
+    
+    [
+        \instr<"Perc.",dx=-2cm> \staffFormat<style="1-line"> \clef<"none">
+         \meter<"4/4"> c2 b1 a g f e d c 
+    ],
+    
+    [
+        \instr<"Luth",transp="G",dx=-2cm,dy=-0.6cm> \staffFormat<style="7-line",size=2pt>
+         \meter<"4/4"> c1 d e f g a h c2 
+    ],
+    
+    [
+        \instr<"clarinet in A",transp="A",dx=-2cm,dy=-0.6cm> \staffFormat<size=3pt>
+         \meter<"4/4"> c2 b1 a g f e d c 
+    ]
+}

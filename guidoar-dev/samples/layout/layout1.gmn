@@ -1,0 +1,9 @@
+{
+    [\staffFormat<size=3pt> c1 d e f g a h c2 ],
+    
+    [\staffFormat<size=5pt> c2 b1 a g f e d c ],
+    
+    [\staffFormat<style="1-line"> \clef<"none"> c1 d e f g a h c2 ],
+    
+    [\staffFormat<style="7-line",size=2pt> c2 b1 a g f e d c ]
+}
