@@ -1,0 +1,130 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\guidolib\\out64\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2291E906-3E58-32D3-A8C4-32F18DC13E9F}|SGUIDOEngine.vcxproj|F:\\guidolib\\src\\engine\\graphic\\GRDynamics.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2291E906-3E58-32D3-A8C4-32F18DC13E9F}|SGUIDOEngine.vcxproj|F:\\guidolib\\src\\engine\\graphic\\GRDynamics.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2291E906-3E58-32D3-A8C4-32F18DC13E9F}|SGUIDOEngine.vcxproj|F:\\guidolib\\src\\engine\\include\\GUIDOScoreMap.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2291E906-3E58-32D3-A8C4-32F18DC13E9F}|SGUIDOEngine.vcxproj|F:\\guidolib\\src\\engine\\graphic\\GRText.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2291E906-3E58-32D3-A8C4-32F18DC13E9F}|SGUIDOEngine.vcxproj|F:\\guidolib\\src\\engine\\graphic\\GRText.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2291E906-3E58-32D3-A8C4-32F18DC13E9F}|SGUIDOEngine.vcxproj|F:\\guidolib\\src\\engine\\graphic\\GRKey.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2291E906-3E58-32D3-A8C4-32F18DC13E9F}|SGUIDOEngine.vcxproj|F:\\guidolib\\src\\engine\\graphic\\GRKey.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GRDynamics.cpp",
+              "DocumentMoniker": "F:\\guidolib\\src\\engine\\graphic\\GRDynamics.cpp",
+              "RelativeDocumentMoniker": "..\\src\\engine\\graphic\\GRDynamics.cpp",
+              "ToolTip": "F:\\guidolib\\src\\engine\\graphic\\GRDynamics.cpp",
+              "RelativeToolTip": "..\\src\\engine\\graphic\\GRDynamics.cpp",
+              "ViewState": "AgIAAIgAAAAAAAAAAAAAALAAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-12T06:47:46.165Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GRDynamics.h",
+              "DocumentMoniker": "F:\\guidolib\\src\\engine\\graphic\\GRDynamics.h",
+              "RelativeDocumentMoniker": "..\\src\\engine\\graphic\\GRDynamics.h",
+              "ToolTip": "F:\\guidolib\\src\\engine\\graphic\\GRDynamics.h",
+              "RelativeToolTip": "..\\src\\engine\\graphic\\GRDynamics.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-12T06:47:28.78Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GRKey.cpp",
+              "DocumentMoniker": "F:\\guidolib\\src\\engine\\graphic\\GRKey.cpp",
+              "RelativeDocumentMoniker": "..\\src\\engine\\graphic\\GRKey.cpp",
+              "ToolTip": "F:\\guidolib\\src\\engine\\graphic\\GRKey.cpp",
+              "RelativeToolTip": "..\\src\\engine\\graphic\\GRKey.cpp",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAAAMMAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-12T06:37:28.673Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GRKey.h",
+              "DocumentMoniker": "F:\\guidolib\\src\\engine\\graphic\\GRKey.h",
+              "RelativeDocumentMoniker": "..\\src\\engine\\graphic\\GRKey.h",
+              "ToolTip": "F:\\guidolib\\src\\engine\\graphic\\GRKey.h",
+              "RelativeToolTip": "..\\src\\engine\\graphic\\GRKey.h",
+              "ViewState": "AgIAABEAAAAAAAAAAAAvwDMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-12T06:37:11.874Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GRText.h",
+              "DocumentMoniker": "F:\\guidolib\\src\\engine\\graphic\\GRText.h",
+              "RelativeDocumentMoniker": "..\\src\\engine\\graphic\\GRText.h",
+              "ToolTip": "F:\\guidolib\\src\\engine\\graphic\\GRText.h",
+              "RelativeToolTip": "..\\src\\engine\\graphic\\GRText.h",
+              "ViewState": "AgIAACQAAAAAAAAAAAAvwEsAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-12T06:37:04.921Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GUIDOScoreMap.h",
+              "DocumentMoniker": "F:\\guidolib\\src\\engine\\include\\GUIDOScoreMap.h",
+              "RelativeDocumentMoniker": "..\\src\\engine\\include\\GUIDOScoreMap.h",
+              "ToolTip": "F:\\guidolib\\src\\engine\\include\\GUIDOScoreMap.h",
+              "RelativeToolTip": "..\\src\\engine\\include\\GUIDOScoreMap.h",
+              "ViewState": "AgIAABcAAAAAAAAAAAAvwC4AAACNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-12T06:36:15.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GRText.cpp",
+              "DocumentMoniker": "F:\\guidolib\\src\\engine\\graphic\\GRText.cpp",
+              "RelativeDocumentMoniker": "..\\src\\engine\\graphic\\GRText.cpp",
+              "ToolTip": "F:\\guidolib\\src\\engine\\graphic\\GRText.cpp",
+              "RelativeToolTip": "..\\src\\engine\\graphic\\GRText.cpp",
+              "ViewState": "AgIAALoAAAAAAAAAAAAvwNYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-12T06:10:51.381Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

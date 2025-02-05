@@ -1,0 +1,14 @@
+os: linux
+dist: xenial
+language: cpp
+compiler: clang
+
+before_install:
+  - sudo apt-get -qq update  
+ 
+branches:
+  only:
+  - dev
+  - master
+
+script: make -C build MIDIEXPORT=no

@@ -1,0 +1,11 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+	<file>activePalette.png</file>
+	<file>combiAfter.png</file>
+	<file>combiBefore.png</file>
+	<file>combiOverEnd.png</file>
+	<file>combiOverStart.png</file>
+	<file>combiUnderEnd.png</file>
+	<file>combiUnderStart.png</file>
+</qresource>
+</RCC>

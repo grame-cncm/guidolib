@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+
+cat sa1.gmn | guidoseq header.gmn - - - \
+			| guidoseq - sb1.gmn - sb2.gmn - sb1.gmn sb3.gmn \
+			| guidopar - "$(cat ba.gmn | guidoseq - bba.gmn - bbb.gmn)" > __tmp$$
+
+cat __tmp$$ | guidoseq - - "$(guidotranspose __tmp$$ [c2])" -
+rm -f __tmp$$

@@ -1,0 +1,393 @@
+﻿  MidiShareLight.cpp
+  lifo.cpp
+  midifile.cpp
+  msEvents.cpp
+F:\guidolib\midisharelight\src\msEvents.cpp(618,41): warning C4312: 'type cast': conversion from 'long' to 'void *' of greater size
+F:\guidolib\midisharelight\src\msEvents.cpp(659,44): warning C4311: 'type cast': pointer truncation from 'void *' to 'long'
+F:\guidolib\midisharelight\src\msEvents.cpp(659,44): warning C4302: 'type cast': truncation from 'void *' to 'long'
+  msFields.cpp
+  msMemory.cpp
+  msSeq.cpp
+  GDeviceWin32.cpp
+F:\guidolib\platforms\win32\src\GDeviceWin32.cpp(1164,53): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+  GDeviceWin32GDIPlus.cpp
+  GFontWin32.cpp
+  GFontWin32GDIPlus.cpp
+  GSystemWin32.cpp
+  GSystemWin32GDIPlus.cpp
+  ARAccelerando.cpp
+  ARAccidental.cpp
+  ARAccolade.cpp
+  ARAlter.cpp
+  ARArpeggio.cpp
+  ARArticulation.cpp
+  ARAuto.cpp
+  Generating Code...
+  Compiling...
+  ARBar.cpp
+  ARBarFormat.cpp
+  ARBeam.cpp
+  ARBow.cpp
+  ARBowing.cpp
+  ARClef.cpp
+  ARCluster.cpp
+  ARColor.cpp
+  ARComposer.cpp
+  ARCrescendo.cpp
+  ARCue.cpp
+  ARDiminuendo.cpp
+  ARDisplayDuration.cpp
+  ARDotFormat.cpp
+  ARDrHoos.cpp
+  ARDrRenz.cpp
+  ARDynamic.cpp
+  ARFactory.cpp
+  ARFeatheredBeam.cpp
+  ARFermata.cpp
+  Generating Code...
+  Compiling...
+  ARFingering.cpp
+  ARFontAble.cpp
+  ARFooter.cpp
+  ARGlissando.cpp
+  ARGrace.cpp
+  ARHarmony.cpp
+  ARInstrument.cpp
+  ARIntens.cpp
+  ARJump.cpp
+  ARKey.cpp
+  ARLyrics.cpp
+  ARMMRest.cpp
+  ARMark.cpp
+  ARMeter.cpp
+  ARMusic.cpp
+  ARMusicalEvent.cpp
+  ARMusicalObject.cpp
+  ARMusicalTag.cpp
+  ARMusicalVoice.cpp
+  ARMusicalVoiceState.cpp
+  Generating Code...
+  Compiling...
+  ARNotations.cpp
+  ARNote.cpp
+  ARNoteFormat.cpp
+  ARNoteName.cpp
+  AROctava.cpp
+  ARPageFormat.cpp
+  ARPizzicato.cpp
+  ARRepeatBegin.cpp
+  ARRest.cpp
+  ARRitardando.cpp
+  ARSlur.cpp
+  ARSpace.cpp
+  ARSpecial.cpp
+  ARStaccato.cpp
+  ARStaff.cpp
+  ARStaffFormat.cpp
+  ARSymbol.cpp
+  ARTHead.cpp
+  ARTStem.cpp
+  ARTempo.cpp
+  Generating Code...
+  Compiling...
+  ARText.cpp
+  ARTie.cpp
+  ARTitle.cpp
+  ARTremolo.cpp
+  ARTrill.cpp
+  ARTuplet.cpp
+  ARUnits.cpp
+  ARUserChordTag.cpp
+  ARVoiceManager.cpp
+  ARVolta.cpp
+  Fraction.cpp
+  NoteAndChordFactory.cpp
+  TagParameter.cpp
+  TagParameterFloat.cpp
+  TagParameterInt.cpp
+  TagParameterMap.cpp
+  TagParameterRGBColor.cpp
+  TagParameterString.cpp
+  TagParameterStrings.cpp
+  Tags.cpp
+  Generating Code...
+  Compiling...
+  TempoChange.cpp
+  PianoRoll.cpp
+  PianoRollTrajectory.cpp
+  RProportional.cpp
+  AbstractDevice.cpp
+F:\\guidolib\\midisharelight\\src\\msEvents.cpp(618,41): warning C4312: 'type cast': conversion from 'long' to 'void *' of greater size
+F:\\guidolib\\midisharelight\\src\\msEvents.cpp(659,44): warning C4311: 'type cast': pointer truncation from 'void *' to 'long'
+F:\\guidolib\\midisharelight\\src\\msEvents.cpp(659,44): warning C4302: 'type cast': truncation from 'void *' to 'long'
+  AbstractFont.cpp
+  AbstractSystem.cpp
+  BinaryDevice.cpp
+  BinaryFont.cpp
+  BinarySystem.cpp
+  SVGDevice.cpp
+  SVGFont.cpp
+  SVGMapDevice.cpp
+  SVGSystem.cpp
+  TimesFont.cpp
+  Bitmap.cpp
+  GObject.cpp
+  GRARCompositeNotationElement.cpp
+  GRARNotationElement.cpp
+  GRAccidental.cpp
+  Generating Code...
+  Compiling...
+  GRAccolade.cpp
+  GRArpeggio.cpp
+  GRArticulation.cpp
+  GRBar.cpp
+  GRBarFormat.cpp
+  GRBeam.cpp
+F:\guidolib\src\engine\graphic\GRBeam.cpp(953,10): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  GRBowing.cpp
+  GRBreakMatrix.cpp
+  GRBreathMark.cpp
+  GRChordTag.cpp
+  GRClef.cpp
+  GRCluster.cpp
+  GRCoda.cpp
+  GRCompositeNotationElement.cpp
+  GRCrescendo.cpp
+  GRDiminuendo.cpp
+  GRDoubleBar.cpp
+  GRDrHoos.cpp
+  GRDrRenz.cpp
+  GRDummy.cpp
+  Generating Code...
+  Compiling...
+  GRDynamics.cpp
+  GREmpty.cpp
+  GREvent.cpp
+  GRFingering.cpp
+  GRFinishBar.cpp
+  GRFlag.cpp
+  GRGlissando.cpp
+  GRGlobalLocation.cpp
+  GRGlobalStem.cpp
+  GRGlue.cpp
+  GRGrace.cpp
+  GRHarmony.cpp
+  GRInstrument.cpp
+  GRIntens.cpp
+  GRJump.cpp
+  GRKey.cpp
+  GRMark.cpp
+  GRMeter.cpp
+  GRMusic.cpp
+  GRNotationElement.cpp
+  Generating Code...
+  Compiling...
+  GRNotations.cpp
+  GRNote.cpp
+  GRNoteDot.cpp
+  GRNoteHead.cpp
+  GROctava.cpp
+F:\guidolib\src\engine\graphic\GROctava.cpp(211,35): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+F:\guidolib\src\engine\graphic\GROctava.cpp(246,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  GRPTagARNotationElement.cpp
+  GRPage.cpp
+  GRPageText.cpp
+  GRPositionTag.cpp
+  GRPossibleBreakState.cpp
+  GRRange.cpp
+  GRRepeatBegin.cpp
+  GRRepeatEnd.cpp
+  GRRest.cpp
+  GRRod.cpp
+  GRSimpleBeam.cpp
+  GRSingleNote.cpp
+F:\guidolib\src\engine\graphic\GRSingleNote.cpp(171,25): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+  GRSingleRest.cpp
+  GRSliceHeight.cpp
+  GRSlur.cpp
+  Generating Code...
+  Compiling...
+  GRSpace.cpp
+  GRSpaceForceFunction.cpp
+  GRSpacingMatrix.cpp
+  GRSpecial.cpp
+  GRSpring.cpp
+  GRSpringCollider.cpp
+  GRSpringForceIndex.cpp
+  GRStaff.cpp
+  GRStaffManager.cpp
+  GRStdNoteHead.cpp
+  GRStem.cpp
+  GRSymbol.cpp
+  GRSystem.cpp
+  GRSystemSlice.cpp
+  GRSystemTag.cpp
+  GRSystemTagInterface.cpp
+  GRTag.cpp
+  GRTempo.cpp
+  GRTempoChange.cpp
+  GRText.cpp
+  Generating Code...
+  Compiling...
+  GRTie.cpp
+  GRTremolo.cpp
+  GRTrill.cpp
+  GRTuplet.cpp
+  GRVoice.cpp
+  GRVoiceManager.cpp
+  GRVolta.cpp
+  GraphTools.cpp
+  Image.cpp
+  NEList.cpp
+  NEPointerList.cpp
+  NVPoint.cpp
+  NVRect.cpp
+  NoteDrawer.cpp
+  FontManager.cpp
+  FormatStringParser.cpp
+  GUIDO2Midi.cpp
+  GUIDOEngine.cpp
+F:\guidolib\src\engine\lib\GUIDOEngine.cpp(857,12): warning C4996: 'GuidoSVGExportWithFontSpec': Deprecated function : use GUIDOAPI GuidoErrCode GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead.
+  GUIDOEngineAdapter.cpp
+  GUIDOFactory.cpp
+  Generating Code...
+  Compiling...
+  GUIDOFactoryAdapter.cpp
+  GUIDOInternal.cpp
+  GUIDOPianoRoll.cpp
+  GUIDOPianoRollAdapter.cpp
+  GUIDOReducedProportional.cpp
+  GUIDOReducedProportionalAdapter.cpp
+  GUIDOScoreMap.cpp
+  GUIDOScoreMapAdapter.cpp
+  MIDIMapper.cpp
+  MeterVisitor.cpp
+  MusicFont.cpp
+  StaticFont.cpp
+  TempoVisitor.cpp
+  TimeMapper.cpp
+  TimeUnwrap.cpp
+  guido2.cpp
+  GuidoMapCollector.cpp
+  GuidoTiming.cpp
+  HtmlColors.cpp
+  TCollisions.cpp
+  Generating Code...
+  Compiling...
+  nvstring.cpp
+  GMNCodePrintVisitor.cpp
+  GRFixVisitor.cpp
+  GRPrintVisitor.cpp
+  GRShowVisitor.cpp
+  GRTrillsLinker.cpp
+  GuidoParser.cpp
+  GuidoStream.cpp
+  NoteAndChordParser.cpp
+  gddefs.cpp
+  gmntools.cpp
+  guidolex.cpp
+guidolex.cpp(911,39): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+  DeviceExporter.cpp
+F:\guidolib\src\engine\tools\DeviceExporter.cpp(101,53): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+  PrintVisitor.cpp
+  base64.cpp
+  benchtools.cpp
+  Generating Code...
+  GUIDOParse.cpp
+  guidoparse.cpp
+guidoparse.cpp(1292,5): warning C4065: switch statement contains 'default' but no 'case' labels
+guido.y(289,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+msSeq.obj : warning LNK4006: "struct TMidiSeq * __cdecl MSNewSeq(struct lifo *)" (?MSNewSeq@@YAPEAUTMidiSeq@@PEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msSeq.obj : warning LNK4006: "void __cdecl MSAddSeq(struct TMidiSeq *,struct TMidiEv *)" (?MSAddSeq@@YAXPEAUTMidiSeq@@PEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msSeq.obj : warning LNK4006: "void __cdecl MSFreeSeq(struct TMidiSeq *,struct lifo *)" (?MSFreeSeq@@YAXPEAUTMidiSeq@@PEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msSeq.obj : warning LNK4006: "void __cdecl MSClearSeq(struct TMidiSeq *,struct lifo *)" (?MSClearSeq@@YAXPEAUTMidiSeq@@PEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msSeq.obj : warning LNK4006: "void __cdecl MSApplySeq(struct TMidiSeq *,void (__cdecl*)(struct TMidiEv *))" (?MSApplySeq@@YAXPEAUTMidiSeq@@P6AXPEAUTMidiEv@@@Z@Z) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "private: void __cdecl MSMemory::InitMemory(unsigned long)" (?InitMemory@MSMemory@@AEAAXK@Z) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "private: bool __cdecl MSMemory::OpenMemory(void)" (?OpenMemory@MSMemory@@AEAA_NXZ) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "private: void __cdecl MSMemory::CloseMemory(void)" (?CloseMemory@MSMemory@@AEAAXXZ) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "private: unsigned long __cdecl MSMemory::NewBlock(unsigned long)" (?NewBlock@MSMemory@@AEAAKK@Z) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "public: __cdecl MSMemory::MSMemory(unsigned long)" (??0MSMemory@@QEAA@K@Z) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "public: virtual __cdecl MSMemory::~MSMemory(void)" (??1MSMemory@@UEAA@XZ) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "public: unsigned long __cdecl MSMemory::GrowSpace(unsigned long)" (?GrowSpace@MSMemory@@QEAAKK@Z) already defined in AbstractDevice.obj; second definition ignored
+msMemory.obj : warning LNK4006: "public: unsigned long __cdecl MSMemory::FreeSpace(void)const " (?FreeSpace@MSMemory@@QEBAKXZ) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "struct TMidiEv * __cdecl MSGetLink(struct TMidiEv *)" (?MSGetLink@@YAPEAUTMidiEv@@PEAU1@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetLink(struct TMidiEv *,struct TMidiEv *)" (?MSSetLink@@YAXPEAUTMidiEv@@0@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "unsigned long __cdecl MSGetDate(struct TMidiEv *)" (?MSGetDate@@YAKPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetDate(struct TMidiEv *,unsigned long)" (?MSSetDate@@YAXPEAUTMidiEv@@K@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "short __cdecl MSGetRefNum(struct TMidiEv *)" (?MSGetRefNum@@YAFPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetRefNum(struct TMidiEv *,short)" (?MSSetRefNum@@YAXPEAUTMidiEv@@F@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "short __cdecl MSGetType(struct TMidiEv *)" (?MSGetType@@YAFPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetType(struct TMidiEv *,short)" (?MSSetType@@YAXPEAUTMidiEv@@F@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "short __cdecl MSGetChan(struct TMidiEv *)" (?MSGetChan@@YAFPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetChan(struct TMidiEv *,short)" (?MSSetChan@@YAXPEAUTMidiEv@@F@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "short __cdecl MSGetPort(struct TMidiEv *)" (?MSGetPort@@YAFPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetPort(struct TMidiEv *,short)" (?MSSetPort@@YAXPEAUTMidiEv@@F@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "long __cdecl MSGetData0(struct TMidiEv *)" (?MSGetData0@@YAJPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "long __cdecl MSGetData1(struct TMidiEv *)" (?MSGetData1@@YAJPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "long __cdecl MSGetData2(struct TMidiEv *)" (?MSGetData2@@YAJPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "long __cdecl MSGetData3(struct TMidiEv *)" (?MSGetData3@@YAJPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetData0(struct TMidiEv *,long)" (?MSSetData0@@YAXPEAUTMidiEv@@J@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetData1(struct TMidiEv *,long)" (?MSSetData1@@YAXPEAUTMidiEv@@J@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetData2(struct TMidiEv *,long)" (?MSSetData2@@YAXPEAUTMidiEv@@J@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetData3(struct TMidiEv *,long)" (?MSSetData3@@YAXPEAUTMidiEv@@J@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "struct TMidiEv * __cdecl MSGetFirstEv(struct TMidiSeq *)" (?MSGetFirstEv@@YAPEAUTMidiEv@@PEAUTMidiSeq@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetFirstEv(struct TMidiSeq *,struct TMidiEv *)" (?MSSetFirstEv@@YAXPEAUTMidiSeq@@PEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "struct TMidiEv * __cdecl MSGetLastEv(struct TMidiSeq *)" (?MSGetLastEv@@YAPEAUTMidiEv@@PEAUTMidiSeq@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msFields.obj : warning LNK4006: "void __cdecl MSSetLastEv(struct TMidiSeq *,struct TMidiEv *)" (?MSSetLastEv@@YAXPEAUTMidiSeq@@PEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "struct TMidiEv * __cdecl MSNewEv(short,struct lifo *)" (?MSNewEv@@YAPEAUTMidiEv@@FPEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "void __cdecl MSFreeEv(struct TMidiEv *,struct lifo *)" (?MSFreeEv@@YAXPEAUTMidiEv@@PEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "struct TMidiEv * __cdecl MSCopyEv(struct TMidiEv *,struct lifo *)" (?MSCopyEv@@YAPEAUTMidiEv@@PEAU1@PEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "void __cdecl MSSetField(struct TMidiEv *,unsigned long,long)" (?MSSetField@@YAXPEAUTMidiEv@@KJ@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "long __cdecl MSGetField(struct TMidiEv *,long)" (?MSGetField@@YAJPEAUTMidiEv@@J@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "long __cdecl MSCountFields(struct TMidiEv *)" (?MSCountFields@@YAJPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "void __cdecl MSAddField(struct TMidiEv *,long,struct lifo *)" (?MSAddField@@YAXPEAUTMidiEv@@JPEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "struct TMidiEv * __cdecl MSNewCellFunction(struct lifo *)" (?MSNewCellFunction@@YAPEAUTMidiEv@@PEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "void __cdecl MSFreeCellFunction(struct TMidiEv *,struct lifo *)" (?MSFreeCellFunction@@YAXPEAUTMidiEv@@PEAUlifo@@@Z) already defined in AbstractDevice.obj; second definition ignored
+msEvents.obj : warning LNK4006: "void __cdecl InitEvents(void)" (?InitEvents@@YAXXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "int MidiFile_errno" (?MidiFile_errno@@3HA) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: MidiFileGetVersion already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "private: bool __cdecl MIDIFile::Init(void)" (?Init@MIDIFile@@AEAA_NXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "private: bool __cdecl MIDIFile::ErrOpen(void)" (?ErrOpen@MIDIFile@@AEAA_NXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "private: bool __cdecl MIDIFile::WriteEv(struct midiFILE *,struct TMidiEv *)" (?WriteEv@MIDIFile@@AEAA_NPEAUmidiFILE@@PEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "private: bool __cdecl MIDIFile::FlushKeyOff(struct midiFILE *)" (?FlushKeyOff@MIDIFile@@AEAA_NPEAUmidiFILE@@@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "private: struct TMidiEv * __cdecl MIDIFile::ReadEv(struct midiFILE *)" (?ReadEv@MIDIFile@@AEAAPEAUTMidiEv@@PEAUmidiFILE@@@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: __cdecl MIDIFile::MIDIFile(void)" (??0MIDIFile@@QEAA@XZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: virtual __cdecl MIDIFile::~MIDIFile(void)" (??1MIDIFile@@UEAA@XZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::Open(char const *,short)" (?Open@MIDIFile@@QEAA_NPEBDF@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::Create(char const *,short,short,short)" (?Create@MIDIFile@@QEAA_NPEBDFFF@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::Close(void)" (?Close@MIDIFile@@QEAA_NXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::OpenTrack(void)" (?OpenTrack@MIDIFile@@QEAA_NXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::NewTrack(void)" (?NewTrack@MIDIFile@@QEAA_NXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::CloseTrack(void)" (?CloseTrack@MIDIFile@@QEAA_NXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::ChooseTrack(short)" (?ChooseTrack@MIDIFile@@QEAA_NF@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: struct TMidiEv * __cdecl MIDIFile::ReadEv(void)" (?ReadEv@MIDIFile@@QEAAPEAUTMidiEv@@XZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: struct TMidiSeq * __cdecl MIDIFile::ReadTrack(void)" (?ReadTrack@MIDIFile@@QEAAPEAUTMidiSeq@@XZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::WriteEv(struct TMidiEv *)" (?WriteEv@MIDIFile@@QEAA_NPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: bool __cdecl MIDIFile::WriteTrack(struct TMidiSeq *)" (?WriteTrack@MIDIFile@@QEAA_NPEAUTMidiSeq@@@Z) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: int __cdecl MIDIFile::GetMFErrno(void)" (?GetMFErrno@MIDIFile@@QEAAHXZ) already defined in AbstractDevice.obj; second definition ignored
+midifile.obj : warning LNK4006: "public: int __cdecl MIDIFile::GetErrno(void)" (?GetErrno@MIDIFile@@QEAAHXZ) already defined in AbstractDevice.obj; second definition ignored
+lifo.obj : warning LNK4006: lifoinit already defined in AbstractDevice.obj; second definition ignored
+lifo.obj : warning LNK4006: lifopush already defined in AbstractDevice.obj; second definition ignored
+lifo.obj : warning LNK4006: lifopop already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "private: void __cdecl MidiLight::checkSpace(void)" (?checkSpace@MidiLight@@AEAAXXZ) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: __cdecl MidiLight::MidiLight(unsigned long)" (??0MidiLight@@QEAA@K@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: virtual __cdecl MidiLight::~MidiLight(void)" (??1MidiLight@@UEAA@XZ) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: float __cdecl MidiLight::GetVersion(void)" (?GetVersion@MidiLight@@QEAAMXZ) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: unsigned long __cdecl MidiLight::FreeSpace(void)" (?FreeSpace@MidiLight@@QEAAKXZ) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: struct TMidiEv * __cdecl MidiLight::NewCell(void)" (?NewCell@MidiLight@@QEAAPEAUTMidiEv@@XZ) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::FreeCell(struct TMidiEv *)" (?FreeCell@MidiLight@@QEAAXPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: unsigned long __cdecl MidiLight::TotalSpace(void)" (?TotalSpace@MidiLight@@QEAAKXZ) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: unsigned long __cdecl MidiLight::GrowSpace(long)" (?GrowSpace@MidiLight@@QEAAKJ@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: struct TMidiEv * __cdecl MidiLight::NewEv(short)" (?NewEv@MidiLight@@QEAAPEAUTMidiEv@@F@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: struct TMidiEv * __cdecl MidiLight::CopyEv(struct TMidiEv *)" (?CopyEv@MidiLight@@QEAAPEAUTMidiEv@@PEAU2@@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::FreeEv(struct TMidiEv *)" (?FreeEv@MidiLight@@QEAAXPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::SetField(struct TMidiEv *,long,long)" (?SetField@MidiLight@@QEAAXPEAUTMidiEv@@JJ@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: long __cdecl MidiLight::GetField(struct TMidiEv *,long)" (?GetField@MidiLight@@QEAAJPEAUTMidiEv@@J@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::AddField(struct TMidiEv *,long)" (?AddField@MidiLight@@QEAAXPEAUTMidiEv@@J@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: long __cdecl MidiLight::CountFields(struct TMidiEv *)" (?CountFields@MidiLight@@QEAAJPEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: struct TMidiSeq * __cdecl MidiLight::NewSeq(void)" (?NewSeq@MidiLight@@QEAAPEAUTMidiSeq@@XZ) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::AddSeq(struct TMidiSeq *,struct TMidiEv *)" (?AddSeq@MidiLight@@QEAAXPEAUTMidiSeq@@PEAUTMidiEv@@@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::FreeSeq(struct TMidiSeq *)" (?FreeSeq@MidiLight@@QEAAXPEAUTMidiSeq@@@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::ClearSeq(struct TMidiSeq *)" (?ClearSeq@MidiLight@@QEAAXPEAUTMidiSeq@@@Z) already defined in AbstractDevice.obj; second definition ignored
+MidiShareLight.obj : warning LNK4006: "public: void __cdecl MidiLight::ApplySeq(struct TMidiSeq *,void (__cdecl*)(struct TMidiEv *))" (?ApplySeq@MidiLight@@QEAAXPEAUTMidiSeq@@P6AXPEAUTMidiEv@@@Z@Z) already defined in AbstractDevice.obj; second definition ignored
+  SGUIDOEngine.vcxproj -> F:\guidolib\build\lib\DebugSanitizer\SGUIDOEngine.lib
