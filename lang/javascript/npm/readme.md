@@ -18,5 +18,5 @@ See the online [GuidoEditor](https://guidoeditor.grame.fr/) for an example of us
 
 -----------------
 ##### Copyright (C) 2002-2021, [GRAME](https://www.grame.fr) - Centre National de Creation Musicale   
-##### Copyright (C) 2022-2023, D. Fober  
+##### Copyright (C) 2022-2025, D. Fober  
 All rights reserved  
