@@ -77,8 +77,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 7;
-const int GUIDOENGINE_SUB_VERSION   = 7;
-const char* GUIDOENGINE_VERSION_STR = "1.7.7";
+const int GUIDOENGINE_SUB_VERSION   = 8;
+const char* GUIDOENGINE_VERSION_STR = "1.7.8";
 
 ARPageFormat* gARPageFormat;
 const TagParametersMaps* gMaps = 0;
@@ -313,6 +313,7 @@ static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutS
 	return guido_RegisterGRMusic(grMusic, ar);
 }
 
+GRHandler gDebugGr;
 // --------------------------------------------------------------------------
 GUIDOAPI GuidoErrCode GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
@@ -338,6 +339,7 @@ GUIDOAPI GuidoErrCode GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * sett
 	GRHandler grh = CreateGr (ar, gARPageFormat, settings);
 	if (!gr) return guidoErrMemory;
 	*gr = grh;
+	gDebugGr = grh;
 	return guidoNoErr;
 }
 
@@ -689,6 +691,36 @@ GUIDOAPI GuidoErrCode GuidoFreeTempoList (GuidoTempoList tempi)
 	return guidoNoErr;
 }
 
+//VGDevice * gHdc;
+////_______________________________________________________________________________
+//static void DebugPitch (GRHandler gr, VGDevice* dev, float xscale, float yscale )
+//{
+//	int pitch[] = { 60, 72, 84, 71, 60, 62, 64, 65, 62, 67, 64, 65, 60, 72, 84, 71, 60, 62, 64, 65, 62, 67, 64, 0};
+//	int* p = pitch;
+//	GuidoDate d;
+//	d.num = 2;
+//	d.denom = 4;
+//	float w = 4;
+//	dev->BeginDraw();
+//	dev->SetScale(xscale, yscale);
+//	gHdc = dev;
+//	while (*p) {
+//		float x, y;
+//		GuidoErrCode err = GuidoGetPitchPos(gr, 1, *p, d, x, y);
+//		if (err != guidoNoErr) {
+//			cerr << "DebugPitch error " << err << " pitch " << *p << endl;
+//			break;
+//		}
+//		else {
+//			dev->PushFillColor(VGColor(250,0,0, 180));
+//			dev->Rectangle(x-w, y-w, x+w, y+w);
+//			dev->PopFillColor();
+//			d.num += 4;
+//			p++;
+//		}
+//	}
+//	dev->EndDraw();
+//}
 
 // --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
@@ -740,7 +772,10 @@ GUIDOAPI GuidoErrCode GuidoOnDraw( GuidoOnDrawDesc * desc )
     }
 
     /**************/
+//    float xscale = desc->hdc->GetXScale();
+//    float yscale = desc->hdc->GetYScale();
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
+//    DebugPitch (desc->handle, desc->hdc, xscale, yscale);
     
     long endTime = GuidoTiming::getCurrentmsTime();
     desc->handle->grmusic->setDrawTime(endTime - startTime);
