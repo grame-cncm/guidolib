@@ -15,24 +15,22 @@
 #include <iostream>
 
 #include "ARColor.h"
-#include "TagParameterFloat.h"
+#include "TagParameterString.h"
 #include "TagParameterStrings.h"
 
 
-ARColor::ARColor() : fR(0), fG(0), fB(0), fA(0)
+ARColor::ARColor()
 {
 	setupTagParameters (gMaps->sARColorMap);
 }
 
 void ARColor::setTagParameters (const TagParameterMap& params)
 {
-	const TagParameterFloat * r = getParameter<TagParameterFloat>(kRedStr, true);
-	const TagParameterFloat * g = getParameter<TagParameterFloat>(kGreenStr, true);
-	const TagParameterFloat * b = getParameter<TagParameterFloat>(kBlueStr, true);
-	const TagParameterFloat * a = getParameter<TagParameterFloat>(kAlphaStr, true);
-	fR = r->getValue();
-	fG = g->getValue();
-	fB = b->getValue();
-	fA = a->getValue();
+	const TagParameterString* color = getParameter<TagParameterString>(kColorStr);
+	if (color) {
+		unsigned char c[4];
+		color->getRGB(c);
+		fColor.Set(c[0], c[1], c[2], c[3]);
+	}
 }
 

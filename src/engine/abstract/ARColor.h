@@ -16,6 +16,29 @@
 */
 
 #include "ARMTParameter.h"
+#include "VGColor.h"
+
+/*@mkdoc
+
+@group:Layout
+
+@tagname:\color
+@tagalias: \colour
+@tagtype:P
+@tagnotation:sets the voice color
+@tagdesc
+The **\color** tag sets the voice color.
+Note that cross staff (like \accol) or global tags (like \title) are ignored. To set the whole score color, use the \pageFormat color parameter.
+Note also that the color applies to the voices that follow.
+@tagend
+
+@params:
+@param:c:string:a color string:*none*:false
+@paramdesc
+The color string must be an html color name or a rgb(a) string in the form `0xrrggbb` or `0xrrggbbaa`
+@paramend
+
+*/
 
 /** \brief The color tag. Ready to support the Alpha componenent for transparency (RGBA).
 */
@@ -33,16 +56,10 @@ class ARColor : public ARMTParameter
 		virtual const char*	getTagName() const		{ return "ARColor"; };
 		virtual std::string getGMNName() const		{ return "\\color"; };
 
-		float getColorR() const { return fR; }
-		float getColorG() const { return fG; }
-		float getColorB() const { return fB; }
-		float getColorA() const { return fA; }
+		const VGColor& getColor() const { return fColor; } //return VGColor (int(fR), int(fG), int(fB), int(fA)); }
 
 	protected:
-		float fR;			// (JB) should be unsigned char components ?
-		float fG;
-		float fB;
-		float fA;
+		VGColor fColor;
 };
 
 #endif

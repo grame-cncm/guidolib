@@ -19,6 +19,7 @@
 #include <string>
 
 #include "ARMTParameter.h"
+#include "VGColor.h"
 
 /*@mkdoc
 
@@ -41,6 +42,7 @@ When no page format is encountered, the default page format is 21cm x 29.6 (A4) 
 @param:tm:unit:the top margin size:5cm:true
 @param:rm:unit:the right margin size:2cm:true
 @param:bm:unit:the bottom margin size:3cm:true
+@param:color:string:the score color:black:true
 @paramdesc
 See the [Layout](@EXAMPLES/layout/) example.
 @paramend
@@ -57,6 +59,7 @@ class ARPageFormat :  public ARMTParameter
 
 		void		 getPageFormat(float * sx, float * sy, float * ml, float * mt, float * mr, float * mb ) const;
 		void		 setPageFormat(float sx, float sy, float ml, float mt, float mr, float mb );
+		const VGColor& getColor() const { return fColor; }
 
 		void operator=(const ARPageFormat& format);
 		virtual bool IsStateTag() const { return true; }
@@ -79,6 +82,7 @@ class ARPageFormat :  public ARMTParameter
 		float mRight;
 		float mBottom;
 		std::string mFormat;
+		VGColor fColor;    // default to black, opaque
 
 	private:
 		void getMargins (const TagParameterMap& params);

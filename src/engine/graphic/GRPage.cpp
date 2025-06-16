@@ -26,6 +26,7 @@ using namespace std;
 #include "ARMusicalVoice.h"
 
 // - Guido GR
+#include "GRColor.h"
 #include "GRPage.h"
 #include "GRMusic.h"
 #include "GRStaffManager.h"
@@ -332,6 +333,10 @@ void GRPage::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos 
 */
 void GRPage::OnDraw( VGDevice & hdc ) const
 {	
+	hdc.SelectPenColor(fColor);
+	hdc.SelectFillColor(fColor);
+	hdc.SetFontColor(fColor);
+
 // TODO: test if the element intersect with the clipping box
 	GuidoPos pagepos = First();
 
@@ -581,6 +586,7 @@ void GRPage::finishPage( bool islastpage )
 void GRPage::setPageFormat( const ARPageFormat * arp )
 {
 	arp->getPageFormat( &mWidth, &mHeight, &mLeftMargin, &mTopMargin, &mRightMargin, &mBottomMargin );
+	fColor = arp->getColor();
 }
 
 // ----------------------------------------------------------------------------

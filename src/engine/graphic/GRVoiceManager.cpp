@@ -124,6 +124,7 @@
 #include "GRClef.h"
 #include "GRCluster.h"
 #include "GRCoda.h"
+#include "GRColor.h"
 #include "GRCrescendo.h"
 #include "GRDiminuendo.h"
 #include "GRDoubleBar.h"
@@ -295,7 +296,7 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 		curheadstate = mhead;
 	}
 	else if ((theColor = dynamic_cast<const ARColor *>(mtag)) != 0) {
-		// it is a color tag... (?)
+		retval = false;
 	}
 	else if (typeid(*mtag) == typeid(ARUnits)) {
 		// just ignore units tag... (it is a state
@@ -551,7 +552,6 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
         return ENDOFVOICE;
 	
 	ARMusicalObject * obj = arVoice->GetAt(fVoiceState->vpos);
-
 	if (fVoiceState->curtp > timepos) {
 		timepos = fVoiceState->curtp;
 		if (obj->getDuration() == DURATION_0) {
@@ -931,8 +931,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		if (grne) fMusic->addVoiceElement(arVoice,grne);
 		
 	}
+	else if (tinf == typeid(ARColor))
+	{
+		GRColor* color = new GRColor(static_cast<const ARColor *>(arOfCompleteObject));
+		mCurGrStaff->AddColor(color);
+//		fMusic->addVoiceElement(arVoice,grne);
+	}
 	else if (tinf == typeid(ARMeter))
-	{		
+	{
 		grne = mCurGrStaff->AddMeter( static_cast<const ARMeter*>(arOfCompleteObject));
 		fMusic->addVoiceElement(arVoice,grne);		
 	}

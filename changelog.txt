@@ -2,6 +2,11 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+  version 1.7.8
+- new \color tag
+- new color parameter for \pageFormat
+
+----------------------------------------------------------------
   version 1.7.7
 - introduce special system variables at gmn level to control engine settings 
 - support for line break ('\n') in text elements

@@ -23,6 +23,7 @@
 class ARPageFormat;
 class ARMusic;
 
+class GRColor;
 class GRSystem;
 class GRMusic;
 class GRStaffManager;
@@ -93,6 +94,7 @@ class GRPage : public GREvent
 
 		GRStaffManager * m_staffmgr;
 		GRMusic * mCurMusic;
+		VGColor fColor;
 
 		float mLeftMargin;	// now in internal units
 		float mTopMargin;

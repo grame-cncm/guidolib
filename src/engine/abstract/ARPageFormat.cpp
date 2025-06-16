@@ -179,6 +179,12 @@ void ARPageFormat::setTagParameters (const TagParameterMap& params)
 	}
 	ClipSize();
     AdjustMargins();
+	const TagParameterString* color = getParameter<TagParameterString>(kColorStr);
+	if (color) {
+		unsigned char c[4];
+		color->getRGB(c);
+		fColor.Set(c[0], c[1], c[2], c[3]);
+	}
 }
 
 /** \brief Returns the size and the margins of the page, in virtual units.
