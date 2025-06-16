@@ -935,7 +935,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		GRColor* color = new GRColor(static_cast<const ARColor *>(arOfCompleteObject));
 		mCurGrStaff->AddColor(color);
-//		fMusic->addVoiceElement(arVoice,grne);
+		fMusic->addVoiceElement(arVoice,color);
 	}
 	else if (tinf == typeid(ARMeter))
 	{

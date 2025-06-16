@@ -26,6 +26,7 @@ public:
 	virtual 		~GRColor() {}
 	
 	virtual void OnDraw( VGDevice & hdc ) const;
+	const VGColor& getColor() const { return fColor; }
 };
 
 
