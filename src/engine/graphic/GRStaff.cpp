@@ -64,6 +64,7 @@ using namespace std;
 #include "GRBarFormat.h"
 #include "GRBeam.h"
 #include "GRClef.h"
+#include "GRColor.h"
 #include "GRDoubleBar.h"
 #include "GRDummy.h"
 #include "GRFinishBar.h"
@@ -2205,6 +2206,7 @@ void GRStaff::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos
 void GRStaff::OnDraw( VGDevice & hdc ) const
 {
     traceMethod("OnDraw");
+//    if (fColor) fColor->OnDraw (hdc);
 #if 0
 	// - Change font settings
 	const int fontsize = getFontSize();
@@ -2345,6 +2347,11 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
     if (currentLineThikness() < 0.5)
         return;
     
+    if (fColor) {
+		hdc.SetFontColor(fColor->getColor());
+		hdc.PushPenColor(fColor->getColor());
+		hdc.PushFillColor(fColor->getColor());
+	}
     if (mStaffState.colRef)
         hdc.PushPenColor(VGColor(mStaffState.colRef));
     hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
@@ -2363,6 +2370,10 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
     }
 
     hdc.PopPenWidth();
+    if (fColor) {
+		hdc.PopPenColor();
+		hdc.PopFillColor();
+    }
     if (mStaffState.colRef)
         hdc.PopPenColor();
 }

@@ -23,6 +23,7 @@
 class ARPageFormat;
 class ARMusic;
 
+class GRColor;
 class GRSystem;
 class GRMusic;
 class GRStaffManager;
@@ -83,6 +84,8 @@ class GRPage : public GREvent
 			float	getInnerHeightCm() const;
 	
 			void	getScaling( float& vsizex, float& vsizey ) const;
+			void	setColor( VGColor color ) 	{ fColor = color; }
+			const VGColor&	getColor() const  	{ return fColor; }
 
 		const SystemPointerList *  getSystems() const { return &mSystems; }
 
@@ -93,6 +96,7 @@ class GRPage : public GREvent
 
 		GRStaffManager * m_staffmgr;
 		GRMusic * mCurMusic;
+		VGColor fColor;
 
 		float mLeftMargin;	// now in internal units
 		float mTopMargin;

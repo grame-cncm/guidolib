@@ -1,7 +1,7 @@
 #######################################
 # CMAKE guidolib
 #######################################
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 project(guidolib)
 
 set (CMAKE_BUILD_TYPE Release)
@@ -20,7 +20,7 @@ macro (get_major_minor_patch version)
 endmacro()
 get_major_minor_patch( ${VERSION} )
 set (SOVERS ${VERSION_MAJOR})
-set (STRVERS "v.1.7.4")
+set (STRVERS "v.1.7.8")
 set (GUIDOFWKVERS C)
 message (STATUS "Configuring version ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 

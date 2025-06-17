@@ -40,6 +40,7 @@ class ARText;
 
 class GRBar;
 class GRClef;
+class GRColor;
 class GRDoubleBar;
 class GRFinishBar;
 class GRGlue;
@@ -235,6 +236,7 @@ class GRStaff : public GRCompositeNotationElement
 		void    setDistance			(float distance)	{ mStaffState.distanceset = true; mStaffState.distance = distance; }
 		void    setEndPosition		(float newendpos)	{ mLength = newendpos - mPosition.x; }
 		void    setLength			(float newlength)	{ mLength = newlength; }
+		void    setColor			(const GRColor* color);
 
 		GROctava *			AddOctava		(const AROctava * aroct);
 		void                AddSecondGlue	(GRGlue * myglue);
@@ -251,6 +253,7 @@ class GRStaff : public GRCompositeNotationElement
 		void                AddTag			(GRNotationElement * grtag);
 		GRClef *            AddClef			(const ARClef *);
 		GRInstrument *      AddInstrument	(const ARInstrument *);
+		void	      		AddColor		(GRColor * color) { fColor = color; }
 
 		virtual AccList * askAccidentals(TYPE_PITCH p_pit, TYPE_REGISTER p_oct, int p_acc, float detune=0.f);
 
@@ -321,6 +324,7 @@ class GRStaff : public GRCompositeNotationElement
 	  	GRGlue * 		secglue;
 		GRSystem * 		mGrSystem;
 		GRSystemSlice * mGrSystemSlice;
+		GRColor * 		fColor = nullptr;
 
 	  	float     		mLength;
 		GRStaffState 	mStaffState;
