@@ -191,11 +191,15 @@ bool GRPage::DPtoLPRect( VGDevice & hdc, float left, float top,
 */
 void GRPage::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos ) const
 {
+	hdc.SetFontColor(fColor);
+	hdc.PushFillColor(fColor);
+	hdc.PushPenColor(fColor);
 
 	setScaling( hdc, (float)inDrawInfos.sizex, (float)inDrawInfos.sizey );
 
 	// if croll coords are in virtual units:
-	hdc.SetOrigin( - (float)inDrawInfos.scrollx, - (float)inDrawInfos.scrolly ); // (JB) sign change
+//	if (inDrawInfos.scrollx || (float)inDrawInfos.scrolly)
+		hdc.SetOrigin( - (float)inDrawInfos.scrollx, - (float)inDrawInfos.scrolly ); // (JB) sign change
 
 
 	// if scroll coords are in device units:
@@ -249,6 +253,9 @@ void GRPage::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos ) const
 
 	// - Draws elements of the page.
 	OnDraw( hdc );
+
+	hdc.PopFillColor();
+	hdc.PopPenColor();
 //    trace (hdc);
 }
 
@@ -333,16 +340,12 @@ void GRPage::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos 
 */
 void GRPage::OnDraw( VGDevice & hdc ) const
 {	
-	hdc.SelectPenColor(fColor);
-	hdc.SelectFillColor(fColor);
-	hdc.SetFontColor(fColor);
 
-// TODO: test if the element intersect with the clipping box
 	GuidoPos pagepos = First();
-
 	while (pagepos)
 		GetNext(pagepos)->OnDraw(hdc);
 
+// TODO: test if the element intersect with the clipping box
 	// - Convert from centimeter to logical.
 	const float tstx = mLeftMargin;	// (JB) sign change
 	const float tsty = mTopMargin;		// (JB) sign change
@@ -386,7 +389,7 @@ void GRPage::OnDraw( VGDevice & hdc ) const
 
 	if (gBoundingBoxesMap & kPageBB)
 		DrawBoundingBox( hdc, kPageBBColor);
-	hdc.OffsetOrigin( -tstx, -tsty ); 
+	hdc.OffsetOrigin( -tstx, -tsty );
 }
 
 // ----------------------------------------------------------------------------
@@ -676,8 +679,8 @@ void GRPage::systemFinished(GRSystem * inSystem)
 		mSystems.pop_back();
 
 		// then we have to build a new page ....
-		GRPage * newpage = new GRPage( mCurMusic, m_staffmgr,
-						inSystem->getRelativeTimePosition(), settings, this);
+		GRPage * newpage = new GRPage( mCurMusic, m_staffmgr, inSystem->getRelativeTimePosition(), settings, this);
+		newpage->setColor(fColor);
 		inSystem->setGRPage(newpage);
 		float tmpf = 0; //(JB) this one was not initialized !
 		newpage->addSystem(inSystem, &tmpf);

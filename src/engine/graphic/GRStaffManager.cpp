@@ -433,7 +433,9 @@ void GRStaffManager::createStaves()
 				if (state.newline == kNewPage)
 				{
 					// a newpage
-					mGrPage = new GRPage( mGrMusic, this, state.timePos, settings, mGrPage );
+					GRPage * newpage = new GRPage( mGrMusic, this, state.timePos, settings, mGrPage );
+					newpage->setColor(mGrPage->getColor());
+					mGrPage = newpage;
 					mGrMusic->addPage( mGrPage );
 					beginheight = 0;
 				}
@@ -3041,6 +3043,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  start pos loop" 
 		{
 			GRPage * newpage = new GRPage( mGrMusic, this, mGrSystem->getRelativeEndTimePosition(), settings, mGrPage );
 			mGrPage->finishPage();
+			newpage->setColor(mGrPage->getColor());
 			mGrPage = newpage;
 			mGrMusic->addPage( mGrPage );
 //			mGrSystem->setGRPage( mGrPage ); // "Last system points to new page" bug!?
@@ -3116,6 +3119,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  end pos loop" <<
 			// build a new page and put the system in the new page
 			GRPage * newpage = new GRPage(mGrMusic, this, mGrSystem->getRelativeTimePosition(), settings, mGrPage);
 			mGrPage->finishPage();
+			newpage->setColor(mGrPage->getColor());
 			mGrPage = newpage;
 			mGrMusic->addPage(mGrPage);
 			mGrSystem->setGRPage(mGrPage);

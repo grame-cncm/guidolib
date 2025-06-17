@@ -70,6 +70,8 @@ class ARPageFormat :  public ARMTParameter
 		virtual const char*	getParamsStr() const	{ return kARPageFormatParams; };
 		virtual const char*	getTagName() const		{ return "ARPageFormat"; };
 		virtual std::string getGMNName() const		{ return "\\pageFormat"; };
+		
+		const VGColor& color () const 				{ return fColor; }
 
 	protected:
 		void  ClipSize();
