@@ -110,6 +110,11 @@ class GRStaffState
 						 GRStaffState();
 		virtual 		~GRStaffState();
 
+		int				getBasePitch() const						{ return basepit; }
+		int				getBaseLine() const						{ return baseline; }
+		int				getBaseOctave() const					{ return baseoct; }
+		int				getBasePitchOffset() const				{ return basepitoffs; }
+
 		GRStaffState & operator=(const GRStaffState &tmp);
 
 		GRStaffState &	getState()								{ return *this; }
@@ -350,5 +355,3 @@ std::ostream& operator<< (std::ostream& os, const GRStaff& staff);
 std::ostream& operator<< (std::ostream& os, const GRStaff* staff);
 
 #endif
-
-
