@@ -81,13 +81,29 @@ bool GRPositionTag::DeleteStaff(GRStaff * grstaff)
 	GRNotationElement * el = dynamic_cast<GRNotationElement *>(this);
 	if (el)
 	{
-		if (sse->startElement)	sse->startElement->removeAssociation(el);
-// here we have a real problem: there are some case where the endElement has been freed before this call and of course it crashes :-( 
+		//if (sse->startElement)	sse->startElement->removeAssociation(el);
+        if (sse->startElement && sse->startElement->associated()) {
+            try {
+                sse->startElement->removeAssociation(el);
+            } catch (...) {
+                std::cerr << "Error calling removeAssociation from startElement in DeleteStaff!" << std::endl;
+                sse->startElement = nullptr;
+            }
+        }
+// here we have a real problem: there are some case where the endElement has been freed before this call and of course it crashes :-(
 // since memory management is quite complex (and a bit messy), the only workaround I've found is to look at the associated fields
 // with the hope that the memory is not reused in between (that's currently the case)
 // a real solution would be to have automatic memory management using smart pointers... 
 // it'll have to be done sooner or later [D.F. 2012 march 6]
-		if (sse->endElement && sse->endElement->associated())	sse->endElement->removeAssociation(el);
+        if (sse->endElement && sse->endElement->associated())	{
+            // naive safeguard - check vtable is valid (ugly but pragmatic)
+            try {
+                sse->endElement->removeAssociation(el);
+            } catch (...) {
+                std::cerr<<"Error calling removeAssociation from DeleteStaff!"<<std::endl;
+                sse->endElement = nullptr;
+            }
+        }
 	}
 	// mStartEndList.setOwnership(0);
 	mStartEndList.RemoveElement(sse);

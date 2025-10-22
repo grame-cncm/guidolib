@@ -1958,6 +1958,20 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	dtempl.normalize();
 
 	GRSingleNote * grnote = new GRSingleNote(mCurGrStaff, tmpNote, tp, arObject->getDuration());
+	const GRStaffState& staffState = mCurGrStaff->getGRStaffState();
+	int basePitch = staffState.getBasePitch();
+	int baseLine = staffState.getBaseLine();
+	int baseOct = staffState.getBaseOctave();
+
+	if (ARMusicalTag * clefTag = fVoiceState->getCurStateTag(typeid(ARClef))) {
+		if (const ARClef * voiceClef = dynamic_cast<const ARClef *>(clefTag)) {
+			GRClef tmpClef(voiceClef, mCurGrStaff);
+			basePitch = tmpClef.getBasePitch() + staffState.getBasePitchOffset();
+			baseLine = tmpClef.getBaseLine();
+			baseOct = tmpClef.getBaseOct();
+		}
+	}
+	grnote->setClefReference(basePitch, baseLine, baseOct);
     grnote->setGraceNote(isGrace);
 	if (size)						grnote->setSize(size);
 	if (curglobalstem)				grnote->setGlobalStem(curglobalstem);
@@ -2437,4 +2451,3 @@ void GRVoiceManager::handleSharedArticulations(const TSharedArticulationsList& l
 		}
 	}
 }
-
