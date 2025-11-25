@@ -250,17 +250,27 @@ void GRSlur::automaticAnchorPoints( const GRBowingContext * context, const ARBow
 	const GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 
-	const GRStaff * startStaff = startElement->getGRStaff();
-	const GRStaff * endStaff   = endElement->getGRStaff();
-	bool spanStaves = (startStaff != endStaff);
-
 	// We try to fix the following problem here: with chord, the start and end
 	// elements are GREmpty objects, with a zero bounding box. So we substitute
 	// them by adequate noteheads.
-	if( context->topLeftHead != context->bottomLeftHead ) // test if chord
-		startElement = upward ? context->topLeftHead : context->bottomLeftHead;
-	if( (context->topRightHead != context->bottomRightHead) || endElement->isEmpty()) // test if chord
-		endElement = upward ? context->topRightHead : context->bottomRightHead;
+	if( context->topLeftHead != context->bottomLeftHead ) { // test if chord
+		const GRNotationElement * head = upward ? context->topLeftHead : context->bottomLeftHead;
+		if (head) startElement = head;
+	}
+	if( (context->topRightHead != context->bottomRightHead) || endElement->isEmpty()) { // test if chord
+		const GRNotationElement * head = upward ? context->topRightHead : context->bottomRightHead;
+		if (head) endElement = head;
+	}
+
+	// When a slur is attached to empty placeholders (as in hidden voices),
+	// we may not find concrete note heads. In that case, abort anchor
+	// computation to avoid dereferencing null element pointers.
+	if (!startElement || !endElement)
+		return;
+
+	const GRStaff * startStaff = startElement->getGRStaff();
+	const GRStaff * endStaff   = endElement->getGRStaff();
+	bool spanStaves = startStaff && endStaff && (startStaff != endStaff);
 
 	// -- Get the bounding box of the left and right elements.
 	const NVRect leftBox  = getElementBox ( context, startElement );
@@ -527,5 +537,4 @@ void GRSlur::automaticControlPoints( const GRBowingContext * context, const ARBo
 		bowInfos->offsets[1].y = std::min(y1, y2) - limit;
 }
 }
-
 
