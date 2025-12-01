@@ -16,8 +16,10 @@
 */
 
 #include "NVPoint.h"
+#include "Fraction.h"
 
 class NVstring;
+class GRStaff;
 
 // The StaffManager holds different hashtables for the
 // Synchronizsation elements to detect contraditions.
@@ -52,6 +54,7 @@ public:
 	virtual const NVPoint& getOffset() const    { return mTagOffset; }
 	virtual float       getSize() const         { return mTagSize; }
 	virtual float       getSConst() const       { return sconst; }
+	virtual void        applyDurationDx(GRStaff * grstaff);
 
     // returns name of a font if present ...
 	virtual const char*  getFont() const         { return fFontName.c_str(); }
@@ -82,6 +85,10 @@ protected:
 
 	float 	mTagSize;
 	NVPoint mTagOffset;
+
+	bool	fHasDurationDx = false;
+	bool	fDurationDxApplied = false;
+	Fraction fDxDuration;
 
 private:
 	int 	fError		= 0;

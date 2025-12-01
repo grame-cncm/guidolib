@@ -17,6 +17,8 @@
 #include "TagParameterFloat.h"
 #include "GRDefine.h"
 #include "GRTag.h"
+#include "GRStaff.h"
+#include "GRNotationElement.h"
 
 GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE )
 	: isautotag(0), sconst(SCONST_DEFAULT)
@@ -41,7 +43,13 @@ GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE )
 
 		const TagParameterFloat * dx = artag->getDX();
 		const TagParameterFloat * dy = artag->getDY();
-		if (dx)	mTagOffset.x = (GCoord) dx->getValue(curLSPACE);
+		if (dx)	{
+			if (dx->isDuration()) {
+				fHasDurationDx = true;
+				fDxDuration = dx->getDuration();
+			}
+			else mTagOffset.x = (GCoord) dx->getValue(curLSPACE);
+		}
 		if (dy)	mTagOffset.y -= (GCoord) dy->getValue(curLSPACE);
 
 		const TagParameterFloat * tps = artag->getSize();
@@ -65,3 +73,28 @@ bool GRTag::IsStateTag() const			{ return (fTagType == STAFFTAG); }
 int  GRTag::getIsAuto() const			{ return isautotag; }
 bool GRTag::operator==(const GRTag & tag) const	{ return false; }
 
+void GRTag::applyDurationDx(GRStaff * grstaff)
+{
+	if (!fHasDurationDx || fDurationDxApplied || !grstaff)
+		return;
+
+	GRNotationElement * ne = dynamic_cast<GRNotationElement*>(this);
+	if (!ne) return;
+
+	TYPE_TIMEPOSITION baseTime = ne->getRelativeTimePosition();
+	TYPE_TIMEPOSITION measStart, measEnd;
+	grstaff->getMeasureBounds(baseTime, measStart, measEnd);
+
+	TYPE_TIMEPOSITION targetTime = baseTime + fDxDuration;
+	if (targetTime < measStart) targetTime = measStart;
+	if (targetTime > measEnd)   targetTime = measEnd;
+
+	float baseX = grstaff->getXForTime(baseTime);
+	float targetX = grstaff->getXForTime(targetTime);
+	float dx = targetX - baseX;
+
+	mTagOffset.x += dx;
+	ne->setHPosition(ne->getPosition().x + dx);
+
+	fDurationDxApplied = true;
+}

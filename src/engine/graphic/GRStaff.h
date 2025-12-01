@@ -208,6 +208,8 @@ class GRStaff : public GRCompositeNotationElement
 		GRStaffState &          getGRStaffState()		{ return mStaffState; }
 		const GRStaffState &    getGRStaffState() const { return mStaffState; }
 		float					getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur) const;
+		float					getXForTime(const TYPE_TIMEPOSITION& tp) const;
+		void					getMeasureBounds(const TYPE_TIMEPOSITION& tp, TYPE_TIMEPOSITION& start, TYPE_TIMEPOSITION& end) const;
         const ARMeter *			getCurMeter() const		{ return mStaffState.curmeter; }
 
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
