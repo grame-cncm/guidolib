@@ -18,6 +18,7 @@
 
 #include <string>
 #include <regex>
+#include <iomanip>
 
 #include "TagParameterFloat.h"
 #include "ARUnits.h"
@@ -56,7 +57,7 @@ void TagParameterFloat::print(std::ostream& out)
 	TagParameter::print (out);
 	const char* u = TagIsUnitTag() ? getUnit() : "";
 	if (fIsDuration) {
-		out << std::string(fDuration);
+		out << std::string(fDuration) << "dur";
 	}
 	else out << getValue() << u;
 }
@@ -119,21 +120,28 @@ static bool parseDots (int dots, Fraction& value)
 
 static bool parseDurationString(const std::string& val, Fraction& out)
 {
-	// syntax: [sign]num/den[.]* (dot(s) optional)
-	std::regex e("^\\s*([+-]?)(\\d+)/(\\d+)(\\.*)\\s*$");
+	// syntax: [sign]num/den[.]*dur or [sign]decimal dur (dur suffix required)
+	std::regex fracExp("^\\s*([+-]?)(\\d+)/(\\d+)(\\.*)dur\\s*$");
+	std::regex decExp("^\\s*([+-]?\\d+(?:\\.\\d+)?)dur\\s*$");
 	std::smatch match;
-	if (!std::regex_search(val, match, e))
-		return false;
 
-	long num = std::stol(match[2]);
-	long den = std::stol(match[3]);
-	if (den == 0) return false;
-	int dots = (int)match[4].str().size();
-	out = Fraction((int)num, (int)den);
-	parseDots(dots, out);
-	if (match[1].str() == "-")
-		out = out * -1;
-	return true;
+	if (std::regex_search(val, match, fracExp)) {
+		long num = std::stol(match[2]);
+		long den = std::stol(match[3]);
+		if (den == 0) return false;
+		int dots = (int)match[4].str().size();
+		out = Fraction((int)num, (int)den);
+		parseDots(dots, out);
+		if (match[1].str() == "-")
+			out = out * -1;
+		return true;
+	}
+	if (std::regex_search(val, match, decExp)) {
+		double d = std::stod(match[1]);
+		out = Fraction(d);
+		return true;
+	}
+	return false;
 }
 
 void TagParameterFloat::setValue(const char * p)

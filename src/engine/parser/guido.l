@@ -100,6 +100,8 @@ SPACE	[ \t]
 EOL		[\x0a\x0d]
 
 %%
+{SPACE}*[+-]?{DIGIT}+(\.{DIGIT}+)?dur	yyextra->fText = yytext; return FLOAT;
+
 {DIGIT}+					yyextra->fText = yytext; return NUMBER;
 "+"{DIGIT}+					yyextra->fText = yytext; return PNUMBER;
 "-"{DIGIT}+					yyextra->fText = yytext; return NNUMBER;
