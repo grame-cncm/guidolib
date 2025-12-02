@@ -85,16 +85,40 @@ void GRTag::applyDurationDx(GRStaff * grstaff)
 	TYPE_TIMEPOSITION measStart, measEnd;
 	grstaff->getMeasureBounds(baseTime, measStart, measEnd);
 
-	TYPE_TIMEPOSITION targetTime = baseTime + fDxDuration;
-	if (targetTime < measStart) targetTime = measStart;
-	if (targetTime > measEnd)   targetTime = measEnd;
+	// derive spatial offset from time offset
+	const TYPE_TIMEPOSITION targetTime = baseTime + fDxDuration;
+	TYPE_TIMEPOSITION targetMeasStart = measStart;
+	TYPE_TIMEPOSITION targetMeasEnd   = measEnd;
 
-	float baseX = grstaff->getXForTime(baseTime);
-	float targetX = grstaff->getXForTime(targetTime);
-	float dx = targetX - baseX;
+	// If the target time crosses a barline, compute offsets in the measure where it lands.
+	if (targetTime < measStart || targetTime > measEnd) {
+		grstaff->getMeasureBounds(targetTime, targetMeasStart, targetMeasEnd);
+	}
+
+	const float baseX = grstaff->getXForTime(baseTime);
+
+	float targetX = baseX;
+	if (targetTime >= targetMeasStart && targetTime <= targetMeasEnd) {
+		targetX = grstaff->getXForTime(targetTime);
+	}
+	else if (targetMeasEnd != targetMeasStart) {
+		const double ratio = double(targetTime - targetMeasStart) /
+							 double(targetMeasEnd - targetMeasStart);
+		const float targetStartX = grstaff->getXForTime(targetMeasStart);
+		const float targetEndX   = grstaff->getXForTime(targetMeasEnd);
+		const float targetWidth  = targetEndX - targetStartX;
+		targetX = targetStartX + float(ratio * targetWidth);
+	}
+	const float dx = targetX - baseX;
+
+//	std::cerr << "[duration-dx] baseTime=" << double(baseTime)
+//			  << " targetTime=" << double(targetTime)
+//			  << " baseMeas=[" << double(measStart) << "," << double(measEnd) << "]"
+//			  << " targetMeas=[" << double(targetMeasStart) << "," << double(targetMeasEnd) << "]"
+//			  << " baseX=" << baseX << " targetX=" << targetX
+//			  << " dx=" << dx << std::endl;
 
 	mTagOffset.x += dx;
-	ne->setHPosition(ne->getPosition().x + dx);
 
 	fDurationDxApplied = true;
 }

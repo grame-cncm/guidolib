@@ -2007,7 +2007,11 @@ void GRStaff::FinishStaff()
     }
     }
 	setDuration (date - getRelativeTimePosition() + duration);
-    // apply duration-based dx offsets once positions are known
+    vector<GRPositionTag *>::iterator i;
+    for (i=ptags.begin(); i!=ptags.end(); i++) {
+       (*i)->FinishPTag (this);
+    }
+    // apply duration-based dx offsets after position tags have set their anchors
     {
         GuidoPos p = mCompElements.GetHeadPosition();
         while (p) {
@@ -2015,10 +2019,6 @@ void GRStaff::FinishStaff()
             GRTag * tag = dynamic_cast<GRTag *>(e);
             if (tag) tag->applyDurationDx(this);
         }
-    }
-    vector<GRPositionTag *>::iterator i;
-    for (i=ptags.begin(); i!=ptags.end(); i++) {
-       (*i)->FinishPTag (this);
     }
     if (mStaffState.fMultiVoiceCollisions) checkMultiVoiceNotesCollision();
 	updateBoundingBox();
@@ -2481,18 +2481,59 @@ void GRStaff::getMeasureBounds(const TYPE_TIMEPOSITION& tp, TYPE_TIMEPOSITION& s
 	start = DURATION_0;
 	end = getDuration();
 
-	GuidoPos pos = mCompElements.GetHeadPosition();
-	while (pos) {
-		const GRNotationElement* e = mCompElements.GetNext(pos);
-		const GRBar* bar = e->isGRBar();
-		if (!bar) continue;
-		TYPE_TIMEPOSITION bt = e->getRelativeTimePosition();
-		if (bt <= tp)
-			start = bt;
-		else {
-			end = bt;
-			break;
+	TYPE_TIMEPOSITION prevBar = DURATION_0;
+	bool prevSet = false;
+	TYPE_TIMEPOSITION nextBar = end;
+	bool nextSet = false;
+
+	GuidoPos p = mCompElements.GetHeadPosition();
+	while (p) {
+		const GRNotationElement* e = mCompElements.GetNext(p);
+		const GRBar* b = e->isGRBar();
+		if (!b) continue;
+
+		const TYPE_TIMEPOSITION bt = e->getRelativeTimePosition();
+		if (bt <= tp) {
+			if (!prevSet || bt > prevBar) {
+				prevBar = bt;
+				prevSet = true;
+			}
 		}
+		else {
+			if (!nextSet || bt < nextBar) {
+				nextBar = bt;
+				nextSet = true;
+			}
+		}
+	}
+
+	if (prevSet) start = prevBar;
+	if (nextSet) end = nextBar;
+
+	// If we only know the next bar, derive the measure start from the meter
+	if (!prevSet && nextSet) {
+		TYPE_DURATION mdur (1,1);
+		const ARMeter* meter = getCurMeter();
+		if (meter) {
+			TYPE_DURATION meterDur = meter->getMeterDuration();
+			if (meterDur > DURATION_0)
+				mdur = meterDur;
+		}
+		start = nextBar - mdur;
+		if (start < DURATION_0)
+			start = DURATION_0;
+	}
+
+	// fallback: if no bar ahead (or zero-length), derive from meter
+	if (end <= start) {
+		const ARMeter* meter = getCurMeter();
+		if (meter) {
+			TYPE_DURATION mdur = meter->getMeterDuration();
+			if (mdur > DURATION_0)
+				end = start + mdur;
+		}
+		if (end <= start) // ensure progress
+			end = start + TYPE_DURATION(1,1);
 	}
 }
 

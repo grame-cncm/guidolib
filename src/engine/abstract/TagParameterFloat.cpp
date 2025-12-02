@@ -176,6 +176,10 @@ void TagParameterFloat::setUnit(const char * unit)
 {
 	fUnit = unit;
 	fUnittag = true;
+	if (fUnit == "dur") {
+		fIsDuration = true;
+		fDuration = Fraction(fValue);
+	}
 }
 
 bool TagParameterFloat::copyValue(const TagParameter * tp)
