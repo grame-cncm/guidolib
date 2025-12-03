@@ -1,0 +1,5 @@
+{[ 
+   (* meas. 1 *)  \clef<"g2"> \key<0> \meter<"4/4", autoBarlines="off", autoMeasuresNum="system"> \harmony<"G7sus", position="above", dy=-0.6hs> \beamsOff \tieBegin:1 g1/1 \harmony<"Gm9", position="above", dy=-0.6hs, dx=-0.50000000dur> \bar<measNum=2> 
+   (* meas. 2 *)  \harmony<"G7sus", position="above", dy=-0.6hs> \stemsUp \beamsOff g1/2. \tieEnd:1 \harmony<"Gm9", position="above", dy=-0.6hs, dx=-0.25000000dur> _/4 \bar<measNum=3> 
+   (* meas. 3 *)  \harmony<"Am/C", position="above", dy=-0.6hs> \stemsAuto \beamsOff c1/1 \harmony<"B&/C", position="above", dy=-0.6hs, dx=-0.50000000dur> \staff<1> \endBar ]
+  }
