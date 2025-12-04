@@ -175,6 +175,15 @@ void GRSingleNote::drawLedges (VGDevice & hdc) const
 	}
 }
 
+void GRSingleNote::setClefReference(int basePitch, int baseLine, int baseOctave)
+{
+    mClefBasePitch = basePitch;
+    mClefBaseLine = baseLine;
+    mClefBaseOctave = baseOctave;
+    mHasClefReference = true;
+}
+
+
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {

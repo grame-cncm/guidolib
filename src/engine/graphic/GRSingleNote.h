@@ -121,7 +121,8 @@ class GRSingleNote : public GRNote
 		const GRStem *	getStem() const;
 		float 			getNoteWidth() const	{ return mNoteBreite; }
 		void			hideHead ();
-
+        void setClefReference(int basePitch, int baseLine, int baseOctave);
+    
 protected:
 	GRStem *	  getStem();
 	GRFlag *	  getFlag();
