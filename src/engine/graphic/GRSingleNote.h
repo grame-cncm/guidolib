@@ -121,8 +121,10 @@ class GRSingleNote : public GRNote
 		const GRStem *	getStem() const;
 		float 			getNoteWidth() const	{ return mNoteBreite; }
 		void			hideHead ();
-        void setClefReference(int basePitch, int baseLine, int baseOctave);
     
+        bool contains(const TYPE_TIMEPOSITION& date) const;
+		void	setClefReference(int basePitch, int baseLine, int baseOctave);
+
 protected:
 	GRStem *	  getStem();
 	GRFlag *	  getFlag();
@@ -137,6 +139,8 @@ private:
 	void 	createNote(const TYPE_DURATION & p_durtemplate /*= DURATION_0*/ );
 	void 	drawLedges (VGDevice & hdc) const;
 	float 	getLedgeWidth (VGDevice & hdc) const;
+	float	notePositionForClef(TYPE_PITCH pit, TYPE_REGISTER oct) const;
+	int		numHelplinesForClef(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 
 	GRStdNoteHead *	mNoteHead; // exists also in element list.
 	GDirection		mStemDir;
@@ -148,6 +152,10 @@ private:
 	static float 	fLedgeWidth;
 
 	ARTHead::HEADSTATE mHeadState;
+	int				mClefBasePitch = 0;
+	int				mClefBaseLine = 0;
+	int				mClefBaseOctave = 0;
+	bool			mHasClefReference = false;
         
     // Used when dispNote param is set on \tuplet-tag to force note appearance
     NVstring mNoteAppearance;
