@@ -114,6 +114,23 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 	}
 }
 
+bool GRSingleNote::contains(const TYPE_TIMEPOSITION &date)  const {
+    TYPE_DURATION dur = getDuration();
+    if (dur.getNumerator() == 0) {        // notes in chords have a null duration
+        dur = getDurTemplate();
+    }
+    
+    return (getARNote()->getRelativeTimePosition() <= date) && (getARNote()->getRelativeTimePosition()+dur > date);
+}
+
+void GRSingleNote::setClefReference(int basePitch, int baseLine, int baseOctave)
+{
+	mClefBasePitch = basePitch;
+	mClefBaseLine = baseLine;
+	mClefBaseOctave = baseOctave;
+	mHasClefReference = true;
+}
+
 //____________________________________________________________________________________
 float GRSingleNote::getLedgeWidth (VGDevice & hdc) const
 {
@@ -174,15 +191,6 @@ void GRSingleNote::drawLedges (VGDevice & hdc) const
 		GRNote::DrawSymbol(hdc, largeledge ? kLedgerLargeSymbol : kLedgerLineSymbol, ledXPos, posy - mPosition.y);
 	}
 }
-
-void GRSingleNote::setClefReference(int basePitch, int baseLine, int baseOctave)
-{
-    mClefBasePitch = basePitch;
-    mClefBaseLine = baseLine;
-    mClefBaseOctave = baseOctave;
-    mHasClefReference = true;
-}
-
 
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
@@ -394,8 +402,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 
 	// - Set the vertical position
 	mPosition.y = 0;
-	if (mGrStaff)
-		mPosition.y = mGrStaff->getNotePosition( pitch, octave );
+	mPosition.y = notePositionForClef(pitch, octave);
 	// -> setting of the element-positions
 	// do I need this? YES for correct dimensions including accidentals
 	setPosition(mPosition);
@@ -443,7 +450,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		}
 	}
 
-	mNumHelpLines = mGrStaff->getNumHelplines(pitch, octave);
+	mNumHelpLines = numHelplinesForClef(pitch, octave);
 
 	if (!mGlobalStem)
 		adjustHeadPosition();
@@ -675,12 +682,45 @@ void GRSingleNote::recalcVerticalPosition()
 	// Here the vertical psoition is calculated and set
 	NVPoint newPos = getPosition();
 
-	newPos.y = 0;
-	if (mGrStaff)
-		newPos.y = mGrStaff->getNotePosition( pitch, octave );
+	newPos.y = notePositionForClef(pitch, octave);
 	setPosition( newPos );
-	mNumHelpLines = mGrStaff->getNumHelplines( pitch, octave );
+	mNumHelpLines = numHelplinesForClef( pitch, octave );
 	updateBoundingBox();
+}
+
+//____________________________________________________________________________________
+float GRSingleNote::notePositionForClef(TYPE_PITCH pit, TYPE_REGISTER oct) const
+{
+	if (!mGrStaff)
+		return 0.f;
+	if (!mHasClefReference)
+		return mGrStaff->getNotePosition(pit, oct);
+	return mGrStaff->getNotePosition(pit, oct, mClefBasePitch, mClefBaseLine, mClefBaseOctave);
+}
+
+//____________________________________________________________________________________
+int GRSingleNote::numHelplinesForClef(TYPE_PITCH pit, TYPE_REGISTER oct) const
+{
+	if (!mGrStaff)
+		return 0;
+	if (mGrStaff->getStaffLSPACE() < kMinNoteSize)
+		return 0;
+
+	float calc = notePositionForClef(pit, oct) / mGrStaff->getStaffLSPACE();
+	if (calc < 0)
+		calc -= 0.25f;
+	else
+		calc += 0.25f;
+
+	const int icalc = static_cast<int>(calc);
+	if (icalc < 0)
+		return -icalc;
+
+	const int numlines = mGrStaff->getNumlines();
+	if (icalc >= numlines)
+		return -(icalc - (numlines - 1));
+
+	return 0;
 }
 
 //____________________________________________________________________________________
