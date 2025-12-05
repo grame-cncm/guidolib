@@ -280,6 +280,10 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 		}
 
 		assert(mCurGrStaff);
+		// A voice keeps its own clef state; when switching to another staff we drop
+		// the previous clef so the new staff's current clef becomes the reference
+		// until this voice sets a new one.
+		fVoiceState->RemoveCurStateTag(typeid(ARClef));
 	}
 	else if ((staffrmt = dynamic_cast<const ARStaffFormat *>(mtag)) != 0)
 		mCurGrStaff->setStaffFormat(staffrmt);
