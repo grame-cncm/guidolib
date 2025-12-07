@@ -284,6 +284,7 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 		// the previous clef so the new staff's current clef becomes the reference
 		// until this voice sets a new one.
 		fVoiceState->RemoveCurStateTag(typeid(ARClef));
+		mHasVoiceClefTag = false;
 	}
 	else if ((staffrmt = dynamic_cast<const ARStaffFormat *>(mtag)) != 0)
 		mCurGrStaff->setStaffFormat(staffrmt);
@@ -930,6 +931,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	else if (tinf == typeid(ARClef)) 
 	{
 		grne = mCurGrStaff->AddClef(static_cast<const ARClef *>(arOfCompleteObject));
+		mHasVoiceClefTag = true;
 		
 		// here the baseline etc. will be changed
 		if (grne) fMusic->addVoiceElement(arVoice,grne);
@@ -1956,20 +1958,25 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	dtempl.normalize();
 
 	GRSingleNote * grnote = new GRSingleNote(mCurGrStaff, tmpNote, tp, arObject->getDuration());
-	const GRStaffState& staffState = mCurGrStaff->getGRStaffState();
-	int basePitch = staffState.getBasePitch();
-	int baseLine = staffState.getBaseLine();
-	int baseOct = staffState.getBaseOctave();
-
-	if (ARMusicalTag * clefTag = fVoiceState->getCurStateTag(typeid(ARClef))) {
-		if (const ARClef * voiceClef = dynamic_cast<const ARClef *>(clefTag)) {
-			GRClef tmpClef(voiceClef, mCurGrStaff);
-			basePitch = tmpClef.getBasePitch() + staffState.getBasePitchOffset();
-			baseLine = tmpClef.getBaseLine();
-			baseOct = tmpClef.getBaseOct();
+	if (mHasVoiceClefTag) {
+		// Only override the staff clef when this voice has explicitly set one.
+		if (ARMusicalTag * clefTag = fVoiceState->getCurStateTag(typeid(ARClef))) {
+			if (const ARClef * voiceClef = dynamic_cast<const ARClef *>(clefTag)) {
+				if (!voiceClef->getIsAuto()) {
+					const GRStaffState& staffState = mCurGrStaff->getGRStaffState();
+					GRClef tmpClef(voiceClef, mCurGrStaff);
+					const int basePitch = tmpClef.getBasePitch() + staffState.getBasePitchOffset();
+					const int baseLine = tmpClef.getBaseLine();
+					const int baseOct = tmpClef.getBaseOct();
+					if (basePitch != staffState.getBasePitch()
+						|| baseLine != staffState.getBaseLine()
+						|| baseOct != staffState.getBaseOctave()) {
+						grnote->setClefReference(basePitch, baseLine, baseOct);
+					}
+				}
+			}
 		}
 	}
-	grnote->setClefReference(basePitch, baseLine, baseOct);
     grnote->setGraceNote(isGrace);
 	if (size)						grnote->setSize(size);
 	if (curglobalstem)				grnote->setGlobalStem(curglobalstem);
