@@ -168,6 +168,7 @@ private:
 	GRTagARNotationElement* fLastbar;
 	GROctava*				fLastOctava;
 	ARMusicalVoiceState *	fVoiceState;
+	bool					mHasVoiceClefTag = false;
 	GRTagPointerList *		fGRTags;
 	GRTrill*				fCurrentTrill = 0;
 	
