@@ -118,6 +118,8 @@ class GRStaffState
 		int				getInitialBaseLine() const				{ return initBaseLine; }
 		int				getInitialBaseOctave() const			{ return initBaseOct; }
 		bool			hasInitialClef() const					{ return initClefCaptured; }
+		bool			hasClefTime() const						{ return clefTimeSet; }
+		TYPE_TIMEPOSITION getClefTime() const					{ return clefTime; }
 
 		GRStaffState & operator=(const GRStaffState &tmp);
 
@@ -163,6 +165,8 @@ class GRStaffState
 		int initBaseLine;
 		int initBaseOct;
 		bool initClefCaptured;
+		bool clefTimeSet;
+		TYPE_TIMEPOSITION clefTime;
 		float instrKeyArray[NUMNOTES];
 				// the key-array for the current instrument (if transposed).
 

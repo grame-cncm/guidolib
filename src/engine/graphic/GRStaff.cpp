@@ -200,6 +200,8 @@ GRStaffState::GRStaffState()
 	initBaseLine = baseline;
 	initBaseOct = baseoct;
 	initClefCaptured = false;
+	clefTimeSet = false;
+	clefTime = DURATION_0;
 
 	distanceset = false;
 	distance    = 0;
@@ -254,6 +256,8 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & state)
 	octava		= state.octava;
 	baseline	= state.baseline;
 	curclef		= state.curclef;
+	clefTimeSet = state.clefTimeSet;
+	clefTime	= state.clefTime;
 
 	curstaffrmt = state.curstaffrmt;
 	staffLSPACE = LSPACE;
@@ -741,6 +745,8 @@ void GRStaff::setMeterParameters(GRMeter * grmeter)
 void GRStaff::setClefParameters(GRClef * grclef, GRStaffState::clefstate cstate)
 {
 	mStaffState.clefset = cstate;
+	mStaffState.clefTimeSet = (grclef != NULL);
+	mStaffState.clefTime = grclef ? grclef->getRelativeTimePosition() : DURATION_0;
 	if (grclef == NULL)
 	{ // Standard ...
 		mStaffState.curclef = NULL;
