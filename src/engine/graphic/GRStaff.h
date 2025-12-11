@@ -114,6 +114,10 @@ class GRStaffState
 		int				getBaseLine() const						{ return baseline; }
 		int				getBaseOctave() const					{ return baseoct; }
 		int				getBasePitchOffset() const				{ return basepitoffs; }
+		int				getInitialBasePitch() const				{ return initBasePit; }
+		int				getInitialBaseLine() const				{ return initBaseLine; }
+		int				getInitialBaseOctave() const			{ return initBaseOct; }
+		bool			hasInitialClef() const					{ return initClefCaptured; }
 
 		GRStaffState & operator=(const GRStaffState &tmp);
 
@@ -152,6 +156,13 @@ class GRStaffState
 				// basepitoffs: the offset for the given instrument, example: clarinet in A
 				// has an offset of -2, it is two pitchclasses away from c-major
 				// instrnumkeys: the number of keys for the transposed instrument ,,,
+
+		// First explicit clef seen on the staff. Voices without a clef of their own
+		// should keep referring to this even if another voice changes the staff clef later.
+		int initBasePit;
+		int initBaseLine;
+		int initBaseOct;
+		bool initClefCaptured;
 		float instrKeyArray[NUMNOTES];
 				// the key-array for the current instrument (if transposed).
 
