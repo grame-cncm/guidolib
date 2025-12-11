@@ -196,6 +196,10 @@ GRStaffState::GRStaffState()
 	octava       = 0;
 	baseline     = 3;
 	curclef      = NULL;
+	initBasePit = basepit;
+	initBaseLine = baseline;
+	initBaseOct = baseoct;
+	initClefCaptured = false;
 
 	distanceset = false;
 	distance    = 0;
@@ -757,6 +761,16 @@ void GRStaff::setClefParameters(GRClef * grclef, GRStaffState::clefstate cstate)
 		mStaffState.baseoct = grclef->getBaseOct();
 		mStaffState.octava = 0;
 		mStaffState.baseline = grclef->getBaseLine();
+	}
+
+	// Remember the first explicit clef encountered on this staff so that voices
+	// without their own clef keep using the initial baseline even if another
+	// voice changes the staff clef later.
+	if (!mStaffState.initClefCaptured) {
+		mStaffState.initBasePit = mStaffState.basepit;
+		mStaffState.initBaseLine = mStaffState.baseline;
+		mStaffState.initBaseOct = mStaffState.baseoct;
+		mStaffState.initClefCaptured = true;
 	}
 
 	// now we have to take into consideration the 

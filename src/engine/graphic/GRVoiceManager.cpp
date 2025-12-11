@@ -1954,29 +1954,36 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	TYPE_DURATION dtempl = findDuration (fVoiceState, curev);
 
 	// we need to take care of dots !
-    const ARNote * tmpNote = static_cast<const ARNote *>(curev->isARNote());
+	const ARNote * tmpNote = static_cast<const ARNote *>(curev->isARNote());
 	dtempl.normalize();
 
 	GRSingleNote * grnote = new GRSingleNote(mCurGrStaff, tmpNote, tp, arObject->getDuration());
+	const GRStaffState& staffState = mCurGrStaff->getGRStaffState();
+	int basePitch = staffState.getBasePitch();
+	int baseLine = staffState.getBaseLine();
+	int baseOct = staffState.getBaseOctave();
+
 	if (mHasVoiceClefTag) {
 		// Only override the staff clef when this voice has explicitly set one.
 		if (ARMusicalTag * clefTag = fVoiceState->getCurStateTag(typeid(ARClef))) {
 			if (const ARClef * voiceClef = dynamic_cast<const ARClef *>(clefTag)) {
 				if (!voiceClef->getIsAuto()) {
-					const GRStaffState& staffState = mCurGrStaff->getGRStaffState();
 					GRClef tmpClef(voiceClef, mCurGrStaff);
-					const int basePitch = tmpClef.getBasePitch() + staffState.getBasePitchOffset();
-					const int baseLine = tmpClef.getBaseLine();
-					const int baseOct = tmpClef.getBaseOct();
-					if (basePitch != staffState.getBasePitch()
-						|| baseLine != staffState.getBaseLine()
-						|| baseOct != staffState.getBaseOctave()) {
-						grnote->setClefReference(basePitch, baseLine, baseOct);
-					}
+					basePitch = tmpClef.getBasePitch() + staffState.getBasePitchOffset();
+					baseLine = tmpClef.getBaseLine();
+					baseOct = tmpClef.getBaseOct();
 				}
 			}
 		}
 	}
+	// Voice without its own clef: keep using the staff's initial clef so later
+	// clef changes in other voices don't shift this voice's pitches.
+	else if (staffState.hasInitialClef()) {
+		basePitch = staffState.getInitialBasePitch();
+		baseLine = staffState.getInitialBaseLine();
+		baseOct = staffState.getInitialBaseOctave();
+	}
+	grnote->setClefReference(basePitch, baseLine, baseOct);
     grnote->setGraceNote(isGrace);
 	if (size)						grnote->setSize(size);
 	if (curglobalstem)				grnote->setGlobalStem(curglobalstem);
