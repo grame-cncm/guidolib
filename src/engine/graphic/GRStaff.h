@@ -16,6 +16,7 @@
 */
 
 #include <iostream>
+#include <vector>
 
 #include "GRCompositeNotationElement.h"
 #include "GuidoDefs.h"
@@ -120,6 +121,8 @@ class GRStaffState
 		bool			hasInitialClef() const					{ return initClefCaptured; }
 		bool			hasClefTime() const						{ return clefTimeSet; }
 		TYPE_TIMEPOSITION getClefTime() const					{ return clefTime; }
+		bool			getClefAtTime(const TYPE_TIMEPOSITION& tp, int& basePitch, int& baseLine, int& baseOct, TYPE_TIMEPOSITION& clefAtTime) const;
+		void			rememberClef(const TYPE_TIMEPOSITION& tp, int basePitch, int baseLine, int baseOct);
 
 		GRStaffState & operator=(const GRStaffState &tmp);
 
@@ -167,6 +170,13 @@ class GRStaffState
 		bool initClefCaptured;
 		bool clefTimeSet;
 		TYPE_TIMEPOSITION clefTime;
+		struct ClefEntry {
+			TYPE_TIMEPOSITION time;
+			int basePitch;
+			int baseLine;
+			int baseOct;
+		};
+		std::vector<ClefEntry> clefHistory;
 		float instrKeyArray[NUMNOTES];
 				// the key-array for the current instrument (if transposed).
 

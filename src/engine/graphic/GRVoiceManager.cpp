@@ -202,6 +202,7 @@ GRVoiceManager::GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, cons
 	grvoice = fMusic->getVoice(arVoice);
 	mVoiceClefTime = DURATION_0;
 	mVoiceClefTimeSet = false;
+	mHasExplicitVoiceClef = false;
 
 	fLastOctava = NULL;
 	fGRTags = NULL;
@@ -287,6 +288,7 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 		// until this voice sets a new one.
 		fVoiceState->RemoveCurStateTag(typeid(ARClef));
 		mHasVoiceClefTag = false;
+		mHasExplicitVoiceClef = false;
 		mVoiceClefTimeSet = false;
 		mVoiceClefTime = DURATION_0;
 	}
@@ -934,8 +936,11 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	}
 	else if (tinf == typeid(ARClef)) 
 	{
-		grne = mCurGrStaff->AddClef(static_cast<const ARClef *>(arOfCompleteObject));
+		const ARClef* arclef = static_cast<const ARClef *>(arOfCompleteObject);
+		grne = mCurGrStaff->AddClef(arclef);
 		mHasVoiceClefTag = true;
+		if (!arclef->getIsAuto())
+			mHasExplicitVoiceClef = true;
 		mVoiceClefTime = arOfCompleteObject->getRelativeTimePosition();
 		mVoiceClefTimeSet = true;
 		
@@ -1969,6 +1974,11 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	int basePitch = staffState.getBasePitch();
 	int baseLine = staffState.getBaseLine();
 	int baseOct = staffState.getBaseOctave();
+	int staffClefPitch = basePitch;
+	int staffClefLine = baseLine;
+	int staffClefOct = baseOct;
+	TYPE_TIMEPOSITION staffClefTime = DURATION_0;
+	const bool hasStaffClefAtNote = staffState.getClefAtTime(noteStart, staffClefPitch, staffClefLine, staffClefOct, staffClefTime);
 
 	const ARClef* voiceClef = nullptr;
 	TYPE_TIMEPOSITION voiceClefTime = mVoiceClefTime;
@@ -1979,23 +1989,25 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 		}
 	}
 
-	bool useVoiceClef = mHasVoiceClefTag && voiceClef;
-	if (useVoiceClef && staffState.hasClefTime()) {
-		const TYPE_TIMEPOSITION& staffClefTime = staffState.getClefTime();
-		if ((staffClefTime >= voiceClefTime) && (staffClefTime <= noteStart)) {
+	bool useVoiceClef = mHasExplicitVoiceClef && voiceClef && !voiceClef->getIsAuto();
+	if (useVoiceClef && hasStaffClefAtNote) {
+		if (staffClefTime >= voiceClefTime) {
 			useVoiceClef = false;
 		}
 	}
 
-	if (useVoiceClef && voiceClef && !voiceClef->getIsAuto()) {
+	if (useVoiceClef) {
 		GRClef tmpClef(voiceClef, mCurGrStaff);
 		basePitch = tmpClef.getBasePitch() + staffState.getBasePitchOffset();
 		baseLine = tmpClef.getBaseLine();
 		baseOct = tmpClef.getBaseOct();
 	}
-	// Voice without its own clef: keep using the staff's initial clef so later
-	// clef changes in other voices don't shift this voice's pitches.
-	else if (!mHasVoiceClefTag && staffState.hasInitialClef()) {
+	else if (hasStaffClefAtNote) {
+		basePitch = staffClefPitch;
+		baseLine = staffClefLine;
+		baseOct = staffClefOct;
+	}
+	else if (staffState.hasInitialClef()) {
 		basePitch = staffState.getInitialBasePitch();
 		baseLine = staffState.getInitialBaseLine();
 		baseOct = staffState.getInitialBaseOctave();
