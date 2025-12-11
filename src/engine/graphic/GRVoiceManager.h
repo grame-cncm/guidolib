@@ -169,6 +169,8 @@ private:
 	GROctava*				fLastOctava;
 	ARMusicalVoiceState *	fVoiceState;
 	bool					mHasVoiceClefTag = false;
+	bool					mVoiceClefTimeSet = false;
+	TYPE_TIMEPOSITION		mVoiceClefTime = DURATION_0;
 	GRTagPointerList *		fGRTags;
 	GRTrill*				fCurrentTrill = 0;
 	
