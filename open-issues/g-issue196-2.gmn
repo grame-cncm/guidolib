@@ -1,40 +1,31 @@
-{[ \staff<1> \title<"Moonlight Sonata"> \composer<"Ludwig van Beethoven", dy=4hs> 
-   (* meas. 1 *)  \clef<"g2"> \key<4> \meter<"C/", autoBarlines="off", autoMeasuresNum="system"> \stemsUp \beamsOff \acc( g1/2)
+{[ \staff<1> \title<"Moonlight Sonata">  
+   (* meas. 1 *)  \clef<"g2"> \key<4> \meter<"C/"> \stemsUp \beamsOff \acc( g1/2)
  \beamsOff f#1/2 \bar<measNum=2> 
    (* meas. 2 *)  \clef<"f4"> \beamsOff c#1/2 \beamsOff c#1/4 \beamsOff c#1/4 \bar<measNum=3> 
    (* meas. 3 *)  \crescBegin<dy=-10.4hs> \beamsOff f#0/4 \restFormat<dy=-9>( _/4)
  \clef<"g2"> \restFormat<dy=-6>( _/4)
  \intens<"p", dy=-10.6hs, dx=0> \beamBegin:1 c#2/8. \crescEnd c#2/16 \beamEnd:1 \staff<1> \endBar ]
  , 
-[ \staff<1> \set<autoHideTiedAccidentals="on"> \barFormat<style= "system", range="1"> \clef<"g2"> 
-   (* meas. 1 *)  \stemsDown \beamBegin:1 \tuplet<"", dispNote="/8">( \acc( g0/12)
- b0/12 \fingering<dy=-12.2hs, dx=-0.8, text="3">( \acc( d1/12)
-)
-)
+[ \staff<1> \clef<"g2"> 
+   (* meas. 1 *)  \stemsDown \beamBegin:1 
+   \tuplet<"", dispNote="/8">( \acc( g0/12) b0/12 \fingering<dy=-12.2hs, dx=-0.8, text="3">( \acc( d1/12)))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( g0/12 b0/12 d1/12)
- \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( f#0/12 a0/12 \fingering<dy=-13.2hs, dx=-1, text="4">( \acc( d#1/12)
-)
-)
+ \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( f#0/12 a0/12 \fingering<dy=-13.2hs, dx=-1, text="4">( \acc( d#1/12)))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( f#0/12 a0/12 d#1/12)
  \beamEnd:1 \bar<measNum=2> 
-   (* meas. 2 *)  \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 \fingering<dy=-11.2hs, dx=-0.8, text="4">( a0/12)
-)
+   (* meas. 2 *)  
+ \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 \fingering<dy=-11.2hs, dx=-0.8, text="4">( a0/12))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 a0/12)
- \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 \fingering<dy=-10.2hs, dx=-0.8, text="3">( g#0/12)
-)
- \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 \acc( e#0/12)
- g#0/12)
+ \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 \fingering<dy=-10.2hs, dx=-0.8, text="3">( g#0/12))
+ \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 \acc( e#0/12) g#0/12)
  \beamEnd:1 \bar<measNum=3> 
    (* meas. 3 *)  \beamBegin:1 \tuplet<"", dispNote="/8">( \fingering<dy=-7.4hs, dx=-0.8, text="2">( f#0/12)
  \fingering<dy=-9.4hs, dx=-1, text="3">( a0/12)
- \fingering<dy=-11.4hs, dx=-0.8, text="5">( c#1/12)
-)
+ \fingering<dy=-11.4hs, dx=-0.8, text="5">( c#1/12))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( \fingering<dy=-9.4hs, dx=-0.8, text="1">( a0/12)
- c#1/12 \fingering<dy=-14.4hs, dx=-0.8, text="4">( f#1/12)
-)
+ c#1/12 \fingering<dy=-14.4hs, dx=-0.8, text="4">( f#1/12))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( \fingering<dy=-9.2hs, dx=-0.8, text="1">( c#1/12)
- f#1/12 \fingering<dy=-13.2hs, dx=-0.8, text="3">( a1/12)
-)
+ f#1/12 \fingering<dy=-13.2hs, dx=-0.8, text="3">( a1/12))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#1/12 f#1/12 a1/12)
  \beamEnd:1 \staff<1> \endBar ]
   }
