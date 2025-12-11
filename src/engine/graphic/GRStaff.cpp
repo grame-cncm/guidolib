@@ -202,6 +202,7 @@ GRStaffState::GRStaffState()
 	initClefCaptured = false;
 	clefTimeSet = false;
 	clefTime = DURATION_0;
+	clefHistory.clear();
 
 	distanceset = false;
 	distance    = 0;
@@ -258,6 +259,7 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & state)
 	curclef		= state.curclef;
 	clefTimeSet = state.clefTimeSet;
 	clefTime	= state.clefTime;
+	clefHistory = state.clefHistory;
 
 	curstaffrmt = state.curstaffrmt;
 	staffLSPACE = LSPACE;
@@ -778,11 +780,38 @@ void GRStaff::setClefParameters(GRClef * grclef, GRStaffState::clefstate cstate)
 		mStaffState.initBaseOct = mStaffState.baseoct;
 		mStaffState.initClefCaptured = true;
 	}
+	if (mStaffState.clefTimeSet)
+		mStaffState.rememberClef(mStaffState.clefTime, mStaffState.basepit, mStaffState.baseline, mStaffState.baseoct);
 
 	// now we have to take into consideration the 
 	// instrument-offset (e.g. "clarinet in A")
 	// which changes the basepitch ....
 	// (relative to the "normal" C-Major oriented scale)
+}
+
+bool GRStaffState::getClefAtTime(const TYPE_TIMEPOSITION& tp, int& basePitch, int& baseLine, int& baseOct, TYPE_TIMEPOSITION& clefAtTime) const
+{
+	bool found = false;
+	TYPE_TIMEPOSITION latest = DURATION_0;
+	for (const auto& entry : clefHistory) {
+		if (entry.time <= tp) {
+			if (!found || entry.time >= latest) {
+				found = true;
+				latest = entry.time;
+				basePitch = entry.basePitch;
+				baseLine = entry.baseLine;
+				baseOct = entry.baseOct;
+			}
+		}
+	}
+	if (found)
+		clefAtTime = latest;
+	return found;
+}
+
+void GRStaffState::rememberClef(const TYPE_TIMEPOSITION& tp, int basePitch, int baseLine, int baseOct)
+{
+	clefHistory.push_back({tp, basePitch, baseLine, baseOct});
 }
 
 // ----------------------------------------------------------------------------
@@ -1569,6 +1598,7 @@ staff_debug("CreateBeginElements");
 	mStaffState.basepitoffs = state.basepitoffs;
 	mStaffState.instrNumKeys = state.instrNumKeys;
 	mStaffState.fInstrument = state.fInstrument;
+    mStaffState.clefHistory = state.clefHistory;
 	
 	// we have to look, what kind of state-settings are set.
 	if (state.curbarfrmt != NULL)
@@ -1918,6 +1948,7 @@ staff_debug("setStaffState");
 
 	mStaffState.distanceset = state->distanceset;
 	mStaffState.distance = state->distance;
+    mStaffState.clefHistory = state->clefHistory;
 // DebugPrintState( "setStaffState apres" );
 
 }

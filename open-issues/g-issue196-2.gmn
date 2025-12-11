@@ -14,7 +14,8 @@
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( f#0/12 a0/12 d#1/12)
  \beamEnd:1 \bar<measNum=2> 
    (* meas. 2 *)  
- \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 \fingering<dy=-11.2hs, dx=-0.8, text="4">( a0/12))
+ \beamBegin:1 
+ \tuplet<"", dispNote="/8">( c#0/12 f#0/12 \fingering<dy=-11.2hs, dx=-0.8, text="4">( a0/12))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 a0/12)
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 f#0/12 \fingering<dy=-10.2hs, dx=-0.8, text="3">( g#0/12))
  \beamEnd:1 \beamBegin:1 \tuplet<"", dispNote="/8">( c#0/12 \acc( e#0/12) g#0/12)
