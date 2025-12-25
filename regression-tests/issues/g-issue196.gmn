@@ -1,0 +1,16 @@
+{[ \staff<1>
+   (* meas. 1 *) \clef<"f4"> \key<2> \meter<"3/4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \stemsUp \slurBegin:1<curve="down"> {e1/4, c#2/4} {c#1/4, e1/4, a1/4} \slurEnd:1 \bar<measNum=2>
+   (* meas. 2 *) \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {a0/4, d1/4, f#1/4} {b0/4, d1/4, \acc(g#1/4)} \slurEnd:1 \bar<measNum=3>
+   (* meas. 3 *) \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {e1/4, c#2/4} {c#1/4, e1/4, a1/4} \slurEnd:1 \bar<measNum=4>
+   (* meas. 4 *) \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {a0/4, d1/4, f#1/4} {b0/4, d1/4, \acc(g#1/4)} \slurEnd:1 \staff<1> \endBar ]
+,
+[ \staff<1> \clef<"f4">
+   (* meas. 1 *) \stemsDown {a-2/2., a-1/2.} \bar<measNum=2>
+   (* meas. 2 *) \clef<"f4"> {e-2/2., e-1/2.} \bar<measNum=3>
+   (* meas. 3 *) {a-2/2., a-1/2.} \bar<measNum=4>
+   (* meas. 4 *) {e-2/2., e-1/2.} \staff<1> \endBar ]
+}

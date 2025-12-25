@@ -16,6 +16,7 @@
 */
 
 #include <iostream>
+#include <vector>
 
 #include "GRCompositeNotationElement.h"
 #include "GuidoDefs.h"
@@ -110,6 +111,19 @@ class GRStaffState
 						 GRStaffState();
 		virtual 		~GRStaffState();
 
+		int				getBasePitch() const						{ return basepit; }
+		int				getBaseLine() const						{ return baseline; }
+		int				getBaseOctave() const					{ return baseoct; }
+		int				getBasePitchOffset() const				{ return basepitoffs; }
+		int				getInitialBasePitch() const				{ return initBasePit; }
+		int				getInitialBaseLine() const				{ return initBaseLine; }
+		int				getInitialBaseOctave() const			{ return initBaseOct; }
+		bool			hasInitialClef() const					{ return initClefCaptured; }
+		bool			hasClefTime() const						{ return clefTimeSet; }
+		TYPE_TIMEPOSITION getClefTime() const					{ return clefTime; }
+		bool			getClefAtTime(const TYPE_TIMEPOSITION& tp, int& basePitch, int& baseLine, int& baseOct, TYPE_TIMEPOSITION& clefAtTime) const;
+		void			rememberClef(const TYPE_TIMEPOSITION& tp, int basePitch, int baseLine, int baseOct);
+
 		GRStaffState & operator=(const GRStaffState &tmp);
 
 		GRStaffState &	getState()								{ return *this; }
@@ -147,6 +161,22 @@ class GRStaffState
 				// basepitoffs: the offset for the given instrument, example: clarinet in A
 				// has an offset of -2, it is two pitchclasses away from c-major
 				// instrnumkeys: the number of keys for the transposed instrument ,,,
+
+		// First explicit clef seen on the staff. Voices without a clef of their own
+		// should keep referring to this even if another voice changes the staff clef later.
+		int initBasePit;
+		int initBaseLine;
+		int initBaseOct;
+		bool initClefCaptured;
+		bool clefTimeSet;
+		TYPE_TIMEPOSITION clefTime;
+		struct ClefEntry {
+			TYPE_TIMEPOSITION time;
+			int basePitch;
+			int baseLine;
+			int baseOct;
+		};
+		std::vector<ClefEntry> clefHistory;
 		float instrKeyArray[NUMNOTES];
 				// the key-array for the current instrument (if transposed).
 
@@ -350,5 +380,3 @@ std::ostream& operator<< (std::ostream& os, const GRStaff& staff);
 std::ostream& operator<< (std::ostream& os, const GRStaff* staff);
 
 #endif
-
-

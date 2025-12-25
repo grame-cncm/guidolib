@@ -124,7 +124,6 @@
 #include "GRClef.h"
 #include "GRCluster.h"
 #include "GRCoda.h"
-#include "GRColor.h"
 #include "GRCrescendo.h"
 #include "GRDiminuendo.h"
 #include "GRDoubleBar.h"
@@ -201,6 +200,9 @@ GRVoiceManager::GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, cons
 	voicenum = p_voicenum;
 	mCurGrStaff = NULL;
 	grvoice = fMusic->getVoice(arVoice);
+	mVoiceClefTime = DURATION_0;
+	mVoiceClefTimeSet = false;
+	mHasExplicitVoiceClef = false;
 
 	fLastOctava = NULL;
 	fGRTags = NULL;
@@ -281,6 +283,14 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 		}
 
 		assert(mCurGrStaff);
+		// A voice keeps its own clef state; when switching to another staff we drop
+		// the previous clef so the new staff's current clef becomes the reference
+		// until this voice sets a new one.
+		fVoiceState->RemoveCurStateTag(typeid(ARClef));
+		mHasVoiceClefTag = false;
+		mHasExplicitVoiceClef = false;
+		mVoiceClefTimeSet = false;
+		mVoiceClefTime = DURATION_0;
 	}
 	else if ((staffrmt = dynamic_cast<const ARStaffFormat *>(mtag)) != 0)
 		mCurGrStaff->setStaffFormat(staffrmt);
@@ -296,7 +306,7 @@ bool GRVoiceManager::parseStateTag(const ARMusicalTag * mtag)
 		curheadstate = mhead;
 	}
 	else if ((theColor = dynamic_cast<const ARColor *>(mtag)) != 0) {
-		retval = false;
+		// it is a color tag... (?)
 	}
 	else if (typeid(*mtag) == typeid(ARUnits)) {
 		// just ignore units tag... (it is a state
@@ -552,6 +562,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
         return ENDOFVOICE;
 	
 	ARMusicalObject * obj = arVoice->GetAt(fVoiceState->vpos);
+
 	if (fVoiceState->curtp > timepos) {
 		timepos = fVoiceState->curtp;
 		if (obj->getDuration() == DURATION_0) {
@@ -925,20 +936,20 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	}
 	else if (tinf == typeid(ARClef)) 
 	{
-		grne = mCurGrStaff->AddClef(static_cast<const ARClef *>(arOfCompleteObject));
+		const ARClef* arclef = static_cast<const ARClef *>(arOfCompleteObject);
+		grne = mCurGrStaff->AddClef(arclef);
+		mHasVoiceClefTag = true;
+		if (!arclef->getIsAuto())
+			mHasExplicitVoiceClef = true;
+		mVoiceClefTime = arOfCompleteObject->getRelativeTimePosition();
+		mVoiceClefTimeSet = true;
 		
 		// here the baseline etc. will be changed
 		if (grne) fMusic->addVoiceElement(arVoice,grne);
 		
 	}
-	else if (tinf == typeid(ARColor))
-	{
-		GRColor* color = new GRColor(static_cast<const ARColor *>(arOfCompleteObject));
-		mCurGrStaff->AddColor(color);
-		fMusic->addVoiceElement(arVoice,color);
-	}
 	else if (tinf == typeid(ARMeter))
-	{
+	{		
 		grne = mCurGrStaff->AddMeter( static_cast<const ARMeter*>(arOfCompleteObject));
 		fMusic->addVoiceElement(arVoice,grne);		
 	}
@@ -1952,12 +1963,56 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	curev = ARMusicalEvent::cast(arObject);
 
 	TYPE_DURATION dtempl = findDuration (fVoiceState, curev);
+	const TYPE_TIMEPOSITION noteStart = arObject->getRelativeTimePosition();
 
 	// we need to take care of dots !
-    const ARNote * tmpNote = static_cast<const ARNote *>(curev->isARNote());
+	const ARNote * tmpNote = static_cast<const ARNote *>(curev->isARNote());
 	dtempl.normalize();
 
 	GRSingleNote * grnote = new GRSingleNote(mCurGrStaff, tmpNote, tp, arObject->getDuration());
+	const GRStaffState& staffState = mCurGrStaff->getGRStaffState();
+	int basePitch = staffState.getBasePitch();
+	int baseLine = staffState.getBaseLine();
+	int baseOct = staffState.getBaseOctave();
+	int staffClefPitch = basePitch;
+	int staffClefLine = baseLine;
+	int staffClefOct = baseOct;
+	TYPE_TIMEPOSITION staffClefTime = DURATION_0;
+	const bool hasStaffClefAtNote = staffState.getClefAtTime(noteStart, staffClefPitch, staffClefLine, staffClefOct, staffClefTime);
+
+	const ARClef* voiceClef = nullptr;
+	TYPE_TIMEPOSITION voiceClefTime = mVoiceClefTime;
+	if (ARMusicalTag * clefTag = fVoiceState->getCurStateTag(typeid(ARClef))) {
+		voiceClef = dynamic_cast<const ARClef *>(clefTag);
+		if (voiceClef) {
+			voiceClefTime = voiceClef->getRelativeTimePosition();
+		}
+	}
+
+	bool useVoiceClef = mHasExplicitVoiceClef && voiceClef && !voiceClef->getIsAuto();
+	if (useVoiceClef && hasStaffClefAtNote) {
+		if (staffClefTime >= voiceClefTime) {
+			useVoiceClef = false;
+		}
+	}
+
+	if (useVoiceClef) {
+		GRClef tmpClef(voiceClef, mCurGrStaff);
+		basePitch = tmpClef.getBasePitch() + staffState.getBasePitchOffset();
+		baseLine = tmpClef.getBaseLine();
+		baseOct = tmpClef.getBaseOct();
+	}
+	else if (hasStaffClefAtNote) {
+		basePitch = staffClefPitch;
+		baseLine = staffClefLine;
+		baseOct = staffClefOct;
+	}
+	else if (staffState.hasInitialClef()) {
+		basePitch = staffState.getInitialBasePitch();
+		baseLine = staffState.getInitialBaseLine();
+		baseOct = staffState.getInitialBaseOctave();
+	}
+	grnote->setClefReference(basePitch, baseLine, baseOct);
     grnote->setGraceNote(isGrace);
 	if (size)						grnote->setSize(size);
 	if (curglobalstem)				grnote->setGlobalStem(curglobalstem);
@@ -2437,4 +2492,3 @@ void GRVoiceManager::handleSharedArticulations(const TSharedArticulationsList& l
 		}
 	}
 }
-
