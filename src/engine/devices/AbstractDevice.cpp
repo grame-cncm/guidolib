@@ -13,7 +13,7 @@
 
 #ifdef WIN32
 # pragma warning (disable : 4996)
-
+/*
 #include "F:\\guidolib\\midisharelight\\src\\MidiShareLight.cpp"
 #include "F:\\guidolib\\midisharelight\\src\\msEvents.cpp"
 #include "F:\\guidolib\\midisharelight\\src\\msFields.cpp"
@@ -21,7 +21,7 @@
 #include "F:\\guidolib\\midisharelight\\src\\msSeq.cpp"
 #include "F:\\guidolib\\midisharelight\\src\\lifo.cpp"
 #include "F:\\guidolib\\midisharelight\\src\\midifile.cpp"
-
+*/
 
 #endif
 
