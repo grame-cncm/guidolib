@@ -2,6 +2,11 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+  version 1.7.9
+- fix issue #195: Octavia on cross-staff can lead to destructor crash + incorrect rendering (Arshia Cont)
+- Enable mapping of Text and Key (Michael Chourdakis)
+
+----------------------------------------------------------------
   version 1.7.8
 - new \color tag
 - new color parameter for \pageFormat
