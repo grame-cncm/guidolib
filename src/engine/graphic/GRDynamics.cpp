@@ -143,6 +143,13 @@ const GRDynamics::TXSegment* GRDynamics::getSegment(const GRSystem* system) cons
 }
 
 
+void GRDynamics::GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const
+{
+	if (sel == kDynSel)
+		SendMap(f, getRelativeTimePosition(), getDuration(), kDyn, infos);
+}
+
+
 //---------------------------------------------------------------------------------
 void GRDynamics::DrawDynamic( VGDevice & hdc, bool cresc) const
 {

@@ -1,0 +1,4 @@
+[
+\clef<"c", dx=0hs, color="darkblue"> \noteFormat<color="darkred"> 
+{ c/1, \stemsOff \noteFormat<color="0x303030">  d0/4 }
+]

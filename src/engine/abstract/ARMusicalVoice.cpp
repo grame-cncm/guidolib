@@ -1757,7 +1757,7 @@ void ARMusicalVoice::doAutoBeaming()
 	GuidoPos posevn = NULL;			// end beam position
 
 	TYPE_TIMEPOSITION	beamStart = 0;
-	bool				beamStartOnbeat;
+	bool				beamStartOnbeat = 0;
 
 	// the timeposition of the last explicit barline...
 	// this needs to be inserted, so that the beat-structure can be matched according to this.

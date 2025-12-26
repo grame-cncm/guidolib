@@ -98,10 +98,18 @@ void GRKey::getOctArray(int * OctArray)
 	mykey->getOctArray(OctArray);
 }
 
+void GRKey::GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const
+{
+	if (sel == kKeySel)
+		SendMap(f, getRelativeTimePosition(), getDuration(), kKey, infos);
+}
+
 
 void GRKey::setHPosition( GCoord nx)
 {
 	setPosition( NVPoint( nx,mPosition.y ));
+
+
 }
 
 /**  Update the the x-coordinates of the accidentals,
@@ -132,6 +140,12 @@ void GRKey::setPosition( const NVPoint & inPos )
 		newPos.x += e->getRightSpace();
 	}
 	updateBoundingBox();
+
+	mMapping.left = mPosition.x;
+	mMapping.top = mPosition.y;
+	mMapping.right = mPosition.x + mBoundingBox.right;
+	mMapping.bottom = mPosition.y + mBoundingBox.bottom;
+
 }
 
 //____________________________________________________________________________________

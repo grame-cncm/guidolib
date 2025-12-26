@@ -207,6 +207,12 @@ void GRText::OnDraw( VGDevice & hdc ) const
 //	DrawBoundingBox(hdc, VGColor(0,0,255));
 }
 
+void GRText::GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const
+{
+	if (sel == kTextSel)
+		SendMap(f, getRelativeTimePosition(), getDuration(), kText, infos);
+}
+
 const VGColor GRText::startDraw( VGDevice & hdc, unsigned int& fontalign ) const
 {
 	hdc.SetTextFont( fFont );
@@ -276,6 +282,12 @@ void GRText::setHPosition( GCoord nx )
 	if (arText->getDX())
 		dx = arText->getDX()->getValue( LSPACE );
 	mPosition.x += dx;
+
+
+	mMapping.left = mPosition.x;
+	mMapping.top = mPosition.y;
+	mMapping.right = mPosition.x + st->boundingBox.right;
+	mMapping.bottom = mPosition.y + st->boundingBox.bottom;
 
 	st->position.x = nx;
 }

@@ -1,0 +1,11 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+	<file>addGuido.png</file>
+	<file>addFromFileGuido.png</file>
+	<file>removeItem.png</file>
+	<file>addText.png</file>
+	<file>addFromAnyFile.png</file>
+	<file>export.png</file>
+	<file>GuidoCommands.xml</file>
+</qresource>
+</RCC>

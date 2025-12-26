@@ -1,0 +1,64 @@
+{[ \staff<1> \set<autoHideTiedAccidentals="on"> \title<"The Art of Finger Dexterity Op.740 - No.27 Allegro"> \composer<"Compositeur", dy=4hs> \auto<autoInstrPos="on"> \instr<"Piano"> \accol<id=0, range="1-2"> \barFormat<style= "system", range="1-2"> 
+   (* meas. 1 *)  \clef<"g2"> \key<2> \meter<"3/4", autoBarlines="off", autoMeasuresNum="system"> _*3/4 \bar<measNum=2> 
+   (* meas. 2 *)  _*3/4 \bar<measNum=3> 
+   (* meas. 3 *)  _*3/4 \bar<measNum=4> 
+   (* meas. 4 *)  _*3/4 \bar<measNum=5> 
+   (* meas. 5 *)  _*3/4 \bar<measNum=6> 
+   (* meas. 6 *)  _*3/4 \bar<measNum=7> 
+   (* meas. 7 *)  _/2. \bar<measNum=8> 
+   (* meas. 8 *)  _/2. \bar<measNum=9> 
+   (* meas. 9 *)  _/2. \bar<measNum=10> 
+   (* meas. 10 *)  _/2. \staff<1> \endBar ]
+ , 
+[ \staff<2> \set<autoHideTiedAccidentals="on"> \barFormat<style= "system", range="2"> 
+   (* meas. 1 *)  \staffFormat<distance=15> \clef<"f4"> \key<2> \meter<"3/4"> 
+   \restFormat<dy=-6>( _/4)
+ \stemsUp \beamsOff {a0/2, \acc( c#1/2)} \bar<measNum=2> 
+   (* meas. 2 *)  \slurBegin:1<curve="up"> \beamsOff {d-1/4, a-1/4, d0/4  } \restFormat<dy=-6>( _/4)
+ \beamsOff {b&-1/4, d0/4, \acc( g#0/4)
+  } \slurEnd:1 \bar<measNum=3> 
+   (* meas. 3 *)  \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="up"> \beamsOff {e1/4, c#2/4  } \beamsOff {c#1/4, e1/4, a1/4  } \slurEnd:1 \bar<measNum=4> 
+   (* meas. 4 *)  \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {a0/4, d1/4, f#1/4  } \beamsOff {b0/4, d1/4, \acc( g#1/4)
+  } \slurEnd:1 \bar<measNum=5> 
+   (* meas. 5 *)  \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \beamsOff {e1/4, c#2/4  } \beamsOff {c#1/4, e1/4, a1/4  } \bar<measNum=6> 
+   (* meas. 6 *)  \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {a0/4, d1/4, f#1/4  } \beamsOff {b0/4, d1/4, \acc( g#1/4)
+  } \slurEnd:1 \bar<measNum=7> 
+   (* meas. 7 *)  \staffFormat<distance=15> \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {c#1/4, a1/4  } \beamsOff {e1/4, a1/4, c#2/4  } \slurEnd:1 \bar<measNum=8> 
+   (* meas. 8 *)  \clef<"f4"> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {d1/4, a1/4, b1/4  } \beamsOff {f#1/4, a1/4, d2/4  } \slurEnd:1 \clef<"f4"> \bar<measNum=9> 
+   (* meas. 9 *)  \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {e1/4, a1/4, c#2/4  } \beamsOff {g1/4, a1/4, e2/4  } \slurEnd:1 \clef<"f4"> \bar<measNum=10> 
+   (* meas. 10 *)  \intens<"sf", dy=20hs, dx=0> \restFormat<dy=-6>( _/4)
+ \clef<"g2"> \slurBegin:1<curve="down"> \beamsOff {f#1/4, a1/4, d2/4  } \beamsOff {a1/4, d2/4, f#2/4  } \slurEnd:1 \clef<"f4"> \staff<2> \endBar ]
+ , 
+[ \staff<2> \set<autoHideTiedAccidentals="on"> \barFormat<style= "system", range="2"> 
+   (* meas. 1 *)  \staffFormat<distance=15> empty/4 \stemsDown \slurBegin:1<curve="down"> 
+   \beamsOff \noteFormat<dx=2>( g0/4)
+ \beamsOff e0/4 \slurEnd:1 \bar<measNum=2> 
+   (* meas. 2 *)  empty/4 \beamsOff {\acc( b&-2/2), \acc( b&-1/2)} \bar<measNum=3> 
+   (* meas. 3 *)  \beamsOff {a-2/2., a-1/2.  } \bar<measNum=4> 
+   (* meas. 4 *)  \beamsOff {e-2/2., e-1/2.  } \bar<measNum=5> 
+   (* meas. 5 *)  \beamsOff {a-2/2., a-1/2.  } \bar<measNum=6> 
+   (* meas. 6 *)  \beamsOff {e-2/2., e-1/2.  } \bar<measNum=7> 
+   (* meas. 7 *)  \staffFormat<distance=15> \beamsOff {a-2/2., a-1/2.  } \bar<measNum=8> 
+   (* meas. 8 *)  \beamsOff {a-2/2., a-1/2.  } \bar<measNum=9> 
+   (* meas. 9 *)  \beamsOff {a-2/2., a-1/2.  } \bar<measNum=10> 
+   (* meas. 10 *)  \beamsOff {a-2/2., a-1/2.  } \staff<2> \endBar ]
+ , 
+[ \staff<2> \set<autoHideTiedAccidentals="on"> \barFormat<style= "system", range="2"> 
+   (* meas. 1 *)  \staffFormat<distance=15> \stemsDown \beamsOff {a-2/2., a-1/2.  } \bar<measNum=2> 
+   (* meas. 2 *)  empty*3/4 \bar<measNum=3> 
+   (* meas. 3 *)  empty/4 empty/2 \bar<measNum=4> 
+   (* meas. 4 *)  empty/4 empty/2 \bar<measNum=5> 
+   (* meas. 5 *)  empty/4 empty/2 \bar<measNum=6> 
+   (* meas. 6 *)  empty/4 empty/2 \bar<measNum=7> 
+   (* meas. 7 *)  \staffFormat<distance=15> empty/4 empty/2 \bar<measNum=8> 
+   (* meas. 8 *)  empty/4 empty/2 \bar<measNum=9> 
+   (* meas. 9 *)  empty/4 empty/2 \bar<measNum=10> 
+   (* meas. 10 *)  empty/4 empty/2 \staff<2> \endBar ]
+  }

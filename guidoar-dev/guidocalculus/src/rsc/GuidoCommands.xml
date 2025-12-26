@@ -1,0 +1,223 @@
+<!DOCTYPE LanguageCommandsLibrary>
+<LanguageCommandsLibraryRoot>
+	<LanguageCommandsCategory name="Simple">
+		<LanguageCommandsCategory name="Notes">
+			<LanguageCommand name="A">		<![CDATA[a]]></LanguageCommand>
+			<LanguageCommand name="A#">	<![CDATA[a#]]></LanguageCommand>
+			<LanguageCommand name="Bb">	<![CDATA[b&]]></LanguageCommand>
+			<LanguageCommand name="B">		<![CDATA[b]]></LanguageCommand>
+			<LanguageCommand name="C">		<![CDATA[c]]></LanguageCommand>
+			<LanguageCommand name="C#">	<![CDATA[c#]]></LanguageCommand>
+			<LanguageCommand name="Db">	<![CDATA[d&]]></LanguageCommand>
+			<LanguageCommand name="D">		<![CDATA[d]]></LanguageCommand>
+			<LanguageCommand name="D#">	<![CDATA[d#]]></LanguageCommand>
+			<LanguageCommand name="E">		<![CDATA[e]]></LanguageCommand>
+			<LanguageCommand name="F">		<![CDATA[f]]></LanguageCommand>
+			<LanguageCommand name="F#">	<![CDATA[f#]]></LanguageCommand>
+			<LanguageCommand name="Gb">	<![CDATA[g&]]></LanguageCommand>
+			<LanguageCommand name="G">		<![CDATA[g]]></LanguageCommand>
+			<LanguageCommand name="G#">	<![CDATA[g#]]></LanguageCommand>
+			<LanguageCommand name="Ab">	<![CDATA[a&]]></LanguageCommand>
+			<LanguageCommand name="Rest">	<![CDATA[_]]></LanguageCommand>
+			<LanguageCommand name="Empty">	<![CDATA[empty]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Accidentals">
+			<LanguageCommand name="Flat">		<![CDATA[&]]></LanguageCommand>
+			<LanguageCommand name="Sharp">		<![CDATA[#]]></LanguageCommand>
+			<LanguageCommand name="Double flat">	<![CDATA[&&]]></LanguageCommand>
+			<LanguageCommand name="Double sharp">	<![CDATA[##]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Octave">
+			<LanguageCommand name="-1">	<![CDATA[-1]]></LanguageCommand>
+			<LanguageCommand name="0">		<![CDATA[0]]></LanguageCommand>
+			<LanguageCommand name="1">		<![CDATA[1]]></LanguageCommand>
+			<LanguageCommand name="2">		<![CDATA[2]]></LanguageCommand>
+			<LanguageCommand name="3">		<![CDATA[3]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Duration">
+			<LanguageCommand name="Quarter">			<![CDATA[/4]]></LanguageCommand>
+			<LanguageCommand name="Half">			<![CDATA[/2]]></LanguageCommand>
+			<LanguageCommand name="Whole">			<![CDATA[/1]]></LanguageCommand>
+			<LanguageCommand name="Longa">			<![CDATA[*2/1]]></LanguageCommand>
+			<LanguageCommand name="8th">			<![CDATA[/8]]></LanguageCommand>
+			<LanguageCommand name="16th">			<![CDATA[/16]]></LanguageCommand>
+			<LanguageCommand name="32th">			<![CDATA[/32]]></LanguageCommand>
+			<LanguageCommand name="Dot">			<![CDATA[.]]></LanguageCommand>
+			<LanguageCommand name="Double Dot">		<![CDATA[..]]></LanguageCommand>
+			<LanguageCommand name="Half Triplet">		<![CDATA[/3]]></LanguageCommand>
+			<LanguageCommand name="Quarter Triplet">		<![CDATA[/6]]></LanguageCommand>
+			<LanguageCommand name="8th Triplet">		<![CDATA[/12]]></LanguageCommand>
+			<LanguageCommand name="Quintuplet">		<![CDATA[/5]]></LanguageCommand>
+			<LanguageCommand name="Tie"	insertIndex="5"><![CDATA[\tie()]]></LanguageCommand>
+		</LanguageCommandsCategory>
+	</LanguageCommandsCategory>
+	<LanguageCommandsCategory name="Interpretation">
+		<LanguageCommandsCategory name="Dynamics">
+			<LanguageCommand name="Pianississimo">				<![CDATA[\intens<"ppp",0.1>]]></LanguageCommand>
+			<LanguageCommand name="Pianissimo">				<![CDATA[\intens<"pp",0.2>]]></LanguageCommand>
+			<LanguageCommand name="Piano">					<![CDATA[\intens<"p",0.3>]]></LanguageCommand>
+			<LanguageCommand name="Mezzo-Piano">				<![CDATA[\intens<"mp",0.4>]]></LanguageCommand>
+			<LanguageCommand name="Mezzo-Forte">				<![CDATA[\intens<"mf",0.6>]]></LanguageCommand>
+			<LanguageCommand name="Forte">					<![CDATA[\intens<"f",0.7>]]></LanguageCommand>
+			<LanguageCommand name="Fortissimo">				<![CDATA[\intens<"ff",0.8>]]></LanguageCommand>
+			<LanguageCommand name="Fortississimo">				<![CDATA[\intens<"fff",0.9>]]></LanguageCommand>
+			<LanguageCommand name="Crescendo 1"	insertIndex="-1">	<![CDATA[\cresc<"mf",0.7>()]]></LanguageCommand>
+			<LanguageCommand name="Diminuendo 1"	insertIndex="-1">	<![CDATA[\dim<"mf",0.7>()]]></LanguageCommand>
+			<LanguageCommand name="Crescendo 2"	insertIndex="22">	<![CDATA[\crescBegin<"mf",0.7>  \crescEnd<"fff",0.9>]]></LanguageCommand>
+			<LanguageCommand name="Diminuendo 2"	insertIndex="10">	<![CDATA[\dimBegin<"mf",0.7>  \dimEnd<"p",0.3>]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Tempo">
+			<LanguageCommand name="Andante">						<![CDATA[\tempo<"Andante">]]></LanguageCommand>
+			<LanguageCommand name="Moderato" comment="Specifies a precise tempo">	<![CDATA[\tempo<"Moderato","1/4=90">]]></LanguageCommand>
+			<LanguageCommand name="Allegro" comment="Specifies a precise tempo">	<![CDATA[\tempo<"Allegro","1/4=120">]]></LanguageCommand>
+			<LanguageCommand name="Accelerando 1"	insertIndex="-1">		<![CDATA[\accel()]]></LanguageCommand>
+			<LanguageCommand name="Accelerando 2" comment="Specifies the final tempo" 	insertIndex="-1">	
+												<![CDATA[\accel<"Allegro","1/4=120">()]]></LanguageCommand>
+			<LanguageCommand name="Accelerando 3"	insertIndex="12"> 		<![CDATA[\accelBegin  \accelEnd ]]></LanguageCommand>
+			<LanguageCommand name="Accelerando 4"	insertIndex="12">		<![CDATA[\accelBegin  \accelEnd<"Allegro","1/4=120">]]></LanguageCommand>
+			<LanguageCommand name="Ritardando 1"	insertIndex="-1">		<![CDATA[\rit()]]></LanguageCommand>
+			<LanguageCommand name="Ritardando 2"	insertIndex="-1">		<![CDATA[\rit<"Andante","1/4=60">()]]></LanguageCommand>
+			<LanguageCommand name="Ritardando 3"	insertIndex="10">		<![CDATA[\ritBegin  \ritEnd ]]></LanguageCommand>
+			<LanguageCommand name="Ritardando 4"	insertIndex="10">		<![CDATA[\ritBegin  \ritEnd<"Andante","1/4=60">]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Articulation">
+			<LanguageCommand name="Slur 1"							insertIndex="-1">	<![CDATA[\slur()]]>			</LanguageCommand>
+			<LanguageCommand name="Slur 2" comment="Specifies start position"			insertIndex="-1">	<![CDATA[\slur<-5,-2>()]]>		</LanguageCommand>
+			<LanguageCommand name="Slur 2" comment="Specifies 3 pts : start, end, control"	insertIndex="-1">	<![CDATA[\slur<0,-5,0,-5,0.75,10>()]]>	</LanguageCommand>
+			<LanguageCommand name="Staccato 1"	insertIndex="-1">	<![CDATA[\stacc()]]></LanguageCommand>
+			<LanguageCommand name="Staccato 2"	insertIndex="-1">	<![CDATA[\stacc<"heavy">()]]></LanguageCommand>
+			<LanguageCommand name="Accent"	insertIndex="-1">	<![CDATA[\accent()]]></LanguageCommand>
+			<LanguageCommand name="Tenuto"	insertIndex="-1">	<![CDATA[\ten()]]></LanguageCommand>
+			<LanguageCommand name="Marcato"	insertIndex="-1">	<![CDATA[\marcato()]]></LanguageCommand>
+			<LanguageCommand name="Pizzicato 1"	insertIndex="-1">	<![CDATA[\pizz()]]></LanguageCommand>
+			<LanguageCommand name="Pizzicato 2"	insertIndex="-1">	<![CDATA[\pizz<type="lefthand">()]]></LanguageCommand>
+			<LanguageCommand name="Pizzicato 3"	insertIndex="-1">	<![CDATA[\pizz<"snap">()]]></LanguageCommand>
+			<LanguageCommand name="Pizzicato 4"	insertIndex="-1">	<![CDATA[\pizz<"buzz">()]]></LanguageCommand>
+			<LanguageCommand name="Pizzicato 5"	insertIndex="-1">	<![CDATA[\pizz<"fingernail">()]]></LanguageCommand>
+			<LanguageCommand name="Pizzicato 6"	insertIndex="-1">	<![CDATA[\pizz<type="bartok">()]]></LanguageCommand>
+			<LanguageCommand name="Pizzicato 7"	insertIndex="-1">	<![CDATA[\fermata()]]></LanguageCommand>
+			<LanguageCommand name="Fermata 1"	insertIndex="-1">	<![CDATA[\fermata<"short">()]]></LanguageCommand>
+			<LanguageCommand name="Fermata 2"	insertIndex="-1">	<![CDATA[\fermata<"regular">()]]></LanguageCommand>
+			<LanguageCommand name="Fermata 3"	insertIndex="-1">	<![CDATA[\fermata<"long">()]]></LanguageCommand>
+			<LanguageCommand name="Fermata 4"	insertIndex="-1">	<![CDATA[\fermata<position="below">()]]></LanguageCommand>
+			<LanguageCommand name="Fermata 5"	insertIndex="-1">	<![CDATA[\fermata<"long",position="above">()]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Ornaments">
+			<LanguageCommand name="Trill"	insertIndex="-1">	<![CDATA[\trill( (*chords*) )]]></LanguageCommand>
+			<LanguageCommand name="Trill 2"	insertIndex="-1">	<![CDATA[\trill<"cautionary">( (*chords*) )]]></LanguageCommand>
+			<LanguageCommand name="Mordent"	insertIndex="-1">	<![CDATA[\mord( (*chords*) )]]></LanguageCommand>
+			<LanguageCommand name="Mordent 2"	insertIndex="-1">	<![CDATA[\mord<"cautionary">( (*chords*) )]]></LanguageCommand>
+			<LanguageCommand name="Turn"	insertIndex="-1">	<![CDATA[\turn( (*chords*) )]]></LanguageCommand>
+			<LanguageCommand name="Turn 2"	insertIndex="-1">	<![CDATA[\turn<dy=1.5, ady=-5.5, adx=0.3>( (*chords*) )]]></LanguageCommand>
+			<LanguageCommand name="Turn 3"	insertIndex="-1">	<![CDATA[\turn<"cautionary">( (*chords*) )]]></LanguageCommand>
+			<LanguageCommand name="Grace"	insertIndex="-1">	<![CDATA[\grace()]]></LanguageCommand>
+			<LanguageCommand name="Grace 2"	insertIndex="-1">	<![CDATA[\grace<32>()]]></LanguageCommand>
+			<LanguageCommand name="Cue"	insertIndex="-1">	<![CDATA[\cue()]]></LanguageCommand>
+			<LanguageCommand name="Cue 2"	insertIndex="-1">	<![CDATA[\cue<"Oboe 1">()]]></LanguageCommand>
+		</LanguageCommandsCategory> 
+	</LanguageCommandsCategory>
+	<LanguageCommandsCategory name="Score">
+		<LanguageCommandsCategory name="Clefs">
+			<LanguageCommand name="F">		<![CDATA[\clef<"f">]]></LanguageCommand>
+			<LanguageCommand name="Double G">	<![CDATA[\clef<"gg">]]></LanguageCommand>
+			<LanguageCommand name="Alto">	<![CDATA[\clef<"alto">]]></LanguageCommand>
+			<LanguageCommand name="Tenor">	<![CDATA[\clef<"tenor">]]></LanguageCommand>
+			<LanguageCommand name="Bass">	<![CDATA[\clef<"bass">]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Meters">
+			<LanguageCommand name="4/4">	<![CDATA[\meter<"4/4">]]></LanguageCommand>
+			<LanguageCommand name="2/2">	<![CDATA[\meter<"2/2">]]></LanguageCommand>
+			<LanguageCommand name="C">		<![CDATA[\meter<"C">]]></LanguageCommand>
+			<LanguageCommand name="2/2 C">	<![CDATA[\meter<"C/">]]></LanguageCommand>
+			<LanguageCommand name="3/8">	<![CDATA[\meter<"3/8">]]></LanguageCommand>
+			<LanguageCommand name="5/4">	<![CDATA[\meter<"5/4">]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Keys">
+			<LanguageCommand name="1 sharp">	<![CDATA[\key<1>]]></LanguageCommand>
+			<LanguageCommand name="1 flat">	<![CDATA[\key<-1>]]></LanguageCommand>
+			<LanguageCommand name="2 sharp">	<![CDATA[\key<2>]]></LanguageCommand>
+			<LanguageCommand name="2 flat">	<![CDATA[\key<-2>]]></LanguageCommand>
+			<LanguageCommand name="D Major">	<![CDATA[\key<"D">]]></LanguageCommand>
+			<LanguageCommand name="D Minor">	<![CDATA[\key<"d">]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Repetitions">
+			<LanguageCommand name="Begin">	<![CDATA[\repeatBegin ]]></LanguageCommand>
+			<LanguageCommand name="End">	<![CDATA[\repeatEnd ]]></LanguageCommand>
+			<LanguageCommand name="Segno">		<![CDATA[\segno ]]></LanguageCommand>
+			<LanguageCommand name="D.S.">		<![CDATA[\dalSegno ]]></LanguageCommand>
+			<LanguageCommand name="Double Segno">	<![CDATA[\segno<"[segno][segno]"> ]]></LanguageCommand>
+			<LanguageCommand name="Fine">		<![CDATA[\fine ]]></LanguageCommand>
+			<LanguageCommand name="D.S. al fine">	<![CDATA[\\dalSegnoAlFine<"Dal [segno] al Fine"> ]]></LanguageCommand>
+			<LanguageCommand name="To coda">		<![CDATA[\daCoda ]]></LanguageCommand>
+			<LanguageCommand name="Coda">		<![CDATA[\coda ]]></LanguageCommand>
+			<LanguageCommand name="Volta">		<![CDATA[\repeatBegin (*repeated notes*) \volta<"1", "1."> ( (*1st volta*) ) \repeatEnd \volta<"2", "2.", format="|-"> ( (*2nd volta*) )]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Staves">
+			<LanguageCommand name="Staff 1">		<![CDATA[\staff<1>]]></LanguageCommand>
+			<LanguageCommand name="Staff 2">		<![CDATA[\staff<2>]]></LanguageCommand>
+			<LanguageCommand name="Named Staff">	<![CDATA[\staff<"MyStaff">]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Bar">
+			<LanguageCommand name="Bar">					<![CDATA[|]]></LanguageCommand>
+			<LanguageCommand name="Bar 2">					<![CDATA[\bar ]]></LanguageCommand>
+			<LanguageCommand name="Bar 3" comment="With measure index">	<![CDATA[\bar<1>]]></LanguageCommand>
+			<LanguageCommand name="Double Bar">				<![CDATA[\doubleBar ]]></LanguageCommand>
+			<LanguageCommand name="Double Bar 2" comment="With measure index">	<![CDATA[\doubleBar<1>]]></LanguageCommand>
+			<LanguageCommand name="Tactus">					<![CDATA[\tactus ]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Octava">
+			<LanguageCommand name="+1">	<![CDATA[\oct<1>]]></LanguageCommand>
+			<LanguageCommand name="-1">	<![CDATA[\oct<-1>]]></LanguageCommand>
+			<LanguageCommand name="+1 - alt"	insertIndex="-1">	<![CDATA[\oct<1>()]]></LanguageCommand>
+		</LanguageCommandsCategory>
+	</LanguageCommandsCategory>
+	<LanguageCommandsCategory name="Format">
+		<LanguageCommand name="Page format">					<![CDATA[\pageFormat<w=21cm,h=31cm,lm=0.8cm,tm=4.25cm,bm=1.2cm,rm=1.1cm> ]]></LanguageCommand>
+		<LanguageCommand name="Space">						<![CDATA[\space<2cm> ]]></LanguageCommand>
+		<LanguageCommand name="Beams Auto">					<![CDATA[\beamsAuto ]]></LanguageCommand>
+		<LanguageCommand name="Beams Off">						<![CDATA[\beamsOff ]]></LanguageCommand>
+		<LanguageCommand name="Beams Manual"	insertIndex="-1">		<![CDATA[\beam()]]></LanguageCommand>
+		<LanguageCommand name="Beams Manual 2">					<![CDATA[\beam<-5,-7>]]></LanguageCommand>
+		<LanguageCommand name="Stems Auto">					<![CDATA[\stemsAuto ]]></LanguageCommand>
+		<LanguageCommand name="Stems Up">						<![CDATA[\stemsUp ]]></LanguageCommand>
+		<LanguageCommand name="Stems Down">					<![CDATA[\stemsDown ]]></LanguageCommand>
+		<LanguageCommand name="System break off">					<![CDATA[\set<autoSystemBreak="off"> ]]></LanguageCommand>
+		<LanguageCommand name="Page break off">					<![CDATA[\set<autoPageBreak="off"> ]]></LanguageCommand>
+		<LanguageCommand name="System break on">					<![CDATA[\set<autoSystemBreak="on"> ]]></LanguageCommand>
+		<LanguageCommand name="Page break on">					<![CDATA[\set<autoPageBreak="on"> ]]></LanguageCommand>
+		<LanguageCommand name="System bars">					<![CDATA[\barFormat<style="system"> ]]></LanguageCommand>
+		<LanguageCommand name="Note format" insertIndex="-1">			<![CDATA[\noteFormat<color="green", size=2 , style="diamond">()]]></LanguageCommand>
+		<LanguageCommand name="Note format 2" insertIndex="-1">			<![CDATA[\noteFormat<style="x">()]]></LanguageCommand>
+		<LanguageCommand name="Rest format" insertIndex="-1">			<![CDATA[\restFormat <color="yellow">()]]></LanguageCommand>
+		<LanguageCommand name="Dot format" insertIndex="-1">			<![CDATA[\dotFormat<dy=-1hs,dx=2hs>()]]></LanguageCommand>
+		<LanguageCommand name="System format">					<![CDATA[\systemFormat<dx=1.05cm>]]></LanguageCommand>
+		<LanguageCommand name="Colored text">					<![CDATA[\text<text="Transparent", color="0x000000AA", dy=6hs>]]></LanguageCommand>
+		<LanguageCommand name="Colored beam" insertIndex="-1">			<![CDATA[\beam<color="0xAA00AA">()]]></LanguageCommand>
+	</LanguageCommandsCategory>
+	<LanguageCommandsCategory name="Misc">
+		<LanguageCommandsCategory name="Instruments">
+			<LanguageCommand name="Organ" comment="Specifies a MIDI instrument">	<![CDATA[\instr<"Organ" , "MIDI 16">]]></LanguageCommand>
+			<LanguageCommand name="Voice">						<![CDATA[\instr<"Voice">]]></LanguageCommand>
+			<LanguageCommand name="Flauto" comment="Specifies a MIDI instrument">	<![CDATA[\instr<"Flauto" , "MIDI 74">]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Text">
+			<LanguageCommand name="Text">						<![CDATA[\text<"">]]></LanguageCommand>
+			<LanguageCommand name="Text 2" comment="Specifies vertical position">	<![CDATA[\text<"",-10>]]></LanguageCommand>
+			<LanguageCommand name="Mark">						<![CDATA[\mark<"">]]></LanguageCommand>
+			<LanguageCommand name="Label">						<![CDATA[\label<"">]]></LanguageCommand>
+			<LanguageCommand name="Label 2"	insertIndex="-1">			<![CDATA[\label<"">()]]></LanguageCommand>
+			<LanguageCommand name="Lyrics"	insertIndex="-1">			<![CDATA[\lyrics<"Ah",dy=13hs>()]]></LanguageCommand>
+			<LanguageCommand name="Lyrics 2"	insertIndex="-1">			<![CDATA[\lyrics<"One~note",dy=13hs>()]]></LanguageCommand>
+			<LanguageCommand name="Fingering"	insertIndex="-1">			<![CDATA[\fingering<text="2",dy=-2hs,fsize=7pt>()]]></LanguageCommand>
+
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Piece info">
+			<LanguageCommand name="Title">		<![CDATA[\title<"My Piece">]]></LanguageCommand>
+			<LanguageCommand name="Composer">		<![CDATA[\composer<"Myself">]]></LanguageCommand>
+		</LanguageCommandsCategory>
+		<LanguageCommandsCategory name="Misc">
+			<LanguageCommand name="Accolade">		<![CDATA[\accol<id=1, range="1-3", type="straightBrace", dx=10hs>]]></LanguageCommand>
+			<LanguageCommand name="Accolade">		<![CDATA[\harmonic( (*notes*) )]]></LanguageCommand>
+		</LanguageCommandsCategory>
+	</LanguageCommandsCategory>
+</LanguageCommandsLibraryRoot>

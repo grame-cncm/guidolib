@@ -1,0 +1,7 @@
+*.aux
+*.out
+*.log
+*.bbl
+*.blg
+html
+latex

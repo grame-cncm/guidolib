@@ -76,7 +76,7 @@ private:
 public:
 
 	// Constructors
-	yystring::yystring() : std::wstring()
+	yystring() : std::wstring()
 	{
 	}
 	yystring(const char* v, int CP = CP_UTF8)
@@ -184,7 +184,7 @@ inline VGColor VGColorX(const D2D1_COLOR_F& f)
 
 class Direct2DSystem;
 
-inline std::tuple<float, float> MeasureString(IDWriteFactory* pWriteFactory, IDWriteTextFormat* ffo, const wchar_t* txt, int l = -1)
+inline std::tuple<float, float> MeasureStringDD(IDWriteFactory* pWriteFactory, IDWriteTextFormat* ffo, const wchar_t* txt, int l = -1)
 {
 	CComPtr<IDWriteTextLayout> lay = 0;
 	pWriteFactory->CreateTextLayout(txt, l == -1 ? (UINT32)wcslen(txt) : l, ffo, 1000, 1000, &lay);
@@ -201,13 +201,13 @@ inline std::tuple<float, float> MeasureString(IDWriteFactory* pWriteFactory, IDW
 	return std::make_tuple<float, float>(std::forward<float>(wi), std::forward<float>(he));
 }
 
-CComPtr<ID2D1SolidColorBrush> GetD2SolidBrush(ID2D1RenderTarget* p, D2D1_COLOR_F cc)
+/*CComPtr<ID2D1SolidColorBrush> GetD2SolidBrush(ID2D1RenderTarget* p, D2D1_COLOR_F cc)
 {
 	CComPtr<ID2D1SolidColorBrush> b = 0;
 	p->CreateSolidColorBrush(cc, &b);
 	return b;
 }
-
+*/
 inline CComPtr<IDWriteFontCollection> PrivateGuidoFonts;
 
 class Direct2DFont : public VGFont
@@ -270,7 +270,7 @@ inline void	Direct2DFont::GetExtent(int c, float* outWidth, float* outHeight, VG
 inline void		Direct2DFont::GetExtent(const char* s, int inCharCount, float* outWidth, float* outHeight, VGDevice* context) const
 {
 	yystring y = s;
-	auto strs = MeasureString(sys->WriteFactory, Text, y.c_str(), inCharCount);
+	auto strs = MeasureStringDD(sys->WriteFactory, Text, y.c_str(), inCharCount);
 
 	*outWidth =  std::get<0>(strs);
 	*outHeight = std::get<1>(strs);
@@ -280,7 +280,7 @@ inline void		Direct2DFont::GetExtent(const char* s, int inCharCount, float* outW
 class Direct2DDevice : public VGDevice
 {
 public:
-	Direct2DSystem* mSys;
+	Direct2DSystem* mSys = 0;
 	Direct2DFont	mCurrTextFont;
 	Direct2DFont	mCurrMusicFont;
 
@@ -521,15 +521,21 @@ public:
 	// - Coordinate services ------------------------------------------------
 	D2D1_POINT_2F Origin = { 0,0 };
 	D2D1_POINT_2F Scl = { 1.0f,1.0f };
+	D2D1::Matrix3x2F org = D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F cur = D2D1::Matrix3x2F::Identity();
+	D2D1_POINT_2F OrgScl = { 1.0f,1.0f };
 
 	void Trs()
 	{
-		mSys->rt->SetTransform(D2D1::Matrix3x2F::Identity());
 		D2D1::Matrix3x2F scl = D2D1::Matrix3x2F::Scale(Scl.x,Scl.y);
 		D2D1::Matrix3x2F trans = D2D1::Matrix3x2F::Translation(Origin.x*Scl.x,Origin.y*Scl.y);
-		mSys->rt->SetTransform(scl*trans);
+		
+		D2D1::Matrix3x2F res = scl * trans;
+		D2D1::Matrix3x2F res2 = org * res;
+		mSys->rt->SetTransform(res2);
 	}
 
+	
 	virtual	void			SetScale(float x, float y) 
 	{ 
 		Scl.x = x;
@@ -538,14 +544,14 @@ public:
 	}
 	virtual	void			SetOrigin(float x, float y) 
 	{
-		Origin.x = x;
-		Origin.y = y;
+		Origin.x = x * OrgScl.x;
+		Origin.y = y * OrgScl.y;
 		Trs();
 	}
 	virtual	void OffsetOrigin(float x, float y) 
 	{
-		Origin.x += x;
-		Origin.y += y;
+		Origin.x += x * OrgScl.x;
+		Origin.y += y * OrgScl.y;
 		Trs();
 	}
 
@@ -570,7 +576,7 @@ public:
 		EnsureBrush();
 		CComPtr< IDWriteTextLayout> tl;
 
-		auto ty = MeasureString(mSys->WriteFactory, F.Text, s,(UINT32)wcslen(s));
+		auto ty = MeasureStringDD(mSys->WriteFactory, F.Text, s,(UINT32)wcslen(s));
 		D2D1_RECT_F ly = {};
 		ly.left = x;
 		ly.top = y;
@@ -652,12 +658,15 @@ public:
 		mCurrMusicFont.a1 = a1;
 		mCurrMusicFont.a2 = a2;
 
-		if (mCurrMusicFont.Text && mCurrTextFont.Text)
+		if (mCurrMusicFont.Text)
+		{
+			mCurrMusicFont.Text->SetTextAlignment(a1);
+			mCurrMusicFont.Text->SetParagraphAlignment(a2);
+		}
+		if (mCurrTextFont.Text)
 		{
 			mCurrTextFont.Text->SetTextAlignment(a1);
-			mCurrMusicFont.Text->SetTextAlignment(a1);
 			mCurrTextFont.Text->SetParagraphAlignment(a2);
-			mCurrMusicFont.Text->SetParagraphAlignment(a2);
 		}
 	}
 	virtual	unsigned int	GetFontAlign() const 
