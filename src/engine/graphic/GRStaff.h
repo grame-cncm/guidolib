@@ -69,6 +69,9 @@ class TagParameterFloat;
 
 template <class T> class KF_List;
 
+typedef std::pair<TYPE_TIMEPOSITION, float>	TRelDXSegments;
+typedef std::vector<TRelDXSegments>			TRelDxMap;
+
 typedef KF_List<float> AccList;
 // typedef KF_IPointerList<GRTag> GRTagPointerList;
 // typedef KF_Vector<float> UnitVect;
