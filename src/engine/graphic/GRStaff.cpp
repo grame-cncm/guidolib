@@ -2430,6 +2430,24 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 }
 
 // ----------------------------------------------------------------------------
+const TRelDxMap GRStaff::getRelativeDxMap(TYPE_TIMEPOSITION from) const
+{
+	TRelDxMap out;
+	GuidoPos pos = mCompElements.GetHeadPosition();
+	while (pos) {
+		GRNotationElement * e = mCompElements.GetNext(pos);
+		if (e->isRest() || e->isGRNote()) {
+			TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
+			if (date >= from) {
+				out.push_back(make_pair(date, e->getMapping().left));
+			}
+		}
+	}
+	out.push_back(make_pair(getRelativeEndTimePosition(), getMapping().right));
+	return out;
+}
+
+// ----------------------------------------------------------------------------
 void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 {
 	const float xOffset = 0; 					// mPosition.x	

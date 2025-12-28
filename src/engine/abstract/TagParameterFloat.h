@@ -47,6 +47,7 @@ class TagParameterFloat : public TagParameter
 		static bool     convertValue(float value, double &toValue, const char * unit, float curLSPACE = 50.0f);
 
 		bool			TagIsUnitTag() const 		{ return fUnittag; }
+		bool			IsRelativeLocation() const 	{ return TagIsUnitTag() && (fUnit == "rl"); }
 		void			setUnitTag()				{ fUnittag = true; }
 		const char *	getUnit() const				{ return fUnit.c_str(); }
 		bool			hasUnit() const				{ return fUnit.size() ? true : false; }

@@ -20,6 +20,7 @@
 
 #include "GUIDOExport.h"
 #include "GUIDOEngine.h"
+#include "defines.h"
 #include "TRect.h"
 
 #include <utility>
@@ -85,9 +86,11 @@ class_export TimeSegment: public std::pair<GuidoDate, GuidoDate>
 };
 
 typedef std::pair<TimeSegment, FloatRect>	TMapSegments;
+typedef std::pair<TYPE_TIMEPOSITION, float>	TRelDXSegments;
 typedef std::pair<TimeSegment, TimeSegment>	TTimeMapSegments;
 typedef std::vector<TMapSegments>			Time2GraphicMap;
 typedef std::vector<TTimeMapSegments>		TTime2TimeMap;
+typedef std::vector<TRelDXSegments>			TRelDxMap;
 typedef Time2GraphicMap::const_iterator		Time2GraphicMapIterator;
 
 inline std::ostream& operator << (std::ostream& out, const GuidoDate& d) {

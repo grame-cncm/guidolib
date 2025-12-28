@@ -80,6 +80,8 @@ const TYPE_FLOATPARAMETER TagParameterFloat::getValue(float curLSPACE) const
 		else tmpunit = fUnit;
 		if (tmpunit == "hs")
 			return ((float) (fValue * curLSPACE * 0.5f));
+		if (tmpunit == "rl")
+			return (float)fValue;
 		
         double result;
 		bool conversionOk = gd_convertUnits((double) fValue, tmpunit.c_str(), "cm", result);

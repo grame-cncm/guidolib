@@ -240,6 +240,8 @@ class GRStaff : public GRCompositeNotationElement
 		float					getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur) const;
         const ARMeter *			getCurMeter() const		{ return mStaffState.curmeter; }
 
+        const TRelDxMap     getRelativeDxMap(TYPE_TIMEPOSITION from) const;
+
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual float 		getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct, int basePitch, int baseLine, int baseOct) const;
 		virtual GDirection  getDefaultThroatDirection(TYPE_PITCH pit, TYPE_REGISTER oct) const;
