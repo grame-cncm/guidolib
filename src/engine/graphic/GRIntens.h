@@ -30,6 +30,7 @@ class GRIntens : public GRTagARNotationElement
 	float fSize = 1;
 	float fDx 	= 0;
 	float fDy 	= 0;
+	bool  fRelativeDx 	= false;
 	const GRSingleNote* fNote = 0;
 
 	public:

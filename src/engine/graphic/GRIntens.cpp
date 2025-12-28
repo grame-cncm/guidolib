@@ -34,6 +34,9 @@
 
 using namespace std;
 
+extern GRSystem * gCurSystem;
+
+
 GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
   : GRTagARNotationElement(ar, LSPACE)
 {
@@ -69,6 +72,8 @@ GRIntens::GRIntens( GRStaff * inStaff, const ARIntens* ar)
 	if (mSymbol != 0) {
 		float x = GetSymbolExtent(mSymbol);
 		fDx = ar->getDX()->getValue();
+		const TagParameterFloat* dx = ar->getDX();
+		if (dx && dx->IsRelativeLocation()) fRelativeDx = true;
 		fDy = ar->getDY()->getValue();
 
 		const TagParameterFloat* p = ar->getSize();
@@ -114,7 +119,29 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 		w = GetSymbolExtent(mSymbol) / 3 * fSize;
 	}
 	float y = mPosition.y - fDy + sy;
-	float x = mPosition.x + fDx - w;
+	float dx = fDx;
+	if (fRelativeDx) {
+		cerr << "GRIntens OnDraw : relative location " << fDx << endl;
+		if (fNote && fNote->getGRStaff()) {
+//			cerr << "GRIntens OnDraw : note  " << fNote << endl;
+//			cerr << "GRIntens OnDraw : date  " << fNote->getRelativeTimePosition() << endl;
+//			cerr << "GRIntens OnDraw : dur   " << fNote->getDuration() << endl;
+
+			const GRStaff* staff = fNote->getGRStaff();
+			TRelDxMap map = staff->getRelativeDxMap(fNote->getRelativeTimePosition());
+			if (map.size() > 1) {
+				TYPE_DURATION dur = map[1].first - map[0].first;
+				float segment = map[1].second - map[0].second;
+//			cerr << "GRIntens OnDraw : map duration " << dur << endl;
+//			cerr << "GRIntens OnDraw : map segment " << segment << endl;
+				dx = segment / float(dur) * 0.25 * fDx;
+				w -= dx;
+//			cerr << "GRIntens OnDraw : dx " << dx << endl;
+			}
+		}
+	}
+
+	float x = mPosition.x + dx - w;
 
 	if (mSymbol) OnDrawSymbol (hdc, mSymbol, -w, sy, 0);
 
