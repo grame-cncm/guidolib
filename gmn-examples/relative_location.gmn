@@ -1,6 +1,9 @@
 {
 [
 	\meter<"4/4">
-	a \i<"p", dx=1rl> g/2. f/1
+	a \i<"p", dx=1rl> g/2. 
+	a/4 \i<"mp", dx=1rl> g/1 
+	f/2.
+	e/4 \i<"f", dx=1rl> { e/2, g, b } f/4
 ]
 }

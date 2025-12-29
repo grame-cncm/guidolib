@@ -2436,10 +2436,12 @@ const TRelDxMap GRStaff::getRelativeDxMap(TYPE_TIMEPOSITION from) const
 	GuidoPos pos = mCompElements.GetHeadPosition();
 	while (pos) {
 		GRNotationElement * e = mCompElements.GetNext(pos);
-		if (e->isRest() || e->isGRNote()) {
+		if (e->isRest() || e->isGRNote() || e->isEmpty()) {
 			TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
-			if (date >= from) {
-				out.push_back(make_pair(date, e->getMapping().left));
+			if ((date >= from) && ((float)e->getDuration() > 0)) {
+				bool skip = e->isGRNote() && e->isGRNote()->getARNote()->isAuto();
+//cerr << "GRStaff::getRelativeDxMap push " << e << " " << skip << endl;
+				if (!skip) out.push_back(make_pair(date, e->getMapping().left));
 			}
 		}
 	}

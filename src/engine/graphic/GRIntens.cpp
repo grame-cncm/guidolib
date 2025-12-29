@@ -121,18 +121,31 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 	float y = mPosition.y - fDy + sy;
 	float dx = fDx;
 	if (fRelativeDx) {
-		cerr << "GRIntens OnDraw : relative location " << fDx << endl;
+//		cerr << "GRIntens OnDraw : relative location " << fDx << endl;
 		if (fNote && fNote->getGRStaff()) {
 //			cerr << "GRIntens OnDraw : note  " << fNote << endl;
 //			cerr << "GRIntens OnDraw : date  " << fNote->getRelativeTimePosition() << endl;
 //			cerr << "GRIntens OnDraw : dur   " << fNote->getDuration() << endl;
 
 			const GRStaff* staff = fNote->getGRStaff();
-			TRelDxMap map = staff->getRelativeDxMap(fNote->getRelativeTimePosition());
+			TRelDxMap map = staff->getRelativeDxMap(getRelativeTimePosition());
+//			cerr << "GRIntens OnDraw : map size " << map.size() << endl;
 			if (map.size() > 1) {
+/*
+				TYPE_DURATION dur = 0;
+				float segment = 0.f;
+				for (auto &elt : map) {
+cerr << elt.first << " " << elt.second << endl;
+					dur = elt.first - map[0].first;
+					if (float(dur) > 0) {
+						segment = elt.second - map[0].second;
+						break;
+					}
+				}
+*/
 				TYPE_DURATION dur = map[1].first - map[0].first;
 				float segment = map[1].second - map[0].second;
-//			cerr << "GRIntens OnDraw : map duration " << dur << endl;
+			cerr << "GRIntens OnDraw : segment duration " << dur << endl;
 //			cerr << "GRIntens OnDraw : map segment " << segment << endl;
 				dx = segment / float(dur) * 0.25 * fDx;
 				w -= dx;
