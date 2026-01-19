@@ -76,6 +76,7 @@ using namespace std;
 #include "GRMusic.h"
 #include "GRNote.h"
 #include "GRRest.h"
+#include "GRTag.h"
 #include "GRRepeatBegin.h"
 #include "GRRepeatEnd.h"
 #include "GRRod.h"
@@ -2054,12 +2055,21 @@ void GRStaff::FinishStaff()
 				date = e->getRelativeTimePosition();
 				duration = e->getDuration();
 			}
-      }
+    }
     }
 	setDuration (date - getRelativeTimePosition() + duration);
     vector<GRPositionTag *>::iterator i;
     for (i=ptags.begin(); i!=ptags.end(); i++) {
        (*i)->FinishPTag (this);
+    }
+    // apply duration-based dx offsets after position tags have set their anchors
+    {
+        GuidoPos p = mCompElements.GetHeadPosition();
+        while (p) {
+            GRNotationElement * e = mCompElements.GetNext(p);
+            GRTag * tag = dynamic_cast<GRTag *>(e);
+            if (tag) tag->applyDurationDx(this);
+        }
     }
     if (mStaffState.fMultiVoiceCollisions) checkMultiVoiceNotesCollision();
 	updateBoundingBox();
@@ -2481,8 +2491,101 @@ float GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur) const
 			}
 			delete elmtsAtEndOfDuration;
 		}
-	}
+    }
     return x;
+}
+
+// ----------------------------------------------------------------------------
+float GRStaff::getXForTime(const TYPE_TIMEPOSITION& tp) const
+{
+	const NEPointerList& elts = getElements();
+	const GRNotationElement* prev = nullptr;
+	const GRNotationElement* next = nullptr;
+
+	GuidoPos pos = elts.GetHeadPosition();
+	while (pos) {
+		const GRNotationElement* e = elts.GetNext(pos);
+		TYPE_TIMEPOSITION et = e->getRelativeTimePosition();
+		if (et <= tp) prev = e;
+		if (et >= tp) { next = e; break; }
+	}
+	if (!prev) prev = next;
+	if (!next) next = prev;
+	if (!prev) return 0;
+
+	float xPrev = prev->getPosition().x;
+	float xNext = next ? next->getPosition().x : xPrev;
+	TYPE_TIMEPOSITION tPrev = prev->getRelativeTimePosition();
+	TYPE_TIMEPOSITION tNext = next ? next->getRelativeTimePosition() : tPrev;
+
+	if (tNext == tPrev) return xPrev;
+	if (tp <= tPrev) return xPrev;
+	if (tp >= tNext) return xNext;
+
+	double ratio = double(tp - tPrev) / double(tNext - tPrev);
+	return xPrev + (float)((xNext - xPrev) * ratio);
+}
+
+// ----------------------------------------------------------------------------
+void GRStaff::getMeasureBounds(const TYPE_TIMEPOSITION& tp, TYPE_TIMEPOSITION& start, TYPE_TIMEPOSITION& end) const
+{
+	start = DURATION_0;
+	end = getDuration();
+
+	TYPE_TIMEPOSITION prevBar = DURATION_0;
+	bool prevSet = false;
+	TYPE_TIMEPOSITION nextBar = end;
+	bool nextSet = false;
+
+	GuidoPos p = mCompElements.GetHeadPosition();
+	while (p) {
+		const GRNotationElement* e = mCompElements.GetNext(p);
+		const GRBar* b = e->isGRBar();
+		if (!b) continue;
+
+		const TYPE_TIMEPOSITION bt = e->getRelativeTimePosition();
+		if (bt <= tp) {
+			if (!prevSet || bt > prevBar) {
+				prevBar = bt;
+				prevSet = true;
+			}
+		}
+		else {
+			if (!nextSet || bt < nextBar) {
+				nextBar = bt;
+				nextSet = true;
+			}
+		}
+	}
+
+	if (prevSet) start = prevBar;
+	if (nextSet) end = nextBar;
+
+	// If we only know the next bar, derive the measure start from the meter
+	if (!prevSet && nextSet) {
+		TYPE_DURATION mdur (1,1);
+		const ARMeter* meter = getCurMeter();
+		if (meter) {
+			TYPE_DURATION meterDur = meter->getMeterDuration();
+			if (meterDur > DURATION_0)
+				mdur = meterDur;
+		}
+		start = nextBar - mdur;
+		if (start < DURATION_0)
+			start = DURATION_0;
+	}
+
+	// fallback: if no bar ahead (or zero-length), derive from meter
+	if (end <= start) {
+		const ARMeter* meter = getCurMeter();
+		if (meter) {
+			TYPE_DURATION mdur = meter->getMeterDuration();
+			if (mdur > DURATION_0)
+				end = start + mdur;
+		}
+		if (end <= start) // ensure progress
+			end = start + TYPE_DURATION(1,1);
+	}
 }
 
 void GRStaff::setOnOff(bool on, TYPE_TIMEPOSITION tp)

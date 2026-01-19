@@ -16,6 +16,7 @@
 */
 
 #include "TagParameter.h"
+#include "Fraction.h"
 
 typedef float TYPE_FLOATPARAMETER;
 
@@ -43,6 +44,8 @@ class TagParameterFloat : public TagParameter
 		virtual bool			isFloat() const		{ return true; }
 
 		const TYPE_FLOATPARAMETER getValue( float curLSPACE = 50.0f ) const;
+		bool					isDuration() const	{ return fIsDuration; }
+		const Fraction &		getDuration() const { return fDuration; }
 
 		static bool     convertValue(float value, double &toValue, const char * unit, float curLSPACE = 50.0f);
 
@@ -63,6 +66,8 @@ class TagParameterFloat : public TagParameter
 //		enum { kUnitLen=3 };
 		std::string			fUnit;
 		TYPE_FLOATPARAMETER fValue;
+		bool				fIsDuration = false;
+		Fraction			fDuration;
 		
 	private:
 		using TagParameter::set;

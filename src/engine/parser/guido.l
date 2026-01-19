@@ -140,7 +140,7 @@ EOL		[\x0a\x0d]
 
 "ms"				return MLS;
 "s"					return SEC;
-"m"|"cm"|"mm"|"in"|"pt"|"pc"|"hs"|"rl"		yyextra->fText = yytext; return UNIT;
+"m"|"cm"|"mm"|"in"|"pt"|"pc"|"hs"|"rl"|"dur"	yyextra->fText = yytext; return UNIT;
 
 
 "<"					BEGIN PARAM; return STARTPARAM;

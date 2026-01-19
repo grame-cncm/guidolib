@@ -18,6 +18,7 @@
 
 #include <string>
 #include <regex>
+#include <iomanip>
 
 #include "TagParameterFloat.h"
 #include "ARUnits.h"
@@ -32,6 +33,8 @@ TagParameterFloat::TagParameterFloat(const TagParameterFloat & tpf)
 {
 	fUnittag = tpf.fUnittag;
 	fValue = tpf.fValue;
+	fIsDuration = tpf.fIsDuration;
+	fDuration = tpf.fDuration;
 	fUnit = tpf.getUnit();
 }
 
@@ -44,6 +47,8 @@ void  TagParameterFloat::set( const TagParameterFloat & in )
 	fUnit = in.getUnit();
 	fUnittag = in.fUnittag;
 	fValue = in.fValue;
+	fIsDuration = in.fIsDuration;
+	fDuration = in.fDuration;
 }
 
 
@@ -51,11 +56,16 @@ void TagParameterFloat::print(std::ostream& out)
 {
 	TagParameter::print (out);
 	const char* u = TagIsUnitTag() ? getUnit() : "";
-	out << getValue() << u;
+	if (fIsDuration) {
+		out << std::string(fDuration) << "dur";
+	}
+	else out << getValue() << u;
 }
 
 void TagParameterFloat::reset(float inFloatValue, const char * inUnit)
 {
+	fIsDuration = false;
+	fDuration = Fraction(0,1);
 	fValue = inFloatValue;
 	string u (inUnit);
 	if (u.size()) {
@@ -70,6 +80,8 @@ void TagParameterFloat::reset(float inFloatValue, const char * inUnit)
 
 const TYPE_FLOATPARAMETER TagParameterFloat::getValue(float curLSPACE) const
 {
+	if (fIsDuration)
+		return (float) fDuration;
 	if (fUnittag) {
 		string tmpunit;
 		if (fUnit.empty()) {
@@ -95,6 +107,43 @@ const TYPE_FLOATPARAMETER TagParameterFloat::getValue(float curLSPACE) const
 	return fValue;
 }
 
+static bool parseDots (int dots, Fraction& value)
+{
+	if (!dots) return true;
+	Fraction add = value;
+	for (int i=0; i<dots; i++) {
+		add = add * Frac_1_2;
+		value += add;
+	}
+	return true;
+}
+
+static bool parseDurationString(const std::string& val, Fraction& out)
+{
+	// syntax: [sign]num/den[.]*dur or [sign]decimal dur (dur suffix required)
+	std::regex fracExp("^\\s*([+-]?)(\\d+)/(\\d+)(\\.*)dur\\s*$");
+	std::regex decExp("^\\s*([+-]?\\d+(?:\\.\\d+)?)dur\\s*$");
+	std::smatch match;
+
+	if (std::regex_search(val, match, fracExp)) {
+		long num = std::stol(match[2]);
+		long den = std::stol(match[3]);
+		if (den == 0) return false;
+		int dots = (int)match[4].str().size();
+		out = Fraction((int)num, (int)den);
+		parseDots(dots, out);
+		if (match[1].str() == "-")
+			out = out * -1;
+		return true;
+	}
+	if (std::regex_search(val, match, decExp)) {
+		double d = std::stod(match[1]);
+		out = Fraction(d);
+		return true;
+	}
+	return false;
+}
+
 void TagParameterFloat::setValue(const char * p)
 {
 	string val = p;
@@ -103,19 +152,34 @@ void TagParameterFloat::setValue(const char * p)
 	std::smatch match;
 	
 	fUnit.clear();
+	fIsDuration = false;
+	fDuration = Fraction(0,1);
 	if (regex_search (val, match, e)) {
 		string vstr = match[1];
 		fValue = (float)atof(vstr.c_str());
 		fUnit = match[2];
 		fUnittag = true;
 	}
-	else fValue = (float)atof(p);
+	else {
+		Fraction dur;
+		if (parseDurationString(val, dur)) {
+			fDuration = dur;
+			fIsDuration = true;
+			fUnittag = false;
+			fValue = (float) dur;
+		}
+		else fValue = (float)atof(p);
+	}
 }
 
 void TagParameterFloat::setUnit(const char * unit)
 {
 	fUnit = unit;
 	fUnittag = true;
+	if (fUnit == "dur") {
+		fIsDuration = true;
+		fDuration = Fraction(fValue);
+	}
 }
 
 bool TagParameterFloat::copyValue(const TagParameter * tp)
@@ -123,6 +187,8 @@ bool TagParameterFloat::copyValue(const TagParameter * tp)
 	const TagParameterFloat * tpf = TagParameterFloat::cast(tp);
 	if (!tpf) return false;
 
+	fIsDuration = tpf->fIsDuration;
+	fDuration = tpf->fDuration;
 	if (fUnittag)
 		fUnit = tpf->getUnit();
 	else if (tpf->getUnit()[0] != 0)
